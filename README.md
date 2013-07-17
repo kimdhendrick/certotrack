@@ -3,13 +3,7 @@ Certotrack
 
 Welcome to CT on Rails! 
 
-To do:
-
 - Getting off the ground:
-  - Backbone
-     - How to get template/views into separate files?  Need require.js?
-  - Jade
-     - How to incorporate and translate templates in Jade
   - Capybara tests
      - Figure out how to install and write a few
   - Jasmine tests
@@ -18,7 +12,7 @@ To do:
 - Epics
   - Port grails app!
   - Styling - same as Grails or more like Bootstrap default or something in the middle?
-  - Migrate Grails app DB
+  - Migrate Grails DB
   - Move to new host
 
 ----    
