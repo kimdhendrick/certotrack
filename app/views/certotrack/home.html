@@ -3,27 +3,6 @@ CertoTrack
 <div class="page"/>
 
 <script type="text/javascript">
-  var LocationView = Backbone.View.extend({
-    el: '.page',
-    template: JST['templates/home'],
-
-    render: function() {
-      this.$el.html(this.template());
-    }
-  });
-
-  var locationView = new LocationView();
-
-  var Router = Backbone.Router.extend({
-    routes: {
-      '': 'home'
-    }
-  });
-
-  var router = new Router();
-  router.on('route:home', function() {
-    locationView.render();
-  });
-
+  new Certotrack.Router();
   Backbone.history.start();
 </script>

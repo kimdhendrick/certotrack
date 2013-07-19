@@ -12,7 +12,10 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require_tree ./certotrack/templates
 //= require underscore
 //= require backbone
 //= require tilt-jade/runtime
+//= require certotrack/init
+//= require_tree ./certotrack
 //= require_tree .
