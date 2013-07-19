@@ -21,6 +21,11 @@ end
 
 gem 'jquery-rails'
 gem 'tilt-jade'
+gem 'bcrypt-ruby', '3.0.1'
+
+group :test do
+  gem "shoulda-matchers"
+end
 
 group :development, :test do
  gem 'sqlite3', '1.3.5'
