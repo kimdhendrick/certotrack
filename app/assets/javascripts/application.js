@@ -19,3 +19,9 @@
 //= require certotrack/init
 //= require_tree ./certotrack
 //= require_tree .
+
+$(document).ready(function () {
+  console.log('starting router');
+  new Certotrack.Router();
+  Backbone.history.start();
+});

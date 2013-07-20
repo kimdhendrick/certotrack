@@ -35,4 +35,24 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = "random"
+
 end
+
+RSpec.configure do |config|
+  config.use_transactional_fixtures = false
+
+  config.before :each do
+    #if Capybara.current_driver == :rack_test
+      #DatabaseCleaner.strategy = :transaction
+    #else
+      DatabaseCleaner.strategy = :truncation
+    #end
+    DatabaseCleaner.start
+  end
+
+  config.after do
+    DatabaseCleaner.clean
+  end
+end
+
+#Capybara.default_wait_time = 5
