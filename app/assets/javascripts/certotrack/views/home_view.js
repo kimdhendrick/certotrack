@@ -3,17 +3,13 @@ Certotrack.HomeView = Backbone.View.extend(
     el: '.page',
     template: JST['certotrack/templates/home'],
 
-    initialize: function() {
-      console.log('initializing home view');
-    },
-
     render: function() {
       var myView = this;
 
       $.ajax({
         type: 'POST',
         url: '/signed_in',
-        success: function (data) {
+        success: function(data) {
           if (data['signed_in']) {
             console.log('accepting home request');
             myView.$el.html(myView.template());
@@ -26,4 +22,5 @@ Certotrack.HomeView = Backbone.View.extend(
         }
       });
     }
-  });
+  }
+);

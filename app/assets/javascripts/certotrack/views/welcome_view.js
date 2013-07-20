@@ -6,9 +6,6 @@ Certotrack.WelcomeView = Backbone.View.extend(
     render: function() {
       console.log('rendering welcome view');
       this.$el.html(this.template());
-    },
-
-    initialize: function() {
-      console.log('initialized welcome view');
     }
-});
+  }
+);
