@@ -29,7 +29,7 @@ describe 'Authentication', js: true do
     end
 
     describe 'with valid information' do
-      let(:user) { User.create(first_name: 'Kim', last_name: 'last', email: 'email@email.com', password: 'password', password_confirmation: 'password') }
+      let(:user) { create_valid_user }
       before do
         fill_in 'Email', with: user.email.upcase
         fill_in 'Password', with: user.password
