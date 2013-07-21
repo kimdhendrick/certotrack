@@ -2,14 +2,10 @@ Certotrack.Router = Backbone.Router.extend(
   {
     routes: {
       '': 'home',
-      'welcome': 'welcome',
       'home': 'home',
-      'locations': 'locations'
-    },
+      'locations': 'locations',
 
-    welcome: function() {
-      console.log('in welcome');
-      new Certotrack.WelcomeView().render();
+      '*path':  'home'
     },
 
     home: function() {
