@@ -1,9 +1,10 @@
 h2 Welcome to Certotrack
 
 p
-  a(href="#") Home
+  a(href='') Home
 p
   a(href='#locations') Locations
 
 p
-  a(href='logout') Log out
+  form(action='/logout')
+    input(type='submit', value='Log out')

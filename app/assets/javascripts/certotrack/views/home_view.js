@@ -14,7 +14,7 @@ Certotrack.HomeView = Backbone.View.extend(
             myView.$el.html(myView.template());
           }
           else {
-            new Certotrack.WelcomeView().render();
+            window.location = "/login"
           }
 
         }

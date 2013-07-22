@@ -1,8 +1,12 @@
 Certotrack::Application.routes.draw do
+  devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}
+  devise_scope :user do
+    get '/users/logout' => 'devise/sessions#destroy'
+    get "login", :to => "devise/sessions#new"
+    get "logout", :to => "devise/sessions#destroy"
+  end
+
   root to: 'certotrack#home'
 
-  resources :sessions, only: [:create, :destroy, :signed_in]
-  match '/signed_in', to: 'sessions#signed_in'
-  match '/logout', to: 'sessions#destroy', :via => [:get, :delete]
-  match '/login', to: 'certotrack#welcome', :via => [:get]
+  match '/signed_in', to: 'certotrack#signed_in'
 end

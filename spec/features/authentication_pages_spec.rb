@@ -20,28 +20,28 @@ describe 'Authentication', js: true do
       before { click_button 'Login' }
 
       it { should have_title('Certotrack') }
-      it { should have_selector('div.alert.alert-error', text: 'Invalid') }
+      it { should have_selector('div.alert', text: 'Invalid') }
 
       describe 'after visiting another page' do
         before { visit root_path }
-        it { should_not have_selector('div.alert.alert-error') }
+        it { should_not have_selector('div.alert') }
       end
     end
 
     describe 'with valid information' do
       let(:user) { create_valid_user }
       before do
-        fill_in 'Email', with: user.email.upcase
+        fill_in 'Username', with: user.username.upcase
         fill_in 'Password', with: user.password
         click_button 'Login'
       end
 
       it { should have_content('Welcome to Certotrack') }
-      it { should have_link('Log out', href: 'logout') }
+      it { should have_selector("input[type=submit][value='Log out']") }
       it { should_not have_link('Login', href: 'login') }
 
       describe "followed by signout" do
-        before { click_link "Log out" }
+        before { click_button "Log out" }
         it { should have_content('Login') }
         it { should have_selector('input[type=submit]') }
       end

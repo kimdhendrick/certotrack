@@ -10,17 +10,19 @@ module ObjectMother
       first_name: 'First',
       last_name: 'Last',
       email: 'email@email.com',
-      password: 'password',
-      password_confirmation: 'password'
+      password: 'Password123',
+      password_confirmation: 'Password123'
     }
-    apply(User.new, defaults, options)
+    _apply(User.new, defaults, options)
   end
 
-  def apply(record, defaults, options)
-    options = defaults.merge(options)
-    options.each do |key, value|
-      record.send("#{key}=", value.is_a?(Proc) ? value.call : value)
+  private
+
+    def _apply(record, defaults, options)
+      options = defaults.merge(options)
+      options.each do |key, value|
+        record.send("#{key}=", value.is_a?(Proc) ? value.call : value)
+      end
+      record
     end
-    record
-  end
 end

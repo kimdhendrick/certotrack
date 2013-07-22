@@ -9,7 +9,6 @@ Certotrack.Router = Backbone.Router.extend(
     },
 
     home: function() {
-      console.log('routing to home');
       new Certotrack.HomeView().render();
     },
 
