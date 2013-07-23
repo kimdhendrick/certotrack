@@ -6,7 +6,8 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable
 
   attr_accessible :username, :email, :first_name, :last_name,
-                  :password, :password_confirmation, :remember_me
+                  :password, :password_confirmation, :remember_me,
+                  :roles_mask
 
   validates_presence_of :first_name, :last_name
 
@@ -23,4 +24,24 @@ class User < ActiveRecord::Base
             uniqueness: {case_sensitive: false}
 
   validates :username, presence: true, uniqueness: {case_sensitive: false}
+
+  ROLES = %w[admin equipment certification vehicle]
+
+  scope :with_role, ->(role) { where("roles_mask & #{2**ROLES.index(role.to_s)} > 0") }
+
+  def role?(role)
+    roles.include?(role)
+  end
+
+  def role_symbols
+    roles.map(&:to_sym)
+  end
+
+  def roles=(roles)
+    self.roles_mask = (roles & ROLES).map { |r| 2**ROLES.index(r) }.sum
+  end
+
+  def roles
+    ROLES.reject { |r| ((roles_mask || 0) & 2**ROLES.index(r)).zero? }
+  end
 end

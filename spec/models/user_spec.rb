@@ -99,4 +99,58 @@ describe User do
     end
     it { should be_valid }
   end
+
+  describe 'roles' do
+    describe 'roles' do
+      it 'should assign and return the roles assigned to the user' do
+        @user.roles = ['equipment', 'admin']
+        @user.roles.should =~ ['equipment', 'admin']
+      end
+    end
+
+    describe 'role_symbols' do
+      it 'should return the correct list of symbols' do
+        @user.roles = ['equipment', 'certification']
+        @user.role_symbols.should =~ [:equipment, :certification]
+      end
+    end
+
+    describe 'role?' do
+      it 'should return true for roles it has' do
+        equipment_user = create_valid_user(roles: ['equipment'])
+        equipment_user.role?('equipment').should be_true
+        equipment_user.role?('certification').should be_false
+        equipment_user.role?('vehicle').should be_false
+        equipment_user.role?('admin').should be_false
+
+        certification_user = create_valid_user(roles: ['certification'])
+        certification_user.role?('equipment').should be_false
+        certification_user.role?('certification').should be_true
+        certification_user.role?('vehicle').should be_false
+        certification_user.role?('admin').should be_false
+
+        vehicle_user = create_valid_user(roles: ['vehicle'])
+        vehicle_user.role?('equipment').should be_false
+        vehicle_user.role?('certification').should be_false
+        vehicle_user.role?('vehicle').should be_true
+        vehicle_user.role?('admin').should be_false
+
+        admin_user = create_valid_user(roles: ['admin'])
+        admin_user.role?('equipment').should be_false
+        admin_user.role?('certification').should be_false
+        admin_user.role?('vehicle').should be_false
+        admin_user.role?('admin').should be_true
+      end
+    end
+
+    describe 'with_role' do
+      it 'should return users with given role' do
+        equipment_user_1 = create_valid_user(roles: ['admin'])
+        equipment_user_2 = create_valid_user(roles: ['admin'])
+        certification_user = create_valid_user(roles: ['certification'])
+
+        User.with_role('admin').should =~ [equipment_user_1, equipment_user_2]
+      end
+    end
+  end
 end

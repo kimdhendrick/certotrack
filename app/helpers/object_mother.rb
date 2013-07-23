@@ -1,15 +1,17 @@
 module ObjectMother
 
+  @@identifier = 0
+
   def create_valid_user(options = {})
     new_valid_user(options).tap(&:save!)
   end
 
   def new_valid_user(options = {})
     defaults = {
-      username: 'username',
+      username: "username_#{_new_id}",
       first_name: 'First',
       last_name: 'Last',
-      email: 'email@email.com',
+      email: "email#{_new_id}@email.com",
       password: 'Password123',
       password_confirmation: 'Password123'
     }
@@ -17,6 +19,10 @@ module ObjectMother
   end
 
   private
+
+    def _new_id
+      @@identifier += 1
+    end
 
     def _apply(record, defaults, options)
       options = defaults.merge(options)
