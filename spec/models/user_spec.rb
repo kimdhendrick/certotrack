@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'cancan/matchers'
 
 describe User do
   before { @user = new_valid_user }
@@ -151,6 +152,42 @@ describe User do
 
         User.with_role('admin').should =~ [equipment_user_1, equipment_user_2]
       end
+    end
+
+    describe 'add_role' do
+      it 'should add the new role' do
+        equipment_user = create_valid_user
+        equipment_user.role?('equipment').should be_false
+        equipment_user.add_role('equipment')
+        equipment_user.role?('equipment').should be_true
+      end
+    end
+
+    describe 'remove_role' do
+      it 'should remove the old role' do
+        equipment_user = create_valid_user(roles: ['admin'])
+        equipment_user.role?('admin').should be_true
+        equipment_user.remove_role('admin')
+        equipment_user.role?('admin').should be_false
+      end
+    end
+  end
+
+  describe "abilities" do
+    subject { ability }
+    let(:ability){ Ability.new(user) }
+    let(:user){ nil }
+
+    context "when user is an admin" do
+      let(:user){ new_valid_user(roles: ['admin']) }
+
+      it{ should be_able_to(:manage, :all) }
+    end
+
+    context "when is not an admin" do
+      let(:user){ new_valid_user }
+
+      it{ should_not be_able_to(:manage, :all) }
     end
   end
 end

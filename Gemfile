@@ -23,6 +23,7 @@ gem 'jquery-rails'
 gem 'tilt-jade'
 gem 'bcrypt-ruby', '3.0.1'
 gem 'devise'
+gem 'cancan'
 
 group :test do
   gem "shoulda-matchers"

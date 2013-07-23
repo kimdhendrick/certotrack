@@ -25,13 +25,13 @@ class User < ActiveRecord::Base
 
   validates :username, presence: true, uniqueness: {case_sensitive: false}
 
-  ROLES = %w[admin equipment certification vehicle]
+    ROLES = %w[admin equipment certification vehicle]
 
   scope :with_role, ->(role) { where("roles_mask & #{2**ROLES.index(role.to_s)} > 0") }
 
-  def role?(role)
-    roles.include?(role)
-  end
+    def role?(role)
+      roles.include?(role)
+    end
 
   def role_symbols
     roles.map(&:to_sym)
@@ -43,5 +43,17 @@ class User < ActiveRecord::Base
 
   def roles
     ROLES.reject { |r| ((roles_mask || 0) & 2**ROLES.index(r)).zero? }
+  end
+
+  def add_role(role)
+    return if role?(role)
+
+    self.roles_mask = (self.roles_mask || 0) + 2**ROLES.index(role)
+  end
+
+  def remove_role(role)
+    return if !role?(role)
+
+    self.roles_mask -= 2**ROLES.index(role)
   end
 end
