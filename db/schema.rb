@@ -11,7 +11,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130723015031) do
+ActiveRecord::Schema.define(:version => 20130724015100) do
+
+  create_table "equipment", :force => true do |t|
+    t.string   "serial_number"
+    t.date     "last_inspection_date"
+    t.string   "inspection_interval"
+    t.string   "name"
+    t.date     "expiration_date"
+    t.string   "inspection_type"
+    t.string   "notes"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+  end
 
   create_table "users", :force => true do |t|
     t.string   "first_name"

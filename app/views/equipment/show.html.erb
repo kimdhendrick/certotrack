@@ -1,0 +1,40 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Serial number:</b>
+  <%= @equipment.serial_number %>
+</p>
+
+<p>
+  <b>Last inspection date:</b>
+  <%= @equipment.last_inspection_date %>
+</p>
+
+<p>
+  <b>Inspection interval:</b>
+  <%= @equipment.inspection_interval %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%= @equipment.name %>
+</p>
+
+<p>
+  <b>Expiration date:</b>
+  <%= @equipment.expiration_date %>
+</p>
+
+<p>
+  <b>Type:</b>
+  <%= @equipment.inspection_type %>
+</p>
+
+<p>
+  <b>Notes:</b>
+  <%= @equipment.notes %>
+</p>
+
+
+<%= link_to 'Edit', edit_equipment_path(@equipment) %> |
+<%= link_to 'Back', equipment_index_path %>
