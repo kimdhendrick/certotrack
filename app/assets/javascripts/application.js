@@ -17,5 +17,8 @@
 //= require backbone
 //= require tilt-jade/runtime
 //= require certotrack/init
-//= require_tree ./certotrack
-//= require_tree .
+//= require certotrack/router
+//= require_tree ./certotrack/models
+//= require_tree ./certotrack/collections
+//= require_tree ./certotrack/templates
+//= require_tree ./certotrack/views
