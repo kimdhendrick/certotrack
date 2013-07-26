@@ -24,7 +24,7 @@ describe 'Authentication', js: true do
 
       describe 'after visiting another page' do
         before { visit root_path }
-        it { should_not have_selector('div.alert') }
+        it { should have_selector('div.alert', text: 'You need to sign in or sign up before continuing.') }
       end
     end
 

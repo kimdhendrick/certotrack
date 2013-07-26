@@ -4,16 +4,26 @@ Certotrack.Router = Backbone.Router.extend(
       '': 'home',
       'home': 'home',
       'locations': 'locations',
+      'equipment': 'equipment',
 
-      '*path':  'home'
+      '*path': 'home'
     },
 
     home: function() {
-      new Certotrack.HomeView().render();
+      this._routeTo(Certotrack.HomeView);
     },
 
     locations: function() {
-      new Certotrack.LocationsView().render();
+      this._routeTo(Certotrack.LocationsView);
+    },
+
+    equipment: function() {
+      this._routeTo(Certotrack.EquipmentListView);
+    },
+
+    _routeTo: function(View) {
+      $('#certotrack-content').html(new View().render().el);
     }
+
   }
 );
