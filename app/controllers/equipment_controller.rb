@@ -1,7 +1,13 @@
 class EquipmentController < ApplicationController
+
+  check_authorization
+
   # GET /equipment
   # GET /equipment.json
   def index
+    # Must have manage permission on equipment (role based)
+    authorize! :manage, :equipment
+
     @equipment = Equipment.all
 
     respond_to do |format|
@@ -13,6 +19,9 @@ class EquipmentController < ApplicationController
   # GET /equipment/1
   # GET /equipment/1.json
   def show
+    # Must have manage permission on :all (admin only)
+    authorize! :manage, :all
+
     @equipment = Equipment.find(params[:id])
 
     respond_to do |format|

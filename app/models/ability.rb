@@ -6,5 +6,9 @@ class Ability
        if user.role?('admin')
          can :manage, :all
        end
+
+       if user.role?('equipment')
+         can :manage, :equipment
+       end
   end
 end
