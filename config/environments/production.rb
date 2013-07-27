@@ -1,4 +1,6 @@
 Certotrack::Application.configure do
+  config.eager_load = true
+
   config.action_mailer.default_url_options = { :host => 'certotrack.com:3000' }
   # Settings specified here will take precedence over those in config/application.rb
 

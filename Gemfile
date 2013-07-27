@@ -1,29 +1,12 @@
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 
-gem 'rails', '3.2.13'
-
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
+# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+gem 'rails', '4.0.0'
 
 gem 'pg'
-
-# Gems used only for assets and not required
-# in production environments by default.
-group :assets do
-  gem 'sass-rails', '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
-
-  # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  # gem 'therubyracer', :platforms => :ruby
-
-  gem 'uglifier', '>= 1.0.3'
-end
-
-gem 'jquery-rails'
-gem 'tilt-jade'
-gem 'bcrypt-ruby', '3.0.1'
 gem 'devise'
 gem 'cancan'
+gem 'tilt-jade'
 
 group :test do
   gem "shoulda-matchers"
@@ -32,33 +15,27 @@ group :test do
 end
 
 group :development, :test do
-  gem 'sqlite3', '1.3.5'
   gem 'rspec-rails', ' ~> 2.0'
   gem 'capybara'
 end
-# Post install message from Capybara:
-# Details here: http://www.elabs.se/blog/60-introducing-capybara-2-1
 
-# To use Jbuilder templates for JSON
-# gem 'jbuilder'
+# Use SCSS for stylesheets
+gem 'sass-rails', '~> 4.0.0'
 
-# Use unicorn as the app server
-# gem 'unicorn'
+# Use Uglifier as compressor for JavaScript assets
+gem 'uglifier', '>= 1.3.0'
 
-# Deploy with Capistrano
-# gem 'capistrano'
+# Use CoffeeScript for .js.coffee assets and views
+gem 'coffee-rails', '~> 4.0.0'
 
-# To use debugger
-# gem 'debugger'
+# See https://github.com/sstephenson/execjs#readme for more supported runtimes
+# gem 'therubyracer', platforms: :ruby
 
-###group :development, :test do
-###gem 'guard-rspec', '0.5.5'
-###end
+# Use jquery as the JavaScript library
+gem 'jquery-rails'
 
-###group :test do
-###gem 'capybara', '1.1.2'
-###gem 'rb-fsevent', '0.9.1', :require => false
-###gem 'growl', '1.0.3'
-###gem 'factory_girl_rails', '1.4.0'
-###end
-###########
+# Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
+gem 'turbolinks'
+
+# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+gem 'jbuilder', '~> 1.2'

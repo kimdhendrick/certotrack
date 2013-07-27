@@ -9,6 +9,4 @@ Certotrack::Application.routes.draw do
   end
 
   root to: 'certotrack#home'
-
-  match '/signed_in', to: 'certotrack#signed_in'
 end
