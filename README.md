@@ -38,7 +38,7 @@ Welcome to CT on Rails!
 
 *Note: You don't need to do this step if you've pulled the `.rvmrc` file checked into master.*
 
-     rvm --rvmrc --create 1.9.3@certotrack
+     rvm --rvmrc --create ruby-2.0.0-p247@certotrack
 
 In this case, 1.9.3 is the version of ruby you want to use and certotrack is the gemset.
 *Note: You __DO__ still need to do the following even if you've pulled the `.rvmrc` file checked into master.*
