@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'cancan/matchers'
 
 describe User do
   before { @user = new_valid_user }
@@ -13,6 +12,7 @@ describe User do
   it { should respond_to(:encrypted_password) }
   it { should respond_to(:password) }
   it { should respond_to(:password_confirmation) }
+  it { should belong_to(:customer) }
 
   describe 'when username has mixed case' do
     before do
@@ -85,7 +85,7 @@ describe User do
     it { should_not be_valid }
   end
 
-  describe "when password is not complex enough" do
+  describe 'when password is not complex enough' do
     before do
       @user.password = 'password'
       @user.password_confirmation = 'password'
@@ -93,12 +93,22 @@ describe User do
     it { should_not be_valid }
   end
 
-  describe "when password is complex enough" do
+  describe 'when password is complex enough' do
     before do
       @user.password = 'Passwor1'
       @user.password_confirmation = 'Passwor1'
     end
     it { should be_valid }
+  end
+
+  describe 'customer' do
+    it 'should be able to assign a customer to a user' do
+      customer = new_valid_customer
+      user = new_valid_user
+      user.customer = customer
+
+      user.customer.should == customer
+    end
   end
 
   describe 'roles' do
@@ -170,24 +180,6 @@ describe User do
         equipment_user.remove_role('admin')
         equipment_user.role?('admin').should be_false
       end
-    end
-  end
-
-  describe "abilities" do
-    subject { ability }
-    let(:ability){ Ability.new(user) }
-    let(:user){ nil }
-
-    context "when user is an admin" do
-      let(:user){ new_valid_user(roles: ['admin']) }
-
-      it{ should be_able_to(:manage, :all) }
-    end
-
-    context "when is not an admin" do
-      let(:user){ new_valid_user }
-
-      it{ should_not be_able_to(:manage, :all) }
     end
   end
 end

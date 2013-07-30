@@ -7,7 +7,7 @@ module ObjectMother
   end
 
   def new_valid_user(options = {})
-    defaults = {
+    valid_attributes = {
       username: "username_#{_new_id}",
       first_name: 'First',
       last_name: 'Last',
@@ -15,8 +15,40 @@ module ObjectMother
       password: 'Password123',
       password_confirmation: 'Password123'
     }
-    _apply(User.new, defaults, options)
+    _apply(User.new, valid_attributes, options)
   end
+
+  def create_valid_equipment(options = {})
+    new_valid_equipment(options).tap(&:save!)
+  end
+
+  def new_valid_equipment(options = {})
+    valid_attributes = equipment_attributes()
+    _apply(Equipment.new, valid_attributes, options)
+  end
+
+  def equipment_attributes
+    {
+      name: "Meter"
+    }
+  end
+
+  def create_valid_customer(options = {})
+    new_valid_customer(options).tap(&:save!)
+  end
+
+  def new_valid_customer(options = {})
+    valid_attributes = {
+      name: "My Customer"
+    }
+    _apply(Customer.new, valid_attributes, options)
+  end
+
+  def valid_session
+    {}
+  end
+
+
 
   private
 

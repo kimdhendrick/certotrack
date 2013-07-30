@@ -1,92 +1,85 @@
 class EquipmentController < ApplicationController
+  before_action :set_equipment, only: [:show, :edit, :update, :destroy]
 
   check_authorization
 
-  # GET /equipment
-  # GET /equipment.json
   def index
-    # Must have manage permission on equipment (role based)
-    authorize! :manage, :equipment
+    # This is not perfect.  Cancan can't (ha!) authorize multiple
+    # objects, so for now only enforcing 'read' access and controller
+    # must be responsible for limiting to customer's equipment
+    authorize! :read, :equipment
 
-    @equipment = Equipment.all
+    @equipment = Equipment.where(customer: current_user.customer).all
 
+    # Not needed if remove BB
     respond_to do |format|
-      format.html # index.html.erb
+      format.html
       format.json { render json: @equipment }
     end
+
   end
 
-  # GET /equipment/1
-  # GET /equipment/1.json
   def show
-    # Must have manage permission on :all (admin only)
-    authorize! :manage, :all
-
-    @equipment = Equipment.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @equipment }
-    end
+    authorize! :manage, @equipment
   end
 
-  # GET /equipment/new
-  # GET /equipment/new.json
   def new
+    authorize! :create, :equipment
+
     @equipment = Equipment.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @equipment }
-    end
   end
 
-  # GET /equipment/1/edit
   def edit
-    @equipment = Equipment.find(params[:id])
+    authorize! :manage, @equipment
   end
 
-  # POST /equipment
-  # POST /equipment.json
   def create
-    @equipment = Equipment.new(params[:equipment])
+    authorize! :create, :equipment
+
+    @equipment = Equipment.new(equipment_params)
+    @equipment.customer = current_user.customer
 
     respond_to do |format|
       if @equipment.save
         format.html { redirect_to @equipment, notice: 'Equipment was successfully created.' }
-        format.json { render json: @equipment, status: :created, location: @equipment }
+        format.json { render action: 'show', status: :created, location: @equipment }
       else
-        format.html { render action: "new" }
+        format.html { render action: 'new' }
         format.json { render json: @equipment.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # PUT /equipment/1
-  # PUT /equipment/1.json
   def update
-    @equipment = Equipment.find(params[:id])
+    authorize! :manage, @equipment
 
     respond_to do |format|
-      if @equipment.update_attributes(params[:equipment])
+      if @equipment.update(equipment_params)
         format.html { redirect_to @equipment, notice: 'Equipment was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render action: 'edit' }
         format.json { render json: @equipment.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # DELETE /equipment/1
-  # DELETE /equipment/1.json
   def destroy
-    @equipment = Equipment.find(params[:id])
-    @equipment.destroy
+    authorize! :manage, @equipment
 
+    @equipment.destroy
     respond_to do |format|
       format.html { redirect_to equipment_index_url }
       format.json { head :no_content }
     end
   end
+
+  private
+    def set_equipment
+      @equipment = Equipment.find(params[:id])
+    end
+
+    def equipment_params
+      params.require(:equipment).permit(Equipment.accessible_parameters)
+    end
 end
