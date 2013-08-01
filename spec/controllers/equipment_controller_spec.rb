@@ -1,18 +1,22 @@
 require 'spec_helper'
 
+def stub_current_user_with(user)
+  controller.stub(:current_user).and_return(user)
+end
+
+def stub_equipment_user
+  stub_current_user_with(create_valid_user(roles: ['equipment'], customer: @customer))
+end
+
+def stub_admin
+  stub_current_user_with(create_valid_user(roles: ['admin']))
+end
+
 describe EquipmentController do
 
   before do
     @customer = create_valid_customer
-    # Should not do this!  Can't get devise to work in test, have tried:
-    #@request.env["devise.mapping"] = Devise.mappings[:user]
-    #@user = new_valid_user(roles_mask:1)
-    #sign_in @user
-    # Sigh... yet another mystery...
-    controller.stub(:current_user).and_return(
-      create_valid_user(roles: ['admin'],
-                     customer: @customer)
-    )
+    stub_equipment_user
   end
 
   describe 'GET index' do
@@ -31,6 +35,21 @@ describe EquipmentController do
       get :index
 
       assigns(:equipment).should eq([my_equipment])
+    end
+
+    context 'when admin user' do
+      before do
+        stub_admin
+      end
+
+      it "does assigns other customer's equipment as @equipment" do
+        my_equipment = create_valid_equipment(customer: @customer)
+        other_equipment = create_valid_equipment(customer: create_valid_customer)
+
+        get :index
+
+        assigns(:equipment).should eq([my_equipment, other_equipment])
+      end
     end
   end
 
@@ -58,6 +77,9 @@ describe EquipmentController do
   end
 
   describe 'POST create' do
+    before do
+      stub_equipment_user
+    end
     describe 'with valid params' do
       it 'creates a new Equipment' do
         expect {
@@ -104,7 +126,7 @@ describe EquipmentController do
   describe 'PUT update' do
     describe 'with valid params' do
       it 'updates the requested equipment' do
-        equipment = create_valid_equipment
+        equipment = create_valid_equipment(customer: @customer)
         Equipment.any_instance.should_receive(:update).with(
           {
             'name' => 'Box',
@@ -134,7 +156,7 @@ describe EquipmentController do
       end
 
       it 'redirects to the equipment' do
-        equipment = create_valid_equipment
+        equipment = create_valid_equipment(customer: @customer)
         put :update, {:id => equipment.to_param, :equipment => equipment_attributes}, valid_session
         response.should redirect_to(equipment)
       end
@@ -149,7 +171,7 @@ describe EquipmentController do
       end
 
       it "re-renders the 'edit' template" do
-        equipment = create_valid_equipment
+        equipment = create_valid_equipment(customer: @customer)
         Equipment.any_instance.stub(:save).and_return(false)
         put :update, {:id => equipment.to_param, :equipment => {'name' => 'invalid value'}}, valid_session
         response.should render_template('edit')
@@ -159,14 +181,14 @@ describe EquipmentController do
 
   describe 'DELETE destroy' do
     it 'destroys the requested equipment' do
-      equipment = create_valid_equipment
+      equipment = create_valid_equipment(customer: @customer)
       expect {
         delete :destroy, {:id => equipment.to_param}, valid_session
       }.to change(Equipment, :count).by(-1)
     end
 
     it 'redirects to the equipment list' do
-      equipment = create_valid_equipment
+      equipment = create_valid_equipment(customer: @customer)
       delete :destroy, {:id => equipment.to_param}, valid_session
       response.should redirect_to(equipment_index_url)
     end

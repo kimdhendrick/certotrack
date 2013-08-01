@@ -1,15 +1,14 @@
 class EquipmentController < ApplicationController
+  extend EquipmentService
+
   before_action :set_equipment, only: [:show, :edit, :update, :destroy]
 
   check_authorization
 
   def index
-    # This is not perfect.  Cancan can't (ha!) authorize multiple
-    # objects, so for now only enforcing 'read' access and controller
-    # must be responsible for limiting to customer's equipment
     authorize! :read, :equipment
 
-    @equipment = Equipment.where(customer: current_user.customer).all
+    @equipment = EquipmentService::get_all_equipment(current_user)
   end
 
   def show
@@ -46,14 +45,10 @@ class EquipmentController < ApplicationController
   def update
     authorize! :manage, @equipment
 
-    respond_to do |format|
-      if @equipment.update(equipment_params)
-        format.html { redirect_to @equipment, notice: 'Equipment was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @equipment.errors, status: :unprocessable_entity }
-      end
+    if @equipment.update(equipment_params)
+      redirect_to @equipment, notice: 'Equipment was successfully updated.'
+    else
+      render action: 'edit'
     end
   end
 
@@ -68,11 +63,11 @@ class EquipmentController < ApplicationController
   end
 
   private
-    def set_equipment
-      @equipment = Equipment.find(params[:id])
-    end
+  def set_equipment
+    @equipment = Equipment.find(params[:id])
+  end
 
-    def equipment_params
-      params.require(:equipment).permit(Equipment.accessible_parameters)
-    end
+  def equipment_params
+    params.require(:equipment).permit(Equipment.accessible_parameters)
+  end
 end
