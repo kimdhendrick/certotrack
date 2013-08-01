@@ -22,13 +22,17 @@ class User < ActiveRecord::Base
 
   validates :username, presence: true, uniqueness: {case_sensitive: false}
 
-    ROLES = %w[admin equipment certification vehicle]
+  ROLES = %w[admin equipment certification vehicle]
 
   scope :with_role, ->(role) { where("roles_mask & #{2**ROLES.index(role.to_s)} > 0") }
 
-    def role?(role)
-      roles.include?(role)
-    end
+  def admin?
+    role?('admin')
+  end
+
+  def role?(role)
+    roles.include?(role)
+  end
 
   def role_symbols
     roles.map(&:to_sym)

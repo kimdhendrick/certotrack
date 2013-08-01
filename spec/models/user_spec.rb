@@ -154,6 +154,13 @@ describe User do
       end
     end
 
+    describe 'admin?' do
+      it 'should be admin with the admin role' do
+        admin_user = create_valid_user(roles: ['admin'])
+        admin_user.should be_admin
+      end
+    end
+
     describe 'with_role' do
       it 'should return users with given role' do
         equipment_user_1 = create_valid_user(roles: ['admin'])
