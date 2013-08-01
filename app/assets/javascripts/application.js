@@ -12,13 +12,5 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require_tree ./certotrack/templates
-//= require underscore
-//= require backbone
 //= require tilt-jade/runtime
 //= require certotrack/init
-//= require certotrack/router
-//= require_tree ./certotrack/models
-//= require_tree ./certotrack/collections
-//= require_tree ./certotrack/templates
-//= require_tree ./certotrack/views

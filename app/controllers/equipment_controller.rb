@@ -10,13 +10,6 @@ class EquipmentController < ApplicationController
     authorize! :read, :equipment
 
     @equipment = Equipment.where(customer: current_user.customer).all
-
-    # Not needed if remove BB
-    respond_to do |format|
-      format.html
-      format.json { render json: @equipment }
-    end
-
   end
 
   def show
