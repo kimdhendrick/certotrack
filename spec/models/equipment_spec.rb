@@ -20,9 +20,33 @@ describe Equipment do
 
   it 'should be able to assign a customer to equipment' do
     customer = new_valid_customer
-    equipment = new_valid_user
+    equipment = new_valid_equipment
     equipment.customer = customer
 
     equipment.customer.should == customer
+  end
+
+  it 'should calculate NA status when no expiration date' do
+    equipment = new_valid_equipment(expiration_date: nil)
+
+    equipment.status.should == Status::NA
+  end
+
+  it 'should calculate VALID status when expiration date is in the future' do
+    equipment = new_valid_equipment(expiration_date: Date.today + 61.days)
+
+    equipment.status.should == Status::VALID
+  end
+
+  it 'should calculate EXPIRED status when expiration date is in the past' do
+    equipment = new_valid_equipment(expiration_date: Date.yesterday)
+
+    equipment.status.should == Status::EXPIRED
+  end
+
+  it 'should calculate WARNING status when expiration date is within 60 days in the future' do
+    equipment = new_valid_equipment(expiration_date: Date.tomorrow)
+
+    equipment.status.should == Status::WARNING
   end
 end

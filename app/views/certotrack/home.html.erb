@@ -2,7 +2,11 @@ CertoTrack - Home
 
 <h2>Welcome to Certotrack</h2>
 
-<p><%= link_to 'All Equipment', equipment_index_path %></p>
+<% if can? :read, :equipment %>
+  <%= render 'equipment_links' %>
+<% else %>
+  <p>You are not authorized for any services. Please contact support.</p>
+<% end %>
 
 <form action="/logout">
   <input type="submit" value="Log out"/>

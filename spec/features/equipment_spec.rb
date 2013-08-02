@@ -40,20 +40,3 @@ describe 'Equipment' do
     end
   end
 end
-
-def login_as_user_with_role(role)
-  visit "#"
-  @customer = create_valid_customer
-  user = create_valid_user(customer: @customer, roles: [role])
-  fill_in 'Username', with: user.username.upcase
-  fill_in 'Password', with: user.password
-  click_button 'Login'
-end
-
-def login_as_equipment_user
-  login_as_user_with_role('equipment')
-end
-
-def login_as_admin
-  login_as_user_with_role('admin')
-end

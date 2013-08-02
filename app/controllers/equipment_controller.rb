@@ -1,6 +1,7 @@
 class EquipmentController < ApplicationController
   extend EquipmentService
 
+  before_filter :authenticate_user!
   before_action :set_equipment, only: [:show, :edit, :update, :destroy]
 
   check_authorization

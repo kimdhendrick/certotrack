@@ -1,22 +1,11 @@
 require 'spec_helper'
 
-def stub_current_user_with(user)
-  controller.stub(:current_user).and_return(user)
-end
-
-def stub_equipment_user
-  stub_current_user_with(create_valid_user(roles: ['equipment'], customer: @customer))
-end
-
-def stub_admin
-  stub_current_user_with(create_valid_user(roles: ['admin']))
-end
-
 describe EquipmentController do
 
   before do
     @customer = create_valid_customer
-    stub_equipment_user
+    user = stub_equipment_user
+    sign_in user
   end
 
   describe 'GET index' do
