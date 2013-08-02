@@ -3,20 +3,6 @@ Certotrack
 
 Welcome to CT on Rails! 
 
-- Getting off the ground:
-  - Capybara tests
-     - Figure out how to install and write a few
-  - Jasmine tests
-     - Figure out how to install and write a few
-
-- Epics
-  - Port grails app!
-  - Styling - same as Grails or more like Bootstrap default or something in the middle?
-  - Migrate Grails DB
-  - Move to new host
-
-----    
-
 # Getting Started
 
 ## Clone repo
@@ -81,3 +67,4 @@ Answer 'yes' when prompted. Copy & paste command to ignore rvm warnings.
 
     rake db:migrate
     rake db:test:prepare
+    rake db:seed
