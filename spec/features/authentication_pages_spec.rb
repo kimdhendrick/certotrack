@@ -1,7 +1,6 @@
 require 'spec_helper'
 
-# Why does this test fail if js: false?  Has something to do with database_cleaner.
-describe 'Authentication', js: true do
+describe 'Authentication' do
 
   subject { page }
 

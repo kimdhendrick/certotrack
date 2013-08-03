@@ -151,6 +151,104 @@ describe 'Equipment' do
     end
   end
 
+  describe 'Create Equipment' do
+    before do
+      login_as_equipment_user
+    end
+
+    it 'should create new equipment' do
+      visit '/'
+      click_link 'Create Equipment'
+
+      page.should have_content 'Create Equipment'
+      page.should have_link 'Home'
+      #TODO page.should have_link 'Search Equipment'
+
+      page.should have_content 'Name'
+      page.should have_content 'Serial Number'
+      #TODO page.should have_content 'Assignee'
+      page.should have_content 'Inspection Interval'
+      page.should have_content 'Last Inspection Date'
+      page.should have_content 'Comments'
+
+      fill_in 'Name', with: 'Level'
+      fill_in 'Serial Number', with: '765-CKD'
+      select '5 years', from: 'Inspection Interval'
+      fill_in 'Last Inspection Date', with: '01/01/2000'
+      fill_in 'Comments', with: 'Special Notes'
+
+      click_on 'Create'
+
+      page.should have_content 'Show Equipment'
+
+      page.should have_content 'Level'
+      page.should have_content '765-CKD'
+      page.should have_content 'Expired'
+      page.should have_content '5 years'
+      page.should have_content '01/01/2000'
+      page.should have_content '01/01/2005'
+      page.should have_content 'Special Notes'
+    end
+  end
+
+  describe 'Update Equipment' do
+    before do
+      login_as_equipment_user
+    end
+
+    it 'should update existing equipment' do
+      valid_equipment = create_equipment(
+        customer: @customer,
+        name: 'Meter',
+        serial_number: 'ABC123',
+        inspection_interval: 'Annually',
+        last_inspection_date: Date.new(2013, 1, 1),
+        inspection_type: 'Inspectable',
+        expiration_date: Date.new(2024, 2, 3),
+        notes: 'my notes'
+      )
+
+      visit '/'
+      click_link 'All Equipment'
+      click_link 'Meter'
+
+      page.should have_content 'Show Equipment'
+      click_on 'Edit'
+
+      page.should have_content 'Edit Equipment'
+      page.should have_link 'Home'
+      page.should have_link 'All Equipment'
+      page.should have_link 'Create Equipment'
+
+      page.should have_content 'Name'
+      page.should have_content 'Serial Number'
+      #TODO page.should have_content 'Assignee'
+      page.should have_content 'Inspection Interval'
+      page.should have_content 'Last Inspection Date'
+      page.should have_content 'Comments'
+
+      page.should have_link 'Delete'
+
+      fill_in 'Name', with: 'Level'
+      fill_in 'Serial Number', with: '765-CKD'
+      select '5 years', from: 'Inspection Interval'
+      fill_in 'Last Inspection Date', with: '01/01/2000'
+      fill_in 'Comments', with: 'Special Notes'
+
+      click_on 'Update'
+
+      page.should have_content 'Show Equipment'
+
+      page.should have_content 'Level'
+      page.should have_content '765-CKD'
+      page.should have_content 'Expired'
+      page.should have_content '5 years'
+      page.should have_content '01/01/2000'
+      page.should have_content '01/01/2005'
+      page.should have_content 'Special Notes'
+    end
+  end
+
   def assert_report_headers_are_correct
     within 'thead tr' do
       page.should have_content 'Name'

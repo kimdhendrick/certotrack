@@ -36,4 +36,10 @@ class Equipment < ActiveRecord::Base
   def expires_on
     InspectionInterval.find_by_text(inspection_interval).expires_on(last_inspection_date)
   end
+
+  def calculate_inspection_type
+    inspection_interval == InspectionInterval::NOT_REQUIRED.text ?
+      InspectionType::NON_INSPECTABLE.text :
+      InspectionType::INSPECTABLE.text
+  end
 end

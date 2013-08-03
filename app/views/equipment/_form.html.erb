@@ -4,42 +4,48 @@
       <h2><%= pluralize(@equipment.errors.count, "error") %> prohibited this equipment from being saved:</h2>
 
       <ul>
-      <% @equipment.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
+        <% @equipment.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
       </ul>
     </div>
   <% end %>
 
   <div class="field">
-    <%= f.label :serial_number %><br />
-    <%= f.text_field :serial_number %>
-  </div>
-  <div class="field">
-    <%= f.label :last_inspection_date %><br />
-    <%= f.date_select :last_inspection_date %>
-  </div>
-  <div class="field">
-    <%= f.label :inspection_interval %><br />
-    <%= select(:equipment, :inspection_interval,
-          options_for_select(InspectionInterval.all.map(&:text),
-            @equipment.inspection_interval)) %>
-  </div>
-  <div class="field">
-    <%= f.label :name %><br />
+    <%= f.label :name %>
+    <br/>
     <%= f.text_field :name %>
   </div>
+
   <div class="field">
-    <%= f.label :inspection_type %><br />
-    <%= select(:equipment, :inspection_type,
-          options_for_select(InspectionType.all.map(&:text),
-            @equipment.inspection_type)) %>
+    <%= f.label :serial_number, 'Serial Number' %>
+    <br/>
+    <%= f.text_field :serial_number %>
   </div>
+
   <div class="field">
-    <%= f.label :notes %><br />
+    <%= f.label :inspection_interval, 'Inspection Interval' %>
+    <br/>
+    <%= select(:equipment, :inspection_interval,
+               options_for_select(InspectionInterval.all.map(&:text),
+                                  @equipment.inspection_interval)) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :last_inspection_date, 'Last Inspection Date' %>
+    <br/>
+    <%= f.text_field :last_inspection_date %>
+  </div>
+
+  <div class="field">
+    <%= f.label :notes, 'Comments' %>
+    <br/>
     <%= f.text_field :notes %>
   </div>
+
   <div class="actions">
-    <%= f.submit %>
+    <%= submit_tag(user_action) %>
   </div>
+
 <% end %>
+

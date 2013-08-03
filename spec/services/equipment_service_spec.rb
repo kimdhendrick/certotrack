@@ -135,7 +135,7 @@ describe EquipmentService do
 
   describe 'update_equipment' do
     it 'should update equipments attributes' do
-      equipment = create_equipment(customer: @customer)
+      equipment = create_equipment(customer: @customer, inspection_type: 'Non-Inspectable')
       attributes =
         {
           'id' => equipment.id,
@@ -143,7 +143,6 @@ describe EquipmentService do
           'serial_number' => 'newSN',
           'inspection_interval' => '5 years',
           'last_inspection_date' => '01/01/2001',
-          'inspection_type' => InspectionType::INSPECTABLE.text,
           'notes' => 'some new notes'
         }
 
@@ -158,6 +157,23 @@ describe EquipmentService do
       equipment.inspection_type.should == InspectionType::INSPECTABLE.text
       equipment.notes.should == 'some new notes'
       equipment.expiration_date.should == Date.new(2006, 1, 1)
+    end
+
+    it 'should set inspection_interval to Non-Inspectable if interval is Not Required' do
+      equipment = create_equipment(customer: @customer)
+      attributes =
+        {
+          'id' => equipment.id,
+          'inspection_interval' => 'Not Required'
+        }
+
+      success = EquipmentService::update_equipment(equipment, attributes)
+      success.should be_true
+
+      equipment.reload
+      equipment.inspection_interval.should == 'Not Required'
+      equipment.inspection_type.should == InspectionType::NON_INSPECTABLE.text
+      equipment.expiration_date.should be_nil
     end
 
     it 'should return false if errors' do
@@ -180,7 +196,6 @@ describe EquipmentService do
           'serial_number' => 'newSN',
           'inspection_interval' => '5 years',
           'last_inspection_date' => '01/01/2001',
-          'inspection_type' => InspectionType::INSPECTABLE.text,
           'notes' => 'some new notes'
         }
       customer = new_customer
@@ -194,6 +209,22 @@ describe EquipmentService do
       equipment.inspection_type.should == InspectionType::INSPECTABLE.text
       equipment.notes.should == 'some new notes'
       equipment.expiration_date.should == Date.new(2006, 1, 1)
+    end
+
+    it 'should set inspection_interval to Non-Inspectable if interval is Not Required' do
+      attributes =
+        {
+          'name' => 'Box',
+          'inspection_interval' => 'Not Required'
+        }
+      customer = new_customer
+
+      equipment = EquipmentService::create_equipment(customer, attributes)
+
+      equipment.name.should == 'Box'
+      equipment.inspection_interval.should == 'Not Required'
+      equipment.inspection_type.should == InspectionType::NON_INSPECTABLE.text
+      equipment.expiration_date.should be_nil
     end
   end
 end

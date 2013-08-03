@@ -1,6 +1,9 @@
-<h1>Editing equipment</h1>
+<h1>Edit Equipment</h1>
 
-<%= render 'form' %>
+<%= link_to 'Home', root_path %> |
+<%= link_to 'All Equipment', equipment_index_path %> |
+<%= link_to "Create Equipment", new_equipment_path %>
 
-<%= link_to 'Show', @equipment %> |
-<%= link_to 'Back', equipment_index_path %>
+<%= render 'form', user_action: 'Update' %>
+
+<%= link_to 'Delete', @equipment, method: :delete, data: {confirm: 'Are you sure you want to delete?'} %>
