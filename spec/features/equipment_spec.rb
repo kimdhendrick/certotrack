@@ -33,6 +33,7 @@ describe 'Equipment' do
         assert_report_headers_are_correct
 
         within 'tbody tr', text: 'Meter' do
+          page.should have_link 'Meter'
           page.should have_content 'ABC123'
           page.should have_content 'Valid'
           page.should have_content 'Annually'
@@ -69,6 +70,7 @@ describe 'Equipment' do
         assert_report_headers_are_correct
 
         within 'tbody tr', text: 'Gauge' do
+          page.should have_link 'Gauge'
           page.should have_content 'XYZ987'
           page.should have_content 'Expired'
           page.should have_content 'Monthly'

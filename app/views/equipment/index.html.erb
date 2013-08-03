@@ -21,7 +21,7 @@
   <tbody>
   <% @equipment.each do |equipment| %>
     <tr>
-      <td><%= equipment.name %></td>
+      <td><%= link_to equipment.name, equipment %></td></td>
       <td><%= equipment.serial_number %></td>
       <td><%= equipment.status %></td>
       <td><%= equipment.inspection_interval %></td>

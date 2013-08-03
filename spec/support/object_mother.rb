@@ -64,7 +64,7 @@ module ObjectMother
 
   def new_valid_customer(options = {})
     valid_attributes = {
-      name: "My Customer"
+      name: 'My Customer'
     }
     _apply(Customer.new, valid_attributes, options)
   end
