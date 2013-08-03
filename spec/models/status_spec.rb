@@ -10,10 +10,10 @@ describe Status do
   end
 
   it 'should have sort_order' do
-    Status::VALID.sort_order.should == 0
-    Status::EXPIRING.sort_order.should == 1
-    Status::EXPIRED.sort_order.should == 2
-    Status::RECERTIFY.sort_order.should == 3
-    Status::NA.sort_order.should == 4
+    Status::VALID.sort_order.should == 1
+    Status::EXPIRING.sort_order.should == 2
+    Status::EXPIRED.sort_order.should == 3
+    Status::RECERTIFY.sort_order.should == 4
+    Status::NA.sort_order.should == 5
   end
 end

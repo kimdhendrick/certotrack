@@ -7,6 +7,7 @@ gem 'pg'
 gem 'devise'
 gem 'cancan'
 gem 'tilt-jade'
+gem 'active_hash'
 
 group :test do
   gem "shoulda-matchers"

@@ -1,20 +1,19 @@
-module Status
-  class Value
-    attr_reader :value
-    attr_reader :sort_order
+class Status < ActiveHash::Base
 
-    def initialize(value, sort_order)
-      @value = value.dup.freeze
-      @sort_order = sort_order
-    end
+  self.data = [
+    {id: 1, text: 'Valid'},
+    {id: 2, text: 'Warning'},
+    {id: 3, text: 'Expired'},
+    {id: 4, text: 'Recertify'},
+    {id: 5, text: 'NA'}
+  ]
 
-    alias_method :to_s, :value
-    alias_method :inspect, :value
-  end
+  alias_method :to_s, :text
+  alias_method :sort_order, :id
 
-  VALID = Value.new('Valid', 0)
-  EXPIRING = Value.new('Warning', 1)
-  EXPIRED = Value.new('Expired', 2)
-  RECERTIFY = Value.new('Recertify', 3)
-  NA = Value.new('NA', 4)
+  VALID = Status.find(1)
+  EXPIRING = Status.find(2)
+  EXPIRED = Status.find(3)
+  RECERTIFY = Status.find(4)
+  NA = Status.find(5)
 end
