@@ -1,40 +1,47 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <b>Serial number:</b>
-  <%= @equipment.serial_number %>
-</p>
+<h1>Show Equipment</h1>
+
+<%= link_to 'Home', equipment_index_path %> |
+<%= link_to "All Equipment", equipment_index_path %> |
+<%= link_to 'Create Equipment', new_equipment_path %>
+
 
 <p>
-  <b>Last inspection date:</b>
-  <%= @equipment.last_inspection_date %>
-</p>
-
-<p>
-  <b>Inspection interval:</b>
-  <%= @equipment.inspection_interval %>
-</p>
-
-<p>
-  <b>Name:</b>
+  <b>Name</b>
   <%= @equipment.name %>
 </p>
 
 <p>
-  <b>Expiration date:</b>
-  <%= @equipment.expiration_date %>
+  <b>Serial Number</b>
+  <%= @equipment.serial_number %>
 </p>
 
 <p>
-  <b>Type:</b>
-  <%= @equipment.inspection_type %>
+  <b>Status</b>
+  <%= @equipment.status %>
 </p>
 
 <p>
-  <b>Notes:</b>
+  <b>Inspection Interval</b>
+  <%= @equipment.inspection_interval %>
+</p>
+
+<p>
+  <b>Last Inspection Date</b>
+  <%= DateHelpers::format(@equipment.last_inspection_date) %>
+</p>
+
+<p>
+  <b>Expiration Date</b>
+  <%= DateHelpers::format(@equipment.expiration_date) %>
+</p>
+
+<p>
+  <b>Comments</b>
   <%= @equipment.notes %>
 </p>
 
 
 <%= link_to 'Edit', edit_equipment_path(@equipment) %> |
-<%= link_to 'Back', equipment_index_path %>
+<%= link_to 'Delete', @equipment, method: :delete, data: { confirm: 'Are you sure you want to delete?' } %>

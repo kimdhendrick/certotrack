@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'Equipment' do
 
-  describe 'All Equipment' do
+  describe 'Reports' do
     context 'when an equipment user' do
       before do
         login_as_equipment_user
@@ -99,6 +99,55 @@ describe 'Equipment' do
         page.should have_content 'Meter 456'
         page.should have_content 'Gauge 987'
       end
+    end
+  end
+
+  describe 'Show Equipment' do
+    before do
+      login_as_equipment_user
+    end
+
+    it 'should render equipment show page' do
+      valid_equipment = create_equipment(
+        customer: @customer,
+        name: 'Meter',
+        serial_number: 'ABC123',
+        inspection_interval: 'Annually',
+        last_inspection_date: Date.new(2013, 1, 1),
+        inspection_type: 'Inspectable',
+        expiration_date: Date.new(2024, 2, 3),
+        notes: 'my notes'
+      )
+
+      visit '/'
+      click_link 'All Equipment'
+      click_link 'Meter'
+
+      page.should have_content 'Show Equipment'
+      page.should have_link 'Home'
+      page.should have_link 'All Equipment'
+      #TODO page.should have_link 'Search Equipment'
+      page.should have_link 'Create Equipment'
+
+      page.should have_content 'Name'
+      page.should have_content 'Serial Number'
+      page.should have_content 'Status'
+      #TODO page.should have_content 'Assignee'
+      page.should have_content 'Inspection Interval'
+      page.should have_content 'Last Inspection Date'
+      page.should have_content 'Expiration Date'
+      page.should have_content 'Comments'
+
+      page.should have_content 'Meter'
+      page.should have_content 'ABC123'
+      page.should have_content 'Valid'
+      page.should have_content 'Annually'
+      page.should have_content '01/01/2013'
+      page.should have_content '02/03/2024'
+      page.should have_content 'my notes'
+
+      page.should have_link 'Edit'
+      page.should have_link 'Delete'
     end
   end
 
