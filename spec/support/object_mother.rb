@@ -2,11 +2,11 @@ module ObjectMother
 
   @@identifier = 0
 
-  def create_valid_user(options = {})
-    new_valid_user(options).tap(&:save!)
+  def create_user(options = {})
+    new_user(options).tap(&:save!)
   end
 
-  def new_valid_user(options = {})
+  def new_user(options = {})
     valid_attributes = {
       username: "username_#{_new_id}",
       first_name: 'First',
@@ -19,11 +19,35 @@ module ObjectMother
   end
 
   def create_valid_equipment(options = {})
-    new_valid_equipment(options).tap(&:save!)
+    create_equipment(options.merge({expiration_date: Date.today + 61.days}))
   end
 
   def new_valid_equipment(options = {})
-    valid_attributes = equipment_attributes()
+    new_equipment(options.merge({expiration_date: Date.today + 61.days}))
+  end
+
+  def create_expired_equipment(options = {})
+    create_equipment(options.merge({expiration_date: Date.yesterday}))
+  end
+
+  def new_expired_equipment(options = {})
+    new_equipment(options.merge({expiration_date: Date.yesterday}))
+  end
+
+  def create_expiring_equipment(options = {})
+    create_equipment(options.merge({expiration_date: Date.tomorrow}))
+  end
+
+  def new_expiring_equipment(options = {})
+    new_equipment(options.merge({expiration_date: Date.tomorrow}))
+  end
+
+  def create_equipment(options = {})
+    new_equipment(options).tap(&:save!)
+  end
+
+  def new_equipment(options = {})
+    valid_attributes = equipment_attributes
     _apply(Equipment.new, valid_attributes, options)
   end
 
@@ -33,7 +57,7 @@ module ObjectMother
     }
   end
 
-  def create_valid_customer(options = {})
+  def create_customer(options = {})
     new_valid_customer(options).tap(&:save!)
   end
 
@@ -49,18 +73,17 @@ module ObjectMother
   end
 
 
-
   private
 
-    def _new_id
-      @@identifier += 1
-    end
+  def _new_id
+    @@identifier += 1
+  end
 
-    def _apply(record, defaults, options)
-      options = defaults.merge(options)
-      options.each do |key, value|
-        record.send("#{key}=", value.is_a?(Proc) ? value.call : value)
-      end
-      record
+  def _apply(record, defaults, options)
+    options = defaults.merge(options)
+    options.each do |key, value|
+      record.send("#{key}=", value.is_a?(Proc) ? value.call : value)
     end
+    record
+  end
 end

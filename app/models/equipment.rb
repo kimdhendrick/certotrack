@@ -16,7 +16,15 @@ class Equipment < ActiveRecord::Base
   def status
     return Status::NA if !expiration_date.present?
     return Status::EXPIRED if expiration_date <= Date.today
-    return Status::WARNING if (expiration_date < Date.today + 60.days)
+    return Status::EXPIRING if (expiration_date < Date.today + 60.days)
     Status::VALID
+  end
+
+  def expired?
+    status == Status::EXPIRED
+  end
+
+  def expiring?
+    status == Status::EXPIRING
   end
 end

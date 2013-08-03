@@ -9,7 +9,18 @@ class EquipmentController < ApplicationController
   def index
     authorize! :read, :equipment
 
+    @report_title = 'All Equipment List'
     @equipment = EquipmentService::get_all_equipment(current_user)
+    @equipment_count = @equipment.count
+  end
+
+  def expired
+    authorize! :read, :equipment
+
+    @report_title = 'Expired Equipment List'
+    @equipment = EquipmentService::get_expired_equipment(current_user)
+    @equipment_count = @equipment.count
+    render 'equipment/index'
   end
 
   def show

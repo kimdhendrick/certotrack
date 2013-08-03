@@ -8,13 +8,13 @@ describe User do
     let(:user) { nil }
 
     context 'when user is an admin' do
-      let(:user) { new_valid_user(roles: ['admin']) }
+      let(:user) { new_user(roles: ['admin']) }
 
       it { should be_able_to(:manage, :all) }
     end
 
     context 'when user is a guest' do
-      let(:user) { new_valid_user }
+      let(:user) { new_user }
 
       it { should_not be_able_to(:manage, :all) }
       it { should_not be_able_to(:manage, :equipment) }
@@ -23,7 +23,7 @@ describe User do
     end
 
     context 'when user is an equipment user' do
-      let(:user) { new_valid_user(roles: ['equipment']) }
+      let(:user) { new_user(roles: ['equipment']) }
 
       it { should be_able_to(:read, :equipment) }
       it { should be_able_to(:create, :equipment) }
@@ -34,13 +34,13 @@ describe User do
 
     context 'when user is an equipment user' do
       let(:user) {
-        new_valid_user(roles: ['equipment'], customer: new_valid_customer)
+        new_user(roles: ['equipment'], customer: new_valid_customer)
       }
       let(:own_equipment) {
-        new_valid_equipment(customer: user.customer)
+        new_equipment(customer: user.customer)
       }
       let(:other_customer_equipment) {
-        new_valid_equipment(customer: new_valid_customer)
+        new_equipment(customer: new_valid_customer)
       }
 
       it { should be_able_to(:manage, own_equipment) }
@@ -48,7 +48,7 @@ describe User do
     end
 
     context 'when user is a certification user' do
-      let(:user) { new_valid_user(roles: ['certification']) }
+      let(:user) { new_user(roles: ['certification']) }
 
       it { should be_able_to(:manage, :certification) }
       it { should_not be_able_to(:manage, :all) }
@@ -57,7 +57,7 @@ describe User do
     end
 
     context 'when user is a vehicle user' do
-      let(:user) { new_valid_user(roles: ['vehicle']) }
+      let(:user) { new_user(roles: ['vehicle']) }
 
       it { should be_able_to(:manage, :vehicle) }
       it { should_not be_able_to(:manage, :all) }

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe User do
-  before { @user = new_valid_user }
+  before { @user = new_user }
 
   subject { @user }
 
@@ -16,7 +16,7 @@ describe User do
 
   describe 'when username has mixed case' do
     before do
-      @user = create_valid_user(username: 'ABC')
+      @user = create_user(username: 'ABC')
     end
     it 'should lowercase the username' do
       @user.username.should == 'abc'
@@ -25,7 +25,7 @@ describe User do
 
   describe 'when email has mixed case' do
     before do
-      @user = create_valid_user(email: 'ABC@EMAIL.COM')
+      @user = create_user(email: 'ABC@EMAIL.COM')
     end
     it 'should lowercase the email' do
       @user.email.should == 'abc@email.com'
@@ -75,7 +75,7 @@ describe User do
 
   describe 'when password is not present' do
     before do
-      @user = new_valid_user(password: '')
+      @user = new_user(password: '')
     end
     it { should_not be_valid }
   end
@@ -104,7 +104,7 @@ describe User do
   describe 'customer' do
     it 'should be able to assign a customer to a user' do
       customer = new_valid_customer
-      user = new_valid_user
+      user = new_user
       user.customer = customer
 
       user.customer.should == customer
@@ -128,25 +128,25 @@ describe User do
 
     describe 'role?' do
       it 'should return true for roles it has' do
-        equipment_user = create_valid_user(roles: ['equipment'])
+        equipment_user = create_user(roles: ['equipment'])
         equipment_user.role?('equipment').should be_true
         equipment_user.role?('certification').should be_false
         equipment_user.role?('vehicle').should be_false
         equipment_user.role?('admin').should be_false
 
-        certification_user = create_valid_user(roles: ['certification'])
+        certification_user = create_user(roles: ['certification'])
         certification_user.role?('equipment').should be_false
         certification_user.role?('certification').should be_true
         certification_user.role?('vehicle').should be_false
         certification_user.role?('admin').should be_false
 
-        vehicle_user = create_valid_user(roles: ['vehicle'])
+        vehicle_user = create_user(roles: ['vehicle'])
         vehicle_user.role?('equipment').should be_false
         vehicle_user.role?('certification').should be_false
         vehicle_user.role?('vehicle').should be_true
         vehicle_user.role?('admin').should be_false
 
-        admin_user = create_valid_user(roles: ['admin'])
+        admin_user = create_user(roles: ['admin'])
         admin_user.role?('equipment').should be_false
         admin_user.role?('certification').should be_false
         admin_user.role?('vehicle').should be_false
@@ -156,16 +156,16 @@ describe User do
 
     describe 'admin?' do
       it 'should be admin with the admin role' do
-        admin_user = create_valid_user(roles: ['admin'])
+        admin_user = create_user(roles: ['admin'])
         admin_user.should be_admin
       end
     end
 
     describe 'with_role' do
       it 'should return users with given role' do
-        equipment_user_1 = create_valid_user(roles: ['admin'])
-        equipment_user_2 = create_valid_user(roles: ['admin'])
-        certification_user = create_valid_user(roles: ['certification'])
+        equipment_user_1 = create_user(roles: ['admin'])
+        equipment_user_2 = create_user(roles: ['admin'])
+        certification_user = create_user(roles: ['certification'])
 
         User.with_role('admin').should =~ [equipment_user_1, equipment_user_2]
       end
@@ -173,7 +173,7 @@ describe User do
 
     describe 'add_role' do
       it 'should add the new role' do
-        equipment_user = create_valid_user
+        equipment_user = create_user
         equipment_user.role?('equipment').should be_false
         equipment_user.add_role('equipment')
         equipment_user.role?('equipment').should be_true
@@ -182,7 +182,7 @@ describe User do
 
     describe 'remove_role' do
       it 'should remove the old role' do
-        equipment_user = create_valid_user(roles: ['admin'])
+        equipment_user = create_user(roles: ['admin'])
         equipment_user.role?('admin').should be_true
         equipment_user.remove_role('admin')
         equipment_user.role?('admin').should be_false

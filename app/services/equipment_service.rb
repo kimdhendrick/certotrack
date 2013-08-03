@@ -8,6 +8,10 @@ module EquipmentService
     end
   end
 
+  def self.get_expired_equipment(current_user)
+    get_all_equipment(current_user).select { |e| e.expired? }
+  end
+
   def self.count_all_equipment(current_user)
     if (current_user.admin?)
       Equipment.count
@@ -17,10 +21,10 @@ module EquipmentService
   end
 
   def self.count_expired_equipment(current_user)
-    get_all_equipment(current_user).select{|equipment| equipment.status == Status::EXPIRED}.count
+    get_all_equipment(current_user).select { |e| e.expired? }.count
   end
 
   def self.count_expiring_equipment(current_user)
-    get_all_equipment(current_user).select{|equipment| equipment.status == Status::WARNING}.count
+    get_all_equipment(current_user).select { |e| e.expiring? }.count
   end
 end

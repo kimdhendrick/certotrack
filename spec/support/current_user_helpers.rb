@@ -5,14 +5,14 @@ module CurrentUserHelpers
   end
 
   def stub_equipment_user
-    stub_current_user_with(create_valid_user(roles: ['equipment'], customer: @customer))
+    stub_current_user_with(create_user(roles: ['equipment'], customer: @customer))
   end
 
   def stub_guest_user
-    stub_current_user_with(create_valid_user(customer: @customer))
+    stub_current_user_with(create_user(customer: @customer))
   end
 
   def stub_admin
-    stub_current_user_with(create_valid_user(roles: ['admin']))
+    stub_current_user_with(create_user(roles: ['admin']))
   end
 end

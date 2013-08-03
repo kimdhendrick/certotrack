@@ -1,8 +1,8 @@
 module LoginHelpers
   def login_as_user_with_role(role)
     visit "#"
-    @customer = create_valid_customer
-    user = create_valid_user(customer: @customer, roles: [role])
+    @customer = create_customer
+    user = create_user(customer: @customer, roles: [role])
     fill_in 'Username', with: user.username.upcase
     fill_in 'Password', with: user.password
     click_button 'Login'
@@ -18,8 +18,8 @@ module LoginHelpers
 
   def login_as_guest
     visit "#"
-    @customer = create_valid_customer
-    user = create_valid_user(customer: @customer)
+    @customer = create_customer
+    user = create_user(customer: @customer)
     fill_in 'Username', with: user.username.upcase
     fill_in 'Password', with: user.password
     click_button 'Login'

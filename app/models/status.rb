@@ -13,7 +13,7 @@ module Status
   end
 
   VALID = Value.new('Valid', 0)
-  WARNING = Value.new('Warning', 1)
+  EXPIRING = Value.new('Warning', 1)
   EXPIRED = Value.new('Expired', 2)
   RECERTIFY = Value.new('Recertify', 3)
   NA = Value.new('NA', 4)

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe CertotrackController do
 
   before do
-    @customer = create_valid_customer
+    @customer = create_customer
   end
 
   describe 'GET home' do
