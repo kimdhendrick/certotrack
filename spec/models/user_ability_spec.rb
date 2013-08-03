@@ -34,13 +34,13 @@ describe User do
 
     context 'when user is an equipment user' do
       let(:user) {
-        new_user(roles: ['equipment'], customer: new_valid_customer)
+        new_user(roles: ['equipment'], customer: new_customer)
       }
       let(:own_equipment) {
         new_equipment(customer: user.customer)
       }
       let(:other_customer_equipment) {
-        new_equipment(customer: new_valid_customer)
+        new_equipment(customer: new_customer)
       }
 
       it { should be_able_to(:manage, own_equipment) }

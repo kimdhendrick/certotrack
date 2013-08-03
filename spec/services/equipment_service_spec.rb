@@ -132,4 +132,68 @@ describe EquipmentService do
       end
     end
   end
+
+  describe 'update_equipment' do
+    it 'should update equipments attributes' do
+      equipment = create_equipment(customer: @customer)
+      attributes =
+        {
+          'id' => equipment.id,
+          'name' => 'Box',
+          'serial_number' => 'newSN',
+          'inspection_interval' => '5 years',
+          'last_inspection_date' => '01/01/2001',
+          'inspection_type' => InspectionType::INSPECTABLE.text,
+          'notes' => 'some new notes'
+        }
+
+      success = EquipmentService::update_equipment(equipment, attributes)
+      success.should be_true
+
+      equipment.reload
+      equipment.name.should == 'Box'
+      equipment.serial_number.should == 'newSN'
+      equipment.inspection_interval.should == '5 years'
+      equipment.last_inspection_date.should == Date.new(2001, 1, 1)
+      equipment.inspection_type.should == InspectionType::INSPECTABLE.text
+      equipment.notes.should == 'some new notes'
+      equipment.expiration_date.should == Date.new(2006, 1, 1)
+    end
+
+    it 'should return false if errors' do
+      equipment = create_equipment(customer: @customer)
+      equipment.stub(:save).and_return(false)
+
+      success = EquipmentService::update_equipment(equipment, {})
+      success.should be_false
+
+      equipment.reload
+      equipment.name.should_not == 'Box'
+    end
+  end
+
+  describe 'create_equipment' do
+    it 'should create equipment' do
+      attributes =
+        {
+          'name' => 'Box',
+          'serial_number' => 'newSN',
+          'inspection_interval' => '5 years',
+          'last_inspection_date' => '01/01/2001',
+          'inspection_type' => InspectionType::INSPECTABLE.text,
+          'notes' => 'some new notes'
+        }
+      customer = new_customer
+
+      equipment = EquipmentService::create_equipment(customer, attributes)
+
+      equipment.name.should == 'Box'
+      equipment.serial_number.should == 'newSN'
+      equipment.inspection_interval.should == '5 years'
+      equipment.last_inspection_date.should == Date.new(2001, 1, 1)
+      equipment.inspection_type.should == InspectionType::INSPECTABLE.text
+      equipment.notes.should == 'some new notes'
+      equipment.expiration_date.should == Date.new(2006, 1, 1)
+    end
+  end
 end

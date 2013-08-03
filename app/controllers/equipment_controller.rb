@@ -40,24 +40,21 @@ class EquipmentController < ApplicationController
   def create
     authorize! :create, :equipment
 
-    @equipment = Equipment.new(equipment_params)
-    @equipment.customer = current_user.customer
+    @equipment = EquipmentService::create_equipment(current_user.customer, equipment_params)
 
-    respond_to do |format|
-      if @equipment.save
-        format.html { redirect_to @equipment, notice: 'Equipment was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @equipment }
-      else
-        format.html { render action: 'new' }
-        format.json { render json: @equipment.errors, status: :unprocessable_entity }
-      end
+    if @equipment.save
+      redirect_to @equipment, notice: 'Equipment was successfully created.'
+    else
+      render action: 'new'
     end
   end
 
   def update
     authorize! :manage, @equipment
 
-    if @equipment.update(equipment_params)
+    success = EquipmentService::update_equipment(@equipment, equipment_params)
+
+    if success
       redirect_to @equipment, notice: 'Equipment was successfully updated.'
     else
       render action: 'edit'
@@ -68,10 +65,7 @@ class EquipmentController < ApplicationController
     authorize! :manage, @equipment
 
     @equipment.destroy
-    respond_to do |format|
-      format.html { redirect_to equipment_index_url }
-      format.json { head :no_content }
-    end
+    redirect_to equipment_index_url
   end
 
   private

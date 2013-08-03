@@ -60,10 +60,10 @@ module ObjectMother
   end
 
   def create_customer(options = {})
-    new_valid_customer(options).tap(&:save!)
+    new_customer(options).tap(&:save!)
   end
 
-  def new_valid_customer(options = {})
+  def new_customer(options = {})
     valid_attributes = {
       name: 'My Customer'
     }

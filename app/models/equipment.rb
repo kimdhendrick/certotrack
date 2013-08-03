@@ -32,4 +32,8 @@ class Equipment < ActiveRecord::Base
   def expiring?
     status == Status::EXPIRING
   end
+
+  def expires_on
+    InspectionInterval.find_by_text(inspection_interval).expires_on(last_inspection_date)
+  end
 end

@@ -149,13 +149,16 @@ describe EquipmentController do
 
     describe 'with invalid params' do
       it 'assigns a newly created but unsaved equipment as @equipment' do
-        # Trigger the behavior that occurs when invalid params are submitted
+        EquipmentService.should_receive(:create_equipment).once.and_return(new_equipment)
         Equipment.any_instance.stub(:save).and_return(false)
+
         post :create, {:equipment => {'name' => 'invalid value'}}, valid_session
+
         assigns(:equipment).should be_a_new(Equipment)
       end
 
       it "re-renders the 'new' template" do
+        EquipmentService.should_receive(:create_equipment).once.and_return(new_equipment)
         Equipment.any_instance.stub(:save).and_return(false)
         post :create, {:equipment => {'name' => 'invalid value'}}, valid_session
         response.should render_template('new')
@@ -167,23 +170,15 @@ describe EquipmentController do
     describe 'with valid params' do
       it 'updates the requested equipment' do
         equipment = create_equipment(customer: @customer)
-        Equipment.any_instance.should_receive(:update).with(
-          {
-            'name' => 'Box',
-            'serial_number' => 'newSN',
-            'inspection_interval' => 'Annually',
-            'last_inspection_date' => '01/01/2001',
-            'inspection_type' => 'Not Inspectable',
-            'notes' => 'some new notes'
-          }
-        )
+        EquipmentService.should_receive(:update_equipment).once
+
         put :update, {:id => equipment.to_param, :equipment =>
           {
             'name' => 'Box',
             'serial_number' => 'newSN',
             'inspection_interval' => 'Annually',
             'last_inspection_date' => '01/01/2001',
-            'inspection_type' => 'Not Inspectable',
+            'inspection_type' => 'Inspectable',
             'notes' => 'some new notes'
           }
         }, valid_session

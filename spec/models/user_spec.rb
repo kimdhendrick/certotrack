@@ -103,7 +103,7 @@ describe User do
 
   describe 'customer' do
     it 'should be able to assign a customer to a user' do
-      customer = new_valid_customer
+      customer = new_customer
       user = new_user
       user.customer = customer
 

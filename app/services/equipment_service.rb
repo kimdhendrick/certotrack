@@ -27,4 +27,17 @@ module EquipmentService
   def self.count_expiring_equipment(current_user)
     get_all_equipment(current_user).select { |e| e.expiring? }.count
   end
+
+  def self.update_equipment(equipment, attributes)
+    equipment.update(attributes)
+    equipment.update(expiration_date: equipment.expires_on)
+    equipment.save
+  end
+
+  def self.create_equipment(customer, attributes)
+    equipment = Equipment.new(attributes)
+    equipment.update(expiration_date: equipment.expires_on)
+    equipment.customer = customer
+    equipment
+  end
 end

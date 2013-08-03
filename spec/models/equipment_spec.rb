@@ -19,7 +19,7 @@ describe Equipment do
   end
 
   it 'should be able to assign a customer to equipment' do
-    customer = new_valid_customer
+    customer = new_customer
     equipment = new_equipment
     equipment.customer = customer
 
