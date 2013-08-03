@@ -1,8 +1,11 @@
 class Equipment < ActiveRecord::Base
 
   belongs_to :customer
-  validates :inspection_type, inclusion: {in: %w(Inspectable Non-Inspectable),
+  validates :inspection_type, inclusion: {in: InspectionType.all.map(&:text),
                                           message: 'invalid value'}
+
+  validates :inspection_interval, inclusion: {in: InspectionInterval.all.map(&:text),
+                                              message: 'invalid value'}
 
   def self.accessible_parameters
     [

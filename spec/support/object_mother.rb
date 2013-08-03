@@ -54,7 +54,8 @@ module ObjectMother
   def equipment_attributes
     {
       name: 'Meter',
-      inspection_type: 'Inspectable'
+      inspection_type: InspectionType::INSPECTABLE.text,
+      inspection_interval: InspectionInterval::ONE_YEAR.text
     }
   end
 

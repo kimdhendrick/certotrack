@@ -21,7 +21,9 @@
   </div>
   <div class="field">
     <%= f.label :inspection_interval %><br />
-    <%= f.text_field :inspection_interval %>
+    <%= select(:equipment, :inspection_interval,
+          options_for_select(InspectionInterval.all.map(&:text),
+            @equipment.inspection_interval)) %>
   </div>
   <div class="field">
     <%= f.label :name %><br />
@@ -29,7 +31,9 @@
   </div>
   <div class="field">
     <%= f.label :inspection_type %><br />
-    <%= f.text_field :inspection_type %>
+    <%= select(:equipment, :inspection_type,
+          options_for_select(InspectionType.all.map(&:text),
+            @equipment.inspection_type)) %>
   </div>
   <div class="field">
     <%= f.label :notes %><br />

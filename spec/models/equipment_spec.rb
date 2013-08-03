@@ -70,9 +70,22 @@ describe Equipment do
     expiring_equipment.expiring?.should be_true
   end
 
-  it 'should be inspectable or not' do
-    new_equipment(inspection_type: 'Inspectable').should be_valid
-    new_equipment(inspection_type: 'Non-Inspectable').should be_valid
+  it 'should validate inspection type' do
+    new_equipment(inspection_type: InspectionType::INSPECTABLE.text).should be_valid
+    new_equipment(inspection_type: InspectionType::NON_INSPECTABLE.text).should be_valid
+
     new_equipment(inspection_type: 'foo').should_not be_valid
+  end
+
+  it 'should validate inspection interval' do
+    new_equipment(inspection_interval: InspectionInterval::ONE_MONTH.text).should be_valid
+    new_equipment(inspection_interval: InspectionInterval::THREE_MONTHS.text).should be_valid
+    new_equipment(inspection_interval: InspectionInterval::SIX_MONTHS.text).should be_valid
+    new_equipment(inspection_interval: InspectionInterval::ONE_YEAR.text).should be_valid
+    new_equipment(inspection_interval: InspectionInterval::TWO_YEARS.text).should be_valid
+    new_equipment(inspection_interval: InspectionInterval::FIVE_YEARS.text).should be_valid
+    new_equipment(inspection_interval: InspectionInterval::NOT_REQUIRED.text).should be_valid
+
+    new_equipment(inspection_interval: 'blah').should_not be_valid
   end
 end

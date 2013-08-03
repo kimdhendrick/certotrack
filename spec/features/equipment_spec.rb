@@ -50,7 +50,7 @@ describe 'Equipment' do
           customer: @customer,
           name: 'Gauge',
           serial_number: 'XYZ987',
-          inspection_interval: 'Monthly',
+          inspection_interval: InspectionInterval::ONE_MONTH.text,
           last_inspection_date: Date.new(2011, 12, 5),
           inspection_type: 'Inspectable',
           expiration_date: Date.new(2012, 7, 11)
@@ -73,7 +73,7 @@ describe 'Equipment' do
           page.should have_link 'Gauge'
           page.should have_content 'XYZ987'
           page.should have_content 'Expired'
-          page.should have_content 'Monthly'
+          page.should have_content '1 month'
           page.should have_content '12/05/2011'
           page.should have_content 'Inspectable'
           page.should have_content '07/11/2012'
