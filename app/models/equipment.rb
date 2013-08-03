@@ -1,6 +1,8 @@
 class Equipment < ActiveRecord::Base
 
   belongs_to :customer
+  validates :inspection_type, inclusion: {in: %w(Inspectable Non-Inspectable),
+                                          message: 'invalid value'}
 
   def self.accessible_parameters
     [

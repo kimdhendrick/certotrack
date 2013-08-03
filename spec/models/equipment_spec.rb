@@ -69,4 +69,10 @@ describe Equipment do
     expired_equipment.expiring?.should be_false
     expiring_equipment.expiring?.should be_true
   end
+
+  it 'should be inspectable or not' do
+    new_equipment(inspection_type: 'Inspectable').should be_valid
+    new_equipment(inspection_type: 'Non-Inspectable').should be_valid
+    new_equipment(inspection_type: 'foo').should_not be_valid
+  end
 end

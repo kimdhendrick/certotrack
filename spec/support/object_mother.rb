@@ -53,7 +53,8 @@ module ObjectMother
 
   def equipment_attributes
     {
-      name: "Meter"
+      name: 'Meter',
+      inspection_type: 'Inspectable'
     }
   end
 
