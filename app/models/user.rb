@@ -39,22 +39,29 @@ class User < ActiveRecord::Base
   end
 
   def roles=(roles)
-    self.roles_mask = (roles & ROLES).map { |r| 2**ROLES.index(r) }.sum
+    self.roles_mask = (roles & ROLES).map { |role| _role_mask(role) }.sum
   end
 
   def roles
-    ROLES.reject { |r| ((roles_mask || 0) & 2**ROLES.index(r)).zero? }
+    ROLES.reject { |role| ((roles_mask || 0) & _role_mask(role)).zero? }
   end
 
   def add_role(role)
     return if role?(role)
 
-    self.roles_mask = (self.roles_mask || 0) + 2**ROLES.index(role)
+    self.roles_mask = (self.roles_mask || 0) + _role_mask(role)
   end
 
   def remove_role(role)
     return if !role?(role)
 
-    self.roles_mask -= 2**ROLES.index(role)
+    self.roles_mask -= _role_mask(role)
   end
+
+  private
+
+  def _role_mask(role)
+    2**ROLES.index(role)
+  end
+
 end
