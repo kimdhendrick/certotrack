@@ -8,18 +8,6 @@ class Equipment < ActiveRecord::Base
   validates :inspection_interval, inclusion: {in: InspectionInterval.all.map(&:text),
                                               message: 'invalid value'}
 
-  def self.accessible_parameters
-    [
-      :name,
-      :serial_number,
-      :inspection_interval,
-      :last_inspection_date,
-      :inspection_type,
-      :notes,
-      :location_id
-    ]
-  end
-
   def status
     return Status::NA if na?
     return Status::EXPIRED if expired?

@@ -8,18 +8,6 @@ describe Equipment do
   it { should belong_to(:customer) }
   it { should belong_to(:location) }
 
-  it 'should provide its accessible parameters' do
-    Equipment.accessible_parameters.should == [
-      :name,
-      :serial_number,
-      :inspection_interval,
-      :last_inspection_date,
-      :inspection_type,
-      :notes,
-      :location_id
-    ]
-  end
-
   it 'should be able to assign a customer to equipment' do
     customer = new_customer
     equipment = new_equipment

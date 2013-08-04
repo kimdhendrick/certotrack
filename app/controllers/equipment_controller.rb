@@ -80,6 +80,6 @@ class EquipmentController < ApplicationController
   end
 
   def equipment_params
-    params.require(:equipment).permit(Equipment.accessible_parameters)
+    params.require(:equipment).permit(EquipmentHelper.accessible_parameters)
   end
 end
