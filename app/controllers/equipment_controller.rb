@@ -24,7 +24,6 @@ class EquipmentController < ApplicationController
   end
 
   def show
-    authorize! :manage, @equipment
   end
 
   def new
@@ -34,7 +33,6 @@ class EquipmentController < ApplicationController
   end
 
   def edit
-    authorize! :manage, @equipment
   end
 
   def create
@@ -50,8 +48,6 @@ class EquipmentController < ApplicationController
   end
 
   def update
-    authorize! :manage, @equipment
-
     success = EquipmentService::update_equipment(@equipment, equipment_params)
 
     if success
@@ -62,15 +58,15 @@ class EquipmentController < ApplicationController
   end
 
   def destroy
-    authorize! :manage, @equipment
-
     @equipment.destroy
     redirect_to equipment_index_url
   end
 
   private
   def set_equipment
-    @equipment = Equipment.find(params[:id])
+    equipment_pending_authorization = Equipment.find(params[:id])
+    authorize! :manage, equipment_pending_authorization
+    @equipment = equipment_pending_authorization
   end
 
   def equipment_params
