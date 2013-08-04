@@ -6,6 +6,7 @@ describe Equipment do
   subject { @equipment }
 
   it { should belong_to(:customer) }
+  it { should belong_to(:location) }
 
   it 'should provide its accessible parameters' do
     Equipment.accessible_parameters.should == [
@@ -14,7 +15,8 @@ describe Equipment do
       :inspection_interval,
       :last_inspection_date,
       :inspection_type,
-      :notes
+      :notes,
+      :location_id
     ]
   end
 

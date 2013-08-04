@@ -6,6 +6,8 @@ describe 'Equipment' do
     context 'when an equipment user' do
       before do
         login_as_equipment_user
+        @denver_location = create_location(name: 'Denver', customer_id: @customer.id)
+        @littleton_location = create_location(name: 'Littleton', customer_id: @customer.id)
       end
 
       it 'should show All Equipment report' do
@@ -16,9 +18,8 @@ describe 'Equipment' do
           inspection_interval: 'Annually',
           last_inspection_date: Date.new(2013, 1, 1),
           inspection_type: 'Inspectable',
-          expiration_date: Date.new(2024, 2, 3)
-        #location
-        #assignee
+          expiration_date: Date.new(2024, 2, 3),
+          location_id: @denver_location.id
         )
 
         visit '/'
@@ -40,8 +41,7 @@ describe 'Equipment' do
           page.should have_content '01/01/2013'
           page.should have_content 'Inspectable'
           page.should have_content '02/03/2024'
-          #page.should have_content 'location'
-          #page.should have_content 'assignee'
+          page.should have_content 'Denver'
         end
       end
 
@@ -53,9 +53,8 @@ describe 'Equipment' do
           inspection_interval: InspectionInterval::ONE_MONTH.text,
           last_inspection_date: Date.new(2011, 12, 5),
           inspection_type: 'Inspectable',
-          expiration_date: Date.new(2012, 7, 11)
-        #location
-        #assignee
+          expiration_date: Date.new(2012, 7, 11),
+          location_id: @littleton_location.id
         )
 
         visit '/'
@@ -77,8 +76,7 @@ describe 'Equipment' do
           page.should have_content '12/05/2011'
           page.should have_content 'Inspectable'
           page.should have_content '07/11/2012'
-          #page.should have_content 'location'
-          #page.should have_content 'assignee'
+          page.should have_content 'Littleton'
         end
       end
     end
@@ -105,6 +103,8 @@ describe 'Equipment' do
   describe 'Show Equipment' do
     before do
       login_as_equipment_user
+      @denver_location = create_location(name: 'Denver', customer_id: @customer.id)
+      @littleton_location = create_location(name: 'Littleton', customer_id: @customer.id)
     end
 
     it 'should render equipment show page' do
@@ -116,7 +116,8 @@ describe 'Equipment' do
         last_inspection_date: Date.new(2013, 1, 1),
         inspection_type: 'Inspectable',
         expiration_date: Date.new(2024, 2, 3),
-        notes: 'my notes'
+        notes: 'my notes',
+        location_id: @denver_location.id
       )
 
       visit '/'
@@ -132,7 +133,7 @@ describe 'Equipment' do
       page.should have_content 'Name'
       page.should have_content 'Serial Number'
       page.should have_content 'Status'
-      #TODO page.should have_content 'Assignee'
+      page.should have_content 'Location'
       page.should have_content 'Inspection Interval'
       page.should have_content 'Last Inspection Date'
       page.should have_content 'Expiration Date'
@@ -140,6 +141,7 @@ describe 'Equipment' do
 
       page.should have_content 'Meter'
       page.should have_content 'ABC123'
+      page.should have_content 'Denver'
       page.should have_content 'Valid'
       page.should have_content 'Annually'
       page.should have_content '01/01/2013'
@@ -154,6 +156,8 @@ describe 'Equipment' do
   describe 'Create Equipment' do
     before do
       login_as_equipment_user
+      @denver_location = create_location(name: 'Denver', customer_id: @customer.id)
+      @littleton_location = create_location(name: 'Littleton', customer_id: @customer.id)
     end
 
     it 'should create new equipment' do
@@ -166,13 +170,14 @@ describe 'Equipment' do
 
       page.should have_content 'Name'
       page.should have_content 'Serial Number'
-      #TODO page.should have_content 'Assignee'
+      page.should have_content 'Location'
       page.should have_content 'Inspection Interval'
       page.should have_content 'Last Inspection Date'
       page.should have_content 'Comments'
 
       fill_in 'Name', with: 'Level'
       fill_in 'Serial Number', with: '765-CKD'
+      select 'Littleton', from: 'Location'
       select '5 years', from: 'Inspection Interval'
       fill_in 'Last Inspection Date', with: '01/01/2000'
       fill_in 'Comments', with: 'Special Notes'
@@ -183,6 +188,7 @@ describe 'Equipment' do
 
       page.should have_content 'Level'
       page.should have_content '765-CKD'
+      page.should have_content 'Littleton'
       page.should have_content 'Expired'
       page.should have_content '5 years'
       page.should have_content '01/01/2000'
@@ -194,6 +200,8 @@ describe 'Equipment' do
   describe 'Update Equipment' do
     before do
       login_as_equipment_user
+      @denver_location = create_location(name: 'Denver', customer_id: @customer.id)
+      @littleton_location = create_location(name: 'Littleton', customer_id: @customer.id)
     end
 
     it 'should update existing equipment' do
@@ -205,7 +213,8 @@ describe 'Equipment' do
         last_inspection_date: Date.new(2013, 1, 1),
         inspection_type: 'Inspectable',
         expiration_date: Date.new(2024, 2, 3),
-        notes: 'my notes'
+        notes: 'my notes',
+        location_id: @littleton_location.id
       )
 
       visit '/'
@@ -222,7 +231,7 @@ describe 'Equipment' do
 
       page.should have_content 'Name'
       page.should have_content 'Serial Number'
-      #TODO page.should have_content 'Assignee'
+      page.should have_content 'Location'
       page.should have_content 'Inspection Interval'
       page.should have_content 'Last Inspection Date'
       page.should have_content 'Comments'
@@ -231,6 +240,7 @@ describe 'Equipment' do
 
       fill_in 'Name', with: 'Level'
       fill_in 'Serial Number', with: '765-CKD'
+      select 'Denver', from: 'Location'
       select '5 years', from: 'Inspection Interval'
       fill_in 'Last Inspection Date', with: '01/01/2000'
       fill_in 'Comments', with: 'Special Notes'
@@ -241,6 +251,7 @@ describe 'Equipment' do
 
       page.should have_content 'Level'
       page.should have_content '765-CKD'
+      page.should have_content 'Denver'
       page.should have_content 'Expired'
       page.should have_content '5 years'
       page.should have_content '01/01/2000'
@@ -261,5 +272,4 @@ describe 'Equipment' do
       page.should have_content 'Assignee'
     end
   end
-
 end

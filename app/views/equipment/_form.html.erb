@@ -24,11 +24,20 @@
   </div>
 
   <div class="field">
+    <%= f.label :location_id %>
+    <br/>
+    <%= select(:equipment, :location_id,
+               options_from_collection_for_select(@locations, 'id', 'name',
+               @equipment.location_id)) %>
+  </div>
+
+
+  <div class="field">
     <%= f.label :inspection_interval, 'Inspection Interval' %>
     <br/>
     <%= select(:equipment, :inspection_interval,
-               options_for_select(InspectionInterval.all.map(&:text),
-                                  @equipment.inspection_interval)) %>
+               options_from_collection_for_select(InspectionInterval.all.to_a, 'text', 'text',
+                                                  @equipment.inspection_interval)) %>
   </div>
 
   <div class="field">

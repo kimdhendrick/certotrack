@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130730020446) do
+ActiveRecord::Schema.define(version: 20130804165158) do
 
   create_table "customers", force: true do |t|
     t.string   "name"
@@ -41,17 +41,25 @@ ActiveRecord::Schema.define(version: 20130730020446) do
     t.date     "expiration_date"
     t.string   "inspection_type"
     t.string   "notes"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "customer_id"
+    t.integer  "location_id"
+  end
+
+  create_table "locations", force: true do |t|
+    t.string   "name"
+    t.integer  "customer_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "users", force: true do |t|
     t.string   "first_name"
     t.string   "last_name"
     t.string   "email"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "username"
     t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"

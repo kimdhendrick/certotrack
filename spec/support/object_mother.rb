@@ -70,6 +70,17 @@ module ObjectMother
     _apply(Customer.new, valid_attributes, options)
   end
 
+  def create_location(options = {})
+    new_location(options).tap(&:save!)
+  end
+
+  def new_location(options = {})
+    valid_attributes = {
+      name: 'Denver'
+    }
+    _apply(Location.new, valid_attributes, options)
+  end
+
   def valid_session
     {}
   end

@@ -185,6 +185,13 @@ describe EquipmentController do
         get :new, {}, valid_session
         assigns(:equipment).should be_a_new(Equipment)
       end
+
+      it 'assigns @locations' do
+        location = new_location
+        LocationService.should_receive(:get_all_locations).once.and_return([location])
+        get :new, {}, valid_session
+        assigns(:locations).should eq([location])
+      end
     end
 
     context 'when admin user' do
@@ -220,6 +227,14 @@ describe EquipmentController do
         equipment = create_equipment(customer: @customer)
         get :edit, {:id => equipment.to_param}, valid_session
         assigns(:equipment).should eq(equipment)
+      end
+
+      it 'assigns @locations' do
+        location = new_location
+        LocationService.should_receive(:get_all_locations).once.and_return([location])
+        equipment = create_equipment(customer: @customer)
+        get :edit, {:id => equipment.to_param}, valid_session
+        assigns(:locations).should eq([location])
       end
     end
 

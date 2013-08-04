@@ -1,9 +1,10 @@
 class Equipment < ActiveRecord::Base
 
   belongs_to :customer
+  belongs_to :location
+
   validates :inspection_type, inclusion: {in: InspectionType.all.map(&:text),
                                           message: 'invalid value'}
-
   validates :inspection_interval, inclusion: {in: InspectionInterval.all.map(&:text),
                                               message: 'invalid value'}
 
@@ -14,7 +15,8 @@ class Equipment < ActiveRecord::Base
       :inspection_interval,
       :last_inspection_date,
       :inspection_type,
-      :notes
+      :notes,
+      :location_id
     ]
   end
 

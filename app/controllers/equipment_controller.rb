@@ -29,10 +29,12 @@ class EquipmentController < ApplicationController
   def new
     authorize! :create, :equipment
 
+    @locations = LocationService.get_all_locations(current_user)
     @equipment = Equipment.new
   end
 
   def edit
+    @locations = LocationService.get_all_locations(current_user)
   end
 
   def create
