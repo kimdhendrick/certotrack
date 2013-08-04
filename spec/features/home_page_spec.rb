@@ -22,7 +22,7 @@ describe 'Home Page' do
       login_as_guest
     end
     it 'should not show any links' do
-      page.should have_content 'You are not authorized for any services.  Please contact support.'
+      page.should have_content 'You are not authorized for any services.  Please contact support@certotrack.com.'
 
       page.should_not have_content 'All Equipment (0)'
       page.should_not have_content 'Expired Equipment (0)'
