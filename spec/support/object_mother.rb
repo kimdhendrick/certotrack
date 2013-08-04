@@ -55,6 +55,7 @@ module ObjectMother
     {
       name: 'Meter',
       inspection_type: InspectionType::INSPECTABLE.text,
+      expiration_date: Date.new(2001, 1, 1),
       inspection_interval: InspectionInterval::ONE_YEAR.text
     }
   end
