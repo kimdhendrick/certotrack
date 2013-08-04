@@ -29,12 +29,10 @@ class EquipmentController < ApplicationController
   def new
     authorize! :create, :equipment
 
-    @locations = LocationService.get_all_locations(current_user)
     @equipment = Equipment.new
   end
 
   def edit
-    @locations = LocationService.get_all_locations(current_user)
   end
 
   def create
@@ -46,6 +44,16 @@ class EquipmentController < ApplicationController
       redirect_to @equipment, notice: 'Equipment was successfully created.'
     else
       render action: 'new'
+    end
+  end
+
+  def ajax_assignee
+    authorize! :read, :equipment
+
+    if params[:assignee] == 'Location'
+      render json: LocationService.get_all_locations(current_user).map { |l| [l.id, l.name] }
+    else
+      render json: []
     end
   end
 

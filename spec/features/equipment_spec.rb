@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Equipment' do
+describe 'Equipment', js: true do
 
   describe 'Reports' do
     context 'when an equipment user' do
@@ -127,7 +127,6 @@ describe 'Equipment' do
       page.should have_content 'Show Equipment'
       page.should have_link 'Home'
       page.should have_link 'All Equipment'
-      #TODO page.should have_link 'Search Equipment'
       page.should have_link 'Create Equipment'
 
       page.should have_content 'Name'
@@ -166,18 +165,19 @@ describe 'Equipment' do
 
       page.should have_content 'Create Equipment'
       page.should have_link 'Home'
-      #TODO page.should have_link 'Search Equipment'
 
       page.should have_content 'Name'
       page.should have_content 'Serial Number'
-      page.should have_content 'Location'
+      page.should have_content 'Assignee'
       page.should have_content 'Inspection Interval'
       page.should have_content 'Last Inspection Date'
       page.should have_content 'Comments'
 
       fill_in 'Name', with: 'Level'
       fill_in 'Serial Number', with: '765-CKD'
-      select 'Littleton', from: 'Location'
+      select 'Location', from: 'Assignee'
+      find('#assignedTo')
+      select 'Littleton', from: 'assignedTo'
       select '5 years', from: 'Inspection Interval'
       fill_in 'Last Inspection Date', with: '01/01/2000'
       fill_in 'Comments', with: 'Special Notes'
@@ -231,6 +231,7 @@ describe 'Equipment' do
 
       page.should have_content 'Name'
       page.should have_content 'Serial Number'
+      page.should have_content 'Assignee'
       page.should have_content 'Location'
       page.should have_content 'Inspection Interval'
       page.should have_content 'Last Inspection Date'
@@ -240,7 +241,8 @@ describe 'Equipment' do
 
       fill_in 'Name', with: 'Level'
       fill_in 'Serial Number', with: '765-CKD'
-      select 'Denver', from: 'Location'
+      find('#assignedTo')
+      select 'Denver', from: 'assignedTo'
       select '5 years', from: 'Inspection Interval'
       fill_in 'Last Inspection Date', with: '01/01/2000'
       fill_in 'Comments', with: 'Special Notes'

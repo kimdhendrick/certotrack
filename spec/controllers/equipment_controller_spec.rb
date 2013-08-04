@@ -185,13 +185,6 @@ describe EquipmentController do
         get :new, {}, valid_session
         assigns(:equipment).should be_a_new(Equipment)
       end
-
-      it 'assigns @locations' do
-        location = new_location
-        LocationService.should_receive(:get_all_locations).once.and_return([location])
-        get :new, {}, valid_session
-        assigns(:locations).should eq([location])
-      end
     end
 
     context 'when admin user' do
@@ -229,13 +222,6 @@ describe EquipmentController do
         assigns(:equipment).should eq(equipment)
       end
 
-      it 'assigns @locations' do
-        location = new_location
-        LocationService.should_receive(:get_all_locations).once.and_return([location])
-        equipment = create_equipment(customer: @customer)
-        get :edit, {:id => equipment.to_param}, valid_session
-        assigns(:locations).should eq([location])
-      end
     end
 
     context 'when admin user' do
@@ -492,6 +478,51 @@ describe EquipmentController do
         expect {
           delete :destroy, {:id => equipment.to_param}, valid_session
         }.not_to change(Equipment, :count)
+      end
+    end
+  end
+
+  describe 'GET ajax_assignee' do
+    context 'when equipment user' do
+      before do
+        sign_in stub_equipment_user
+      end
+
+      it 'should return locations when assignee is Location' do
+        location = create_location(name: 'Oz')
+        LocationService.should_receive(:get_all_locations).once.and_return([location])
+        get :ajax_assignee, {assignee: 'Location'}
+        json = JSON.parse(response.body)
+        json.should == [
+          [location.id, 'Oz']
+        ]
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'should redirect, I suppose' do
+        get :ajax_assignee, {assignee: 'Location'}
+        response.body.should eq("<html><body>You are being <a href=\"http://test.host/\">redirected</a>.</body></html>")
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'should return locations when assignee is Location' do
+        location = create_location(name: 'Oz')
+        LocationService.should_receive(:get_all_locations).once.and_return([location])
+        get :ajax_assignee, {assignee: 'Location'}
+        json = JSON.parse(response.body)
+        json.should == [
+          [location.id, 'Oz']
+        ]
       end
     end
   end

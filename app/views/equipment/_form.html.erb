@@ -24,11 +24,14 @@
   </div>
 
   <div class="field">
-    <%= f.label :location_id %>
-    <br/>
-    <%= select(:equipment, :location_id,
-               options_from_collection_for_select(@locations, 'id', 'name',
-               @equipment.location_id)) %>
+    <label for="assignee">Assignee</label>
+    <select id="assignee" name="assignee">
+      <%= options_for_select(['Unassigned', 'Employee', 'Location']) %>
+    </select>
+
+    <div id="assigneeListContainer">
+      <select id="assignedTo" name="assignedTo"></select>
+    </div>
   </div>
 
 
@@ -57,4 +60,52 @@
   </div>
 
 <% end %>
+
+<script type="text/javascript">
+  $(function() {
+    if (<%=@equipment.location_id.present?%>) {
+      $('#assignee').val('Location');
+    } else {
+      $('#assigneeListContainer').hide();
+    }
+
+    $("#assignedTo").remoteChained("#assignee", "/ajax_assignee");
+    $("#assignedTo").chained("#assignee");
+
+    $('#assignee').change(function() {
+      if ($(this).val() == 'Unassigned') {
+        if ($('#assigneeListContainer').is(':visible')) {
+          $('#assigneeListContainer').hide('explode', function() {
+            $('input[data-hidden-assignee]').remove()
+            show_input('location', 'nil');
+            show_input('trooper', 'nil');
+          });
+        }
+      } else {
+        $('#assigneeListContainer').slideDown();
+      }
+
+      $('#assigneeLabel, #assigneeList').show('slide');
+    });
+
+    $('#assignedTo').change(function() {
+      $('input[data-hidden-assignee]').remove()
+
+      if ($('#assignee').val() == 'Location') {
+        show_input('location', $(this).val());
+        $('#assignedTo').val(<%=@equipment.location_id%>);
+      } else if ($('#assignee').val() == 'Employee') {
+        show_input('employee', $(this).val());
+      } else {
+        show_input('location', 'nil');
+        show_input('employee', 'nil');
+      }
+    });
+
+    function show_input(name, value) {
+      $('<input>').attr('type', 'hidden').attr('data-hidden-assignee', 'data-hidden-assignee').attr('name', 'equipment[' + name + '_id]').attr('value', value).appendTo('#assigneeListContainer');
+    }
+  });
+</script>
+
 

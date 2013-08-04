@@ -14,3 +14,5 @@
 //= require jquery_ujs
 //= require tilt-jade/runtime
 //= require certotrack/init
+//= require jquery.chained.remote.js
+//= require jquery.chained.js

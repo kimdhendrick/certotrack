@@ -1,6 +1,7 @@
 Certotrack::Application.routes.draw do
   resources :equipment
   get 'expired_equipment', action: 'expired', controller: 'equipment'
+  get 'ajax_assignee', action: 'ajax_assignee', controller: 'equipment'
 
   devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}
   devise_scope :user do
