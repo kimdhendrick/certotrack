@@ -28,11 +28,12 @@ class EquipmentController < ApplicationController
 
   def new
     authorize! :create, :equipment
-
+    @inspection_intervals = InspectionInterval.all.to_a
     @equipment = Equipment.new
   end
 
   def edit
+    @inspection_intervals = InspectionInterval.all.to_a
   end
 
   def create
