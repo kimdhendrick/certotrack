@@ -2,6 +2,7 @@ class Equipment < ActiveRecord::Base
 
   belongs_to :customer
   belongs_to :location
+  belongs_to :employee
 
   validates :inspection_type, inclusion: {in: InspectionType.all.map(&:text),
                                           message: 'invalid value'}
@@ -35,5 +36,19 @@ class Equipment < ActiveRecord::Base
     inspection_interval == InspectionInterval::NOT_REQUIRED.text ?
       InspectionType::NON_INSPECTABLE.text :
       InspectionType::INSPECTABLE.text
+  end
+
+  def assigned_to_location?
+    location.present?
+  end
+
+  def assigned_to_employee?
+    employee.present?
+  end
+
+  def assigned_to
+    assigned_to_location? ? location :
+      assigned_to_employee? ? employee :
+        nil
   end
 end

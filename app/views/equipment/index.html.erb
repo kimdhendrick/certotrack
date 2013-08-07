@@ -28,7 +28,7 @@
       <td><%= DateHelpers::format(equipment.last_inspection_date) %></td>
       <td><%= equipment.inspection_type %></td>
       <td><%= DateHelpers::format(equipment.expiration_date) %></td>
-      <td><%= equipment.location %></td>
+      <td><%= display_assigned_to(equipment) %></td>
     </tr>
   <% end %>
   </tbody>

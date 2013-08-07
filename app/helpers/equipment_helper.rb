@@ -1,5 +1,10 @@
 module EquipmentHelper
-  def self.accessible_parameters
+
+  def display_assigned_to(equipment)
+    equipment.assigned_to.try(:to_s) || 'Unassigned'
+  end
+
+  def equipment_accessible_parameters
     [
       :name,
       :serial_number,
@@ -7,7 +12,8 @@ module EquipmentHelper
       :last_inspection_date,
       :inspection_type,
       :notes,
-      :location_id
+      :location_id,
+      :employee_id
     ]
   end
 end

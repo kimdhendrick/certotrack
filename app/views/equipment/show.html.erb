@@ -18,8 +18,14 @@
 </p>
 
 <p>
-  <b>Location</b>
-  <%= @equipment.location %>
+  <% if @equipment.assigned_to_location? %>
+    <b>Location</b>
+  <% elsif @equipment.assigned_to_employee? %>
+    <b>Employee</b>
+  <% else %>
+    <b>Assignee</b>
+  <% end %>
+  <%= display_assigned_to(@equipment) %>
 </p>
 
 <p>
@@ -49,4 +55,4 @@
 
 
 <%= link_to 'Edit', edit_equipment_path(@equipment) %> |
-<%= link_to 'Delete', @equipment, method: :delete, data: { confirm: 'Are you sure you want to delete?' } %>
+<%= link_to 'Delete', @equipment, method: :delete, data: {confirm: 'Are you sure you want to delete?'} %>

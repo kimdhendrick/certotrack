@@ -8,10 +8,11 @@ describe 'Equipment', js: true do
         login_as_equipment_user
         @denver_location = create_location(name: 'Denver', customer_id: @customer.id)
         @littleton_location = create_location(name: 'Littleton', customer_id: @customer.id)
+        @special_employee = create_employee(first_name: 'Special', last_name: 'Employee', customer_id: @customer.id)
       end
 
       it 'should show All Equipment report' do
-        valid_equipment = create_equipment(
+        create_equipment(
           customer: @customer,
           name: 'Meter',
           serial_number: 'ABC123',
@@ -19,6 +20,17 @@ describe 'Equipment', js: true do
           last_inspection_date: Date.new(2013, 1, 1),
           inspection_type: 'Inspectable',
           expiration_date: Date.new(2024, 2, 3),
+          employee_id: @special_employee.id
+        )
+
+        create_equipment(
+          customer: @customer,
+          name: 'Box',
+          serial_number: 'BBB999',
+          inspection_interval: 'Annually',
+          last_inspection_date: Date.new(2012, 1, 1),
+          inspection_type: 'Inspectable',
+          expiration_date: Date.new(2013, 1, 1),
           location_id: @denver_location.id
         )
 
@@ -27,13 +39,13 @@ describe 'Equipment', js: true do
         click_link 'All Equipment'
 
         page.should have_content 'All Equipment List'
-        page.should have_content 'Total: 1'
+        page.should have_content 'Total: 2'
         page.should have_link 'Home'
         page.should have_link 'Create Equipment'
 
         assert_report_headers_are_correct
 
-        within 'tbody tr', text: 'Meter' do
+        within 'table tbody tr:nth-of-type(1)' do
           page.should have_link 'Meter'
           page.should have_content 'ABC123'
           page.should have_content 'Valid'
@@ -41,6 +53,17 @@ describe 'Equipment', js: true do
           page.should have_content '01/01/2013'
           page.should have_content 'Inspectable'
           page.should have_content '02/03/2024'
+          page.should have_content 'Employee, Special'
+        end
+
+        within 'table tbody tr:nth-of-type(2)' do
+          page.should have_link 'Box'
+          page.should have_content 'BBB999'
+          page.should have_content 'Expired'
+          page.should have_content 'Annually'
+          page.should have_content '01/01/2012'
+          page.should have_content 'Inspectable'
+          page.should have_content '01/01/2013'
           page.should have_content 'Denver'
         end
       end
@@ -157,9 +180,10 @@ describe 'Equipment', js: true do
       login_as_equipment_user
       @denver_location = create_location(name: 'Denver', customer_id: @customer.id)
       @littleton_location = create_location(name: 'Littleton', customer_id: @customer.id)
+      @special_employee = create_employee(first_name: 'Special', last_name: 'Employee', customer_id: @customer.id)
     end
 
-    it 'should create new equipment' do
+    it 'should create new equipment assigned to a location' do
       visit '/'
       click_link 'Create Equipment'
 
@@ -176,7 +200,7 @@ describe 'Equipment', js: true do
       fill_in 'Name', with: 'Level'
       fill_in 'Serial Number', with: '765-CKD'
       select 'Location', from: 'Assignee'
-      find('#assignedTo')
+      find '#assignedTo'
       select 'Littleton', from: 'assignedTo'
       select '5 years', from: 'Inspection Interval'
       fill_in 'Last Inspection Date', with: '01/01/2000'
@@ -195,6 +219,77 @@ describe 'Equipment', js: true do
       page.should have_content '01/01/2005'
       page.should have_content 'Special Notes'
     end
+
+    it 'should create new equipment assigned to an employee' do
+      visit '/'
+      click_link 'Create Equipment'
+
+      page.should have_content 'Create Equipment'
+      page.should have_link 'Home'
+
+      page.should have_content 'Name'
+      page.should have_content 'Serial Number'
+      page.should have_content 'Assignee'
+      page.should have_content 'Inspection Interval'
+      page.should have_content 'Last Inspection Date'
+      page.should have_content 'Comments'
+
+      fill_in 'Name', with: 'Level'
+      fill_in 'Serial Number', with: '765-CKD'
+      select 'Employee', from: 'Assignee'
+      find '#assignedTo'
+      select 'Employee, Special', from: 'assignedTo'
+      select '5 years', from: 'Inspection Interval'
+      fill_in 'Last Inspection Date', with: '01/01/2000'
+      fill_in 'Comments', with: 'Special Notes'
+
+      click_on 'Create'
+
+      page.should have_content 'Show Equipment'
+
+      page.should have_content 'Level'
+      page.should have_content '765-CKD'
+      page.should have_content 'Employee, Special'
+      page.should have_content 'Expired'
+      page.should have_content '5 years'
+      page.should have_content '01/01/2000'
+      page.should have_content '01/01/2005'
+      page.should have_content 'Special Notes'
+    end
+
+    it 'should create new unassigned equipment' do
+      visit '/'
+      click_link 'Create Equipment'
+
+      page.should have_content 'Create Equipment'
+      page.should have_link 'Home'
+
+      page.should have_content 'Name'
+      page.should have_content 'Serial Number'
+      page.should have_content 'Assignee'
+      page.should have_content 'Inspection Interval'
+      page.should have_content 'Last Inspection Date'
+      page.should have_content 'Comments'
+
+      fill_in 'Name', with: 'Level'
+      fill_in 'Serial Number', with: '765-CKD'
+      select '5 years', from: 'Inspection Interval'
+      fill_in 'Last Inspection Date', with: '01/01/2000'
+      fill_in 'Comments', with: 'Special Notes'
+
+      click_on 'Create'
+
+      page.should have_content 'Show Equipment'
+
+      page.should have_content 'Level'
+      page.should have_content '765-CKD'
+      page.should have_content 'Unassigned'
+      page.should have_content 'Expired'
+      page.should have_content '5 years'
+      page.should have_content '01/01/2000'
+      page.should have_content '01/01/2005'
+      page.should have_content 'Special Notes'
+    end
   end
 
   describe 'Update Equipment' do
@@ -202,6 +297,7 @@ describe 'Equipment', js: true do
       login_as_equipment_user
       @denver_location = create_location(name: 'Denver', customer_id: @customer.id)
       @littleton_location = create_location(name: 'Littleton', customer_id: @customer.id)
+      @special_employee = create_employee(first_name: 'Special', last_name: 'Employee', customer_id: @customer.id)
     end
 
     it 'should update existing equipment' do
@@ -241,8 +337,10 @@ describe 'Equipment', js: true do
 
       fill_in 'Name', with: 'Level'
       fill_in 'Serial Number', with: '765-CKD'
-      find('#assignedTo')
-      select 'Denver', from: 'assignedTo'
+
+      select 'Employee', from: 'Assignee'
+      find '#assignedTo'
+      select 'Employee, Special', from: 'assignedTo'
       select '5 years', from: 'Inspection Interval'
       fill_in 'Last Inspection Date', with: '01/01/2000'
       fill_in 'Comments', with: 'Special Notes'
@@ -253,7 +351,7 @@ describe 'Equipment', js: true do
 
       page.should have_content 'Level'
       page.should have_content '765-CKD'
-      page.should have_content 'Denver'
+      page.should have_content 'Employee, Special'
       page.should have_content 'Expired'
       page.should have_content '5 years'
       page.should have_content '01/01/2000'
@@ -263,7 +361,7 @@ describe 'Equipment', js: true do
   end
 
   def assert_report_headers_are_correct
-    within 'thead tr' do
+    within 'table thead tr' do
       page.should have_content 'Name'
       page.should have_content 'Serial Number'
       page.should have_content 'Status'

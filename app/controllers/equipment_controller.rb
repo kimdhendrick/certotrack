@@ -1,5 +1,6 @@
 class EquipmentController < ApplicationController
   extend EquipmentService
+  include EquipmentHelper
 
   before_filter :authenticate_user!
   before_action :set_equipment, only: [:show, :edit, :update, :destroy]
@@ -54,12 +55,12 @@ class EquipmentController < ApplicationController
     if params[:assignee] == 'Location'
       render json: LocationService.get_all_locations(current_user).map { |l| [l.id, l.name] }
     else
-      render json: []
+      render json: EmployeeService.get_all_employees(current_user).map { |e| [e.id, e.to_s] }
     end
   end
 
   def update
-    success = EquipmentService::update_equipment(@equipment, equipment_params)
+    success = EquipmentService.update_equipment(@equipment, equipment_params)
 
     if success
       redirect_to @equipment, notice: 'Equipment was successfully updated.'
@@ -81,6 +82,6 @@ class EquipmentController < ApplicationController
   end
 
   def equipment_params
-    params.require(:equipment).permit(EquipmentHelper.accessible_parameters)
+    params.require(:equipment).permit(equipment_accessible_parameters)
   end
 end

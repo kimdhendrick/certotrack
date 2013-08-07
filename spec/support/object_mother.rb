@@ -82,6 +82,18 @@ module ObjectMother
     _apply(Location.new, valid_attributes, options)
   end
 
+  def create_employee(options = {})
+    new_employee(options).tap(&:save!)
+  end
+
+  def new_employee(options = {})
+    valid_attributes = {
+      first_name: 'John',
+      last_name: 'Smith'
+    }
+    _apply(Employee.new, valid_attributes, options)
+  end
+
   def valid_session
     {}
   end

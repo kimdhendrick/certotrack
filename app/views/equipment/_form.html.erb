@@ -63,8 +63,10 @@
 
 <script type="text/javascript">
   $(function() {
-    if (<%=@equipment.location_id.present?%>) {
+    if (<%=@equipment.assigned_to_location? %>) {
       $('#assignee').val('Location');
+    } else if (<%=@equipment.assigned_to_employee? %>) {
+      $('#assignee').val('Employee');
     } else {
       $('#assigneeListContainer').hide();
     }
@@ -76,9 +78,9 @@
       if ($(this).val() == 'Unassigned') {
         if ($('#assigneeListContainer').is(':visible')) {
           $('#assigneeListContainer').hide('explode', function() {
-            $('input[data-hidden-assignee]').remove()
-            show_input('location', 'nil');
-            show_input('trooper', 'nil');
+            remove_input();
+            add_input('location', '');
+            add_input('employee', '');
           });
         }
       } else {
@@ -89,21 +91,28 @@
     });
 
     $('#assignedTo').change(function() {
-      $('input[data-hidden-assignee]').remove()
+      remove_input();
 
       if ($('#assignee').val() == 'Location') {
-        show_input('location', $(this).val());
+        add_input('location', $(this).val());
+        add_input('employee', '');
         $('#assignedTo').val(<%=@equipment.location_id%>);
       } else if ($('#assignee').val() == 'Employee') {
-        show_input('employee', $(this).val());
+        add_input('employee', $(this).val());
+        add_input('location', '');
+        $('#assignedTo').val(<%=@equipment.employee_id%>);
       } else {
-        show_input('location', 'nil');
-        show_input('employee', 'nil');
+        add_input('location', '');
+        add_input('employee', '');
       }
     });
 
-    function show_input(name, value) {
+    function add_input(name, value) {
       $('<input>').attr('type', 'hidden').attr('data-hidden-assignee', 'data-hidden-assignee').attr('name', 'equipment[' + name + '_id]').attr('value', value).appendTo('#assigneeListContainer');
+    }
+    
+    function remove_input() {
+      $('input[data-hidden-assignee]').remove();  
     }
   });
 </script>

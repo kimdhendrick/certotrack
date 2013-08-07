@@ -68,3 +68,7 @@ Answer 'yes' when prompted. Copy & paste command to ignore rvm warnings.
     rake db:migrate
     rake db:test:prepare
     rake db:seed
+
+### Reset Database from Seed Data
+
+    rake db:reset

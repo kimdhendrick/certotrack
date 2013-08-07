@@ -497,6 +497,16 @@ describe EquipmentController do
           [location.id, 'Oz']
         ]
       end
+
+      it 'should return employees when assignee is Employee' do
+        employee = create_employee(first_name: 'The', last_name: 'Wizard')
+        EmployeeService.should_receive(:get_all_employees).once.and_return([employee])
+        get :ajax_assignee, {assignee: 'Employee'}
+        json = JSON.parse(response.body)
+        json.should == [
+          [employee.id, 'Wizard, The']
+        ]
+      end
     end
 
     context 'when guest user' do

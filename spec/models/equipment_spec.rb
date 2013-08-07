@@ -7,6 +7,7 @@ describe Equipment do
 
   it { should belong_to(:customer) }
   it { should belong_to(:location) }
+  it { should belong_to(:employee) }
 
   it 'should be able to assign a customer to equipment' do
     customer = new_customer
@@ -77,5 +78,35 @@ describe Equipment do
     new_equipment(inspection_interval: InspectionInterval::NOT_REQUIRED.text).should be_valid
 
     new_equipment(inspection_interval: 'blah').should_not be_valid
+  end
+
+  it 'should answer assigned_to_location?' do
+    location = create_location
+    location_assigned_equipment = create_equipment(location_id: location.id)
+    employee = create_employee
+    employee_assigned_equipment = create_equipment(employee_id: employee.id)
+
+    location_assigned_equipment.should be_assigned_to_location
+    employee_assigned_equipment.should_not be_assigned_to_location
+  end
+
+  it 'should answer assigned_to_employee?' do
+    location = create_location
+    location_assigned_equipment = create_equipment(location_id: location.id)
+    employee = create_employee
+    employee_assigned_equipment = create_equipment(employee_id: employee.id)
+
+    employee_assigned_equipment.should be_assigned_to_employee
+    location_assigned_equipment.should_not be_assigned_to_employee
+  end
+
+  it 'should respond to assigned_to' do
+    location = create_location
+    location_assigned_equipment = create_equipment(location_id: location.id)
+    employee = create_employee
+    employee_assigned_equipment = create_equipment(employee_id: employee.id)
+
+    employee_assigned_equipment.assigned_to.should == employee
+    location_assigned_equipment.assigned_to.should == location
   end
 end
