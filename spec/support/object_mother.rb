@@ -19,7 +19,7 @@ module ObjectMother
   end
 
   def create_valid_equipment(options = {})
-    create_equipment(options.merge({expiration_date: Date.today + 61.days}))
+    new_valid_equipment(options).tap(&:save!)
   end
 
   def new_valid_equipment(options = {})
@@ -27,7 +27,7 @@ module ObjectMother
   end
 
   def create_expired_equipment(options = {})
-    create_equipment(options.merge({expiration_date: Date.yesterday}))
+    new_expired_equipment(options).tap(&:save!)
   end
 
   def new_expired_equipment(options = {})
@@ -35,7 +35,7 @@ module ObjectMother
   end
 
   def create_expiring_equipment(options = {})
-    create_equipment(options.merge({expiration_date: Date.tomorrow}))
+    new_expiring_equipment(options).tap(&:save!)
   end
 
   def new_expiring_equipment(options = {})
