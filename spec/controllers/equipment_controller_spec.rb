@@ -185,6 +185,12 @@ describe EquipmentController do
         get :new, {}, valid_session
         assigns(:equipment).should be_a_new(Equipment)
       end
+
+      it 'assigns @inspection_intervals' do
+        equipment = create_equipment(customer: @customer)
+        get :new, {:id => equipment.to_param}, valid_session
+        assigns(:inspection_intervals).should eq(InspectionInterval.all.to_a)
+      end
     end
 
     context 'when admin user' do
@@ -220,6 +226,12 @@ describe EquipmentController do
         equipment = create_equipment(customer: @customer)
         get :edit, {:id => equipment.to_param}, valid_session
         assigns(:equipment).should eq(equipment)
+      end
+
+      it 'assigns @inspection_intervals' do
+        equipment = create_equipment(customer: @customer)
+        get :edit, {:id => equipment.to_param}, valid_session
+        assigns(:inspection_intervals).should eq(InspectionInterval.all.to_a)
       end
 
     end
@@ -297,6 +309,13 @@ describe EquipmentController do
           Equipment.any_instance.stub(:save).and_return(false)
           post :create, {:equipment => {'name' => 'invalid value'}}, valid_session
           response.should render_template('new')
+        end
+
+        it 'assigns @inspection_intervals' do
+          EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(new_equipment)
+          Equipment.any_instance.stub(:save).and_return(false)
+          post :create, {:equipment => {'name' => 'invalid value'}}, valid_session
+          assigns(:inspection_intervals).should eq(InspectionInterval.all.to_a)
         end
       end
     end
@@ -390,7 +409,15 @@ describe EquipmentController do
           put :update, {:id => equipment.to_param, :equipment => {'name' => 'invalid value'}}, valid_session
           response.should render_template('edit')
         end
+
+        it 'assigns @inspection_intervals' do
+          equipment = create_equipment(customer: @customer)
+          Equipment.any_instance.stub(:save).and_return(false)
+          put :update, {:id => equipment.to_param, :equipment => {'name' => 'invalid value'}}, valid_session
+          assigns(:inspection_intervals).should eq(InspectionInterval.all.to_a)
+        end
       end
+
     end
 
     context 'when admin user' do

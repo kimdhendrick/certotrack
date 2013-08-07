@@ -32,12 +32,12 @@ class EquipmentController < ApplicationController
 
   def new
     authorize! :create, :equipment
-    @inspection_intervals = InspectionInterval.all.to_a
+    set_inspection_intervals
     @equipment = Equipment.new
   end
 
   def edit
-    @inspection_intervals = InspectionInterval.all.to_a
+    set_inspection_intervals
   end
 
   def create
@@ -48,6 +48,7 @@ class EquipmentController < ApplicationController
     if @equipment.save
       redirect_to @equipment, notice: 'Equipment was successfully created.'
     else
+      set_inspection_intervals
       render action: 'new'
     end
   end
@@ -68,6 +69,7 @@ class EquipmentController < ApplicationController
     if success
       redirect_to @equipment, notice: 'Equipment was successfully updated.'
     else
+      set_inspection_intervals
       render action: 'edit'
     end
   end
@@ -98,5 +100,9 @@ class EquipmentController < ApplicationController
 
   def equipment_params
     params.require(:equipment).permit(equipment_accessible_parameters)
+  end
+
+  def set_inspection_intervals
+    @inspection_intervals = InspectionInterval.all.to_a
   end
 end
