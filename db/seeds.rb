@@ -18,13 +18,13 @@ john = create_employee(first_name: 'John', last_name: 'Doe', customer: customer,
 sue = create_employee(first_name: 'Sue', last_name: 'Smith', customer: customer, employee_number: 'JD123', location_id: denver)
 
 create_equipment(name: 'Meter', serial_number: 'ABC123', customer: customer, last_inspection_date: '01-01-2013',
-                       inspection_interval: 'Annually', expiration_date: '01-01-2014', inspection_type: 'Inspectable',
+                       inspection_interval: 'Annually', expiration_date: '01-01-2014',
                        notes: 'Fragile', location: golden)
 
 create_equipment(name: 'Cart', serial_number: '888-EFZ', customer: customer, last_inspection_date: '02-01-2013',
-                       inspection_interval: 'Annually', expiration_date: '02-01-2014', inspection_type: 'Inspectable',
+                       inspection_interval: 'Annually', expiration_date: '02-01-2014',
                        notes: 'Heavy', employee: sue)
 
 create_equipment(name: 'Box', serial_number: 'Box 555', customer: customer, last_inspection_date: '02-01-2013',
-                       inspection_interval: 'Annually', expiration_date: '02-01-2014', inspection_type: 'Inspectable',
+                       inspection_interval: 'Annually', expiration_date: '02-01-2014',
                        notes: 'Heavy')

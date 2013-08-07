@@ -135,7 +135,7 @@ describe EquipmentService do
 
   describe 'update_equipment' do
     it 'should update equipments attributes' do
-      equipment = create_equipment(customer: @customer, inspection_type: 'Non-Inspectable')
+      equipment = create_equipment(customer: @customer)
       attributes =
         {
           'id' => equipment.id,

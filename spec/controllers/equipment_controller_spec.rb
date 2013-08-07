@@ -358,7 +358,6 @@ describe EquipmentController do
               'serial_number' => 'newSN',
               'inspection_interval' => 'Annually',
               'last_inspection_date' => '01/01/2001',
-              'inspection_type' => 'Inspectable',
               'notes' => 'some new notes'
             }
           }, valid_session
@@ -409,7 +408,6 @@ describe EquipmentController do
             'serial_number' => 'newSN',
             'inspection_interval' => 'Annually',
             'last_inspection_date' => '01/01/2001',
-            'inspection_type' => 'Inspectable',
             'notes' => 'some new notes'
           }
         }, valid_session

@@ -18,7 +18,6 @@ describe 'Equipment', js: true do
           serial_number: 'ABC123',
           inspection_interval: 'Annually',
           last_inspection_date: Date.new(2013, 1, 1),
-          inspection_type: 'Inspectable',
           expiration_date: Date.new(2024, 2, 3),
           employee_id: @special_employee.id
         )
@@ -29,7 +28,6 @@ describe 'Equipment', js: true do
           serial_number: 'BBB999',
           inspection_interval: 'Annually',
           last_inspection_date: Date.new(2012, 1, 1),
-          inspection_type: 'Inspectable',
           expiration_date: Date.new(2013, 1, 1),
           location_id: @denver_location.id
         )
@@ -75,7 +73,6 @@ describe 'Equipment', js: true do
           serial_number: 'XYZ987',
           inspection_interval: InspectionInterval::ONE_MONTH.text,
           last_inspection_date: Date.new(2011, 12, 5),
-          inspection_type: 'Inspectable',
           expiration_date: Date.new(2012, 7, 11),
           location_id: @littleton_location.id
         )
@@ -137,7 +134,6 @@ describe 'Equipment', js: true do
         serial_number: 'ABC123',
         inspection_interval: 'Annually',
         last_inspection_date: Date.new(2013, 1, 1),
-        inspection_type: 'Inspectable',
         expiration_date: Date.new(2024, 2, 3),
         notes: 'my notes',
         location_id: @denver_location.id
@@ -307,7 +303,6 @@ describe 'Equipment', js: true do
         serial_number: 'ABC123',
         inspection_interval: 'Annually',
         last_inspection_date: Date.new(2013, 1, 1),
-        inspection_type: 'Inspectable',
         expiration_date: Date.new(2024, 2, 3),
         notes: 'my notes',
         location_id: @littleton_location.id

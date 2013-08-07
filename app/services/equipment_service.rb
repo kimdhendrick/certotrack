@@ -30,14 +30,12 @@ module EquipmentService
 
   def self.update_equipment(equipment, attributes)
     equipment.update(attributes)
-    equipment.update(inspection_type: equipment.calculate_inspection_type)
     equipment.update(expiration_date: equipment.expires_on)
     equipment.save
   end
 
   def self.create_equipment(customer, attributes)
     equipment = Equipment.new(attributes)
-    equipment.update(inspection_type: equipment.calculate_inspection_type)
     equipment.update(expiration_date: equipment.expires_on)
     equipment.customer = customer
     equipment

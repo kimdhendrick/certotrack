@@ -4,8 +4,6 @@ class Equipment < ActiveRecord::Base
   belongs_to :location
   belongs_to :employee
 
-  validates :inspection_type, inclusion: {in: InspectionType.all.map(&:text),
-                                          message: 'invalid value'}
   validates :inspection_interval, inclusion: {in: InspectionInterval.all.map(&:text),
                                               message: 'invalid value'}
 
@@ -32,7 +30,7 @@ class Equipment < ActiveRecord::Base
     InspectionInterval.find_by_text(inspection_interval).expires_on(last_inspection_date)
   end
 
-  def calculate_inspection_type
+  def inspection_type
     inspection_interval == InspectionInterval::NOT_REQUIRED.text ?
       InspectionType::NON_INSPECTABLE.text :
       InspectionType::INSPECTABLE.text

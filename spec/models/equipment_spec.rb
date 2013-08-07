@@ -61,13 +61,6 @@ describe Equipment do
     expiring_equipment.expiring?.should be_true
   end
 
-  it 'should validate inspection type' do
-    new_equipment(inspection_type: InspectionType::INSPECTABLE.text).should be_valid
-    new_equipment(inspection_type: InspectionType::NON_INSPECTABLE.text).should be_valid
-
-    new_equipment(inspection_type: 'foo').should_not be_valid
-  end
-
   it 'should validate inspection interval' do
     new_equipment(inspection_interval: InspectionInterval::ONE_MONTH.text).should be_valid
     new_equipment(inspection_interval: InspectionInterval::THREE_MONTHS.text).should be_valid
@@ -108,5 +101,13 @@ describe Equipment do
 
     employee_assigned_equipment.assigned_to.should == employee
     location_assigned_equipment.assigned_to.should == location
+  end
+
+  it 'should respond to inspection_type' do
+    inspectable_equipment = new_equipment(inspection_interval: InspectionInterval::FIVE_YEARS.text)
+    non_inspectable_equipment = new_equipment(inspection_interval: InspectionInterval::NOT_REQUIRED.text)
+
+    inspectable_equipment.inspection_type.should == 'Inspectable'
+    non_inspectable_equipment.inspection_type.should == 'Non-Inspectable'
   end
 end
