@@ -12,6 +12,10 @@ class EquipmentService
     get_all_equipment(current_user).select { |e| e.expired? }
   end
 
+  def get_expiring_equipment(current_user)
+    get_all_equipment(current_user).select { |e| e.expiring? }
+  end
+
   def count_all_equipment(current_user)
     if (current_user.admin?)
       Equipment.count

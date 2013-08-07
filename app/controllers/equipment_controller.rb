@@ -27,6 +27,15 @@ class EquipmentController < ApplicationController
     render 'equipment/index'
   end
 
+  def expiring
+    authorize! :read, :equipment
+
+    @report_title = 'Expiring Equipment List'
+    @equipment = @equipment_service.get_expiring_equipment(current_user)
+    @equipment_count = @equipment.count
+    render 'equipment/index'
+  end
+
   def show
   end
 

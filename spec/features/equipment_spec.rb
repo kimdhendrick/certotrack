@@ -99,6 +99,38 @@ describe 'Equipment', js: true do
           page.should have_content 'Littleton'
         end
       end
+
+      it 'should show Expiring Equipment report' do
+        expiring_equipment = create_equipment(
+          customer: @customer,
+          name: 'Banana',
+          serial_number: 'BANA',
+          inspection_interval: InspectionInterval::ONE_MONTH.text,
+          last_inspection_date: Date.today,
+          expiration_date: Date.tomorrow,
+          location_id: @denver_location.id
+        )
+
+        visit '/'
+        page.should have_content 'Equipment Expiring Soon'
+        click_link 'Equipment Expiring Soon'
+
+        page.should have_content 'Expiring Equipment List'
+        page.should have_content 'Total: 1'
+        page.should have_link 'Home'
+        page.should have_link 'Create Equipment'
+
+        assert_report_headers_are_correct
+
+        within 'tbody tr', text: 'Banana' do
+          page.should have_link 'Banana'
+          page.should have_content 'BANA'
+          page.should have_content 'Warning'
+          page.should have_content '1 month'
+          page.should have_content 'Inspectable'
+          page.should have_content 'Denver'
+        end
+      end
     end
 
     context 'when an admin user' do

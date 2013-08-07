@@ -137,6 +137,72 @@ describe EquipmentController do
     end
   end
 
+  describe 'GET expiring' do
+    context 'when equipment user' do
+      before do
+        sign_in stub_equipment_user
+      end
+
+      it 'assigns equipment as @equipment' do
+        expiring_equipment = create_expiring_equipment(customer: @customer)
+
+        EquipmentService.any_instance.stub(:get_expiring_equipment).and_return([expiring_equipment])
+
+        get :expiring
+
+        assigns(:equipment).should eq([expiring_equipment])
+      end
+
+      it 'assigns equipment_count' do
+        EquipmentService.any_instance.stub(:get_expiring_equipment).and_return([new_equipment])
+
+        get :expiring
+
+        assigns(:equipment_count).should eq(1)
+      end
+
+      it 'assigns report_title' do
+        EquipmentService.any_instance.stub(:get_expiring_equipment).and_return([new_equipment])
+
+        get :expiring
+
+        assigns(:report_title).should eq('Expiring Equipment List')
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'assigns equipment as @equipment' do
+        expiring_equipment = create_expiring_equipment(customer: @customer)
+        EquipmentService.any_instance.stub(:get_expiring_equipment).and_return([expiring_equipment])
+
+        get :expiring
+
+        assigns(:equipment).should eq([expiring_equipment])
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      describe 'GET expiring' do
+        it 'does not assign equipment as @equipment' do
+          equipment = new_equipment
+          EquipmentService.any_instance.stub(:get_all_equipment).and_return([equipment])
+
+          get :expiring
+
+          assigns(:equipment).should be_nil
+        end
+      end
+    end
+  end
+
   describe 'GET show' do
     context 'when equipment user' do
       before do

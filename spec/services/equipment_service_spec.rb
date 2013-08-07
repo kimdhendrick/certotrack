@@ -53,6 +53,34 @@ describe EquipmentService do
     end
   end
 
+  describe 'get_expiring_equipment' do
+    before do
+      @my_customer = create_customer
+      @my_expiring_equipment = create_expiring_equipment(customer: @my_customer)
+      @other_expiring_equipment = create_expiring_equipment(customer: create_customer)
+      @my_expired_equipment = create_expired_equipment(customer: @my_customer)
+      @other_expired_equipment = create_expired_equipment(customer: create_customer)
+      @my_valid_equipment = create_valid_equipment(customer: @my_customer)
+      @other_valid_equipment = create_valid_equipment(customer: create_customer)
+    end
+
+    context 'an admin user' do
+      it 'should return all expiring equipment' do
+        admin_user = create_user(roles: ['admin'])
+
+        EquipmentService.new.get_expiring_equipment(admin_user).should == [@my_expiring_equipment, @other_expiring_equipment]
+      end
+    end
+
+    context 'a regular user' do
+      it "should return only that user's expiring equipment" do
+        user = create_user(customer: @my_customer)
+
+        EquipmentService.new.get_expiring_equipment(user).should == [@my_expiring_equipment]
+      end
+    end
+  end
+
   describe 'count_all_equipment' do
     before do
       @customer_one = create_customer
