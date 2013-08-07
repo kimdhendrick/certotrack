@@ -19,11 +19,11 @@ class Equipment < ActiveRecord::Base
   end
 
   def expired?
-    expiration_date <= Date.today
+    expiration_date.present? && expiration_date <= Date.today
   end
 
   def expiring?
-    !expired? && expiration_date < Date.today + 60.days
+    expiration_date.present? && !expired? && expiration_date < Date.today + 60.days
   end
 
   def expires_on

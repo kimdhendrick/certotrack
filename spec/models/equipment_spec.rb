@@ -45,20 +45,24 @@ describe Equipment do
     valid_equipment = new_valid_equipment
     expiring_equipment = new_expiring_equipment
     expired_equipment = new_expired_equipment
+    non_inspectable_equipment = new_equipment(expiration_date: nil, inspection_interval:InspectionInterval::NOT_REQUIRED)
 
     valid_equipment.expired?.should be_false
     expiring_equipment.expired?.should be_false
     expired_equipment.expired?.should be_true
+    non_inspectable_equipment.expired?.should be_false
   end
 
   it 'should answer expiring?' do
     valid_equipment = new_valid_equipment
     expiring_equipment = new_expiring_equipment
     expired_equipment = new_expired_equipment
+    non_inspectable_equipment = new_equipment(expiration_date: nil, inspection_interval:InspectionInterval::NOT_REQUIRED)
 
     valid_equipment.expiring?.should be_false
     expired_equipment.expiring?.should be_false
     expiring_equipment.expiring?.should be_true
+    non_inspectable_equipment.expired?.should be_false
   end
 
   it 'should validate inspection interval' do
