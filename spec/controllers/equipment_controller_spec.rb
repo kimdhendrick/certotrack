@@ -14,7 +14,7 @@ describe EquipmentController do
 
       it 'assigns equipment as @equipment' do
         equipment = new_equipment
-        EquipmentService.stub(:get_all_equipment).and_return([equipment])
+        EquipmentService.any_instance.stub(:get_all_equipment).and_return([equipment])
 
         get :index
 
@@ -22,7 +22,7 @@ describe EquipmentController do
       end
 
       it 'assigns equipment_count' do
-        EquipmentService.stub(:get_all_equipment).and_return([new_equipment])
+        EquipmentService.any_instance.stub(:get_all_equipment).and_return([new_equipment])
 
         get :index
 
@@ -30,7 +30,7 @@ describe EquipmentController do
       end
 
       it 'assigns report_title' do
-        EquipmentService.stub(:get_all_equipment).and_return([new_equipment])
+        EquipmentService.any_instance.stub(:get_all_equipment).and_return([new_equipment])
 
         get :index
 
@@ -45,7 +45,7 @@ describe EquipmentController do
 
       it 'assigns equipment as @equipment' do
         equipment = new_equipment
-        EquipmentService.stub(:get_all_equipment).and_return([equipment])
+        EquipmentService.any_instance.stub(:get_all_equipment).and_return([equipment])
 
         get :index
 
@@ -61,7 +61,7 @@ describe EquipmentController do
       describe 'GET index' do
         it 'does not assign equipment as @equipment' do
           equipment = new_equipment
-          EquipmentService.stub(:get_all_equipment).and_return([equipment])
+          EquipmentService.any_instance.stub(:get_all_equipment).and_return([equipment])
 
           get :index
 
@@ -80,7 +80,7 @@ describe EquipmentController do
       it 'assigns equipment as @equipment' do
         expired_equipment = create_expired_equipment(customer: @customer)
 
-        EquipmentService.stub(:get_expired_equipment).and_return([expired_equipment])
+        EquipmentService.any_instance.stub(:get_expired_equipment).and_return([expired_equipment])
 
         get :expired
 
@@ -88,7 +88,7 @@ describe EquipmentController do
       end
 
       it 'assigns equipment_count' do
-        EquipmentService.stub(:get_expired_equipment).and_return([new_equipment])
+        EquipmentService.any_instance.stub(:get_expired_equipment).and_return([new_equipment])
 
         get :expired
 
@@ -96,7 +96,7 @@ describe EquipmentController do
       end
 
       it 'assigns report_title' do
-        EquipmentService.stub(:get_expired_equipment).and_return([new_equipment])
+        EquipmentService.any_instance.stub(:get_expired_equipment).and_return([new_equipment])
 
         get :expired
 
@@ -111,7 +111,7 @@ describe EquipmentController do
 
       it 'assigns equipment as @equipment' do
         expired_equipment = create_expired_equipment(customer: @customer)
-        EquipmentService.stub(:get_expired_equipment).and_return([expired_equipment])
+        EquipmentService.any_instance.stub(:get_expired_equipment).and_return([expired_equipment])
 
         get :expired
 
@@ -127,7 +127,7 @@ describe EquipmentController do
       describe 'GET expired' do
         it 'does not assign equipment as @equipment' do
           equipment = new_equipment
-          EquipmentService.stub(:get_all_equipment).and_return([equipment])
+          EquipmentService.any_instance.stub(:get_all_equipment).and_return([equipment])
 
           get :expired
 
@@ -284,7 +284,7 @@ describe EquipmentController do
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved equipment as @equipment' do
-          EquipmentService.should_receive(:create_equipment).once.and_return(new_equipment)
+          EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(new_equipment)
           Equipment.any_instance.stub(:save).and_return(false)
 
           post :create, {:equipment => {'name' => 'invalid value'}}, valid_session
@@ -293,7 +293,7 @@ describe EquipmentController do
         end
 
         it "re-renders the 'new' template" do
-          EquipmentService.should_receive(:create_equipment).once.and_return(new_equipment)
+          EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(new_equipment)
           Equipment.any_instance.stub(:save).and_return(false)
           post :create, {:equipment => {'name' => 'invalid value'}}, valid_session
           response.should render_template('new')
@@ -350,7 +350,7 @@ describe EquipmentController do
       describe 'with valid params' do
         it 'updates the requested equipment' do
           equipment = create_equipment(customer: @customer)
-          EquipmentService.should_receive(:update_equipment).once
+          EquipmentService.any_instance.should_receive(:update_equipment).once
 
           put :update, {:id => equipment.to_param, :equipment =>
             {
@@ -400,7 +400,7 @@ describe EquipmentController do
 
       it 'updates the requested equipment' do
         equipment = create_equipment(customer: @customer)
-        EquipmentService.should_receive(:update_equipment).once
+        EquipmentService.any_instance.should_receive(:update_equipment).once
 
         put :update, {:id => equipment.to_param, :equipment =>
           {
@@ -488,7 +488,7 @@ describe EquipmentController do
 
       it 'should return locations when assignee is Location' do
         location = create_location(name: 'Oz')
-        LocationService.should_receive(:get_all_locations).once.and_return([location])
+        LocationService.any_instance.should_receive(:get_all_locations).once.and_return([location])
         get :ajax_assignee, {assignee: 'Location'}
         json = JSON.parse(response.body)
         json.should == [
@@ -498,7 +498,7 @@ describe EquipmentController do
 
       it 'should return employees when assignee is Employee' do
         employee = create_employee(first_name: 'The', last_name: 'Wizard')
-        EmployeeService.should_receive(:get_all_employees).once.and_return([employee])
+        EmployeeService.any_instance.should_receive(:get_all_employees).once.and_return([employee])
         get :ajax_assignee, {assignee: 'Employee'}
         json = JSON.parse(response.body)
         json.should == [
@@ -525,7 +525,7 @@ describe EquipmentController do
 
       it 'should return locations when assignee is Location' do
         location = create_location(name: 'Oz')
-        LocationService.should_receive(:get_all_locations).once.and_return([location])
+        LocationService.any_instance.should_receive(:get_all_locations).once.and_return([location])
         get :ajax_assignee, {assignee: 'Location'}
         json = JSON.parse(response.body)
         json.should == [

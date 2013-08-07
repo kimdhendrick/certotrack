@@ -13,9 +13,9 @@ describe CertotrackController do
       user = stub_equipment_user
       sign_in user
 
-      EquipmentService.stub(:count_all_equipment).and_return(3)
-      EquipmentService.stub(:count_expired_equipment).and_return(2)
-      EquipmentService.stub(:count_expiring_equipment).and_return(1)
+      EquipmentService.any_instance.stub(:count_all_equipment).and_return(3)
+      EquipmentService.any_instance.stub(:count_expired_equipment).and_return(2)
+      EquipmentService.any_instance.stub(:count_expiring_equipment).and_return(1)
 
       get :home
 

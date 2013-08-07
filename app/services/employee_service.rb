@@ -1,6 +1,6 @@
-module EmployeeService
+class EmployeeService
 
-  def self.get_all_employees(current_user)
+  def get_all_employees(current_user)
     if (current_user.admin?)
       Employee.all
     else

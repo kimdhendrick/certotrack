@@ -1,6 +1,6 @@
-module LocationService
+class LocationService
 
-  def self.get_all_locations(current_user)
+  def get_all_locations(current_user)
     if (current_user.admin?)
       Location.all
     else

@@ -1,8 +1,11 @@
 class EquipmentController < ApplicationController
-  extend EquipmentService
   include EquipmentHelper
 
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, 
+                :load_equipment_service, 
+                :load_location_service, 
+                :load_employee_service
+  
   before_action :set_equipment, only: [:show, :edit, :update, :destroy]
 
   check_authorization
@@ -11,7 +14,7 @@ class EquipmentController < ApplicationController
     authorize! :read, :equipment
 
     @report_title = 'All Equipment List'
-    @equipment = EquipmentService::get_all_equipment(current_user)
+    @equipment = @equipment_service.get_all_equipment(current_user)
     @equipment_count = @equipment.count
   end
 
@@ -19,7 +22,7 @@ class EquipmentController < ApplicationController
     authorize! :read, :equipment
 
     @report_title = 'Expired Equipment List'
-    @equipment = EquipmentService::get_expired_equipment(current_user)
+    @equipment = @equipment_service.get_expired_equipment(current_user)
     @equipment_count = @equipment.count
     render 'equipment/index'
   end
@@ -40,7 +43,7 @@ class EquipmentController < ApplicationController
   def create
     authorize! :create, :equipment
 
-    @equipment = EquipmentService::create_equipment(current_user.customer, equipment_params)
+    @equipment = @equipment_service.create_equipment(current_user.customer, equipment_params)
 
     if @equipment.save
       redirect_to @equipment, notice: 'Equipment was successfully created.'
@@ -53,14 +56,14 @@ class EquipmentController < ApplicationController
     authorize! :read, :equipment
 
     if params[:assignee] == 'Location'
-      render json: LocationService.get_all_locations(current_user).map { |l| [l.id, l.name] }
+      render json: @location_service.get_all_locations(current_user).map { |l| [l.id, l.name] }
     else
-      render json: EmployeeService.get_all_employees(current_user).map { |e| [e.id, e.to_s] }
+      render json: @employee_service.get_all_employees(current_user).map { |e| [e.id, e.to_s] }
     end
   end
 
   def update
-    success = EquipmentService.update_equipment(@equipment, equipment_params)
+    success = @equipment_service.update_equipment(@equipment, equipment_params)
 
     if success
       redirect_to @equipment, notice: 'Equipment was successfully updated.'
@@ -72,6 +75,18 @@ class EquipmentController < ApplicationController
   def destroy
     @equipment.destroy
     redirect_to equipment_index_url
+  end
+
+  def load_equipment_service(service = EquipmentService.new)
+    @equipment_service ||= service
+  end
+
+  def load_employee_service(service = EmployeeService.new)
+    @employee_service ||= service
+  end
+
+  def load_location_service(service = LocationService.new)
+    @location_service ||= service
   end
 
   private

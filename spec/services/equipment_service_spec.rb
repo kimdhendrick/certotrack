@@ -12,7 +12,7 @@ describe EquipmentService do
       it 'should return all equipment' do
         admin_user = create_user(roles: ['admin'])
 
-        EquipmentService::get_all_equipment(admin_user).should == [@my_equipment, @other_equipment]
+        EquipmentService.new.get_all_equipment(admin_user).should == [@my_equipment, @other_equipment]
       end
     end
 
@@ -20,7 +20,7 @@ describe EquipmentService do
       it "should return only that user's equipment" do
         user = create_user(customer: @my_customer)
 
-        EquipmentService::get_all_equipment(user).should == [@my_equipment]
+        EquipmentService.new.get_all_equipment(user).should == [@my_equipment]
       end
     end
   end
@@ -40,7 +40,7 @@ describe EquipmentService do
       it 'should return all expired equipment' do
         admin_user = create_user(roles: ['admin'])
 
-        EquipmentService::get_expired_equipment(admin_user).should == [@my_expired_equipment, @other_expired_equipment]
+        EquipmentService.new.get_expired_equipment(admin_user).should == [@my_expired_equipment, @other_expired_equipment]
       end
     end
 
@@ -48,7 +48,7 @@ describe EquipmentService do
       it "should return only that user's expired equipment" do
         user = create_user(customer: @my_customer)
 
-        EquipmentService::get_expired_equipment(user).should == [@my_expired_equipment]
+        EquipmentService.new.get_expired_equipment(user).should == [@my_expired_equipment]
       end
     end
   end
@@ -64,7 +64,7 @@ describe EquipmentService do
       it 'should return count that includes all equipment' do
         admin_user = create_user(roles: ['admin'])
 
-        EquipmentService::count_all_equipment(admin_user).should == 2
+        EquipmentService.new.count_all_equipment(admin_user).should == 2
       end
     end
 
@@ -72,7 +72,7 @@ describe EquipmentService do
       it "should return count that includes only that user's equipment" do
         user = create_user(customer: @customer_one)
 
-        EquipmentService::count_all_equipment(user).should == 1
+        EquipmentService.new.count_all_equipment(user).should == 1
       end
     end
   end
@@ -91,7 +91,7 @@ describe EquipmentService do
       it 'should return count that includes all expired equipment' do
         admin_user = create_user(roles: ['admin'])
 
-        EquipmentService::count_expired_equipment(admin_user).should == 2
+        EquipmentService.new.count_expired_equipment(admin_user).should == 2
       end
     end
 
@@ -99,7 +99,7 @@ describe EquipmentService do
       it "should return count that includes only that user's expired equipment" do
         user = create_user(customer: @customer_one)
 
-        EquipmentService::count_expired_equipment(user).should == 1
+        EquipmentService.new.count_expired_equipment(user).should == 1
       end
     end
   end
@@ -120,7 +120,7 @@ describe EquipmentService do
       it 'should return count that includes all expiring equipment' do
         admin_user = create_user(roles: ['admin'])
 
-        EquipmentService::count_expiring_equipment(admin_user).should == 2
+        EquipmentService.new.count_expiring_equipment(admin_user).should == 2
       end
     end
 
@@ -128,7 +128,7 @@ describe EquipmentService do
       it "should return count that includes only that user's expiring equipment" do
         user = create_user(customer: @customer_one)
 
-        EquipmentService::count_expiring_equipment(user).should == 1
+        EquipmentService.new.count_expiring_equipment(user).should == 1
       end
     end
   end
@@ -146,7 +146,7 @@ describe EquipmentService do
           'notes' => 'some new notes'
         }
 
-      success = EquipmentService::update_equipment(equipment, attributes)
+      success = EquipmentService.new.update_equipment(equipment, attributes)
       success.should be_true
 
       equipment.reload
@@ -167,7 +167,7 @@ describe EquipmentService do
           'inspection_interval' => 'Not Required'
         }
 
-      success = EquipmentService::update_equipment(equipment, attributes)
+      success = EquipmentService.new.update_equipment(equipment, attributes)
       success.should be_true
 
       equipment.reload
@@ -180,7 +180,7 @@ describe EquipmentService do
       equipment = create_equipment(customer: @customer)
       equipment.stub(:save).and_return(false)
 
-      success = EquipmentService::update_equipment(equipment, {})
+      success = EquipmentService.new.update_equipment(equipment, {})
       success.should be_false
 
       equipment.reload
@@ -200,7 +200,7 @@ describe EquipmentService do
         }
       customer = new_customer
 
-      equipment = EquipmentService::create_equipment(customer, attributes)
+      equipment = EquipmentService.new.create_equipment(customer, attributes)
 
       equipment.name.should == 'Box'
       equipment.serial_number.should == 'newSN'
@@ -219,7 +219,7 @@ describe EquipmentService do
         }
       customer = new_customer
 
-      equipment = EquipmentService::create_equipment(customer, attributes)
+      equipment = EquipmentService.new.create_equipment(customer, attributes)
 
       equipment.name.should == 'Box'
       equipment.inspection_interval.should == 'Not Required'

@@ -11,7 +11,7 @@ describe LocationService do
     it 'should return all locations' do
       admin_user = create_user(roles: ['admin'])
 
-      LocationService::get_all_locations(admin_user).should == [@my_location, @other_location]
+      LocationService.new.get_all_locations(admin_user).should == [@my_location, @other_location]
     end
   end
 
@@ -19,7 +19,7 @@ describe LocationService do
     it "should return only customer's locations" do
       user = create_user(customer: @my_customer)
 
-      LocationService::get_all_locations(user).should == [@my_location]
+      LocationService.new.get_all_locations(user).should == [@my_location]
     end
   end
 end

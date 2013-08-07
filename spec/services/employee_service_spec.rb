@@ -11,7 +11,7 @@ describe EmployeeService do
     it 'should return all employees' do
       admin_user = create_user(roles: ['admin'])
 
-      EmployeeService::get_all_employees(admin_user).should == [@my_employee, @other_employee]
+      EmployeeService.new.get_all_employees(admin_user).should == [@my_employee, @other_employee]
     end
   end
 
@@ -19,7 +19,7 @@ describe EmployeeService do
     it "should return only customer's employees" do
       user = create_user(customer: @my_customer)
 
-      EmployeeService::get_all_employees(user).should == [@my_employee]
+      EmployeeService.new.get_all_employees(user).should == [@my_employee]
     end
   end
 end
