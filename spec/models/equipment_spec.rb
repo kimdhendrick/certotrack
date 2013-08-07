@@ -5,9 +5,22 @@ describe Equipment do
 
   subject { @equipment }
 
+  it { should validate_presence_of :name }
+  it { should validate_presence_of :serial_number }
   it { should belong_to(:customer) }
   it { should belong_to(:location) }
   it { should belong_to(:employee) }
+
+  it 'should require last_inspection_date if Inspectable' do
+    equipment = new_equipment(inspection_interval: InspectionInterval::ONE_YEAR.text, last_inspection_date: nil)
+    equipment.should_not be_valid
+    equipment.errors[:last_inspection_date].should == ["can't be blank"]
+  end
+
+  it 'should not require last_inspection_date if Non-Inspectable' do
+    equipment = new_equipment(inspection_interval: InspectionInterval::NOT_REQUIRED.text, last_inspection_date: nil)
+    equipment.should be_valid
+  end
 
   it 'should be able to assign a customer to equipment' do
     customer = new_customer
