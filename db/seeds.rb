@@ -36,3 +36,6 @@ create_equipment(name: 'Light cart', serial_number: 'Cart LI1', customer: custom
 create_equipment(name: 'Air Bottle', serial_number: 'SCOTT', customer: customer, last_inspection_date: Date.today,
                        inspection_interval: InspectionInterval::ONE_MONTH.text, expiration_date: Date.today + 59.days,
                        notes: 'Full')
+
+create_equipment(name: 'Mobile Data Computer', serial_number: 'MDC999', customer: customer, last_inspection_date: Date.today,
+                       inspection_interval: InspectionInterval::NOT_REQUIRED.text)

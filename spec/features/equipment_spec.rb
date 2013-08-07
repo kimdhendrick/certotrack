@@ -131,6 +131,35 @@ describe 'Equipment', js: true do
           page.should have_content 'Denver'
         end
       end
+
+      it 'should show Non-Inspectable Equipment report' do
+        non_inspectable_equipment = create_equipment(
+          customer: @customer,
+          name: 'MDC',
+          serial_number: 'mdc1',
+          inspection_interval: InspectionInterval::NOT_REQUIRED.text,
+          location_id: @denver_location.id
+        )
+
+        visit '/'
+        page.should have_content 'Non-Inspectable Equipment'
+        click_link 'Non-Inspectable Equipment'
+
+        page.should have_content 'Non-Inspectable Equipment List'
+        page.should have_content 'Total: 1'
+        page.should have_link 'Home'
+        page.should have_link 'Create Equipment'
+
+        assert_report_headers_are_correct
+
+        within 'tbody tr', text: 'MDC' do
+          page.should have_link 'MDC'
+          page.should have_content 'mdc1'
+          page.should have_content 'Not Required'
+          page.should have_content 'Inspectable'
+          page.should have_content 'Denver'
+        end
+      end
     end
 
     context 'when an admin user' do

@@ -16,6 +16,10 @@ class EquipmentService
     get_all_equipment(current_user).select { |e| e.expiring? }
   end
 
+  def get_noninspectable_equipment(current_user)
+    get_all_equipment(current_user).select { |e| !e.inspectable? }
+  end
+
   def count_all_equipment(current_user)
     if (current_user.admin?)
       Equipment.count

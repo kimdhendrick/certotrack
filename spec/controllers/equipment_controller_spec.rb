@@ -203,6 +203,72 @@ describe EquipmentController do
     end
   end
 
+  describe 'GET noninspectable' do
+    context 'when equipment user' do
+      before do
+        sign_in stub_equipment_user
+      end
+
+      it 'assigns equipment as @equipment' do
+        noninspectable_equipment = create_noninspectable_equipment(customer: @customer)
+
+        EquipmentService.any_instance.stub(:get_noninspectable_equipment).and_return([noninspectable_equipment])
+
+        get :noninspectable
+
+        assigns(:equipment).should eq([noninspectable_equipment])
+      end
+
+      it 'assigns equipment_count' do
+        EquipmentService.any_instance.stub(:get_noninspectable_equipment).and_return([new_equipment])
+
+        get :noninspectable
+
+        assigns(:equipment_count).should eq(1)
+      end
+
+      it 'assigns report_title' do
+        EquipmentService.any_instance.stub(:get_noninspectable_equipment).and_return([new_equipment])
+
+        get :noninspectable
+
+        assigns(:report_title).should eq('Non-Inspectable Equipment List')
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'assigns equipment as @equipment' do
+        noninspectable_equipment = create_noninspectable_equipment(customer: @customer)
+        EquipmentService.any_instance.stub(:get_noninspectable_equipment).and_return([noninspectable_equipment])
+
+        get :noninspectable
+
+        assigns(:equipment).should eq([noninspectable_equipment])
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      describe 'GET noninspectable' do
+        it 'does not assign equipment as @equipment' do
+          equipment = new_equipment
+          EquipmentService.any_instance.stub(:get_all_equipment).and_return([equipment])
+
+          get :noninspectable
+
+          assigns(:equipment).should be_nil
+        end
+      end
+    end
+  end
+
   describe 'GET show' do
     context 'when equipment user' do
       before do

@@ -6,7 +6,7 @@ describe Status do
     Status::EXPIRING.to_s.should == 'Warning'
     Status::EXPIRED.to_s.should == 'Expired'
     Status::RECERTIFY.to_s.should == 'Recertify'
-    Status::NA.to_s.should == 'NA'
+    Status::NA.to_s.should == 'N/A'
   end
 
   it 'should have sort_order' do

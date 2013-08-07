@@ -36,6 +36,15 @@ class EquipmentController < ApplicationController
     render 'equipment/index'
   end
 
+  def noninspectable
+    authorize! :read, :equipment
+
+    @report_title = 'Non-Inspectable Equipment List'
+    @equipment = @equipment_service.get_noninspectable_equipment(current_user)
+    @equipment_count = @equipment.count
+    render 'equipment/index'
+  end
+
   def show
   end
 
@@ -100,7 +109,9 @@ class EquipmentController < ApplicationController
     @location_service ||= service
   end
 
+
   private
+
   def set_equipment
     equipment_pending_authorization = Equipment.find(params[:id])
     authorize! :manage, equipment_pending_authorization

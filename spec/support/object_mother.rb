@@ -42,6 +42,14 @@ module ObjectMother
     new_equipment(options.merge({expiration_date: Date.tomorrow}))
   end
 
+  def create_noninspectable_equipment(options = {})
+    new_noninspectable_equipment(options).tap(&:save!)
+  end
+
+  def new_noninspectable_equipment(options = {})
+    new_equipment(options.merge({inspection_interval: InspectionInterval::NOT_REQUIRED.text, last_inspection_date: nil}))
+  end
+
   def create_equipment(options = {})
     new_equipment(options).tap(&:save!)
   end

@@ -81,6 +81,32 @@ describe EquipmentService do
     end
   end
 
+  describe 'get_noninspectable_equipment' do
+    before do
+      @my_customer = create_customer
+      @my_noninspectable_equipment = create_noninspectable_equipment(customer: @my_customer)
+      @other_noninspectable_equipment = create_noninspectable_equipment(customer: create_customer)
+      @my_valid_equipment = create_valid_equipment(customer: @my_customer)
+      @other_valid_equipment = create_valid_equipment(customer: create_customer)
+    end
+
+    context 'an admin user' do
+      it 'should return all noninspectable equipment' do
+        admin_user = create_user(roles: ['admin'])
+
+        EquipmentService.new.get_noninspectable_equipment(admin_user).should == [@my_noninspectable_equipment, @other_noninspectable_equipment]
+      end
+    end
+
+    context 'a regular user' do
+      it "should return only that user's noninspectable equipment" do
+        user = create_user(customer: @my_customer)
+
+        EquipmentService.new.get_noninspectable_equipment(user).should == [@my_noninspectable_equipment]
+      end
+    end
+  end
+
   describe 'count_all_equipment' do
     before do
       @customer_one = create_customer

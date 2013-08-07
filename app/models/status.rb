@@ -5,7 +5,7 @@ class Status < ActiveHash::Base
     {id: 2, text: 'Warning'},
     {id: 3, text: 'Expired'},
     {id: 4, text: 'Recertify'},
-    {id: 5, text: 'NA'}
+    {id: 5, text: 'N/A'}
   ]
 
   alias_method :to_s, :text
