@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Home Page' do
+describe 'Home Page', js:true do
 
   context 'when an equipment user' do
     before do

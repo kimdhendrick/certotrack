@@ -38,14 +38,24 @@ class EquipmentService
 
   def update_equipment(equipment, attributes)
     equipment.update(attributes)
+    equipment.update(last_inspection_date: _format_date(attributes['last_inspection_date']))
     equipment.update(expiration_date: equipment.expires_on)
     equipment.save
   end
 
   def create_equipment(customer, attributes)
     equipment = Equipment.new(attributes)
+    equipment.update(last_inspection_date: _format_date(attributes['last_inspection_date']))
     equipment.update(expiration_date: equipment.expires_on)
     equipment.customer = customer
     equipment
+  end
+
+
+  private
+
+  def _format_date(date)
+    return nil unless date.present?
+    Date.strptime(date, '%m/%d/%Y')
   end
 end

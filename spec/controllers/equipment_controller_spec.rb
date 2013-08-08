@@ -401,26 +401,21 @@ describe EquipmentController do
 
       describe 'with valid params' do
         it 'creates a new Equipment' do
+          EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(new_equipment)
           expect {
             post :create, {:equipment => equipment_attributes}, valid_session
           }.to change(Equipment, :count).by(1)
         end
 
-        it 'sets the customer on the Equipment' do
-          post :create, {:equipment => equipment_attributes}, valid_session
-
-          equipment = Equipment.last
-
-          equipment.customer.should == @customer
-        end
-
         it 'assigns a newly created equipment as @equipment' do
+          EquipmentService.any_instance.stub(:create_equipment).and_return(new_equipment)
           post :create, {:equipment => equipment_attributes}, valid_session
           assigns(:equipment).should be_a(Equipment)
           assigns(:equipment).should be_persisted
         end
 
         it 'redirects to the created equipment' do
+          EquipmentService.any_instance.stub(:create_equipment).and_return(new_equipment)
           post :create, {:equipment => equipment_attributes}, valid_session
           response.should redirect_to(Equipment.last)
         end
@@ -458,20 +453,14 @@ describe EquipmentController do
       end
 
       it 'creates a new Equipment' do
+        EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(new_equipment)
         expect {
           post :create, {:equipment => equipment_attributes}, valid_session
         }.to change(Equipment, :count).by(1)
       end
 
-      it 'sets the customer on the Equipment' do
-        post :create, {:equipment => equipment_attributes}, valid_session
-
-        equipment = Equipment.last
-
-        equipment.customer.should == stub_admin.customer
-      end
-
       it 'assigns a newly created equipment as @equipment' do
+        EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(new_equipment)
         post :create, {:equipment => equipment_attributes}, valid_session
         assigns(:equipment).should be_a(Equipment)
         assigns(:equipment).should be_persisted
@@ -515,12 +504,14 @@ describe EquipmentController do
         end
 
         it 'assigns the requested equipment as @equipment' do
+          EquipmentService.any_instance.stub(:update_equipment).and_return(true)
           equipment = create_equipment(customer: @customer)
           put :update, {:id => equipment.to_param, :equipment => equipment_attributes}, valid_session
           assigns(:equipment).should eq(equipment)
         end
 
         it 'redirects to the equipment' do
+          EquipmentService.any_instance.stub(:update_equipment).and_return(true)
           equipment = create_equipment(customer: @customer)
           put :update, {:id => equipment.to_param, :equipment => equipment_attributes}, valid_session
           response.should redirect_to(equipment)
@@ -530,21 +521,21 @@ describe EquipmentController do
       describe 'with invalid params' do
         it 'assigns the equipment as @equipment' do
           equipment = create_equipment(customer: @customer)
-          Equipment.any_instance.stub(:save).and_return(false)
+          EquipmentService.any_instance.stub(:update_equipment).and_return(false)
           put :update, {:id => equipment.to_param, :equipment => {'name' => 'invalid value'}}, valid_session
           assigns(:equipment).should eq(equipment)
         end
 
         it "re-renders the 'edit' template" do
           equipment = create_equipment(customer: @customer)
-          Equipment.any_instance.stub(:save).and_return(false)
+          EquipmentService.any_instance.stub(:update_equipment).and_return(false)
           put :update, {:id => equipment.to_param, :equipment => {'name' => 'invalid value'}}, valid_session
           response.should render_template('edit')
         end
 
         it 'assigns @inspection_intervals' do
           equipment = create_equipment(customer: @customer)
-          Equipment.any_instance.stub(:save).and_return(false)
+          EquipmentService.any_instance.stub(:update_equipment).and_return(false)
           put :update, {:id => equipment.to_param, :equipment => {'name' => 'invalid value'}}, valid_session
           assigns(:inspection_intervals).should eq(InspectionInterval.all.to_a)
         end
@@ -574,6 +565,7 @@ describe EquipmentController do
 
       it 'assigns the requested equipment as @equipment' do
         equipment = create_equipment(customer: @customer)
+        EquipmentService.any_instance.stub(:update_equipment).and_return(equipment)
         put :update, {:id => equipment.to_param, :equipment => equipment_attributes}, valid_session
         assigns(:equipment).should eq(equipment)
       end

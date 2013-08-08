@@ -196,7 +196,7 @@ describe EquipmentService do
           'name' => 'Box',
           'serial_number' => 'newSN',
           'inspection_interval' => '5 years',
-          'last_inspection_date' => '01/01/2001',
+          'last_inspection_date' => '12/31/2001',
           'notes' => 'some new notes'
         }
 
@@ -207,10 +207,10 @@ describe EquipmentService do
       equipment.name.should == 'Box'
       equipment.serial_number.should == 'newSN'
       equipment.inspection_interval.should == '5 years'
-      equipment.last_inspection_date.should == Date.new(2001, 1, 1)
+      equipment.last_inspection_date.should == Date.new(2001, 12, 31)
       equipment.inspection_type.should == InspectionType::INSPECTABLE.text
       equipment.notes.should == 'some new notes'
-      equipment.expiration_date.should == Date.new(2006, 1, 1)
+      equipment.expiration_date.should == Date.new(2006, 12, 31)
     end
 
     it 'should set inspection_interval to Non-Inspectable if interval is Not Required' do
@@ -249,7 +249,7 @@ describe EquipmentService do
           'name' => 'Box',
           'serial_number' => 'newSN',
           'inspection_interval' => '5 years',
-          'last_inspection_date' => '01/01/2001',
+          'last_inspection_date' => '12/31/2001',
           'notes' => 'some new notes'
         }
       customer = new_customer
@@ -259,10 +259,11 @@ describe EquipmentService do
       equipment.name.should == 'Box'
       equipment.serial_number.should == 'newSN'
       equipment.inspection_interval.should == '5 years'
-      equipment.last_inspection_date.should == Date.new(2001, 1, 1)
+      equipment.last_inspection_date.should == Date.new(2001, 12, 31)
       equipment.inspection_type.should == InspectionType::INSPECTABLE.text
       equipment.notes.should == 'some new notes'
-      equipment.expiration_date.should == Date.new(2006, 1, 1)
+      equipment.expiration_date.should == Date.new(2006, 12, 31)
+      equipment.customer.should == customer
     end
 
     it 'should set inspection_interval to Non-Inspectable if interval is Not Required' do

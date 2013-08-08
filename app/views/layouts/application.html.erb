@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>Certotrack</title>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= stylesheet_link_tag "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
 </head>
@@ -16,3 +16,16 @@
 
 </body>
 </html>
+
+<script type="text/javascript">
+  $(function() {
+    $('.datepicker').datepicker(
+      {
+        showOn: "button",
+        buttonImage: "/assets/calendar.png",
+        buttonImageOnly: true,
+        dateFormat: 'mm/dd/yy',
+        changeYear: true
+      });
+  });
+</script>

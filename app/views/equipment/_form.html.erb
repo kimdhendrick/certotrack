@@ -37,7 +37,11 @@
   <div class="field">
     <%= f.label :last_inspection_date, 'Last Inspection Date' %>
     <br/>
-    <%= f.text_field :last_inspection_date %>
+    <input class="datepicker"
+           id="equipment_last_inspection_date"
+           name="equipment[last_inspection_date]"
+           type="text"
+           value="<%= DateHelpers.format(@equipment.last_inspection_date) %>">
   </div>
 
   <div class="field">
@@ -101,9 +105,9 @@
     function add_input(name, value) {
       $('<input>').attr('type', 'hidden').attr('data-hidden-assignee', 'data-hidden-assignee').attr('name', 'equipment[' + name + '_id]').attr('value', value).appendTo('#assigneeListContainer');
     }
-    
+
     function remove_input() {
-      $('input[data-hidden-assignee]').remove();  
+      $('input[data-hidden-assignee]').remove();
     }
   });
 </script>
