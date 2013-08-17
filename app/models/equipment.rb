@@ -16,6 +16,14 @@ class Equipment < ActiveRecord::Base
     Status::VALID
   end
 
+  def status_code
+    status.sort_order
+  end
+
+  def inspection_interval_code
+    InspectionInterval.find_by_text(inspection_interval).id
+  end
+
   def na?
     !expiration_date.present?
   end
@@ -48,6 +56,10 @@ class Equipment < ActiveRecord::Base
 
   def assigned_to_employee?
     employee.present?
+  end
+
+  def assignee
+    assigned_to.try(:to_s) || "Unassigned"
   end
 
   def assigned_to

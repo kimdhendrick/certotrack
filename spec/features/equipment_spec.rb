@@ -44,17 +44,6 @@ describe 'Equipment', js: true do
         assert_report_headers_are_correct
 
         within 'table tbody tr:nth-of-type(1)' do
-          page.should have_link 'Meter'
-          page.should have_content 'ABC123'
-          page.should have_content 'Valid'
-          page.should have_content 'Annually'
-          page.should have_content '01/01/2013'
-          page.should have_content 'Inspectable'
-          page.should have_content '02/03/2024'
-          page.should have_content 'Employee, Special'
-        end
-
-        within 'table tbody tr:nth-of-type(2)' do
           page.should have_link 'Box'
           page.should have_content 'BBB999'
           page.should have_content 'Expired'
@@ -63,6 +52,17 @@ describe 'Equipment', js: true do
           page.should have_content 'Inspectable'
           page.should have_content '01/01/2013'
           page.should have_content 'Denver'
+        end
+
+        within 'table tbody tr:nth-of-type(2)' do
+          page.should have_link 'Meter'
+          page.should have_content 'ABC123'
+          page.should have_content 'Valid'
+          page.should have_content 'Annually'
+          page.should have_content '01/01/2013'
+          page.should have_content 'Inspectable'
+          page.should have_content '02/03/2024'
+          page.should have_content 'Employee, Special'
         end
       end
 
@@ -418,14 +418,14 @@ describe 'Equipment', js: true do
 
   def assert_report_headers_are_correct
     within 'table thead tr' do
-      page.should have_content 'Name'
-      page.should have_content 'Serial Number'
-      page.should have_content 'Status'
-      page.should have_content 'Inspection Interval'
-      page.should have_content 'Last Inspection Date'
-      page.should have_content 'Type'
-      page.should have_content 'Expiration Date'
-      page.should have_content 'Assignee'
+      page.should have_link 'Name'
+      page.should have_link 'Serial Number'
+      page.should have_link 'Status'
+      page.should have_link 'Inspection Interval'
+      page.should have_link 'Last Inspection Date'
+      page.should have_link 'Type'
+      page.should have_link 'Expiration Date'
+      page.should have_link 'Assignee'
     end
   end
 end

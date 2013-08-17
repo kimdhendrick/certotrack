@@ -8,14 +8,14 @@
 <table>
   <thead>
   <tr>
-    <th>Name</th>
-    <th>Serial Number</th>
-    <th>Status</th>
-    <th>Inspection Interval</th>
-    <th>Last Inspection Date</th>
-    <th>Type</th>
-    <th>Expiration Date</th>
-    <th>Assignee</th>
+    <th><%= sortable 'name' %></th>
+    <th><%= sortable 'serial_number' %></th>
+    <th><%= sortable 'status_code', title='Status' %></th>
+    <th><%= sortable 'inspection_interval' %></th>
+    <th><%= sortable 'last_inspection_date' %></th>
+    <th><%= sortable 'inspection_type' %></th>
+    <th><%= sortable 'expiration_date' %></th>
+    <th><%= sortable 'assignee' %></th>
   </tr>
   </thead>
   <tbody>

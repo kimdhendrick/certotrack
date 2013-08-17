@@ -127,4 +127,28 @@ describe Equipment do
     inspectable_equipment.inspection_type.should == 'Inspectable'
     non_inspectable_equipment.inspection_type.should == 'Non-Inspectable'
   end
+
+  it 'should respond to inspection_interval_code' do
+    one_month_equipment = new_equipment(inspection_interval: InspectionInterval::ONE_MONTH.text)
+    not_required_equipment = new_equipment(inspection_interval: InspectionInterval::NOT_REQUIRED.text)
+
+    one_month_equipment.inspection_interval_code.should == InspectionInterval::ONE_MONTH.id
+    not_required_equipment.inspection_interval_code.should == InspectionInterval::NOT_REQUIRED.id
+  end
+
+  it 'should respond to status_code' do
+    new_valid_equipment.status_code.should == Status::VALID.id
+    new_expiring_equipment.status_code.should == Status::EXPIRING.id
+    new_expired_equipment.status_code.should == Status::EXPIRED.id
+  end
+
+  it 'should respond to assignee' do
+    location = create_location(name: 'Location Name')
+    location_assigned_equipment = create_equipment(location_id: location.id)
+    employee = create_employee(first_name: 'Joe', last_name: 'Schmoe')
+    employee_assigned_equipment = create_equipment(employee_id: employee.id)
+
+    location_assigned_equipment.assignee.should == 'Location Name'
+    employee_assigned_equipment.assignee.should == 'Schmoe, Joe'
+  end
 end

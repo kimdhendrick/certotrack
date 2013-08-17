@@ -1,11 +1,15 @@
 class EquipmentService
 
-  def get_all_equipment(current_user)
-    if (current_user.admin?)
-      Equipment.all
-    else
-      Equipment.where(customer: current_user.customer)
+  def get_all_equipment(current_user, params = {})
+    dynamic_sort_fields = %w(status_code inspection_interval_code inspection_type assignee)
+    sort_direction = params[:direction] || 'asc'
+    sort_field = params[:sort] || 'name'
+
+    if (sort_field.in? dynamic_sort_fields)
+      return _equipment_by_dynamic_sort(current_user, sort_field, sort_direction)
     end
+
+    _equipment_by_database_sort(current_user, sort_field, sort_direction)
   end
 
   def get_expired_equipment(current_user)
@@ -57,5 +61,23 @@ class EquipmentService
   def _format_date(date)
     return nil unless date.present?
     Date.strptime(date, '%m/%d/%Y')
+  end
+
+  def _equipment_by_dynamic_sort(current_user, sort_field, direction)
+    equipment = current_user.admin? ? Equipment.all : Equipment.where(customer: current_user.customer)
+
+    sorted_equipment = equipment.to_a.sort_by { |e| e.public_send(sort_field) }
+
+    sorted_equipment.reverse! if direction == 'desc'
+
+    sorted_equipment
+  end
+
+  def _equipment_by_database_sort(current_user, sort_field, sort_direction)
+    sort = sort_field + ' ' + sort_direction
+
+    current_user.admin? ?
+      Equipment.order(sort) :
+      Equipment.where(customer: current_user.customer).order(sort)
   end
 end

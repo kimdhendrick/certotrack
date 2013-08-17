@@ -7,6 +7,19 @@ describe EquipmentController do
   end
 
   describe 'GET index' do
+    it 'calls get_all_equipment with current_user and params' do
+      my_user = stub_equipment_user
+      sign_in my_user
+      @fake_equipment_service = controller.load_equipment_service(FakeEquipmentService.new)
+      params = {sort: 'name', direction: 'asc'}
+
+      get :index, params
+
+      @fake_equipment_service.received_current_user.should == my_user
+      @fake_equipment_service.received_params['sort'].should == 'name'
+      @fake_equipment_service.received_params['direction'].should == 'asc'
+    end
+
     context 'when equipment user' do
       before do
         sign_in stub_equipment_user
@@ -685,4 +698,16 @@ describe EquipmentController do
       end
     end
   end
+
+  class FakeEquipmentService
+    attr_accessor :received_current_user, :received_params
+
+    def get_all_equipment(current_user, params)
+      @received_current_user = current_user
+      @received_params = params
+      []
+    end
+  end
 end
+
+
