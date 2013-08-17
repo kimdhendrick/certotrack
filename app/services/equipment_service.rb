@@ -1,27 +1,27 @@
 class EquipmentService
 
   def get_all_equipment(current_user, params = {})
-    dynamic_sort_fields = %w(status_code inspection_interval_code inspection_type assignee)
-    sort_direction = params[:direction] || 'asc'
-    sort_field = params[:sort] || 'name'
+    equipment = _get_equipment_for_user(current_user)
 
-    if (sort_field.in? dynamic_sort_fields)
-      return _equipment_by_dynamic_sort(current_user, sort_field, sort_direction)
-    end
-
-    _equipment_by_database_sort(current_user, sort_field, sort_direction)
+    _sort_equipment(equipment, params)
   end
 
-  def get_expired_equipment(current_user)
-    get_all_equipment(current_user).select { |e| e.expired? }
+  def get_expired_equipment(current_user, params = {})
+    equipment = _get_equipment_for_user(current_user).select { |e| e.expired? }
+
+    _sort_equipment(equipment, params)
   end
 
-  def get_expiring_equipment(current_user)
-    get_all_equipment(current_user).select { |e| e.expiring? }
+  def get_expiring_equipment(current_user, params = {})
+    equipment = _get_equipment_for_user(current_user).select { |e| e.expiring? }
+
+    _sort_equipment(equipment, params)
   end
 
-  def get_noninspectable_equipment(current_user)
-    get_all_equipment(current_user).select { |e| !e.inspectable? }
+  def get_noninspectable_equipment(current_user, params = {})
+    equipment = _get_equipment_for_user(current_user).select { |e| !e.inspectable? }
+
+    _sort_equipment(equipment, params)
   end
 
   def count_all_equipment(current_user)
@@ -55,6 +55,10 @@ class EquipmentService
     equipment
   end
 
+  def load_sort_service(service = SortService.new)
+    @sort_service ||= service
+  end
+
 
   private
 
@@ -63,21 +67,11 @@ class EquipmentService
     Date.strptime(date, '%m/%d/%Y')
   end
 
-  def _equipment_by_dynamic_sort(current_user, sort_field, direction)
-    equipment = current_user.admin? ? Equipment.all : Equipment.where(customer: current_user.customer)
-
-    sorted_equipment = equipment.to_a.sort_by { |e| e.public_send(sort_field) }
-
-    sorted_equipment.reverse! if direction == 'desc'
-
-    sorted_equipment
+  def _get_equipment_for_user(current_user)
+    current_user.admin? ? Equipment.all : Equipment.where(customer: current_user.customer)
   end
 
-  def _equipment_by_database_sort(current_user, sort_field, sort_direction)
-    sort = sort_field + ' ' + sort_direction
-
-    current_user.admin? ?
-      Equipment.order(sort) :
-      Equipment.where(customer: current_user.customer).order(sort)
+  def _sort_equipment(equipment, params)
+    load_sort_service.sort(equipment, params[:sort] || 'name', params[:direction] || 'asc')
   end
 end

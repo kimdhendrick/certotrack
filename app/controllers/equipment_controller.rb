@@ -22,7 +22,7 @@ class EquipmentController < ApplicationController
     authorize! :read, :equipment
 
     @report_title = 'Expired Equipment List'
-    @equipment = @equipment_service.get_expired_equipment(current_user)
+    @equipment = @equipment_service.get_expired_equipment(current_user, params)
     @equipment_count = @equipment.count
     render 'equipment/index'
   end
@@ -31,7 +31,7 @@ class EquipmentController < ApplicationController
     authorize! :read, :equipment
 
     @report_title = 'Expiring Equipment List'
-    @equipment = @equipment_service.get_expiring_equipment(current_user)
+    @equipment = @equipment_service.get_expiring_equipment(current_user, params)
     @equipment_count = @equipment.count
     render 'equipment/index'
   end
@@ -40,7 +40,7 @@ class EquipmentController < ApplicationController
     authorize! :read, :equipment
 
     @report_title = 'Non-Inspectable Equipment List'
-    @equipment = @equipment_service.get_noninspectable_equipment(current_user)
+    @equipment = @equipment_service.get_noninspectable_equipment(current_user, params)
     @equipment_count = @equipment.count
     render 'equipment/index'
   end
