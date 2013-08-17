@@ -74,5 +74,25 @@ describe 'Navigation', js:true do
       click_link 'Home'
       page.should have_content 'Welcome to Certotrack'
     end
+
+    it 'should navigate Show Equipment' do
+      equipment = create_equipment(customer: @customer)
+      visit equipment_path equipment.id
+
+      page.should have_content 'Home'
+      page.should have_content 'All Equipment'
+      page.should have_content 'Create Equipment'
+
+      click_link 'Home'
+      page.should have_content 'Welcome to Certotrack'
+
+      visit equipment_path equipment.id
+      click_link 'All Equipment'
+      page.should have_content 'All Equipment List'
+
+      visit equipment_path equipment.id
+      click_link 'Create Equipment'
+      page.should have_content 'Create Equipment'
+    end
   end
 end
