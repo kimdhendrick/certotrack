@@ -1,2 +1,3 @@
 #!/bin/sh
+heroku run rake db:migrate
 git push heroku master
