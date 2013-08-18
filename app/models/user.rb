@@ -22,46 +22,21 @@ class User < ActiveRecord::Base
 
   validates :username, presence: true, uniqueness: {case_sensitive: false}
 
-  ROLES = %w[admin equipment certification vehicle]
-
-  scope :with_role, ->(role) { where("roles_mask & #{2**ROLES.index(role.to_s)} > 0") }
+  scope :with_role, ->(role) { where(UserRoleHelper::role_where_clause(role)) }
 
   def admin?
-    role?('admin')
+    UserRoleHelper::admin?(self)
   end
 
   def role?(role)
-    roles.include?(role)
-  end
-
-  def role_symbols
-    roles.map(&:to_sym)
+    UserRoleHelper::role?(self, role)
   end
 
   def roles=(roles)
-    self.roles_mask = (roles & ROLES).map { |role| _role_mask(role) }.sum
+    UserRoleHelper::set_roles(self, roles)
   end
 
   def roles
-    ROLES.reject { |role| ((roles_mask || 0) & _role_mask(role)).zero? }
+    UserRoleHelper::roles(self)
   end
-
-  def add_role(role)
-    return if role?(role)
-
-    self.roles_mask = (self.roles_mask || 0) + _role_mask(role)
-  end
-
-  def remove_role(role)
-    return if !role?(role)
-
-    self.roles_mask -= _role_mask(role)
-  end
-
-  private
-
-  def _role_mask(role)
-    2**ROLES.index(role)
-  end
-
 end

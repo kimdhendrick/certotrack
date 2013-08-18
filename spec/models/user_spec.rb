@@ -119,13 +119,6 @@ describe User do
       end
     end
 
-    describe 'role_symbols' do
-      it 'should return the correct list of symbols' do
-        @user.roles = ['equipment', 'certification']
-        @user.role_symbols.should =~ [:equipment, :certification]
-      end
-    end
-
     describe 'role?' do
       it 'should return true for roles it has' do
         equipment_user = create_user(roles: ['equipment'])
@@ -168,24 +161,6 @@ describe User do
         certification_user = create_user(roles: ['certification'])
 
         User.with_role('admin').should =~ [equipment_user_1, equipment_user_2]
-      end
-    end
-
-    describe 'add_role' do
-      it 'should add the new role' do
-        equipment_user = create_user
-        equipment_user.role?('equipment').should be_false
-        equipment_user.add_role('equipment')
-        equipment_user.role?('equipment').should be_true
-      end
-    end
-
-    describe 'remove_role' do
-      it 'should remove the old role' do
-        equipment_user = create_user(roles: ['admin'])
-        equipment_user.role?('admin').should be_true
-        equipment_user.remove_role('admin')
-        equipment_user.role?('admin').should be_false
       end
     end
   end
