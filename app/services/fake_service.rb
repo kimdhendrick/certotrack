@@ -1,11 +1,18 @@
 class FakeService
   attr_accessor :received_messages, :received_params
 
+  def initialize(fake_return_value = nil)
+    @fake_return_value = fake_return_value
+  end
+
   def method_missing(m, *args, &block)
     _record_received_params(m.to_sym, args)
+    @fake_return_value
   end
 
   def received_message
+    return nil if @received_messages.nil?
+
     @received_messages.first if @received_messages.count == 1
   end
 

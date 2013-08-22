@@ -71,16 +71,6 @@ class EquipmentController < ApplicationController
     end
   end
 
-  def ajax_assignee
-    authorize! :read, :equipment
-
-    if params[:assignee] == 'Location'
-      render json: @location_service.get_all_locations(current_user).map { |l| [l.id, l.name] }
-    else
-      render json: @employee_service.get_all_employees(current_user).map { |e| [e.id, e.to_s] }
-    end
-  end
-
   def update
     success = @equipment_service.update_equipment(@equipment, equipment_params)
 
@@ -95,6 +85,26 @@ class EquipmentController < ApplicationController
   def destroy
     @equipment.destroy
     redirect_to equipment_index_url
+  end
+
+  def search
+    authorize! :read, :equipment
+
+    @report_title = 'Search Equipment'
+    @equipment = @equipment_service.get_all_equipment(current_user, params)
+    @equipment_count = @equipment.count
+    @locations = @location_service.get_all_locations(current_user)
+    @employees = @employee_service.get_all_employees(current_user)
+  end
+
+  def ajax_assignee
+    authorize! :read, :equipment
+
+    if params[:assignee] == 'Location'
+      render json: @location_service.get_all_locations(current_user).map { |l| [l.id, l.name] }
+    else
+      render json: @employee_service.get_all_employees(current_user).map { |e| [e.id, e.to_s] }
+    end
   end
 
   def load_equipment_service(service = EquipmentService.new)

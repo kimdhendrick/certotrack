@@ -10,7 +10,7 @@ describe EquipmentController do
     it 'calls get_all_equipment with current_user and params' do
       my_user = stub_equipment_user
       sign_in my_user
-      @fake_equipment_service = controller.load_equipment_service(FakeService.new)
+      @fake_equipment_service = controller.load_equipment_service(FakeService.new([]))
       params = {sort: 'name', direction: 'asc'}
 
       get :index, params
@@ -89,7 +89,7 @@ describe EquipmentController do
     it 'calls get_expired_equipment with current_user and params' do
       my_user = stub_equipment_user
       sign_in my_user
-      @fake_equipment_service = controller.load_equipment_service(FakeService.new)
+      @fake_equipment_service = controller.load_equipment_service(FakeService.new([]))
       params = {sort: 'name', direction: 'asc'}
 
       get :expired, params
@@ -169,7 +169,7 @@ describe EquipmentController do
     it 'calls get_expiring_equipment with current_user and params' do
       my_user = stub_equipment_user
       sign_in my_user
-      @fake_equipment_service = controller.load_equipment_service(FakeService.new)
+      @fake_equipment_service = controller.load_equipment_service(FakeService.new([]))
       params = {sort: 'name', direction: 'asc'}
 
       get :expiring, params
@@ -249,7 +249,7 @@ describe EquipmentController do
     it 'calls get_noninspectable_equipment with current_user and params' do
       my_user = stub_equipment_user
       sign_in my_user
-      @fake_equipment_service = controller.load_equipment_service(FakeService.new)
+      @fake_equipment_service = controller.load_equipment_service(FakeService.new([]))
       params = {sort: 'name', direction: 'asc'}
 
       get :noninspectable, params
@@ -683,6 +683,72 @@ describe EquipmentController do
         expect {
           delete :destroy, {:id => equipment.to_param}, valid_session
         }.not_to change(Equipment, :count)
+      end
+    end
+  end
+
+  describe 'GET search' do
+    it 'calls get_all_equipment with current_user and params' do
+      my_user = stub_equipment_user
+      sign_in my_user
+      fake_equipment_service = controller.load_equipment_service(FakeService.new([]))
+      params = {sort: 'name', direction: 'asc'}
+
+      get :search, params
+
+      fake_equipment_service.received_messages.should == [:get_all_equipment]
+      fake_equipment_service.received_params[0].should == my_user
+      fake_equipment_service.received_params[1]['sort'].should == 'name'
+      fake_equipment_service.received_params[1]['direction'].should == 'asc'
+    end
+
+    context 'when equipment user' do
+      before do
+        sign_in stub_equipment_user
+      end
+
+      it 'assigns equipment as @equipment' do
+        equipment = new_equipment(customer: @customer)
+
+        EquipmentService.any_instance.stub(:get_all_equipment).and_return([equipment])
+
+        get :search
+
+        assigns(:equipment).should eq([equipment])
+      end
+
+      it 'assigns equipment_count' do
+        EquipmentService.any_instance.stub(:get_all_equipment).and_return([new_equipment])
+
+        get :search
+
+        assigns(:equipment_count).should eq(1)
+      end
+
+      it 'assigns report_title' do
+        EquipmentService.any_instance.stub(:get_all_equipment).and_return([new_equipment])
+
+        get :search
+
+        assigns(:report_title).should eq('Search Equipment')
+      end
+
+      it 'assigns locations' do
+        location = new_location
+        LocationService.any_instance.stub(:get_all_locations).and_return([location])
+
+        get :search
+
+        assigns(:locations).should == [location]
+      end
+
+      it 'assigns employees' do
+        employee = new_employee
+        EmployeeService.any_instance.stub(:get_all_employees).and_return([employee])
+
+        get :search
+
+        assigns(:employees).should == [employee]
       end
     end
   end

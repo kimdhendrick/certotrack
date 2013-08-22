@@ -1,0 +1,28 @@
+<table class="sortable">
+  <thead>
+  <tr>
+    <th><%= sortable 'name' %></th>
+    <th><%= sortable 'serial_number' %></th>
+    <th><%= sortable 'status_code', title='Status' %></th>
+    <th><%= sortable 'inspection_interval_code', title="Inspection Interval" %></th>
+    <th><%= sortable 'last_inspection_date' %></th>
+    <th><%= sortable 'inspection_type' %></th>
+    <th><%= sortable 'expiration_date' %></th>
+    <th><%= sortable 'assignee' %></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @equipment.each do |equipment| %>
+    <tr>
+      <td><%= link_to equipment.name, equipment %></td></td>
+      <td><%= equipment.serial_number %></td>
+      <td><%= equipment.status %></td>
+      <td><%= equipment.inspection_interval %></td>
+      <td><%= DateHelpers::format(equipment.last_inspection_date) %></td>
+      <td><%= equipment.inspection_type %></td>
+      <td><%= DateHelpers::format(equipment.expiration_date) %></td>
+      <td><%= display_assigned_to(equipment) %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

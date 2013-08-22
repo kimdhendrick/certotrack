@@ -3,6 +3,7 @@ Certotrack::Application.routes.draw do
   get 'expired_equipment', action: 'expired', controller: 'equipment'
   get 'expiring_equipment', action: 'expiring', controller: 'equipment'
   get 'noninspectable_equipment', action: 'noninspectable', controller: 'equipment'
+  get 'search_equipment', action: 'search', controller: 'equipment'
   get 'ajax_assignee', action: 'ajax_assignee', controller: 'equipment'
 
   devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}

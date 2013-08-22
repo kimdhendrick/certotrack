@@ -1,0 +1,58 @@
+<h1><%=@report_title%></h1>
+
+<div>Total: <%=@equipment_count%></div>
+
+<%= link_to 'Home', root_path %> |
+<%= link_to "Create Equipment", new_equipment_path %>
+
+<p>You may enter any of the below values.</p>
+
+<%= form_tag search_equipment_path, :method => 'get' do %>
+  <table>
+    <tr>
+      <td><label for="name">Name contains:</label></td>
+      <td>
+        <%= text_field_tag :name, params[:name] %>
+      </td>
+    </tr>
+    <tr>
+      <td><label for="serial_number">Serial Number contains:</label></td>
+      <td>
+        <%= text_field_tag :serial_number, params[:serial_number] %>
+      </td>
+    </tr>
+    <tr><td>Assigned To</td><td></td></tr>
+    <tr>
+      <td><label for="location_id">Location:</label></td>
+      <td>
+        <select name="location_id">
+          <option value='' selected='selected'>Any Location</option>
+          <%=
+              options_from_collection_for_select(@locations, 'id', 'name', params[:location_id])
+          %>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td><label for="employee_id">Employee:</label></td>
+      <td>
+        <select name="employee_id">
+          <option value='' selected='selected'>Any Employee</option>
+          <%=
+              options_from_collection_for_select(@employees, 'id', 'to_s', params[:employee_id])
+          %>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <%= submit_tag "Search", :name => nil %>
+      </td>
+    </tr>
+  </table>
+<% end %>
+
+<%= render 'equipment_list'%>
+
+<%= will_paginate @equipment %>

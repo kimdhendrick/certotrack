@@ -3,6 +3,8 @@ class EquipmentService
   def get_all_equipment(current_user, params = {})
     equipment = _get_equipment_for_user(current_user)
 
+    equipment = load_search_service.search(equipment, params)
+
     _sort_and_paginate(equipment, params)
   end
 
@@ -63,6 +65,9 @@ class EquipmentService
     @pagination_service ||= service
   end
 
+  def load_search_service(service = EquipmentSearchService.new)
+    @search_service ||= service
+  end
 
   private
 

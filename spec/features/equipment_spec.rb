@@ -655,6 +655,75 @@ describe 'Equipment', js: true do
     end
   end
 
+  describe 'Search' do
+    context 'when an equipment user' do
+      before do
+        login_as_equipment_user
+      end
+
+      it 'should show Search Equipment page' do
+        create_equipment(
+          customer: @customer,
+          name: 'Unique Name'
+        )
+
+        create_equipment(
+          customer: @customer,
+          name: 'Box'
+        )
+
+        visit '/'
+        page.should have_content 'Search Equipment'
+        click_link 'Search Equipment'
+
+        page.should have_content 'Search Equipment'
+        page.should have_link 'Home'
+        page.should have_link 'Create Equipment'
+
+        fill_in 'Name contains:', with: 'Unique'
+
+        click_on 'Search'
+
+        page.should have_content 'Search Equipment'
+
+        assert_report_headers_are_correct
+
+        find 'table.sortable'
+
+        page.should have_link 'Unique Name'
+        page.should_not have_link 'Box'
+      end
+
+      it 'should show Search Equipment box' do
+        create_equipment(
+          customer: @customer,
+          name: 'Unique Name'
+        )
+
+        create_equipment(
+          customer: @customer,
+          name: 'Box'
+        )
+
+        visit '/'
+
+        within '[data-equipment-search-form]' do
+          fill_in 'name', with: 'Unique'
+          click_on 'Search'
+        end
+
+        page.should have_content 'Search Equipment'
+
+        assert_report_headers_are_correct
+
+        find 'table.sortable'
+
+        page.should have_link 'Unique Name'
+        page.should_not have_link 'Box'
+      end
+    end
+  end
+
   def column_data_should_be_in_order(data_list)
     within 'table tbody tr:nth-of-type(1)' do
       page.should have_content data_list[0]

@@ -3,3 +3,16 @@
 <p><%= link_to "Equipment Expiring Soon (#{@expiring_equipment_count})", expiring_equipment_path %></p>
 <p><%= link_to "Non-Inspectable Equipment", noninspectable_equipment_path %></p>
 <p><%= link_to 'Create Equipment', new_equipment_path %></p>
+<p><%= link_to 'Search Equipment', search_equipment_path %></p>
+<%= form_tag({:controller => "equipment", :action => "search"}, :method => "get", 'data-equipment-search-form' => 'data-equipment-search-form') do %>
+  <table>
+    <tr>
+      <td>
+        <%= text_field_tag :name, params[:name] %>
+      </td>
+      <td>
+        <%= submit_tag "Search", :name => nil %>
+      </td>
+    </tr>
+  </table>
+<% end %>

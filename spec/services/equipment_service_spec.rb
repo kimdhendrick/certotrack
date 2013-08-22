@@ -10,7 +10,7 @@ describe EquipmentService do
     context 'sorting' do
       it 'should call SortService to ensure sorting' do
         equipment_service = EquipmentService.new
-        fake_sort_service = equipment_service.load_sort_service(FakeService.new)
+        fake_sort_service = equipment_service.load_sort_service(FakeService.new([]))
 
         equipment_service.get_all_equipment(@my_user)
 
@@ -27,6 +27,20 @@ describe EquipmentService do
         equipment_service.get_all_equipment(@my_user)
 
         fake_pagination_service.received_message.should == :paginate
+      end
+    end
+
+    context 'search' do
+      it 'should call SearchService to filter results' do
+        equipment_service = EquipmentService.new
+        equipment_service.load_sort_service(FakeService.new([]))
+        fake_search_service = equipment_service.load_search_service(FakeService.new([]))
+
+        equipment_service.get_all_equipment(@my_user, {thing1: 'thing2'})
+
+        fake_search_service.received_message.should == :search
+        fake_search_service.received_params[0].should == []
+        fake_search_service.received_params[1].should == {thing1: 'thing2'}
       end
     end
 
@@ -66,7 +80,7 @@ describe EquipmentService do
     context 'sorting' do
       it 'should call Sort Service to ensure sorting' do
         equipment_service = EquipmentService.new
-        fake_sort_service = equipment_service.load_sort_service(FakeService.new)
+        fake_sort_service = equipment_service.load_sort_service(FakeService.new([]))
 
         equipment_service.get_expired_equipment(create_user(customer: @my_customer))
 
@@ -118,7 +132,7 @@ describe EquipmentService do
     context 'sorting' do
       it 'should call Sort Service to ensure sorting' do
         equipment_service = EquipmentService.new
-        fake_sort_service = equipment_service.load_sort_service(FakeService.new)
+        fake_sort_service = equipment_service.load_sort_service(FakeService.new([]))
 
         equipment_service.get_expiring_equipment(create_user(customer: @my_customer))
 
@@ -168,7 +182,7 @@ describe EquipmentService do
     context 'sorting' do
       it 'should call Sort Service to ensure sorting' do
         equipment_service = EquipmentService.new
-        fake_sort_service = equipment_service.load_sort_service(FakeService.new)
+        fake_sort_service = equipment_service.load_sort_service(FakeService.new([]))
 
         equipment_service.get_noninspectable_equipment(create_user(customer: @my_customer))
 
