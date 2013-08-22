@@ -8,13 +8,25 @@ describe EquipmentService do
     end
 
     context 'sorting' do
-      it 'should call Sort Service to ensure sorting' do
+      it 'should call SortService to ensure sorting' do
         equipment_service = EquipmentService.new
-        fake_sort_service = equipment_service.load_sort_service(FakeSortService.new)
+        fake_sort_service = equipment_service.load_sort_service(FakeService.new)
 
         equipment_service.get_all_equipment(@my_user)
 
         fake_sort_service.received_message.should == :sort
+      end
+    end
+
+    context 'pagination' do
+      it 'should call PaginationService to paginate results' do
+        equipment_service = EquipmentService.new
+        equipment_service.load_sort_service(FakeService.new)
+        fake_pagination_service = equipment_service.load_pagination_service(FakeService.new)
+
+        equipment_service.get_all_equipment(@my_user)
+
+        fake_pagination_service.received_message.should == :paginate
       end
     end
 
@@ -42,6 +54,7 @@ describe EquipmentService do
   describe 'get_expired_equipment' do
     before do
       @my_customer = create_customer
+      @my_user = create_user(customer: @my_customer)
       @my_expired_equipment = create_expired_equipment(customer: @my_customer)
       @other_expired_equipment = create_expired_equipment(customer: create_customer)
       @my_valid_equipment = create_valid_equipment(customer: @my_customer)
@@ -53,11 +66,23 @@ describe EquipmentService do
     context 'sorting' do
       it 'should call Sort Service to ensure sorting' do
         equipment_service = EquipmentService.new
-        fake_sort_service = equipment_service.load_sort_service(FakeSortService.new)
+        fake_sort_service = equipment_service.load_sort_service(FakeService.new)
 
         equipment_service.get_expired_equipment(create_user(customer: @my_customer))
 
         fake_sort_service.received_message.should == :sort
+      end
+    end
+
+    context 'pagination' do
+      it 'should call PaginationService to paginate results' do
+        equipment_service = EquipmentService.new
+        equipment_service.load_sort_service(FakeService.new)
+        fake_pagination_service = equipment_service.load_pagination_service(FakeService.new)
+
+        equipment_service.get_expired_equipment(@my_user)
+
+        fake_pagination_service.received_message.should == :paginate
       end
     end
 
@@ -81,6 +106,7 @@ describe EquipmentService do
   describe 'get_expiring_equipment' do
     before do
       @my_customer = create_customer
+      @my_user = create_user(customer: @my_customer)
       @my_expiring_equipment = create_expiring_equipment(customer: @my_customer)
       @other_expiring_equipment = create_expiring_equipment(customer: create_customer)
       @my_expired_equipment = create_expired_equipment(customer: @my_customer)
@@ -92,11 +118,23 @@ describe EquipmentService do
     context 'sorting' do
       it 'should call Sort Service to ensure sorting' do
         equipment_service = EquipmentService.new
-        fake_sort_service = equipment_service.load_sort_service(FakeSortService.new)
+        fake_sort_service = equipment_service.load_sort_service(FakeService.new)
 
         equipment_service.get_expiring_equipment(create_user(customer: @my_customer))
 
         fake_sort_service.received_message.should == :sort
+      end
+    end
+
+    context 'pagination' do
+      it 'should call PaginationService to paginate results' do
+        equipment_service = EquipmentService.new
+        equipment_service.load_sort_service(FakeService.new)
+        fake_pagination_service = equipment_service.load_pagination_service(FakeService.new)
+
+        equipment_service.get_expiring_equipment(@my_user)
+
+        fake_pagination_service.received_message.should == :paginate
       end
     end
 
@@ -120,6 +158,7 @@ describe EquipmentService do
   describe 'get_noninspectable_equipment' do
     before do
       @my_customer = create_customer
+      @my_user = create_user(customer: @my_customer)
       @my_noninspectable_equipment = create_noninspectable_equipment(customer: @my_customer)
       @other_noninspectable_equipment = create_noninspectable_equipment(customer: create_customer)
       @my_valid_equipment = create_valid_equipment(customer: @my_customer)
@@ -129,11 +168,23 @@ describe EquipmentService do
     context 'sorting' do
       it 'should call Sort Service to ensure sorting' do
         equipment_service = EquipmentService.new
-        fake_sort_service = equipment_service.load_sort_service(FakeSortService.new)
+        fake_sort_service = equipment_service.load_sort_service(FakeService.new)
 
         equipment_service.get_noninspectable_equipment(create_user(customer: @my_customer))
 
         fake_sort_service.received_message.should == :sort
+      end
+    end
+
+    context 'pagination' do
+      it 'should call PaginationService to paginate results' do
+        equipment_service = EquipmentService.new
+        equipment_service.load_sort_service(FakeService.new)
+        fake_pagination_service = equipment_service.load_pagination_service(FakeService.new)
+
+        equipment_service.get_noninspectable_equipment(@my_user)
+
+        fake_pagination_service.received_message.should == :paginate
       end
     end
 
@@ -399,15 +450,6 @@ describe EquipmentService do
         #end
         #puts "Average: #{total/field_list.count} (100,000)"
       end
-    end
-  end
-
-  class FakeSortService
-    attr_accessor :received_message
-
-    def sort(items, sort_field, sort_direction)
-      @received_message = :sort
-      []
     end
   end
 

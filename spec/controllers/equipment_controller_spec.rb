@@ -10,15 +10,15 @@ describe EquipmentController do
     it 'calls get_all_equipment with current_user and params' do
       my_user = stub_equipment_user
       sign_in my_user
-      @fake_equipment_service = controller.load_equipment_service(FakeEquipmentService.new)
+      @fake_equipment_service = controller.load_equipment_service(FakeService.new)
       params = {sort: 'name', direction: 'asc'}
 
       get :index, params
 
       @fake_equipment_service.received_messages.should == [:get_all_equipment]
-      @fake_equipment_service.received_current_user.should == my_user
-      @fake_equipment_service.received_params['sort'].should == 'name'
-      @fake_equipment_service.received_params['direction'].should == 'asc'
+      @fake_equipment_service.received_params[0].should == my_user
+      @fake_equipment_service.received_params[1]['sort'].should == 'name'
+      @fake_equipment_service.received_params[1]['direction'].should == 'asc'
     end
 
     context 'when equipment user' do
@@ -89,15 +89,15 @@ describe EquipmentController do
     it 'calls get_expired_equipment with current_user and params' do
       my_user = stub_equipment_user
       sign_in my_user
-      @fake_equipment_service = controller.load_equipment_service(FakeEquipmentService.new)
+      @fake_equipment_service = controller.load_equipment_service(FakeService.new)
       params = {sort: 'name', direction: 'asc'}
 
       get :expired, params
 
       @fake_equipment_service.received_messages.should == [:get_expired_equipment]
-      @fake_equipment_service.received_current_user.should == my_user
-      @fake_equipment_service.received_params['sort'].should == 'name'
-      @fake_equipment_service.received_params['direction'].should == 'asc'
+      @fake_equipment_service.received_params[0].should == my_user
+      @fake_equipment_service.received_params[1]['sort'].should == 'name'
+      @fake_equipment_service.received_params[1]['direction'].should == 'asc'
     end
 
     context 'when equipment user' do
@@ -169,15 +169,15 @@ describe EquipmentController do
     it 'calls get_expiring_equipment with current_user and params' do
       my_user = stub_equipment_user
       sign_in my_user
-      @fake_equipment_service = controller.load_equipment_service(FakeEquipmentService.new)
+      @fake_equipment_service = controller.load_equipment_service(FakeService.new)
       params = {sort: 'name', direction: 'asc'}
 
       get :expiring, params
 
       @fake_equipment_service.received_messages.should == [:get_expiring_equipment]
-      @fake_equipment_service.received_current_user.should == my_user
-      @fake_equipment_service.received_params['sort'].should == 'name'
-      @fake_equipment_service.received_params['direction'].should == 'asc'
+      @fake_equipment_service.received_params[0].should == my_user
+      @fake_equipment_service.received_params[1]['sort'].should == 'name'
+      @fake_equipment_service.received_params[1]['direction'].should == 'asc'
     end
 
     context 'when equipment user' do
@@ -249,15 +249,15 @@ describe EquipmentController do
     it 'calls get_noninspectable_equipment with current_user and params' do
       my_user = stub_equipment_user
       sign_in my_user
-      @fake_equipment_service = controller.load_equipment_service(FakeEquipmentService.new)
+      @fake_equipment_service = controller.load_equipment_service(FakeService.new)
       params = {sort: 'name', direction: 'asc'}
 
       get :noninspectable, params
 
       @fake_equipment_service.received_messages.should == [:get_noninspectable_equipment]
-      @fake_equipment_service.received_current_user.should == my_user
-      @fake_equipment_service.received_params['sort'].should == 'name'
-      @fake_equipment_service.received_params['direction'].should == 'asc'
+      @fake_equipment_service.received_params[0].should == my_user
+      @fake_equipment_service.received_params[1]['sort'].should == 'name'
+      @fake_equipment_service.received_params[1]['direction'].should == 'asc'
     end
 
     context 'when equipment user' do
@@ -739,23 +739,6 @@ describe EquipmentController do
           [location.id, 'Oz']
         ]
       end
-    end
-  end
-
-  class FakeEquipmentService
-    attr_accessor :received_messages, :received_current_user, :received_params
-
-    def method_missing(m, *args, &block)
-      _record_received_params(m.to_sym, args[0], args[1])
-    end
-
-    private
-
-    def _record_received_params(message, current_user, params)
-      @received_messages ||= []
-      @received_messages << message
-      @received_current_user = current_user
-      @received_params = params
     end
   end
 end

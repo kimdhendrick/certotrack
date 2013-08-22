@@ -602,6 +602,57 @@ describe 'Equipment', js: true do
         column_data_should_be_in_order(['Zurich', 'Zephyr, Zoe', 'Burbank', 'Baker, Bob', 'Alfonso, Albert', 'Alcatraz'])
       end
     end
+
+    context 'pagination' do
+      before do
+        login_as_equipment_user
+      end
+
+      it 'should paginate All Equipment report' do
+        55.times do
+          create_equipment(customer: @customer)
+        end
+
+        visit '/'
+        click_link 'All Equipment'
+
+        find 'table.sortable'
+
+        page.all('table tr').count.should == 25 + 1
+        page.should_not have_link 'Previous'
+        page.should_not have_link '1'
+        page.should have_link '2'
+        page.should have_link '3'
+        page.should have_link 'Next'
+
+        click_link 'Next'
+
+        page.all('table tr').count.should == 25 + 1
+        page.should have_link 'Previous'
+        page.should have_link '1'
+        page.should_not have_link '2'
+        page.should have_link '3'
+        page.should have_link 'Next'
+
+        click_link 'Next'
+
+        page.all('table tr').count.should == 5 + 1
+        page.should have_link 'Previous'
+        page.should have_link '1'
+        page.should have_link '2'
+        page.should_not have_link '3'
+        page.should_not have_link 'Next'
+
+        click_link 'Previous'
+        click_link 'Previous'
+
+        page.should_not have_link 'Previous'
+        page.should_not have_link '1'
+        page.should have_link '2'
+        page.should have_link '3'
+        page.should have_link 'Next'
+      end
+    end
   end
 
   def column_data_should_be_in_order(data_list)

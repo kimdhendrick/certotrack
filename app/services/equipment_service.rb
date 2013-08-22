@@ -3,25 +3,25 @@ class EquipmentService
   def get_all_equipment(current_user, params = {})
     equipment = _get_equipment_for_user(current_user)
 
-    _sort_equipment(equipment, params)
+    _sort_and_paginate(equipment, params)
   end
 
   def get_expired_equipment(current_user, params = {})
     equipment = _get_equipment_for_user(current_user).select { |e| e.expired? }
 
-    _sort_equipment(equipment, params)
+    _sort_and_paginate(equipment, params)
   end
 
   def get_expiring_equipment(current_user, params = {})
     equipment = _get_equipment_for_user(current_user).select { |e| e.expiring? }
 
-    _sort_equipment(equipment, params)
+    _sort_and_paginate(equipment, params)
   end
 
   def get_noninspectable_equipment(current_user, params = {})
     equipment = _get_equipment_for_user(current_user).select { |e| !e.inspectable? }
 
-    _sort_equipment(equipment, params)
+    _sort_and_paginate(equipment, params)
   end
 
   def count_all_equipment(current_user)
@@ -59,6 +59,10 @@ class EquipmentService
     @sort_service ||= service
   end
 
+  def load_pagination_service(service = PaginationService.new)
+    @pagination_service ||= service
+  end
+
 
   private
 
@@ -71,8 +75,9 @@ class EquipmentService
     current_user.admin? ? Equipment.all : Equipment.where(customer: current_user.customer)
   end
 
-  def _sort_equipment(equipment, params)
-    load_sort_service.sort(equipment, params[:sort], params[:direction])
+  def _sort_and_paginate(equipment, params)
+    equipment = load_sort_service.sort(equipment, params[:sort], params[:direction])
+    load_pagination_service.paginate(equipment, params[:page])
   end
 
 
