@@ -72,6 +72,8 @@ class EquipmentService
   end
 
   def _sort_equipment(equipment, params)
-    load_sort_service.sort(equipment, params[:sort] || 'name', params[:direction] || 'asc')
+    load_sort_service.sort(equipment, params[:sort], params[:direction])
   end
+
+
 end
