@@ -6,7 +6,7 @@ class Equipment < ActiveRecord::Base
 
   validates_presence_of :name, :serial_number
   validates :last_inspection_date, presence: true, if: :inspectable?
-  validates :inspection_interval, inclusion: {in: InspectionInterval.all.map(&:text),
+  validates :inspection_interval, inclusion: {in: Interval.all.map(&:text),
                                               message: 'invalid value'}
   validates_uniqueness_of :serial_number, scope: :customer_id
 
@@ -22,7 +22,7 @@ class Equipment < ActiveRecord::Base
   end
 
   def inspection_interval_code
-    InspectionInterval.find_by_text(inspection_interval).id
+    Interval.find_by_text(inspection_interval).id
   end
 
   def na?
@@ -38,7 +38,7 @@ class Equipment < ActiveRecord::Base
   end
 
   def expires_on
-    InspectionInterval.find_by_text(inspection_interval).expires_on(last_inspection_date)
+    Interval.find_by_text(inspection_interval).expires_on(last_inspection_date)
   end
 
   def inspection_type
@@ -48,7 +48,7 @@ class Equipment < ActiveRecord::Base
   end
 
   def inspectable?
-    inspection_interval != InspectionInterval::NOT_REQUIRED.text
+    inspection_interval != Interval::NOT_REQUIRED.text
   end
 
   def assigned_to_location?

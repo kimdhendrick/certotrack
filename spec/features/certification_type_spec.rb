@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'Certification Type', js: true do
 
-  describe 'Create Equipment' do
+  describe 'Create Certification Type' do
     before do
       login_as_certification_user
     end
@@ -23,7 +23,7 @@ describe 'Certification Type', js: true do
 
       fill_in 'Name', with: 'Periodic Inspection'
       fill_in 'Required Units', with: 32
-      select '5 years', from: 'Inspection Interval'
+      select '5 years', from: 'Interval'
 
 
       click_on 'Create'

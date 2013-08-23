@@ -86,11 +86,11 @@ describe CertificationTypesController do
           response.should render_template('new')
         end
 
-        it 'assigns @inspection_intervals' do
+        it 'assigns @intervals' do
           CertificationTypesService.any_instance.should_receive(:create_certification_type).once.and_return(new_certification_type)
           CertificationType.any_instance.stub(:save).and_return(false)
           post :create, {:certification_type => {'name' => 'invalid value'}}, valid_session
-          assigns(:inspection_intervals).should eq(InspectionInterval.all.to_a)
+          assigns(:intervals).should eq(Interval.all.to_a)
         end
       end
     end

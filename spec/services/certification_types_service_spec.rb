@@ -7,7 +7,7 @@ describe CertificationTypesService do
         {
           'name' => 'Box',
           'units_required' => '15',
-          'inspection_interval' => '5 years'
+          'interval' => '5 years'
         }
       customer = new_customer
 
@@ -15,7 +15,7 @@ describe CertificationTypesService do
 
       certification_type.name.should == 'Box'
       certification_type.units_required.should == 15
-      certification_type.inspection_interval.should == '5 years'
+      certification_type.interval.should == '5 years'
       certification_type.customer.should == customer
     end
   end

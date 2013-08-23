@@ -6,7 +6,7 @@ class CertificationType < ActiveRecord::Base
 
   validates_presence_of :name
   validates :units_required, :numericality => { :greater_than_or_equal_to => 0 }
-  validates :inspection_interval, inclusion: {in: InspectionInterval.all.map(&:text),
+  validates :interval, inclusion: {in: Interval.all.map(&:text),
                                               message: 'invalid value'}
 
 

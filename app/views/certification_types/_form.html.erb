@@ -15,11 +15,11 @@
   </div>
 
   <div class="field">
-    <%= f.label :inspection_interval, 'Inspection Interval' %>
+    <%= f.label :interval, 'Interval' %>
     <br/>
-    <%= select(:certification_type, :inspection_interval,
-               options_from_collection_for_select(@inspection_intervals, 'text', 'text',
-                                                  @certification_type.inspection_interval)) %>
+    <%= select(:certification_type, :interval,
+               options_from_collection_for_select(@intervals, 'text', 'text',
+                                                  @certification_type.interval)) %>
   </div>
 
   <div class="actions">

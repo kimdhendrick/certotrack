@@ -30,7 +30,7 @@
     <%= f.label :inspection_interval, 'Inspection Interval' %>
     <br/>
     <%= select(:equipment, :inspection_interval,
-               options_from_collection_for_select(@inspection_intervals, 'text', 'text',
+               options_from_collection_for_select(@intervals, 'text', 'text',
                                                   @equipment.inspection_interval)) %>
   </div>
 

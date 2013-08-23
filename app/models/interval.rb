@@ -1,4 +1,4 @@
-class InspectionInterval < ActiveHash::Base
+class Interval < ActiveHash::Base
 
   self.data = [
     {id: 1, text: '1 month'},
@@ -13,14 +13,14 @@ class InspectionInterval < ActiveHash::Base
 
   alias :to_s :text
 
-  ONE_MONTH = InspectionInterval.find(1)
-  THREE_MONTHS = InspectionInterval.find(2)
-  SIX_MONTHS = InspectionInterval.find(3)
-  ONE_YEAR = InspectionInterval.find(4)
-  TWO_YEARS = InspectionInterval.find(5)
-  THREE_YEARS = InspectionInterval.find(6)
-  FIVE_YEARS = InspectionInterval.find(7)
-  NOT_REQUIRED = InspectionInterval.find(8)
+  ONE_MONTH = Interval.find(1)
+  THREE_MONTHS = Interval.find(2)
+  SIX_MONTHS = Interval.find(3)
+  ONE_YEAR = Interval.find(4)
+  TWO_YEARS = Interval.find(5)
+  THREE_YEARS = Interval.find(6)
+  FIVE_YEARS = Interval.find(7)
+  NOT_REQUIRED = Interval.find(8)
 
   def expires_on(start_date)
     return if start_date.blank?

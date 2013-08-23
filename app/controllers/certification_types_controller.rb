@@ -19,7 +19,7 @@ class CertificationTypesController < ApplicationController
   def new
     authorize! :create, :certification
     @certification_type = CertificationType.new
-    assign_inspection_intervals
+    assign_intervals
   end
 
   def create
@@ -33,7 +33,7 @@ class CertificationTypesController < ApplicationController
     if @certification_type.save
       redirect_to @certification_type, notice: 'Certification Type was successfully created.'
     else
-      assign_inspection_intervals
+      assign_intervals
       render action: 'new'
     end
   end

@@ -1,5 +1,5 @@
 module ControllerHelper
-  def assign_inspection_intervals
-    @inspection_intervals = InspectionInterval.all.to_a
+  def assign_intervals
+    @intervals = Interval.all.to_a
   end
 end

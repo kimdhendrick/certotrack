@@ -20,15 +20,15 @@ describe CertificationType do
   end
 
   it 'should only accept valid intervals' do
-    new_certification_type(inspection_interval: InspectionInterval::ONE_MONTH.text).should be_valid
-    new_certification_type(inspection_interval: InspectionInterval::THREE_MONTHS.text).should be_valid
-    new_certification_type(inspection_interval: InspectionInterval::SIX_MONTHS.text).should be_valid
-    new_certification_type(inspection_interval: InspectionInterval::ONE_YEAR.text).should be_valid
-    new_certification_type(inspection_interval: InspectionInterval::TWO_YEARS.text).should be_valid
-    new_certification_type(inspection_interval: InspectionInterval::FIVE_YEARS.text).should be_valid
-    new_certification_type(inspection_interval: InspectionInterval::NOT_REQUIRED.text).should be_valid
+    new_certification_type(interval: Interval::ONE_MONTH.text).should be_valid
+    new_certification_type(interval: Interval::THREE_MONTHS.text).should be_valid
+    new_certification_type(interval: Interval::SIX_MONTHS.text).should be_valid
+    new_certification_type(interval: Interval::ONE_YEAR.text).should be_valid
+    new_certification_type(interval: Interval::TWO_YEARS.text).should be_valid
+    new_certification_type(interval: Interval::FIVE_YEARS.text).should be_valid
+    new_certification_type(interval: Interval::NOT_REQUIRED.text).should be_valid
 
-    new_certification_type(inspection_interval: 'blah').should_not be_valid
+    new_certification_type(interval: 'blah').should_not be_valid
   end
 
   it 'should respond to units_based?' do

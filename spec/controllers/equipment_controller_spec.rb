@@ -374,10 +374,10 @@ describe EquipmentController do
         assigns(:equipment).should be_a_new(Equipment)
       end
 
-      it 'assigns @inspection_intervals' do
+      it 'assigns @intervals' do
         equipment = create_equipment(customer: @customer)
         get :new, {:id => equipment.to_param}, valid_session
-        assigns(:inspection_intervals).should eq(InspectionInterval.all.to_a)
+        assigns(:intervals).should eq(Interval.all.to_a)
       end
     end
 
@@ -416,10 +416,10 @@ describe EquipmentController do
         assigns(:equipment).should eq(equipment)
       end
 
-      it 'assigns @inspection_intervals' do
+      it 'assigns @intervals' do
         equipment = create_equipment(customer: @customer)
         get :edit, {:id => equipment.to_param}, valid_session
-        assigns(:inspection_intervals).should eq(InspectionInterval.all.to_a)
+        assigns(:intervals).should eq(Interval.all.to_a)
       end
 
     end
@@ -494,11 +494,11 @@ describe EquipmentController do
           response.should render_template('new')
         end
 
-        it 'assigns @inspection_intervals' do
+        it 'assigns @intervals' do
           EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(new_equipment)
           Equipment.any_instance.stub(:save).and_return(false)
           post :create, {:equipment => {'name' => 'invalid value'}}, valid_session
-          assigns(:inspection_intervals).should eq(InspectionInterval.all.to_a)
+          assigns(:intervals).should eq(Interval.all.to_a)
         end
       end
     end
@@ -589,11 +589,11 @@ describe EquipmentController do
           response.should render_template('edit')
         end
 
-        it 'assigns @inspection_intervals' do
+        it 'assigns @intervals' do
           equipment = create_equipment(customer: @customer)
           EquipmentService.any_instance.stub(:update_equipment).and_return(false)
           put :update, {:id => equipment.to_param, :equipment => {'name' => 'invalid value'}}, valid_session
-          assigns(:inspection_intervals).should eq(InspectionInterval.all.to_a)
+          assigns(:intervals).should eq(Interval.all.to_a)
         end
       end
 

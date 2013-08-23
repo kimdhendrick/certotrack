@@ -47,7 +47,7 @@ module ObjectMother
   end
 
   def new_noninspectable_equipment(options = {})
-    new_equipment(options.merge({inspection_interval: InspectionInterval::NOT_REQUIRED.text, last_inspection_date: nil}))
+    new_equipment(options.merge({inspection_interval: Interval::NOT_REQUIRED.text, last_inspection_date: nil}))
   end
 
   def create_equipment(options = {})
@@ -64,7 +64,7 @@ module ObjectMother
       name: 'Meter',
       serial_number: "782-888-DKHE-#{_new_id}",
       last_inspection_date: Date.new(2000, 1, 1),
-      inspection_interval: InspectionInterval::ONE_YEAR.text
+      inspection_interval: Interval::ONE_YEAR.text
     }
   end
 
@@ -113,7 +113,7 @@ module ObjectMother
   def certification_type_attributes
     {
       name: 'Routine Inspection',
-      inspection_interval: InspectionInterval::ONE_YEAR.text
+      interval: Interval::ONE_YEAR.text
     }
   end
 

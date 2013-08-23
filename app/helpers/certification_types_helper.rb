@@ -3,7 +3,7 @@ module CertificationTypesHelper
   def certification_type_accessible_parameters
     [
       :name,
-      :inspection_interval,
+      :interval,
       :units_required
     ]
   end

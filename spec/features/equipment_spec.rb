@@ -395,7 +395,7 @@ describe 'Equipment', js: true do
           customer: @customer,
           name: 'Gauge',
           serial_number: 'XYZ987',
-          inspection_interval: InspectionInterval::ONE_MONTH.text,
+          inspection_interval: Interval::ONE_MONTH.text,
           last_inspection_date: Date.new(2011, 12, 5),
           expiration_date: Date.new(2012, 7, 11),
           location_id: @littleton_location.id
@@ -429,7 +429,7 @@ describe 'Equipment', js: true do
           customer: @customer,
           name: 'Banana',
           serial_number: 'BANA',
-          inspection_interval: InspectionInterval::ONE_MONTH.text,
+          inspection_interval: Interval::ONE_MONTH.text,
           last_inspection_date: Date.today,
           expiration_date: Date.tomorrow,
           location_id: @denver_location.id
@@ -461,7 +461,7 @@ describe 'Equipment', js: true do
           customer: @customer,
           name: 'MDC',
           serial_number: 'mdc1',
-          inspection_interval: InspectionInterval::NOT_REQUIRED.text,
+          inspection_interval: Interval::NOT_REQUIRED.text,
           location_id: @denver_location.id
         )
 
@@ -561,14 +561,14 @@ describe 'Equipment', js: true do
       end
 
       it 'should sort by inspection interval' do
-        create_equipment(inspection_interval: InspectionInterval::SIX_MONTHS.text, customer: @customer)
-        create_equipment(inspection_interval: InspectionInterval::TWO_YEARS.text, customer: @customer)
-        create_equipment(inspection_interval: InspectionInterval::ONE_YEAR.text, customer: @customer)
-        create_equipment(inspection_interval: InspectionInterval::FIVE_YEARS.text, customer: @customer)
-        create_equipment(inspection_interval: InspectionInterval::NOT_REQUIRED.text, customer: @customer)
-        create_equipment(inspection_interval: InspectionInterval::THREE_YEARS.text, customer: @customer)
-        create_equipment(inspection_interval: InspectionInterval::ONE_MONTH.text, customer: @customer)
-        create_equipment(inspection_interval: InspectionInterval::THREE_MONTHS.text, customer: @customer)
+        create_equipment(inspection_interval: Interval::SIX_MONTHS.text, customer: @customer)
+        create_equipment(inspection_interval: Interval::TWO_YEARS.text, customer: @customer)
+        create_equipment(inspection_interval: Interval::ONE_YEAR.text, customer: @customer)
+        create_equipment(inspection_interval: Interval::FIVE_YEARS.text, customer: @customer)
+        create_equipment(inspection_interval: Interval::NOT_REQUIRED.text, customer: @customer)
+        create_equipment(inspection_interval: Interval::THREE_YEARS.text, customer: @customer)
+        create_equipment(inspection_interval: Interval::ONE_MONTH.text, customer: @customer)
+        create_equipment(inspection_interval: Interval::THREE_MONTHS.text, customer: @customer)
 
         visit '/'
         click_link 'All Equipment'
@@ -577,14 +577,14 @@ describe 'Equipment', js: true do
         click_link 'Inspection Interval'
         column_data_should_be_in_order(
           [
-            InspectionInterval::ONE_MONTH.text,
-            InspectionInterval::THREE_MONTHS.text,
-            InspectionInterval::SIX_MONTHS.text,
-            InspectionInterval::ONE_YEAR.text,
-            InspectionInterval::TWO_YEARS.text,
-            InspectionInterval::THREE_YEARS.text,
-            InspectionInterval::FIVE_YEARS.text,
-            InspectionInterval::NOT_REQUIRED.text
+            Interval::ONE_MONTH.text,
+            Interval::THREE_MONTHS.text,
+            Interval::SIX_MONTHS.text,
+            Interval::ONE_YEAR.text,
+            Interval::TWO_YEARS.text,
+            Interval::THREE_YEARS.text,
+            Interval::FIVE_YEARS.text,
+            Interval::NOT_REQUIRED.text
           ]
         )
 
@@ -592,14 +592,14 @@ describe 'Equipment', js: true do
         click_link 'Inspection Interval'
         column_data_should_be_in_order(
           [
-            InspectionInterval::NOT_REQUIRED.text,
-            InspectionInterval::FIVE_YEARS.text,
-            InspectionInterval::THREE_YEARS.text,
-            InspectionInterval::TWO_YEARS.text,
-            InspectionInterval::ONE_YEAR.text,
-            InspectionInterval::SIX_MONTHS.text,
-            InspectionInterval::THREE_MONTHS.text,
-            InspectionInterval::ONE_MONTH.text
+            Interval::NOT_REQUIRED.text,
+            Interval::FIVE_YEARS.text,
+            Interval::THREE_YEARS.text,
+            Interval::TWO_YEARS.text,
+            Interval::ONE_YEAR.text,
+            Interval::SIX_MONTHS.text,
+            Interval::THREE_MONTHS.text,
+            Interval::ONE_MONTH.text
           ]
         )
       end
@@ -626,9 +626,9 @@ describe 'Equipment', js: true do
       end
 
       it 'should sort by inspection type' do
-        inspectable1 = create_equipment(inspection_interval: InspectionInterval::ONE_YEAR.text, customer: @customer)
-        not_inspectable = create_equipment(inspection_interval: InspectionInterval::NOT_REQUIRED.text, customer: @customer)
-        inspectable2 = create_equipment(inspection_interval: InspectionInterval::FIVE_YEARS.text, customer: @customer)
+        inspectable1 = create_equipment(inspection_interval: Interval::ONE_YEAR.text, customer: @customer)
+        not_inspectable = create_equipment(inspection_interval: Interval::NOT_REQUIRED.text, customer: @customer)
+        inspectable2 = create_equipment(inspection_interval: Interval::FIVE_YEARS.text, customer: @customer)
 
         visit '/'
         click_link 'All Equipment'

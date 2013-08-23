@@ -51,12 +51,12 @@ class EquipmentController < ApplicationController
 
   def new
     authorize! :create, :equipment
-    assign_inspection_intervals
+    assign_intervals
     @equipment = Equipment.new
   end
 
   def edit
-    assign_inspection_intervals
+    assign_intervals
   end
 
   def create
@@ -67,7 +67,7 @@ class EquipmentController < ApplicationController
     if @equipment.save
       redirect_to @equipment, notice: 'Equipment was successfully created.'
     else
-      assign_inspection_intervals
+      assign_intervals
       render action: 'new'
     end
   end
@@ -78,7 +78,7 @@ class EquipmentController < ApplicationController
     if success
       redirect_to @equipment, notice: 'Equipment was successfully updated.'
     else
-      assign_inspection_intervals
+      assign_intervals
       render action: 'edit'
     end
   end

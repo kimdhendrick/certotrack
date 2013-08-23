@@ -5,7 +5,7 @@ describe CertificationTypesHelper do
   it 'should provide accessible parameters' do
     certification_type_accessible_parameters.should == [
       :name,
-      :inspection_interval,
+      :interval,
       :units_required
     ]
   end

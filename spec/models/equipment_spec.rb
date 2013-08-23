@@ -13,13 +13,13 @@ describe Equipment do
   it { should validate_uniqueness_of(:serial_number).scoped_to(:customer_id) }
 
   it 'should require last_inspection_date if Inspectable' do
-    equipment = new_equipment(inspection_interval: InspectionInterval::ONE_YEAR.text, last_inspection_date: nil)
+    equipment = new_equipment(inspection_interval: Interval::ONE_YEAR.text, last_inspection_date: nil)
     equipment.should_not be_valid
     equipment.errors[:last_inspection_date].should == ["can't be blank"]
   end
 
   it 'should not require last_inspection_date if Non-Inspectable' do
-    equipment = new_equipment(inspection_interval: InspectionInterval::NOT_REQUIRED.text, last_inspection_date: nil)
+    equipment = new_equipment(inspection_interval: Interval::NOT_REQUIRED.text, last_inspection_date: nil)
     equipment.should be_valid
   end
 
@@ -59,7 +59,7 @@ describe Equipment do
     valid_equipment = new_valid_equipment
     expiring_equipment = new_expiring_equipment
     expired_equipment = new_expired_equipment
-    non_inspectable_equipment = new_equipment(expiration_date: nil, inspection_interval:InspectionInterval::NOT_REQUIRED)
+    non_inspectable_equipment = new_equipment(expiration_date: nil, inspection_interval:Interval::NOT_REQUIRED)
 
     valid_equipment.expired?.should be_false
     expiring_equipment.expired?.should be_false
@@ -71,7 +71,7 @@ describe Equipment do
     valid_equipment = new_valid_equipment
     expiring_equipment = new_expiring_equipment
     expired_equipment = new_expired_equipment
-    non_inspectable_equipment = new_equipment(expiration_date: nil, inspection_interval:InspectionInterval::NOT_REQUIRED)
+    non_inspectable_equipment = new_equipment(expiration_date: nil, inspection_interval:Interval::NOT_REQUIRED)
 
     valid_equipment.expiring?.should be_false
     expired_equipment.expiring?.should be_false
@@ -80,13 +80,13 @@ describe Equipment do
   end
 
   it 'should validate inspection interval' do
-    new_equipment(inspection_interval: InspectionInterval::ONE_MONTH.text).should be_valid
-    new_equipment(inspection_interval: InspectionInterval::THREE_MONTHS.text).should be_valid
-    new_equipment(inspection_interval: InspectionInterval::SIX_MONTHS.text).should be_valid
-    new_equipment(inspection_interval: InspectionInterval::ONE_YEAR.text).should be_valid
-    new_equipment(inspection_interval: InspectionInterval::TWO_YEARS.text).should be_valid
-    new_equipment(inspection_interval: InspectionInterval::FIVE_YEARS.text).should be_valid
-    new_equipment(inspection_interval: InspectionInterval::NOT_REQUIRED.text).should be_valid
+    new_equipment(inspection_interval: Interval::ONE_MONTH.text).should be_valid
+    new_equipment(inspection_interval: Interval::THREE_MONTHS.text).should be_valid
+    new_equipment(inspection_interval: Interval::SIX_MONTHS.text).should be_valid
+    new_equipment(inspection_interval: Interval::ONE_YEAR.text).should be_valid
+    new_equipment(inspection_interval: Interval::TWO_YEARS.text).should be_valid
+    new_equipment(inspection_interval: Interval::FIVE_YEARS.text).should be_valid
+    new_equipment(inspection_interval: Interval::NOT_REQUIRED.text).should be_valid
 
     new_equipment(inspection_interval: 'blah').should_not be_valid
   end
@@ -122,19 +122,19 @@ describe Equipment do
   end
 
   it 'should respond to inspection_type' do
-    inspectable_equipment = new_equipment(inspection_interval: InspectionInterval::FIVE_YEARS.text)
-    non_inspectable_equipment = new_equipment(inspection_interval: InspectionInterval::NOT_REQUIRED.text)
+    inspectable_equipment = new_equipment(inspection_interval: Interval::FIVE_YEARS.text)
+    non_inspectable_equipment = new_equipment(inspection_interval: Interval::NOT_REQUIRED.text)
 
     inspectable_equipment.inspection_type.should == 'Inspectable'
     non_inspectable_equipment.inspection_type.should == 'Non-Inspectable'
   end
 
   it 'should respond to inspection_interval_code' do
-    one_month_equipment = new_equipment(inspection_interval: InspectionInterval::ONE_MONTH.text)
-    not_required_equipment = new_equipment(inspection_interval: InspectionInterval::NOT_REQUIRED.text)
+    one_month_equipment = new_equipment(inspection_interval: Interval::ONE_MONTH.text)
+    not_required_equipment = new_equipment(inspection_interval: Interval::NOT_REQUIRED.text)
 
-    one_month_equipment.inspection_interval_code.should == InspectionInterval::ONE_MONTH.id
-    not_required_equipment.inspection_interval_code.should == InspectionInterval::NOT_REQUIRED.id
+    one_month_equipment.inspection_interval_code.should == Interval::ONE_MONTH.id
+    not_required_equipment.inspection_interval_code.should == Interval::NOT_REQUIRED.id
   end
 
   it 'should respond to status_code' do
