@@ -393,77 +393,77 @@ describe EquipmentService do
       equipment.inspection_type.should == InspectionType::NON_INSPECTABLE.text
       equipment.expiration_date.should be_nil
     end
+  end
 
-    context 'performance testing of sorting' do
-      it 'should time the sorting of equipment' do
+  describe 'performance testing of sorting' do
+    it 'should time the sorting of equipment' do
 
-        # Test results as of 2013-08-18 15:42:08 -0600:
-        # 1,000...
-        # Time elapsed: 0.003632 (for name)
-        # Time elapsed: 0.00291 (for serial_number)
-        # Time elapsed: 0.010663 (for status_code)
-        # Time elapsed: 0.007275 (for inspection_interval_code)
-        # Time elapsed: 0.003812 (for last_inspection_date)
-        # Time elapsed: 0.001077 (for expiration_date)
-        # Time elapsed: 0.024727 (for assignee)
-        # Average: 0.007728 (1,000)
-        # 10,000...
-        # Time elapsed: 0.034225 (for name)
-        # Time elapsed: 0.039557 (for serial_number)
-        # Time elapsed: 0.1305 (for status_code)
-        # Time elapsed: 0.106152 (for inspection_interval_code)
-        # Time elapsed: 0.079333 (for last_inspection_date)
-        # Time elapsed: 0.031203 (for expiration_date)
-        # Time elapsed: 0.643867 (for assignee)
-        # Average: 0.1521195714285714 (10,000)
-        # 100,000...
-        # Time elapsed: 0.487783 (for name)
-        # Time elapsed: 0.795771 (for serial_number)
-        # Time elapsed: 1.276033 (for status_code)
-        # Time elapsed: 1.338913 (for inspection_interval_code)
-        # Time elapsed: 0.564061 (for last_inspection_date)
-        # Time elapsed: 0.221214 (for expiration_date)
-        # Time elapsed: 6.174405 (for assignee)
-        # Average: 1.5511685714285715 (100,000)
+      # Test results as of 2013-08-18 15:42:08 -0600:
+      # 1,000...
+      # Time elapsed: 0.003632 (for name)
+      # Time elapsed: 0.00291 (for serial_number)
+      # Time elapsed: 0.010663 (for status_code)
+      # Time elapsed: 0.007275 (for inspection_interval_code)
+      # Time elapsed: 0.003812 (for last_inspection_date)
+      # Time elapsed: 0.001077 (for expiration_date)
+      # Time elapsed: 0.024727 (for assignee)
+      # Average: 0.007728 (1,000)
+      # 10,000...
+      # Time elapsed: 0.034225 (for name)
+      # Time elapsed: 0.039557 (for serial_number)
+      # Time elapsed: 0.1305 (for status_code)
+      # Time elapsed: 0.106152 (for inspection_interval_code)
+      # Time elapsed: 0.079333 (for last_inspection_date)
+      # Time elapsed: 0.031203 (for expiration_date)
+      # Time elapsed: 0.643867 (for assignee)
+      # Average: 0.1521195714285714 (10,000)
+      # 100,000...
+      # Time elapsed: 0.487783 (for name)
+      # Time elapsed: 0.795771 (for serial_number)
+      # Time elapsed: 1.276033 (for status_code)
+      # Time elapsed: 1.338913 (for inspection_interval_code)
+      # Time elapsed: 0.564061 (for last_inspection_date)
+      # Time elapsed: 0.221214 (for expiration_date)
+      # Time elapsed: 6.174405 (for assignee)
+      # Average: 1.5511685714285715 (100,000)
 
-        ###########################################
-        # Uncomment for performance testing
-        ###########################################
+      ###########################################
+      # Uncomment for performance testing
+      ###########################################
 
-        #puts "Test results as of #{Time::now}:"
-        #
-        #equipment = []
-        #100000.times do
-        #  equipment << new_equipment(expiration_date: Date.new(2013, 1, 2), customer: @my_customer)
-        #end
-        #
-        #sort_service = SortService.new
-        #
-        #puts "1,000..."
-        #field_list = ['name', 'serial_number', 'status_code',
-        #              'inspection_interval_code', 'last_inspection_date',
-        #              'expiration_date', 'assignee']
-        #
-        #total = 0
-        #field_list.each do |field|
-        #  total += _sort_fields(sort_service, equipment[0..999], field)
-        #end
-        #puts "Average: #{total/field_list.count} (1,000)"
-        #
-        #puts "10,000..."
-        #total = 0
-        #field_list.each do |field|
-        #  total += _sort_fields(sort_service, equipment[0..9999], field)
-        #end
-        #puts "Average: #{total/field_list.count} (10,000)"
-        #
-        #puts "100,000..."
-        #total = 0
-        #field_list.each do |field|
-        #  total += _sort_fields(sort_service, equipment, field)
-        #end
-        #puts "Average: #{total/field_list.count} (100,000)"
-      end
+      #puts "Test results as of #{Time::now}:"
+      #
+      #equipment = []
+      #100000.times do
+      #  equipment << new_equipment(expiration_date: Date.new(2013, 1, 2), customer: @my_customer)
+      #end
+      #
+      #sort_service = SortService.new
+      #
+      #puts "1,000..."
+      #field_list = ['name', 'serial_number', 'status_code',
+      #              'inspection_interval_code', 'last_inspection_date',
+      #              'expiration_date', 'assignee']
+      #
+      #total = 0
+      #field_list.each do |field|
+      #  total += _sort_fields(sort_service, equipment[0..999], field)
+      #end
+      #puts "Average: #{total/field_list.count} (1,000)"
+      #
+      #puts "10,000..."
+      #total = 0
+      #field_list.each do |field|
+      #  total += _sort_fields(sort_service, equipment[0..9999], field)
+      #end
+      #puts "Average: #{total/field_list.count} (10,000)"
+      #
+      #puts "100,000..."
+      #total = 0
+      #field_list.each do |field|
+      #  total += _sort_fields(sort_service, equipment, field)
+      #end
+      #puts "Average: #{total/field_list.count} (100,000)"
     end
   end
 

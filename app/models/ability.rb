@@ -16,14 +16,19 @@ class Ability
       end
     end
 
-    # TODO
     if user.role?('certification')
-      can :manage, :certification
+      can :create, :certification
+      can :read, :certification
+
+      can :manage, CertificationType do |certification_type|
+        certification_type.try(:customer) == user.customer
+      end
     end
 
     # TODO
     if user.role?('vehicle')
-      can :manage, :vehicle
+      can :read, :vehicle
+      can :create, :vehicle
     end
   end
 end

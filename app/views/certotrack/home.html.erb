@@ -3,8 +3,16 @@ CertoTrack - Home
 <h2>Welcome to Certotrack</h2>
 
 <% if can? :read, :equipment %>
+  Equipment Links:
   <%= render 'equipment_links' %>
-<% else %>
+<% end %>
+
+<% if can? :read, :certification %>
+  Certification Links:
+  <%= render 'certification_links' %>
+<% end %>
+
+<% if (cannot? :read, :equipment) && (cannot? :read, :certification) %>
   <p>You are not authorized for any services. Please contact support@certotrack.com.</p>
 <% end %>
 

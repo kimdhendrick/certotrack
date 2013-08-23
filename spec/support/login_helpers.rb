@@ -12,6 +12,10 @@ module LoginHelpers
     login_as_user_with_role('equipment')
   end
 
+  def login_as_certification_user
+    login_as_user_with_role('certification')
+  end
+
   def login_as_admin
     login_as_user_with_role('admin')
   end

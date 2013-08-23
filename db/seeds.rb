@@ -9,6 +9,8 @@ customer = create_customer(name: 'Test Customer')
 
 create_user(username: 'admin', password: 'Password123', roles: ['admin'], customer: customer)
 create_user(username: 'equipment_user', password: 'Password123', roles: ['equipment'], customer: customer)
+create_user(username: 'certification_user', password: 'Password123', roles: ['certification'], customer: customer)
+create_user(username: 'full_rights_user', password: 'Password123', roles: ['equipment', 'certification'], customer: customer)
 create_user(username: 'guest', password: 'Password123')
 
 golden = create_location(name: 'Golden', customer: customer)

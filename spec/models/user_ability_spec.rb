@@ -32,7 +32,7 @@ describe User do
       it { should_not be_able_to(:manage, :vehicle) }
     end
 
-    context 'when user is an equipment user' do
+    context 'when user is an equipment user with equipment' do
       let(:user) {
         new_user(roles: ['equipment'], customer: new_customer)
       }
@@ -50,16 +50,33 @@ describe User do
     context 'when user is a certification user' do
       let(:user) { new_user(roles: ['certification']) }
 
-      it { should be_able_to(:manage, :certification) }
+      it { should be_able_to(:read, :certification) }
+      it { should be_able_to(:create, :certification) }
       it { should_not be_able_to(:manage, :all) }
       it { should_not be_able_to(:manage, :equipment) }
       it { should_not be_able_to(:manage, :vehicle) }
     end
 
+    context 'when user is an certification user with certification types' do
+      let(:user) {
+        new_user(roles: ['certification'], customer: new_customer)
+      }
+      let(:own_certification_type) {
+        new_certification_type(customer: user.customer)
+      }
+      let(:other_customer_certification_type) {
+        new_certification_type(customer: new_customer)
+      }
+
+      it { should be_able_to(:manage, own_certification_type) }
+      it { should_not be_able_to(:manage, other_customer_certification_type) }
+    end
+
     context 'when user is a vehicle user' do
       let(:user) { new_user(roles: ['vehicle']) }
 
-      it { should be_able_to(:manage, :vehicle) }
+      it { should be_able_to(:read, :vehicle) }
+      it { should be_able_to(:create, :vehicle) }
       it { should_not be_able_to(:manage, :all) }
       it { should_not be_able_to(:manage, :equipment) }
       it { should_not be_able_to(:manage, :certification) }

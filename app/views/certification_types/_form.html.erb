@@ -1,0 +1,29 @@
+<%= form_for(@certification_type) do |f| %>
+
+  <%= render 'errors'%>
+
+  <div class="field">
+    <%= f.label :name %>
+    <br/>
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :units_required, 'Required Units' %>
+    <br/>
+    <%= f.text_field :units_required %>
+  </div>
+
+  <div class="field">
+    <%= f.label :inspection_interval, 'Inspection Interval' %>
+    <br/>
+    <%= select(:certification_type, :inspection_interval,
+               options_from_collection_for_select(@inspection_intervals, 'text', 'text',
+                                                  @certification_type.inspection_interval)) %>
+  </div>
+
+  <div class="actions">
+    <%= submit_tag(user_action) %>
+  </div>
+
+<% end %>

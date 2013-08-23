@@ -102,10 +102,24 @@ module ObjectMother
     _apply(Employee.new, valid_attributes, options)
   end
 
+  def create_certification_type(options = {})
+    new_certification_type(options).tap(&:save!)
+  end
+
+  def new_certification_type(options = {})
+    _apply(CertificationType.new, certification_type_attributes, options)
+  end
+
+  def certification_type_attributes
+    {
+      name: 'Routine Inspection',
+      inspection_interval: InspectionInterval::ONE_YEAR.text
+    }
+  end
+
   def valid_session
     {}
   end
-
 
   private
 

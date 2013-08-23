@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'Navigation', js:true do
 
-  describe 'Home page links' do
+  describe 'Equipment Links' do
     before do
       login_as_equipment_user
     end
@@ -16,7 +16,6 @@ describe 'Navigation', js:true do
       page.should have_link 'Equipment Expiring Soon (0)'
       page.should have_link 'Non-Inspectable Equipment'
       page.should have_link 'Create Equipment'
-      page.should have_link 'Search Equipment'
 
       click_link 'All Equipment'
       page.should have_content 'All Equipment List'
@@ -36,6 +35,11 @@ describe 'Navigation', js:true do
       visit equipment_index_path
       click_link 'Create Equipment'
       page.should have_content 'Create Equipment'
+
+      visit equipment_index_path
+      click_link 'Search Equipment'
+      page.should have_content 'Search Equipment'
+
     end
 
     it 'should navigate Expired Equipment List' do
@@ -80,6 +84,12 @@ describe 'Navigation', js:true do
 
       click_link 'Home'
       page.should have_content 'Welcome to Certotrack'
+
+      visit new_equipment_path
+      page.should have_content 'Create Equipment'
+
+      click_link 'Search Equipment'
+      page.should have_content 'Search Equipment'
     end
 
     it 'should navigate Show Equipment' do
@@ -98,25 +108,61 @@ describe 'Navigation', js:true do
       page.should have_content 'All Equipment List'
 
       visit equipment_path equipment.id
+      click_link 'Search Equipment'
+      page.should have_content 'Search Equipment'
+
+      visit equipment_path equipment.id
       click_link 'Create Equipment'
       page.should have_content 'Create Equipment'
     end
 
     it 'should navigate Search Equipment' do
       visit root_path
-      page.should have_content 'Search Equipment'
 
-      click_link 'Search Equipment'
+      within '[data-equipment-search-form]' do
+        click_on 'Search'
+      end
+
       page.should have_content 'Search Equipment'
 
       click_link 'Home'
       page.should have_content 'Welcome to Certotrack'
 
-      click_link 'Search Equipment'
+      within '[data-equipment-search-form]' do
+        click_on 'Search'
+      end
+
       page.should have_content 'Search Equipment'
 
       click_link 'Create Equipment'
       page.should have_content 'Create Equipment'
+    end
+  end
+
+  describe 'Certification Links' do
+    before do
+      login_as_certification_user
+    end
+
+    it 'should navigate Home page' do
+      visit root_path
+      page.should have_content 'Welcome to Certotrack'
+
+      page.should have_link 'Create Certification Type'
+
+      click_link 'Create Certification Type'
+      page.should have_content 'Create Certification Type'
+    end
+
+    it 'should navigate Create Certification Type' do
+      visit new_certification_type_path
+      page.should have_content 'Create Certification Type'
+
+      click_link 'Home'
+      page.should have_content 'Welcome to Certotrack'
+
+      visit new_certification_type_path
+      page.should have_content 'Create Certification Type'
     end
   end
 end

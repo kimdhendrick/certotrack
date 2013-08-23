@@ -104,6 +104,7 @@ describe 'Equipment', js: true do
 
       page.should have_content 'Create Equipment'
       page.should have_link 'Home'
+      page.should have_link 'Search Equipment'
 
       page.should have_content 'Name'
       page.should have_content 'Serial Number'
@@ -762,8 +763,10 @@ describe 'Equipment', js: true do
         )
 
         visit '/'
-        page.should have_content 'Search Equipment'
-        click_link 'Search Equipment'
+
+        within '[data-equipment-search-form]' do
+          click_on 'Search'
+        end
 
         page.should have_content 'Search Equipment'
         page.should have_link 'Home'
@@ -823,8 +826,9 @@ describe 'Equipment', js: true do
         )
 
         visit '/'
-        page.should have_content 'Search Equipment'
-        click_link 'Search Equipment'
+        within '[data-equipment-search-form]' do
+          click_on 'Search'
+        end
 
         page.should have_content 'Search Equipment'
         page.should have_link 'Home'
