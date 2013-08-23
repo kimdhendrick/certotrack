@@ -649,17 +649,18 @@ describe 'Equipment', js: true do
         create_equipment(expiration_date: middle_date, customer: @customer)
         create_equipment(expiration_date: latest_date, customer: @customer)
         create_equipment(expiration_date: earliest_date, customer: @customer)
+        create_equipment(expiration_date: nil, customer: @customer)
 
         visit '/'
         click_link 'All Equipment'
 
         # Ascending search
         click_link 'Expiration Date'
-        column_data_should_be_in_order([DateHelpers.format(earliest_date), DateHelpers.format(middle_date), DateHelpers.format(latest_date)])
+        column_data_should_be_in_order([DateHelpers.format(earliest_date), DateHelpers.format(middle_date), DateHelpers.format(latest_date), ''])
 
         # Descending search
         click_link 'Expiration Date'
-        column_data_should_be_in_order([DateHelpers.format(latest_date), DateHelpers.format(middle_date), DateHelpers.format(earliest_date)])
+        column_data_should_be_in_order(['', DateHelpers.format(latest_date), DateHelpers.format(middle_date), DateHelpers.format(earliest_date)])
       end
 
       it 'should sort by assignee' do
