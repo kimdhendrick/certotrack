@@ -83,3 +83,6 @@ Answer 'yes' when prompted. Copy & paste command to ignore rvm warnings.
 
 ## Reseed database
     heroku run rake db:seed
+
+## Restart heroku
+    heroku restart
