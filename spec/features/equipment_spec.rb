@@ -168,6 +168,45 @@ describe 'Equipment', js: true do
       page.should have_content '01/01/2005'
       page.should have_content 'Special Notes'
     end
+
+    it 'should alert on future dates' do
+      visit '/'
+      click_link 'Create Equipment'
+
+      fill_in 'Name', with: 'Level'
+      fill_in 'Serial Number', with: '765-CKD-123'
+      fill_in 'Last Inspection Date', with: '01/01/2055'
+
+      click_on 'Create'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to enter a future date?')
+      alert.dismiss
+
+      fill_in 'Last Inspection Date', with: '01/01/2000'
+
+      click_on 'Create'
+
+      page.should have_content 'Show Equipment'
+      page.should have_content '01/01/2000'
+
+      visit '/'
+      click_link 'Create Equipment'
+
+      fill_in 'Name', with: 'Level'
+      fill_in 'Serial Number', with: '765-CKD-456'
+      fill_in 'Last Inspection Date', with: '01/01/2055'
+
+      click_on 'Create'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to enter a future date?')
+      alert.accept
+
+      page.should have_content 'Show Equipment'
+      page.should have_content '01/01/2055'
+    end
+
   end
 
   describe 'Update Equipment' do
@@ -234,6 +273,55 @@ describe 'Equipment', js: true do
       page.should have_content '01/01/2000'
       page.should have_content '01/01/2005'
       page.should have_content 'Special Notes'
+    end
+
+    it 'should alert on future dates' do
+      valid_equipment = create_equipment(
+        customer: @customer,
+        name: 'Meter',
+        serial_number: 'ABC123',
+        inspection_interval: 'Annually',
+        last_inspection_date: Date.new(2013, 1, 1),
+        expiration_date: Date.new(2024, 2, 3),
+        notes: 'my notes',
+        location_id: @littleton_location.id
+      )
+
+      visit '/'
+      click_link 'All Equipment'
+      click_link 'Meter'
+      click_on 'Edit'
+
+      fill_in 'Last Inspection Date', with: '01/01/2055'
+
+      click_on 'Update'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to enter a future date?')
+      alert.dismiss
+
+      fill_in 'Last Inspection Date', with: '01/01/2000'
+
+      click_on 'Update'
+
+      page.should have_content 'Show Equipment'
+      page.should have_content '01/01/2000'
+
+      visit '/'
+      click_link 'All Equipment'
+      click_link 'Meter'
+      click_link 'Edit'
+
+      fill_in 'Last Inspection Date', with: '01/01/2055'
+
+      click_on 'Update'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to enter a future date?')
+      alert.accept
+
+      page.should have_content 'Show Equipment'
+      page.should have_content '01/01/2055'
     end
   end
 
