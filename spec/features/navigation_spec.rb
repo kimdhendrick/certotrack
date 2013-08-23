@@ -96,9 +96,12 @@ describe 'Navigation', js:true do
       equipment = create_equipment(customer: @customer)
       visit equipment_path equipment.id
 
-      page.should have_content 'Home'
-      page.should have_content 'All Equipment'
-      page.should have_content 'Create Equipment'
+      page.should have_link 'Home'
+      page.should have_link 'All Equipment'
+      page.should have_link 'Create Equipment'
+
+      page.should have_link 'Edit'
+      page.should have_link 'Delete'
 
       click_link 'Home'
       page.should have_content 'Welcome to Certotrack'
@@ -114,6 +117,16 @@ describe 'Navigation', js:true do
       visit equipment_path equipment.id
       click_link 'Create Equipment'
       page.should have_content 'Create Equipment'
+
+      visit equipment_path equipment.id
+      click_link 'Edit'
+      page.should have_content 'Edit Equipment'
+
+      visit equipment_path equipment.id
+      click_link 'Delete'
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete?')
+      alert.dismiss
     end
 
     it 'should navigate Search Equipment' do
@@ -190,14 +203,15 @@ describe 'Navigation', js:true do
       page.should have_content 'Create Certification Type'
 
       # TODO
-      #visit certification_type_path certification_type.id
-      #click_on 'Edit'
-      #page.should have_content 'Edit Certification Type'
+      visit certification_type_path certification_type.id
+      #click_link 'Edit'
+      #page.should have_content 'Edit Equipment'
 
-      #visit certification_type_path certification_type.id
-      #click_on 'Delete'
-      #should get confirmation dialog
-
+      visit certification_type_path certification_type.id
+      click_link 'Delete'
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete?')
+      alert.dismiss
     end
   end
 end
