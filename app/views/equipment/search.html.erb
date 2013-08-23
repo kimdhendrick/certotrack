@@ -8,6 +8,8 @@
 <p>You may enter any of the below values.</p>
 
 <%= form_tag search_equipment_path, :method => 'get' do %>
+  <%= hidden_field_tag :direction, params[:direction] %>
+  <%= hidden_field_tag :sort, params[:sort] %>
   <table>
     <tr>
       <td><label for="name">Name contains:</label></td>

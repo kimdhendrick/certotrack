@@ -11,6 +11,13 @@ describe 'Navigation', js:true do
       visit root_path
       page.should have_content 'Welcome to Certotrack'
 
+      page.should have_link 'All Equipment (0)'
+      page.should have_link 'Expired Equipment (0)'
+      page.should have_link 'Equipment Expiring Soon (0)'
+      page.should have_link 'Non-Inspectable Equipment'
+      page.should have_link 'Create Equipment'
+      page.should have_link 'Search Equipment'
+
       click_link 'All Equipment'
       page.should have_content 'All Equipment List'
 
@@ -91,6 +98,23 @@ describe 'Navigation', js:true do
       page.should have_content 'All Equipment List'
 
       visit equipment_path equipment.id
+      click_link 'Create Equipment'
+      page.should have_content 'Create Equipment'
+    end
+
+    it 'should navigate Search Equipment' do
+      visit root_path
+      page.should have_content 'Search Equipment'
+
+      click_link 'Search Equipment'
+      page.should have_content 'Search Equipment'
+
+      click_link 'Home'
+      page.should have_content 'Welcome to Certotrack'
+
+      click_link 'Search Equipment'
+      page.should have_content 'Search Equipment'
+
       click_link 'Create Equipment'
       page.should have_content 'Create Equipment'
     end

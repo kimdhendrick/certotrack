@@ -810,6 +810,44 @@ describe 'Equipment', js: true do
         page.should have_link 'Unique Name'
         page.should_not have_link 'Box'
       end
+
+      it 'should search and sort simultaneously' do
+        create_equipment(
+          customer: @customer,
+          name: 'Unique Name'
+        )
+
+        create_equipment(
+          customer: @customer,
+          name: 'Box'
+        )
+
+        visit '/'
+        page.should have_content 'Search Equipment'
+        click_link 'Search Equipment'
+
+        page.should have_content 'Search Equipment'
+        page.should have_link 'Home'
+        page.should have_link 'Create Equipment'
+
+        fill_in 'Name contains:', with: 'Unique'
+
+        click_on 'Search'
+
+        page.should have_content 'Search Equipment'
+
+        assert_report_headers_are_correct
+
+        find 'table.sortable'
+
+        page.should have_link 'Unique Name'
+        page.should_not have_link 'Box'
+
+        click_on 'Name'
+
+        page.should have_link 'Unique Name'
+        page.should_not have_link 'Box'
+      end
     end
   end
 
