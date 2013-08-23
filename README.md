@@ -72,3 +72,14 @@ Answer 'yes' when prompted. Copy & paste command to ignore rvm warnings.
 ### Reset Database from Seed Data
 
     rake db:reset
+
+# Heroku cheatsheet
+
+## Rails Console
+    heroku run rails console
+
+## Recreate database
+    heroku pg:reset DATABASE
+
+## Reseed database
+    heroku run rake db:seed
