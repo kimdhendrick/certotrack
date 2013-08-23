@@ -164,5 +164,40 @@ describe 'Navigation', js:true do
       visit new_certification_type_path
       page.should have_content 'Create Certification Type'
     end
+
+    it 'should navigate Show Certification Type' do
+      certification_type = create_certification_type(customer: @customer)
+
+      visit certification_type_path certification_type.id
+
+      page.should have_content 'Show Certification Type'
+      page.should have_link 'Home'
+      page.should have_link 'All Certification Types'
+      page.should have_link 'Create Certification Type'
+
+      page.should have_link 'Edit'
+      page.should have_link 'Delete'
+
+      click_on 'Home'
+      page.should have_content 'Welcome to Certotrack'
+
+      # TODO
+      #click_on 'All Certification Types'
+      #visit certification_type_path certification_type.id
+
+      visit certification_type_path certification_type.id
+      click_on 'Create Certification Type'
+      page.should have_content 'Create Certification Type'
+
+      # TODO
+      #visit certification_type_path certification_type.id
+      #click_on 'Edit'
+      #page.should have_content 'Edit Certification Type'
+
+      #visit certification_type_path certification_type.id
+      #click_on 'Delete'
+      #should get confirmation dialog
+
+    end
   end
 end

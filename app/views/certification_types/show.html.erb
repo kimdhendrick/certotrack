@@ -10,14 +10,17 @@
 </p>
 
 <p>
-  <b>Required Units</b>
-  <%= @certification_type.units_required %>
-</p>
-
-<p>
   <b>Interval</b>
   <%= @certification_type.interval %>
 </p>
+
+<% if @certification_type.units_based? %>
+  <p>
+    <b>Required Units</b>
+    <%= @certification_type.units_required %>
+  </p>
+<% end %>
+
 
 <%= link_to 'Edit', edit_certification_type_path(@certification_type) %> |
 <%= link_to 'Delete', @certification_type, method: :delete, data: {confirm: 'Are you sure you want to delete?'} %>
