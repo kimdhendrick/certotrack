@@ -10,6 +10,7 @@ describe Equipment do
   it { should belong_to(:customer) }
   it { should belong_to(:location) }
   it { should belong_to(:employee) }
+  it { should validate_uniqueness_of(:serial_number).scoped_to(:customer_id) }
 
   it 'should require last_inspection_date if Inspectable' do
     equipment = new_equipment(inspection_interval: InspectionInterval::ONE_YEAR.text, last_inspection_date: nil)

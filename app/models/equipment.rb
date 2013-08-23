@@ -8,6 +8,7 @@ class Equipment < ActiveRecord::Base
   validates :last_inspection_date, presence: true, if: :inspectable?
   validates :inspection_interval, inclusion: {in: InspectionInterval.all.map(&:text),
                                               message: 'invalid value'}
+  validates_uniqueness_of :serial_number, scope: :customer_id
 
   def status
     return Status::NA if na?

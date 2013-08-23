@@ -62,7 +62,7 @@ module ObjectMother
   def equipment_attributes
     {
       name: 'Meter',
-      serial_number: '782-888-DKHE',
+      serial_number: "782-888-DKHE-#{_new_id}",
       last_inspection_date: Date.new(2000, 1, 1),
       inspection_interval: InspectionInterval::ONE_YEAR.text
     }
