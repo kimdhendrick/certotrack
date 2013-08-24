@@ -9,7 +9,7 @@ describe 'Navigation', js:true do
 
     it 'navigates Home page' do
       visit root_path
-      page.should have_content 'Welcome to Certotrack'
+      page.should have_content 'Welcome to CertoTrack'
 
       page.should have_link 'All Equipment (0)'
       page.should have_link 'Expired Equipment (0)'
@@ -18,19 +18,19 @@ describe 'Navigation', js:true do
       page.should have_link 'Create Equipment'
 
       click_link 'All Equipment'
-      page.should have_content 'All Equipment List'
+      page.should have_content 'All Equipment'
 
       visit root_path
       click_link 'Create Equipment'
       page.should have_content 'Create Equipment'
     end
 
-    it 'navigates All Equipment List' do
+    it 'navigates All Equipment' do
       visit equipment_index_path
-      page.should have_content 'All Equipment List'
+      page.should have_content 'All Equipment'
 
       click_link 'Home'
-      page.should have_content 'Welcome to Certotrack'
+      page.should have_content 'Welcome to CertoTrack'
 
       visit equipment_index_path
       click_link 'Create Equipment'
@@ -46,7 +46,7 @@ describe 'Navigation', js:true do
       page.should have_content 'Expired Equipment List'
 
       click_link 'Home'
-      page.should have_content 'Welcome to Certotrack'
+      page.should have_content 'Welcome to CertoTrack'
 
       visit expired_equipment_path
       click_link 'Create Equipment'
@@ -58,7 +58,7 @@ describe 'Navigation', js:true do
       page.should have_content 'Expiring Equipment List'
 
       click_link 'Home'
-      page.should have_content 'Welcome to Certotrack'
+      page.should have_content 'Welcome to CertoTrack'
 
       visit expiring_equipment_path
       click_link 'Create Equipment'
@@ -70,7 +70,7 @@ describe 'Navigation', js:true do
       page.should have_content 'Non-Inspectable Equipment List'
 
       click_link 'Home'
-      page.should have_content 'Welcome to Certotrack'
+      page.should have_content 'Welcome to CertoTrack'
 
       visit noninspectable_equipment_path
       click_link 'Create Equipment'
@@ -82,7 +82,7 @@ describe 'Navigation', js:true do
       page.should have_content 'Create Equipment'
 
       click_link 'Home'
-      page.should have_content 'Welcome to Certotrack'
+      page.should have_content 'Welcome to CertoTrack'
 
       visit new_equipment_path
       page.should have_content 'Create Equipment'
@@ -103,11 +103,11 @@ describe 'Navigation', js:true do
       page.should have_link 'Delete'
 
       click_link 'Home'
-      page.should have_content 'Welcome to Certotrack'
+      page.should have_content 'Welcome to CertoTrack'
 
       visit equipment_path equipment.id
       click_link 'All Equipment'
-      page.should have_content 'All Equipment List'
+      page.should have_content 'All Equipment'
 
       visit equipment_path equipment.id
       click_link 'Search Equipment'
@@ -141,7 +141,7 @@ describe 'Navigation', js:true do
       page.should have_link 'Delete'
 
       click_on 'Home'
-      page.should have_content 'Welcome to Certotrack'
+      page.should have_content 'Welcome to CertoTrack'
       visit equipment_path equipment.id
       click_on 'Edit'
       click_on 'All Equipment'
@@ -162,7 +162,7 @@ describe 'Navigation', js:true do
       page.should have_content 'Search Equipment'
 
       click_link 'Home'
-      page.should have_content 'Welcome to Certotrack'
+      page.should have_content 'Welcome to CertoTrack'
 
       within '[data-equipment-search-form]' do
         click_on 'Search'
@@ -182,7 +182,7 @@ describe 'Navigation', js:true do
 
     it 'navigates Home page' do
       visit root_path
-      page.should have_content 'Welcome to Certotrack'
+      page.should have_content 'Welcome to CertoTrack'
 
       page.should have_link 'Create Certification Type'
       page.should have_link 'All Certification Types'
@@ -197,7 +197,7 @@ describe 'Navigation', js:true do
       page.should have_content 'All Certification Types'
 
       click_link 'Home'
-      page.should have_content 'Welcome to Certotrack'
+      page.should have_content 'Welcome to CertoTrack'
 
       visit new_certification_type_path
       click_link 'All Certification Types'
@@ -218,7 +218,7 @@ describe 'Navigation', js:true do
       page.should have_link 'Delete'
 
       click_on 'Home'
-      page.should have_content 'Welcome to Certotrack'
+      page.should have_content 'Welcome to CertoTrack'
       visit certification_type_path certification_type.id
 
       click_on 'All Certification Types'
@@ -252,7 +252,7 @@ describe 'Navigation', js:true do
       page.should have_link 'Create Certification Type'
 
       click_on 'Home'
-      page.should have_content 'Welcome to Certotrack'
+      page.should have_content 'Welcome to CertoTrack'
       visit certification_type_path certification_type.id
       click_on 'Edit'
       click_on 'All Certification Types'
@@ -270,7 +270,7 @@ describe 'Navigation', js:true do
       click_on 'All Certification Types'
 
       click_link 'Home'
-      page.should have_content 'Welcome to Certotrack'
+      page.should have_content 'Welcome to CertoTrack'
 
       visit equipment_index_path
       click_link 'Create Certification Type'

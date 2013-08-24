@@ -48,7 +48,7 @@ describe EquipmentController do
 
         get :index
 
-        assigns(:report_title).should eq('All Equipment List')
+        assigns(:report_title).should eq('All Equipment')
       end
     end
 

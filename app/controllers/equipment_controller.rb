@@ -14,7 +14,7 @@ class EquipmentController < ApplicationController
   def index
     authorize! :read, :equipment
 
-    @report_title = 'All Equipment List'
+    @report_title = 'All Equipment'
     @equipment = @equipment_service.get_all_equipment(current_user, params)
     @equipment_count = @equipment.count
   end

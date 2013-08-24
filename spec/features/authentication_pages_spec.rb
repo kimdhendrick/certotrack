@@ -35,7 +35,7 @@ describe 'Authentication', js:true do
         click_button 'Login'
       end
 
-      it { should have_content('Welcome to Certotrack') }
+      it { should have_content('Welcome to CertoTrack') }
       it { should have_selector("input[type=submit][value='Log out']") }
       it { should_not have_link('Login', href: 'login') }
 

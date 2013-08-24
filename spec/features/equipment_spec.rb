@@ -396,7 +396,7 @@ describe 'Equipment', js: true do
         page.should have_content 'All Equipment'
         click_link 'All Equipment'
 
-        page.should have_content 'All Equipment List'
+        page.should have_content 'All Equipment'
         page.should have_content 'Total: 2'
         page.should have_link 'Home'
         page.should have_link 'Create Equipment'
