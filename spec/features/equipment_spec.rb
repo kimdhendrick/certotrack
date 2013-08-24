@@ -891,20 +891,6 @@ describe 'Equipment', js: true do
     end
   end
 
-  def column_data_should_be_in_order(data_list)
-    within 'table tbody tr:nth-of-type(1)' do
-      page.should have_content data_list[0]
-    end
-
-    within 'table tbody tr:nth-of-type(2)' do
-      page.should have_content data_list[1]
-    end
-
-    within 'table tbody tr:nth-of-type(3)' do
-      page.should have_content data_list[2]
-    end
-  end
-
   def assert_report_headers_are_correct
     within 'table thead tr' do
       page.should have_link 'Name'

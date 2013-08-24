@@ -22,7 +22,7 @@ class Equipment < ActiveRecord::Base
   end
 
   def inspection_interval_code
-    Interval.find_by_text(inspection_interval).id
+    Interval.lookup(inspection_interval)
   end
 
   def na?

@@ -61,4 +61,54 @@ describe CertificationTypesService do
       }.to change(CertificationType, :count).by(-1)
     end
   end
+
+  describe 'get_all_certification_types' do
+    before do
+      @my_customer = create_customer
+      @my_user = create_user(customer: @my_customer)
+    end
+
+    context 'sorting' do
+      it 'should call SortService to ensure sorting' do
+        certification_types_service = CertificationTypesService.new
+        fake_sort_service = certification_types_service.load_sort_service(FakeService.new([]))
+
+        certification_types_service.get_all_certification_types(@my_user)
+
+        fake_sort_service.received_message.should == :sort
+      end
+    end
+
+    context 'pagination' do
+      it 'should call PaginationService to paginate results' do
+        certification_types_service = CertificationTypesService.new
+        certification_types_service.load_sort_service(FakeService.new)
+        fake_pagination_service = certification_types_service.load_pagination_service(FakeService.new)
+
+        certification_types_service.get_all_certification_types(@my_user)
+
+        fake_pagination_service.received_message.should == :paginate
+      end
+    end
+
+    context 'an admin user' do
+      it 'should return all certification_types' do
+        my_certification_type = create_certification_type(customer: @my_customer)
+        other_certification_type = create_certification_type(customer: create_customer)
+
+        admin_user = create_user(roles: ['admin'])
+
+        CertificationTypesService.new.get_all_certification_types(admin_user).should == [my_certification_type, other_certification_type]
+      end
+    end
+
+    context 'a regular user' do
+      it "should return only that user's certification_types" do
+        my_certification_type = create_certification_type(customer: @my_customer)
+        other_certification_type = create_certification_type(customer: create_customer)
+
+        CertificationTypesService.new.get_all_certification_types(@my_user).should == [my_certification_type]
+      end
+    end
+  end
 end

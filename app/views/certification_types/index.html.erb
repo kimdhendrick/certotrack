@@ -1,1 +1,10 @@
 <h1>All Certification Types</h1>
+
+<div>Total: <%=@certification_type_count%></div>
+
+<%= link_to 'Home', root_path %> |
+<%= link_to "Create Certification Type", new_certification_type_path %>
+
+<%= render 'certification_type_list'%>
+
+<%= will_paginate @certification_types %>

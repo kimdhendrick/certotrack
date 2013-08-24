@@ -14,6 +14,7 @@ RSpec.configure do |config|
   config.include ObjectMother
   config.include LoginHelpers
   config.include CurrentUserHelpers
+  config.include ReportHelpers
 
   # ## Mock Framework
   #

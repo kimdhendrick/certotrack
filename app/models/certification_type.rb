@@ -14,6 +14,11 @@ class CertificationType < ActiveRecord::Base
     units_required > 0
   end
 
+  def interval_code
+    Interval.lookup(interval)
+  end
+
+
   private
 
   def _default_values

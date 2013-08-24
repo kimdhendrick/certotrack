@@ -39,7 +39,6 @@ describe 'Navigation', js:true do
       visit equipment_index_path
       click_link 'Search Equipment'
       page.should have_content 'Search Equipment'
-
     end
 
     it 'navigates Expired Equipment List' do
@@ -186,6 +185,7 @@ describe 'Navigation', js:true do
       page.should have_content 'Welcome to Certotrack'
 
       page.should have_link 'Create Certification Type'
+      page.should have_link 'All Certification Types'
 
       click_link 'Create Certification Type'
       page.should have_content 'Create Certification Type'
@@ -194,12 +194,14 @@ describe 'Navigation', js:true do
     it 'navigates Create Certification Type' do
       visit new_certification_type_path
       page.should have_content 'Create Certification Type'
+      page.should have_content 'All Certification Types'
 
       click_link 'Home'
       page.should have_content 'Welcome to Certotrack'
 
       visit new_certification_type_path
-      page.should have_content 'Create Certification Type'
+      click_link 'All Certification Types'
+      page.should have_content 'All Certification Types'
     end
 
     it 'navigates Show Certification Type' do
@@ -259,6 +261,25 @@ describe 'Navigation', js:true do
       click_on 'Edit'
       click_on 'Create Certification Type'
       page.should have_content 'Create Certification Type'
+    end
+
+    it 'navigates All Certification Types' do
+      visit equipment_index_path
+      page.should have_content 'All Certification Types'
+
+      click_on 'All Certification Types'
+
+      click_link 'Home'
+      page.should have_content 'Welcome to Certotrack'
+
+      visit equipment_index_path
+      click_link 'Create Certification Type'
+      page.should have_content 'Create Certification Type'
+
+      #TODO
+      #visit equipment_index_path
+      #click_link 'Search Certification Type'
+      #page.should have_content 'Search Certification Type'
     end
   end
 end

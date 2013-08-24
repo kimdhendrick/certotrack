@@ -1,0 +1,22 @@
+<table class="sortable">
+  <thead>
+  <tr>
+    <th><%= sortable 'name' %></th>
+    <th><%= sortable 'interval_code', title="Interval" %></th>
+    <th><%= sortable 'units_required', title="Required Units" %></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @certification_types.each do |certification_type| %>
+    <tr>
+      <td><%= link_to certification_type.name, certification_type %></td></td>
+      <td><%= certification_type.interval %></td>
+      <td>
+      <% if certification_type.units_based? %>
+        <%= certification_type.units_required %>
+      <% end %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

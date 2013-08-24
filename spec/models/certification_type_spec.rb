@@ -35,4 +35,12 @@ describe CertificationType do
     new_certification_type(units_required: 0).should_not be_units_based
     new_certification_type(units_required: 1).should be_units_based
   end
+
+  it 'should respond to interval_code' do
+    one_month_certification_type = new_certification_type(interval: Interval::ONE_MONTH.text)
+    not_required_certification_type = new_certification_type(interval: Interval::NOT_REQUIRED.text)
+
+    one_month_certification_type.interval_code.should == Interval::ONE_MONTH.id
+    not_required_certification_type.interval_code.should == Interval::NOT_REQUIRED.id
+  end
 end

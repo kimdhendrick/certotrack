@@ -22,6 +22,10 @@ class Interval < ActiveHash::Base
   FIVE_YEARS = Interval.find(7)
   NOT_REQUIRED = Interval.find(8)
 
+  def self.lookup(interval_text)
+    Interval.find_by_text(interval_text).id
+  end
+
   def expires_on(start_date)
     return if start_date.blank?
 
