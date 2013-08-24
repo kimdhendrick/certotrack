@@ -7,7 +7,7 @@ describe 'Navigation', js:true do
       login_as_equipment_user
     end
 
-    it 'should navigate Home page' do
+    it 'navigates Home page' do
       visit root_path
       page.should have_content 'Welcome to Certotrack'
 
@@ -25,7 +25,7 @@ describe 'Navigation', js:true do
       page.should have_content 'Create Equipment'
     end
 
-    it 'should navigate All Equipment List' do
+    it 'navigates All Equipment List' do
       visit equipment_index_path
       page.should have_content 'All Equipment List'
 
@@ -42,7 +42,7 @@ describe 'Navigation', js:true do
 
     end
 
-    it 'should navigate Expired Equipment List' do
+    it 'navigates Expired Equipment List' do
       visit expired_equipment_path
       page.should have_content 'Expired Equipment List'
 
@@ -54,7 +54,7 @@ describe 'Navigation', js:true do
       page.should have_content 'Create Equipment'
     end
 
-    it 'should navigate Expiring Equipment List' do
+    it 'navigates Expiring Equipment List' do
       visit expiring_equipment_path
       page.should have_content 'Expiring Equipment List'
 
@@ -66,7 +66,7 @@ describe 'Navigation', js:true do
       page.should have_content 'Create Equipment'
     end
 
-    it 'should navigate Non-Inspectable Equipment List' do
+    it 'navigates Non-Inspectable Equipment List' do
       visit noninspectable_equipment_path
       page.should have_content 'Non-Inspectable Equipment List'
 
@@ -78,7 +78,7 @@ describe 'Navigation', js:true do
       page.should have_content 'Create Equipment'
     end
 
-    it 'should navigate Create Equipment' do
+    it 'navigates Create Equipment' do
       visit new_equipment_path
       page.should have_content 'Create Equipment'
 
@@ -92,7 +92,7 @@ describe 'Navigation', js:true do
       page.should have_content 'Search Equipment'
     end
 
-    it 'should navigate Show Equipment' do
+    it 'navigates Show Equipment' do
       equipment = create_equipment(customer: @customer)
       visit equipment_path equipment.id
 
@@ -129,7 +129,31 @@ describe 'Navigation', js:true do
       alert.dismiss
     end
 
-    it 'should navigate Search Equipment' do
+    it 'navigates Edit Equipment' do
+      equipment = create_equipment(customer: @customer)
+      visit equipment_path equipment.id
+
+      click_on 'Edit'
+
+      page.should have_link 'Home'
+      page.should have_link 'All Equipment'
+      page.should have_link 'Create Equipment'
+
+      page.should have_link 'Delete'
+
+      click_on 'Home'
+      page.should have_content 'Welcome to Certotrack'
+      visit equipment_path equipment.id
+      click_on 'Edit'
+      click_on 'All Equipment'
+      page.should have_content 'All Equipment'
+      visit equipment_path equipment.id
+      click_on 'Edit'
+      click_on 'Create Equipment'
+      page.should have_content 'Create Equipment'
+    end
+
+    it 'navigates Search Equipment' do
       visit root_path
 
       within '[data-equipment-search-form]' do
@@ -157,7 +181,7 @@ describe 'Navigation', js:true do
       login_as_certification_user
     end
 
-    it 'should navigate Home page' do
+    it 'navigates Home page' do
       visit root_path
       page.should have_content 'Welcome to Certotrack'
 
@@ -167,7 +191,7 @@ describe 'Navigation', js:true do
       page.should have_content 'Create Certification Type'
     end
 
-    it 'should navigate Create Certification Type' do
+    it 'navigates Create Certification Type' do
       visit new_certification_type_path
       page.should have_content 'Create Certification Type'
 
@@ -178,7 +202,7 @@ describe 'Navigation', js:true do
       page.should have_content 'Create Certification Type'
     end
 
-    it 'should navigate Show Certification Type' do
+    it 'navigates Show Certification Type' do
       certification_type = create_certification_type(customer: @customer)
 
       visit certification_type_path certification_type.id
@@ -193,10 +217,11 @@ describe 'Navigation', js:true do
 
       click_on 'Home'
       page.should have_content 'Welcome to Certotrack'
+      visit certification_type_path certification_type.id
 
-      # TODO
-      #click_on 'All Certification Types'
-      #visit certification_type_path certification_type.id
+      click_on 'All Certification Types'
+      page.should have_content 'All Certification Types'
+      visit certification_type_path certification_type.id
 
       visit certification_type_path certification_type.id
       click_on 'Create Certification Type'
@@ -213,7 +238,7 @@ describe 'Navigation', js:true do
       alert.dismiss
     end
 
-    it 'should navigate Edit Certification Type' do
+    it 'navigates Edit Certification Type' do
       certification_type = create_certification_type(customer: @customer)
 
       visit certification_type_path certification_type.id
@@ -228,12 +253,10 @@ describe 'Navigation', js:true do
       page.should have_content 'Welcome to Certotrack'
       visit certification_type_path certification_type.id
       click_on 'Edit'
-
-      # TODO
-      #click_on 'All Certification Types'
-      #visit certification_type_path certification_type.id
-      #click_on 'Edit'
-
+      click_on 'All Certification Types'
+      page.should have_content 'All Certification Types'
+      visit certification_type_path certification_type.id
+      click_on 'Edit'
       click_on 'Create Certification Type'
       page.should have_content 'Create Certification Type'
     end
