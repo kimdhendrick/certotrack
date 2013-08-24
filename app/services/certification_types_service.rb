@@ -11,4 +11,8 @@ class CertificationTypesService
     certification_type.update(attributes)
     certification_type.save
   end
+
+  def delete_certification_type(certification_type)
+    certification_type.destroy
+  end
 end

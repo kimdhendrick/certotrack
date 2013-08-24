@@ -51,6 +51,8 @@ class CertificationTypesController < ApplicationController
   end
 
   def destroy
+    @certification_types_service.delete_certification_type(@certification_type)
+    redirect_to certification_types_path, notice: 'Certification Type was successfully deleted.'
   end
 
   def load_certification_type_service(service = CertificationTypesService.new)

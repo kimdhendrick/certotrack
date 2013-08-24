@@ -265,4 +265,41 @@ describe CertificationTypesController do
       end
     end
   end
+
+  describe 'DELETE destroy' do
+    context 'when certification_type user' do
+      before do
+        sign_in stub_certification_user
+      end
+
+      it 'calls CertificationTypeService' do
+        certification_type = create_certification_type(customer: @customer)
+        CertificationTypesService.any_instance.should_receive(:delete_certification_type).once
+
+        delete :destroy, {:id => certification_type.to_param}, valid_session
+      end
+
+      it 'redirects to the certification_type list' do
+        certification_type = create_certification_type(customer: @customer)
+        CertificationTypesService.any_instance.should_receive(:delete_certification_type).once
+
+        delete :destroy, {:id => certification_type.to_param}, valid_session
+
+        response.should redirect_to(certification_types_path)
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'calls certification_typeService' do
+        certification_type = create_certification_type(customer: @customer)
+        CertificationTypesService.any_instance.should_receive(:delete_certification_type).once
+
+        delete :destroy, {:id => certification_type.to_param}, valid_session
+      end
+    end
+  end
 end

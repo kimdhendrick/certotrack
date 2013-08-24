@@ -123,4 +123,37 @@ describe 'Certification Type', js: true do
       page.should have_content 'Required Units 13'
     end
   end
+  
+  describe 'Delete Certification Type' do
+    before do
+      login_as_certification_user
+    end
+
+    it 'should delete existing certification_type' do
+      certification_type = create_certification_type(
+        customer: @customer,
+        name: 'CPR'
+      )
+
+      visit certification_type_path certification_type.id
+
+      page.should have_content 'Show Certification Type'
+      click_on 'Delete'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete?')
+      alert.dismiss
+
+      page.should have_content 'Show Certification Type'
+
+      click_on 'Delete'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete?')
+      alert.accept
+
+      page.should have_content 'All Certification Type'
+      page.should have_content 'Certification Type was successfully deleted.'
+    end
+  end
 end

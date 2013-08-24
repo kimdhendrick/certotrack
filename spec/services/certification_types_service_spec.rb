@@ -51,4 +51,14 @@ describe CertificationTypesService do
       certification_type.name.should_not == 'CPR'
     end
   end
+
+  describe 'delete_certification_type' do
+    it 'destroys the requested certification_type' do
+      certification_type = create_certification_type(customer: @customer)
+
+      expect {
+        CertificationTypesService.new.delete_certification_type(certification_type)
+      }.to change(CertificationType, :count).by(-1)
+    end
+  end
 end
