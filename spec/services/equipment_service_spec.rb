@@ -368,6 +368,7 @@ describe EquipmentService do
 
       equipment = EquipmentService.new.create_equipment(customer, attributes)
 
+      equipment.should be_persisted
       equipment.name.should == 'Box'
       equipment.serial_number.should == 'newSN'
       equipment.inspection_interval.should == '5 years'
@@ -382,7 +383,8 @@ describe EquipmentService do
       attributes =
         {
           'name' => 'Box',
-          'inspection_interval' => 'Not Required'
+          'inspection_interval' => 'Not Required',
+          'serial_number' => 'newSN'
         }
       customer = new_customer
 

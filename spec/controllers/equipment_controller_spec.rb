@@ -458,20 +458,17 @@ describe EquipmentController do
       describe 'with valid params' do
         it 'creates a new Equipment' do
           EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(new_equipment)
-          expect {
-            post :create, {:equipment => equipment_attributes}, valid_session
-          }.to change(Equipment, :count).by(1)
+          post :create, {:equipment => equipment_attributes}, valid_session
         end
 
         it 'assigns a newly created equipment as @equipment' do
           EquipmentService.any_instance.stub(:create_equipment).and_return(new_equipment)
           post :create, {:equipment => equipment_attributes}, valid_session
           assigns(:equipment).should be_a(Equipment)
-          assigns(:equipment).should be_persisted
         end
 
         it 'redirects to the created equipment' do
-          EquipmentService.any_instance.stub(:create_equipment).and_return(new_equipment)
+          EquipmentService.any_instance.stub(:create_equipment).and_return(create_equipment)
           post :create, {:equipment => equipment_attributes}, valid_session
           response.should redirect_to(Equipment.last)
         end
@@ -489,7 +486,6 @@ describe EquipmentController do
 
         it "re-renders the 'new' template" do
           EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(new_equipment)
-          Equipment.any_instance.stub(:save).and_return(false)
           post :create, {:equipment => {'name' => 'invalid value'}}, valid_session
           response.should render_template('new')
         end
@@ -508,18 +504,15 @@ describe EquipmentController do
         sign_in stub_admin
       end
 
-      it 'creates a new Equipment' do
+      it 'calls EquipmentService' do
         EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(new_equipment)
-        expect {
-          post :create, {:equipment => equipment_attributes}, valid_session
-        }.to change(Equipment, :count).by(1)
+        post :create, {:equipment => equipment_attributes}, valid_session
       end
 
       it 'assigns a newly created equipment as @equipment' do
         EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(new_equipment)
         post :create, {:equipment => equipment_attributes}, valid_session
         assigns(:equipment).should be_a(Equipment)
-        assigns(:equipment).should be_persisted
       end
     end
 

@@ -48,22 +48,19 @@ describe CertificationTypesController do
       end
 
       describe 'with valid params' do
-        it 'creates a new CertificationType' do
+        it 'calls CertificationTypesService' do
           CertificationTypesService.any_instance.should_receive(:create_certification_type).once.and_return(new_certification_type)
-          expect {
-            post :create, {:certification_type => certification_type_attributes}, valid_session
-          }.to change(CertificationType, :count).by(1)
+          post :create, {:certification_type => certification_type_attributes}, valid_session
         end
 
         it 'assigns a newly created certification_type as @certification_type' do
           CertificationTypesService.any_instance.stub(:create_certification_type).and_return(new_certification_type)
           post :create, {:certification_type => certification_type_attributes}, valid_session
           assigns(:certification_type).should be_a(CertificationType)
-          assigns(:certification_type).should be_persisted
         end
 
         it 'redirects to the created certification_type' do
-          CertificationTypesService.any_instance.stub(:create_certification_type).and_return(new_certification_type)
+          CertificationTypesService.any_instance.stub(:create_certification_type).and_return(create_certification_type)
           post :create, {:certification_type => certification_type_attributes}, valid_session
           response.should redirect_to(CertificationType.last)
         end
@@ -100,18 +97,15 @@ describe CertificationTypesController do
         sign_in stub_admin
       end
 
-      it 'creates a new CertificationType' do
+      it 'calls CertificationTypesService' do
         CertificationTypesService.any_instance.should_receive(:create_certification_type).once.and_return(new_certification_type)
-        expect {
-          post :create, {:certification_type => certification_type_attributes}, valid_session
-        }.to change(CertificationType, :count).by(1)
+        post :create, {:certification_type => certification_type_attributes}, valid_session
       end
 
       it 'assigns a newly created certification_type as @certification_type' do
         CertificationTypesService.any_instance.should_receive(:create_certification_type).once.and_return(new_certification_type)
         post :create, {:certification_type => certification_type_attributes}, valid_session
         assigns(:certification_type).should be_a(CertificationType)
-        assigns(:certification_type).should be_persisted
       end
     end
 

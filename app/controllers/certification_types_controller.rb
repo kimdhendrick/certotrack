@@ -40,12 +40,9 @@ class CertificationTypesController < ApplicationController
   def create
     authorize! :create, :certification
 
-    @certification_type =
-      @certification_types_service.create_certification_type(
-        current_user.customer,
-        _certification_type_params)
+    @certification_type = @certification_types_service.create_certification_type(current_user.customer, _certification_type_params)
 
-    if @certification_type.save
+    if @certification_type.persisted?
       redirect_to @certification_type, notice: 'Certification Type was successfully created.'
     else
       assign_intervals

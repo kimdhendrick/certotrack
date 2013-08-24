@@ -13,6 +13,7 @@ describe CertificationTypesService do
 
       certification_type = CertificationTypesService.new.create_certification_type(customer, attributes)
 
+      certification_type.should be_persisted
       certification_type.name.should == 'Box'
       certification_type.units_required.should == 15
       certification_type.interval.should == '5 years'

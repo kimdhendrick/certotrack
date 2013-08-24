@@ -54,6 +54,7 @@ class EquipmentService
     equipment.update(last_inspection_date: _format_date(attributes['last_inspection_date']))
     equipment.update(expiration_date: equipment.expires_on)
     equipment.customer = customer
+    equipment.save
     equipment
   end
 

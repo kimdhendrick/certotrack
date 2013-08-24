@@ -64,7 +64,7 @@ class EquipmentController < ApplicationController
 
     @equipment = @equipment_service.create_equipment(current_user.customer, equipment_params)
 
-    if @equipment.save
+    if @equipment.persisted?
       redirect_to @equipment, notice: 'Equipment was successfully created.'
     else
       assign_intervals
