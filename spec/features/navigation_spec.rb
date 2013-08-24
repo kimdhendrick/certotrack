@@ -202,16 +202,40 @@ describe 'Navigation', js:true do
       click_on 'Create Certification Type'
       page.should have_content 'Create Certification Type'
 
-      # TODO
       visit certification_type_path certification_type.id
-      #click_link 'Edit'
-      #page.should have_content 'Edit Equipment'
+      click_link 'Edit'
+      page.should have_content 'Edit Certification Type'
 
       visit certification_type_path certification_type.id
       click_link 'Delete'
       alert = page.driver.browser.switch_to.alert
       alert.text.should eq('Are you sure you want to delete?')
       alert.dismiss
+    end
+
+    it 'should navigate Edit Certification Type' do
+      certification_type = create_certification_type(customer: @customer)
+
+      visit certification_type_path certification_type.id
+
+      click_on 'Edit'
+      page.should have_content 'Edit Certification Type'
+      page.should have_link 'Home'
+      page.should have_link 'All Certification Types'
+      page.should have_link 'Create Certification Type'
+
+      click_on 'Home'
+      page.should have_content 'Welcome to Certotrack'
+      visit certification_type_path certification_type.id
+      click_on 'Edit'
+
+      # TODO
+      #click_on 'All Certification Types'
+      #visit certification_type_path certification_type.id
+      #click_on 'Edit'
+
+      click_on 'Create Certification Type'
+      page.should have_content 'Create Certification Type'
     end
   end
 end

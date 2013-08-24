@@ -5,4 +5,9 @@ class CertificationTypesService
     certification_type.customer = customer
     certification_type
   end
+
+  def update_certification_type(certification_type, attributes)
+    certification_type.update(attributes)
+    certification_type.save
+  end
 end

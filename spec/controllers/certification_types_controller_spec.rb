@@ -128,5 +128,147 @@ describe CertificationTypesController do
       end
     end
   end
-end
 
+  describe 'GET edit' do
+    context 'when certification user' do
+      before do
+        sign_in stub_certification_user
+      end
+
+      it 'assigns the requested certification_type as @certification_type' do
+        certification_type = create_certification_type(customer: @customer)
+        get :edit, {:id => certification_type.to_param}, valid_session
+        assigns(:certification_type).should eq(certification_type)
+      end
+
+      it 'assigns @intervals' do
+        certification_type = create_certification_type(customer: @customer)
+        get :edit, {:id => certification_type.to_param}, valid_session
+        assigns(:intervals).should eq(Interval.all.to_a)
+      end
+
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'assigns the requested certification_type as @certification_type' do
+        certification_type = create_certification_type(customer: @customer)
+        get :edit, {:id => certification_type.to_param}, valid_session
+        assigns(:certification_type).should eq(certification_type)
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'does not assign certification_type as @certification_type' do
+        certification_type = create_certification_type(customer: @customer)
+        get :edit, {:id => certification_type.to_param}, valid_session
+        assigns(:certification_type).should be_nil
+      end
+    end
+  end
+
+  describe 'PUT update' do
+    context 'when certification_type user' do
+      before do
+        sign_in stub_certification_user
+      end
+
+      describe 'with valid params' do
+        it 'updates the requested certification_type' do
+          certification_type = create_certification_type(customer: @customer)
+          CertificationTypesService.any_instance.should_receive(:update_certification_type).once
+
+          put :update, {:id => certification_type.to_param, :certification_type =>
+            {
+              'name' => 'Box',
+              'interval' => 'Annually',
+              'units_required' => '99'
+            }
+          }, valid_session
+        end
+
+        it 'assigns the requested certification_type as @certification_type' do
+          CertificationTypesService.any_instance.stub(:update_certification_type).and_return(true)
+          certification_type = create_certification_type(customer: @customer)
+          put :update, {:id => certification_type.to_param, :certification_type => certification_type_attributes}, valid_session
+          assigns(:certification_type).should eq(certification_type)
+        end
+
+        it 'redirects to the certification_type' do
+          CertificationTypesService.any_instance.stub(:update_certification_type).and_return(true)
+          certification_type = create_certification_type(customer: @customer)
+          put :update, {:id => certification_type.to_param, :certification_type => certification_type_attributes}, valid_session
+          response.should redirect_to(certification_type)
+        end
+      end
+
+      describe 'with invalid params' do
+        it 'assigns the certification_type as @certification_type' do
+          certification_type = create_certification_type(customer: @customer)
+          CertificationTypesService.any_instance.stub(:update_certification_type).and_return(false)
+          put :update, {:id => certification_type.to_param, :certification_type => {'name' => 'invalid value'}}, valid_session
+          assigns(:certification_type).should eq(certification_type)
+        end
+
+        it "re-renders the 'edit' template" do
+          certification_type = create_certification_type(customer: @customer)
+          CertificationTypesService.any_instance.stub(:update_certification_type).and_return(false)
+          put :update, {:id => certification_type.to_param, :certification_type => {'name' => 'invalid value'}}, valid_session
+          response.should render_template('edit')
+        end
+
+        it 'assigns @intervals' do
+          certification_type = create_certification_type(customer: @customer)
+          CertificationTypesService.any_instance.stub(:update_certification_type).and_return(false)
+          put :update, {:id => certification_type.to_param, :certification_type => {'name' => 'invalid value'}}, valid_session
+          assigns(:intervals).should eq(Interval.all.to_a)
+        end
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'updates the requested certification_type' do
+        certification_type = create_certification_type(customer: @customer)
+        CertificationTypesService.any_instance.should_receive(:update_certification_type).once
+
+        put :update, {:id => certification_type.to_param, :certification_type =>
+          {
+            'name' => 'Box',
+            'interval' => 'Annually',
+            'units_required' => 89
+          }
+        }, valid_session
+      end
+
+      it 'assigns the requested certification_type as @certification_type' do
+        certification_type = create_certification_type(customer: @customer)
+        CertificationTypesService.any_instance.stub(:update_certification_type).and_return(certification_type)
+        put :update, {:id => certification_type.to_param, :certification_type => certification_type_attributes}, valid_session
+        assigns(:certification_type).should eq(certification_type)
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'does not assign certification_type as @certification_type' do
+        certification_type = create_certification_type(customer: @customer)
+        put :update, {:id => certification_type.to_param, :certification_type => certification_type_attributes}, valid_session
+        assigns(:certification_type).should be_nil
+      end
+    end
+  end
+end

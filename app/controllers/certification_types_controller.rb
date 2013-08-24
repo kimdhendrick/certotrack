@@ -16,6 +16,21 @@ class CertificationTypesController < ApplicationController
   def show
   end
 
+  def edit
+    assign_intervals
+  end
+
+  def update
+    success = @certification_types_service.update_certification_type(@certification_type, _certification_type_params)
+
+    if success
+      redirect_to @certification_type, notice: 'Certification Type was successfully updated.'
+    else
+      assign_intervals
+      render action: 'edit'
+    end
+  end
+
   def new
     authorize! :create, :certification
     @certification_type = CertificationType.new
@@ -26,7 +41,7 @@ class CertificationTypesController < ApplicationController
     authorize! :create, :certification
 
     @certification_type =
-      @certification_type_service.create_certification_type(
+      @certification_types_service.create_certification_type(
         current_user.customer,
         _certification_type_params)
 
@@ -42,7 +57,7 @@ class CertificationTypesController < ApplicationController
   end
 
   def load_certification_type_service(service = CertificationTypesService.new)
-    @certification_type_service ||= service
+    @certification_types_service ||= service
   end
 
   private
