@@ -639,16 +639,19 @@ describe EquipmentController do
         sign_in stub_equipment_user
       end
 
-      it 'destroys the requested equipment' do
+      it 'calls EquipmentService' do
         equipment = create_equipment(customer: @customer)
-        expect {
-          delete :destroy, {:id => equipment.to_param}, valid_session
-        }.to change(Equipment, :count).by(-1)
+        EquipmentService.any_instance.should_receive(:delete_equipment).once
+
+        delete :destroy, {:id => equipment.to_param}, valid_session
       end
 
       it 'redirects to the equipment list' do
         equipment = create_equipment(customer: @customer)
+        EquipmentService.any_instance.should_receive(:delete_equipment).once
+
         delete :destroy, {:id => equipment.to_param}, valid_session
+
         response.should redirect_to(equipment_index_url)
       end
     end
@@ -658,24 +661,11 @@ describe EquipmentController do
         sign_in stub_admin
       end
 
-      it 'destroys the requested equipment' do
+      it 'calls EquipmentService' do
         equipment = create_equipment(customer: @customer)
-        expect {
-          delete :destroy, {:id => equipment.to_param}, valid_session
-        }.to change(Equipment, :count).by(-1)
-      end
-    end
+        EquipmentService.any_instance.should_receive(:delete_equipment).once
 
-    context 'when guest user' do
-      before do
-        sign_in stub_guest_user
-      end
-
-      it 'does not destroy any equipment' do
-        equipment = create_equipment(customer: @customer)
-        expect {
-          delete :destroy, {:id => equipment.to_param}, valid_session
-        }.not_to change(Equipment, :count)
+        delete :destroy, {:id => equipment.to_param}, valid_session
       end
     end
   end

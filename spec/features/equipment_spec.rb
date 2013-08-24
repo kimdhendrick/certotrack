@@ -326,6 +326,42 @@ describe 'Equipment', js: true do
     end
   end
 
+  describe 'Delete Equipment' do
+    before do
+      login_as_equipment_user
+      @denver_location = create_location(name: 'Denver', customer_id: @customer.id)
+    end
+
+    it 'should delete existing equipment' do
+      valid_equipment = create_equipment(
+        customer: @customer,
+        name: 'Meter'
+      )
+
+      visit '/'
+      click_link 'All Equipment'
+      click_link 'Meter'
+
+      page.should have_content 'Show Equipment'
+      click_on 'Delete'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete?')
+      alert.dismiss
+
+      page.should have_content 'Show Equipment'
+
+      click_on 'Delete'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete?')
+      alert.accept
+
+      page.should have_content 'All Equipment'
+      page.should have_content 'Equipment was successfully deleted.'
+    end
+  end
+
   describe 'Reports' do
     context 'when an equipment user' do
       before do

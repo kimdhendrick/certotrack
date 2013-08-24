@@ -84,8 +84,8 @@ class EquipmentController < ApplicationController
   end
 
   def destroy
-    @equipment.destroy
-    redirect_to equipment_index_url
+    @equipment_service.delete_equipment(@equipment)
+    redirect_to equipment_index_url, notice: 'Equipment was successfully deleted.'
   end
 
   def search

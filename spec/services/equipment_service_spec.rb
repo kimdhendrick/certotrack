@@ -397,6 +397,16 @@ describe EquipmentService do
     end
   end
 
+  describe 'delete_equipment' do
+    it 'destroys the requested equipment' do
+      equipment = create_equipment(customer: @customer)
+
+      expect {
+        EquipmentService.new.delete_equipment(equipment)
+      }.to change(Equipment, :count).by(-1)
+    end
+  end
+
   describe 'performance testing of sorting' do
     it 'should time the sorting of equipment' do
 

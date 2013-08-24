@@ -58,6 +58,10 @@ class EquipmentService
     equipment
   end
 
+  def delete_equipment(equipment)
+    equipment.destroy
+  end
+
   def load_sort_service(service = SortService.new)
     @sort_service ||= service
   end
