@@ -123,7 +123,7 @@ describe 'Certification Type', js: true do
       page.should have_content 'Required Units 13'
     end
   end
-  
+
   describe 'Delete Certification Type' do
     before do
       login_as_certification_user
@@ -156,7 +156,7 @@ describe 'Certification Type', js: true do
       page.should have_content 'Certification Type was successfully deleted.'
     end
   end
-  
+
   describe 'All Certification Type Report' do
     context 'when a certification user' do
       before do
@@ -185,11 +185,7 @@ describe 'Certification Type', js: true do
         page.should have_content 'All Certification Types'
         page.should have_content 'Total: 2'
 
-        within 'table thead tr' do
-          page.should have_link 'Name'
-          page.should have_link 'Interval'
-          page.should have_link 'Required Units'
-        end
+        assert_report_headers_are_correct
 
         within 'table tbody tr:nth-of-type(1)' do
           page.should have_link 'CPR'
@@ -236,11 +232,11 @@ describe 'Certification Type', js: true do
         visit '/'
         click_link 'All Certification Types'
 
-        # Ascending search
+        # Ascending sort
         click_link 'Name'
         column_data_should_be_in_order(['alpha', 'beta', 'zeta'])
 
-        # Descending search
+        # Descending sort
         click_link 'Name'
         column_data_should_be_in_order(['zeta', 'beta', 'alpha'])
       end
@@ -258,7 +254,7 @@ describe 'Certification Type', js: true do
         visit '/'
         click_link 'All Certification Types'
 
-        # Ascending search
+        # Ascending sort
         click_link 'Interval'
         column_data_should_be_in_order(
           [
@@ -273,7 +269,7 @@ describe 'Certification Type', js: true do
           ]
         )
 
-        # Descending search
+        # Descending sort
         click_link 'Interval'
         column_data_should_be_in_order(
           [
@@ -339,6 +335,88 @@ describe 'Certification Type', js: true do
         page.should have_link '3'
         page.should have_link 'Next'
       end
+    end
+  end
+
+  describe 'Search Certification Types' do
+    context 'when a certification user' do
+      before do
+        login_as_certification_user
+      end
+
+      it 'should show Search Certification Types page' do
+        create_certification_type(
+          customer: @customer,
+          name: 'Unique Name'
+        )
+
+        create_certification_type(
+          customer: @customer,
+          name: 'Routine Examination'
+        )
+
+        visit '/'
+
+        click_on 'Search Certification Types'
+
+        page.should have_content 'Search Certification Types'
+
+        fill_in 'Name contains:', with: 'Unique'
+
+        click_on 'Search'
+
+        page.should have_content 'Search Certification Types'
+
+        assert_report_headers_are_correct
+
+        find 'table.sortable'
+
+        page.should have_link 'Unique Name'
+        page.should_not have_link 'Routine Examination'
+      end
+
+      it 'should search and sort simultaneously' do
+        create_certification_type(
+          customer: @customer,
+          name: 'Unique Name'
+        )
+
+        create_certification_type(
+          customer: @customer,
+          name: 'Routine Examination'
+        )
+
+        visit '/'
+        click_on 'Search'
+
+        page.should have_content 'Search Certification Types'
+
+        fill_in 'Name contains:', with: 'Unique'
+
+        click_on 'Search'
+
+        page.should have_content 'Search Certification Types'
+
+        assert_report_headers_are_correct
+
+        find 'table.sortable'
+
+        page.should have_link 'Unique Name'
+        page.should_not have_link 'Routine Examination'
+
+        click_on 'Name'
+
+        page.should have_link 'Unique Name'
+        page.should_not have_link 'Routine Examination'
+      end
+    end
+  end
+
+  def assert_report_headers_are_correct
+    within 'table thead tr' do
+      page.should have_link 'Name'
+      page.should have_link 'Interval'
+      page.should have_link 'Required Units'
     end
   end
 end

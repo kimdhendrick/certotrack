@@ -1,0 +1,29 @@
+<h1>Search Certification Types</h1>
+
+<div>Total: <%=@certification_types_count%></div>
+
+<%= link_to 'Home', root_path %> |
+<%= link_to "Create Certification Type", new_certification_type_path %>
+
+<%= form_tag search_certification_types_path, :method => 'get' do %>
+  <%= hidden_field_tag :direction, params[:direction] %>
+  <%= hidden_field_tag :sort, params[:sort] %>
+  <table>
+    <tr>
+      <td><label for="name">Name contains:</label></td>
+      <td>
+        <%= text_field_tag :name, params[:name] %>
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <%= submit_tag "Search", :name => nil %>
+      </td>
+    </tr>
+  </table>
+<% end %>
+
+<%= render 'certification_type_list'%>
+
+<%= will_paginate @certification_types %>

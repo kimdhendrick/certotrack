@@ -70,7 +70,7 @@ class EquipmentService
     @pagination_service ||= service
   end
 
-  def load_search_service(service = EquipmentSearchService.new)
+  def load_search_service(service = SearchService.new)
     @search_service ||= service
   end
 

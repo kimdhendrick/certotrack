@@ -91,6 +91,20 @@ describe CertificationTypesService do
       end
     end
 
+    context 'search' do
+      it 'should call SearchService to filter results' do
+        certification_types_service = CertificationTypesService.new
+        certification_types_service.load_sort_service(FakeService.new([]))
+        fake_search_service = certification_types_service.load_search_service(FakeService.new([]))
+
+        certification_types_service.get_all_certification_types(@my_user, {thing1: 'thing2'})
+
+        fake_search_service.received_message.should == :search
+        fake_search_service.received_params[0].should == []
+        fake_search_service.received_params[1].should == {thing1: 'thing2'}
+      end
+    end
+
     context 'an admin user' do
       it 'should return all certification_types' do
         my_certification_type = create_certification_type(customer: @my_customer)

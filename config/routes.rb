@@ -17,4 +17,5 @@ Certotrack::Application.routes.draw do
   get 'ajax_assignee', action: 'ajax_assignee', controller: 'equipment'
 
   resources :certification_types
+  get 'search_certification_types', action: 'search', controller: 'certification_types'
 end

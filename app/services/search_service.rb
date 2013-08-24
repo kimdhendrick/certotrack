@@ -1,4 +1,4 @@
-class EquipmentSearchService
+class SearchService
   def search(active_record_relation, params)
 
     query = nil

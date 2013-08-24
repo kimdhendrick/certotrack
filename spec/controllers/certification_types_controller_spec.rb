@@ -332,12 +332,12 @@ describe CertificationTypesController do
         assigns(:certification_types).should eq([certification_type])
       end
 
-      it 'assigns certification_type_count' do
+      it 'assigns certification_types_count' do
         CertificationTypesService.any_instance.stub(:get_all_certification_types).and_return([new_certification_type])
 
         get :index
 
-        assigns(:certification_type_count).should eq(1)
+        assigns(:certification_types_count).should eq(1)
       end
     end
 
@@ -374,4 +374,43 @@ describe CertificationTypesController do
     end
   end
 
+  describe 'GET search' do
+    it 'calls get_all_certification_types with current_user and params' do
+      my_user = stub_certification_user
+      sign_in my_user
+      fake_certification_types_service = controller.load_certification_types_service(FakeService.new([]))
+      params = {sort: 'name', direction: 'asc'}
+
+      get :search, params
+
+      fake_certification_types_service.received_messages.should == [:get_all_certification_types]
+      fake_certification_types_service.received_params[0].should == my_user
+      fake_certification_types_service.received_params[1]['sort'].should == 'name'
+      fake_certification_types_service.received_params[1]['direction'].should == 'asc'
+    end
+
+    context 'when certification user' do
+      before do
+        sign_in stub_certification_user
+      end
+
+      it 'assigns certification_types as @certification_types' do
+        certification_type = new_certification_type(customer: @customer)
+
+        CertificationTypesService.any_instance.stub(:get_all_certification_types).and_return([certification_type])
+
+        get :search
+
+        assigns(:certification_types).should eq([certification_type])
+      end
+
+      it 'assigns certification_types_count' do
+        CertificationTypesService.any_instance.stub(:get_all_certification_types).and_return([new_certification_type])
+
+        get :search
+
+        assigns(:certification_types_count).should eq(1)
+      end
+    end
+  end
 end

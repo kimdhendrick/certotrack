@@ -264,22 +264,33 @@ describe 'Navigation', js:true do
     end
 
     it 'navigates All Certification Types' do
-      visit equipment_index_path
+      visit certification_types_path
       page.should have_content 'All Certification Types'
-
-      click_on 'All Certification Types'
 
       click_link 'Home'
       page.should have_content 'Welcome to CertoTrack'
 
-      visit equipment_index_path
+      visit certification_types_path
       click_link 'Create Certification Type'
       page.should have_content 'Create Certification Type'
 
-      #TODO
-      #visit equipment_index_path
-      #click_link 'Search Certification Type'
-      #page.should have_content 'Search Certification Type'
+      visit certification_types_path
+      click_link 'Search Certification Types'
+      page.should have_content 'Search Certification Types'
+    end
+
+    it 'navigates Search Certification Types' do
+      visit root_path
+
+      click_link 'Search Certification Types'
+      page.should have_content 'Search Certification Types'
+
+      click_link 'Home'
+      page.should have_content 'Welcome to CertoTrack'
+
+      click_link 'Search Certification Types'
+      click_link 'Create Certification Type'
+      page.should have_content 'Create Certification Type'
     end
   end
 end

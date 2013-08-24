@@ -13,7 +13,7 @@ class CertificationTypesController < ApplicationController
     authorize! :read, :certification
 
     @certification_types = @certification_types_service.get_all_certification_types(current_user, params)
-    @certification_type_count = @certification_types.count
+    @certification_types_count = @certification_types.count
   end
 
   def show
@@ -56,6 +56,12 @@ class CertificationTypesController < ApplicationController
   def destroy
     @certification_types_service.delete_certification_type(@certification_type)
     redirect_to certification_types_path, notice: 'Certification Type was successfully deleted.'
+  end
+
+  def search
+    authorize! :read, :certification
+    @certification_types = @certification_types_service.get_all_certification_types(current_user, params)
+    @certification_types_count = @certification_types.count
   end
 
   def load_certification_types_service(service = CertificationTypesService.new)

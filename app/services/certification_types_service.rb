@@ -2,6 +2,7 @@ class CertificationTypesService
 
   def get_all_certification_types(user, params = {})
     certification_types = user.admin? ? CertificationType.all : CertificationType.where(customer: user.customer)
+    certification_types = load_search_service.search(certification_types, params)
     certification_types = load_sort_service.sort(certification_types, params[:sort], params[:direction])
     load_pagination_service.paginate(certification_types, params[:page])
   end
@@ -28,5 +29,9 @@ class CertificationTypesService
 
   def load_pagination_service(service = PaginationService.new)
     @pagination_service ||= service
+  end
+
+  def load_search_service(service = SearchService.new)
+    @search_service ||= service
   end
 end
