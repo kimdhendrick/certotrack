@@ -18,4 +18,6 @@ Certotrack::Application.routes.draw do
 
   resources :certification_types
   get 'search_certification_types', action: 'search', controller: 'certification_types'
+
+  resources :employees
 end

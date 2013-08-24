@@ -87,6 +87,7 @@ describe 'Equipment', js: true do
       click_on 'Create'
 
       page.should have_content 'Show Equipment'
+      page.should have_content 'Equipment was successfully created.'
 
       page.should have_content 'Level'
       page.should have_content '765-CKD'

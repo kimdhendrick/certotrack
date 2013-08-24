@@ -72,6 +72,21 @@ describe User do
       it { should_not be_able_to(:manage, other_customer_certification_type) }
     end
 
+    context 'when user is a certification user with employee' do
+      let(:user) {
+        new_user(roles: ['certification'], customer: new_customer)
+      }
+      let(:own_employee) {
+        new_employee(customer: user.customer)
+      }
+      let(:other_employee) {
+        new_employee(customer: new_customer)
+      }
+
+      it { should be_able_to(:manage, own_employee) }
+      it { should_not be_able_to(:manage, other_employee) }
+    end
+
     context 'when user is a vehicle user' do
       let(:user) { new_user(roles: ['vehicle']) }
 

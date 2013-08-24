@@ -95,11 +95,15 @@ module ObjectMother
   end
 
   def new_employee(options = {})
-    valid_attributes = {
+    _apply(Employee.new, employee_attributes, options)
+  end
+
+  def employee_attributes
+    {
       first_name: 'John',
-      last_name: 'Smith'
+      last_name: 'Smith',
+      employee_number: '876ABC'
     }
-    _apply(Employee.new, valid_attributes, options)
   end
 
   def create_certification_type(options = {})

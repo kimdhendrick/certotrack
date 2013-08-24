@@ -186,22 +186,31 @@ describe 'Navigation', js:true do
 
       page.should have_link 'Create Certification Type'
       page.should have_link 'All Certification Types'
+      page.should have_link 'Create Employee'
 
       click_link 'Create Certification Type'
       page.should have_content 'Create Certification Type'
+
+      visit root_path
+      click_link 'All Certification Types'
+      page.should have_content 'All Certification Types'
+
+      visit root_path
+      click_link 'Create Employee'
+      page.should have_content 'Create Employee'
     end
 
     it 'navigates Create Certification Type' do
       visit new_certification_type_path
       page.should have_content 'Create Certification Type'
-      page.should have_content 'All Certification Types'
+      page.should have_link 'Search Certification Types'
 
       click_link 'Home'
       page.should have_content 'Welcome to CertoTrack'
 
       visit new_certification_type_path
-      click_link 'All Certification Types'
-      page.should have_content 'All Certification Types'
+      click_link 'Search Certification Types'
+      page.should have_content 'Search Certification Types'
     end
 
     it 'navigates Show Certification Type' do
@@ -291,6 +300,21 @@ describe 'Navigation', js:true do
       click_link 'Search Certification Types'
       click_link 'Create Certification Type'
       page.should have_content 'Create Certification Type'
+    end
+
+    it 'navigates Create Employee' do
+      visit new_employee_path
+      page.should have_content 'Create Employee'
+      page.should have_link 'Home'
+      #TODO
+      #page.should have_link 'Search Employees'
+
+      click_on 'Home'
+      page.should have_content 'Welcome to CertoTrack'
+
+      #TODO
+      #click_on 'Search Employees'
+      #page.should have_content 'Search Employees'
     end
   end
 end

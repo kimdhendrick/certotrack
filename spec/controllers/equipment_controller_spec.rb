@@ -727,7 +727,7 @@ describe EquipmentController do
 
       it 'assigns employees' do
         employee = new_employee
-        EmployeeService.any_instance.stub(:get_all_employees).and_return([employee])
+        EmployeesService.any_instance.stub(:get_all_employees).and_return([employee])
 
         get :search
 
@@ -754,7 +754,7 @@ describe EquipmentController do
 
       it 'should return employees when assignee is Employee' do
         employee = create_employee(first_name: 'The', last_name: 'Wizard')
-        EmployeeService.any_instance.should_receive(:get_all_employees).once.and_return([employee])
+        EmployeesService.any_instance.should_receive(:get_all_employees).once.and_return([employee])
         get :ajax_assignee, {assignee: 'Employee'}
         json = JSON.parse(response.body)
         json.should == [

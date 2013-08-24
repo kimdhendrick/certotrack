@@ -1,6 +1,6 @@
 <% if @certification_type.errors.any? %>
   <div id="error_explanation">
-    <h2><%= pluralize(@certification_type.errors.count, "error") %> prohibited this certification type from being saved:</h2>
+    <h2><%= pluralize(@certification_type.errors.count, "error") %> prohibited this Certification Type from being saved:</h2>
 
     <ul>
       <% @certification_type.errors.full_messages.each do |msg| %>

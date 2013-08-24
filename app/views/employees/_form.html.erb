@@ -1,0 +1,35 @@
+<%= form_for(@employee, data: { employee_form: "data-employee-form" }) do |f| %>
+
+  <%= render 'errors'%>
+
+  <div class="field">
+    <%= f.label :first_name, 'First Name' %>
+    <br/>
+    <%= f.text_field :first_name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :last_name, 'Last Name' %>
+    <br/>
+    <%= f.text_field :last_name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :employee_number, 'Employee Number' %>
+    <br/>
+    <%= f.text_field :employee_number %>
+  </div>
+
+  <div class="field">
+    <%= f.label :location %>
+    <br/>
+    <%= select(:employee, :location,
+               options_from_collection_for_select(@locations, 'id', 'name',
+                                                  @employee.location)) %>
+  </div>
+
+  <div class="actions">
+    <%= submit_tag(user_action) %>
+  </div>
+
+<% end %>

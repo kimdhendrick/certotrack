@@ -1,6 +1,6 @@
 <% if @equipment.errors.any? %>
   <div id="error_explanation">
-    <h2><%= pluralize(@equipment.errors.count, "error") %> prohibited this equipment from being saved:</h2>
+    <h2><%= pluralize(@equipment.errors.count, "error") %> prohibited this Equipment from being saved:</h2>
 
     <ul>
       <% @equipment.errors.full_messages.each do |msg| %>

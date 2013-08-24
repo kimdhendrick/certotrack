@@ -7,7 +7,7 @@ class EquipmentController < ApplicationController
                 :load_location_service, 
                 :load_employee_service
   
-  before_action :set_equipment, only: [:show, :edit, :update, :destroy]
+  before_action :_set_equipment, only: [:show, :edit, :update, :destroy]
 
   check_authorization
 
@@ -62,7 +62,7 @@ class EquipmentController < ApplicationController
   def create
     authorize! :create, :equipment
 
-    @equipment = @equipment_service.create_equipment(current_user.customer, equipment_params)
+    @equipment = @equipment_service.create_equipment(current_user.customer, _equipment_params)
 
     if @equipment.persisted?
       redirect_to @equipment, notice: 'Equipment was successfully created.'
@@ -73,7 +73,7 @@ class EquipmentController < ApplicationController
   end
 
   def update
-    success = @equipment_service.update_equipment(@equipment, equipment_params)
+    success = @equipment_service.update_equipment(@equipment, _equipment_params)
 
     if success
       redirect_to @equipment, notice: 'Equipment was successfully updated.'
@@ -112,7 +112,7 @@ class EquipmentController < ApplicationController
     @equipment_service ||= service
   end
 
-  def load_employee_service(service = EmployeeService.new)
+  def load_employee_service(service = EmployeesService.new)
     @employee_service ||= service
   end
 
@@ -123,13 +123,13 @@ class EquipmentController < ApplicationController
 
   private
 
-  def set_equipment
+  def _set_equipment
     equipment_pending_authorization = Equipment.find(params[:id])
     authorize! :manage, equipment_pending_authorization
     @equipment = equipment_pending_authorization
   end
 
-  def equipment_params
+  def _equipment_params
     params.require(:equipment).permit(equipment_accessible_parameters)
   end
 end
