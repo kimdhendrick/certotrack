@@ -23,6 +23,18 @@ describe Equipment do
     equipment.should be_valid
   end
 
+  it 'should give invalid date if date is more than 100 years in the future' do
+    equipment = new_equipment(last_inspection_date: Date.new(3000,1,1))
+    equipment.should_not be_valid
+    equipment.errors[:last_inspection_date].should == ['is an invalid date']
+  end
+
+  it 'should give invalid date if date is more than 100 years in the past' do
+    equipment = new_equipment(last_inspection_date: Date.new(1000,1,1))
+    equipment.should_not be_valid
+    equipment.errors[:last_inspection_date].should == ['is an invalid date']
+  end
+
   it 'should be able to assign a customer to equipment' do
     customer = new_customer
     equipment = new_equipment

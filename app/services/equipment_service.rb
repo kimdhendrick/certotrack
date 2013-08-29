@@ -78,7 +78,11 @@ class EquipmentService
 
   def _format_date(date)
     return nil unless date.present?
-    Date.strptime(date, '%m/%d/%Y')
+    begin
+      return Date.strptime(date, '%m/%d/%Y')
+    rescue ArgumentError
+      return nil
+    end
   end
 
   def _get_equipment_for_user(current_user)
