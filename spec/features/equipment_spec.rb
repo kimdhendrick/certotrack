@@ -126,6 +126,7 @@ describe 'Equipment', js: true do
       click_on 'Create'
 
       page.should have_content 'Show Equipment'
+      page.should have_content 'Equipment was successfully created.'
 
       page.should have_content 'Level'
       page.should have_content '765-CKD'
@@ -160,6 +161,7 @@ describe 'Equipment', js: true do
       click_on 'Create'
 
       page.should have_content 'Show Equipment'
+      page.should have_content 'Equipment was successfully created.'
 
       page.should have_content 'Level'
       page.should have_content '765-CKD'
@@ -206,6 +208,7 @@ describe 'Equipment', js: true do
       alert.accept
 
       page.should have_content 'Show Equipment'
+      page.should have_content 'Equipment was successfully created.'
       page.should have_content '01/01/2055'
     end
 
@@ -266,6 +269,7 @@ describe 'Equipment', js: true do
       click_on 'Update'
 
       page.should have_content 'Show Equipment'
+      page.should have_content 'Equipment was successfully updated.'
 
       page.should have_content 'Level'
       page.should have_content '765-CKD'
@@ -323,6 +327,7 @@ describe 'Equipment', js: true do
       alert.accept
 
       page.should have_content 'Show Equipment'
+      page.should have_content 'Equipment was successfully updated.'
       page.should have_content '01/01/2055'
     end
   end
