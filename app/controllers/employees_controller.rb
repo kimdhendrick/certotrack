@@ -53,6 +53,17 @@ class EmployeesController < ApplicationController
     end
   end
 
+  def destroy
+    status = @employee_service.delete(@employee)
+
+    if status == :equipment_exists
+      redirect_to @employee, notice: 'Employee has equipment assigned, you must remove them before deleting the employee. Or Deactivate the employee instead.'
+      return
+    end
+
+    redirect_to employees_url, notice: 'Employee was successfully deleted.'
+  end
+
   def load_employee_service(service = EmployeesService.new)
     @employee_service ||= service
   end

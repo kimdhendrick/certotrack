@@ -114,4 +114,29 @@ describe EmployeesService do
       employee.first_name.should_not == 'Susie'
     end
   end
+
+  describe 'delete_employee' do
+    it 'destroys the requested employee' do
+      employee = create_employee(customer: @customer)
+
+      expect {
+        EmployeesService.new.delete(employee)
+      }.to change(Employee, :count).by(-1)
+    end
+
+    it 'returns error when equipment assigned to employee' do
+      employee = create_employee(customer: @customer)
+      equipment = create_equipment(employee: employee, customer: @customer)
+
+      status = EmployeesService.new.delete(employee)
+
+      employee.reload
+      employee.should_not be_nil
+
+      equipment.reload
+      equipment.should_not be_nil
+
+      status.should == :equipment_exists
+    end
+  end
 end

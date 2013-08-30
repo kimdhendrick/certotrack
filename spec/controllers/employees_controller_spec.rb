@@ -191,7 +191,7 @@ describe EmployeesController do
   end
 
   describe 'GET show' do
-    context 'when employee user' do
+    context 'when certification user' do
       before do
         sign_in stub_certification_user
       end
@@ -229,7 +229,7 @@ describe EmployeesController do
   end
 
   describe 'GET edit' do
-    context 'when employee user' do
+    context 'when certification user' do
       before do
         sign_in stub_certification_user
       end
@@ -277,7 +277,7 @@ describe EmployeesController do
   end
 
   describe 'PUT update' do
-    context 'when employee user' do
+    context 'when certification user' do
       before do
         sign_in stub_certification_user
       end
@@ -394,6 +394,56 @@ describe EmployeesController do
         put :update, {:id => employee.to_param, :employee => employee_attributes}, valid_session
 
         assigns(:employee).should be_nil
+      end
+    end
+  end
+
+  describe 'DELETE destroy' do
+    context 'when certification user' do
+      before do
+        sign_in stub_certification_user
+      end
+
+      it 'calls EmployeesService' do
+        employee = create_employee(customer: @customer)
+        @fake_employee_service = controller.load_employee_service(FakeService.new(true))
+
+        delete :destroy, {:id => employee.to_param}, valid_session
+
+        @fake_employee_service.received_message.should == :delete
+      end
+
+      it 'redirects to the employee list' do
+        employee = create_employee(customer: @customer)
+        @fake_employee_service = controller.load_employee_service(FakeService.new(true))
+
+        delete :destroy, {:id => employee.to_param}, valid_session
+
+        response.should redirect_to(employees_url)
+        flash[:notice].should == 'Employee was successfully deleted.'
+      end
+
+      it 'gives error message when equipment exists' do
+        employee = create_employee(customer: @customer)
+        @fake_employee_service = controller.load_employee_service(FakeService.new(:equipment_exists))
+
+        delete :destroy, {:id => employee.to_param}, valid_session
+
+        response.should redirect_to(employee_url)
+        flash[:notice].should == 'Employee has equipment assigned, you must remove them before deleting the employee. Or Deactivate the employee instead.'
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'calls EmployeesService' do
+        employee = create_employee(customer: @customer)
+        @fake_employee_service = controller.load_employee_service(FakeService.new(true))
+
+        delete :destroy, {:id => employee.to_param}, valid_session
       end
     end
   end

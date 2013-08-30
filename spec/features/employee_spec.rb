@@ -335,6 +335,79 @@ describe 'Employee', js:true do
     end
   end
 
+  describe 'Delete Employee' do
+    before do
+      login_as_certification_user
+      @denver_location = create_location(name: 'Denver', customer_id: @customer.id)
+    end
+
+    it 'should delete existing employee' do
+      valid_employee = create_employee(
+        first_name: 'Sandee',
+        last_name: 'Walker',
+        employee_number: 'PUP789',
+        location_id: @denver_location.id,
+        customer: @customer
+      )
+
+      visit '/'
+      click_link 'All Employees'
+      click_link 'Sandee'
+
+      page.should have_content 'Show Employee'
+      click_on 'Delete'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete?')
+      alert.dismiss
+
+      page.should have_content 'Show Employee'
+
+      click_on 'Delete'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete?')
+      alert.accept
+
+      page.should have_content 'All Employees'
+      page.should have_content 'Employee was successfully deleted.'
+    end
+
+    it 'should not delete employee with equipment assigned' do
+      valid_employee = create_employee(
+        first_name: 'Sandee',
+        last_name: 'Walker',
+        employee_number: 'PUP789',
+        location_id: @denver_location.id,
+        customer: @customer
+      )
+
+      create_equipment(employee: valid_employee)
+
+      visit '/'
+      click_link 'All Employees'
+      click_link 'Sandee'
+
+      page.should have_content 'Show Employee'
+      click_on 'Delete'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete?')
+      alert.dismiss
+
+      page.should have_content 'Show Employee'
+
+      click_on 'Delete'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete?')
+      alert.accept
+
+      page.should have_content 'Show Employee'
+      page.should have_content 'Employee has equipment assigned, you must remove them before deleting the employee. Or Deactivate the employee instead.'
+    end
+  end
+
   def assert_report_headers_are_correct
     within 'table thead tr' do
       page.should have_link 'Employee Number'

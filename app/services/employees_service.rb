@@ -18,6 +18,14 @@ class EmployeesService
     employee.save
   end
 
+  def delete(employee)
+    if Equipment.where(employee: employee).any?
+      return :equipment_exists
+    end
+
+    employee.destroy
+  end
+
   def load_sort_service(service = SortService.new)
     @sort_service ||= service
   end
