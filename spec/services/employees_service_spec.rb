@@ -4,6 +4,7 @@ describe EmployeesService do
   describe 'get_all_employees' do
     before do
       @my_customer = create_customer
+      @my_user = create_user(customer: @my_customer)
       @my_employee = create_employee(customer: @my_customer)
       @other_employee = create_employee(customer: create_customer)
     end
@@ -23,7 +24,41 @@ describe EmployeesService do
         EmployeesService.new.get_all_employees(user).should == [@my_employee]
       end
     end
+
+    context 'sorting' do
+      it 'should call SortService to ensure sorting' do
+        employee_service = EmployeesService.new
+        fake_sort_service = employee_service.load_sort_service(FakeService.new([]))
+
+        employee_service.get_all_employees(@my_user)
+
+        fake_sort_service.received_message.should == :sort
+      end
+
+      it 'should default to sorted ascending by employee_number' do
+        employee_service = EmployeesService.new
+        fake_sort_service = employee_service.load_sort_service(FakeService.new([]))
+
+        employee_service.get_all_employees(@my_user)
+
+        fake_sort_service.received_message.should == :sort
+        fake_sort_service.received_params[3].should == 'employee_number'
+      end
+    end
+
+    context 'pagination' do
+      it 'should call PaginationService to paginate results' do
+        employee_service = EmployeesService.new
+        employee_service.load_sort_service(FakeService.new)
+        fake_pagination_service = employee_service.load_pagination_service(FakeService.new)
+
+        employee_service.get_all_employees(@my_user)
+
+        fake_pagination_service.received_message.should == :paginate
+      end
+    end
   end
+  
   describe 'create_employee' do
     it 'should create employee' do
       attributes =

@@ -1,11 +1,9 @@
 class EmployeesService
 
-  def get_all_employees(current_user)
-    if (current_user.admin?)
-      Employee.all
-    else
-      Employee.where(customer: current_user.customer)
-    end
+  def get_all_employees(current_user, params = {})
+    employees = current_user.admin? ? Employee.all : Employee.where(customer: current_user.customer)
+    employees = load_sort_service.sort(employees, params[:sort], params[:direction], 'employee_number')
+    load_pagination_service.paginate(employees, params[:page])
   end
 
   def create_employee(customer, attributes)
@@ -13,5 +11,13 @@ class EmployeesService
     @employee.customer = customer
     @employee.save
     @employee
+  end
+
+  def load_sort_service(service = SortService.new)
+    @sort_service ||= service
+  end
+
+  def load_pagination_service(service = PaginationService.new)
+    @pagination_service ||= service
   end
 end

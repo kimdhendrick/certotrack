@@ -1,0 +1,20 @@
+<table class="sortable">
+  <thead>
+  <tr>
+    <th><%= sortable 'employee_number' %></th>
+    <th><%= sortable 'first_name' %></th>
+    <th><%= sortable 'last_name' %></th>
+    <th><%= sortable 'location_name' %></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @employees.each do |employee| %>
+    <tr>
+      <td><%= link_to employee.employee_number, employee %></td></td>
+      <td><%= link_to employee.first_name, employee %></td></td>
+      <td><%= link_to employee.last_name, employee %></td></td>
+      <td><%= employee.location_name %></td></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

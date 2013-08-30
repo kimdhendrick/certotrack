@@ -17,4 +17,11 @@ describe Employee do
     @employee.last_name = 'Doe'
     @employee.to_s.should == 'Doe, John'
   end
+
+  it 'should respond to location_name' do
+    location = create_location(name: 'Location Name')
+    employee = create_employee(location_id: location.id)
+
+    employee.location_name.should == 'Location Name'
+  end
 end

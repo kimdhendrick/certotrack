@@ -8,4 +8,8 @@ class Employee < ActiveRecord::Base
   def to_s
     "#{last_name}, #{first_name}"
   end
+
+  def location_name
+    location.try(:to_s) || "Unassigned"
+  end
 end

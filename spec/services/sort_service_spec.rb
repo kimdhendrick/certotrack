@@ -16,18 +16,6 @@ describe SortService do
       results.should == ['alpha', 'beta', 'zeta', nil]
     end
 
-    it 'should sort dates ascending' do
-      today = Date.today
-      equipment =
-        [
-          new_equipment(expiration_date: today),
-          new_equipment(expiration_date: nil)
-        ]
-
-      results = SortService.new.sort(equipment, 'expiration_date', 'asc').map(&:expiration_date)
-      results.should == [today, nil]
-    end
-
     it 'should sort strings descending' do
       equipment =
         [
@@ -39,6 +27,18 @@ describe SortService do
 
       results = SortService.new.sort(equipment, 'name', 'desc').map(&:name)
       results.should == [nil, 'zeta', 'beta', 'alpha']
+    end
+
+    it 'should sort dates ascending' do
+      today = Date.today
+      equipment =
+        [
+          new_equipment(expiration_date: today),
+          new_equipment(expiration_date: nil)
+        ]
+
+      results = SortService.new.sort(equipment, 'expiration_date', 'asc').map(&:expiration_date)
+      results.should == [today, nil]
     end
 
     it 'should sort dates descending' do
@@ -63,6 +63,18 @@ describe SortService do
         ]
 
       results = SortService.new.sort(equipment, 'bad_column_name', 'asc').map(&:name)
+      results.should == ['alpha', 'beta', 'zeta']
+    end
+
+    it 'should default to specified column if provided' do
+      equipment =
+        [
+          new_equipment(serial_number: 'zeta', name: 'a'),
+          new_equipment(serial_number: 'beta', name: 'b'),
+          new_equipment(serial_number: 'alpha', name: 'c')
+        ]
+
+      results = SortService.new.sort(equipment, 'bad_column_name', 'asc', 'serial_number').map(&:serial_number)
       results.should == ['alpha', 'beta', 'zeta']
     end
 

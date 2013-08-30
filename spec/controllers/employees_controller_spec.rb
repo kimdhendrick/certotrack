@@ -122,4 +122,70 @@ describe EmployeesController do
       end
     end
   end
+  
+  describe 'GET index' do
+    it 'calls get_all_employees with current_user and params' do
+      my_user = stub_certification_user
+      sign_in my_user
+      @fake_employee_service = controller.load_employee_service(FakeService.new([]))
+      params = {sort: 'name', direction: 'asc'}
+
+      get :index, params
+
+      @fake_employee_service.received_messages.should == [:get_all_employees]
+      @fake_employee_service.received_params[0].should == my_user
+      @fake_employee_service.received_params[1]['sort'].should == 'name'
+      @fake_employee_service.received_params[1]['direction'].should == 'asc'
+    end
+
+    context 'when certification user' do
+      before do
+        sign_in stub_certification_user
+      end
+
+      it 'assigns @employees and @employees_count' do
+        employee = new_employee
+        @fake_employee_service = controller.load_employee_service(FakeService.new([employee]))
+
+        get :index
+
+        assigns(:employees).should eq([employee])
+        assigns(:employee_count).should eq(1)
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'assigns employee as @employee' do
+        employee = new_employee
+        @fake_employee_service = controller.load_employee_service(FakeService.new([employee]))
+
+        get :index
+
+        assigns(:employees).should eq([employee])
+        assigns(:employee_count).should eq(1)
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      describe 'GET index' do
+        it 'does not assign employee as @employee' do
+          employee = new_employee
+          @fake_employee_service = controller.load_employee_service(FakeService.new([employee]))
+
+          get :index
+
+          assigns(:employees).should be_nil
+          assigns(:employee_count).should be_nil
+        end
+      end
+    end
+  end
 end

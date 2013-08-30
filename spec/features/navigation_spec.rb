@@ -315,19 +315,36 @@ describe 'Navigation', js: true do
       visit search_certification_types_path
       click_and_test_link_with_title 'Create Certification Type'
     end
+  end
+
+  describe 'Employee Links' do
+    before do
+      login_as_certification_user
+    end
 
     it 'navigates Create Employee' do
       visit new_employee_path
       page.should have_content 'Create Employee'
       page.should have_link 'Home'
-      #TODO
-      #page.should have_link 'Search Employees'
+      page.should have_link 'All Employees'
 
       click_and_test_home_link
-      #TODO
-      #click_on 'Search Employees'
-      #page.should have_content 'Search Employees'
+      click_and_test_link_with_title 'All Employees'
     end
+
+    it 'navigates All Employees' do
+      visit employees_path
+      page.should have_content 'All Employees'
+
+      page.should have_link 'Home'
+      page.should have_link 'Create Employee'
+
+      click_and_test_home_link
+
+      visit employees_path
+      click_and_test_link_with_title 'Create Employee'
+    end
+
   end
 
   def click_and_test_home_link

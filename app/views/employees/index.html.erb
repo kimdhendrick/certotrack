@@ -1,0 +1,10 @@
+<h1>All Employees</h1>
+
+<div>Total: <%=@employee_count%></div>
+
+<%= link_to 'Home', root_path %> |
+<%= link_to "Create Employee", new_employee_path %>
+
+<%= render 'employee_list'%>
+
+<%= will_paginate @employees %>

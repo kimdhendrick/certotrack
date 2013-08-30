@@ -9,6 +9,13 @@ class EmployeesController < ApplicationController
 
   check_authorization
 
+  def index
+    authorize! :read, :certification
+
+    @employees = @employee_service.get_all_employees(current_user, params)
+    @employee_count = @employees.count
+  end
+
   def show
   end
 
