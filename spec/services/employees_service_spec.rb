@@ -120,7 +120,7 @@ describe EmployeesService do
       employee = create_employee(customer: @customer)
 
       expect {
-        EmployeesService.new.delete(employee)
+        EmployeesService.new.delete_employee(employee)
       }.to change(Employee, :count).by(-1)
     end
 
@@ -128,7 +128,7 @@ describe EmployeesService do
       employee = create_employee(customer: @customer)
       equipment = create_equipment(employee: employee, customer: @customer)
 
-      status = EmployeesService.new.delete(employee)
+      status = EmployeesService.new.delete_employee(employee)
 
       employee.reload
       employee.should_not be_nil

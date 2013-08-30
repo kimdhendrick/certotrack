@@ -410,7 +410,7 @@ describe EmployeesController do
 
         delete :destroy, {:id => employee.to_param}, valid_session
 
-        @fake_employee_service.received_message.should == :delete
+        @fake_employee_service.received_message.should == :delete_employee
       end
 
       it 'redirects to the employee list' do

@@ -18,7 +18,7 @@ class EmployeesService
     employee.save
   end
 
-  def delete(employee)
+  def delete_employee(employee)
     if Equipment.where(employee: employee).any?
       return :equipment_exists
     end
