@@ -1,7 +1,6 @@
 require 'spec_helper'
 
-describe 'Navigation', js:true do
-
+describe 'Navigation', js: true do
   describe 'Equipment Links' do
     before do
       login_as_equipment_user
@@ -17,78 +16,86 @@ describe 'Navigation', js:true do
       page.should have_link 'Non-Inspectable Equipment'
       page.should have_link 'Create Equipment'
 
-      click_link 'All Equipment'
-      page.should have_content 'All Equipment'
+      click_and_test_link_with_title 'All Equipment'
 
       visit root_path
-      click_link 'Create Equipment'
-      page.should have_content 'Create Equipment'
+      click_and_test_link_with_title 'Create Equipment'
     end
 
     it 'navigates All Equipment' do
       visit equipment_index_path
       page.should have_content 'All Equipment'
 
-      click_link 'Home'
-      page.should have_content 'Welcome to CertoTrack'
+      page.should have_link 'Home'
+      page.should have_link 'Create Equipment'
+      page.should have_link 'Search Equipment'
+
+      click_and_test_home_link
 
       visit equipment_index_path
-      click_link 'Create Equipment'
-      page.should have_content 'Create Equipment'
+      click_and_test_link_with_title 'Create Equipment'
 
       visit equipment_index_path
-      click_link 'Search Equipment'
-      page.should have_content 'Search Equipment'
+      click_and_test_link_with_title 'Search Equipment'
     end
 
     it 'navigates Expired Equipment List' do
       visit expired_equipment_path
       page.should have_content 'Expired Equipment List'
 
-      click_link 'Home'
-      page.should have_content 'Welcome to CertoTrack'
+      page.should have_link 'Home'
+      page.should have_link 'Create Equipment'
+      page.should have_link 'Search Equipment'
+
+      click_and_test_home_link
 
       visit expired_equipment_path
-      click_link 'Create Equipment'
-      page.should have_content 'Create Equipment'
+      click_and_test_link_with_title 'Create Equipment'
+
+      visit expired_equipment_path
+      click_and_test_link_with_title 'Search Equipment'
     end
 
     it 'navigates Expiring Equipment List' do
       visit expiring_equipment_path
       page.should have_content 'Expiring Equipment List'
 
-      click_link 'Home'
-      page.should have_content 'Welcome to CertoTrack'
+      page.should have_link 'Home'
+      page.should have_link 'Create Equipment'
+      page.should have_link 'Search Equipment'
+
+      click_and_test_home_link
 
       visit expiring_equipment_path
-      click_link 'Create Equipment'
-      page.should have_content 'Create Equipment'
+      click_and_test_link_with_title 'Create Equipment'
+
+      visit expiring_equipment_path
+      click_and_test_link_with_title 'Search Equipment'
     end
 
     it 'navigates Non-Inspectable Equipment List' do
       visit noninspectable_equipment_path
       page.should have_content 'Non-Inspectable Equipment List'
 
-      click_link 'Home'
-      page.should have_content 'Welcome to CertoTrack'
+      page.should have_link 'Home'
+      page.should have_link 'Create Equipment'
+      page.should have_link 'Search Equipment'
+
+      click_and_test_home_link
 
       visit noninspectable_equipment_path
-      click_link 'Create Equipment'
-      page.should have_content 'Create Equipment'
+      click_and_test_link_with_title 'Create Equipment'
+
+      visit noninspectable_equipment_path
+      click_and_test_link_with_title 'Search Equipment'
     end
 
     it 'navigates Create Equipment' do
       visit new_equipment_path
       page.should have_content 'Create Equipment'
-
-      click_link 'Home'
-      page.should have_content 'Welcome to CertoTrack'
-
+      click_and_test_home_link
       visit new_equipment_path
-      page.should have_content 'Create Equipment'
-
-      click_link 'Search Equipment'
-      page.should have_content 'Search Equipment'
+      click_and_test_link_with_title 'Search Equipment'
     end
 
     it 'navigates Show Equipment' do
@@ -97,25 +104,22 @@ describe 'Navigation', js:true do
 
       page.should have_link 'Home'
       page.should have_link 'All Equipment'
+      page.should have_link 'Search Equipment'
       page.should have_link 'Create Equipment'
 
       page.should have_link 'Edit'
       page.should have_link 'Delete'
 
-      click_link 'Home'
-      page.should have_content 'Welcome to CertoTrack'
+      click_and_test_home_link
 
       visit equipment_path equipment.id
-      click_link 'All Equipment'
-      page.should have_content 'All Equipment'
+      click_and_test_link_with_title 'All Equipment'
 
       visit equipment_path equipment.id
-      click_link 'Search Equipment'
-      page.should have_content 'Search Equipment'
+      click_and_test_link_with_title 'Search Equipment'
 
       visit equipment_path equipment.id
-      click_link 'Create Equipment'
-      page.should have_content 'Create Equipment'
+      click_and_test_link_with_title 'Create Equipment'
 
       visit equipment_path equipment.id
       click_link 'Edit'
@@ -140,16 +144,15 @@ describe 'Navigation', js:true do
 
       page.should have_link 'Delete'
 
-      click_on 'Home'
-      page.should have_content 'Welcome to CertoTrack'
+      click_and_test_home_link
       visit equipment_path equipment.id
       click_on 'Edit'
-      click_on 'All Equipment'
-      page.should have_content 'All Equipment'
+
+      click_and_test_link_with_title 'All Equipment'
       visit equipment_path equipment.id
       click_on 'Edit'
-      click_on 'Create Equipment'
-      page.should have_content 'Create Equipment'
+
+      click_and_test_link_with_title 'Create Equipment'
     end
 
     it 'navigates Search Equipment' do
@@ -161,17 +164,15 @@ describe 'Navigation', js:true do
 
       page.should have_content 'Search Equipment'
 
-      click_link 'Home'
-      page.should have_content 'Welcome to CertoTrack'
+      page.should have_link 'Home'
+      page.should have_link 'Create Equipment'
 
+      click_and_test_home_link
       within '[data-equipment-search-form]' do
         click_on 'Search'
       end
 
-      page.should have_content 'Search Equipment'
-
-      click_link 'Create Equipment'
-      page.should have_content 'Create Equipment'
+      click_and_test_link_with_title 'Create Equipment'
     end
   end
 
@@ -188,16 +189,14 @@ describe 'Navigation', js:true do
       page.should have_link 'All Certification Types'
       page.should have_link 'Create Employee'
 
-      click_link 'Create Certification Type'
-      page.should have_content 'Create Certification Type'
+
+      click_and_test_link_with_title 'Create Certification Type'
 
       visit root_path
-      click_link 'All Certification Types'
-      page.should have_content 'All Certification Types'
+      click_and_test_link_with_title 'All Certification Types'
 
       visit root_path
-      click_link 'Create Employee'
-      page.should have_content 'Create Employee'
+      click_and_test_link_with_title 'Create Employee'
     end
 
     it 'navigates Create Certification Type' do
@@ -205,12 +204,10 @@ describe 'Navigation', js:true do
       page.should have_content 'Create Certification Type'
       page.should have_link 'Search Certification Types'
 
-      click_link 'Home'
-      page.should have_content 'Welcome to CertoTrack'
+      click_and_test_home_link
 
       visit new_certification_type_path
-      click_link 'Search Certification Types'
-      page.should have_content 'Search Certification Types'
+      click_and_test_link_with_title 'Search Certification Types'
     end
 
     it 'navigates Show Certification Type' do
@@ -226,17 +223,15 @@ describe 'Navigation', js:true do
       page.should have_link 'Edit'
       page.should have_link 'Delete'
 
-      click_on 'Home'
-      page.should have_content 'Welcome to CertoTrack'
-      visit certification_type_path certification_type.id
-
-      click_on 'All Certification Types'
-      page.should have_content 'All Certification Types'
-      visit certification_type_path certification_type.id
+      click_and_test_home_link
 
       visit certification_type_path certification_type.id
-      click_on 'Create Certification Type'
-      page.should have_content 'Create Certification Type'
+
+      click_and_test_link_with_title 'All Certification Types'
+      visit certification_type_path certification_type.id
+
+      visit certification_type_path certification_type.id
+      click_and_test_link_with_title 'Create Certification Type'
 
       visit certification_type_path certification_type.id
       click_link 'Edit'
@@ -260,46 +255,38 @@ describe 'Navigation', js:true do
       page.should have_link 'All Certification Types'
       page.should have_link 'Create Certification Type'
 
-      click_on 'Home'
-      page.should have_content 'Welcome to CertoTrack'
+      click_and_test_home_link
+
       visit certification_type_path certification_type.id
       click_on 'Edit'
-      click_on 'All Certification Types'
-      page.should have_content 'All Certification Types'
+      click_and_test_link_with_title 'All Certification Types'
+
       visit certification_type_path certification_type.id
       click_on 'Edit'
-      click_on 'Create Certification Type'
-      page.should have_content 'Create Certification Type'
+      click_and_test_link_with_title 'Create Certification Type'
     end
 
     it 'navigates All Certification Types' do
       visit certification_types_path
       page.should have_content 'All Certification Types'
 
-      click_link 'Home'
-      page.should have_content 'Welcome to CertoTrack'
+      click_and_test_home_link
 
       visit certification_types_path
-      click_link 'Create Certification Type'
-      page.should have_content 'Create Certification Type'
+      click_and_test_link_with_title 'Create Certification Type'
 
       visit certification_types_path
-      click_link 'Search Certification Types'
-      page.should have_content 'Search Certification Types'
+      click_and_test_link_with_title 'Search Certification Types'
     end
 
     it 'navigates Search Certification Types' do
       visit root_path
 
-      click_link 'Search Certification Types'
-      page.should have_content 'Search Certification Types'
-
-      click_link 'Home'
-      page.should have_content 'Welcome to CertoTrack'
+      click_and_test_link_with_title 'Search Certification Types'
+      click_and_test_home_link
 
       click_link 'Search Certification Types'
-      click_link 'Create Certification Type'
-      page.should have_content 'Create Certification Type'
+      click_and_test_link_with_title 'Create Certification Type'
     end
 
     it 'navigates Create Employee' do
@@ -309,12 +296,20 @@ describe 'Navigation', js:true do
       #TODO
       #page.should have_link 'Search Employees'
 
-      click_on 'Home'
-      page.should have_content 'Welcome to CertoTrack'
-
+      click_and_test_home_link
       #TODO
       #click_on 'Search Employees'
       #page.should have_content 'Search Employees'
     end
+  end
+
+  def click_and_test_home_link
+    click_link 'Home'
+    page.should have_content 'Welcome to CertoTrack'
+  end
+
+  def click_and_test_link_with_title(link_title)
+    click_link link_title
+    page.should have_content link_title
   end
 end
