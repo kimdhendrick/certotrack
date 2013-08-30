@@ -51,7 +51,7 @@ class EmployeesController < ApplicationController
   def _set_employee
     employee_pending_authorization = Employee.find(params[:id])
     authorize! :manage, employee_pending_authorization
-    @equipment = employee_pending_authorization
+    @employee = employee_pending_authorization
   end
 
   def _employees_params

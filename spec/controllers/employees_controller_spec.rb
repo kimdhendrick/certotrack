@@ -188,4 +188,42 @@ describe EmployeesController do
       end
     end
   end
+
+  describe 'GET show' do
+    context 'when employee user' do
+      before do
+        sign_in stub_certification_user
+      end
+
+      it 'assigns employee as @employee' do
+        employee = create_employee(customer: @customer)
+        get :show, {:id => employee.to_param}, valid_session
+        assigns(:employee).should eq(employee)
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'assigns employee as @employee' do
+        employee = create_employee(customer: @customer)
+        get :show, {:id => employee.to_param}, valid_session
+        assigns(:employee).should eq(employee)
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'does not assign employee as @employee' do
+        employee = create_employee(customer: @customer)
+        get :show, {:id => employee.to_param}, valid_session
+        assigns(:employee).should be_nil
+      end
+    end
+  end
 end

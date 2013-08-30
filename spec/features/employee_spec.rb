@@ -244,6 +244,45 @@ describe 'Employee', js:true do
     end
   end
 
+  describe 'Show Employee' do
+    before do
+      login_as_certification_user
+      @denver_location = create_location(name: 'Denver', customer_id: @customer.id)
+    end
+
+    it 'should render employee show page' do
+      valid_employee = create_employee(
+        first_name: 'Sandee',
+        last_name: 'Walker',
+        employee_number: 'PUP789',
+        location_id: @denver_location.id,
+        customer: @customer
+      )
+
+      visit '/'
+      click_link 'All Employee'
+      click_link 'Sandee'
+
+      page.should have_content 'Show Employee'
+      page.should have_link 'Home'
+      page.should have_link 'All Employees'
+      page.should have_link 'Create Employee'
+
+      page.should have_content 'Employee Number'
+      page.should have_content 'First Name'
+      page.should have_content 'Last Name'
+      page.should have_content 'Location'
+
+      page.should have_content 'PUP789'
+      page.should have_content 'Sandee'
+      page.should have_content 'Walker'
+      page.should have_content 'Denver'
+
+      page.should have_link 'Edit'
+      page.should have_link 'Delete'
+    end
+  end
+
   def assert_report_headers_are_correct
     within 'table thead tr' do
       page.should have_link 'Employee Number'

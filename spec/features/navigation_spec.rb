@@ -345,6 +345,36 @@ describe 'Navigation', js: true do
       click_and_test_link_with_title 'Create Employee'
     end
 
+    it 'navigates Show Employee' do
+      employee = create_employee(customer: @customer)
+      visit employee_path employee.id
+      page.should have_content 'Show Employee'
+
+      page.should have_link 'Home'
+      page.should have_link 'All Employees'
+      page.should have_link 'Create Employee'
+
+      page.should have_link 'Edit'
+      page.should have_link 'Delete'
+
+      click_and_test_home_link
+
+      visit employee_path employee.id
+      click_and_test_link_with_title 'All Employees'
+
+      visit employee_path employee.id
+      click_and_test_link_with_title 'Create Employee'
+
+      #visit employee_path employee.id
+      #click_link 'Edit'
+      #page.should have_content 'Edit Employee'
+
+      visit employee_path employee.id
+      click_link 'Delete'
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete?')
+      alert.dismiss
+    end
   end
 
   def click_and_test_home_link

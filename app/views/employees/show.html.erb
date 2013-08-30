@@ -1,3 +1,28 @@
 <h1>Show Employee</h1>
 
-<%= link_to 'Home', root_path %>
+<%= link_to 'Home', root_path %> |
+<%= link_to 'All Employees', employees_path %> |
+<%= link_to 'Create Employee', new_employee_path %>
+
+<p>
+  <b>Employee Number</b>
+  <%= @employee.employee_number %>
+</p>
+
+<p>
+  <b>First Name</b>
+  <%= @employee.first_name %>
+</p>
+
+<p>
+  <b>Last Name</b>
+  <%= @employee.last_name %>
+</p>
+
+<p>
+  <b>Location</b>
+  <%= @employee.location_name %>
+</p>
+
+<%= link_to 'Edit', edit_employee_path(@employee) %> |
+<%= link_to 'Delete', @employee, method: :delete, data: {confirm: 'Are you sure you want to delete?'} %>
