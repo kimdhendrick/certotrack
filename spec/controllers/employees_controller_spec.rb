@@ -71,6 +71,7 @@ describe EmployeesController do
           EmployeesService.any_instance.stub(:create_employee).and_return(create_employee)
           post :create, {:employee => employee_attributes}, valid_session
           response.should redirect_to(Employee.last)
+          flash[:notice].should == 'Employee was successfully created.'
         end
       end
 
@@ -222,6 +223,176 @@ describe EmployeesController do
       it 'does not assign employee as @employee' do
         employee = create_employee(customer: @customer)
         get :show, {:id => employee.to_param}, valid_session
+        assigns(:employee).should be_nil
+      end
+    end
+  end
+
+  describe 'GET edit' do
+    context 'when employee user' do
+      before do
+        sign_in stub_certification_user
+      end
+
+      it 'assigns the requested employee as @employee' do
+        employee = create_employee(customer: @customer)
+        get :edit, {:id => employee.to_param}, valid_session
+        assigns(:employee).should eq(employee)
+      end
+
+      it 'assigns locations' do
+        location = new_location
+        @fake_location_service = controller.load_location_service(FakeService.new([location]))
+        employee = create_employee(customer: @customer)
+
+        get :edit, {:id => employee.to_param}, valid_session
+
+        assigns(:locations).should == [location]
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'assigns the requested employee as @employee' do
+        employee = create_employee(customer: @customer)
+        get :edit, {:id => employee.to_param}, valid_session
+        assigns(:employee).should eq(employee)
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'does not assign employee as @employee' do
+        employee = create_employee(customer: @customer)
+        get :edit, {:id => employee.to_param}, valid_session
+        assigns(:employee).should be_nil
+      end
+    end
+  end
+
+  describe 'PUT update' do
+    context 'when employee user' do
+      before do
+        sign_in stub_certification_user
+      end
+
+      describe 'with valid params' do
+        it 'updates the requested employee' do
+          employee = create_employee(customer: @customer)
+          @fake_employee_service = controller.load_employee_service(FakeService.new([]))
+
+          put :update, {:id => employee.to_param, :employee =>
+            {
+              'first_name' => 'Susie',
+              'last_name' => 'Sampson',
+              'employee_number' => 'newEmpNum',
+              'location_id' => 1,
+            }
+          }, valid_session
+
+          @fake_employee_service.received_messages.should == [:update_employee]
+        end
+
+        it 'assigns the requested employee as @employee' do
+          employee = create_employee(customer: @customer)
+          @fake_employee_service = controller.load_employee_service(FakeService.new(true))
+
+          put :update, {:id => employee.to_param, :employee => employee_attributes}, valid_session
+
+          assigns(:employee).should eq(employee)
+          @fake_employee_service.received_messages.should == [:update_employee]
+        end
+
+        it 'redirects to the employee' do
+          @fake_employee_service = controller.load_employee_service(FakeService.new(true))
+          employee = create_employee(customer: @customer)
+
+          put :update, {:id => employee.to_param, :employee => employee_attributes}, valid_session
+
+          response.should redirect_to(employee)
+          flash[:notice].should == 'Employee was successfully updated.'
+        end
+      end
+
+      describe 'with invalid params' do
+        it 'assigns the employee as @employee' do
+          employee = create_employee(customer: @customer)
+          @fake_employee_service = controller.load_employee_service(FakeService.new(false))
+
+          put :update, {:id => employee.to_param, :employee => {'name' => 'invalid value'}}, valid_session
+
+          assigns(:employee).should eq(employee)
+        end
+
+        it "re-renders the 'edit' template" do
+          employee = create_employee(customer: @customer)
+          @fake_employee_service = controller.load_employee_service(FakeService.new(false))
+
+          put :update, {:id => employee.to_param, :employee => {'name' => 'invalid value'}}, valid_session
+
+          response.should render_template('edit')
+        end
+
+        it 'assigns locations' do
+          @fake_employee_service = controller.load_employee_service(FakeService.new(false))
+          location = new_location
+          @fake_location_service = controller.load_location_service(FakeService.new([location]))
+          employee = create_employee(customer: @customer)
+
+          put :update, {:id => employee.to_param, :employee => employee_attributes}, valid_session
+
+          assigns(:locations).should == [location]
+        end
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'updates the requested employee' do
+        employee = create_employee(customer: @customer)
+        @fake_employee_service = controller.load_employee_service(FakeService.new(true))
+
+        put :update, {:id => employee.to_param, :employee =>
+          {
+            'first_name' => 'Susie',
+            'last_name' => 'Sampson',
+            'employee_number' => 'newEmpNum',
+            'location_id' => 1
+          }
+        }, valid_session
+
+        @fake_employee_service.received_messages.should == [:update_employee]
+      end
+
+      it 'assigns the requested employee as @employee' do
+        employee = create_employee(customer: @customer)
+        @fake_employee_service = controller.load_employee_service(FakeService.new(true))
+
+        put :update, {:id => employee.to_param, :employee => employee_attributes}, valid_session
+
+        assigns(:employee).should eq(employee)
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'does not assign employee as @employee' do
+        employee = create_employee(customer: @customer)
+
+        put :update, {:id => employee.to_param, :employee => employee_attributes}, valid_session
+
         assigns(:employee).should be_nil
       end
     end

@@ -469,8 +469,11 @@ describe EquipmentController do
 
         it 'redirects to the created equipment' do
           EquipmentService.any_instance.stub(:create_equipment).and_return(create_equipment)
+
           post :create, {:equipment => equipment_attributes}, valid_session
+
           response.should redirect_to(Equipment.last)
+          flash[:notice].should == 'Equipment was successfully created.'
         end
       end
 
@@ -562,8 +565,11 @@ describe EquipmentController do
         it 'redirects to the equipment' do
           EquipmentService.any_instance.stub(:update_equipment).and_return(true)
           equipment = create_equipment(customer: @customer)
+
           put :update, {:id => equipment.to_param, :equipment => equipment_attributes}, valid_session
+
           response.should redirect_to(equipment)
+          flash[:notice].should == 'Equipment was successfully updated.'
         end
       end
 
@@ -653,6 +659,7 @@ describe EquipmentController do
         delete :destroy, {:id => equipment.to_param}, valid_session
 
         response.should redirect_to(equipment_index_url)
+        flash[:notice].should == 'Equipment was successfully deleted.'
       end
     end
 

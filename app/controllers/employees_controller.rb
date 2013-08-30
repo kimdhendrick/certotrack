@@ -38,6 +38,21 @@ class EmployeesController < ApplicationController
     end
   end
 
+  def edit
+    @locations = @location_service.get_all_locations(current_user)
+  end
+
+  def update
+    success = @employee_service.update_employee(@employee, _employees_params)
+
+    if success
+      redirect_to @employee, notice: 'Employee was successfully updated.'
+    else
+      @locations = @location_service.get_all_locations(current_user)
+      render action: 'edit'
+    end
+  end
+
   def load_employee_service(service = EmployeesService.new)
     @employee_service ||= service
   end
@@ -57,5 +72,4 @@ class EmployeesController < ApplicationController
   def _employees_params
     params.require(:employee).permit(employees_accessible_parameters)
   end
-
 end

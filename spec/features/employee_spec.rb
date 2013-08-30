@@ -29,11 +29,10 @@ describe 'Employee', js:true do
       page.should have_content 'Show Employee'
       page.should have_content 'Employee was successfully created.'
 
-      #TODO show employee
-      #page.should have_content 'First Name Joe'
-      #page.should have_content 'Last Name Schmoe'
-      #page.should have_content 'Employee Number EMP3000'
-      #page.should have_content 'Location Golden'
+      page.should have_content 'First Name Joe'
+      page.should have_content 'Last Name Schmoe'
+      page.should have_content 'Employee Number EMP3000'
+      page.should have_content 'Location Golden'
     end
   end
 
@@ -280,6 +279,59 @@ describe 'Employee', js:true do
 
       page.should have_link 'Edit'
       page.should have_link 'Delete'
+    end
+  end
+
+  describe 'Update Employee' do
+    before do
+      login_as_certification_user
+      @denver_location = create_location(name: 'Denver', customer_id: @customer.id)
+      @littleton_location = create_location(name: 'Littleton', customer_id: @customer.id)
+    end
+
+    it 'should update existing employee' do
+      valid_employee = create_employee(
+        first_name: 'Sandee',
+        last_name: 'Walker',
+        employee_number: 'PUP789',
+        location_id: @denver_location.id,
+        customer: @customer
+      )
+
+      visit '/'
+      click_link 'All Employee'
+      click_link 'Sandee'
+
+      page.should have_content 'Show Employee'
+      click_on 'Edit'
+
+      page.should have_content 'Edit Employee'
+      page.should have_link 'Home'
+      page.should have_link 'All Employees'
+      page.should have_link 'Create Employee'
+
+      page.should have_content 'Employee Number'
+      page.should have_content 'First Name'
+      page.should have_content 'Last Name'
+      page.should have_content 'Location'
+
+      page.should have_link 'Delete'
+
+      fill_in 'First Name', with: 'Susie'
+      fill_in 'Last Name', with: 'Sampson'
+      fill_in 'Employee Number', with: '765-CKD'
+
+      select 'Littleton', from: 'Location'
+
+      click_on 'Update'
+
+      page.should have_content 'Show Employee'
+      page.should have_content 'Employee was successfully updated.'
+
+      page.should have_content 'Susie'
+      page.should have_content 'Sampson'
+      page.should have_content '765-CKD'
+      page.should have_content 'Littleton'
     end
   end
 

@@ -1,0 +1,9 @@
+<h1>Edit Employee</h1>
+
+<%= link_to 'Home', root_path %> |
+<%= link_to 'All Employees', employees_path %> |
+<%= link_to "Create Employee", new_employee_path %>
+
+<%= render 'form', user_action: 'Update' %>
+
+<%= link_to 'Delete', @employee, method: :delete, data: {confirm: 'Are you sure you want to delete?'} %>

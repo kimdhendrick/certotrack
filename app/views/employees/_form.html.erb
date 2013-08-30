@@ -21,11 +21,11 @@
   </div>
 
   <div class="field">
-    <%= f.label :location %>
+    <%= f.label :location_id, 'Location' %>
     <br/>
-    <%= select(:employee, :location,
+    <%= select(:employee, :location_id,
                options_from_collection_for_select(@locations, 'id', 'name',
-                                                  @employee.location)) %>
+                                                  @employee.location_id)) %>
   </div>
 
   <div class="actions">

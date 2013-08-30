@@ -80,4 +80,38 @@ describe EmployeesService do
       employee.customer.should == customer
     end
   end
+
+  describe 'update_employee' do
+    it 'should update employees attributes' do
+      employee = create_employee(customer: @customer)
+      attributes =
+        {
+          'id' => employee.id,
+          'first_name' => 'Susie',
+          'last_name' => 'Sampson',
+          'employee_number' => 'newEmpNum',
+          'location_id' => 99
+        }
+
+      success = EmployeesService.new.update_employee(employee, attributes)
+      success.should be_true
+
+      employee.reload
+      employee.first_name.should == 'Susie'
+      employee.last_name.should == 'Sampson'
+      employee.employee_number.should == 'newEmpNum'
+      employee.location_id.should == 99
+    end
+
+    it 'should return false if errors' do
+      employee = create_employee(customer: @customer)
+      employee.stub(:save).and_return(false)
+
+      success = EmployeesService.new.update_employee(employee, {})
+      success.should be_false
+
+      employee.reload
+      employee.first_name.should_not == 'Susie'
+    end
+  end
 end

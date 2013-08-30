@@ -13,6 +13,11 @@ class EmployeesService
     @employee
   end
 
+  def update_employee(employee, attributes)
+    employee.update_attributes(attributes)
+    employee.save
+  end
+
   def load_sort_service(service = SortService.new)
     @sort_service ||= service
   end
