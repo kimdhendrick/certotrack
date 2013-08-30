@@ -101,6 +101,7 @@ describe 'Navigation', js: true do
     it 'navigates Show Equipment' do
       equipment = create_equipment(customer: @customer)
       visit equipment_path equipment.id
+      page.should have_content 'Show Equipment'
 
       page.should have_link 'Home'
       page.should have_link 'All Equipment'
@@ -138,6 +139,8 @@ describe 'Navigation', js: true do
 
       click_on 'Edit'
 
+      page.should have_content 'Edit Equipment'
+
       page.should have_link 'Home'
       page.should have_link 'All Equipment'
       page.should have_link 'Create Equipment'
@@ -153,6 +156,13 @@ describe 'Navigation', js: true do
       click_on 'Edit'
 
       click_and_test_link_with_title 'Create Equipment'
+
+      visit equipment_path equipment.id
+      click_on 'Edit'
+      click_link 'Delete'
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete?')
+      alert.dismiss
     end
 
     it 'navigates Search Equipment' do
@@ -202,22 +212,20 @@ describe 'Navigation', js: true do
     it 'navigates Create Certification Type' do
       visit new_certification_type_path
       page.should have_content 'Create Certification Type'
-      page.should have_link 'Search Certification Types'
 
       click_and_test_home_link
-
       visit new_certification_type_path
       click_and_test_link_with_title 'Search Certification Types'
     end
 
     it 'navigates Show Certification Type' do
       certification_type = create_certification_type(customer: @customer)
-
       visit certification_type_path certification_type.id
-
       page.should have_content 'Show Certification Type'
+
       page.should have_link 'Home'
       page.should have_link 'All Certification Types'
+      page.should have_link 'Search Certification Types'
       page.should have_link 'Create Certification Type'
 
       page.should have_link 'Edit'
@@ -226,9 +234,10 @@ describe 'Navigation', js: true do
       click_and_test_home_link
 
       visit certification_type_path certification_type.id
-
       click_and_test_link_with_title 'All Certification Types'
+
       visit certification_type_path certification_type.id
+      click_and_test_link_with_title 'Search Certification Types'
 
       visit certification_type_path certification_type.id
       click_and_test_link_with_title 'Create Certification Type'
@@ -246,29 +255,43 @@ describe 'Navigation', js: true do
 
     it 'navigates Edit Certification Type' do
       certification_type = create_certification_type(customer: @customer)
-
       visit certification_type_path certification_type.id
 
       click_on 'Edit'
+
       page.should have_content 'Edit Certification Type'
+
       page.should have_link 'Home'
       page.should have_link 'All Certification Types'
       page.should have_link 'Create Certification Type'
 
+      page.should have_link 'Delete'
+
       click_and_test_home_link
-
       visit certification_type_path certification_type.id
       click_on 'Edit'
+
       click_and_test_link_with_title 'All Certification Types'
+      visit certification_type_path certification_type.id
+      click_on 'Edit'
+
+      click_and_test_link_with_title 'Create Certification Type'
 
       visit certification_type_path certification_type.id
       click_on 'Edit'
-      click_and_test_link_with_title 'Create Certification Type'
+      click_link 'Delete'
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete?')
+      alert.dismiss
     end
 
     it 'navigates All Certification Types' do
       visit certification_types_path
       page.should have_content 'All Certification Types'
+
+      page.should have_link 'Home'
+      page.should have_link 'Create Certification Type'
+      page.should have_link 'Search Certification Types'
 
       click_and_test_home_link
 
@@ -280,12 +303,16 @@ describe 'Navigation', js: true do
     end
 
     it 'navigates Search Certification Types' do
-      visit root_path
+      visit search_certification_types_path
 
-      click_and_test_link_with_title 'Search Certification Types'
+      page.should have_content 'Search Certification Types'
+
+      page.should have_link 'Home'
+      page.should have_link 'Create Certification Type'
+
       click_and_test_home_link
 
-      click_link 'Search Certification Types'
+      visit search_certification_types_path
       click_and_test_link_with_title 'Create Certification Type'
     end
 
