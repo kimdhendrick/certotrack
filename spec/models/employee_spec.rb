@@ -24,4 +24,9 @@ describe Employee do
 
     employee.location_name.should == 'Location Name'
   end
+
+  it 'should default active to true' do
+    employee = Employee.new
+    employee.active.should be_true
+  end
 end

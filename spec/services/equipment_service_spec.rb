@@ -407,6 +407,16 @@ describe EquipmentService do
     end
   end
 
+  describe 'get_all_equipment_for_employee' do
+    it 'returns only equipment assigned to employee' do
+      employee = create_employee
+      assigned_equipment = create_equipment(employee: employee)
+      unassigned_equipment = create_equipment(employee: nil)
+
+      EquipmentService.new.get_all_equipment_for_employee(employee).should == [assigned_equipment]
+    end
+  end
+
   describe 'performance testing of sorting' do
     it 'should time the sorting of equipment' do
 

@@ -5,23 +5,32 @@ describe EmployeesService do
     before do
       @my_customer = create_customer
       @my_user = create_user(customer: @my_customer)
-      @my_employee = create_employee(customer: @my_customer)
-      @other_employee = create_employee(customer: create_customer)
     end
 
     context 'when admin user' do
       it 'should return all employees' do
         admin_user = create_user(roles: ['admin'])
+        my_employee = create_employee(customer: @my_customer)
+        other_employee = create_employee(customer: create_customer)
 
-        EmployeesService.new.get_all_employees(admin_user).should == [@my_employee, @other_employee]
+        EmployeesService.new.get_all_employees(admin_user).should == [my_employee, other_employee]
       end
     end
 
     context 'when regular user' do
       it "should return only customer's employees" do
         user = create_user(customer: @my_customer)
+        my_employee = create_employee(customer: @my_customer)
+        other_employee = create_employee(customer: create_customer)
 
-        EmployeesService.new.get_all_employees(user).should == [@my_employee]
+        EmployeesService.new.get_all_employees(user).should == [my_employee]
+      end
+
+      it 'only returns active employees' do
+        active_employee = create_employee(active: true, customer: @my_customer)
+        inactive_employee = create_employee(active: false, customer: @my_customer)
+
+        EmployeesService.new.get_all_employees(@my_user).should == [active_employee]
       end
     end
 
@@ -137,6 +146,46 @@ describe EmployeesService do
       equipment.should_not be_nil
 
       status.should == :equipment_exists
+    end
+  end
+
+  describe 'deactivate_employee' do
+    it 'makes employee inactive' do
+      employee = new_employee(active: true)
+
+      EmployeesService.new.deactivate_employee(employee)
+
+      employee.should_not be_active
+    end
+
+    it "sets the employee's deactivation date" do
+      employee = create_employee(active: true, deactivation_date: nil)
+
+      EmployeesService.new.deactivate_employee(employee)
+
+      employee.reload
+      employee.deactivation_date.should == Date.today
+    end
+
+    it 'unassigns equipment' do
+      employee = create_employee
+      equipment = create_equipment(employee: employee)
+
+      EmployeesService.new.deactivate_employee(employee)
+      
+      equipment.reload
+      equipment.employee_id.should be_nil
+    end
+
+    it "does not unassign other employee's equipment" do
+      employee = create_employee
+      other_employee = create_employee
+      equipment = create_equipment(employee: other_employee)
+
+      EmployeesService.new.deactivate_employee(employee)
+
+      equipment.reload
+      equipment.employee_id.should == other_employee.id
     end
   end
 end

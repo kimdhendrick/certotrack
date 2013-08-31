@@ -62,6 +62,10 @@ class EquipmentService
     equipment.destroy
   end
 
+  def get_all_equipment_for_employee(employee)
+    Equipment.where(employee: employee)
+  end
+
   def load_sort_service(service = SortService.new)
     @sort_service ||= service
   end

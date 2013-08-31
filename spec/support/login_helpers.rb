@@ -16,6 +16,15 @@ module LoginHelpers
     login_as_user_with_role('certification')
   end
 
+  def login_as_equipment_and_certification_user
+    visit "#"
+    @customer ||= create_customer
+    user = create_user(customer: @customer, roles: ['equipment', 'certification'])
+    fill_in 'Username', with: user.username.upcase
+    fill_in 'Password', with: user.password
+    click_button 'Login'
+  end
+
   def login_as_admin
     login_as_user_with_role('admin')
   end

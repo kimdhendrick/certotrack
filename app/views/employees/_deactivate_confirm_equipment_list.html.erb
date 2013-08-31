@@ -1,0 +1,33 @@
+<table>
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Serial Number</th>
+    <th>Status</th>
+    <th>Inspection Interval</th>
+    <th>Last Inspection Date</th>
+    <th>Type</th>
+    <th>Expiration Date</th>
+    <th>Assignee</th>
+  </tr>
+  </thead>
+  <tbody>
+    <% if @equipment.count == 0 %>
+    <tr>
+      <td colspan="8">No equipment assigned to this employee.</td>
+    </tr>
+  <% end %>
+    <% @equipment.each do |equipment| %>
+    <tr>
+      <td><%= equipment.name %></td></td>
+      <td><%= equipment.serial_number %></td>
+      <td><%= equipment.status %></td>
+      <td><%= equipment.inspection_interval %></td>
+      <td><%= DateHelpers::format(equipment.last_inspection_date) %></td>
+      <td><%= equipment.inspection_type %></td>
+      <td><%= DateHelpers::format(equipment.expiration_date) %></td>
+      <td><%= display_assigned_to(equipment) %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,11 @@
+<h1>Confirm Deactivation</h1>
+
+<%= link_to 'Home', root_path %>
+
+<h2>Click Deactivate button at bottom to deactivate employee</h2>
+<h2>*The following equipment is assigned to this employee and will be unassigned if you continue:</h2>
+
+<%= render 'deactivate_confirm_equipment_list'%>
+
+<%= link_to 'Cancel', employee_path(@employee) %> |
+<%= link_to 'Deactivate', deactivate_path(@employee), data: {confirm: 'Deactivate Employee will unassign all equipment and remove employee.  Are you sure?'} %>
