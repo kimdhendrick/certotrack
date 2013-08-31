@@ -17,7 +17,7 @@ golden = create_location(name: 'Golden', customer: customer)
 boulder = create_location(name: 'Boulder', customer: customer)
 denver = create_location(name: 'Denver', customer: customer)
 john = create_employee(first_name: 'John', last_name: 'Doe', customer: customer, employee_number: 'JD123', location_id: golden)
-sue = create_employee(first_name: 'Sue', last_name: 'Smith', customer: customer, employee_number: 'JD123', location_id: denver)
+sue = create_employee(first_name: 'Sue', last_name: 'Smith', customer: customer, employee_number: 'SS123', location_id: denver)
 
 create_equipment(name: 'Meter', serial_number: 'ABC123', customer: customer, last_inspection_date: '01-01-2013',
                        inspection_interval: Interval::ONE_YEAR.text, expiration_date: '01-01-2014',

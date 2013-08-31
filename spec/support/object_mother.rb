@@ -102,7 +102,7 @@ module ObjectMother
     {
       first_name: 'John',
       last_name: 'Smith',
-      employee_number: '876ABC'
+      employee_number: "876ABC-#{_new_id}"
     }
   end
 

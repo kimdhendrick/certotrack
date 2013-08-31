@@ -207,38 +207,46 @@ describe 'Employee', js: true do
         find 'table.sortable'
 
         page.all('table tr').count.should == 25 + 1
-        page.should_not have_link 'Previous'
-        page.should_not have_link '1'
-        page.should have_link '2'
-        page.should have_link '3'
-        page.should have_link 'Next'
+        within 'div.pagination' do
+          page.should_not have_link 'Previous'
+          page.should_not have_link '1'
+          page.should have_link '2'
+          page.should have_link '3'
+          page.should have_link 'Next'
+        end
 
         click_link 'Next'
 
         page.all('table tr').count.should == 25 + 1
-        page.should have_link 'Previous'
-        page.should have_link '1'
-        page.should_not have_link '2'
-        page.should have_link '3'
-        page.should have_link 'Next'
+        within 'div.pagination' do
+          page.should have_link 'Previous'
+          page.should have_link '1'
+          page.should_not have_link '2'
+          page.should have_link '3'
+          page.should have_link 'Next'
+        end
 
         click_link 'Next'
 
         page.all('table tr').count.should == 5 + 1
-        page.should have_link 'Previous'
-        page.should have_link '1'
-        page.should have_link '2'
-        page.should_not have_link '3'
-        page.should_not have_link 'Next'
+        within 'div.pagination' do
+          page.should have_link 'Previous'
+          page.should have_link '1'
+          page.should have_link '2'
+          page.should_not have_link '3'
+          page.should_not have_link 'Next'
+        end
 
         click_link 'Previous'
         click_link 'Previous'
 
-        page.should_not have_link 'Previous'
-        page.should_not have_link '1'
-        page.should have_link '2'
-        page.should have_link '3'
-        page.should have_link 'Next'
+        within 'div.pagination' do
+          page.should_not have_link 'Previous'
+          page.should_not have_link '1'
+          page.should have_link '2'
+          page.should have_link '3'
+          page.should have_link 'Next'
+        end
       end
     end
   end
@@ -259,7 +267,7 @@ describe 'Employee', js: true do
       )
 
       visit '/'
-      click_link 'All Employee'
+      click_link 'All Employees'
       click_link 'Sandee'
 
       page.should have_content 'Show Employee'
@@ -299,7 +307,7 @@ describe 'Employee', js: true do
       )
 
       visit '/'
-      click_link 'All Employee'
+      click_link 'All Employees'
       click_link 'Sandee'
 
       page.should have_content 'Show Employee'
