@@ -32,7 +32,7 @@ describe EquipmentController do
 
         get :index
 
-        assigns(:equipment).should eq([equipment])
+        assigns(:equipments).should eq([equipment])
       end
 
       it 'assigns equipment_count' do
@@ -63,7 +63,7 @@ describe EquipmentController do
 
         get :index
 
-        assigns(:equipment).should eq([equipment])
+        assigns(:equipments).should eq([equipment])
       end
     end
 
@@ -79,7 +79,7 @@ describe EquipmentController do
 
           get :index
 
-          assigns(:equipment).should be_nil
+          assigns(:equipments).should be_nil
         end
       end
     end
@@ -112,7 +112,7 @@ describe EquipmentController do
 
         get :expired
 
-        assigns(:equipment).should eq([expired_equipment])
+        assigns(:equipments).should eq([expired_equipment])
       end
 
       it 'assigns equipment_count' do
@@ -143,7 +143,7 @@ describe EquipmentController do
 
         get :expired
 
-        assigns(:equipment).should eq([expired_equipment])
+        assigns(:equipments).should eq([expired_equipment])
       end
     end
 
@@ -159,7 +159,7 @@ describe EquipmentController do
 
           get :expired
 
-          assigns(:equipment).should be_nil
+          assigns(:equipments).should be_nil
         end
       end
     end
@@ -192,7 +192,7 @@ describe EquipmentController do
 
         get :expiring
 
-        assigns(:equipment).should eq([expiring_equipment])
+        assigns(:equipments).should eq([expiring_equipment])
       end
 
       it 'assigns equipment_count' do
@@ -223,7 +223,7 @@ describe EquipmentController do
 
         get :expiring
 
-        assigns(:equipment).should eq([expiring_equipment])
+        assigns(:equipments).should eq([expiring_equipment])
       end
     end
 
@@ -239,7 +239,7 @@ describe EquipmentController do
 
           get :expiring
 
-          assigns(:equipment).should be_nil
+          assigns(:equipments).should be_nil
         end
       end
     end
@@ -272,7 +272,7 @@ describe EquipmentController do
 
         get :noninspectable
 
-        assigns(:equipment).should eq([noninspectable_equipment])
+        assigns(:equipments).should eq([noninspectable_equipment])
       end
 
       it 'assigns equipment_count' do
@@ -303,7 +303,7 @@ describe EquipmentController do
 
         get :noninspectable
 
-        assigns(:equipment).should eq([noninspectable_equipment])
+        assigns(:equipments).should eq([noninspectable_equipment])
       end
     end
 
@@ -319,7 +319,7 @@ describe EquipmentController do
 
           get :noninspectable
 
-          assigns(:equipment).should be_nil
+          assigns(:equipments).should be_nil
         end
       end
     end
@@ -704,7 +704,7 @@ describe EquipmentController do
 
         get :search
 
-        assigns(:equipment).should eq([equipment])
+        assigns(:equipments).should eq([equipment])
       end
 
       it 'assigns equipment_count' do
@@ -734,7 +734,7 @@ describe EquipmentController do
 
       it 'assigns employees' do
         employee = new_employee
-        EmployeesService.any_instance.stub(:get_all_employees).and_return([employee])
+        EmployeeService.any_instance.stub(:get_all_employees).and_return([employee])
 
         get :search
 
@@ -761,7 +761,7 @@ describe EquipmentController do
 
       it 'should return employees when assignee is Employee' do
         employee = create_employee(first_name: 'The', last_name: 'Wizard')
-        EmployeesService.any_instance.should_receive(:get_all_employees).once.and_return([employee])
+        EmployeeService.any_instance.should_receive(:get_all_employees).once.and_return([employee])
         get :ajax_assignee, {assignee: 'Employee'}
         json = JSON.parse(response.body)
         json.should == [

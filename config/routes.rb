@@ -20,6 +20,7 @@ Certotrack::Application.routes.draw do
   get 'search_certification_types', action: 'search', controller: 'certification_types'
 
   resources :employees
-  get '/deactivate_confirm/:id', to: 'employees#deactivate_confirm', as: 'deactivate_confirm'
-  get '/deactivate/:id', to: 'employees#deactivate', as: 'deactivate'
+
+  get '/deactivate_confirm/:id', to: 'employee_deactivation#deactivate_confirm', as: 'deactivate_confirm'
+  get '/deactivate/:id', to: 'employee_deactivation#deactivate', as: 'deactivate'
 end

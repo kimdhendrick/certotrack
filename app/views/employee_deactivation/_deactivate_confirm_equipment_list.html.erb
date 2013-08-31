@@ -12,12 +12,12 @@
   </tr>
   </thead>
   <tbody>
-    <% if @equipment.count == 0 %>
+    <% if @equipments.count == 0 %>
     <tr>
       <td colspan="8">No equipment assigned to this employee.</td>
     </tr>
   <% end %>
-    <% @equipment.each do |equipment| %>
+    <% @equipments.each do |equipment| %>
     <tr>
       <td><%= equipment.name %></td></td>
       <td><%= equipment.serial_number %></td>

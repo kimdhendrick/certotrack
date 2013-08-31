@@ -86,3 +86,15 @@ Answer 'yes' when prompted. Copy & paste command to ignore rvm warnings.
 
 ## Restart heroku
     heroku restart
+
+# Development
+
+## Builds
+    build_unit => Build all but features
+    build_all => Build all including features
+
+## Seed data
+    equipment_user
+    certification_user
+    full_rights_user
+    admin

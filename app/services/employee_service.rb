@@ -1,4 +1,4 @@
-class EmployeesService
+class EmployeeService
 
   def get_all_employees(current_user, params = {})
     employees = current_user.admin? ? Employee.all : Employee.where(customer: current_user.customer)
@@ -26,26 +26,11 @@ class EmployeesService
     employee.destroy
   end
 
-  def deactivate_employee(employee)
-    load_equipment_service.get_all_equipment_for_employee(employee).each do |equipment|
-      equipment.employee = nil
-      equipment.save
-    end
-
-    employee.deactivation_date = Date.today
-    employee.active = false
-    employee.save
-  end
-
   def load_sort_service(service = SortService.new)
     @sort_service ||= service
   end
 
   def load_pagination_service(service = PaginationService.new)
     @pagination_service ||= service
-  end
-
-  def load_equipment_service(service = EquipmentService.new)
-    @equipment_service ||= service
   end
 end

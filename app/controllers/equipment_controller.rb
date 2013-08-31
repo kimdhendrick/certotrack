@@ -15,16 +15,16 @@ class EquipmentController < ApplicationController
     authorize! :read, :equipment
 
     @report_title = 'All Equipment'
-    @equipment = @equipment_service.get_all_equipment(current_user, params)
-    @equipment_count = @equipment.count
+    @equipments = @equipment_service.get_all_equipment(current_user, params)
+    @equipment_count = @equipments.count
   end
 
   def expired
     authorize! :read, :equipment
 
     @report_title = 'Expired Equipment List'
-    @equipment = @equipment_service.get_expired_equipment(current_user, params)
-    @equipment_count = @equipment.count
+    @equipments = @equipment_service.get_expired_equipment(current_user, params)
+    @equipment_count = @equipments.count
     render 'equipment/index'
   end
 
@@ -32,8 +32,8 @@ class EquipmentController < ApplicationController
     authorize! :read, :equipment
 
     @report_title = 'Expiring Equipment List'
-    @equipment = @equipment_service.get_expiring_equipment(current_user, params)
-    @equipment_count = @equipment.count
+    @equipments = @equipment_service.get_expiring_equipment(current_user, params)
+    @equipment_count = @equipments.count
     render 'equipment/index'
   end
 
@@ -41,8 +41,8 @@ class EquipmentController < ApplicationController
     authorize! :read, :equipment
 
     @report_title = 'Non-Inspectable Equipment List'
-    @equipment = @equipment_service.get_noninspectable_equipment(current_user, params)
-    @equipment_count = @equipment.count
+    @equipments = @equipment_service.get_noninspectable_equipment(current_user, params)
+    @equipment_count = @equipments.count
     render 'equipment/index'
   end
 
@@ -92,8 +92,8 @@ class EquipmentController < ApplicationController
     authorize! :read, :equipment
 
     @report_title = 'Search Equipment'
-    @equipment = @equipment_service.get_all_equipment(current_user, params)
-    @equipment_count = @equipment.count
+    @equipments = @equipment_service.get_all_equipment(current_user, params)
+    @equipment_count = @equipments.count
     @locations = @location_service.get_all_locations(current_user)
     @employees = @employee_service.get_all_employees(current_user)
   end
@@ -112,7 +112,7 @@ class EquipmentController < ApplicationController
     @equipment_service ||= service
   end
 
-  def load_employee_service(service = EmployeesService.new)
+  def load_employee_service(service = EmployeeService.new)
     @employee_service ||= service
   end
 
