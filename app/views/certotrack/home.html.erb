@@ -3,13 +3,18 @@ CertoTrack - Home
 <h2>Welcome to CertoTrack</h2>
 
 <% if can? :read, :equipment %>
+  <hr/>
   Equipment Links:
   <%= render 'equipment_links' %>
 <% end %>
 
 <% if can? :read, :certification %>
+  <hr/>
   Certification Links:
   <%= render 'certification_links' %>
+  <hr/>
+  User Administration Links:
+  <%= render 'user_administration_links' %>
 <% end %>
 
 <% if (cannot? :read, :equipment) && (cannot? :read, :certification) %>

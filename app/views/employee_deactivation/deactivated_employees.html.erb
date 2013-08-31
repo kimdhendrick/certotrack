@@ -1,0 +1,9 @@
+<h1>Deactivated Employee List</h1>
+
+<div>Total: <%=@employee_count%></div>
+
+<%= link_to 'Home', root_path %>
+
+<%= render 'deactivated_employee_list'%>
+
+<%= will_paginate @employees %>

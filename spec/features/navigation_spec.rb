@@ -409,6 +409,22 @@ describe 'Navigation', js: true do
     end
   end
 
+  describe 'Administration Links' do
+    it 'when certification user' do
+      login_as_certification_user
+      visit '/'
+
+      page.should have_link 'Deactivated Employees'
+
+      click_on 'Deactivated Employees'
+
+      page.should have_content 'Deactivated Employee List'
+
+      page.should have_link 'Home'
+      click_and_test_home_link
+    end
+  end
+
   def click_and_test_home_link
     click_link 'Home'
     page.should have_content 'Welcome to CertoTrack'
