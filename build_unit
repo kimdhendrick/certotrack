@@ -1,0 +1,5 @@
+#!/bin/sh
+rake spec:controllers
+rake spec:helpers
+rake spec:models
+rake spec:services
