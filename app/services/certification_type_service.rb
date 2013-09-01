@@ -1,7 +1,11 @@
-class CertificationTypesService
+class CertificationTypeService
 
-  def get_all_certification_types(user, params = {})
-    certification_types = user.admin? ? CertificationType.all : CertificationType.where(customer: user.customer)
+  def get_all_certification_types(user)
+    user.admin? ? CertificationType.all : CertificationType.where(customer: user.customer)
+  end
+
+  def get_certification_type_list(user, params = {})
+    certification_types = get_all_certification_types(user)
     certification_types = load_search_service.search(certification_types, params)
     certification_types = load_sort_service.sort(certification_types, params[:sort], params[:direction])
     load_pagination_service.paginate(certification_types, params[:page])

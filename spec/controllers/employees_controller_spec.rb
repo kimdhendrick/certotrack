@@ -125,7 +125,7 @@ describe EmployeesController do
   end
   
   describe 'GET index' do
-    it 'calls get_all_employees with current_user and params' do
+    it 'calls get_employee_list with current_user and params' do
       my_user = stub_certification_user
       sign_in my_user
       @fake_employee_service = controller.load_employee_service(FakeService.new([]))
@@ -133,7 +133,7 @@ describe EmployeesController do
 
       get :index, params
 
-      @fake_employee_service.received_messages.should == [:get_all_employees]
+      @fake_employee_service.received_messages.should == [:get_employee_list]
       @fake_employee_service.received_params[0].should == my_user
       @fake_employee_service.received_params[1]['sort'].should == 'name'
       @fake_employee_service.received_params[1]['direction'].should == 'asc'

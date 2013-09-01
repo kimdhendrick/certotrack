@@ -3,7 +3,7 @@ class CertificationTypesController < ApplicationController
   include CertificationTypesHelper
 
   before_filter :authenticate_user!,
-                :load_certification_types_service
+                :load_certification_type_service
 
   before_action :set_certification_type, only: [:show, :edit, :update, :destroy]
 
@@ -12,7 +12,7 @@ class CertificationTypesController < ApplicationController
   def index
     authorize! :read, :certification
 
-    @certification_types = @certification_types_service.get_all_certification_types(current_user, params)
+    @certification_types = @certification_type_service.get_certification_type_list(current_user, params)
     @certification_types_count = @certification_types.count
   end
 
@@ -24,7 +24,7 @@ class CertificationTypesController < ApplicationController
   end
 
   def update
-    success = @certification_types_service.update_certification_type(@certification_type, _certification_type_params)
+    success = @certification_type_service.update_certification_type(@certification_type, _certification_type_params)
 
     if success
       redirect_to @certification_type, notice: 'Certification Type was successfully updated.'
@@ -43,7 +43,7 @@ class CertificationTypesController < ApplicationController
   def create
     authorize! :create, :certification
 
-    @certification_type = @certification_types_service.create_certification_type(current_user.customer, _certification_type_params)
+    @certification_type = @certification_type_service.create_certification_type(current_user.customer, _certification_type_params)
 
     if @certification_type.persisted?
       redirect_to @certification_type, notice: 'Certification Type was successfully created.'
@@ -54,18 +54,18 @@ class CertificationTypesController < ApplicationController
   end
 
   def destroy
-    @certification_types_service.delete_certification_type(@certification_type)
+    @certification_type_service.delete_certification_type(@certification_type)
     redirect_to certification_types_path, notice: 'Certification Type was successfully deleted.'
   end
 
   def search
     authorize! :read, :certification
-    @certification_types = @certification_types_service.get_all_certification_types(current_user, params)
+    @certification_types = @certification_type_service.get_certification_type_list(current_user, params)
     @certification_types_count = @certification_types.count
   end
 
-  def load_certification_types_service(service = CertificationTypesService.new)
-    @certification_types_service ||= service
+  def load_certification_type_service(service = CertificationTypeService.new)
+    @certification_type_service ||= service
   end
 
   private

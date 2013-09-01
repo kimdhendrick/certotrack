@@ -1,0 +1,45 @@
+<%= form_for(@certification) do |f| %>
+
+  <%= render 'errors'%>
+
+  <div class="field">
+    Employee <%= link_to "#{@certification.employee.first_name} #{@certification.employee.last_name}", @certification.employee %>
+    <%= hidden_field(:employee, :id, value: @certification.employee.id) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :certification_type_id, 'Certification Type' %>
+    <br/>
+    <%= select(:certification, :certification_type_id,
+               options_from_collection_for_select(@certification_types, 'id', 'name',
+                                                  @certification.certification_type)) %>
+  </div>
+
+  <%= link_to 'Create Certification Type', new_certification_type_path %>
+
+  <div class="field">
+    <%= f.label :trainer %>
+    <br/>
+    <%= f.text_field :trainer %>
+  </div>
+
+  <div class="field">
+    <%= f.label :last_certification_date, 'Last Certification Date' %>
+    <br/>
+    <input class="datepicker"
+           id="certification_last_certification_date"
+           name="certification[last_certification_date]"
+           type="text"
+           value="<%= DateHelpers.format(@certification.last_certification_date) %>">
+  </div>
+
+  <div class="field">
+    <%= f.label :comments %>
+    <br/>
+    <%= f.text_field :comments %>
+  </div>
+
+  <%= submit_tag "Create" %>
+  <%= submit_tag "Save and Create Another" %>
+
+<% end %>

@@ -45,14 +45,14 @@ class EquipmentService
   def update_equipment(equipment, attributes)
     equipment.update(attributes)
     equipment.update(last_inspection_date: _format_date(attributes['last_inspection_date']))
-    equipment.update(expiration_date: equipment.expires_on)
+    equipment.update(expiration_date: _expires_on(equipment))
     equipment.save
   end
 
   def create_equipment(customer, attributes)
     equipment = Equipment.new(attributes)
     equipment.update(last_inspection_date: _format_date(attributes['last_inspection_date']))
-    equipment.update(expiration_date: equipment.expires_on)
+    equipment.update(expiration_date: _expires_on(equipment))
     equipment.customer = customer
     equipment.save
     equipment
@@ -98,5 +98,7 @@ class EquipmentService
     load_pagination_service.paginate(equipment, params[:page])
   end
 
-
+  def _expires_on(equipment)
+    ExpirationCalculator.new.calculate(equipment.last_inspection_date, Interval.find_by_text(equipment.inspection_interval))
+  end
 end

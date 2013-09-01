@@ -734,7 +734,7 @@ describe EquipmentController do
 
       it 'assigns employees' do
         employee = new_employee
-        EmployeeService.any_instance.stub(:get_all_employees).and_return([employee])
+        EmployeeService.any_instance.stub(:get_employee_list).and_return([employee])
 
         get :search
 
@@ -751,22 +751,24 @@ describe EquipmentController do
 
       it 'should return locations when assignee is Location' do
         location = create_location(name: 'Oz')
-        LocationService.any_instance.should_receive(:get_all_locations).once.and_return([location])
+        fake_employee_service = controller.load_location_service(FakeService.new([location]))
         get :ajax_assignee, {assignee: 'Location'}
         json = JSON.parse(response.body)
         json.should == [
           [location.id, 'Oz']
         ]
+        fake_employee_service.received_message.should == :get_all_locations
       end
 
       it 'should return employees when assignee is Employee' do
         employee = create_employee(first_name: 'The', last_name: 'Wizard')
-        EmployeeService.any_instance.should_receive(:get_all_employees).once.and_return([employee])
+        fake_employee_service = controller.load_employee_service(FakeService.new([employee]))
         get :ajax_assignee, {assignee: 'Employee'}
         json = JSON.parse(response.body)
         json.should == [
           [employee.id, 'Wizard, The']
         ]
+        fake_employee_service.received_message.should == :get_all_employees
       end
     end
 

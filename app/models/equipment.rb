@@ -38,10 +38,6 @@ class Equipment < ActiveRecord::Base
     expiration_date.present? && !expired? && expiration_date < Date.today + 60.days
   end
 
-  def expires_on
-    Interval.find_by_text(inspection_interval).expires_on(last_inspection_date)
-  end
-
   def inspection_type
     inspectable? ?
       InspectionType::INSPECTABLE.text :

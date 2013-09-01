@@ -1,0 +1,11 @@
+<% if @certification.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@certification.errors.count, "error") %> prohibited this Certification from being saved:</h2>
+
+    <ul>
+      <% @certification.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

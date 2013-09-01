@@ -25,25 +25,4 @@ class Interval < ActiveHash::Base
   def self.lookup(interval_text)
     Interval.find_by_text(interval_text).id
   end
-
-  def expires_on(start_date)
-    return if start_date.blank?
-
-    case id
-      when 1
-        return start_date + 1.month
-      when 2
-        return start_date + 3.months
-      when 3
-        return start_date + 6.months
-      when 4
-        return start_date + 1.year
-      when 5
-        return start_date + 2.years
-      when 6
-        return start_date + 3.years
-      when 7
-        return start_date + 5.years
-    end
-  end
 end

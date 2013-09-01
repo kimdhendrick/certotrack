@@ -9,13 +9,16 @@ class CertificationType < ActiveRecord::Base
   validates :interval, inclusion: {in: Interval.all.map(&:text),
                                               message: 'invalid value'}
 
-
   def units_based?
     units_required > 0
   end
 
   def interval_code
     Interval.lookup(interval)
+  end
+
+  def to_s
+    "#{name}:#{interval}"
   end
 
 

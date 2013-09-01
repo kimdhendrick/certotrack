@@ -121,6 +121,31 @@ module ObjectMother
     }
   end
 
+  def create_certification_period(options = {})
+    new_certification_period(options).tap(&:save!)
+  end
+
+  def new_certification_period(options = {})
+    valid_attributes = {
+      start_date: Date.new(2000, 1, 1)
+    }
+    _apply(CertificationPeriod.new, valid_attributes, options)
+  end
+
+  def create_certification(options = {})
+    new_certification(options).tap(&:save!)
+  end
+
+  def new_certification(options = {})
+    valid_attributes = {
+      certification_type_id: -> {create_certification_type.id},
+      employee_id: -> {create_employee.id},
+      last_certification_date: Date.new(2005, 1, 4),
+      active_certification_period: -> {create_certification_period}
+    }
+    _apply(Certification.new, valid_attributes, options)
+  end
+
   def valid_session
     {}
   end

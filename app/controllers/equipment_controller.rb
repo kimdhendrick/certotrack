@@ -95,7 +95,7 @@ class EquipmentController < ApplicationController
     @equipments = @equipment_service.get_all_equipment(current_user, params)
     @equipment_count = @equipments.count
     @locations = @location_service.get_all_locations(current_user)
-    @employees = @employee_service.get_all_employees(current_user)
+    @employees = @employee_service.get_employee_list(current_user)
   end
 
   def ajax_assignee

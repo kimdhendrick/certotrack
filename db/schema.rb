@@ -11,13 +11,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130823202824) do
+ActiveRecord::Schema.define(version: 20130901181217) do
+
+  create_table "certification_periods", force: true do |t|
+    t.string   "trainer"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.integer  "units_achieved",   default: 0
+    t.string   "comments"
+    t.integer  "certification_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "certification_types", force: true do |t|
     t.string   "name"
     t.string   "interval"
     t.integer  "units_required"
     t.integer  "customer_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "certifications", force: true do |t|
+    t.integer  "certification_type_id"
+    t.integer  "employee_id"
+    t.integer  "customer_id"
+    t.boolean  "active",                default: true
     t.datetime "created_at"
     t.datetime "updated_at"
   end

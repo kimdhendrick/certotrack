@@ -43,4 +43,9 @@ describe CertificationType do
     one_month_certification_type.interval_code.should == Interval::ONE_MONTH.id
     not_required_certification_type.interval_code.should == Interval::NOT_REQUIRED.id
   end
+
+  it 'should display as a string' do
+    certification_type = new_certification_type(name: 'certification name', interval: Interval::ONE_YEAR.text)
+    certification_type.to_s.should == 'certification name:Annually'
+  end
 end

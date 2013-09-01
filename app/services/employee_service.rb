@@ -1,7 +1,11 @@
 class EmployeeService
 
-  def get_all_employees(current_user, params = {})
-    employees = current_user.admin? ? Employee.all : Employee.where(customer: current_user.customer)
+  def get_all_employees(current_user)
+    current_user.admin? ? Employee.all : Employee.where(customer: current_user.customer)
+  end
+
+  def get_employee_list(current_user, params = {})
+    employees = get_all_employees(current_user)
     employees = load_sort_service.sort(employees, params[:sort], params[:direction], 'employee_number')
     load_pagination_service.paginate(employees, params[:page])
   end
