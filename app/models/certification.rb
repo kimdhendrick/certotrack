@@ -3,11 +3,10 @@ class Certification < ActiveRecord::Base
   belongs_to :certification_type
   belongs_to :employee
   belongs_to :customer
-  has_one :active_certification_period, class_name: 'CertificationPeriod'
+  has_one :active_certification_period, class_name: 'CertificationPeriod', autosave: true
 
   validates_uniqueness_of :certification_type_id, scope: :employee_id, message: "already assigned to this Employee. Please update existing Certification."
   validates_presence_of :active_certification_period
-  validates_presence_of :last_certification_date
 
   delegate :comments, to: :active_certification_period
   delegate :comments=, to: :active_certification_period

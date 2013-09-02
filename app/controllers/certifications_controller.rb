@@ -16,27 +16,26 @@ class CertificationsController < ApplicationController
   def create
     authorize! :create, :certification
 
+    if params[:certification][:certification_type_id].blank?
+      return _render_new_with_message 'No certification type selected'
+    end
+
     @certification = @certification_service.certify(
       params[:employee][:id],
       params[:certification][:certification_type_id],
-      params[:certification][:last_certification_date],
+      DateHelpers.string_to_date(params[:certification][:last_certification_date]),
       params[:certification][:trainer],
       params[:certification][:comments]
     )
 
     if !@certification.valid?
-      _set_certification_types(current_user)
-      render action: 'new'
-      return
+      return _render_new
     end
 
     if _redirect_to_employee?
       redirect_to @certification.employee, notice: _success_message(@certification)
     else
-      flash[:notice] = _success_message(@certification)
-      _set_new_certification(params[:employee][:id])
-      _set_certification_types(current_user)
-      render action: 'new'
+      return _render_new_with_message _success_message(@certification)
     end
   end
 
@@ -65,5 +64,19 @@ class CertificationsController < ApplicationController
 
   def _redirect_to_employee?
     params[:commit] == "Create"
+  end
+
+  def _render_new_with_message(message)
+    flash[:notice] = message
+    _set_certification_types(current_user)
+    _set_new_certification(params[:employee][:id])
+    render action: 'new'
+    nil
+  end
+
+  def _render_new
+    _set_certification_types(current_user)
+    render action: 'new'
+    nil
   end
 end

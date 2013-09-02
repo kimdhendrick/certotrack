@@ -11,7 +11,6 @@ describe Certification do
              with_message(/already assigned to this Employee. Please update existing Certification/)
   end
   it { should validate_presence_of :active_certification_period }
-  it { should validate_presence_of :last_certification_date }
 
   context 'non-units based certification type' do
     before do
@@ -101,7 +100,7 @@ describe Certification do
 
   it 'should respond to last_certification_date' do
     certification = create_certification
-    certification.active_certification_period.start_date =  Date.new(2010, 5, 10)
+    certification.active_certification_period.start_date = Date.new(2010, 5, 10)
 
     certification.last_certification_date.should == Date.new(2010, 5, 10)
   end

@@ -2,24 +2,29 @@ require 'spec_helper'
 
 describe CertificationService do
   describe 'new_certification' do
-    it 'returns a new certification' do
+    it 'calls CertificationFactory' do
       employee = create_employee
+      certification = new_certification
+      certification_service = CertificationService.new
+      fake_certification_factory = certification_service.load_certification_factory(FakeService.new(certification))
 
-      certification = CertificationService.new.new_certification(employee.id)
+      certification = certification_service.new_certification(employee.id)
 
-      certification.should be_a(Certification)
-      certification.employee.should == employee
-      certification.active_certification_period.should be_a(CertificationPeriod)
+      fake_certification_factory.received_message.should == :new_instance
+      fake_certification_factory.received_params[0].should == employee.id
       certification.should_not be_persisted
     end
   end
 
   describe 'certify' do
     it 'creates a certification' do
-      certification_type = create_certification_type
       employee = create_employee
+      certification_type = create_certification_type
+      certification = new_certification
+      certification_service = CertificationService.new
+      fake_certification_factory = certification_service.load_certification_factory(FakeService.new(certification))
 
-      certification = CertificationService.new.certify(
+      certification = certification_service.certify(
         employee.id,
         certification_type.id,
         Date.new(2000, 1, 1),
@@ -27,35 +32,38 @@ describe CertificationService do
         'Great class!'
       )
 
+      fake_certification_factory.received_message.should == :new_instance
+      fake_certification_factory.received_params[0].should == employee.id
+      fake_certification_factory.received_params[1].should == certification_type.id
+      fake_certification_factory.received_params[2].should == Date.new(2000, 1, 1)
+      fake_certification_factory.received_params[3].should == 'Joe Bob'
+      fake_certification_factory.received_params[4].should == 'Great class!'
       certification.should be_persisted
-      certification.employee.should == employee
-      certification.certification_type.should == certification_type
-      certification.active_certification_period.trainer.should == 'Joe Bob'
-      certification.active_certification_period.comments.should == 'Great class!'
-      certification.last_certification_date.should == Date.new(2000, 1, 1)
     end
 
-    it 'calculates expiration date using calculator' do
-      certification_type = create_certification_type
+    it 'handles bad date' do
       employee = create_employee
-      last_certification_date = Date.new(2000, 1, 1)
-      fake_expiration_date = Date.new(2001, 1, 1)
+      certification_type = create_certification_type
+      certification = Certification.new
+      certification_service = CertificationService.new
+      fake_certification_factory = certification_service.load_certification_factory(FakeService.new(certification))
 
-      certification_factory = CertificationService.new
-      fake_expiration_calculator = certification_factory.load_expiration_calculator(FakeService.new(fake_expiration_date))
-
-      certification = certification_factory.certify(
+      certification = certification_service.certify(
         employee.id,
         certification_type.id,
-        last_certification_date,
         nil,
-        nil
+        'Joe Bob',
+        'Great class!'
       )
 
-      fake_expiration_calculator.received_message.should == :calculate
-      fake_expiration_calculator.received_params[0].should == last_certification_date
-      fake_expiration_calculator.received_params[1].should == certification_type.interval
-      certification.expiration_date.should == fake_expiration_date
+      certification.should_not be_valid
+      certification.should_not be_persisted
+      fake_certification_factory.received_message.should == :new_instance
+      fake_certification_factory.received_params[0].should == employee.id
+      fake_certification_factory.received_params[1].should == certification_type.id
+      fake_certification_factory.received_params[2].should == nil
+      fake_certification_factory.received_params[3].should == 'Joe Bob'
+      fake_certification_factory.received_params[4].should == 'Great class!'
     end
   end
 end

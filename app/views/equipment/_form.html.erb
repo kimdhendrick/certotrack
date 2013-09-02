@@ -41,7 +41,7 @@
            id="equipment_last_inspection_date"
            name="equipment[last_inspection_date]"
            type="text"
-           value="<%= DateHelpers.format(@equipment.last_inspection_date) %>">
+           value="<%= DateHelpers.date_to_string(@equipment.last_inspection_date) %>">
   </div>
 
   <div class="field">

@@ -12,7 +12,7 @@
     <br/>
     <%= select(:certification, :certification_type_id,
                options_from_collection_for_select(@certification_types, 'id', 'name',
-                                                  @certification.certification_type)) %>
+                                                  @certification.certification_type_id)) %>
   </div>
 
   <%= link_to 'Create Certification Type', new_certification_type_path %>
@@ -30,7 +30,7 @@
            id="certification_last_certification_date"
            name="certification[last_certification_date]"
            type="text"
-           value="<%= DateHelpers.format(@certification.last_certification_date) %>">
+           value="<%= DateHelpers.date_to_string(@certification.last_certification_date) %>">
   </div>
 
   <div class="field">

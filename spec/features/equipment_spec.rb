@@ -660,11 +660,11 @@ describe 'Equipment', js: true do
 
         # Ascending search
         click_link 'Last Inspection Date'
-        column_data_should_be_in_order([DateHelpers.format(earliest_date), DateHelpers.format(middle_date), DateHelpers.format(latest_date)])
+        column_data_should_be_in_order([DateHelpers.date_to_string(earliest_date), DateHelpers.date_to_string(middle_date), DateHelpers.date_to_string(latest_date)])
 
         # Descending search
         click_link 'Last Inspection Date'
-        column_data_should_be_in_order([DateHelpers.format(latest_date), DateHelpers.format(middle_date), DateHelpers.format(earliest_date)])
+        column_data_should_be_in_order([DateHelpers.date_to_string(latest_date), DateHelpers.date_to_string(middle_date), DateHelpers.date_to_string(earliest_date)])
       end
 
       it 'should sort by inspection type' do
@@ -699,11 +699,11 @@ describe 'Equipment', js: true do
 
         # Ascending search
         click_link 'Expiration Date'
-        column_data_should_be_in_order([DateHelpers.format(earliest_date), DateHelpers.format(middle_date), DateHelpers.format(latest_date), ''])
+        column_data_should_be_in_order([DateHelpers.date_to_string(earliest_date), DateHelpers.date_to_string(middle_date), DateHelpers.date_to_string(latest_date), ''])
 
         # Descending search
         click_link 'Expiration Date'
-        column_data_should_be_in_order(['', DateHelpers.format(latest_date), DateHelpers.format(middle_date), DateHelpers.format(earliest_date)])
+        column_data_should_be_in_order(['', DateHelpers.date_to_string(latest_date), DateHelpers.date_to_string(middle_date), DateHelpers.date_to_string(earliest_date)])
       end
 
       it 'should sort by assignee' do

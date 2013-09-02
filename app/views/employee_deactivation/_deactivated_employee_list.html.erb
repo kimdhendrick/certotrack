@@ -15,7 +15,7 @@
       <td><%= employee.first_name %></td></td>
       <td><%= employee.last_name %></td></td>
       <td><%= employee.location_name %></td></td>
-      <td><%= DateHelpers::format(employee.deactivation_date) %></td></td>
+      <td><%= DateHelpers::date_to_string(employee.deactivation_date) %></td></td>
     </tr>
   <% end %>
   </tbody>

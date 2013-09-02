@@ -44,14 +44,14 @@ class EquipmentService
 
   def update_equipment(equipment, attributes)
     equipment.update(attributes)
-    equipment.update(last_inspection_date: _format_date(attributes['last_inspection_date']))
+    equipment.update(last_inspection_date: DateHelpers.string_to_date(attributes['last_inspection_date']))
     equipment.update(expiration_date: _expires_on(equipment))
     equipment.save
   end
 
   def create_equipment(customer, attributes)
     equipment = Equipment.new(attributes)
-    equipment.update(last_inspection_date: _format_date(attributes['last_inspection_date']))
+    equipment.update(last_inspection_date: DateHelpers.string_to_date(attributes['last_inspection_date']))
     equipment.update(expiration_date: _expires_on(equipment))
     equipment.customer = customer
     equipment.save
@@ -80,14 +80,6 @@ class EquipmentService
 
   private
 
-  def _format_date(date)
-    return nil unless date.present?
-    begin
-      return Date.strptime(date, '%m/%d/%Y')
-    rescue ArgumentError
-      return nil
-    end
-  end
 
   def _get_equipment_for_user(current_user)
     current_user.admin? ? Equipment.all : Equipment.where(customer: current_user.customer)

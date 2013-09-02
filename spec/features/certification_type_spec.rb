@@ -310,9 +310,10 @@ describe 'Certification Type', js: true do
           page.should have_link '2'
           page.should have_link '3'
           page.should have_link 'Next'
+
+          click_link 'Next'
         end
 
-        click_link 'Next'
 
         page.all('table tr').count.should == 25 + 1
         within 'div.pagination' do
@@ -321,9 +322,10 @@ describe 'Certification Type', js: true do
           page.should_not have_link '2'
           page.should have_link '3'
           page.should have_link 'Next'
+
+          click_link 'Next'
         end
 
-        click_link 'Next'
 
         page.all('table tr').count.should == 5 + 1
         within 'div.pagination' do

@@ -96,7 +96,7 @@ describe CertificationsController do
           employee: {id: 99},
           certification: {
             certification_type_id: 1001,
-            last_certification_date: Date.new(2003, 3, 3),
+            last_certification_date: "3/3/2003",
             trainer: 'John Jacob Jingle',
             comments: 'my name too'
           },
@@ -108,7 +108,7 @@ describe CertificationsController do
         fake_certification_service.received_message.should == :certify
         fake_certification_service.received_params[0].should == "99"
         fake_certification_service.received_params[1].should == "1001"
-        fake_certification_service.received_params[2].should == "2003-03-03"
+        fake_certification_service.received_params[2].should == Date.new(2003,3,3)
         fake_certification_service.received_params[3].should == 'John Jacob Jingle'
         fake_certification_service.received_params[4].should == 'my name too'
       end
@@ -128,7 +128,7 @@ describe CertificationsController do
         Certification.any_instance.stub(:valid?).and_return(false)
         controller.load_certification_service(FakeService.new(new_certification))
 
-        get :create, {employee: {}, certification: {}}, valid_session
+        get :create, {employee: {}, certification: {certification_type_id: 1}}, valid_session
 
         assigns(:certification).should be_a(Certification)
       end
@@ -158,6 +158,48 @@ describe CertificationsController do
         assigns(:certification_types).should eq([certification_type])
       end
 
+      it 'handles bad date formats' do
+        controller.load_certification_type_service(FakeService.new())
+        Certification.any_instance.stub(:valid?).and_return(false)
+        fake_certification_service = controller.load_certification_service(FakeService.new(new_certification))
+
+        params = {
+          employee: {},
+          certification: {
+            certification_type_id: 1,
+            last_certification_date: '999'
+          }
+        }
+        post :create, params, valid_session
+
+        fake_certification_service.received_params[2].should be_nil
+      end
+
+      it 'handles missing employee_id' do
+        params = {
+          employee: {id: nil},
+          certification: {}
+        }
+        post :create, params, valid_session
+
+        response.should render_template('new')
+      end
+
+      it 'handles missing certification_type_id' do
+        certification_type = create_certification_type
+        controller.load_certification_type_service(FakeService.new([certification_type]))
+
+        params = {
+          employee: {},
+          certification: {certification_type_id: nil}
+        }
+        post :create, params, valid_session
+
+        response.should render_template('new')
+        assigns(:certification).should be_a(Certification)
+        assigns(:certification_types).should eq([certification_type])
+      end
+
       context 'Create' do
         it 'redirects to show employee on success' do
           employee = create_employee
@@ -168,7 +210,7 @@ describe CertificationsController do
 
           params = {
             employee: {},
-            certification: {},
+            certification: {certification_type_id: 1},
             commit: 'Create'
           }
 
@@ -186,7 +228,7 @@ describe CertificationsController do
 
           params = {
             employee: {},
-            certification: {},
+            certification: {certification_type_id: 1},
             commit: 'Create'
           }
 
@@ -220,7 +262,7 @@ describe CertificationsController do
 
           params = {
             employee: {},
-            certification: {},
+            certification: {certification_type_id: 1},
             commit: 'Save and Create Another'
           }
 
@@ -255,7 +297,7 @@ describe CertificationsController do
 
           params = {
             employee: {},
-            certification: {},
+            certification: {certification_type_id: 1},
             commit: 'Save and Create Another'
           }
 

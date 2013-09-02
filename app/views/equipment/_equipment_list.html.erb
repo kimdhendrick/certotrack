@@ -18,9 +18,9 @@
       <td><%= equipment.serial_number %></td>
       <td><%= equipment.status %></td>
       <td><%= equipment.inspection_interval %></td>
-      <td><%= DateHelpers::format(equipment.last_inspection_date) %></td>
+      <td><%= DateHelpers::date_to_string(equipment.last_inspection_date) %></td>
       <td><%= equipment.inspection_type %></td>
-      <td><%= DateHelpers::format(equipment.expiration_date) %></td>
+      <td><%= DateHelpers::date_to_string(equipment.expiration_date) %></td>
       <td><%= display_assigned_to(equipment) %></td>
     </tr>
   <% end %>

@@ -39,12 +39,12 @@
 
 <p>
   <b>Last Inspection Date</b>
-  <%= DateHelpers::format(@equipment.last_inspection_date) %>
+  <%= DateHelpers::date_to_string(@equipment.last_inspection_date) %>
 </p>
 
 <p>
   <b>Expiration Date</b>
-  <%= DateHelpers::format(@equipment.expiration_date) %>
+  <%= DateHelpers::date_to_string(@equipment.expiration_date) %>
 </p>
 
 <p>
