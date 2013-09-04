@@ -172,4 +172,38 @@ describe Certification do
     certification.units_achieved.should == 10
     certification.active_certification_period.units_achieved.should == 10
   end
+
+  describe "new date validations" do
+    subject { Certification.new }
+    let(:certification_period) { CertificationPeriod.new(start_date: start_date) }
+
+    before do
+      subject.active_certification_period = certification_period
+      subject.valid?
+    end
+
+    context 'when start_date is invalid' do
+      let(:start_date) { '1111111' }
+
+      it 'should have the correct message' do
+        subject.errors.full_messages_for(:"active_certification_period.start_date").first.should == 'Last certification date is not a valid date'
+      end
+    end
+
+    context 'when start_date is more than 100 years in the future' do
+      let(:start_date) { 101.years.from_now }
+
+      it 'should have the correct message' do
+        subject.errors.full_messages_for(:"active_certification_period.start_date").first.should == 'Last certification date must be before 09/04/2113'
+      end
+    end
+
+    context 'when start_date is more than 100 years in the past do' do
+      let(:start_date) { 101.years.ago }
+
+      it 'should have the correct message' do
+        subject.errors.full_messages_for(:"active_certification_period.start_date").first.should == 'Last certification date must be after 09/04/1913'
+      end
+    end
+  end
 end
