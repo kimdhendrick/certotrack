@@ -6,3 +6,8 @@ en:
     attributes:
       active_certification_period:
         start_date: 'Last certification date'
+      certification:
+        certification_type_id: ''
+    errors:
+      messages:
+        taken: 'This Employee is already Certified for this Certification Type. Please update existing Certification.'

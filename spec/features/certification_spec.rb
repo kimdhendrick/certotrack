@@ -86,7 +86,7 @@ describe 'Certifications', js: true do
       click_on 'Create'
 
       page.should have_content 'Create Certification'
-      page.should have_content 'Certification type already assigned to this Employee. Please update existing Certification.'
+      page.should have_content 'This Employee is already Certified for this Certification Type. Please update existing Certification.'
     end
 
     it 'should certify employee and be ready to create another' do
