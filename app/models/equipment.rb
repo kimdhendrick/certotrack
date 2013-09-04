@@ -5,8 +5,7 @@ class Equipment < ActiveRecord::Base
   belongs_to :employee
 
   validates_presence_of :name, :serial_number
-  validates :last_inspection_date, presence: true, if: :inspectable?
-  validate :_validate_last_inspection_date
+  validates_date :last_inspection_date, :before => lambda { 100.years.from_now }, :after => lambda { 100.years.ago }, if: :inspectable?
   validates :inspection_interval, inclusion: {in: Interval.all.map(&:text),
                                               message: 'invalid value'}
   validates_uniqueness_of :serial_number, scope: :customer_id
@@ -64,15 +63,5 @@ class Equipment < ActiveRecord::Base
     assigned_to_location? ? location :
       assigned_to_employee? ? employee :
         nil
-  end
-
-  private
-
-  def _validate_last_inspection_date
-    return if last_inspection_date.blank?
-
-    if (last_inspection_date <= 100.years.ago || last_inspection_date >= 100.years.from_now)
-      errors.add(:last_inspection_date, 'is an invalid date')
-    end
   end
 end

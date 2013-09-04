@@ -8,7 +8,7 @@ describe Certification do
   it do
     should validate_uniqueness_of(:certification_type_id).
              scoped_to(:employee_id).
-             with_message(/already assigned to this Employee. Please update existing Certification/)
+             with_message(/This Employee is already Certified for this Certification Type. Please update existing Certification/)
   end
   it { should validate_presence_of :active_certification_period }
 
@@ -194,7 +194,7 @@ describe Certification do
       let(:start_date) { 101.years.from_now }
 
       it 'should have the correct message' do
-        subject.errors.full_messages_for(:"active_certification_period.start_date").first.should == 'Last certification date must be before 09/04/2113'
+        subject.errors.full_messages_for(:"active_certification_period.start_date").first.should == 'Last certification date out of range'
       end
     end
 
@@ -202,7 +202,7 @@ describe Certification do
       let(:start_date) { 101.years.ago }
 
       it 'should have the correct message' do
-        subject.errors.full_messages_for(:"active_certification_period.start_date").first.should == 'Last certification date must be after 09/04/1913'
+        subject.errors.full_messages_for(:"active_certification_period.start_date").first.should == 'Last certification date out of range'
       end
     end
   end

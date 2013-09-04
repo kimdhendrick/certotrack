@@ -15,7 +15,7 @@ describe Equipment do
   it 'should require last_inspection_date if Inspectable' do
     equipment = new_equipment(inspection_interval: Interval::ONE_YEAR.text, last_inspection_date: nil)
     equipment.should_not be_valid
-    equipment.errors[:last_inspection_date].should == ["can't be blank"]
+    equipment.errors[:last_inspection_date].should == ["is not a valid date"]
   end
 
   it 'should not require last_inspection_date if Non-Inspectable' do
@@ -26,13 +26,13 @@ describe Equipment do
   it 'should give invalid date if date is more than 100 years in the future' do
     equipment = new_equipment(last_inspection_date: Date.new(3000,1,1))
     equipment.should_not be_valid
-    equipment.errors[:last_inspection_date].should == ['is an invalid date']
+    equipment.errors[:last_inspection_date].should == ['out of range']
   end
 
   it 'should give invalid date if date is more than 100 years in the past' do
     equipment = new_equipment(last_inspection_date: Date.new(1000,1,1))
     equipment.should_not be_valid
-    equipment.errors[:last_inspection_date].should == ['is an invalid date']
+    equipment.errors[:last_inspection_date].should == ['out of range']
   end
 
   it 'should be able to assign a customer to equipment' do

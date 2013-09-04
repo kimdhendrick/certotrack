@@ -23,7 +23,7 @@ class CertificationsController < ApplicationController
     @certification = @certification_service.certify(
       params[:employee][:id],
       params[:certification][:certification_type_id],
-      DateHelpers.string_to_date(params[:certification][:last_certification_date]),
+      params[:certification][:last_certification_date],
       params[:certification][:trainer],
       params[:certification][:comments]
     )

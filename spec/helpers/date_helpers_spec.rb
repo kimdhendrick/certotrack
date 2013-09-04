@@ -11,12 +11,4 @@ describe DateHelpers do
       DateHelpers.date_to_string(nil).should == ''
     end
   end
-
-  describe 'string_to_date' do
-    it 'should return nil on bad date format' do
-      DateHelpers.string_to_date(nil).should be_nil
-      DateHelpers.string_to_date('1111').should be_nil
-      DateHelpers.string_to_date('1/1/2000').should == Date.new(2000,1,1)
-    end
-  end
 end
