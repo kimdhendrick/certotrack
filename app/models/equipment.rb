@@ -1,4 +1,5 @@
 class Equipment < ActiveRecord::Base
+  include SortableByStatus
 
   belongs_to :customer
   belongs_to :location
@@ -15,10 +16,6 @@ class Equipment < ActiveRecord::Base
     return Status::EXPIRED if expired?
     return Status::EXPIRING if expiring?
     Status::VALID
-  end
-
-  def status_code
-    status.sort_order
   end
 
   def inspection_interval_code

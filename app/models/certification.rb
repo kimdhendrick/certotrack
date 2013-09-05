@@ -1,4 +1,5 @@
 class Certification < ActiveRecord::Base
+  include SortableByStatus
 
   belongs_to :certification_type
   belongs_to :employee
@@ -41,10 +42,6 @@ class Certification < ActiveRecord::Base
     certification_type.units_based? ?
       _calculate_status_for_units_based :
       _calculate_status_for_non_units_based
-  end
-
-  def status_code
-    status.sort_order
   end
 
   def na?
