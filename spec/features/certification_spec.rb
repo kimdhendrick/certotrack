@@ -11,6 +11,12 @@ describe 'Certifications', js: true do
         customer: @customer
       )
 
+      create_certification_type(
+        name: 'Inspections',
+        interval: Interval::SIX_MONTHS.text,
+        customer: @customer
+      )
+
       @employee = create_employee(
         employee_number: 'JB3',
         first_name: 'Joe',
@@ -58,6 +64,46 @@ describe 'Certifications', js: true do
       #page.should have_content 'Joe'
       #page.should have_content 'Brown'
       #page.should have_content '01/01/2000'
+    end
+
+    it 'should alert on future dates' do
+      visit employee_path @employee.id
+
+      page.should have_link 'New Employee Certification'
+      click_on 'New Employee Certification'
+
+      page.should have_content 'Create Certification'
+
+      page.should have_content 'Employee'
+      page.should have_link 'Joe Brown'
+      page.should have_content 'Certification Type'
+      page.should have_content 'Create Certification Type'
+      page.should have_content 'Trainer'
+      page.should have_content 'Last Certification Date'
+      page.should have_content 'Comments'
+
+      page.should have_button 'Create'
+      page.should have_button 'Save and Create Another'
+
+      select 'Inspections', from: 'Certification Type'
+      fill_in 'Last Certification Date', with: '01/01/2055'
+
+      click_on 'Create'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to enter a future date?')
+      alert.dismiss
+
+      fill_in 'Last Certification Date', with: '01/01/2055'
+
+      click_on 'Save and Create Another'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to enter a future date?')
+      alert.accept
+
+      page.should have_content 'Create Certification'
+      page.should have_content 'Certification: Inspections created for Brown, Joe.'
     end
 
     it 'should give error if already certified' do

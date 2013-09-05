@@ -43,3 +43,21 @@
   <%= submit_tag "Save and Create Another" %>
 
 <% end %>
+
+<script type="text/javascript">
+  $('[name=commit]').click(function() {
+    var date = new Date(document.getElementById('certification_last_certification_date').value);
+    var today = new Date();
+    var sure = true;
+
+    if (date > today) {
+      sure = confirm('Are you sure you want to enter a future date?');
+    }
+
+    if (!sure) {
+      return false;
+    }
+
+    return true;
+  });
+</script>

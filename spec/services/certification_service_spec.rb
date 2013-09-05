@@ -27,7 +27,7 @@ describe CertificationService do
       certification = certification_service.certify(
         employee.id,
         certification_type.id,
-        Date.new(2000, 1, 1),
+        '12/31/2000',
         'Joe Bob',
         'Great class!'
       )
@@ -35,7 +35,7 @@ describe CertificationService do
       fake_certification_factory.received_message.should == :new_instance
       fake_certification_factory.received_params[0].should == employee.id
       fake_certification_factory.received_params[1].should == certification_type.id
-      fake_certification_factory.received_params[2].should == Date.new(2000, 1, 1)
+      fake_certification_factory.received_params[2].should == '12/31/2000'
       fake_certification_factory.received_params[3].should == 'Joe Bob'
       fake_certification_factory.received_params[4].should == 'Great class!'
       certification.should be_persisted
@@ -51,7 +51,7 @@ describe CertificationService do
       certification = certification_service.certify(
         employee.id,
         certification_type.id,
-        nil,
+        '999',
         'Joe Bob',
         'Great class!'
       )
@@ -61,7 +61,7 @@ describe CertificationService do
       fake_certification_factory.received_message.should == :new_instance
       fake_certification_factory.received_params[0].should == employee.id
       fake_certification_factory.received_params[1].should == certification_type.id
-      fake_certification_factory.received_params[2].should == nil
+      fake_certification_factory.received_params[2].should == '999'
       fake_certification_factory.received_params[3].should == 'Joe Bob'
       fake_certification_factory.received_params[4].should == 'Great class!'
     end
