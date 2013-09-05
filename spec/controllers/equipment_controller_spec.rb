@@ -550,7 +550,7 @@ describe EquipmentController do
               'serial_number' => 'newSN',
               'inspection_interval' => 'Annually',
               'last_inspection_date' => '01/01/2001',
-              'notes' => 'some new notes'
+              'comments' => 'some new notes'
             }
           }, valid_session
         end
@@ -613,7 +613,7 @@ describe EquipmentController do
             'serial_number' => 'newSN',
             'inspection_interval' => 'Annually',
             'last_inspection_date' => '01/01/2001',
-            'notes' => 'some new notes'
+            'comments' => 'some new notes'
           }
         }, valid_session
       end

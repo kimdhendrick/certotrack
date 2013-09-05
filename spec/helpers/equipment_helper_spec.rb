@@ -8,7 +8,7 @@ describe EquipmentHelper do
       :serial_number,
       :inspection_interval,
       :last_inspection_date,
-      :notes,
+      :comments,
       :location_id,
       :employee_id
     ]

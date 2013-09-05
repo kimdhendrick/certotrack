@@ -21,23 +21,23 @@ sue = create_employee(first_name: 'Sue', last_name: 'Smith', customer: customer,
 
 create_equipment(name: 'Meter', serial_number: 'ABC123', customer: customer, last_inspection_date: '01-01-2013',
                        inspection_interval: Interval::ONE_YEAR.text, expiration_date: '01-01-2014',
-                       notes: 'Fragile', location: golden)
+                       comments: 'Fragile', location: golden)
 
 create_equipment(name: 'Cart', serial_number: '888-EFZ', customer: customer, last_inspection_date: '02-01-2013',
                        inspection_interval: Interval::ONE_YEAR.text, expiration_date: '02-01-2014',
-                       notes: 'Heavy', employee: sue)
+                       comments: 'Heavy', employee: sue)
 
 create_equipment(name: 'Box', serial_number: 'Box 555', customer: customer, last_inspection_date: '02-01-2013',
                        inspection_interval: Interval::ONE_YEAR.text, expiration_date: '02-01-2014',
-                       notes: 'Heavy')
+                       comments: 'Heavy')
 
 create_equipment(name: 'Light cart', serial_number: 'Cart LI1', customer: customer, last_inspection_date: Date.today-45.days,
                        inspection_interval: Interval::ONE_MONTH.text, expiration_date: Date.yesterday,
-                       notes: 'Light')
+                       comments: 'Light')
 
 create_equipment(name: 'Air Bottle', serial_number: 'SCOTT', customer: customer, last_inspection_date: Date.today,
                        inspection_interval: Interval::ONE_MONTH.text, expiration_date: Date.today + 59.days,
-                       notes: 'Full')
+                       comments: 'Full')
 
 create_equipment(name: 'Mobile Data Computer', serial_number: 'MDC999', customer: customer, last_inspection_date: Date.today,
                        inspection_interval: Interval::NOT_REQUIRED.text)

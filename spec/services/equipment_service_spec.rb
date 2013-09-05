@@ -309,7 +309,7 @@ describe EquipmentService do
           'serial_number' => 'newSN',
           'inspection_interval' => '5 years',
           'last_inspection_date' => '12/31/2001',
-          'notes' => 'some new notes'
+          'comments' => 'some new notes'
         }
 
       success = EquipmentService.new.update_equipment(equipment, attributes)
@@ -321,7 +321,7 @@ describe EquipmentService do
       equipment.inspection_interval.should == '5 years'
       equipment.last_inspection_date.should == Date.new(2001, 12, 31)
       equipment.inspection_type.should == InspectionType::INSPECTABLE.text
-      equipment.notes.should == 'some new notes'
+      equipment.comments.should == 'some new notes'
       equipment.expiration_date.should == Date.new(2006, 12, 31)
     end
 
@@ -362,7 +362,7 @@ describe EquipmentService do
           'serial_number' => 'newSN',
           'inspection_interval' => '5 years',
           'last_inspection_date' => '12/31/2001',
-          'notes' => 'some new notes'
+          'comments' => 'some new notes'
         }
       customer = new_customer
 
@@ -374,7 +374,7 @@ describe EquipmentService do
       equipment.inspection_interval.should == '5 years'
       equipment.last_inspection_date.should == Date.new(2001, 12, 31)
       equipment.inspection_type.should == InspectionType::INSPECTABLE.text
-      equipment.notes.should == 'some new notes'
+      equipment.comments.should == 'some new notes'
       equipment.expiration_date.should == Date.new(2006, 12, 31)
       equipment.customer.should == customer
     end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130901181217) do
+ActiveRecord::Schema.define(version: 20130905040552) do
 
   create_table "certification_periods", force: true do |t|
     t.string   "trainer"
@@ -80,7 +80,7 @@ ActiveRecord::Schema.define(version: 20130901181217) do
     t.string   "inspection_interval"
     t.string   "name"
     t.date     "expiration_date"
-    t.string   "notes"
+    t.string   "comments"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "customer_id"

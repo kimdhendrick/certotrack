@@ -17,7 +17,7 @@ describe 'Equipment', js: true do
         inspection_interval: 'Annually',
         last_inspection_date: Date.new(2013, 1, 1),
         expiration_date: Date.new(2024, 2, 3),
-        notes: 'my notes',
+        comments: 'my notes',
         location_id: @denver_location.id
       )
 
@@ -230,7 +230,7 @@ describe 'Equipment', js: true do
         inspection_interval: 'Annually',
         last_inspection_date: Date.new(2013, 1, 1),
         expiration_date: Date.new(2024, 2, 3),
-        notes: 'my notes',
+        comments: 'my notes',
         location_id: @littleton_location.id
       )
 
@@ -289,7 +289,7 @@ describe 'Equipment', js: true do
         inspection_interval: 'Annually',
         last_inspection_date: Date.new(2013, 1, 1),
         expiration_date: Date.new(2024, 2, 3),
-        notes: 'my notes',
+        comments: 'my notes',
         location_id: @littleton_location.id
       )
 
