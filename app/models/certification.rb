@@ -19,6 +19,10 @@ class Certification < ActiveRecord::Base
     active_certification_period.end_date
   end
 
+  def name
+    certification_type.name
+  end
+
   def expiration_date=(date)
     active_certification_period.end_date=(date)
   end

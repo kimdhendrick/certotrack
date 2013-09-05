@@ -173,6 +173,11 @@ describe Certification do
     certification.active_certification_period.units_achieved.should == 10
   end
 
+  it 'should response to name' do
+    certification = FactoryGirl.build(:certification)
+    certification.name.should == 'Scrum Master'
+  end
+
   describe "new date validations" do
     subject { Certification.new }
     let(:certification_period) { CertificationPeriod.new(start_date: start_date) }

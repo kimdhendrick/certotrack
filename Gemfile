@@ -21,12 +21,14 @@ gem 'validates_timeliness', '~> 3.0'
 group :test do
   gem "shoulda-matchers"
   gem 'selenium-webdriver'
+  gem 'cucumber-rails', :require => false
   gem 'database_cleaner'
 end
 
 group :development, :test do
   gem 'rspec-rails', ' ~> 2.0'
   gem 'capybara'
+  gem 'factory_girl_rails'
 end
 
 group :production do
