@@ -191,15 +191,29 @@ describe EmployeesController do
   end
 
   describe 'GET show' do
+    let(:employee) { create_employee(customer: @customer) }
+    let(:certification_service) { stub('certification_service') }
+    let(:certification) { FactoryGirl.create(:certification, employee: employee) }
+    let(:certifications) { [certification] }
+
+    before do
+      controller.load_certification_service(certification_service)
+      certification_service.stub(:get_all_certifications_for).and_return(certifications)
+    end
+    
     context 'when certification user' do
       before do
         sign_in stub_certification_user
       end
 
       it 'assigns employee as @employee' do
-        employee = create_employee(customer: @customer)
         get :show, {:id => employee.to_param}, valid_session
         assigns(:employee).should eq(employee)
+      end
+
+      it 'assigns certifications as @certifications' do
+        get :show, { id: employee.to_param }, valid_session
+        assigns(:certifications).should == certifications
       end
     end
 
@@ -209,9 +223,13 @@ describe EmployeesController do
       end
 
       it 'assigns employee as @employee' do
-        employee = create_employee(customer: @customer)
         get :show, {:id => employee.to_param}, valid_session
         assigns(:employee).should eq(employee)
+      end
+
+      it 'assigns certifications as @certifications' do
+        get :show, { id: employee.to_param }, valid_session
+        assigns(:certifications).should == certifications
       end
     end
 

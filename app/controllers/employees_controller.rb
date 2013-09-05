@@ -3,7 +3,8 @@ class EmployeesController < ApplicationController
 
   before_filter :authenticate_user!,
                 :load_employee_service,
-                :load_location_service
+                :load_location_service,
+                :load_certification_service
 
   before_action :_set_employee, only: [:show, :edit, :update, :destroy]
 
@@ -17,6 +18,7 @@ class EmployeesController < ApplicationController
   end
 
   def show
+    @certifications = @certification_service.get_all_certifications_for(@employee, params)
   end
 
   def new
@@ -70,6 +72,10 @@ class EmployeesController < ApplicationController
 
   def load_location_service(service = LocationService.new)
     @location_service ||= service
+  end
+
+  def load_certification_service(service = CertificationService.new)
+    @certification_service ||= service
   end
 
   private

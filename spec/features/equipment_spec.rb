@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Equipment', js: true do
+describe 'Equipment' do
 
   describe 'Show Equipment' do
     before do
@@ -53,7 +53,7 @@ describe 'Equipment', js: true do
     end
   end
 
-  describe 'Create Equipment' do
+  describe 'Create Equipment', js: true do
     before do
       login_as_equipment_user
       @denver_location = create_location(name: 'Denver', customer_id: @customer.id)
@@ -214,7 +214,7 @@ describe 'Equipment', js: true do
 
   end
 
-  describe 'Update Equipment' do
+  describe 'Update Equipment', js: true do
     before do
       login_as_equipment_user
       @denver_location = create_location(name: 'Denver', customer_id: @customer.id)
@@ -332,7 +332,7 @@ describe 'Equipment', js: true do
     end
   end
 
-  describe 'Delete Equipment' do
+  describe 'Delete Equipment', js: true do
     before do
       login_as_equipment_user
       @denver_location = create_location(name: 'Denver', customer_id: @customer.id)

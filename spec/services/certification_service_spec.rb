@@ -66,4 +66,38 @@ describe CertificationService do
       fake_certification_factory.received_params[4].should == 'Great class!'
     end
   end
+
+  describe '#get_all_certifications_for' do
+    subject { CertificationService.new }
+    it 'returns all certifications for a given employee' do
+      employee_1 = FactoryGirl.create(:employee)
+      employee_2 = FactoryGirl.create(:employee)
+      certification_1 = FactoryGirl.create(:certification, employee: employee_1)
+      certification_2 = FactoryGirl.create(:certification, employee: employee_2)
+
+      subject.get_all_certifications_for(employee_1).should == [certification_1]
+      subject.get_all_certifications_for(employee_2).should == [certification_2]
+    end
+
+    context 'sorting' do
+      it 'should call SortService to ensure sorting' do
+        fake_sort_service = subject.load_sort_service(FakeService.new([]))
+
+        subject.get_all_certifications_for(@my_user)
+
+        fake_sort_service.received_message.should == :sort
+      end
+    end
+
+    context 'pagination' do
+      it 'should call PaginationService to paginate results' do
+        subject.load_sort_service(FakeService.new)
+        fake_pagination_service = subject.load_pagination_service(FakeService.new)
+
+        subject.get_all_certifications_for(@my_user)
+
+        fake_pagination_service.received_message.should == :paginate
+      end
+    end
+  end
 end

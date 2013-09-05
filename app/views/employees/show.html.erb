@@ -30,3 +30,30 @@
 
 <hr/>
 <%= link_to 'New Employee Certification', new_certification_path(employee_id: @employee.id) %>
+
+<table class="sortable">
+  <thead>
+    <tr>
+      <th><%= sortable 'name', title = 'Certification Type'%></th>
+      <th>Trainer</th>
+      <th>Expiration Date</th>
+      <th>Last Certification Date</th>
+      <th>Units</th>
+      <th><%= sortable 'status_code', title='Status' %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @certifications.each do |certification| %>
+      <tr>
+        <td><%= certification.name %></td>
+        <td><%= certification.trainer %></td>
+        <td><%= DateHelpers::date_to_string(certification.expiration_date) %></td>
+        <td><%= DateHelpers::date_to_string(certification.last_certification_date) %></td>
+        <td><%= certification.units_achieved %></td>
+        <td><%= certification.status %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= will_paginate @certifications %>

@@ -21,8 +21,7 @@ class CertificationType < ActiveRecord::Base
     "#{name}:#{interval}"
   end
 
-
-  private
+private
 
   def _default_values
     self.units_required ||= 0
