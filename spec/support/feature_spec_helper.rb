@@ -1,15 +1,10 @@
 module ReportHelpers
-  def column_data_should_be_in_order(data_list)
-    within 'table tbody tr:nth-of-type(1)' do
-      page.should have_content data_list[0]
-    end
-
-    within 'table tbody tr:nth-of-type(2)' do
-      page.should have_content data_list[1]
-    end
-
-    within 'table tbody tr:nth-of-type(3)' do
-      page.should have_content data_list[2]
+  def column_data_should_be_in_order(*data_list)
+    data_list.each_with_index do |data, index|
+      row_number = index + 1
+      within "table tbody tr:nth-of-type(#{row_number})" do
+        page.should have_content data_list[index]
+      end
     end
   end
 end

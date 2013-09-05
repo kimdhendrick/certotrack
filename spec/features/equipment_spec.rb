@@ -561,11 +561,11 @@ describe 'Equipment', js: true do
 
         # Ascending search
         click_link 'Name'
-        column_data_should_be_in_order(['alpha', 'beta', 'zeta'])
+        column_data_should_be_in_order('alpha', 'beta', 'zeta')
 
         # Descending search
         click_link 'Name'
-        column_data_should_be_in_order(['zeta', 'beta', 'alpha'])
+        column_data_should_be_in_order('zeta', 'beta', 'alpha')
       end
 
       it 'should sort by serial number' do
@@ -578,11 +578,11 @@ describe 'Equipment', js: true do
 
         # Ascending search
         click_link 'Serial Number'
-        column_data_should_be_in_order(['111', '222', '333'])
+        column_data_should_be_in_order('111', '222', '333')
 
         # Descending search
         click_link 'Serial Number'
-        column_data_should_be_in_order(['333', '222', '111'])
+        column_data_should_be_in_order('333', '222', '111')
       end
 
       it 'should sort by status' do
@@ -595,11 +595,11 @@ describe 'Equipment', js: true do
 
         # Ascending search
         click_link 'Status'
-        column_data_should_be_in_order([Status::VALID.text, Status::EXPIRING.text, Status::EXPIRED.text])
+        column_data_should_be_in_order(Status::VALID.text, Status::EXPIRING.text, Status::EXPIRED.text)
 
         # Descending search
         click_link 'Status'
-        column_data_should_be_in_order([Status::EXPIRED.text, Status::EXPIRING.text, Status::VALID.text])
+        column_data_should_be_in_order(Status::EXPIRED.text, Status::EXPIRING.text, Status::VALID.text)
       end
 
       it 'should sort by inspection interval' do
@@ -618,31 +618,27 @@ describe 'Equipment', js: true do
         # Ascending search
         click_link 'Inspection Interval'
         column_data_should_be_in_order(
-          [
-            Interval::ONE_MONTH.text,
-            Interval::THREE_MONTHS.text,
-            Interval::SIX_MONTHS.text,
-            Interval::ONE_YEAR.text,
-            Interval::TWO_YEARS.text,
-            Interval::THREE_YEARS.text,
-            Interval::FIVE_YEARS.text,
-            Interval::NOT_REQUIRED.text
-          ]
+          Interval::ONE_MONTH.text,
+          Interval::THREE_MONTHS.text,
+          Interval::SIX_MONTHS.text,
+          Interval::ONE_YEAR.text,
+          Interval::TWO_YEARS.text,
+          Interval::THREE_YEARS.text,
+          Interval::FIVE_YEARS.text,
+          Interval::NOT_REQUIRED.text
         )
 
         # Descending search
         click_link 'Inspection Interval'
         column_data_should_be_in_order(
-          [
-            Interval::NOT_REQUIRED.text,
-            Interval::FIVE_YEARS.text,
-            Interval::THREE_YEARS.text,
-            Interval::TWO_YEARS.text,
-            Interval::ONE_YEAR.text,
-            Interval::SIX_MONTHS.text,
-            Interval::THREE_MONTHS.text,
-            Interval::ONE_MONTH.text
-          ]
+          Interval::NOT_REQUIRED.text,
+          Interval::FIVE_YEARS.text,
+          Interval::THREE_YEARS.text,
+          Interval::TWO_YEARS.text,
+          Interval::ONE_YEAR.text,
+          Interval::SIX_MONTHS.text,
+          Interval::THREE_MONTHS.text,
+          Interval::ONE_MONTH.text
         )
       end
 
@@ -660,11 +656,11 @@ describe 'Equipment', js: true do
 
         # Ascending search
         click_link 'Last Inspection Date'
-        column_data_should_be_in_order([DateHelpers.date_to_string(earliest_date), DateHelpers.date_to_string(middle_date), DateHelpers.date_to_string(latest_date)])
+        column_data_should_be_in_order(DateHelpers.date_to_string(earliest_date), DateHelpers.date_to_string(middle_date), DateHelpers.date_to_string(latest_date))
 
         # Descending search
         click_link 'Last Inspection Date'
-        column_data_should_be_in_order([DateHelpers.date_to_string(latest_date), DateHelpers.date_to_string(middle_date), DateHelpers.date_to_string(earliest_date)])
+        column_data_should_be_in_order(DateHelpers.date_to_string(latest_date), DateHelpers.date_to_string(middle_date), DateHelpers.date_to_string(earliest_date))
       end
 
       it 'should sort by inspection type' do
@@ -677,11 +673,11 @@ describe 'Equipment', js: true do
 
         # Ascending search
         click_link 'Inspection Type'
-        column_data_should_be_in_order(["Inspectable", "Inspectable", "Non-Inspectable"])
+        column_data_should_be_in_order("Inspectable", "Inspectable", "Non-Inspectable")
 
         # Descending search
         click_link 'Inspection Type'
-        column_data_should_be_in_order(["Non-Inspectable", "Inspectable", "Inspectable"])
+        column_data_should_be_in_order("Non-Inspectable", "Inspectable", "Inspectable")
       end
 
       it 'should sort by expiration date' do
@@ -699,11 +695,11 @@ describe 'Equipment', js: true do
 
         # Ascending search
         click_link 'Expiration Date'
-        column_data_should_be_in_order([DateHelpers.date_to_string(earliest_date), DateHelpers.date_to_string(middle_date), DateHelpers.date_to_string(latest_date), ''])
+        column_data_should_be_in_order(DateHelpers.date_to_string(earliest_date), DateHelpers.date_to_string(middle_date), DateHelpers.date_to_string(latest_date), '')
 
         # Descending search
         click_link 'Expiration Date'
-        column_data_should_be_in_order(['', DateHelpers.date_to_string(latest_date), DateHelpers.date_to_string(middle_date), DateHelpers.date_to_string(earliest_date)])
+        column_data_should_be_in_order('', DateHelpers.date_to_string(latest_date), DateHelpers.date_to_string(middle_date), DateHelpers.date_to_string(earliest_date))
       end
 
       it 'should sort by assignee' do
@@ -727,11 +723,11 @@ describe 'Equipment', js: true do
 
         # Ascending search
         click_link 'Assignee'
-        column_data_should_be_in_order(['Alcatraz', 'Alfonso, Albert', 'Baker, Bob', 'Burbank', 'Zephyr, Zoe', 'Zurich'])
+        column_data_should_be_in_order('Alcatraz', 'Alfonso, Albert', 'Baker, Bob', 'Burbank', 'Zephyr, Zoe', 'Zurich')
 
         # Descending search
         click_link 'Assignee'
-        column_data_should_be_in_order(['Zurich', 'Zephyr, Zoe', 'Burbank', 'Baker, Bob', 'Alfonso, Albert', 'Alcatraz'])
+        column_data_should_be_in_order('Zurich', 'Zephyr, Zoe', 'Burbank', 'Baker, Bob', 'Alfonso, Albert', 'Alcatraz')
       end
     end
 

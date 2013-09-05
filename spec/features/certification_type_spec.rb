@@ -236,11 +236,11 @@ describe 'Certification Type', js: true do
 
         # Ascending sort
         click_link 'Name'
-        column_data_should_be_in_order(['alpha', 'beta', 'zeta'])
+        column_data_should_be_in_order('alpha', 'beta', 'zeta')
 
         # Descending sort
         click_link 'Name'
-        column_data_should_be_in_order(['zeta', 'beta', 'alpha'])
+        column_data_should_be_in_order('zeta', 'beta', 'alpha')
       end
 
       it 'should sort by interval' do
@@ -259,31 +259,27 @@ describe 'Certification Type', js: true do
         # Ascending sort
         click_link 'Interval'
         column_data_should_be_in_order(
-          [
-            Interval::ONE_MONTH.text,
-            Interval::THREE_MONTHS.text,
-            Interval::SIX_MONTHS.text,
-            Interval::ONE_YEAR.text,
-            Interval::TWO_YEARS.text,
-            Interval::THREE_YEARS.text,
-            Interval::FIVE_YEARS.text,
-            Interval::NOT_REQUIRED.text
-          ]
+          Interval::ONE_MONTH.text,
+          Interval::THREE_MONTHS.text,
+          Interval::SIX_MONTHS.text,
+          Interval::ONE_YEAR.text,
+          Interval::TWO_YEARS.text,
+          Interval::THREE_YEARS.text,
+          Interval::FIVE_YEARS.text,
+          Interval::NOT_REQUIRED.text
         )
 
         # Descending sort
         click_link 'Interval'
         column_data_should_be_in_order(
-          [
-            Interval::NOT_REQUIRED.text,
-            Interval::FIVE_YEARS.text,
-            Interval::THREE_YEARS.text,
-            Interval::TWO_YEARS.text,
-            Interval::ONE_YEAR.text,
-            Interval::SIX_MONTHS.text,
-            Interval::THREE_MONTHS.text,
-            Interval::ONE_MONTH.text
-          ]
+          Interval::NOT_REQUIRED.text,
+          Interval::FIVE_YEARS.text,
+          Interval::THREE_YEARS.text,
+          Interval::TWO_YEARS.text,
+          Interval::ONE_YEAR.text,
+          Interval::SIX_MONTHS.text,
+          Interval::THREE_MONTHS.text,
+          Interval::ONE_MONTH.text
         )
       end
     end

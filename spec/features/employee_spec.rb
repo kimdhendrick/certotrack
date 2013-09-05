@@ -128,11 +128,11 @@ describe 'Employee', js: true do
 
         # Ascending search
         click_link 'First Name'
-        column_data_should_be_in_order(['alpha', 'beta', 'zeta'])
+        column_data_should_be_in_order('alpha', 'beta', 'zeta')
 
         # Descending search
         click_link 'First Name'
-        column_data_should_be_in_order(['zeta', 'beta', 'alpha'])
+        column_data_should_be_in_order('zeta', 'beta', 'alpha')
       end
 
       it 'should sort by last name' do
@@ -145,11 +145,11 @@ describe 'Employee', js: true do
 
         # Ascending search
         click_link 'Last Name'
-        column_data_should_be_in_order(['alpha', 'beta', 'zeta'])
+        column_data_should_be_in_order('alpha', 'beta', 'zeta')
 
         # Descending search
         click_link 'Last Name'
-        column_data_should_be_in_order(['zeta', 'beta', 'alpha'])
+        column_data_should_be_in_order('zeta', 'beta', 'alpha')
       end
 
       it 'should sort by employee number' do
@@ -162,11 +162,11 @@ describe 'Employee', js: true do
 
         # Ascending search
         click_link 'Employee Number'
-        column_data_should_be_in_order(['111', '222', '333'])
+        column_data_should_be_in_order('111', '222', '333')
 
         # Descending search
         click_link 'Employee Number'
-        column_data_should_be_in_order(['333', '222', '111'])
+        column_data_should_be_in_order('333', '222', '111')
       end
 
       it 'should sort by location' do
@@ -183,11 +183,11 @@ describe 'Employee', js: true do
 
         # Ascending search
         click_link 'Location'
-        column_data_should_be_in_order(['Alcatraz', 'Burbank', 'Zurich'])
+        column_data_should_be_in_order('Alcatraz', 'Burbank', 'Zurich')
 
         # Descending search
         click_link 'Location'
-        column_data_should_be_in_order(['Zurich', 'Burbank', 'Alcatraz'])
+        column_data_should_be_in_order('Zurich', 'Burbank', 'Alcatraz')
       end
     end
 
