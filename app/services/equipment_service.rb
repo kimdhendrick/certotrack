@@ -1,4 +1,7 @@
+require 'service_support/sorting_and_pagination'
+
 class EquipmentService
+  include ServiceSupport::SortingAndPagination
 
   def get_all_equipment(current_user, params = {})
     equipment = _get_equipment_for_user(current_user)
@@ -66,14 +69,6 @@ class EquipmentService
     Equipment.where(employee: employee)
   end
 
-  def load_sort_service(service = SortService.new)
-    @sort_service ||= service
-  end
-
-  def load_pagination_service(service = PaginationService.new)
-    @pagination_service ||= service
-  end
-
   def load_search_service(service = SearchService.new)
     @search_service ||= service
   end
@@ -83,11 +78,6 @@ class EquipmentService
 
   def _get_equipment_for_user(current_user)
     current_user.admin? ? Equipment.all : Equipment.where(customer: current_user.customer)
-  end
-
-  def _sort_and_paginate(equipment, params)
-    equipment = load_sort_service.sort(equipment, params[:sort], params[:direction])
-    load_pagination_service.paginate(equipment, params[:page])
   end
 
   def _expires_on(equipment)
