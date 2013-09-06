@@ -8,7 +8,8 @@ describe Certification do
   it do
     should validate_uniqueness_of(:certification_type_id).
              scoped_to(:employee_id).
-             with_message(/This Employee is already Certified for this Certification Type. Please update existing Certification/)
+             with_message(/already assigned to this Employee. Please update existing Certification/)
+
   end
   it { should validate_presence_of :active_certification_period }
   it { should validate_presence_of :certification_type }
