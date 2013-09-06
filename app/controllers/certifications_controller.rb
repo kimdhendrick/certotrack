@@ -16,10 +16,6 @@ class CertificationsController < ApplicationController
   def create
     authorize! :create, :certification
 
-    if params[:certification][:certification_type_id].blank?
-      return _render_new_with_message 'No certification type selected'
-    end
-
     @certification = @certification_service.certify(
       params[:employee][:id],
       params[:certification][:certification_type_id],

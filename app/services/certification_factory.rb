@@ -14,7 +14,7 @@ class CertificationFactory
   private
 
   def _expires_on(certification_type_id, certification_date)
-    return nil if certification_date.blank?
+    return nil if certification_date.blank? || certification_type_id.blank?
     certification_type = CertificationType.find(certification_type_id)
     load_expiration_calculator.calculate(certification_date, Interval.find_by_text(certification_type.interval))
   end

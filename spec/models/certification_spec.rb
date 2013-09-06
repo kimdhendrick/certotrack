@@ -11,6 +11,7 @@ describe Certification do
              with_message(/This Employee is already Certified for this Certification Type. Please update existing Certification/)
   end
   it { should validate_presence_of :active_certification_period }
+  it { should validate_presence_of :certification_type }
 
   context 'non-units based certification type' do
     before do

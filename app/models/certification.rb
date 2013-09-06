@@ -8,6 +8,7 @@ class Certification < ActiveRecord::Base
 
   validates_uniqueness_of :certification_type_id, scope: :employee_id
   validates_presence_of :active_certification_period
+  validates_presence_of :certification_type
 
   delegate :comments, to: :active_certification_period
   delegate :comments=, to: :active_certification_period
