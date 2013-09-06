@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe 'Employee Deactivation', js: true do
-  describe 'Deactivate Employee' do
+describe 'Employee Deactivation' do
+  describe 'Deactivate Employee', js: true do
     before do
       login_as_equipment_and_certification_user
       @denver_location = create_location(name: 'Denver', customer_id: @customer.id)

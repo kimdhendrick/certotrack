@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Employee', js: true do
+describe 'Employee' do
   describe 'Create Employee' do
     before do
       login_as_certification_user
@@ -346,7 +346,7 @@ describe 'Employee', js: true do
     end
   end
 
-  describe 'Delete Employee' do
+  describe 'Delete Employee', js: true do
     before do
       login_as_certification_user
       @denver_location = create_location(name: 'Denver', customer_id: @customer.id)

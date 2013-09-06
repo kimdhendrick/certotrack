@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Certification Type', js: true do
+describe 'Certification Type' do
 
   describe 'Create Certification Type' do
     before do
@@ -126,7 +126,7 @@ describe 'Certification Type', js: true do
     end
   end
 
-  describe 'Delete Certification Type' do
+  describe 'Delete Certification Type', js: true do
     before do
       login_as_certification_user
     end

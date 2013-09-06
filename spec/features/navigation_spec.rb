@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe 'Navigation', js: true do
-  describe 'Equipment Links' do
+describe 'Navigation' do
+  describe 'Equipment Links', js: true do
     before do
       login_as_equipment_user
     end
@@ -186,7 +186,7 @@ describe 'Navigation', js: true do
     end
   end
 
-  describe 'Certification Links' do
+  describe 'Certification Links', js: true do
     before do
       login_as_certification_user
     end
@@ -317,7 +317,7 @@ describe 'Navigation', js: true do
     end
   end
 
-  describe 'Employee Links' do
+  describe 'Employee Links', js: true do
     before do
       login_as_certification_user
     end
