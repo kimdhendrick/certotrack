@@ -4,7 +4,7 @@ describe CertificationService do
   describe 'new_certification' do
     it 'calls CertificationFactory' do
       employee = create_employee
-      certification = new_certification
+      certification = new_certification(employee: employee)
       certification_service = CertificationService.new
       fake_certification_factory = certification_service.load_certification_factory(FakeService.new(certification))
 
@@ -20,7 +20,7 @@ describe CertificationService do
     it 'creates a certification' do
       employee = create_employee
       certification_type = create_certification_type
-      certification = new_certification
+      certification = new_certification(certification_type: certification_type, employee: employee)
       certification_service = CertificationService.new
       fake_certification_factory = certification_service.load_certification_factory(FakeService.new(certification))
 

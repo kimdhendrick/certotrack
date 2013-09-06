@@ -1,6 +1,9 @@
 FactoryGirl.define do
   factory :certification_type do
-    name 'Scrum Master'
+    sequence :name do |n|
+      "Scrum Master-#{n}"
+    end
+
     interval Interval::ONE_YEAR.text
 
     factory :units_based_certification_type do

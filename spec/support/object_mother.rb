@@ -107,7 +107,7 @@ module ObjectMother
   end
 
   def create_certification_type(options = {})
-    new_certification_type(options).tap(&:save!)
+    FactoryGirl.create(:certification_type, options)
   end
 
   def new_certification_type(options = {})
@@ -133,17 +133,11 @@ module ObjectMother
   end
 
   def create_certification(options = {})
-    new_certification(options).tap(&:save!)
+    FactoryGirl.create(:certification, options)
   end
 
   def new_certification(options = {})
-    valid_attributes = {
-      certification_type_id: -> {create_certification_type.id},
-      employee_id: -> {create_employee.id},
-      last_certification_date: Date.new(2005, 1, 4),
-      active_certification_period: -> {create_certification_period}
-    }
-    _apply(Certification.new, valid_attributes, options)
+    FactoryGirl.build(:certification, options)
   end
 
   def valid_session

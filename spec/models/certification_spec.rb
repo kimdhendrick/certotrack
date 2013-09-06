@@ -175,7 +175,8 @@ describe Certification do
   end
 
   it 'should respond to name' do
-    certification = FactoryGirl.build(:certification)
+    certification_type = create_certification_type(name: 'Scrum Master')
+    certification = create_certification(certification_type: certification_type)
     certification.name.should == 'Scrum Master'
   end
 

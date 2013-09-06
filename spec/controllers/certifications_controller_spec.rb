@@ -168,21 +168,6 @@ describe CertificationsController do
         response.should render_template('new')
       end
 
-      it 'handles missing certification_type_id' do
-        certification_type = create_certification_type
-        controller.load_certification_type_service(FakeService.new([certification_type]))
-
-        params = {
-          employee: {},
-          certification: {certification_type_id: nil}
-        }
-        post :create, params, valid_session
-
-        response.should render_template('new')
-        assigns(:certification).should be_a(Certification)
-        assigns(:certification_types).should eq([certification_type])
-      end
-
       context 'Create' do
         it 'redirects to show employee on success' do
           employee = create_employee
