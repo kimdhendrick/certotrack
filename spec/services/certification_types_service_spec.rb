@@ -139,7 +139,7 @@ describe CertificationTypeService do
 
         admin_user = create_user(roles: ['admin'])
 
-        CertificationTypeService.new.get_certification_type_list(admin_user).should == [my_certification_type, other_certification_type]
+        CertificationTypeService.new.get_certification_type_list(admin_user).should =~ [my_certification_type, other_certification_type]
       end
     end
 

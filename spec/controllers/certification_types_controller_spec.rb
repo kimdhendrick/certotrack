@@ -13,7 +13,7 @@ describe CertificationTypesController do
       end
 
       it 'assigns a new certification type as @certification_type' do
-        get :new, {}, valid_session
+        get :new, {}, {}
         assigns(:certification_type).should be_a_new(CertificationType)
       end
     end
@@ -24,7 +24,7 @@ describe CertificationTypesController do
       end
 
       it 'assigns a new certification_type as @certification_type' do
-        get :new, {}, valid_session
+        get :new, {}, {}
         assigns(:certification_type).should be_a_new(CertificationType)
       end
     end
@@ -35,7 +35,7 @@ describe CertificationTypesController do
       end
 
       it 'does not assign certification_type as @certification_type' do
-        get :new, {}, valid_session
+        get :new, {}, {}
         assigns(:certification_type).should be_nil
       end
     end
@@ -50,18 +50,18 @@ describe CertificationTypesController do
       describe 'with valid params' do
         it 'calls CertificationTypeService' do
           CertificationTypeService.any_instance.should_receive(:create_certification_type).once.and_return(new_certification_type)
-          post :create, {:certification_type => certification_type_attributes}, valid_session
+          post :create, {:certification_type => certification_type_attributes}, {}
         end
 
         it 'assigns a newly created certification_type as @certification_type' do
           CertificationTypeService.any_instance.stub(:create_certification_type).and_return(new_certification_type)
-          post :create, {:certification_type => certification_type_attributes}, valid_session
+          post :create, {:certification_type => certification_type_attributes}, {}
           assigns(:certification_type).should be_a(CertificationType)
         end
 
         it 'redirects to the created certification_type' do
           CertificationTypeService.any_instance.stub(:create_certification_type).and_return(create_certification_type)
-          post :create, {:certification_type => certification_type_attributes}, valid_session
+          post :create, {:certification_type => certification_type_attributes}, {}
           response.should redirect_to(CertificationType.last)
         end
       end
@@ -71,7 +71,7 @@ describe CertificationTypesController do
           CertificationTypeService.any_instance.should_receive(:create_certification_type).once.and_return(new_certification_type)
           CertificationType.any_instance.stub(:save).and_return(false)
 
-          post :create, {:certification_type => {'name' => 'invalid value'}}, valid_session
+          post :create, {:certification_type => {'name' => 'invalid value'}}, {}
 
           assigns(:certification_type).should be_a_new(CertificationType)
         end
@@ -79,14 +79,14 @@ describe CertificationTypesController do
         it "re-renders the 'new' template" do
           CertificationTypeService.any_instance.should_receive(:create_certification_type).once.and_return(new_certification_type)
           CertificationType.any_instance.stub(:save).and_return(false)
-          post :create, {:certification_type => {'name' => 'invalid value'}}, valid_session
+          post :create, {:certification_type => {'name' => 'invalid value'}}, {}
           response.should render_template('new')
         end
 
         it 'assigns @intervals' do
           CertificationTypeService.any_instance.should_receive(:create_certification_type).once.and_return(new_certification_type)
           CertificationType.any_instance.stub(:save).and_return(false)
-          post :create, {:certification_type => {'name' => 'invalid value'}}, valid_session
+          post :create, {:certification_type => {'name' => 'invalid value'}}, {}
           assigns(:intervals).should eq(Interval.all.to_a)
         end
       end
@@ -99,12 +99,12 @@ describe CertificationTypesController do
 
       it 'calls CertificationTypeService' do
         CertificationTypeService.any_instance.should_receive(:create_certification_type).once.and_return(new_certification_type)
-        post :create, {:certification_type => certification_type_attributes}, valid_session
+        post :create, {:certification_type => certification_type_attributes}, {}
       end
 
       it 'assigns a newly created certification_type as @certification_type' do
         CertificationTypeService.any_instance.should_receive(:create_certification_type).once.and_return(new_certification_type)
-        post :create, {:certification_type => certification_type_attributes}, valid_session
+        post :create, {:certification_type => certification_type_attributes}, {}
         assigns(:certification_type).should be_a(CertificationType)
       end
     end
@@ -116,7 +116,7 @@ describe CertificationTypesController do
 
       it 'does not assign certification_type as @certification_type' do
         expect {
-          post :create, {:certification_type => certification_type_attributes}, valid_session
+          post :create, {:certification_type => certification_type_attributes}, {}
         }.not_to change(CertificationType, :count)
         assigns(:certification_type).should be_nil
       end
@@ -131,13 +131,13 @@ describe CertificationTypesController do
 
       it 'assigns the requested certification_type as @certification_type' do
         certification_type = create_certification_type(customer: @customer)
-        get :edit, {:id => certification_type.to_param}, valid_session
+        get :edit, {:id => certification_type.to_param}, {}
         assigns(:certification_type).should eq(certification_type)
       end
 
       it 'assigns @intervals' do
         certification_type = create_certification_type(customer: @customer)
-        get :edit, {:id => certification_type.to_param}, valid_session
+        get :edit, {:id => certification_type.to_param}, {}
         assigns(:intervals).should eq(Interval.all.to_a)
       end
 
@@ -150,7 +150,7 @@ describe CertificationTypesController do
 
       it 'assigns the requested certification_type as @certification_type' do
         certification_type = create_certification_type(customer: @customer)
-        get :edit, {:id => certification_type.to_param}, valid_session
+        get :edit, {:id => certification_type.to_param}, {}
         assigns(:certification_type).should eq(certification_type)
       end
     end
@@ -162,7 +162,7 @@ describe CertificationTypesController do
 
       it 'does not assign certification_type as @certification_type' do
         certification_type = create_certification_type(customer: @customer)
-        get :edit, {:id => certification_type.to_param}, valid_session
+        get :edit, {:id => certification_type.to_param}, {}
         assigns(:certification_type).should be_nil
       end
     end
@@ -185,20 +185,20 @@ describe CertificationTypesController do
               'interval' => 'Annually',
               'units_required' => '99'
             }
-          }, valid_session
+          }, {}
         end
 
         it 'assigns the requested certification_type as @certification_type' do
           CertificationTypeService.any_instance.stub(:update_certification_type).and_return(true)
           certification_type = create_certification_type(customer: @customer)
-          put :update, {:id => certification_type.to_param, :certification_type => certification_type_attributes}, valid_session
+          put :update, {:id => certification_type.to_param, :certification_type => certification_type_attributes}, {}
           assigns(:certification_type).should eq(certification_type)
         end
 
         it 'redirects to the certification_type' do
           CertificationTypeService.any_instance.stub(:update_certification_type).and_return(true)
           certification_type = create_certification_type(customer: @customer)
-          put :update, {:id => certification_type.to_param, :certification_type => certification_type_attributes}, valid_session
+          put :update, {:id => certification_type.to_param, :certification_type => certification_type_attributes}, {}
           response.should redirect_to(certification_type)
         end
       end
@@ -207,21 +207,21 @@ describe CertificationTypesController do
         it 'assigns the certification_type as @certification_type' do
           certification_type = create_certification_type(customer: @customer)
           CertificationTypeService.any_instance.stub(:update_certification_type).and_return(false)
-          put :update, {:id => certification_type.to_param, :certification_type => {'name' => 'invalid value'}}, valid_session
+          put :update, {:id => certification_type.to_param, :certification_type => {'name' => 'invalid value'}}, {}
           assigns(:certification_type).should eq(certification_type)
         end
 
         it "re-renders the 'edit' template" do
           certification_type = create_certification_type(customer: @customer)
           CertificationTypeService.any_instance.stub(:update_certification_type).and_return(false)
-          put :update, {:id => certification_type.to_param, :certification_type => {'name' => 'invalid value'}}, valid_session
+          put :update, {:id => certification_type.to_param, :certification_type => {'name' => 'invalid value'}}, {}
           response.should render_template('edit')
         end
 
         it 'assigns @intervals' do
           certification_type = create_certification_type(customer: @customer)
           CertificationTypeService.any_instance.stub(:update_certification_type).and_return(false)
-          put :update, {:id => certification_type.to_param, :certification_type => {'name' => 'invalid value'}}, valid_session
+          put :update, {:id => certification_type.to_param, :certification_type => {'name' => 'invalid value'}}, {}
           assigns(:intervals).should eq(Interval.all.to_a)
         end
       end
@@ -242,13 +242,13 @@ describe CertificationTypesController do
             'interval' => 'Annually',
             'units_required' => 89
           }
-        }, valid_session
+        }, {}
       end
 
       it 'assigns the requested certification_type as @certification_type' do
         certification_type = create_certification_type(customer: @customer)
         CertificationTypeService.any_instance.stub(:update_certification_type).and_return(certification_type)
-        put :update, {:id => certification_type.to_param, :certification_type => certification_type_attributes}, valid_session
+        put :update, {:id => certification_type.to_param, :certification_type => certification_type_attributes}, {}
         assigns(:certification_type).should eq(certification_type)
       end
     end
@@ -260,7 +260,7 @@ describe CertificationTypesController do
 
       it 'does not assign certification_type as @certification_type' do
         certification_type = create_certification_type(customer: @customer)
-        put :update, {:id => certification_type.to_param, :certification_type => certification_type_attributes}, valid_session
+        put :update, {:id => certification_type.to_param, :certification_type => certification_type_attributes}, {}
         assigns(:certification_type).should be_nil
       end
     end
@@ -276,14 +276,14 @@ describe CertificationTypesController do
         certification_type = create_certification_type(customer: @customer)
         CertificationTypeService.any_instance.should_receive(:delete_certification_type).once
 
-        delete :destroy, {:id => certification_type.to_param}, valid_session
+        delete :destroy, {:id => certification_type.to_param}, {}
       end
 
       it 'redirects to the certification_type list' do
         certification_type = create_certification_type(customer: @customer)
         CertificationTypeService.any_instance.should_receive(:delete_certification_type).once
 
-        delete :destroy, {:id => certification_type.to_param}, valid_session
+        delete :destroy, {:id => certification_type.to_param}, {}
 
         response.should redirect_to(certification_types_path)
       end
@@ -298,7 +298,7 @@ describe CertificationTypesController do
         certification_type = create_certification_type(customer: @customer)
         CertificationTypeService.any_instance.should_receive(:delete_certification_type).once
 
-        delete :destroy, {:id => certification_type.to_param}, valid_session
+        delete :destroy, {:id => certification_type.to_param}, {}
       end
     end
   end
@@ -412,5 +412,12 @@ describe CertificationTypesController do
         assigns(:certification_types_count).should eq(1)
       end
     end
+  end
+
+  def certification_type_attributes
+    {
+      name: 'Routine Inspection',
+      interval: Interval::ONE_YEAR.text
+    }
   end
 end

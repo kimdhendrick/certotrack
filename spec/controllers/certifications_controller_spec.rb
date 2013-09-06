@@ -16,7 +16,7 @@ describe CertificationsController do
         certification = create_certification(employee: employee)
         fake_certification_service = controller.load_certification_service(FakeService.new(certification))
 
-        get :new, {employee_id: employee.id}, valid_session
+        get :new, {employee_id: employee.id}, {}
 
         fake_certification_service.received_message.should == :new_certification
         fake_certification_service.received_params[0].should == employee.id.to_s
@@ -27,7 +27,7 @@ describe CertificationsController do
         certification = create_certification
         controller.load_certification_service(FakeService.new(certification))
 
-        get :new, {}, valid_session
+        get :new, {}, {}
 
         assigns(:certification).should == certification
       end
@@ -36,7 +36,7 @@ describe CertificationsController do
         controller.load_certification_service(FakeService.new())
         fake_certification_type_service = controller.load_certification_type_service(FakeService.new([]))
 
-        get :new, {}, valid_session
+        get :new, {}, {}
 
         fake_certification_type_service.received_message.should == :get_all_certification_types
         fake_certification_type_service.received_params[0].should == @current_user
@@ -47,7 +47,7 @@ describe CertificationsController do
         certification_type = create_certification_type
         controller.load_certification_type_service(FakeService.new([certification_type]))
 
-        get :new, {}, valid_session
+        get :new, {}, {}
 
         assigns(:certification_types).should eq([certification_type])
       end
@@ -63,7 +63,7 @@ describe CertificationsController do
         controller.load_certification_type_service(FakeService.new([certification_type]))
         controller.load_certification_service(FakeService.new())
 
-        get :new, {}, valid_session
+        get :new, {}, {}
 
         assigns(:certification_types).should eq([certification_type])
       end
@@ -75,7 +75,7 @@ describe CertificationsController do
       end
 
       it 'does not assign @certification_types' do
-        get :new, {}, valid_session
+        get :new, {}, {}
         assigns(:certification_types).should be_nil
       end
     end
@@ -103,7 +103,7 @@ describe CertificationsController do
           commit: "Create"
         }
 
-        post :create, params, valid_session
+        post :create, params, {}
 
         fake_certification_service.received_message.should == :certify
         fake_certification_service.received_params[0].should == '99'
@@ -118,7 +118,7 @@ describe CertificationsController do
         Certification.any_instance.stub(:valid?).and_return(false)
         controller.load_certification_service(FakeService.new(new_certification))
 
-        post :create, {employee: {}, certification: {}}, valid_session
+        post :create, {employee: {}, certification: {}}, {}
 
         response.should render_template('new')
       end
@@ -128,7 +128,7 @@ describe CertificationsController do
         Certification.any_instance.stub(:valid?).and_return(false)
         controller.load_certification_service(FakeService.new(new_certification))
 
-        get :create, {employee: {}, certification: {certification_type_id: 1}}, valid_session
+        get :create, {employee: {}, certification: {certification_type_id: 1}}, {}
 
         assigns(:certification).should be_a(Certification)
       end
@@ -140,7 +140,7 @@ describe CertificationsController do
         certification_type = create_certification_type
         fake_certification_type_service = controller.load_certification_type_service(FakeService.new([certification_type]))
 
-        get :create, {employee: {}, certification: {}}, valid_session
+        get :create, {employee: {}, certification: {}}, {}
 
         fake_certification_type_service.received_message.should == :get_all_certification_types
         fake_certification_type_service.received_params[0].should == @current_user
@@ -153,7 +153,7 @@ describe CertificationsController do
         certification_type = create_certification_type
         controller.load_certification_type_service(FakeService.new([certification_type]))
 
-        get :create, {employee: {}, certification: {}}, valid_session
+        get :create, {employee: {}, certification: {}}, {}
 
         assigns(:certification_types).should eq([certification_type])
       end
@@ -163,7 +163,7 @@ describe CertificationsController do
           employee: {id: nil},
           certification: {}
         }
-        post :create, params, valid_session
+        post :create, params, {}
 
         response.should render_template('new')
       end
@@ -182,7 +182,7 @@ describe CertificationsController do
             commit: 'Create'
           }
 
-          post :create, params, valid_session
+          post :create, params, {}
 
           response.should redirect_to(employee)
         end
@@ -200,7 +200,7 @@ describe CertificationsController do
             commit: 'Create'
           }
 
-          post :create, params, valid_session
+          post :create, params, {}
 
           flash[:notice].should == "Certification: certType24 created for Barnes, Dutch."
         end
@@ -217,7 +217,7 @@ describe CertificationsController do
             commit: 'Save and Create Another'
           }
 
-          post :create, params, valid_session
+          post :create, params, {}
 
           fake_certification_type_service.received_message.should == :get_all_certification_types
           fake_certification_type_service.received_params[0].should == @current_user
@@ -234,7 +234,7 @@ describe CertificationsController do
             commit: 'Save and Create Another'
           }
 
-          post :create, params, valid_session
+          post :create, params, {}
 
           assigns(:certification).should be_a(Certification)
           assigns(:certification_types).should eq([certification_type])
@@ -250,7 +250,7 @@ describe CertificationsController do
             commit: 'Save and Create Another'
           }
 
-          post :create, params, valid_session
+          post :create, params, {}
 
           response.should render_template('new')
         end
@@ -269,7 +269,7 @@ describe CertificationsController do
             commit: 'Save and Create Another'
           }
 
-          post :create, params, valid_session
+          post :create, params, {}
 
           flash[:notice].should == "Certification: certType24 created for Barnes, Dutch."
         end
@@ -284,7 +284,7 @@ describe CertificationsController do
       it 'does not call factory' do
         fake_certification_service = controller.load_certification_service(FakeService.new())
 
-        post :create, {}, valid_session
+        post :create, {}, {}
 
         fake_certification_service.received_message.should be_nil
       end

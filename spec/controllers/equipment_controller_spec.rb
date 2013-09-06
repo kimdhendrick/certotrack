@@ -333,7 +333,7 @@ describe EquipmentController do
 
       it 'assigns equipment as @equipment' do
         equipment = create_equipment(customer: @customer)
-        get :show, {:id => equipment.to_param}, valid_session
+        get :show, {:id => equipment.to_param}, {}
         assigns(:equipment).should eq(equipment)
       end
     end
@@ -345,7 +345,7 @@ describe EquipmentController do
 
       it 'assigns equipment as @equipment' do
         equipment = create_equipment(customer: @customer)
-        get :show, {:id => equipment.to_param}, valid_session
+        get :show, {:id => equipment.to_param}, {}
         assigns(:equipment).should eq(equipment)
       end
     end
@@ -357,7 +357,7 @@ describe EquipmentController do
 
       it 'does not assign equipment as @equipment' do
         equipment = create_equipment(customer: @customer)
-        get :show, {:id => equipment.to_param}, valid_session
+        get :show, {:id => equipment.to_param}, {}
         assigns(:equipment).should be_nil
       end
     end
@@ -370,13 +370,13 @@ describe EquipmentController do
       end
 
       it 'assigns a new equipment as @equipment' do
-        get :new, {}, valid_session
+        get :new, {}, {}
         assigns(:equipment).should be_a_new(Equipment)
       end
 
       it 'assigns @intervals' do
         equipment = create_equipment(customer: @customer)
-        get :new, {:id => equipment.to_param}, valid_session
+        get :new, {:id => equipment.to_param}, {}
         assigns(:intervals).should eq(Interval.all.to_a)
       end
     end
@@ -387,7 +387,7 @@ describe EquipmentController do
       end
 
       it 'assigns a new equipment as @equipment' do
-        get :new, {}, valid_session
+        get :new, {}, {}
         assigns(:equipment).should be_a_new(Equipment)
       end
     end
@@ -398,7 +398,7 @@ describe EquipmentController do
       end
 
       it 'does not assign equipment as @equipment' do
-        get :new, {}, valid_session
+        get :new, {}, {}
         assigns(:equipment).should be_nil
       end
     end
@@ -412,13 +412,13 @@ describe EquipmentController do
 
       it 'assigns the requested equipment as @equipment' do
         equipment = create_equipment(customer: @customer)
-        get :edit, {:id => equipment.to_param}, valid_session
+        get :edit, {:id => equipment.to_param}, {}
         assigns(:equipment).should eq(equipment)
       end
 
       it 'assigns @intervals' do
         equipment = create_equipment(customer: @customer)
-        get :edit, {:id => equipment.to_param}, valid_session
+        get :edit, {:id => equipment.to_param}, {}
         assigns(:intervals).should eq(Interval.all.to_a)
       end
 
@@ -431,7 +431,7 @@ describe EquipmentController do
 
       it 'assigns the requested equipment as @equipment' do
         equipment = create_equipment(customer: @customer)
-        get :edit, {:id => equipment.to_param}, valid_session
+        get :edit, {:id => equipment.to_param}, {}
         assigns(:equipment).should eq(equipment)
       end
     end
@@ -443,7 +443,7 @@ describe EquipmentController do
 
       it 'does not assign equipment as @equipment' do
         equipment = create_equipment(customer: @customer)
-        get :edit, {:id => equipment.to_param}, valid_session
+        get :edit, {:id => equipment.to_param}, {}
         assigns(:equipment).should be_nil
       end
     end
@@ -458,19 +458,19 @@ describe EquipmentController do
       describe 'with valid params' do
         it 'creates a new Equipment' do
           EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(new_equipment)
-          post :create, {:equipment => equipment_attributes}, valid_session
+          post :create, {:equipment => equipment_attributes}, {}
         end
 
         it 'assigns a newly created equipment as @equipment' do
           EquipmentService.any_instance.stub(:create_equipment).and_return(new_equipment)
-          post :create, {:equipment => equipment_attributes}, valid_session
+          post :create, {:equipment => equipment_attributes}, {}
           assigns(:equipment).should be_a(Equipment)
         end
 
         it 'redirects to the created equipment' do
           EquipmentService.any_instance.stub(:create_equipment).and_return(create_equipment)
 
-          post :create, {:equipment => equipment_attributes}, valid_session
+          post :create, {:equipment => equipment_attributes}, {}
 
           response.should redirect_to(Equipment.last)
           flash[:notice].should == 'Equipment was successfully created.'
@@ -482,21 +482,21 @@ describe EquipmentController do
           EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(new_equipment)
           Equipment.any_instance.stub(:save).and_return(false)
 
-          post :create, {:equipment => {'name' => 'invalid value'}}, valid_session
+          post :create, {:equipment => {'name' => 'invalid value'}}, {}
 
           assigns(:equipment).should be_a_new(Equipment)
         end
 
         it "re-renders the 'new' template" do
           EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(new_equipment)
-          post :create, {:equipment => {'name' => 'invalid value'}}, valid_session
+          post :create, {:equipment => {'name' => 'invalid value'}}, {}
           response.should render_template('new')
         end
 
         it 'assigns @intervals' do
           EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(new_equipment)
           Equipment.any_instance.stub(:save).and_return(false)
-          post :create, {:equipment => {'name' => 'invalid value'}}, valid_session
+          post :create, {:equipment => {'name' => 'invalid value'}}, {}
           assigns(:intervals).should eq(Interval.all.to_a)
         end
       end
@@ -509,12 +509,12 @@ describe EquipmentController do
 
       it 'calls EquipmentService' do
         EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(new_equipment)
-        post :create, {:equipment => equipment_attributes}, valid_session
+        post :create, {:equipment => equipment_attributes}, {}
       end
 
       it 'assigns a newly created equipment as @equipment' do
         EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(new_equipment)
-        post :create, {:equipment => equipment_attributes}, valid_session
+        post :create, {:equipment => equipment_attributes}, {}
         assigns(:equipment).should be_a(Equipment)
       end
     end
@@ -526,7 +526,7 @@ describe EquipmentController do
 
       it 'does not assign equipment as @equipment' do
         expect {
-          post :create, {:equipment => equipment_attributes}, valid_session
+          post :create, {:equipment => equipment_attributes}, {}
         }.not_to change(Equipment, :count)
         assigns(:equipment).should be_nil
       end
@@ -552,13 +552,13 @@ describe EquipmentController do
               'last_inspection_date' => '01/01/2001',
               'comments' => 'some new notes'
             }
-          }, valid_session
+          }, {}
         end
 
         it 'assigns the requested equipment as @equipment' do
           EquipmentService.any_instance.stub(:update_equipment).and_return(true)
           equipment = create_equipment(customer: @customer)
-          put :update, {:id => equipment.to_param, :equipment => equipment_attributes}, valid_session
+          put :update, {:id => equipment.to_param, :equipment => equipment_attributes}, {}
           assigns(:equipment).should eq(equipment)
         end
 
@@ -566,7 +566,7 @@ describe EquipmentController do
           EquipmentService.any_instance.stub(:update_equipment).and_return(true)
           equipment = create_equipment(customer: @customer)
 
-          put :update, {:id => equipment.to_param, :equipment => equipment_attributes}, valid_session
+          put :update, {:id => equipment.to_param, :equipment => equipment_attributes}, {}
 
           response.should redirect_to(equipment)
           flash[:notice].should == 'Equipment was successfully updated.'
@@ -577,21 +577,21 @@ describe EquipmentController do
         it 'assigns the equipment as @equipment' do
           equipment = create_equipment(customer: @customer)
           EquipmentService.any_instance.stub(:update_equipment).and_return(false)
-          put :update, {:id => equipment.to_param, :equipment => {'name' => 'invalid value'}}, valid_session
+          put :update, {:id => equipment.to_param, :equipment => {'name' => 'invalid value'}}, {}
           assigns(:equipment).should eq(equipment)
         end
 
         it "re-renders the 'edit' template" do
           equipment = create_equipment(customer: @customer)
           EquipmentService.any_instance.stub(:update_equipment).and_return(false)
-          put :update, {:id => equipment.to_param, :equipment => {'name' => 'invalid value'}}, valid_session
+          put :update, {:id => equipment.to_param, :equipment => {'name' => 'invalid value'}}, {}
           response.should render_template('edit')
         end
 
         it 'assigns @intervals' do
           equipment = create_equipment(customer: @customer)
           EquipmentService.any_instance.stub(:update_equipment).and_return(false)
-          put :update, {:id => equipment.to_param, :equipment => {'name' => 'invalid value'}}, valid_session
+          put :update, {:id => equipment.to_param, :equipment => {'name' => 'invalid value'}}, {}
           assigns(:intervals).should eq(Interval.all.to_a)
         end
       end
@@ -615,13 +615,13 @@ describe EquipmentController do
             'last_inspection_date' => '01/01/2001',
             'comments' => 'some new notes'
           }
-        }, valid_session
+        }, {}
       end
 
       it 'assigns the requested equipment as @equipment' do
         equipment = create_equipment(customer: @customer)
         EquipmentService.any_instance.stub(:update_equipment).and_return(equipment)
-        put :update, {:id => equipment.to_param, :equipment => equipment_attributes}, valid_session
+        put :update, {:id => equipment.to_param, :equipment => equipment_attributes}, {}
         assigns(:equipment).should eq(equipment)
       end
     end
@@ -633,7 +633,7 @@ describe EquipmentController do
 
       it 'does not assign equipment as @equipment' do
         equipment = create_equipment(customer: @customer)
-        put :update, {:id => equipment.to_param, :equipment => equipment_attributes}, valid_session
+        put :update, {:id => equipment.to_param, :equipment => equipment_attributes}, {}
         assigns(:equipment).should be_nil
       end
     end
@@ -649,14 +649,14 @@ describe EquipmentController do
         equipment = create_equipment(customer: @customer)
         EquipmentService.any_instance.should_receive(:delete_equipment).once
 
-        delete :destroy, {:id => equipment.to_param}, valid_session
+        delete :destroy, {:id => equipment.to_param}, {}
       end
 
       it 'redirects to the equipment list' do
         equipment = create_equipment(customer: @customer)
         EquipmentService.any_instance.should_receive(:delete_equipment).once
 
-        delete :destroy, {:id => equipment.to_param}, valid_session
+        delete :destroy, {:id => equipment.to_param}, {}
 
         response.should redirect_to(equipment_index_url)
         flash[:notice].should == 'Equipment was successfully deleted.'
@@ -672,7 +672,7 @@ describe EquipmentController do
         equipment = create_equipment(customer: @customer)
         EquipmentService.any_instance.should_receive(:delete_equipment).once
 
-        delete :destroy, {:id => equipment.to_param}, valid_session
+        delete :destroy, {:id => equipment.to_param}, {}
       end
     end
   end
@@ -799,6 +799,14 @@ describe EquipmentController do
       end
     end
   end
-end
 
+  def equipment_attributes
+    {
+      name: 'Meter',
+      serial_number: '782-888-DKHE',
+      last_inspection_date: Date.new(2000, 1, 1),
+      inspection_interval: Interval::ONE_YEAR.text
+    }
+  end
+end
 

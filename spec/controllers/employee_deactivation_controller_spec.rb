@@ -15,7 +15,7 @@ describe EmployeeDeactivationController do
         employee = create_employee(customer: @customer)
         @fake_employee_service = controller.load_employee_deactivation_service(FakeService.new(true))
 
-        delete :deactivate, {:id => employee.to_param}, valid_session
+        delete :deactivate, {:id => employee.to_param}, {}
 
         @fake_employee_service.received_message.should == :deactivate_employee
         @fake_employee_service.received_params[0].should == employee
@@ -25,7 +25,7 @@ describe EmployeeDeactivationController do
         employee = create_employee(customer: @customer, last_name: 'last', first_name: 'first')
         @fake_employee_service = controller.load_employee_deactivation_service(FakeService.new(true))
 
-        delete :deactivate, {:id => employee.to_param}, valid_session
+        delete :deactivate, {:id => employee.to_param}, {}
 
         response.should redirect_to(employees_url)
         flash[:notice].should == 'Employee last, first deactivated'
@@ -41,7 +41,7 @@ describe EmployeeDeactivationController do
         employee = create_employee(customer: @customer)
         @fake_employee_service = controller.load_employee_deactivation_service(FakeService.new(true))
 
-        delete :deactivate, {:id => employee.to_param}, valid_session
+        delete :deactivate, {:id => employee.to_param}, {}
       end
     end
 
@@ -72,7 +72,7 @@ describe EmployeeDeactivationController do
         equipment = new_equipment
         @fake_equipment_service = controller.load_equipment_service(FakeService.new([equipment]))
 
-        get :deactivate_confirm, {:id => employee.to_param}, valid_session
+        get :deactivate_confirm, {:id => employee.to_param}, {}
 
         assigns(:employee).should eq(employee)
         assigns(:equipments).should eq([equipment])
@@ -91,7 +91,7 @@ describe EmployeeDeactivationController do
         equipment = new_equipment
         @fake_equipment_service = controller.load_equipment_service(FakeService.new([equipment]))
 
-        get :deactivate_confirm, {:id => employee.to_param}, valid_session
+        get :deactivate_confirm, {:id => employee.to_param}, {}
 
         assigns(:employee).should eq(employee)
         assigns(:equipments).should eq([equipment])
@@ -108,7 +108,7 @@ describe EmployeeDeactivationController do
       it 'does not assign anything' do
         employee = create_employee(customer: @customer)
 
-        get :deactivate_confirm, {:id => employee.to_param}, valid_session
+        get :deactivate_confirm, {:id => employee.to_param}, {}
 
         assigns(:employee).should be_nil
         assigns(:equipments).should be_nil

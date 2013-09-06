@@ -12,7 +12,7 @@ describe EmployeesController do
       end
 
       it 'assigns a new employee as @employee' do
-        get :new, {}, valid_session
+        get :new, {}, {}
         assigns(:employee).should be_a_new(Employee)
       end
 
@@ -32,7 +32,7 @@ describe EmployeesController do
       end
 
       it 'assigns a new employee as @employee' do
-        get :new, {}, valid_session
+        get :new, {}, {}
         assigns(:employee).should be_a_new(Employee)
       end
     end
@@ -43,7 +43,7 @@ describe EmployeesController do
       end
 
       it 'does not assign employee as @employee' do
-        get :new, {}, valid_session
+        get :new, {}, {}
         assigns(:employee).should be_nil
       end
     end
@@ -58,18 +58,18 @@ describe EmployeesController do
       describe 'with valid params' do
         it 'creates a new Employee' do
           EmployeeService.any_instance.should_receive(:create_employee).once.and_return(new_employee)
-          post :create, {:employee => employee_attributes}, valid_session
+          post :create, {:employee => employee_attributes}, {}
         end
 
         it 'assigns a newly created employee as @employee' do
           EmployeeService.any_instance.stub(:create_employee).and_return(new_employee)
-          post :create, {:employee => employee_attributes}, valid_session
+          post :create, {:employee => employee_attributes}, {}
           assigns(:employee).should be_a(Employee)
         end
 
         it 'redirects to the created employee' do
           EmployeeService.any_instance.stub(:create_employee).and_return(create_employee)
-          post :create, {:employee => employee_attributes}, valid_session
+          post :create, {:employee => employee_attributes}, {}
           response.should redirect_to(Employee.last)
           flash[:notice].should == 'Employee was successfully created.'
         end
@@ -80,14 +80,14 @@ describe EmployeesController do
           EmployeeService.any_instance.should_receive(:create_employee).once.and_return(new_employee)
           Employee.any_instance.stub(:save).and_return(false)
 
-          post :create, {:employee => {'name' => 'invalid value'}}, valid_session
+          post :create, {:employee => {'name' => 'invalid value'}}, {}
 
           assigns(:employee).should be_a_new(Employee)
         end
 
         it "re-renders the 'new' template" do
           EmployeeService.any_instance.should_receive(:create_employee).once.and_return(new_employee)
-          post :create, {:employee => {'name' => 'invalid value'}}, valid_session
+          post :create, {:employee => {'name' => 'invalid value'}}, {}
           response.should render_template('new')
         end
       end
@@ -100,12 +100,12 @@ describe EmployeesController do
 
       it 'calls EmployeesService' do
         EmployeeService.any_instance.should_receive(:create_employee).once.and_return(new_employee)
-        post :create, {:employee => employee_attributes}, valid_session
+        post :create, {:employee => employee_attributes}, {}
       end
 
       it 'assigns a newly created employee as @employee' do
         EmployeeService.any_instance.should_receive(:create_employee).once.and_return(new_employee)
-        post :create, {:employee => employee_attributes}, valid_session
+        post :create, {:employee => employee_attributes}, {}
         assigns(:employee).should be_a(Employee)
       end
     end
@@ -117,7 +117,7 @@ describe EmployeesController do
 
       it 'does not assign employee as @employee' do
         expect {
-          post :create, {:employee => employee_attributes}, valid_session
+          post :create, {:employee => employee_attributes}, {}
         }.not_to change(Employee, :count)
         assigns(:employee).should be_nil
       end
@@ -192,7 +192,7 @@ describe EmployeesController do
 
   describe 'GET show' do
     let(:employee) { create_employee(customer: @customer) }
-    let(:certification_service) { stub('certification_service') }
+    let(:certification_service) { double('certification_service') }
     let(:certification) { FactoryGirl.create(:certification, employee: employee) }
     let(:certifications) { [certification] }
 
@@ -207,12 +207,12 @@ describe EmployeesController do
       end
 
       it 'assigns employee as @employee' do
-        get :show, {:id => employee.to_param}, valid_session
+        get :show, {:id => employee.to_param}, {}
         assigns(:employee).should eq(employee)
       end
 
       it 'assigns certifications as @certifications' do
-        get :show, { id: employee.to_param }, valid_session
+        get :show, { id: employee.to_param }, {}
         assigns(:certifications).should == certifications
       end
     end
@@ -223,12 +223,12 @@ describe EmployeesController do
       end
 
       it 'assigns employee as @employee' do
-        get :show, {:id => employee.to_param}, valid_session
+        get :show, {:id => employee.to_param}, {}
         assigns(:employee).should eq(employee)
       end
 
       it 'assigns certifications as @certifications' do
-        get :show, { id: employee.to_param }, valid_session
+        get :show, { id: employee.to_param }, {}
         assigns(:certifications).should == certifications
       end
     end
@@ -240,7 +240,7 @@ describe EmployeesController do
 
       it 'does not assign employee as @employee' do
         employee = create_employee(customer: @customer)
-        get :show, {:id => employee.to_param}, valid_session
+        get :show, {:id => employee.to_param}, {}
         assigns(:employee).should be_nil
       end
     end
@@ -254,7 +254,7 @@ describe EmployeesController do
 
       it 'assigns the requested employee as @employee' do
         employee = create_employee(customer: @customer)
-        get :edit, {:id => employee.to_param}, valid_session
+        get :edit, {:id => employee.to_param}, {}
         assigns(:employee).should eq(employee)
       end
 
@@ -263,7 +263,7 @@ describe EmployeesController do
         @fake_location_service = controller.load_location_service(FakeService.new([location]))
         employee = create_employee(customer: @customer)
 
-        get :edit, {:id => employee.to_param}, valid_session
+        get :edit, {:id => employee.to_param}, {}
 
         assigns(:locations).should == [location]
       end
@@ -276,7 +276,7 @@ describe EmployeesController do
 
       it 'assigns the requested employee as @employee' do
         employee = create_employee(customer: @customer)
-        get :edit, {:id => employee.to_param}, valid_session
+        get :edit, {:id => employee.to_param}, {}
         assigns(:employee).should eq(employee)
       end
     end
@@ -288,7 +288,7 @@ describe EmployeesController do
 
       it 'does not assign employee as @employee' do
         employee = create_employee(customer: @customer)
-        get :edit, {:id => employee.to_param}, valid_session
+        get :edit, {:id => employee.to_param}, {}
         assigns(:employee).should be_nil
       end
     end
@@ -312,7 +312,7 @@ describe EmployeesController do
               'employee_number' => 'newEmpNum',
               'location_id' => 1,
             }
-          }, valid_session
+          }, {}
 
           @fake_employee_service.received_messages.should == [:update_employee]
         end
@@ -321,7 +321,7 @@ describe EmployeesController do
           employee = create_employee(customer: @customer)
           @fake_employee_service = controller.load_employee_service(FakeService.new(true))
 
-          put :update, {:id => employee.to_param, :employee => employee_attributes}, valid_session
+          put :update, {:id => employee.to_param, :employee => employee_attributes}, {}
 
           assigns(:employee).should eq(employee)
           @fake_employee_service.received_messages.should == [:update_employee]
@@ -331,7 +331,7 @@ describe EmployeesController do
           @fake_employee_service = controller.load_employee_service(FakeService.new(true))
           employee = create_employee(customer: @customer)
 
-          put :update, {:id => employee.to_param, :employee => employee_attributes}, valid_session
+          put :update, {:id => employee.to_param, :employee => employee_attributes}, {}
 
           response.should redirect_to(employee)
           flash[:notice].should == 'Employee was successfully updated.'
@@ -343,7 +343,7 @@ describe EmployeesController do
           employee = create_employee(customer: @customer)
           @fake_employee_service = controller.load_employee_service(FakeService.new(false))
 
-          put :update, {:id => employee.to_param, :employee => {'name' => 'invalid value'}}, valid_session
+          put :update, {:id => employee.to_param, :employee => {'name' => 'invalid value'}}, {}
 
           assigns(:employee).should eq(employee)
         end
@@ -352,7 +352,7 @@ describe EmployeesController do
           employee = create_employee(customer: @customer)
           @fake_employee_service = controller.load_employee_service(FakeService.new(false))
 
-          put :update, {:id => employee.to_param, :employee => {'name' => 'invalid value'}}, valid_session
+          put :update, {:id => employee.to_param, :employee => {'name' => 'invalid value'}}, {}
 
           response.should render_template('edit')
         end
@@ -363,7 +363,7 @@ describe EmployeesController do
           @fake_location_service = controller.load_location_service(FakeService.new([location]))
           employee = create_employee(customer: @customer)
 
-          put :update, {:id => employee.to_param, :employee => employee_attributes}, valid_session
+          put :update, {:id => employee.to_param, :employee => employee_attributes}, {}
 
           assigns(:locations).should == [location]
         end
@@ -386,7 +386,7 @@ describe EmployeesController do
             'employee_number' => 'newEmpNum',
             'location_id' => 1
           }
-        }, valid_session
+        }, {}
 
         @fake_employee_service.received_messages.should == [:update_employee]
       end
@@ -395,7 +395,7 @@ describe EmployeesController do
         employee = create_employee(customer: @customer)
         @fake_employee_service = controller.load_employee_service(FakeService.new(true))
 
-        put :update, {:id => employee.to_param, :employee => employee_attributes}, valid_session
+        put :update, {:id => employee.to_param, :employee => employee_attributes}, {}
 
         assigns(:employee).should eq(employee)
       end
@@ -409,7 +409,7 @@ describe EmployeesController do
       it 'does not assign employee as @employee' do
         employee = create_employee(customer: @customer)
 
-        put :update, {:id => employee.to_param, :employee => employee_attributes}, valid_session
+        put :update, {:id => employee.to_param, :employee => employee_attributes}, {}
 
         assigns(:employee).should be_nil
       end
@@ -426,7 +426,7 @@ describe EmployeesController do
         employee = create_employee(customer: @customer)
         @fake_employee_service = controller.load_employee_service(FakeService.new(true))
 
-        delete :destroy, {:id => employee.to_param}, valid_session
+        delete :destroy, {:id => employee.to_param}, {}
 
         @fake_employee_service.received_message.should == :delete_employee
       end
@@ -435,7 +435,7 @@ describe EmployeesController do
         employee = create_employee(customer: @customer)
         @fake_employee_service = controller.load_employee_service(FakeService.new(true))
 
-        delete :destroy, {:id => employee.to_param}, valid_session
+        delete :destroy, {:id => employee.to_param}, {}
 
         response.should redirect_to(employees_url)
         flash[:notice].should == 'Employee was successfully deleted.'
@@ -445,7 +445,7 @@ describe EmployeesController do
         employee = create_employee(customer: @customer)
         @fake_employee_service = controller.load_employee_service(FakeService.new(:equipment_exists))
 
-        delete :destroy, {:id => employee.to_param}, valid_session
+        delete :destroy, {:id => employee.to_param}, {}
 
         response.should redirect_to(employee_url)
         flash[:notice].should == 'Employee has equipment assigned, you must remove them before deleting the employee. Or Deactivate the employee instead.'
@@ -461,8 +461,16 @@ describe EmployeesController do
         employee = create_employee(customer: @customer)
         @fake_employee_service = controller.load_employee_service(FakeService.new(true))
 
-        delete :destroy, {:id => employee.to_param}, valid_session
+        delete :destroy, {:id => employee.to_param}, {}
       end
     end
+  end
+
+  def employee_attributes
+    {
+      first_name: 'John',
+      last_name: 'Smith',
+      employee_number: '876ABC'
+    }
   end
 end
