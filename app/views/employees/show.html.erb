@@ -45,11 +45,11 @@
   <tbody>
     <% @certifications.each do |certification| %>
       <tr>
-        <td><%= certification.name %></td>
+        <td><%= link_to certification.name, certification_type_path(certification.certification_type) %></td>
         <td><%= certification.trainer %></td>
         <td><%= DateHelpers::date_to_string(certification.expiration_date) %></td>
         <td><%= DateHelpers::date_to_string(certification.last_certification_date) %></td>
-        <td><%= certification.units_achieved %></td>
+        <td><%= units(certification) %></td>
         <td><%= certification.status %></td>
       </tr>
     <% end %>

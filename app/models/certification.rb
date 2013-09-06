@@ -25,6 +25,10 @@ class Certification < ActiveRecord::Base
     certification_type.name
   end
 
+  def units_based?
+    certification_type.units_based?
+  end
+
   def expiration_date=(date)
     active_certification_period.end_date=(date)
   end
@@ -40,7 +44,7 @@ class Certification < ActiveRecord::Base
   end
 
   def status
-    certification_type.units_based? ?
+    units_based? ?
       _calculate_status_for_units_based :
       _calculate_status_for_non_units_based
   end

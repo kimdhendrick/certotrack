@@ -9,7 +9,7 @@ describe 'Employee Certifications' do
     end
 
     it 'should show certifications' do
-      FactoryGirl.create(:certification, employee: employee)
+      certification = FactoryGirl.create(:certification, employee: employee)
 
       visit employee_path(employee)
       page.should have_content 'Show Employee'
@@ -24,7 +24,7 @@ describe 'Employee Certifications' do
       end
 
       within 'table tbody tr:nth-of-type(1)' do
-        page.should have_content 'Scrum Master'
+        page.should have_link 'Scrum Master', href: certification_type_path(certification.certification_type)
         page.should have_content DateHelpers::date_to_string(1.day.ago)
         page.should have_content '0'
         page.should have_content 'N/A'
@@ -66,13 +66,13 @@ describe 'Employee Certifications' do
           click_link 'Status'
         end
 
-        column_data_should_be_in_order(Status::RECERTIFY.text, Status::NA.text)
+        column_data_should_be_in_order(Status::VALID.text, Status::NA.text)
 
         within 'table thead tr:nth-of-type(1)' do
           click_link 'Status'
         end
 
-        column_data_should_be_in_order(Status::NA.text, Status::RECERTIFY.text)
+        column_data_should_be_in_order(Status::NA.text, Status::VALID.text)
       end
     end
 

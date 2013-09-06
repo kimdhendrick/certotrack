@@ -174,9 +174,14 @@ describe Certification do
     certification.active_certification_period.units_achieved.should == 10
   end
 
-  it 'should response to name' do
+  it 'should respond to name' do
     certification = FactoryGirl.build(:certification)
     certification.name.should == 'Scrum Master'
+  end
+
+  it 'should respond to units_based?' do
+    FactoryGirl.build(:certification).should_not be_units_based
+    FactoryGirl.build(:units_based_certification).should be_units_based
   end
 
   describe "new date validations" do
