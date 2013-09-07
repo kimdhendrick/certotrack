@@ -14,6 +14,36 @@ describe User do
   it { should respond_to(:password_confirmation) }
   it { should belong_to(:customer) }
 
+  describe 'associations' do
+    it 'should respond to certification_types' do
+      user = create(:user, username: 'ABC')
+      certification_type = create(:certification_type, customer: user.customer)
+
+      user.certification_types.should == [certification_type]
+    end
+
+    it 'should respond to employees' do
+      user = create(:user, username: 'ABC')
+      employee = create(:employee, customer: user.customer)
+
+      user.employees.should == [employee]
+    end
+
+    it 'should respond to equipments' do
+      user = create(:user, username: 'ABC')
+      equipment = create(:equipment, customer: user.customer)
+
+      user.equipments.should == [equipment]
+    end
+
+    it 'should respond to locations' do
+      user = create(:user, username: 'ABC')
+      location = create(:location, customer: user.customer)
+
+      user.locations.should == [location]
+    end
+  end
+
   describe 'when username has mixed case' do
     before do
       @user = create(:user, username: 'ABC')

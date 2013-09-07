@@ -8,6 +8,7 @@ describe CertificationType do
   it { should validate_presence_of :name }
   it { should belong_to(:customer) }
   it { should validate_uniqueness_of(:name).scoped_to(:customer_id) }
+  it { should have_many :certifications }
 
   it 'should default units_required to 0' do
     certification_type = CertificationType.new

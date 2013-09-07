@@ -1,7 +1,7 @@
 class EmployeeService
 
   def get_all_employees(current_user)
-    current_user.admin? ? Employee.all : Employee.where(customer: current_user.customer)
+    current_user.admin? ? Employee.all : current_user.employees
   end
 
   def get_employee_list(current_user, params = {})
@@ -23,7 +23,7 @@ class EmployeeService
   end
 
   def delete_employee(employee)
-    if Equipment.where(employee: employee).any?
+    if employee.equipments.any?
       return :equipment_exists
     end
 

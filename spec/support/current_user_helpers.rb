@@ -5,18 +5,23 @@ module CurrentUserHelpers
   end
 
   def stub_equipment_user
-    stub_current_user_with(create(:user, roles: ['equipment'], customer: @customer))
+    stub_current_user_with(_create_stub_user_with_roles(['equipment']))
   end
 
   def stub_certification_user
-    stub_current_user_with(create(:user, roles: ['certification'], customer: @customer))
+    stub_current_user_with(_create_stub_user_with_roles(['certification']))
   end
 
   def stub_guest_user
-    stub_current_user_with(create(:user, customer: @customer))
+    stub_current_user_with(_create_stub_user_with_roles([]))
   end
 
   def stub_admin
-    stub_current_user_with(create(:user, roles: ['admin']))
+    stub_current_user_with(_create_stub_user_with_roles(['admin']))
+  end
+
+  def _create_stub_user_with_roles(roles)
+    @customer ||= create(:customer)
+    stub_current_user_with(create(:user, roles: roles, customer: @customer))
   end
 end

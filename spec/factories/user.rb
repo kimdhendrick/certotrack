@@ -15,5 +15,6 @@ FactoryGirl.define do
     email
     password 'Password123'
     password_confirmation 'Password123'
+    customer
   end
 end

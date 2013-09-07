@@ -30,11 +30,9 @@ class EquipmentService
   end
 
   def count_all_equipment(current_user)
-    if (current_user.admin?)
-      Equipment.count
-    else
-      Equipment.where(customer: current_user.customer).count
-    end
+    current_user.admin? ?
+      Equipment.count :
+      current_user.equipments.count
   end
 
   def count_expired_equipment(current_user)
@@ -66,7 +64,7 @@ class EquipmentService
   end
 
   def get_all_equipment_for_employee(employee)
-    Equipment.where(employee: employee)
+    employee.equipments
   end
 
   def load_search_service(service = SearchService.new)
@@ -77,7 +75,9 @@ class EquipmentService
 
 
   def _get_equipment_for_user(current_user)
-    current_user.admin? ? Equipment.all : Equipment.where(customer: current_user.customer)
+    current_user.admin? ?
+      Equipment.all :
+      current_user.equipments
   end
 
   def _expires_on(equipment)

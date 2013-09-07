@@ -211,7 +211,7 @@ describe Certification do
       end
     end
 
-    context 'when start_date is more than 100 years in the past do' do
+    context 'when start_date is more than 100 years in the past' do
       let(:start_date) { 101.years.ago }
 
       it 'should have the correct message' do

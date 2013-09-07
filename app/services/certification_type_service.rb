@@ -1,7 +1,7 @@
 class CertificationTypeService
 
   def get_all_certification_types(user)
-    user.admin? ? CertificationType.all : CertificationType.where(customer: user.customer)
+    user.admin? ? CertificationType.all : user.certification_types
   end
 
   def get_certification_type_list(user, params = {})

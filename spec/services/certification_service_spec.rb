@@ -83,7 +83,7 @@ describe CertificationService do
       it 'should call SortService to ensure sorting' do
         fake_sort_service = subject.load_sort_service(FakeService.new([]))
 
-        subject.get_all_certifications_for(@my_user)
+        subject.get_all_certifications_for(build(:employee))
 
         fake_sort_service.received_message.should == :sort
       end
@@ -94,7 +94,7 @@ describe CertificationService do
         subject.load_sort_service(FakeService.new)
         fake_pagination_service = subject.load_pagination_service(FakeService.new)
 
-        subject.get_all_certifications_for(@my_user)
+        subject.get_all_certifications_for(build(:employee))
 
         fake_pagination_service.received_message.should == :paginate
       end

@@ -4,6 +4,8 @@ class Employee < ActiveRecord::Base
 
   belongs_to :customer
   belongs_to :location
+  has_many :certifications
+  has_many :equipments
 
   validates_presence_of :employee_number, :first_name, :last_name
   validates_uniqueness_of :employee_number, scope: :customer_id

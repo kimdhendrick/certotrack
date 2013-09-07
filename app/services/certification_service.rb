@@ -18,7 +18,7 @@ class CertificationService
   end
 
   def get_all_certifications_for(employee, params = {})
-    certifications = Certification.where(employee: employee)
+    certifications = employee.certifications
     _sort_and_paginate(certifications, params)
   end
 end

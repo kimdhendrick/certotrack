@@ -12,6 +12,8 @@ describe Employee do
 
   it { should belong_to(:customer) }
   it { should belong_to(:location) }
+  it { should have_many(:certifications) }
+  it { should have_many(:equipments) }
 
   it 'should display its name as to_s' do
     @employee.first_name = 'John'

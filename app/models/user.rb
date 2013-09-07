@@ -39,4 +39,20 @@ class User < ActiveRecord::Base
   def roles
     UserRoleHelper::roles(self)
   end
+
+  def certification_types
+    customer.certification_types
+  end
+
+  def employees
+    customer.employees
+  end
+
+  def equipments
+    customer.equipments
+  end
+
+  def locations
+    customer.locations
+  end
 end

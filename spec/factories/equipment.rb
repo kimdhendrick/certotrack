@@ -13,7 +13,6 @@ FactoryGirl.define do
 
     factory :location_assigned_equipment do
       location
-      customer = nil
     end
 
     factory :valid_equipment do
