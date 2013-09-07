@@ -1,5 +1,9 @@
 class CertificationFactory
 
+  def initialize(params = {})
+    @expiration_calculator = params[:expiration_calculator] || ExpirationCalculator.new
+  end
+
   def new_instance(employee_id, certification_type_id = nil, certification_date = nil, trainer = nil, comments = nil)
     employee = Employee.find(employee_id)
     certification = Certification.new(employee_id: employee_id, certification_type_id: certification_type_id, customer: employee.customer)
@@ -8,15 +12,11 @@ class CertificationFactory
     certification
   end
 
-  def load_expiration_calculator(calculator = ExpirationCalculator.new)
-    @expiration_calculator ||= calculator
-  end
-
   private
 
   def _expires_on(certification_type_id, certification_date)
     return nil if certification_date.blank? || certification_type_id.blank?
     certification_type = CertificationType.find(certification_type_id)
-    load_expiration_calculator.calculate(certification_date, Interval.find_by_text(certification_type.interval))
+    @expiration_calculator.calculate(certification_date, Interval.find_by_text(certification_type.interval))
   end
 end

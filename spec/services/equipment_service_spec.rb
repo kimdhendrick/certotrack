@@ -8,8 +8,8 @@ describe EquipmentService do
   describe 'get_all_equipment' do
     context 'sorting' do
       it 'should call SortService to ensure sorting' do
-        equipment_service = EquipmentService.new
-        fake_sort_service = equipment_service.load_sort_service(FakeService.new([]))
+        fake_sort_service = FakeService.new([])
+        equipment_service = EquipmentService.new(sort_service: fake_sort_service)
 
         equipment_service.get_all_equipment(my_user)
 
@@ -19,9 +19,8 @@ describe EquipmentService do
 
     context 'pagination' do
       it 'should call PaginationService to paginate results' do
-        equipment_service = EquipmentService.new
-        equipment_service.load_sort_service(FakeService.new)
-        fake_pagination_service = equipment_service.load_pagination_service(FakeService.new)
+        fake_pagination_service = FakeService.new
+        equipment_service = EquipmentService.new(sort_service: FakeService.new, pagination_service: fake_pagination_service)
 
         equipment_service.get_all_equipment(my_user)
 
@@ -31,9 +30,8 @@ describe EquipmentService do
 
     context 'search' do
       it 'should call SearchService to filter results' do
-        equipment_service = EquipmentService.new
-        equipment_service.load_sort_service(FakeService.new([]))
-        fake_search_service = equipment_service.load_search_service(FakeService.new([]))
+        fake_search_service = FakeService.new
+        equipment_service = EquipmentService.new(sort_service: FakeService.new([]), search_service: fake_search_service)
 
         equipment_service.get_all_equipment(my_user, {thing1: 'thing2'})
 
@@ -74,8 +72,8 @@ describe EquipmentService do
 
     context 'sorting' do
       it 'should call Sort Service to ensure sorting' do
-        equipment_service = EquipmentService.new
-        fake_sort_service = equipment_service.load_sort_service(FakeService.new([]))
+        fake_sort_service = FakeService.new([])
+        equipment_service = EquipmentService.new(sort_service: fake_sort_service)
 
         equipment_service.get_expired_equipment(my_user)
 
@@ -85,9 +83,8 @@ describe EquipmentService do
 
     context 'pagination' do
       it 'should call PaginationService to paginate results' do
-        equipment_service = EquipmentService.new
-        equipment_service.load_sort_service(FakeService.new)
-        fake_pagination_service = equipment_service.load_pagination_service(FakeService.new)
+        fake_pagination_service = FakeService.new
+        equipment_service = EquipmentService.new(sort_service: FakeService.new, pagination_service: fake_pagination_service)
 
         equipment_service.get_expired_equipment(my_user)
 
@@ -120,8 +117,8 @@ describe EquipmentService do
 
     context 'sorting' do
       it 'should call Sort Service to ensure sorting' do
-        equipment_service = EquipmentService.new
-        fake_sort_service = equipment_service.load_sort_service(FakeService.new([]))
+        fake_sort_service = FakeService.new([])
+        equipment_service = EquipmentService.new(sort_service: fake_sort_service)
 
         equipment_service.get_expiring_equipment(my_user)
 
@@ -131,9 +128,8 @@ describe EquipmentService do
 
     context 'pagination' do
       it 'should call PaginationService to paginate results' do
-        equipment_service = EquipmentService.new
-        equipment_service.load_sort_service(FakeService.new)
-        fake_pagination_service = equipment_service.load_pagination_service(FakeService.new)
+        fake_pagination_service = FakeService.new
+        equipment_service = EquipmentService.new(sort_service: FakeService.new, pagination_service: fake_pagination_service)
 
         equipment_service.get_expiring_equipment(my_user)
 
@@ -164,8 +160,8 @@ describe EquipmentService do
 
     context 'sorting' do
       it 'should call Sort Service to ensure sorting' do
-        equipment_service = EquipmentService.new
-        fake_sort_service = equipment_service.load_sort_service(FakeService.new([]))
+        fake_sort_service = FakeService.new([])
+        equipment_service = EquipmentService.new(sort_service: fake_sort_service)
 
         equipment_service.get_noninspectable_equipment(my_user)
 
@@ -175,9 +171,8 @@ describe EquipmentService do
 
     context 'pagination' do
       it 'should call PaginationService to paginate results' do
-        equipment_service = EquipmentService.new
-        equipment_service.load_sort_service(FakeService.new)
-        fake_pagination_service = equipment_service.load_pagination_service(FakeService.new)
+        fake_pagination_service = FakeService.new
+        equipment_service = EquipmentService.new(sort_service: FakeService.new, pagination_service: fake_pagination_service)
 
         equipment_service.get_noninspectable_equipment(my_user)
 

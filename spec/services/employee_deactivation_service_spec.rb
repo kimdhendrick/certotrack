@@ -67,8 +67,8 @@ describe EmployeeDeactivationService do
 
     context 'pagination' do
       it 'should call PaginationService to paginate results' do
-        employee_deactivation_service = EmployeeDeactivationService.new
-        fake_pagination_service = employee_deactivation_service.load_pagination_service(FakeService.new)
+        fake_pagination_service = FakeService.new
+        employee_deactivation_service = EmployeeDeactivationService.new(pagination_service: fake_pagination_service)
 
         employee_deactivation_service.get_deactivated_employees(@my_user)
 

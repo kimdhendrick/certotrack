@@ -5,8 +5,8 @@ describe CertificationService do
     it 'calls CertificationFactory' do
       employee = create(:employee)
       certification = build(:certification, employee: employee)
-      certification_service = CertificationService.new
-      fake_certification_factory = certification_service.load_certification_factory(FakeService.new(certification))
+      fake_certification_factory = FakeService.new(certification)
+      certification_service = CertificationService.new(certification_factory: fake_certification_factory)
 
       certification = certification_service.new_certification(employee.id)
 
@@ -21,8 +21,8 @@ describe CertificationService do
       employee = create(:employee)
       certification_type = create(:certification_type)
       certification = build(:certification, certification_type: certification_type, employee: employee, customer: employee.customer)
-      certification_service = CertificationService.new
-      fake_certification_factory = certification_service.load_certification_factory(FakeService.new(certification))
+      fake_certification_factory = FakeService.new(certification)
+      certification_service = CertificationService.new(certification_factory: fake_certification_factory)
 
       certification = certification_service.certify(
         employee.id,
@@ -45,8 +45,8 @@ describe CertificationService do
       employee = create(:employee)
       certification_type = create(:certification_type)
       certification = Certification.new
-      certification_service = CertificationService.new
-      fake_certification_factory = certification_service.load_certification_factory(FakeService.new(certification))
+      fake_certification_factory = FakeService.new(certification)
+      certification_service = CertificationService.new(certification_factory: fake_certification_factory)
 
       certification = certification_service.certify(
         employee.id,
@@ -68,12 +68,14 @@ describe CertificationService do
   end
 
   describe '#get_all_certifications_for' do
-    subject { CertificationService.new }
+
     it 'returns all certifications for a given employee' do
       employee_1 = create(:employee)
       employee_2 = create(:employee)
       certification_1 = create(:certification, employee: employee_1, customer: employee_1.customer)
       certification_2 = create(:certification, employee: employee_2, customer: employee_2.customer)
+
+      subject = CertificationService.new
 
       subject.get_all_certifications_for(employee_1).should == [certification_1]
       subject.get_all_certifications_for(employee_2).should == [certification_2]
@@ -81,7 +83,9 @@ describe CertificationService do
 
     context 'sorting' do
       it 'should call SortService to ensure sorting' do
-        fake_sort_service = subject.load_sort_service(FakeService.new([]))
+        fake_sort_service = FakeService.new([])
+
+        subject = CertificationService.new(sort_service: fake_sort_service)
 
         subject.get_all_certifications_for(build(:employee))
 
@@ -91,8 +95,9 @@ describe CertificationService do
 
     context 'pagination' do
       it 'should call PaginationService to paginate results' do
-        subject.load_sort_service(FakeService.new)
-        fake_pagination_service = subject.load_pagination_service(FakeService.new)
+        fake_pagination_service = FakeService.new
+
+        subject = CertificationService.new(pagination_service: fake_pagination_service)
 
         subject.get_all_certifications_for(build(:employee))
 

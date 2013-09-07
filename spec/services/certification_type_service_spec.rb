@@ -101,8 +101,8 @@ describe CertificationTypeService do
 
     context 'sorting' do
       it 'should call SortService to ensure sorting' do
-        certification_type_service = CertificationTypeService.new
-        fake_sort_service = certification_type_service.load_sort_service(FakeService.new([]))
+        fake_sort_service = FakeService.new([])
+        certification_type_service = CertificationTypeService.new(sort_service: fake_sort_service)
 
         certification_type_service.get_certification_type_list(@my_user)
 
@@ -112,9 +112,8 @@ describe CertificationTypeService do
 
     context 'pagination' do
       it 'should call PaginationService to paginate results' do
-        certification_type_service = CertificationTypeService.new
-        certification_type_service.load_sort_service(FakeService.new)
-        fake_pagination_service = certification_type_service.load_pagination_service(FakeService.new)
+        fake_pagination_service = FakeService.new
+        certification_type_service = CertificationTypeService.new(sort_service: FakeService.new, pagination_service: fake_pagination_service)
 
         certification_type_service.get_certification_type_list(@my_user)
 
@@ -124,9 +123,8 @@ describe CertificationTypeService do
 
     context 'search' do
       it 'should call SearchService to filter results' do
-        certification_type_service = CertificationTypeService.new
-        certification_type_service.load_sort_service(FakeService.new([]))
-        fake_search_service = certification_type_service.load_search_service(FakeService.new([]))
+        fake_search_service = FakeService.new([])
+        certification_type_service = CertificationTypeService.new(sort_service: FakeService.new([]), search_service: fake_search_service)
 
         certification_type_service.get_certification_type_list(@my_user, {thing1: 'thing2'})
 

@@ -33,8 +33,8 @@ describe EmployeeService do
 
     context 'sorting' do
       it 'should call SortService to ensure sorting' do
-        employee_service = EmployeeService.new
-        fake_sort_service = employee_service.load_sort_service(FakeService.new([]))
+        fake_sort_service = FakeService.new([])
+        employee_service = EmployeeService.new(sort_service: fake_sort_service)
 
         employee_service.get_employee_list(my_user)
 
@@ -42,8 +42,8 @@ describe EmployeeService do
       end
 
       it 'should default to sorted ascending by employee_number' do
-        employee_service = EmployeeService.new
-        fake_sort_service = employee_service.load_sort_service(FakeService.new([]))
+        fake_sort_service = FakeService.new([])
+        employee_service = EmployeeService.new(sort_service: fake_sort_service)
 
         employee_service.get_employee_list(my_user)
 
@@ -54,9 +54,8 @@ describe EmployeeService do
 
     context 'pagination' do
       it 'should call PaginationService to paginate results' do
-        employee_service = EmployeeService.new
-        employee_service.load_sort_service(FakeService.new)
-        fake_pagination_service = employee_service.load_pagination_service(FakeService.new)
+        fake_pagination_service = FakeService.new
+        employee_service = EmployeeService.new(sort_service: FakeService.new, pagination_service: fake_pagination_service)
 
         employee_service.get_employee_list(my_user)
 

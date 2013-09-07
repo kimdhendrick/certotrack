@@ -51,8 +51,8 @@ describe CertificationFactory do
       employee = create(:employee)
       fake_expiration_date = Date.new(2001, 1, 1)
 
-      certification_factory = CertificationFactory.new
-      fake_expiration_calculator = certification_factory.load_expiration_calculator(FakeService.new(fake_expiration_date))
+      fake_expiration_calculator = FakeService.new(fake_expiration_date)
+      certification_factory = CertificationFactory.new(expiration_calculator: fake_expiration_calculator)
 
       certification = certification_factory.new_instance(
         employee.id,

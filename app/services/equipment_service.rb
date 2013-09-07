@@ -3,10 +3,16 @@ require 'service_support/sorting_and_pagination'
 class EquipmentService
   include ServiceSupport::SortingAndPagination
 
+  def initialize(params = {})
+    @sort_service = params[:sort_service] || SortService.new
+    @search_service = params[:search_service] || SearchService.new
+    @pagination_service = params[:pagination_service] || PaginationService.new
+  end
+
   def get_all_equipment(current_user, params = {})
     equipment = _get_equipment_for_user(current_user)
 
-    equipment = load_search_service.search(equipment, params)
+    equipment = @search_service.search(equipment, params)
 
     _sort_and_paginate(equipment, params)
   end
@@ -67,12 +73,7 @@ class EquipmentService
     employee.equipments
   end
 
-  def load_search_service(service = SearchService.new)
-    @search_service ||= service
-  end
-
   private
-
 
   def _get_equipment_for_user(current_user)
     current_user.admin? ?
