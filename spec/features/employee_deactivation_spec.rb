@@ -8,7 +8,7 @@ describe 'Employee Deactivation' do
     end
 
     it 'should deactivate employee and unassign equipment' do
-      valid_employee = create_employee(
+      valid_employee = create(:employee,
         first_name: 'Sandee',
         last_name: 'Walker',
         employee_number: 'PUP789',
@@ -16,7 +16,7 @@ describe 'Employee Deactivation' do
         customer: @customer
       )
 
-      valid_equipment = create_equipment(
+      valid_equipment = create(:equipment,
         employee: valid_employee,
         customer: @customer,
         name: 'Meter',

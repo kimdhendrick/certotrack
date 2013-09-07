@@ -99,7 +99,7 @@ describe 'Navigation' do
     end
 
     it 'navigates Show Equipment' do
-      equipment = create_equipment(customer: @customer)
+      equipment = create(:equipment, customer: @customer)
       visit equipment_path equipment.id
       page.should have_content 'Show Equipment'
 
@@ -134,7 +134,7 @@ describe 'Navigation' do
     end
 
     it 'navigates Edit Equipment' do
-      equipment = create_equipment(customer: @customer)
+      equipment = create(:equipment, customer: @customer)
       visit equipment_path equipment.id
 
       click_on 'Edit'

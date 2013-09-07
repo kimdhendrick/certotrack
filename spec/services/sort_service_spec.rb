@@ -6,10 +6,10 @@ describe SortService do
     it 'should sort strings ascending' do
       equipment =
         [
-          new_equipment(name: 'zeta'),
-          new_equipment(name: nil),
-          new_equipment(name: 'alpha'),
-          new_equipment(name: 'beta')
+          build(:equipment, name: 'zeta'),
+          build(:equipment, name: nil),
+          build(:equipment, name: 'alpha'),
+          build(:equipment, name: 'beta')
         ]
 
       results = SortService.new.sort(equipment, 'name', 'asc').map(&:name)
@@ -19,10 +19,10 @@ describe SortService do
     it 'should sort strings descending' do
       equipment =
         [
-          new_equipment(name: 'zeta'),
-          new_equipment(name: 'beta'),
-          new_equipment(name: nil),
-          new_equipment(name: 'alpha')
+          build(:equipment, name: 'zeta'),
+          build(:equipment, name: 'beta'),
+          build(:equipment, name: nil),
+          build(:equipment, name: 'alpha')
         ]
 
       results = SortService.new.sort(equipment, 'name', 'desc').map(&:name)
@@ -33,8 +33,8 @@ describe SortService do
       today = Date.today
       equipment =
         [
-          new_equipment(expiration_date: today),
-          new_equipment(expiration_date: nil)
+          build(:equipment, expiration_date: today),
+          build(:equipment, expiration_date: nil)
         ]
 
       results = SortService.new.sort(equipment, 'expiration_date', 'asc').map(&:expiration_date)
@@ -46,8 +46,8 @@ describe SortService do
 
       equipment =
         [
-          new_equipment(expiration_date: today),
-          new_equipment(expiration_date: nil)
+          build(:equipment, expiration_date: today),
+          build(:equipment, expiration_date: nil)
         ]
 
       results = SortService.new.sort(equipment, 'expiration_date', 'desc').map(&:expiration_date)
@@ -57,9 +57,9 @@ describe SortService do
     it 'should default to name if bad column given' do
       equipment =
         [
-          new_equipment(name: 'zeta'),
-          new_equipment(name: 'beta'),
-          new_equipment(name: 'alpha')
+          build(:equipment, name: 'zeta'),
+          build(:equipment, name: 'beta'),
+          build(:equipment, name: 'alpha')
         ]
 
       results = SortService.new.sort(equipment, 'bad_column_name', 'asc').map(&:name)
@@ -69,9 +69,9 @@ describe SortService do
     it 'should default to specified column if provided' do
       equipment =
         [
-          new_equipment(serial_number: 'zeta', name: 'a'),
-          new_equipment(serial_number: 'beta', name: 'b'),
-          new_equipment(serial_number: 'alpha', name: 'c')
+          build(:equipment, serial_number: 'zeta', name: 'a'),
+          build(:equipment, serial_number: 'beta', name: 'b'),
+          build(:equipment, serial_number: 'alpha', name: 'c')
         ]
 
       results = SortService.new.sort(equipment, 'bad_column_name', 'asc', 'serial_number').map(&:serial_number)
@@ -81,9 +81,9 @@ describe SortService do
     it 'should default to ascending if bad direction given' do
       equipment =
         [
-          new_equipment(name: 'zeta'),
-          new_equipment(name: 'beta'),
-          new_equipment(name: 'alpha')
+          build(:equipment, name: 'zeta'),
+          build(:equipment, name: 'beta'),
+          build(:equipment, name: 'alpha')
         ]
 
       results = SortService.new.sort(equipment, 'name', 'bad_sort_direction').map(&:name)

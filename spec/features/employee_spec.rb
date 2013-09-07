@@ -385,7 +385,7 @@ describe 'Employee' do
     end
 
     it 'should not delete employee with equipment assigned' do
-      valid_employee = create_employee(
+      valid_employee = create(:employee, 
         first_name: 'Sandee',
         last_name: 'Walker',
         employee_number: 'PUP789',
@@ -393,7 +393,7 @@ describe 'Employee' do
         customer: @customer
       )
 
-      create_equipment(employee: valid_employee)
+      create(:equipment, employee: valid_employee)
 
       visit '/'
       click_link 'All Employees'

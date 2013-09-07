@@ -27,7 +27,7 @@ describe EquipmentController do
       end
 
       it 'assigns equipment as @equipment' do
-        equipment = new_equipment
+        equipment = create(:equipment)
         EquipmentService.any_instance.stub(:get_all_equipment).and_return([equipment])
 
         get :index
@@ -36,7 +36,7 @@ describe EquipmentController do
       end
 
       it 'assigns equipment_count' do
-        EquipmentService.any_instance.stub(:get_all_equipment).and_return([new_equipment])
+        EquipmentService.any_instance.stub(:get_all_equipment).and_return([create(:equipment)])
 
         get :index
 
@@ -44,7 +44,7 @@ describe EquipmentController do
       end
 
       it 'assigns report_title' do
-        EquipmentService.any_instance.stub(:get_all_equipment).and_return([new_equipment])
+        EquipmentService.any_instance.stub(:get_all_equipment).and_return([create(:equipment)])
 
         get :index
 
@@ -58,7 +58,7 @@ describe EquipmentController do
       end
 
       it 'assigns equipment as @equipment' do
-        equipment = new_equipment
+        equipment = create(:equipment)
         EquipmentService.any_instance.stub(:get_all_equipment).and_return([equipment])
 
         get :index
@@ -74,7 +74,7 @@ describe EquipmentController do
 
       describe 'GET index' do
         it 'does not assign equipment as @equipment' do
-          equipment = new_equipment
+          equipment = create(:equipment)
           EquipmentService.any_instance.stub(:get_all_equipment).and_return([equipment])
 
           get :index
@@ -106,7 +106,7 @@ describe EquipmentController do
       end
 
       it 'assigns equipment as @equipment' do
-        expired_equipment = create_expired_equipment(customer: @customer)
+        expired_equipment = create(:expired_equipment, customer: @customer)
 
         EquipmentService.any_instance.stub(:get_expired_equipment).and_return([expired_equipment])
 
@@ -116,7 +116,7 @@ describe EquipmentController do
       end
 
       it 'assigns equipment_count' do
-        EquipmentService.any_instance.stub(:get_expired_equipment).and_return([new_equipment])
+        EquipmentService.any_instance.stub(:get_expired_equipment).and_return([create(:equipment)])
 
         get :expired
 
@@ -124,7 +124,7 @@ describe EquipmentController do
       end
 
       it 'assigns report_title' do
-        EquipmentService.any_instance.stub(:get_expired_equipment).and_return([new_equipment])
+        EquipmentService.any_instance.stub(:get_expired_equipment).and_return([create(:equipment)])
 
         get :expired
 
@@ -138,7 +138,7 @@ describe EquipmentController do
       end
 
       it 'assigns equipment as @equipment' do
-        expired_equipment = create_expired_equipment(customer: @customer)
+        expired_equipment = create(:expired_equipment, customer: @customer)
         EquipmentService.any_instance.stub(:get_expired_equipment).and_return([expired_equipment])
 
         get :expired
@@ -154,7 +154,7 @@ describe EquipmentController do
 
       describe 'GET expired' do
         it 'does not assign equipment as @equipment' do
-          equipment = new_equipment
+          equipment = create(:equipment)
           EquipmentService.any_instance.stub(:get_all_equipment).and_return([equipment])
 
           get :expired
@@ -186,7 +186,7 @@ describe EquipmentController do
       end
 
       it 'assigns equipment as @equipment' do
-        expiring_equipment = create_expiring_equipment(customer: @customer)
+        expiring_equipment = create(:expiring_equipment, customer: @customer)
 
         EquipmentService.any_instance.stub(:get_expiring_equipment).and_return([expiring_equipment])
 
@@ -196,7 +196,7 @@ describe EquipmentController do
       end
 
       it 'assigns equipment_count' do
-        EquipmentService.any_instance.stub(:get_expiring_equipment).and_return([new_equipment])
+        EquipmentService.any_instance.stub(:get_expiring_equipment).and_return([create(:equipment)])
 
         get :expiring
 
@@ -204,7 +204,7 @@ describe EquipmentController do
       end
 
       it 'assigns report_title' do
-        EquipmentService.any_instance.stub(:get_expiring_equipment).and_return([new_equipment])
+        EquipmentService.any_instance.stub(:get_expiring_equipment).and_return([create(:equipment)])
 
         get :expiring
 
@@ -218,7 +218,7 @@ describe EquipmentController do
       end
 
       it 'assigns equipment as @equipment' do
-        expiring_equipment = create_expiring_equipment(customer: @customer)
+        expiring_equipment = create(:expiring_equipment, customer: @customer)
         EquipmentService.any_instance.stub(:get_expiring_equipment).and_return([expiring_equipment])
 
         get :expiring
@@ -234,7 +234,7 @@ describe EquipmentController do
 
       describe 'GET expiring' do
         it 'does not assign equipment as @equipment' do
-          equipment = new_equipment
+          equipment = create(:equipment)
           EquipmentService.any_instance.stub(:get_all_equipment).and_return([equipment])
 
           get :expiring
@@ -266,7 +266,7 @@ describe EquipmentController do
       end
 
       it 'assigns equipment as @equipment' do
-        noninspectable_equipment = create_noninspectable_equipment(customer: @customer)
+        noninspectable_equipment = create(:noninspectable_equipment, customer: @customer)
 
         EquipmentService.any_instance.stub(:get_noninspectable_equipment).and_return([noninspectable_equipment])
 
@@ -276,7 +276,7 @@ describe EquipmentController do
       end
 
       it 'assigns equipment_count' do
-        EquipmentService.any_instance.stub(:get_noninspectable_equipment).and_return([new_equipment])
+        EquipmentService.any_instance.stub(:get_noninspectable_equipment).and_return([create(:equipment)])
 
         get :noninspectable
 
@@ -284,7 +284,7 @@ describe EquipmentController do
       end
 
       it 'assigns report_title' do
-        EquipmentService.any_instance.stub(:get_noninspectable_equipment).and_return([new_equipment])
+        EquipmentService.any_instance.stub(:get_noninspectable_equipment).and_return([create(:equipment)])
 
         get :noninspectable
 
@@ -298,7 +298,7 @@ describe EquipmentController do
       end
 
       it 'assigns equipment as @equipment' do
-        noninspectable_equipment = create_noninspectable_equipment(customer: @customer)
+        noninspectable_equipment = create(:noninspectable_equipment, customer: @customer)
         EquipmentService.any_instance.stub(:get_noninspectable_equipment).and_return([noninspectable_equipment])
 
         get :noninspectable
@@ -314,7 +314,7 @@ describe EquipmentController do
 
       describe 'GET noninspectable' do
         it 'does not assign equipment as @equipment' do
-          equipment = new_equipment
+          equipment = create(:equipment)
           EquipmentService.any_instance.stub(:get_all_equipment).and_return([equipment])
 
           get :noninspectable
@@ -332,7 +332,7 @@ describe EquipmentController do
       end
 
       it 'assigns equipment as @equipment' do
-        equipment = create_equipment(customer: @customer)
+        equipment = create(:equipment, customer: @customer)
         get :show, {:id => equipment.to_param}, {}
         assigns(:equipment).should eq(equipment)
       end
@@ -344,7 +344,7 @@ describe EquipmentController do
       end
 
       it 'assigns equipment as @equipment' do
-        equipment = create_equipment(customer: @customer)
+        equipment = create(:equipment, customer: @customer)
         get :show, {:id => equipment.to_param}, {}
         assigns(:equipment).should eq(equipment)
       end
@@ -356,7 +356,7 @@ describe EquipmentController do
       end
 
       it 'does not assign equipment as @equipment' do
-        equipment = create_equipment(customer: @customer)
+        equipment = create(:equipment, customer: @customer)
         get :show, {:id => equipment.to_param}, {}
         assigns(:equipment).should be_nil
       end
@@ -375,7 +375,7 @@ describe EquipmentController do
       end
 
       it 'assigns @intervals' do
-        equipment = create_equipment(customer: @customer)
+        equipment = create(:equipment, customer: @customer)
         get :new, {:id => equipment.to_param}, {}
         assigns(:intervals).should eq(Interval.all.to_a)
       end
@@ -411,13 +411,13 @@ describe EquipmentController do
       end
 
       it 'assigns the requested equipment as @equipment' do
-        equipment = create_equipment(customer: @customer)
+        equipment = create(:equipment, customer: @customer)
         get :edit, {:id => equipment.to_param}, {}
         assigns(:equipment).should eq(equipment)
       end
 
       it 'assigns @intervals' do
-        equipment = create_equipment(customer: @customer)
+        equipment = create(:equipment, customer: @customer)
         get :edit, {:id => equipment.to_param}, {}
         assigns(:intervals).should eq(Interval.all.to_a)
       end
@@ -430,7 +430,7 @@ describe EquipmentController do
       end
 
       it 'assigns the requested equipment as @equipment' do
-        equipment = create_equipment(customer: @customer)
+        equipment = create(:equipment, customer: @customer)
         get :edit, {:id => equipment.to_param}, {}
         assigns(:equipment).should eq(equipment)
       end
@@ -442,7 +442,7 @@ describe EquipmentController do
       end
 
       it 'does not assign equipment as @equipment' do
-        equipment = create_equipment(customer: @customer)
+        equipment = create(:equipment, customer: @customer)
         get :edit, {:id => equipment.to_param}, {}
         assigns(:equipment).should be_nil
       end
@@ -457,18 +457,18 @@ describe EquipmentController do
 
       describe 'with valid params' do
         it 'creates a new Equipment' do
-          EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(new_equipment)
+          EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(create(:equipment))
           post :create, {:equipment => equipment_attributes}, {}
         end
 
         it 'assigns a newly created equipment as @equipment' do
-          EquipmentService.any_instance.stub(:create_equipment).and_return(new_equipment)
+          EquipmentService.any_instance.stub(:create_equipment).and_return(create(:equipment))
           post :create, {:equipment => equipment_attributes}, {}
           assigns(:equipment).should be_a(Equipment)
         end
 
         it 'redirects to the created equipment' do
-          EquipmentService.any_instance.stub(:create_equipment).and_return(create_equipment)
+          EquipmentService.any_instance.stub(:create_equipment).and_return(create(:equipment))
 
           post :create, {:equipment => equipment_attributes}, {}
 
@@ -479,7 +479,7 @@ describe EquipmentController do
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved equipment as @equipment' do
-          EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(new_equipment)
+          EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(build(:equipment))
           Equipment.any_instance.stub(:save).and_return(false)
 
           post :create, {:equipment => {'name' => 'invalid value'}}, {}
@@ -488,13 +488,13 @@ describe EquipmentController do
         end
 
         it "re-renders the 'new' template" do
-          EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(new_equipment)
+          EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(build(:equipment))
           post :create, {:equipment => {'name' => 'invalid value'}}, {}
           response.should render_template('new')
         end
 
         it 'assigns @intervals' do
-          EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(new_equipment)
+          EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(build(:equipment))
           Equipment.any_instance.stub(:save).and_return(false)
           post :create, {:equipment => {'name' => 'invalid value'}}, {}
           assigns(:intervals).should eq(Interval.all.to_a)
@@ -508,12 +508,12 @@ describe EquipmentController do
       end
 
       it 'calls EquipmentService' do
-        EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(new_equipment)
+        EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(create(:equipment))
         post :create, {:equipment => equipment_attributes}, {}
       end
 
       it 'assigns a newly created equipment as @equipment' do
-        EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(new_equipment)
+        EquipmentService.any_instance.should_receive(:create_equipment).once.and_return(create(:equipment))
         post :create, {:equipment => equipment_attributes}, {}
         assigns(:equipment).should be_a(Equipment)
       end
@@ -541,7 +541,7 @@ describe EquipmentController do
 
       describe 'with valid params' do
         it 'updates the requested equipment' do
-          equipment = create_equipment(customer: @customer)
+          equipment = create(:equipment, customer: @customer)
           EquipmentService.any_instance.should_receive(:update_equipment).once
 
           put :update, {:id => equipment.to_param, :equipment =>
@@ -557,14 +557,14 @@ describe EquipmentController do
 
         it 'assigns the requested equipment as @equipment' do
           EquipmentService.any_instance.stub(:update_equipment).and_return(true)
-          equipment = create_equipment(customer: @customer)
+          equipment = create(:equipment, customer: @customer)
           put :update, {:id => equipment.to_param, :equipment => equipment_attributes}, {}
           assigns(:equipment).should eq(equipment)
         end
 
         it 'redirects to the equipment' do
           EquipmentService.any_instance.stub(:update_equipment).and_return(true)
-          equipment = create_equipment(customer: @customer)
+          equipment = create(:equipment, customer: @customer)
 
           put :update, {:id => equipment.to_param, :equipment => equipment_attributes}, {}
 
@@ -575,21 +575,21 @@ describe EquipmentController do
 
       describe 'with invalid params' do
         it 'assigns the equipment as @equipment' do
-          equipment = create_equipment(customer: @customer)
+          equipment = create(:equipment, customer: @customer)
           EquipmentService.any_instance.stub(:update_equipment).and_return(false)
           put :update, {:id => equipment.to_param, :equipment => {'name' => 'invalid value'}}, {}
           assigns(:equipment).should eq(equipment)
         end
 
         it "re-renders the 'edit' template" do
-          equipment = create_equipment(customer: @customer)
+          equipment = create(:equipment, customer: @customer)
           EquipmentService.any_instance.stub(:update_equipment).and_return(false)
           put :update, {:id => equipment.to_param, :equipment => {'name' => 'invalid value'}}, {}
           response.should render_template('edit')
         end
 
         it 'assigns @intervals' do
-          equipment = create_equipment(customer: @customer)
+          equipment = create(:equipment, customer: @customer)
           EquipmentService.any_instance.stub(:update_equipment).and_return(false)
           put :update, {:id => equipment.to_param, :equipment => {'name' => 'invalid value'}}, {}
           assigns(:intervals).should eq(Interval.all.to_a)
@@ -604,7 +604,7 @@ describe EquipmentController do
       end
 
       it 'updates the requested equipment' do
-        equipment = create_equipment(customer: @customer)
+        equipment = create(:equipment, customer: @customer)
         EquipmentService.any_instance.should_receive(:update_equipment).once
 
         put :update, {:id => equipment.to_param, :equipment =>
@@ -619,7 +619,7 @@ describe EquipmentController do
       end
 
       it 'assigns the requested equipment as @equipment' do
-        equipment = create_equipment(customer: @customer)
+        equipment = create(:equipment, customer: @customer)
         EquipmentService.any_instance.stub(:update_equipment).and_return(equipment)
         put :update, {:id => equipment.to_param, :equipment => equipment_attributes}, {}
         assigns(:equipment).should eq(equipment)
@@ -632,7 +632,7 @@ describe EquipmentController do
       end
 
       it 'does not assign equipment as @equipment' do
-        equipment = create_equipment(customer: @customer)
+        equipment = create(:equipment, customer: @customer)
         put :update, {:id => equipment.to_param, :equipment => equipment_attributes}, {}
         assigns(:equipment).should be_nil
       end
@@ -646,14 +646,14 @@ describe EquipmentController do
       end
 
       it 'calls EquipmentService' do
-        equipment = create_equipment(customer: @customer)
+        equipment = create(:equipment, customer: @customer)
         EquipmentService.any_instance.should_receive(:delete_equipment).once
 
         delete :destroy, {:id => equipment.to_param}, {}
       end
 
       it 'redirects to the equipment list' do
-        equipment = create_equipment(customer: @customer)
+        equipment = create(:equipment, customer: @customer)
         EquipmentService.any_instance.should_receive(:delete_equipment).once
 
         delete :destroy, {:id => equipment.to_param}, {}
@@ -669,7 +669,7 @@ describe EquipmentController do
       end
 
       it 'calls EquipmentService' do
-        equipment = create_equipment(customer: @customer)
+        equipment = create(:equipment, customer: @customer)
         EquipmentService.any_instance.should_receive(:delete_equipment).once
 
         delete :destroy, {:id => equipment.to_param}, {}
@@ -698,7 +698,7 @@ describe EquipmentController do
       end
 
       it 'assigns equipment as @equipment' do
-        equipment = new_equipment(customer: @customer)
+        equipment = create(:equipment, customer: @customer)
 
         EquipmentService.any_instance.stub(:get_all_equipment).and_return([equipment])
 
@@ -708,7 +708,7 @@ describe EquipmentController do
       end
 
       it 'assigns equipment_count' do
-        EquipmentService.any_instance.stub(:get_all_equipment).and_return([new_equipment])
+        EquipmentService.any_instance.stub(:get_all_equipment).and_return([create(:equipment)])
 
         get :search
 
@@ -716,7 +716,7 @@ describe EquipmentController do
       end
 
       it 'assigns report_title' do
-        EquipmentService.any_instance.stub(:get_all_equipment).and_return([new_equipment])
+        EquipmentService.any_instance.stub(:get_all_equipment).and_return([create(:equipment)])
 
         get :search
 

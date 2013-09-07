@@ -21,7 +21,7 @@ describe EmployeeDeactivationService do
 
     it 'unassigns equipment' do
       employee = create_employee
-      equipment = create_equipment(employee: employee)
+      equipment = create(:equipment, employee: employee)
 
       EmployeeDeactivationService.new.deactivate_employee(employee)
 
@@ -32,7 +32,7 @@ describe EmployeeDeactivationService do
     it "does not unassign other employee's equipment" do
       employee = create_employee
       other_employee = create_employee
-      equipment = create_equipment(employee: other_employee)
+      equipment = create(:equipment, employee: other_employee)
 
       EmployeeDeactivationService.new.deactivate_employee(employee)
 

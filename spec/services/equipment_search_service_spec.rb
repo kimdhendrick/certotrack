@@ -3,8 +3,8 @@ describe SearchService do
 
   describe 'search by Equipment' do
     it 'should search by name' do
-      match = create_equipment(name: 'Meter123')
-      no_match = create_equipment(name: 'Box')
+      match = create(:equipment, name: 'Meter123')
+      no_match = create(:equipment, name: 'Box')
 
       SearchService.new.search(Equipment.all, {name: 'Meter123'}).should == [match]
       SearchService.new.search(Equipment.all, {name: 'METER123'}).should == [match]
@@ -15,8 +15,8 @@ describe SearchService do
     end
 
     it 'should search by serial_number' do
-      match = create_equipment(serial_number: 'ABC123')
-      no_match = create_equipment(serial_number: 'XYZ')
+      match = create(:equipment, serial_number: 'ABC123')
+      no_match = create(:equipment, serial_number: 'XYZ')
 
       SearchService.new.search(Equipment.all, {serial_number: 'ABC123'}).should == [match]
       SearchService.new.search(Equipment.all, {serial_number: 'abc123'}).should == [match]
@@ -27,25 +27,25 @@ describe SearchService do
     end
 
     it 'should search by employee_id' do
-      match = create_equipment(employee_id: 1)
-      no_match = create_equipment(employee_id: 2)
+      match = create(:equipment, employee_id: 1)
+      no_match = create(:equipment, employee_id: 2)
 
       SearchService.new.search(Equipment.all, {employee_id: 1}).should == [match]
     end
 
     it 'should search by location_id' do
-      match = create_equipment(location_id: 1)
-      no_match = create_equipment(location_id: 2)
+      match = create(:equipment, location_id: 1)
+      no_match = create(:equipment, location_id: 2)
 
       SearchService.new.search(Equipment.all, {location_id: 1}).should == [match]
     end
 
     it 'should search by all fields' do
-      employee_match = create_equipment(employee_id: 7)
-      location_match = create_equipment(location_id: 3)
-      name_match = create_equipment(name: 'Meter123')
-      serial_number_match = create_equipment(serial_number: 'ABC123')
-      no_match = create_equipment(name: 'blah', serial_number: 'blah', employee_id: nil, location_id: nil)
+      employee_match = create(:equipment, employee_id: 7)
+      location_match = create(:equipment, location_id: 3)
+      name_match = create(:equipment, name: 'Meter123')
+      serial_number_match = create(:equipment, serial_number: 'ABC123')
+      no_match = create(:equipment, name: 'blah', serial_number: 'blah', employee_id: nil, location_id: nil)
 
       search_params =
         {
@@ -65,7 +65,7 @@ describe SearchService do
     end
 
     it 'should search by name OR serial_number' do
-      match = create_equipment(name: 'Meter', serial_number: 'ABC123')
+      match = create(:equipment, name: 'Meter', serial_number: 'ABC123')
       SearchService.new.search(Equipment.all, {name: 'Meter', serial_number: 'ABC123'}).should == [match]
     end
   end

@@ -37,10 +37,10 @@ describe User do
         new_user(roles: ['equipment'], customer: new_customer)
       }
       let(:own_equipment) {
-        new_equipment(customer: user.customer)
+        build(:equipment, customer: user.customer)
       }
       let(:other_customer_equipment) {
-        new_equipment(customer: new_customer)
+        build(:equipment, customer: new_customer)
       }
 
       it { should be_able_to(:manage, own_equipment) }

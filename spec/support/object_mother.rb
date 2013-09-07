@@ -8,46 +8,6 @@ module ObjectMother
     FactoryGirl.build(:user, options)
   end
 
-  def create_valid_equipment(options = {})
-    new_valid_equipment(options).tap(&:save!)
-  end
-
-  def new_valid_equipment(options = {})
-    new_equipment(options.merge({expiration_date: Date.today + 61.days}))
-  end
-
-  def create_expired_equipment(options = {})
-    new_expired_equipment(options).tap(&:save!)
-  end
-
-  def new_expired_equipment(options = {})
-    new_equipment(options.merge({expiration_date: Date.yesterday}))
-  end
-
-  def create_expiring_equipment(options = {})
-    new_expiring_equipment(options).tap(&:save!)
-  end
-
-  def new_expiring_equipment(options = {})
-    new_equipment(options.merge({expiration_date: Date.tomorrow}))
-  end
-
-  def create_noninspectable_equipment(options = {})
-    new_noninspectable_equipment(options).tap(&:save!)
-  end
-
-  def new_noninspectable_equipment(options = {})
-    new_equipment(options.merge({inspection_interval: Interval::NOT_REQUIRED.text, last_inspection_date: nil}))
-  end
-
-  def create_equipment(options = {})
-    FactoryGirl.create(:equipment, options)
-  end
-
-  def new_equipment(options = {})
-    FactoryGirl.build(:equipment, options)
-  end
-
   def create_customer(options = {})
     FactoryGirl.create(:customer, options)
   end

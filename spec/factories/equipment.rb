@@ -9,5 +9,22 @@ FactoryGirl.define do
     last_inspection_date Date.new(2000, 1, 1)
     inspection_interval Interval::ONE_YEAR.text
     serial_number
+
+    factory :valid_equipment do
+      expiration_date Date.today + 61.days
+    end
+
+    factory :expired_equipment do
+      expiration_date Date.yesterday
+    end
+
+    factory :expiring_equipment do
+      expiration_date Date.tomorrow
+    end
+
+    factory :noninspectable_equipment do
+      inspection_interval Interval::NOT_REQUIRED.text
+      last_inspection_date nil
+    end
   end
 end

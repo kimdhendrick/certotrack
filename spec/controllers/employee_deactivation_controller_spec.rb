@@ -68,8 +68,8 @@ describe EmployeeDeactivationController do
       end
 
       it 'calls service and makes assignments' do
-        employee = create_employee(customer: @customer)
-        equipment = new_equipment
+        employee = create(:employee, customer: @customer)
+        equipment = build(:equipment)
         @fake_equipment_service = controller.load_equipment_service(FakeService.new([equipment]))
 
         get :deactivate_confirm, {:id => employee.to_param}, {}
@@ -87,8 +87,8 @@ describe EmployeeDeactivationController do
       end
 
       it 'calls service and makes assignments' do
-        employee = create_employee(customer: @customer)
-        equipment = new_equipment
+        employee = create(:employee, customer: @customer)
+        equipment = build(:equipment)
         @fake_equipment_service = controller.load_equipment_service(FakeService.new([equipment]))
 
         get :deactivate_confirm, {:id => employee.to_param}, {}

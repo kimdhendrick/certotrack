@@ -12,8 +12,8 @@ end
 module ServiceSupport
   describe SortingAndPagination do
     subject { ConcreteSortingAndPagination.new }
-    let(:sort_service) { stub('sort_service') }
-    let(:pagination_service) { stub('pagination_service') }
+    let(:sort_service) { double('sort_service') }
+    let(:pagination_service) { double('pagination_service') }
 
     before do
       subject.load_sort_service(sort_service)

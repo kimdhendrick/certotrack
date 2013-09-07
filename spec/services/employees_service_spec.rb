@@ -169,7 +169,7 @@ describe EmployeeService do
 
     it 'returns error when equipment assigned to employee' do
       employee = create_employee(customer: @customer)
-      equipment = create_equipment(employee: employee, customer: @customer)
+      equipment = create(:equipment, employee: employee, customer: @customer)
 
       status = EmployeeService.new.delete_employee(employee)
 
