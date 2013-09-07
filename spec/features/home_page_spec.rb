@@ -8,7 +8,8 @@ describe 'Home Page', slow: true do
     end
 
     it 'should show all equipment menu links' do
-      # TODO Should have search box
+      page.should have_field 'name'
+      page.should have_button 'Search'
       page.should have_content 'All Equipment (0)'
       page.should have_content 'Expired Equipment (0)'
       page.should have_content 'Equipment Expiring Soon (0)'

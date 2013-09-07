@@ -800,6 +800,57 @@ describe EquipmentController do
     end
   end
 
+  describe 'GET ajax_equipment_name' do
+    context 'when equipment user' do
+      before do
+        @current_user = stub_equipment_user
+        sign_in @current_user
+      end
+
+      it 'should call equipment_service to retrieve names' do
+        fake_employee_service = controller.load_equipment_service(FakeService.new(['cat']))
+
+        get :ajax_equipment_name, {term: 'cat'}
+
+        json = JSON.parse(response.body)
+        json.should == ['cat']
+        fake_employee_service.received_message.should == :get_equipment_names
+        fake_employee_service.received_params[0].should == @current_user
+        fake_employee_service.received_params[1].should == 'cat'
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'should redirect, I suppose' do
+        get :ajax_equipment_name, {term: 'cat'}
+        response.body.should eq("<html><body>You are being <a href=\"http://test.host/\">redirected</a>.</body></html>")
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        @current_user = stub_admin
+        sign_in @current_user
+      end
+
+      it 'should call equipment_service to retrieve names' do
+        fake_employee_service = controller.load_equipment_service(FakeService.new(['cat']))
+
+        get :ajax_equipment_name, {term: 'cat'}
+
+        json = JSON.parse(response.body)
+        json.should == ['cat']
+        fake_employee_service.received_message.should == :get_equipment_names
+        fake_employee_service.received_params[0].should == @current_user
+        fake_employee_service.received_params[1].should == 'cat'
+      end
+    end
+  end
+
   def equipment_attributes
     {
       name: 'Meter',

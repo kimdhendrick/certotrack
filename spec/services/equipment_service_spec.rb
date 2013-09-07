@@ -4,7 +4,7 @@ describe EquipmentService do
   let(:my_customer) { create(:customer) }
   let(:my_user) { create(:user, customer: my_customer) }
   let(:admin_user) { create(:user, roles: ['admin']) }
-  
+
   describe 'get_all_equipment' do
     context 'sorting' do
       it 'should call SortService to ensure sorting' do
@@ -382,6 +382,37 @@ describe EquipmentService do
       unassigned_equipment = create(:equipment, employee: nil)
 
       EquipmentService.new.get_all_equipment_for_employee(employee).should == [assigned_equipment]
+    end
+  end
+
+  describe 'get_equipment_names' do
+    it "should only return own customer's equipment names" do
+      my_customer = create(:customer)
+      me = create(:user, customer: my_customer)
+      create(:equipment, name: 'my_equipment', customer: my_customer)
+      create(:equipment, name: 'not_my_equipment', customer: create(:customer))
+
+      EquipmentService.new.get_equipment_names(me, 'equipment').should == ['my_equipment']
+    end
+
+    it 'should not return duplicate names' do
+      my_customer = create(:customer)
+      me = create(:user, customer: my_customer)
+      create(:equipment, name: 'my_equipment', customer: my_customer)
+      create(:equipment, name: 'my_equipment', customer: my_customer)
+
+      EquipmentService.new.get_equipment_names(me, 'equipment').should == ['my_equipment']
+    end
+
+    it 'should match term anywhere in name' do
+      my_customer = create(:customer)
+      me = create(:user, customer: my_customer)
+      create(:equipment, name: 'equipment_end', customer: my_customer)
+      create(:equipment, name: 'beginning_equipment_end', customer: my_customer)
+      create(:equipment, name: 'beginning_equipment', customer: my_customer)
+
+      EquipmentService.new.get_equipment_names(me, 'equipment').should =~
+        ['equipment_end', 'beginning_equipment_end', 'beginning_equipment']
     end
   end
 

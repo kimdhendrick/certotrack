@@ -15,6 +15,7 @@ Certotrack::Application.routes.draw do
   get 'noninspectable_equipment', action: 'noninspectable', controller: 'equipment'
   get 'search_equipment', action: 'search', controller: 'equipment'
   get 'ajax_assignee', action: 'ajax_assignee', controller: 'equipment'
+  get 'ajax_equipment_name', action: 'ajax_equipment_name', controller: 'equipment'
 
   resources :certification_types
   get 'search_certification_types', action: 'search', controller: 'certification_types'

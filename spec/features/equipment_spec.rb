@@ -10,7 +10,7 @@ describe 'Equipment', slow: true do
     end
 
     it 'should render equipment show page' do
-      valid_equipment = create(:equipment, 
+      valid_equipment = create(:equipment,
         customer: @customer,
         name: 'Meter',
         serial_number: 'ABC123',
@@ -212,6 +212,22 @@ describe 'Equipment', slow: true do
       page.should have_content '01/01/2055'
     end
 
+    it 'should auto complete on name', js:true do
+      create(:equipment, name: 'Leveler', customer: @customer)
+
+      visit '/'
+      click_link 'Create Equipment'
+
+      assert_autocomplete('equipment_name', 'lev', 'Leveler')
+
+      fill_in 'Serial Number', with: '765-CKD'
+      select 'Not Required', from: 'Inspection Interval'
+
+      click_on 'Create'
+
+      page.should have_content 'Show Equipment'
+      page.should have_content 'Leveler'
+    end
   end
 
   describe 'Update Equipment' do
@@ -223,7 +239,7 @@ describe 'Equipment', slow: true do
     end
 
     it 'should update existing equipment', js: true do
-      valid_equipment = create(:equipment, 
+      valid_equipment = create(:equipment,
         customer: @customer,
         name: 'Meter',
         serial_number: 'ABC123',
@@ -282,7 +298,7 @@ describe 'Equipment', slow: true do
     end
 
     it 'should alert on future dates', js: true do
-      valid_equipment = create(:equipment, 
+      valid_equipment = create(:equipment,
         customer: @customer,
         name: 'Meter',
         serial_number: 'ABC123',
@@ -339,7 +355,7 @@ describe 'Equipment', slow: true do
     end
 
     it 'should delete existing equipment', js: true do
-      valid_equipment = create(:equipment, 
+      valid_equipment = create(:equipment,
         customer: @customer,
         name: 'Meter'
       )
@@ -378,7 +394,7 @@ describe 'Equipment', slow: true do
       end
 
       it 'should show All Equipment report' do
-        create(:equipment, 
+        create(:equipment,
           customer: @customer,
           name: 'Meter',
           serial_number: 'ABC123',
@@ -388,7 +404,7 @@ describe 'Equipment', slow: true do
           employee_id: @special_employee.id
         )
 
-        create(:equipment, 
+        create(:equipment,
           customer: @customer,
           name: 'Box',
           serial_number: 'BBB999',
@@ -433,7 +449,7 @@ describe 'Equipment', slow: true do
       end
 
       it 'should show Expired Equipment report' do
-        expired_equipment = create(:equipment, 
+        expired_equipment = create(:equipment,
           customer: @customer,
           name: 'Gauge',
           serial_number: 'XYZ987',
@@ -467,7 +483,7 @@ describe 'Equipment', slow: true do
       end
 
       it 'should show Expiring Equipment report' do
-        expiring_equipment = create(:equipment, 
+        expiring_equipment = create(:equipment,
           customer: @customer,
           name: 'Banana',
           serial_number: 'BANA',
@@ -499,7 +515,7 @@ describe 'Equipment', slow: true do
       end
 
       it 'should show Non-Inspectable Equipment report' do
-        non_inspectable_equipment = create(:equipment, 
+        non_inspectable_equipment = create(:equipment,
           customer: @customer,
           name: 'MDC',
           serial_number: 'mdc1',
@@ -798,12 +814,12 @@ describe 'Equipment', slow: true do
       end
 
       it 'should show Search Equipment page' do
-        create(:equipment, 
+        create(:equipment,
           customer: @customer,
           name: 'Unique Name'
         )
 
-        create(:equipment, 
+        create(:equipment,
           customer: @customer,
           name: 'Box'
         )
@@ -832,18 +848,20 @@ describe 'Equipment', slow: true do
         page.should_not have_link 'Box'
       end
 
-      it 'should show Search Equipment box' do
-        create(:equipment, 
+      it 'should show Search Equipment box', js: true do
+        create(:equipment,
           customer: @customer,
           name: 'Unique Name'
         )
 
-        create(:equipment, 
+        create(:equipment,
           customer: @customer,
           name: 'Box'
         )
 
         visit '/'
+
+        assert_autocomplete('name', 'bo', 'Box')
 
         within '[data-equipment-search-form]' do
           fill_in 'name', with: 'Unique'
@@ -856,17 +874,18 @@ describe 'Equipment', slow: true do
 
         find 'table.sortable'
 
+        find_field('name').value.should eq 'Unique'
         page.should have_link 'Unique Name'
         page.should_not have_link 'Box'
       end
 
       it 'should search and sort simultaneously' do
-        create(:equipment, 
+        create(:equipment,
           customer: @customer,
           name: 'Unique Name'
         )
 
-        create(:equipment, 
+        create(:equipment,
           customer: @customer,
           name: 'Box'
         )
@@ -898,6 +917,16 @@ describe 'Equipment', slow: true do
         page.should have_link 'Unique Name'
         page.should_not have_link 'Box'
       end
+
+      it 'should auto complete on name', js: true do
+        create(:equipment, name: 'Leveler', customer: @customer)
+
+        visit '/'
+        click_on 'Search'
+
+        assert_autocomplete('name', 'lev', 'Leveler')
+      end
+
     end
   end
 
@@ -912,5 +941,12 @@ describe 'Equipment', slow: true do
       page.should have_link 'Expiration Date'
       page.should have_link 'Assignee'
     end
+  end
+
+  def assert_autocomplete(field_name, partial_value, full_value)
+    fill_in field_name, with: partial_value
+    sleep 1.5
+    page.execute_script "$('.ui-menu-item a:contains(\"#{full_value}\")'). trigger(\"mouseenter\").click();"
+    find_field(field_name).value.should eq full_value
   end
 end

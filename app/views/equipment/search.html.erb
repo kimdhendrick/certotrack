@@ -1,6 +1,6 @@
-<h1><%=@report_title%></h1>
+<h1><%= @report_title %></h1>
 
-<div>Total: <%=@equipment_count%></div>
+<div>Total: <%= @equipment_count %></div>
 
 <%= link_to 'Home', root_path %> |
 <%= link_to "Create Equipment", new_equipment_path %>
@@ -23,7 +23,10 @@
         <%= text_field_tag :serial_number, params[:serial_number] %>
       </td>
     </tr>
-    <tr><td>Assigned To</td><td></td></tr>
+    <tr>
+      <td>Assigned To</td>
+      <td></td>
+    </tr>
     <tr>
       <td><label for="location_id">Location:</label></td>
       <td>
@@ -55,6 +58,10 @@
   </table>
 <% end %>
 
-<%= render 'equipment_list'%>
+<%= render 'equipment_list' %>
 
 <%= will_paginate @equipments %>
+
+<script type="text/javascript">
+  autocomplete_equipment_name('input#name', '<%=ajax_equipment_name_path%>');
+</script>

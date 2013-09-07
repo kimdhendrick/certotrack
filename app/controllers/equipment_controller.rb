@@ -2,11 +2,11 @@ class EquipmentController < ApplicationController
   include ControllerHelper
   include EquipmentHelper
 
-  before_filter :authenticate_user!, 
-                :load_equipment_service, 
-                :load_location_service, 
+  before_filter :authenticate_user!,
+                :load_equipment_service,
+                :load_location_service,
                 :load_employee_service
-  
+
   before_action :_set_equipment, only: [:show, :edit, :update, :destroy]
 
   check_authorization
@@ -106,6 +106,11 @@ class EquipmentController < ApplicationController
     else
       render json: @employee_service.get_all_employees(current_user).map { |e| [e.id, e.to_s] }
     end
+  end
+
+  def ajax_equipment_name
+    authorize! :read, :equipment
+    render json: @equipment_service.get_equipment_names(current_user, params[:term])
   end
 
   def load_equipment_service(service = EquipmentService.new)
