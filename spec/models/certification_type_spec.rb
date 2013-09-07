@@ -6,6 +6,7 @@ describe CertificationType do
   subject { @certification_type }
 
   it { should validate_presence_of :name }
+  it { should validate_presence_of :customer }
   it { should belong_to(:customer) }
   it { should validate_uniqueness_of(:name).scoped_to(:customer_id) }
   it { should have_many :certifications }

@@ -7,7 +7,11 @@ class Employee < ActiveRecord::Base
   has_many :certifications
   has_many :equipments
 
-  validates_presence_of :employee_number, :first_name, :last_name
+  validates_presence_of :employee_number,
+                        :first_name,
+                        :last_name,
+                        :customer
+
   validates_uniqueness_of :employee_number, scope: :customer_id
 
   def to_s

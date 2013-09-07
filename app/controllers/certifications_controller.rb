@@ -16,6 +16,8 @@ class CertificationsController < ApplicationController
   def create
     authorize! :create, :certification
 
+    return _render_new if params[:employee][:id].blank?
+
     @certification = @certification_service.certify(
       params[:employee][:id],
       params[:certification][:certification_type_id],

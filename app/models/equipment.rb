@@ -5,7 +5,9 @@ class Equipment < ActiveRecord::Base
   belongs_to :location
   belongs_to :employee
 
-  validates_presence_of :name, :serial_number
+  validates_presence_of :name,
+                        :serial_number,
+                        :customer
   validates_date :last_inspection_date, :before => lambda { 100.years.from_now }, :after => lambda { 100.years.ago }, if: :inspectable?
   validates :inspection_interval, inclusion: {in: Interval.all.map(&:text),
                                               message: 'invalid value'}

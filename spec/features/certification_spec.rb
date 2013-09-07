@@ -107,7 +107,7 @@ describe 'Certifications', slow: true do
     end
 
     it 'should give error if already certified' do
-      create(:certification, employee: @employee, certification_type: @certification_type)
+      create(:certification, employee: @employee, certification_type: @certification_type, customer: @employee.customer)
 
       visit employee_path @employee.id
 

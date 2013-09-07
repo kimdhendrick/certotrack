@@ -116,7 +116,7 @@ describe EmployeeService do
 
   describe 'update_employee' do
     it 'should update employees attributes' do
-      employee = create(:employee, customer: @customer)
+      employee = create(:employee, customer: my_customer)
       attributes =
         {
           'id' => employee.id,
@@ -137,7 +137,7 @@ describe EmployeeService do
     end
 
     it 'should return false if errors' do
-      employee = create(:employee, customer: @customer)
+      employee = create(:employee, customer: my_customer)
       employee.stub(:save).and_return(false)
 
       success = EmployeeService.new.update_employee(employee, {})
@@ -150,7 +150,7 @@ describe EmployeeService do
 
   describe 'delete_employee' do
     it 'destroys the requested employee' do
-      employee = create(:employee, customer: @customer)
+      employee = create(:employee, customer: my_customer)
 
       expect {
         EmployeeService.new.delete_employee(employee)
@@ -158,8 +158,8 @@ describe EmployeeService do
     end
 
     it 'returns error when equipment assigned to employee' do
-      employee = create(:employee, customer: @customer)
-      equipment = create(:equipment, employee: employee, customer: @customer)
+      employee = create(:employee, customer: my_customer)
+      equipment = create(:equipment, employee: employee, customer: my_customer)
 
       status = EmployeeService.new.delete_employee(employee)
 

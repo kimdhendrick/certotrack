@@ -16,6 +16,7 @@ describe CertificationFactory do
 
       certification.should_not be_persisted
       certification.employee.should == employee
+      certification.customer.should == employee.customer
       certification.certification_type.should == certification_type
       certification.active_certification_period.trainer.should == 'Joe Bob'
       certification.active_certification_period.comments.should == 'Great class!'

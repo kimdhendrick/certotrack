@@ -9,6 +9,7 @@ describe User do
   it { should validate_presence_of :last_name }
   it { should validate_presence_of :email }
   it { should validate_presence_of :username }
+  it { should validate_presence_of :customer }
   it { should respond_to(:encrypted_password) }
   it { should respond_to(:password) }
   it { should respond_to(:password_confirmation) }

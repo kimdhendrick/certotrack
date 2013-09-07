@@ -274,7 +274,7 @@ describe EquipmentService do
 
   describe 'update_equipment' do
     it 'should update equipments attributes' do
-      equipment = create(:equipment, customer: @customer)
+      equipment = create(:equipment, customer: my_customer)
       attributes =
         {
           'id' => equipment.id,
@@ -299,7 +299,7 @@ describe EquipmentService do
     end
 
     it 'should set inspection_interval to Non-Inspectable if interval is Not Required' do
-      equipment = create(:equipment, customer: @customer)
+      equipment = create(:equipment, customer: my_customer)
       attributes =
         {
           'id' => equipment.id,
@@ -316,7 +316,7 @@ describe EquipmentService do
     end
 
     it 'should return false if errors' do
-      equipment = create(:equipment, customer: @customer)
+      equipment = create(:equipment, customer: my_customer)
       equipment.stub(:save).and_return(false)
 
       success = EquipmentService.new.update_equipment(equipment, {})
@@ -372,7 +372,7 @@ describe EquipmentService do
 
   describe 'delete_equipment' do
     it 'destroys the requested equipment' do
-      equipment = create(:equipment, customer: @customer)
+      equipment = create(:equipment, customer: my_customer)
 
       expect {
         EquipmentService.new.delete_equipment(equipment)

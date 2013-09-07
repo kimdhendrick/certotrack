@@ -20,7 +20,7 @@ describe CertificationService do
     it 'creates a certification' do
       employee = create(:employee)
       certification_type = create(:certification_type)
-      certification = build(:certification, certification_type: certification_type, employee: employee)
+      certification = build(:certification, certification_type: certification_type, employee: employee, customer: employee.customer)
       certification_service = CertificationService.new
       fake_certification_factory = certification_service.load_certification_factory(FakeService.new(certification))
 
@@ -72,8 +72,8 @@ describe CertificationService do
     it 'returns all certifications for a given employee' do
       employee_1 = create(:employee)
       employee_2 = create(:employee)
-      certification_1 = create(:certification, employee: employee_1)
-      certification_2 = create(:certification, employee: employee_2)
+      certification_1 = create(:certification, employee: employee_1, customer: employee_1.customer)
+      certification_2 = create(:certification, employee: employee_2, customer: employee_2.customer)
 
       subject.get_all_certifications_for(employee_1).should == [certification_1]
       subject.get_all_certifications_for(employee_2).should == [certification_2]

@@ -7,6 +7,7 @@ describe Equipment do
 
   it { should validate_presence_of :name }
   it { should validate_presence_of :serial_number }
+  it { should validate_presence_of :customer }
   it { should belong_to(:customer) }
   it { should belong_to(:location) }
   it { should belong_to(:employee) }

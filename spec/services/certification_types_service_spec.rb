@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe CertificationTypeService do
+  before do
+    @customer = create(:customer)
+  end
+
   describe 'create_certification_type' do
     it 'should create certification type' do
       attributes =

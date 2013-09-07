@@ -5,7 +5,9 @@ class CertificationType < ActiveRecord::Base
   belongs_to :customer
   has_many :certifications
 
-  validates_presence_of :name
+  validates_presence_of :name,
+                        :customer
+
   validates_uniqueness_of :name, scope: :customer_id
   validates :units_required, :numericality => { :greater_than_or_equal_to => 0 }
   validates :interval, inclusion: {in: Interval.all.map(&:text),

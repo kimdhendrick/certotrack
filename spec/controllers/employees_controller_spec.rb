@@ -193,7 +193,7 @@ describe EmployeesController do
   describe 'GET show' do
     let(:employee) { create(:employee, customer: @customer) }
     let(:certification_service) { double('certification_service') }
-    let(:certification) { create(:certification, employee: employee) }
+    let(:certification) { create(:certification, employee: employee, customer: employee.customer) }
     let(:certifications) { [certification] }
 
     before do

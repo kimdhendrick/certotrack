@@ -13,7 +13,7 @@ describe CertificationsController do
       it 'calls certification service' do
         controller.load_certification_type_service(FakeService.new())
         employee = create(:employee)
-        certification = create(:certification, employee: employee)
+        certification = create(:certification, employee: employee, customer: employee.customer)
         fake_certification_service = controller.load_certification_service(FakeService.new(certification))
 
         get :new, {employee_id: employee.id}, {}
@@ -24,7 +24,7 @@ describe CertificationsController do
 
       it 'assigns @certification' do
         controller.load_certification_type_service(FakeService.new())
-        certification = create(:certification)
+        certification = create(:certification, customer: create(:customer))
         controller.load_certification_service(FakeService.new(certification))
 
         get :new, {}, {}
@@ -128,7 +128,7 @@ describe CertificationsController do
         Certification.any_instance.stub(:valid?).and_return(false)
         controller.load_certification_service(FakeService.new(build(:certification)))
 
-        get :create, {employee: {}, certification: {certification_type_id: 1}}, {}
+        get :create, {employee: {id: 1}, certification: {certification_type_id: 1}}, {}
 
         assigns(:certification).should be_a(Certification)
       end
@@ -172,12 +172,12 @@ describe CertificationsController do
         it 'redirects to show employee on success' do
           employee = create(:employee)
           certification_type = create(:certification_type)
-          certification = create(:certification, employee: employee, certification_type: certification_type)
+          certification = create(:certification, employee: employee, certification_type: certification_type, customer: employee.customer)
 
           controller.load_certification_service(FakeService.new(certification))
 
           params = {
-            employee: {},
+            employee: {id: 1},
             certification: {certification_type_id: 1},
             commit: 'Create'
           }
@@ -190,12 +190,12 @@ describe CertificationsController do
         it 'gives successful message on success' do
           employee = create(:employee, first_name: 'Dutch', last_name: 'Barnes')
           certification_type = create(:certification_type, name: 'certType24')
-          certification = create(:certification, employee: employee, certification_type: certification_type)
+          certification = create(:certification, employee: employee, certification_type: certification_type, customer: employee.customer)
 
           controller.load_certification_service(FakeService.new(certification))
 
           params = {
-            employee: {},
+            employee: {id: 1},
             certification: {certification_type_id: 1},
             commit: 'Create'
           }
@@ -229,7 +229,7 @@ describe CertificationsController do
           controller.load_certification_type_service(FakeService.new([certification_type]))
 
           params = {
-            employee: {},
+            employee: {id: 1},
             certification: {certification_type_id: 1},
             commit: 'Save and Create Another'
           }
@@ -258,13 +258,13 @@ describe CertificationsController do
         it 'gives successful message on success' do
           employee = create(:employee, first_name: 'Dutch', last_name: 'Barnes')
           certification_type = create(:certification_type, name: 'certType24')
-          certification = create(:certification, employee: employee, certification_type: certification_type)
+          certification = create(:certification, employee: employee, certification_type: certification_type, customer: employee.customer)
 
           controller.load_certification_service(FakeService.new(certification))
           controller.load_certification_type_service(FakeService.new([]))
 
           params = {
-            employee: {},
+            employee: {id: 1},
             certification: {certification_type_id: 1},
             commit: 'Save and Create Another'
           }

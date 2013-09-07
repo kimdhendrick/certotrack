@@ -6,7 +6,9 @@ class User < ActiveRecord::Base
 
   belongs_to :customer
 
-  validates_presence_of :first_name, :last_name
+  validates_presence_of :first_name,
+                        :last_name,
+                        :customer
 
   validates :password,
             format: {
