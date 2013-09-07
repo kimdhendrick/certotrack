@@ -196,6 +196,9 @@ describe Certification do
       subject.valid?
     end
 
+    before { Timecop.freeze(2013, 9, 6) }
+    after { Timecop.return }
+
     context 'when start_date is invalid' do
       let(:start_date) { '1111111' }
 

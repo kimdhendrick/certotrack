@@ -17,6 +17,7 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
 gem 'will_paginate', '~> 3.0'
 gem 'validates_timeliness', '~> 3.0'
+gem 'timecop'
 
 group :test do
   gem "shoulda-matchers"

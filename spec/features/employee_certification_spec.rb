@@ -25,7 +25,7 @@ describe 'Employee Certifications', slow: true do
 
       within 'table tbody tr:nth-of-type(1)' do
         page.should have_link 'Scrum Master', href: certification_type_path(certification.certification_type)
-        page.should have_content DateHelpers::date_to_string(1.day.ago)
+        page.should have_content DateHelpers.date_to_string(certification.last_certification_date)
         page.should have_content '0'
         page.should have_content 'N/A'
       end
