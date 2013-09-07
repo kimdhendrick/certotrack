@@ -112,18 +112,6 @@
   });
 
   $('[name=commit]').click(function() {
-    var date = new Date(document.getElementById('equipment_last_inspection_date').value);
-    var today = new Date();
-    var sure = true;
-
-    if (date > today) {
-      sure = confirm('Are you sure you want to enter a future date?');
-    }
-
-    if (sure) {
-      $('[data-equipment-form]').submit();
-    }
-
-    return false;
+    return confirm_future_date(new Date(document.getElementById('equipment_last_inspection_date').value));
   });
 </script>
