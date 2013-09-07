@@ -15,6 +15,7 @@ RSpec.configure do |config|
   config.include LoginHelpers
   config.include CurrentUserHelpers
   config.include ReportHelpers
+  config.include FactoryGirl::Syntax::Methods
 
   # ## Mock Framework
   #

@@ -70,10 +70,10 @@ describe CertificationService do
   describe '#get_all_certifications_for' do
     subject { CertificationService.new }
     it 'returns all certifications for a given employee' do
-      employee_1 = FactoryGirl.create(:employee)
-      employee_2 = FactoryGirl.create(:employee)
-      certification_1 = FactoryGirl.create(:certification, employee: employee_1)
-      certification_2 = FactoryGirl.create(:certification, employee: employee_2)
+      employee_1 = create(:employee)
+      employee_2 = create(:employee)
+      certification_1 = create(:certification, employee: employee_1)
+      certification_2 = create(:certification, employee: employee_2)
 
       subject.get_all_certifications_for(employee_1).should == [certification_1]
       subject.get_all_certifications_for(employee_2).should == [certification_2]

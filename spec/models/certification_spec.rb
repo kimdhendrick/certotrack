@@ -182,8 +182,8 @@ describe Certification do
   end
 
   it 'should respond to units_based?' do
-    FactoryGirl.build(:certification).should_not be_units_based
-    FactoryGirl.build(:units_based_certification).should be_units_based
+    build(:certification).should_not be_units_based
+    build(:units_based_certification).should be_units_based
   end
 
   describe "new date validations" do

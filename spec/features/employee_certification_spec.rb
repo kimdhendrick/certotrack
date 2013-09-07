@@ -2,14 +2,14 @@ require 'spec_helper'
 
 describe 'Employee Certifications' do
   describe 'Show Employee' do
-    let(:employee) { FactoryGirl.create(:employee, customer: @customer) }
+    let(:employee) { create(:employee, customer: @customer) }
 
     before do
       login_as_certification_user
     end
 
     it 'should show certifications' do
-      certification = FactoryGirl.create(:certification, employee: employee)
+      certification = create(:certification, employee: employee)
 
       visit employee_path(employee)
       page.should have_content 'Show Employee'
@@ -32,16 +32,16 @@ describe 'Employee Certifications' do
     end
 
     context 'sorting' do
-      let(:scrum_master_certification_type) { FactoryGirl.create(:certification_type, name: 'Scrum Master') }
-      let(:scrum_coach_certification_type) { FactoryGirl.create(:certification_type, name: 'Scrum Coach') }
+      let(:scrum_master_certification_type) { create(:certification_type, name: 'Scrum Master') }
+      let(:scrum_coach_certification_type) { create(:certification_type, name: 'Scrum Coach') }
 
       before do
         
       end
 
       it 'should sort by certification type (name)' do
-        FactoryGirl.create(:certification, employee: employee, certification_type: scrum_master_certification_type)
-        FactoryGirl.create(:certification, employee: employee, certification_type: scrum_coach_certification_type)
+        create(:certification, employee: employee, certification_type: scrum_master_certification_type)
+        create(:certification, employee: employee, certification_type: scrum_coach_certification_type)
         visit employee_path(employee)
 
         within 'table thead tr:nth-of-type(1)' do
@@ -58,8 +58,8 @@ describe 'Employee Certifications' do
       end
 
       it 'should sort by status' do
-        FactoryGirl.create(:units_based_certification, employee: employee)
-        FactoryGirl.create(:certification, employee: employee)
+        create(:units_based_certification, employee: employee)
+        create(:certification, employee: employee)
         visit employee_path(employee)
 
         within 'table thead tr:nth-of-type(1)' do
@@ -79,8 +79,8 @@ describe 'Employee Certifications' do
     context 'pagination' do
       before do
         26.times do |n|
-          certification_type = FactoryGirl.create(:certification_type, name: "type-#{n}")
-          FactoryGirl.create(:certification, employee: employee, certification_type: certification_type)
+          certification_type = create(:certification_type, name: "type-#{n}")
+          create(:certification, employee: employee, certification_type: certification_type)
         end
         visit employee_path(employee)
       end
