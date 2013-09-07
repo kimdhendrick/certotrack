@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe EmployeeDeactivationController do
   before do
-    @customer = create_customer
+    @customer = create(:customer)
   end
 
   describe 'GET deactivate' do
@@ -12,7 +12,7 @@ describe EmployeeDeactivationController do
       end
 
       it 'calls EmployeesService' do
-        employee = create_employee(customer: @customer)
+        employee = create(:employee, customer: @customer)
         @fake_employee_service = controller.load_employee_deactivation_service(FakeService.new(true))
 
         delete :deactivate, {:id => employee.to_param}, {}
@@ -22,7 +22,7 @@ describe EmployeeDeactivationController do
       end
 
       it 'redirects to the employee list' do
-        employee = create_employee(customer: @customer, last_name: 'last', first_name: 'first')
+        employee = create(:employee, customer: @customer, last_name: 'last', first_name: 'first')
         @fake_employee_service = controller.load_employee_deactivation_service(FakeService.new(true))
 
         delete :deactivate, {:id => employee.to_param}, {}
@@ -38,7 +38,7 @@ describe EmployeeDeactivationController do
       end
 
       it 'calls EmployeesService' do
-        employee = create_employee(customer: @customer)
+        employee = create(:employee, customer: @customer)
         @fake_employee_service = controller.load_employee_deactivation_service(FakeService.new(true))
 
         delete :deactivate, {:id => employee.to_param}, {}
@@ -51,7 +51,7 @@ describe EmployeeDeactivationController do
       end
 
       it 'does not deactivate' do
-        employee = new_employee
+        employee = build(:employee)
         @fake_employee_service = controller.load_employee_deactivation_service(FakeService.new([employee]))
 
         get :deactivated_employees
@@ -106,7 +106,7 @@ describe EmployeeDeactivationController do
       end
 
       it 'does not assign anything' do
-        employee = create_employee(customer: @customer)
+        employee = create(:employee, customer: @customer)
 
         get :deactivate_confirm, {:id => employee.to_param}, {}
 
@@ -135,7 +135,7 @@ describe EmployeeDeactivationController do
       end
 
       it 'assigns @employees and @employee_count' do
-        employee = new_employee
+        employee = build(:employee)
         @fake_employee_service = controller.load_employee_deactivation_service(FakeService.new([employee]))
 
         get :deactivated_employees
@@ -151,7 +151,7 @@ describe EmployeeDeactivationController do
       end
 
       it 'assigns employees as @employees' do
-        employee = new_employee
+        employee = build(:employee)
         @fake_employee_service = controller.load_employee_deactivation_service(FakeService.new([employee]))
 
         get :deactivated_employees
@@ -167,7 +167,7 @@ describe EmployeeDeactivationController do
       end
 
       it 'does not assign employees as @employees' do
-        employee = new_employee
+        employee = build(:employee)
         @fake_employee_service = controller.load_employee_deactivation_service(FakeService.new([employee]))
 
         get :deactivated_employees

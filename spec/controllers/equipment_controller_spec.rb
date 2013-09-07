@@ -3,7 +3,7 @@ require 'spec_helper'
 describe EquipmentController do
 
   before do
-    @customer = create_customer
+    @customer = create(:customer)
   end
 
   describe 'GET index' do
@@ -724,7 +724,7 @@ describe EquipmentController do
       end
 
       it 'assigns locations' do
-        location = new_location
+        location = build(:location)
         LocationService.any_instance.stub(:get_all_locations).and_return([location])
 
         get :search
@@ -733,7 +733,7 @@ describe EquipmentController do
       end
 
       it 'assigns employees' do
-        employee = new_employee
+        employee = build(:employee)
         EmployeeService.any_instance.stub(:get_employee_list).and_return([employee])
 
         get :search
@@ -750,7 +750,7 @@ describe EquipmentController do
       end
 
       it 'should return locations when assignee is Location' do
-        location = create_location(name: 'Oz')
+        location = create(:location, name: 'Oz')
         fake_employee_service = controller.load_location_service(FakeService.new([location]))
         get :ajax_assignee, {assignee: 'Location'}
         json = JSON.parse(response.body)
@@ -761,7 +761,7 @@ describe EquipmentController do
       end
 
       it 'should return employees when assignee is Employee' do
-        employee = create_employee(first_name: 'The', last_name: 'Wizard')
+        employee = create(:employee, first_name: 'The', last_name: 'Wizard')
         fake_employee_service = controller.load_employee_service(FakeService.new([employee]))
         get :ajax_assignee, {assignee: 'Employee'}
         json = JSON.parse(response.body)
@@ -789,7 +789,7 @@ describe EquipmentController do
       end
 
       it 'should return locations when assignee is Location' do
-        location = create_location(name: 'Oz')
+        location = create(:location, name: 'Oz')
         LocationService.any_instance.should_receive(:get_all_locations).once.and_return([location])
         get :ajax_assignee, {assignee: 'Location'}
         json = JSON.parse(response.body)

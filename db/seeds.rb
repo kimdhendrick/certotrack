@@ -2,42 +2,39 @@
 # The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
 # Also called via rake db:reset
 
-require_relative '../spec/support/object_mother'
-include ObjectMother
+customer = Customer.create!(name: 'Test Customer')
 
-customer = create_customer(name: 'Test Customer')
+User.create!(username: 'admin', password: 'Password123', email: 'admin@example.com', roles: ['admin'], customer: customer, first_name: 'First', last_name: 'Last')
+User.create!(username: 'equipment_user', password: 'Password123', email: 'equipment_user@example.com', roles: ['equipment'], customer: customer, first_name: 'First', last_name: 'Last')
+User.create!(username: 'certification_user', password: 'Password123', email: 'certification_user@example.com', roles: ['certification'], customer: customer, first_name: 'First', last_name: 'Last')
+User.create!(username: 'full_rights_user', password: 'Password123', email: 'full_rights_user@example.com', roles: ['equipment', 'certification'], customer: customer, first_name: 'First', last_name: 'Last')
+User.create!(username: 'guest', password: 'Password123', email: 'guest@example.com', first_name: 'First', last_name: 'Last')
 
-create_user(username: 'admin', password: 'Password123', roles: ['admin'], customer: customer)
-create_user(username: 'equipment_user', password: 'Password123', roles: ['equipment'], customer: customer)
-create_user(username: 'certification_user', password: 'Password123', roles: ['certification'], customer: customer)
-create_user(username: 'full_rights_user', password: 'Password123', roles: ['equipment', 'certification'], customer: customer)
-create_user(username: 'guest', password: 'Password123')
+golden = Location.create!(name: 'Golden', customer: customer)
+boulder = Location.create!(name: 'Boulder', customer: customer)
+denver = Location.create!(name: 'Denver', customer: customer)
+john = Employee.create!(first_name: 'John', last_name: 'Doe', customer: customer, employee_number: 'JD123', location_id: golden)
+sue = Employee.create!(first_name: 'Sue', last_name: 'Smith', customer: customer, employee_number: 'SS123', location_id: denver)
 
-golden = create_location(name: 'Golden', customer: customer)
-boulder = create_location(name: 'Boulder', customer: customer)
-denver = create_location(name: 'Denver', customer: customer)
-john = create_employee(first_name: 'John', last_name: 'Doe', customer: customer, employee_number: 'JD123', location_id: golden)
-sue = create_employee(first_name: 'Sue', last_name: 'Smith', customer: customer, employee_number: 'SS123', location_id: denver)
-
-create_equipment(name: 'Meter', serial_number: 'ABC123', customer: customer, last_inspection_date: '01-01-2013',
+Equipment.create!(name: 'Meter', serial_number: 'ABC123', customer: customer, last_inspection_date: '01-01-2013',
                        inspection_interval: Interval::ONE_YEAR.text, expiration_date: '01-01-2014',
                        comments: 'Fragile', location: golden)
 
-create_equipment(name: 'Cart', serial_number: '888-EFZ', customer: customer, last_inspection_date: '02-01-2013',
+Equipment.create!(name: 'Cart', serial_number: '888-EFZ', customer: customer, last_inspection_date: '02-01-2013',
                        inspection_interval: Interval::ONE_YEAR.text, expiration_date: '02-01-2014',
                        comments: 'Heavy', employee: sue)
 
-create_equipment(name: 'Box', serial_number: 'Box 555', customer: customer, last_inspection_date: '02-01-2013',
+Equipment.create!(name: 'Box', serial_number: 'Box 555', customer: customer, last_inspection_date: '02-01-2013',
                        inspection_interval: Interval::ONE_YEAR.text, expiration_date: '02-01-2014',
                        comments: 'Heavy')
 
-create_equipment(name: 'Light cart', serial_number: 'Cart LI1', customer: customer, last_inspection_date: Date.today-45.days,
+Equipment.create!(name: 'Light cart', serial_number: 'Cart LI1', customer: customer, last_inspection_date: Date.today-45.days,
                        inspection_interval: Interval::ONE_MONTH.text, expiration_date: Date.yesterday,
                        comments: 'Light')
 
-create_equipment(name: 'Air Bottle', serial_number: 'SCOTT', customer: customer, last_inspection_date: Date.today,
+Equipment.create!(name: 'Air Bottle', serial_number: 'SCOTT', customer: customer, last_inspection_date: Date.today,
                        inspection_interval: Interval::ONE_MONTH.text, expiration_date: Date.today + 59.days,
                        comments: 'Full')
 
-create_equipment(name: 'Mobile Data Computer', serial_number: 'MDC999', customer: customer, last_inspection_date: Date.today,
+Equipment.create!(name: 'Mobile Data Computer', serial_number: 'MDC999', customer: customer, last_inspection_date: Date.today,
                        inspection_interval: Interval::NOT_REQUIRED.text)

@@ -8,13 +8,13 @@ describe User do
     let(:user) { nil }
 
     context 'when user is an admin' do
-      let(:user) { new_user(roles: ['admin']) }
+      let(:user) { build(:user, roles: ['admin']) }
 
       it { should be_able_to(:manage, :all) }
     end
 
     context 'when user is a guest' do
-      let(:user) { new_user }
+      let(:user) { build(:user) }
 
       it { should_not be_able_to(:manage, :all) }
       it { should_not be_able_to(:manage, :equipment) }
@@ -23,7 +23,7 @@ describe User do
     end
 
     context 'when user is an equipment user' do
-      let(:user) { new_user(roles: ['equipment']) }
+      let(:user) { build(:user, roles: ['equipment']) }
 
       it { should be_able_to(:read, :equipment) }
       it { should be_able_to(:create, :equipment) }
@@ -34,13 +34,13 @@ describe User do
 
     context 'when user is an equipment user with equipment' do
       let(:user) {
-        new_user(roles: ['equipment'], customer: new_customer)
+        build(:user, roles: ['equipment'])
       }
       let(:own_equipment) {
         build(:equipment, customer: user.customer)
       }
       let(:other_customer_equipment) {
-        build(:equipment, customer: new_customer)
+        build(:equipment)
       }
 
       it { should be_able_to(:manage, own_equipment) }
@@ -48,7 +48,7 @@ describe User do
     end
 
     context 'when user is a certification user' do
-      let(:user) { new_user(roles: ['certification']) }
+      let(:user) { build(:user, roles: ['certification']) }
 
       it { should be_able_to(:read, :certification) }
       it { should be_able_to(:create, :certification) }
@@ -59,13 +59,13 @@ describe User do
 
     context 'when user is an certification user with certification types' do
       let(:user) {
-        new_user(roles: ['certification'], customer: new_customer)
+        build(:user, roles: ['certification'])
       }
       let(:own_certification_type) {
-        new_certification_type(customer: user.customer)
+        build(:certification_type, customer: user.customer)
       }
       let(:other_customer_certification_type) {
-        new_certification_type(customer: new_customer)
+        build(:certification_type)
       }
 
       it { should be_able_to(:manage, own_certification_type) }
@@ -74,13 +74,13 @@ describe User do
 
     context 'when user is a certification user with employee' do
       let(:user) {
-        new_user(roles: ['certification'], customer: new_customer)
+        build(:user, roles: ['certification'])
       }
       let(:own_employee) {
-        new_employee(customer: user.customer)
+        build(:employee, customer: user.customer)
       }
       let(:other_employee) {
-        new_employee(customer: new_customer)
+        build(:employee)
       }
 
       it { should be_able_to(:manage, own_employee) }
@@ -88,7 +88,7 @@ describe User do
     end
 
     context 'when user is a vehicle user' do
-      let(:user) { new_user(roles: ['vehicle']) }
+      let(:user) { build(:user, roles: ['vehicle']) }
 
       it { should be_able_to(:read, :vehicle) }
       it { should be_able_to(:create, :vehicle) }

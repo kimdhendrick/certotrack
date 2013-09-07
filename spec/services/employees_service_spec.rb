@@ -1,17 +1,15 @@
 require 'spec_helper'
 
 describe EmployeeService do
-  describe 'get_employee_list' do
-    before do
-      @my_customer = create_customer
-      @my_user = create_user(customer: @my_customer)
-    end
+  let(:my_customer) { create(:customer) }
+  let(:my_user) { create(:user, customer: my_customer)}
+  let(:admin_user) { create(:user, roles: ['admin'])}
 
+  describe 'get_employee_list' do
     context 'when admin user' do
       it 'should return all employees' do
-        admin_user = create_user(roles: ['admin'])
-        my_employee = create_employee(customer: @my_customer)
-        other_employee = create_employee(customer: create_customer)
+        my_employee = create(:employee, customer: my_customer)
+        other_employee = create(:employee)
 
         EmployeeService.new.get_employee_list(admin_user).should == [my_employee, other_employee]
       end
@@ -19,18 +17,17 @@ describe EmployeeService do
 
     context 'when regular user' do
       it "should return only customer's employees" do
-        user = create_user(customer: @my_customer)
-        my_employee = create_employee(customer: @my_customer)
-        other_employee = create_employee(customer: create_customer)
+        my_employee = create(:employee, customer: my_customer)
+        other_employee = create(:employee)
 
-        EmployeeService.new.get_employee_list(user).should == [my_employee]
+        EmployeeService.new.get_employee_list(my_user).should == [my_employee]
       end
 
       it 'only returns active employees' do
-        active_employee = create_employee(active: true, customer: @my_customer)
-        inactive_employee = create_employee(active: false, customer: @my_customer)
+        active_employee = create(:employee, active: true, customer: my_customer)
+        inactive_employee = create(:employee, active: false, customer: my_customer)
 
-        EmployeeService.new.get_employee_list(@my_user).should == [active_employee]
+        EmployeeService.new.get_employee_list(my_user).should == [active_employee]
       end
     end
 
@@ -39,7 +36,7 @@ describe EmployeeService do
         employee_service = EmployeeService.new
         fake_sort_service = employee_service.load_sort_service(FakeService.new([]))
 
-        employee_service.get_employee_list(@my_user)
+        employee_service.get_employee_list(my_user)
 
         fake_sort_service.received_message.should == :sort
       end
@@ -48,7 +45,7 @@ describe EmployeeService do
         employee_service = EmployeeService.new
         fake_sort_service = employee_service.load_sort_service(FakeService.new([]))
 
-        employee_service.get_employee_list(@my_user)
+        employee_service.get_employee_list(my_user)
 
         fake_sort_service.received_message.should == :sort
         fake_sort_service.received_params[3].should == 'employee_number'
@@ -61,7 +58,7 @@ describe EmployeeService do
         employee_service.load_sort_service(FakeService.new)
         fake_pagination_service = employee_service.load_pagination_service(FakeService.new)
 
-        employee_service.get_employee_list(@my_user)
+        employee_service.get_employee_list(my_user)
 
         fake_pagination_service.received_message.should == :paginate
       end
@@ -69,16 +66,10 @@ describe EmployeeService do
   end
 
   describe 'get_all_employees' do
-    before do
-      @my_customer = create_customer
-      @my_user = create_user(customer: @my_customer)
-    end
-
     context 'when admin user' do
       it 'should return all employees' do
-        admin_user = create_user(roles: ['admin'])
-        my_employee = create_employee(customer: @my_customer)
-        other_employee = create_employee(customer: create_customer)
+        my_employee = create(:employee, customer: my_customer)
+        other_employee = create(:employee)
 
         EmployeeService.new.get_all_employees(admin_user).should == [my_employee, other_employee]
       end
@@ -86,18 +77,17 @@ describe EmployeeService do
 
     context 'when regular user' do
       it "should return only customer's employees" do
-        user = create_user(customer: @my_customer)
-        my_employee = create_employee(customer: @my_customer)
-        other_employee = create_employee(customer: create_customer)
+        my_employee = create(:employee, customer: my_customer)
+        other_employee = create(:employee)
 
-        EmployeeService.new.get_all_employees(user).should == [my_employee]
+        EmployeeService.new.get_all_employees(my_user).should == [my_employee]
       end
 
       it 'only returns active employees' do
-        active_employee = create_employee(active: true, customer: @my_customer)
-        inactive_employee = create_employee(active: false, customer: @my_customer)
+        active_employee = create(:employee, active: true, customer: my_customer)
+        inactive_employee = create(:employee, active: false, customer: my_customer)
 
-        EmployeeService.new.get_all_employees(@my_user).should == [active_employee]
+        EmployeeService.new.get_all_employees(my_user).should == [active_employee]
       end
     end
   end
@@ -111,7 +101,7 @@ describe EmployeeService do
           'employee_number' => 'KIMBA123',
           'location_id' => 99
         }
-      customer = new_customer
+      customer = build(:customer)
 
       employee = EmployeeService.new.create_employee(customer, attributes)
 
@@ -126,7 +116,7 @@ describe EmployeeService do
 
   describe 'update_employee' do
     it 'should update employees attributes' do
-      employee = create_employee(customer: @customer)
+      employee = create(:employee, customer: @customer)
       attributes =
         {
           'id' => employee.id,
@@ -147,7 +137,7 @@ describe EmployeeService do
     end
 
     it 'should return false if errors' do
-      employee = create_employee(customer: @customer)
+      employee = create(:employee, customer: @customer)
       employee.stub(:save).and_return(false)
 
       success = EmployeeService.new.update_employee(employee, {})
@@ -160,7 +150,7 @@ describe EmployeeService do
 
   describe 'delete_employee' do
     it 'destroys the requested employee' do
-      employee = create_employee(customer: @customer)
+      employee = create(:employee, customer: @customer)
 
       expect {
         EmployeeService.new.delete_employee(employee)
@@ -168,7 +158,7 @@ describe EmployeeService do
     end
 
     it 'returns error when equipment assigned to employee' do
-      employee = create_employee(customer: @customer)
+      employee = create(:employee, customer: @customer)
       equipment = create(:equipment, employee: employee, customer: @customer)
 
       status = EmployeeService.new.delete_employee(employee)

@@ -9,6 +9,12 @@ FactoryGirl.define do
     last_inspection_date Date.new(2000, 1, 1)
     inspection_interval Interval::ONE_YEAR.text
     serial_number
+    customer
+
+    factory :location_assigned_equipment do
+      location
+      customer = nil
+    end
 
     factory :valid_equipment do
       expiration_date Date.today + 61.days

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Certification Type' do
+describe 'Certification Type', slow: true do
 
   describe 'Create Certification Type' do
     before do
@@ -42,7 +42,7 @@ describe 'Certification Type' do
     end
 
     it 'should render show certification type page' do
-      certification_type = create_certification_type(
+      certification_type = create(:certification_type,
         name: 'CPR',
         interval: Interval::SIX_MONTHS.text,
         customer: @customer
@@ -63,7 +63,7 @@ describe 'Certification Type' do
     end
 
     it 'should render show certification type page for units based' do
-      certification_type = create_certification_type(
+      certification_type = create(:certification_type,
         name: 'CPR',
         interval: Interval::SIX_MONTHS.text,
         units_required: 123,
@@ -91,7 +91,7 @@ describe 'Certification Type' do
     end
 
     it 'should update existing certification type' do
-      certification_type = create_certification_type(
+      certification_type = create(:certification_type,
         name: 'CPR',
         interval: Interval::SIX_MONTHS.text,
         customer: @customer
@@ -132,7 +132,7 @@ describe 'Certification Type' do
     end
 
     it 'should delete existing certification_type' do
-      certification_type = create_certification_type(
+      certification_type = create(:certification_type,
         customer: @customer,
         name: 'CPR'
       )
@@ -166,14 +166,14 @@ describe 'Certification Type' do
       end
 
       it 'should show All Certification Types report' do
-        create_certification_type(
+        create(:certification_type,
           customer: @customer,
           name: 'CPR',
           interval: 'Annually',
           units_required: 0
         )
 
-        create_certification_type(
+        create(:certification_type,
           customer: @customer,
           name: 'Routine Exam',
           interval: '1 month',
@@ -209,9 +209,9 @@ describe 'Certification Type' do
       end
 
       it 'should show all certification types for all customers' do
-        create_certification_type(name: 'CPR', customer: @customer)
-        create_certification_type(name: 'Routine Exam', customer: @customer)
-        create_certification_type(name: 'Special Test', customer: create_customer)
+        create(:certification_type, name: 'CPR', customer: @customer)
+        create(:certification_type, name: 'Routine Exam', customer: @customer)
+        create(:certification_type, name: 'Special Test')
 
         click_link 'All Certification Types'
 
@@ -227,9 +227,9 @@ describe 'Certification Type' do
       end
 
       it 'should sort by name' do
-        create_certification_type(name: 'zeta', customer: @customer)
-        create_certification_type(name: 'beta', customer: @customer)
-        create_certification_type(name: 'alpha', customer: @customer)
+        create(:certification_type, name: 'zeta', customer: @customer)
+        create(:certification_type, name: 'beta', customer: @customer)
+        create(:certification_type, name: 'alpha', customer: @customer)
 
         visit '/'
         click_link 'All Certification Types'
@@ -244,14 +244,14 @@ describe 'Certification Type' do
       end
 
       it 'should sort by interval' do
-        create_certification_type(interval: Interval::SIX_MONTHS.text, customer: @customer)
-        create_certification_type(interval: Interval::TWO_YEARS.text, customer: @customer)
-        create_certification_type(interval: Interval::ONE_YEAR.text, customer: @customer)
-        create_certification_type(interval: Interval::FIVE_YEARS.text, customer: @customer)
-        create_certification_type(interval: Interval::NOT_REQUIRED.text, customer: @customer)
-        create_certification_type(interval: Interval::THREE_YEARS.text, customer: @customer)
-        create_certification_type(interval: Interval::ONE_MONTH.text, customer: @customer)
-        create_certification_type(interval: Interval::THREE_MONTHS.text, customer: @customer)
+        create(:certification_type, interval: Interval::SIX_MONTHS.text, customer: @customer)
+        create(:certification_type, interval: Interval::TWO_YEARS.text, customer: @customer)
+        create(:certification_type, interval: Interval::ONE_YEAR.text, customer: @customer)
+        create(:certification_type, interval: Interval::FIVE_YEARS.text, customer: @customer)
+        create(:certification_type, interval: Interval::NOT_REQUIRED.text, customer: @customer)
+        create(:certification_type, interval: Interval::THREE_YEARS.text, customer: @customer)
+        create(:certification_type, interval: Interval::ONE_MONTH.text, customer: @customer)
+        create(:certification_type, interval: Interval::THREE_MONTHS.text, customer: @customer)
 
         visit '/'
         click_link 'All Certification Types'
@@ -291,7 +291,7 @@ describe 'Certification Type' do
 
       it 'should paginate All Certification Types report' do
         55.times do
-          create_certification_type(customer: @customer)
+          create(:certification_type, customer: @customer)
         end
 
         visit '/'
@@ -353,12 +353,12 @@ describe 'Certification Type' do
       end
 
       it 'should show Search Certification Types page' do
-        create_certification_type(
+        create(:certification_type, 
           customer: @customer,
           name: 'Unique Name'
         )
 
-        create_certification_type(
+        create(:certification_type, 
           customer: @customer,
           name: 'Routine Examination'
         )
@@ -384,12 +384,12 @@ describe 'Certification Type' do
       end
 
       it 'should search and sort simultaneously' do
-        create_certification_type(
+        create(:certification_type, 
           customer: @customer,
           name: 'Unique Name'
         )
 
-        create_certification_type(
+        create(:certification_type, 
           customer: @customer,
           name: 'Routine Examination'
         )

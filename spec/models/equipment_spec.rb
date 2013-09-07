@@ -36,7 +36,7 @@ describe Equipment do
   end
 
   it 'should be able to assign a customer to equipment' do
-    customer = new_customer
+    customer = build(:customer)
     equipment = build(:equipment)
     equipment.customer = customer
 
@@ -104,9 +104,9 @@ describe Equipment do
   end
 
   it 'should answer assigned_to_location?' do
-    location = create_location
+    location = create(:location)
     location_assigned_equipment = create(:equipment, location_id: location.id)
-    employee = create_employee
+    employee = create(:employee)
     employee_assigned_equipment = create(:equipment, employee_id: employee.id)
 
     location_assigned_equipment.should be_assigned_to_location
@@ -114,9 +114,9 @@ describe Equipment do
   end
 
   it 'should answer assigned_to_employee?' do
-    location = create_location
+    location = create(:location)
     location_assigned_equipment = create(:equipment, location_id: location.id)
-    employee = create_employee
+    employee = create(:employee)
     employee_assigned_equipment = create(:equipment, employee_id: employee.id)
 
     employee_assigned_equipment.should be_assigned_to_employee
@@ -124,10 +124,10 @@ describe Equipment do
   end
 
   it 'should respond to assigned_to' do
-    location = create_location
-    location_assigned_equipment = create(:equipment, location_id: location.id)
-    employee = create_employee
-    employee_assigned_equipment = create(:equipment, employee_id: employee.id)
+    location = create(:location)
+    location_assigned_equipment = create(:equipment, location: location)
+    employee = create(:employee)
+    employee_assigned_equipment = create(:equipment, employee: employee)
 
     employee_assigned_equipment.assigned_to.should == employee
     location_assigned_equipment.assigned_to.should == location
@@ -156,9 +156,9 @@ describe Equipment do
   end
 
   it 'should respond to assignee' do
-    location = create_location(name: 'Location Name')
+    location = create(:location, name: 'Location Name')
     location_assigned_equipment = create(:equipment, location_id: location.id)
-    employee = create_employee(first_name: 'Joe', last_name: 'Schmoe')
+    employee = create(:employee, first_name: 'Joe', last_name: 'Schmoe')
     employee_assigned_equipment = create(:equipment, employee_id: employee.id)
 
     location_assigned_equipment.assignee.should == 'Location Name'

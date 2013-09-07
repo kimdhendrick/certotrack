@@ -7,5 +7,6 @@ FactoryGirl.define do
     first_name 'John'
     last_name 'Smith'
     employee_number
+    customer
   end
 end

@@ -72,8 +72,8 @@ describe SearchService do
 
   describe 'search by Certification Type' do
     it 'should search by name' do
-      match = create_certification_type(name: 'Examination')
-      no_match = create_certification_type(name: 'CPR')
+      match = create(:certification_type, name: 'Examination')
+      no_match = create(:certification_type, name: 'CPR')
 
       SearchService.new.search(CertificationType.all, {name: 'Examination'}).should == [match]
       SearchService.new.search(CertificationType.all, {name: 'EXAMINATION'}).should == [match]

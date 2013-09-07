@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe 'Employee Deactivation' do
-  describe 'Deactivate Employee', js: true do
+describe 'Employee Deactivation', slow: true do
+  describe 'Deactivate Employee' do
     before do
       login_as_equipment_and_certification_user
-      @denver_location = create_location(name: 'Denver', customer_id: @customer.id)
+      @denver_location = create(:location, name: 'Denver', customer_id: @customer.id)
     end
 
-    it 'should deactivate employee and unassign equipment' do
+    it 'should deactivate employee and unassign equipment', js: true do
       valid_employee = create(:employee,
         first_name: 'Sandee',
         last_name: 'Walker',
@@ -98,8 +98,8 @@ describe 'Employee Deactivation' do
       page.should_not have_content 'Walker, Sandee'
     end
 
-    it 'should cancel deactivation of employee' do
-      valid_employee = create_employee(
+    it 'should cancel deactivation of employee', js: true do
+      valid_employee = create(:employee, 
         first_name: 'Sandee',
         last_name: 'Walker',
         employee_number: 'PUP789',
@@ -130,12 +130,12 @@ describe 'Employee Deactivation' do
     context 'when a certification user' do
       before do
         login_as_certification_user
-        @denver_location = create_location(name: 'Denver', customer_id: @customer.id)
-        @littleton_location = create_location(name: 'Littleton', customer_id: @customer.id)
+        @denver_location = create(:location, name: 'Denver', customer_id: @customer.id)
+        @littleton_location = create(:location, name: 'Littleton', customer_id: @customer.id)
       end
 
       it 'should show Deactivated Employees list' do
-        create_employee(
+        create(:employee, 
           active: false,
           deactivation_date: Date.new(2000, 1, 1),
           employee_number: 'JB3',
@@ -145,7 +145,7 @@ describe 'Employee Deactivation' do
           customer_id: @customer.id
         )
 
-        create_employee(
+        create(:employee, 
           active: false,
           deactivation_date: Date.new(2001, 12, 31),
           employee_number: 'SG99',
@@ -155,13 +155,12 @@ describe 'Employee Deactivation' do
           customer_id: @customer.id
         )
 
-        create_employee(
+        create(:employee, 
           deactivation_date: Date.new(2013, 4, 4),
           active: false,
           employee_number: 'KB123',
           first_name: 'Kim',
           last_name: 'Barnes',
-          customer: create_customer
         )
 
         visit '/'
@@ -204,9 +203,9 @@ describe 'Employee Deactivation' do
       end
 
       it 'should show all deactivated employees for all customers' do
-        create_employee(active: false, first_name: 'Tom', customer: @customer)
-        create_employee(active: false, first_name: 'Dick', customer: @customer)
-        create_employee(active: false, first_name: 'Harry', customer: create_customer)
+        create(:employee, active: false, first_name: 'Tom', customer: @customer)
+        create(:employee, active: false, first_name: 'Dick', customer: @customer)
+        create(:employee, active: false, first_name: 'Harry')
 
         click_link 'Deactivated Employees'
 
@@ -223,7 +222,7 @@ describe 'Employee Deactivation' do
 
       it 'should paginate Deactivated Employees report' do
         55.times do
-          create_employee(active: false, customer: @customer)
+          create(:employee, active: false, customer: @customer)
         end
 
         visit '/'

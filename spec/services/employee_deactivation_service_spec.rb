@@ -3,7 +3,7 @@ require 'spec_helper'
 describe EmployeeDeactivationService do
   describe 'deactivate_employee' do
     it 'makes employee inactive' do
-      employee = new_employee(active: true)
+      employee = build(:employee, active: true)
 
       EmployeeDeactivationService.new.deactivate_employee(employee)
 
@@ -11,7 +11,7 @@ describe EmployeeDeactivationService do
     end
 
     it "sets the employee's deactivation date" do
-      employee = create_employee(active: true, deactivation_date: nil)
+      employee = create(:employee, active: true, deactivation_date: nil)
 
       EmployeeDeactivationService.new.deactivate_employee(employee)
 
@@ -20,7 +20,7 @@ describe EmployeeDeactivationService do
     end
 
     it 'unassigns equipment' do
-      employee = create_employee
+      employee = create(:employee)
       equipment = create(:equipment, employee: employee)
 
       EmployeeDeactivationService.new.deactivate_employee(employee)
@@ -30,8 +30,8 @@ describe EmployeeDeactivationService do
     end
 
     it "does not unassign other employee's equipment" do
-      employee = create_employee
-      other_employee = create_employee
+      employee = create(:employee)
+      other_employee = create(:employee)
       equipment = create(:equipment, employee: other_employee)
 
       EmployeeDeactivationService.new.deactivate_employee(employee)
@@ -43,13 +43,13 @@ describe EmployeeDeactivationService do
 
   describe 'deactivated_employees' do
     before do
-      @my_customer = create_customer
-      @my_user = create_user(customer: @my_customer)
+      @my_customer = create(:customer)
+      @my_user = create(:user, customer: @my_customer)
     end
 
     it 'includes only inactive employees' do
-      inactive_employee = create_employee(active: false, customer: @my_customer)
-      active_employee = create_employee(active: true, customer: @my_customer)
+      inactive_employee = create(:employee, active: false, customer: @my_customer)
+      active_employee = create(:employee, active: true, customer: @my_customer)
 
       results = EmployeeDeactivationService.new.get_deactivated_employees(@my_user)
 
@@ -57,8 +57,8 @@ describe EmployeeDeactivationService do
     end
 
     it 'includes only inactive employees for customer' do
-      my_inactive_employee = create_employee(active: false, customer: @my_customer)
-      other_inactive_employee = create_employee(active: false, customer: create_customer)
+      my_inactive_employee = create(:employee, active: false, customer: @my_customer)
+      other_inactive_employee = create(:employee, active: false)
 
       results = EmployeeDeactivationService.new.get_deactivated_employees(@my_user)
 

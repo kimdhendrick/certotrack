@@ -1,23 +1,23 @@
 require 'spec_helper'
 
-describe 'Certifications', js: true do
+describe 'Certifications', slow: true do
 
   describe 'Certify Employee from Show Employee page' do
     before do
       login_as_certification_user
-      @certification_type = create_certification_type(
+      @certification_type = create(:certification_type,
         name: 'CPR',
         interval: Interval::SIX_MONTHS.text,
         customer: @customer
       )
 
-      create_certification_type(
+      create(:certification_type,
         name: 'Inspections',
         interval: Interval::SIX_MONTHS.text,
         customer: @customer
       )
 
-      @employee = create_employee(
+      @employee = create(:employee,
         employee_number: 'JB3',
         first_name: 'Joe',
         last_name: 'Brown',
@@ -66,7 +66,7 @@ describe 'Certifications', js: true do
       #page.should have_content '01/01/2000'
     end
 
-    it 'should alert on future dates' do
+    it 'should alert on future dates', js: true do
       visit employee_path @employee.id
 
       page.should have_link 'New Employee Certification'
@@ -107,7 +107,7 @@ describe 'Certifications', js: true do
     end
 
     it 'should give error if already certified' do
-      create_certification(employee: @employee, certification_type: @certification_type)
+      create(:certification, employee: @employee, certification_type: @certification_type)
 
       visit employee_path @employee.id
 

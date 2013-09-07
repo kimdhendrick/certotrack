@@ -9,7 +9,7 @@ describe CertificationTypeService do
           'units_required' => '15',
           'interval' => '5 years'
         }
-      customer = new_customer
+      customer = build(:customer)
 
       certification_type = CertificationTypeService.new.create_certification_type(customer, attributes)
 
@@ -23,7 +23,7 @@ describe CertificationTypeService do
 
   describe 'update_certification_type' do
     it 'should update certification_types attributes' do
-      certification_type = create_certification_type(name: 'Certification', customer: @customer)
+      certification_type = create(:certification_type, name: 'Certification', customer: @customer)
       attributes =
         {
           'id' => certification_type.id,
@@ -41,7 +41,7 @@ describe CertificationTypeService do
     end
 
     it 'should return false if errors' do
-      certification_type = create_certification_type(name: 'Certification', customer: @customer)
+      certification_type = create(:certification_type, name: 'Certification', customer: @customer)
       certification_type.stub(:save).and_return(false)
 
       success = CertificationTypeService.new.update_certification_type(certification_type, {})
@@ -54,7 +54,7 @@ describe CertificationTypeService do
 
   describe 'delete_certification_type' do
     it 'destroys the requested certification_type' do
-      certification_type = create_certification_type(customer: @customer)
+      certification_type = create(:certification_type, customer: @customer)
 
       expect {
         CertificationTypeService.new.delete_certification_type(certification_type)
@@ -64,16 +64,16 @@ describe CertificationTypeService do
 
   describe 'get_all_certification_types' do
     before do
-      @my_customer = create_customer
-      @my_user = create_user(customer: @my_customer)
+      @my_customer = create(:customer)
+      @my_user = create(:user, customer: @my_customer)
     end
 
     context 'an admin user' do
       it 'should return all certification_types' do
-        my_certification_type = create_certification_type(customer: @my_customer)
-        other_certification_type = create_certification_type(customer: create_customer)
+        my_certification_type = create(:certification_type, customer: @my_customer)
+        other_certification_type = create(:certification_type)
 
-        admin_user = create_user(roles: ['admin'])
+        admin_user = create(:user, roles: ['admin'])
 
         CertificationTypeService.new.get_all_certification_types(admin_user).should == [my_certification_type, other_certification_type]
       end
@@ -81,8 +81,8 @@ describe CertificationTypeService do
 
     context 'a regular user' do
       it "should return only that user's certification_types" do
-        my_certification_type = create_certification_type(customer: @my_customer)
-        other_certification_type = create_certification_type(customer: create_customer)
+        my_certification_type = create(:certification_type, customer: @my_customer)
+        other_certification_type = create(:certification_type)
 
         CertificationTypeService.new.get_all_certification_types(@my_user).should == [my_certification_type]
       end
@@ -91,8 +91,8 @@ describe CertificationTypeService do
 
   describe 'get_certification_type_list' do
     before do
-      @my_customer = create_customer
-      @my_user = create_user(customer: @my_customer)
+      @my_customer = create(:customer)
+      @my_user = create(:user, customer: @my_customer)
     end
 
     context 'sorting' do
@@ -134,10 +134,10 @@ describe CertificationTypeService do
 
     context 'an admin user' do
       it 'should return all certification_types' do
-        my_certification_type = create_certification_type(customer: @my_customer)
-        other_certification_type = create_certification_type(customer: create_customer)
+        my_certification_type = create(:certification_type, customer: @my_customer)
+        other_certification_type = create(:certification_type)
 
-        admin_user = create_user(roles: ['admin'])
+        admin_user = create(:user, roles: ['admin'])
 
         CertificationTypeService.new.get_certification_type_list(admin_user).should =~ [my_certification_type, other_certification_type]
       end
@@ -145,8 +145,8 @@ describe CertificationTypeService do
 
     context 'a regular user' do
       it "should return only that user's certification_types" do
-        my_certification_type = create_certification_type(customer: @my_customer)
-        other_certification_type = create_certification_type(customer: create_customer)
+        my_certification_type = create(:certification_type, customer: @my_customer)
+        other_certification_type = create(:certification_type)
 
         CertificationTypeService.new.get_certification_type_list(@my_user).should == [my_certification_type]
       end

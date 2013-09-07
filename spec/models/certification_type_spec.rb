@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe CertificationType do
-  before { @certification_type = new_certification_type }
+  before { @certification_type = build(:certification_type) }
 
   subject { @certification_type }
 
@@ -15,38 +15,38 @@ describe CertificationType do
   end
 
   it 'should not allow negative numbers for units_required' do
-    new_certification_type(units_required: -1).should_not be_valid
-    new_certification_type(units_required: 0).should be_valid
-    new_certification_type(units_required: 1).should be_valid
+    build(:certification_type, units_required: -1).should_not be_valid
+    build(:certification_type, units_required: 0).should be_valid
+    build(:certification_type, units_required: 1).should be_valid
   end
 
   it 'should only accept valid intervals' do
-    new_certification_type(interval: Interval::ONE_MONTH.text).should be_valid
-    new_certification_type(interval: Interval::THREE_MONTHS.text).should be_valid
-    new_certification_type(interval: Interval::SIX_MONTHS.text).should be_valid
-    new_certification_type(interval: Interval::ONE_YEAR.text).should be_valid
-    new_certification_type(interval: Interval::TWO_YEARS.text).should be_valid
-    new_certification_type(interval: Interval::FIVE_YEARS.text).should be_valid
-    new_certification_type(interval: Interval::NOT_REQUIRED.text).should be_valid
+    build(:certification_type, interval: Interval::ONE_MONTH.text).should be_valid
+    build(:certification_type, interval: Interval::THREE_MONTHS.text).should be_valid
+    build(:certification_type, interval: Interval::SIX_MONTHS.text).should be_valid
+    build(:certification_type, interval: Interval::ONE_YEAR.text).should be_valid
+    build(:certification_type, interval: Interval::TWO_YEARS.text).should be_valid
+    build(:certification_type, interval: Interval::FIVE_YEARS.text).should be_valid
+    build(:certification_type, interval: Interval::NOT_REQUIRED.text).should be_valid
 
-    new_certification_type(interval: 'blah').should_not be_valid
+    build(:certification_type, interval: 'blah').should_not be_valid
   end
 
   it 'should respond to units_based?' do
-    new_certification_type(units_required: 0).should_not be_units_based
-    new_certification_type(units_required: 1).should be_units_based
+    build(:certification_type, units_required: 0).should_not be_units_based
+    build(:certification_type, units_required: 1).should be_units_based
   end
 
   it 'should respond to interval_code' do
-    one_month_certification_type = new_certification_type(interval: Interval::ONE_MONTH.text)
-    not_required_certification_type = new_certification_type(interval: Interval::NOT_REQUIRED.text)
+    one_month_certification_type = build(:certification_type, interval: Interval::ONE_MONTH.text)
+    not_required_certification_type = build(:certification_type, interval: Interval::NOT_REQUIRED.text)
 
     one_month_certification_type.interval_code.should == Interval::ONE_MONTH.id
     not_required_certification_type.interval_code.should == Interval::NOT_REQUIRED.id
   end
 
   it 'should display as a string' do
-    certification_type = new_certification_type(name: 'certification name', interval: Interval::ONE_YEAR.text)
+    certification_type = build(:certification_type, name: 'certification name', interval: Interval::ONE_YEAR.text)
     certification_type.to_s.should == 'certification name:Annually'
   end
 end

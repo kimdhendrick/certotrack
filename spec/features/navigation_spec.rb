@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe 'Navigation' do
-  describe 'Equipment Links', js: true do
+describe 'Navigation', slow: true do
+  describe 'Equipment Links' do
     before do
       login_as_equipment_user
     end
@@ -98,7 +98,7 @@ describe 'Navigation' do
       click_and_test_link_with_title 'Search Equipment'
     end
 
-    it 'navigates Show Equipment' do
+    it 'navigates Show Equipment', js: true do
       equipment = create(:equipment, customer: @customer)
       visit equipment_path equipment.id
       page.should have_content 'Show Equipment'
@@ -133,7 +133,7 @@ describe 'Navigation' do
       alert.dismiss
     end
 
-    it 'navigates Edit Equipment' do
+    it 'navigates Edit Equipment', js: true do
       equipment = create(:equipment, customer: @customer)
       visit equipment_path equipment.id
 
@@ -186,7 +186,7 @@ describe 'Navigation' do
     end
   end
 
-  describe 'Certification Links', js: true do
+  describe 'Certification Links' do
     before do
       login_as_certification_user
     end
@@ -218,8 +218,8 @@ describe 'Navigation' do
       click_and_test_link_with_title 'Search Certification Types'
     end
 
-    it 'navigates Show Certification Type' do
-      certification_type = create_certification_type(customer: @customer)
+    it 'navigates Show Certification Type', js: true do
+      certification_type = create(:certification_type, customer: @customer)
       visit certification_type_path certification_type.id
       page.should have_content 'Show Certification Type'
 
@@ -253,8 +253,8 @@ describe 'Navigation' do
       alert.dismiss
     end
 
-    it 'navigates Edit Certification Type' do
-      certification_type = create_certification_type(customer: @customer)
+    it 'navigates Edit Certification Type', js: true do
+      certification_type = create(:certification_type, customer: @customer)
       visit certification_type_path certification_type.id
 
       click_on 'Edit'
@@ -317,7 +317,7 @@ describe 'Navigation' do
     end
   end
 
-  describe 'Employee Links', js: true do
+  describe 'Employee Links' do
     before do
       login_as_certification_user
     end
@@ -345,8 +345,8 @@ describe 'Navigation' do
       click_and_test_link_with_title 'Create Employee'
     end
 
-    it 'navigates Show Employee' do
-      employee = create_employee(customer: @customer)
+    it 'navigates Show Employee', js: true do
+      employee = create(:employee, customer: @customer)
       visit employee_path employee.id
       page.should have_content 'Show Employee'
 
@@ -376,8 +376,8 @@ describe 'Navigation' do
       alert.dismiss
     end
 
-    it 'navigates Edit Employee' do
-      employee = create_employee(customer: @customer)
+    it 'navigates Edit Employee', js: true do
+      employee = create(:employee, customer: @customer)
       visit employee_path employee.id
 
       click_on 'Edit'

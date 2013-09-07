@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe 'Employee' do
+describe 'Employee', slow: true do
   describe 'Create Employee' do
     before do
       login_as_certification_user
-      create_location(name: 'Golden', customer_id: @customer.id)
+      create(:location, name: 'Golden', customer_id: @customer.id)
     end
 
     it 'should create new Employee' do
@@ -40,12 +40,12 @@ describe 'Employee' do
     context 'when a certification user' do
       before do
         login_as_certification_user
-        @denver_location = create_location(name: 'Denver', customer_id: @customer.id)
-        @littleton_location = create_location(name: 'Littleton', customer_id: @customer.id)
+        @denver_location = create(:location, name: 'Denver', customer_id: @customer.id)
+        @littleton_location = create(:location, name: 'Littleton', customer_id: @customer.id)
       end
 
       it 'should show All Employee list' do
-        create_employee(
+        create(:employee, 
           employee_number: 'JB3',
           first_name: 'Joe',
           last_name: 'Brown',
@@ -53,7 +53,7 @@ describe 'Employee' do
           customer_id: @customer.id
         )
 
-        create_employee(
+        create(:employee, 
           employee_number: 'SG99',
           first_name: 'Sue',
           last_name: 'Green',
@@ -61,11 +61,10 @@ describe 'Employee' do
           customer_id: @customer.id
         )
 
-        create_employee(
+        create(:employee, 
           employee_number: 'KB123',
           first_name: 'Kim',
           last_name: 'Barnes',
-          customer: create_customer
         )
 
         visit '/'
@@ -101,9 +100,9 @@ describe 'Employee' do
       end
 
       it 'should show all employees for all customers' do
-        create_employee(first_name: 'Tom', customer: @customer)
-        create_employee(first_name: 'Dick', customer: @customer)
-        create_employee(first_name: 'Harry', customer: create_customer)
+        create(:employee, first_name: 'Tom', customer: @customer)
+        create(:employee, first_name: 'Dick', customer: @customer)
+        create(:employee, first_name: 'Harry')
 
         click_link 'All Employees'
 
@@ -119,9 +118,9 @@ describe 'Employee' do
       end
 
       it 'should sort by first name' do
-        create_employee(first_name: 'zeta', customer: @customer)
-        create_employee(first_name: 'beta', customer: @customer)
-        create_employee(first_name: 'alpha', customer: @customer)
+        create(:employee, first_name: 'zeta', customer: @customer)
+        create(:employee, first_name: 'beta', customer: @customer)
+        create(:employee, first_name: 'alpha', customer: @customer)
 
         visit '/'
         click_link 'All Employees'
@@ -136,9 +135,9 @@ describe 'Employee' do
       end
 
       it 'should sort by last name' do
-        create_employee(last_name: 'zeta', customer: @customer)
-        create_employee(last_name: 'beta', customer: @customer)
-        create_employee(last_name: 'alpha', customer: @customer)
+        create(:employee, last_name: 'zeta', customer: @customer)
+        create(:employee, last_name: 'beta', customer: @customer)
+        create(:employee, last_name: 'alpha', customer: @customer)
 
         visit '/'
         click_link 'All Employees'
@@ -153,9 +152,9 @@ describe 'Employee' do
       end
 
       it 'should sort by employee number' do
-        create_employee(employee_number: '222', customer: @customer)
-        create_employee(employee_number: '333', customer: @customer)
-        create_employee(employee_number: '111', customer: @customer)
+        create(:employee, employee_number: '222', customer: @customer)
+        create(:employee, employee_number: '333', customer: @customer)
+        create(:employee, employee_number: '111', customer: @customer)
 
         visit '/'
         click_link 'All Employees'
@@ -170,13 +169,13 @@ describe 'Employee' do
       end
 
       it 'should sort by location' do
-        first_location = create_location(name: 'Alcatraz')
-        last_location = create_location(name: 'Zurich')
-        middle_location = create_location(name: 'Burbank')
+        first_location = create(:location, name: 'Alcatraz')
+        last_location = create(:location, name: 'Zurich')
+        middle_location = create(:location, name: 'Burbank')
 
-        create_employee(location: first_location, customer: @customer)
-        create_employee(location: last_location, customer: @customer)
-        create_employee(location: middle_location, customer: @customer)
+        create(:employee, location: first_location, customer: @customer)
+        create(:employee, location: last_location, customer: @customer)
+        create(:employee, location: middle_location, customer: @customer)
 
         visit '/'
         click_link 'All Employees'
@@ -198,7 +197,7 @@ describe 'Employee' do
 
       it 'should paginate All Employees report' do
         55.times do
-          create_employee(customer: @customer)
+          create(:employee, customer: @customer)
         end
 
         visit '/'
@@ -257,11 +256,11 @@ describe 'Employee' do
   describe 'Show Employee' do
     before do
       login_as_certification_user
-      @denver_location = create_location(name: 'Denver', customer_id: @customer.id)
+      @denver_location = create(:location, name: 'Denver', customer_id: @customer.id)
     end
 
     it 'should render employee show page' do
-      valid_employee = create_employee(
+      valid_employee = create(:employee, 
         first_name: 'Sandee',
         last_name: 'Walker',
         employee_number: 'PUP789',
@@ -296,12 +295,12 @@ describe 'Employee' do
   describe 'Update Employee' do
     before do
       login_as_certification_user
-      @denver_location = create_location(name: 'Denver', customer_id: @customer.id)
-      @littleton_location = create_location(name: 'Littleton', customer_id: @customer.id)
+      @denver_location = create(:location, name: 'Denver', customer_id: @customer.id)
+      @littleton_location = create(:location, name: 'Littleton', customer_id: @customer.id)
     end
 
     it 'should update existing employee' do
-      valid_employee = create_employee(
+      valid_employee = create(:employee, 
         first_name: 'Sandee',
         last_name: 'Walker',
         employee_number: 'PUP789',
@@ -349,11 +348,11 @@ describe 'Employee' do
   describe 'Delete Employee', js: true do
     before do
       login_as_certification_user
-      @denver_location = create_location(name: 'Denver', customer_id: @customer.id)
+      @denver_location = create(:location, name: 'Denver', customer_id: @customer.id)
     end
 
     it 'should delete existing employee' do
-      valid_employee = create_employee(
+      valid_employee = create(:employee, 
         first_name: 'Sandee',
         last_name: 'Walker',
         employee_number: 'PUP789',

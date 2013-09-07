@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-describe 'Equipment' do
+describe 'Equipment', slow: true do
 
   describe 'Show Equipment' do
     before do
       login_as_equipment_user
-      @denver_location = create_location(name: 'Denver', customer_id: @customer.id)
-      @littleton_location = create_location(name: 'Littleton', customer_id: @customer.id)
+      @denver_location = create(:location, name: 'Denver', customer_id: @customer.id)
+      @littleton_location = create(:location, name: 'Littleton', customer_id: @customer.id)
     end
 
     it 'should render equipment show page' do
@@ -53,15 +53,15 @@ describe 'Equipment' do
     end
   end
 
-  describe 'Create Equipment', js: true do
+  describe 'Create Equipment' do
     before do
       login_as_equipment_user
-      @denver_location = create_location(name: 'Denver', customer_id: @customer.id)
-      @littleton_location = create_location(name: 'Littleton', customer_id: @customer.id)
-      @special_employee = create_employee(first_name: 'Special', last_name: 'Employee', customer_id: @customer.id)
+      @denver_location = create(:location, name: 'Denver', customer_id: @customer.id)
+      @littleton_location = create(:location, name: 'Littleton', customer_id: @customer.id)
+      @special_employee = create(:employee, first_name: 'Special', last_name: 'Employee', customer_id: @customer.id)
     end
 
-    it 'should create new equipment assigned to a location' do
+    it 'should create new equipment assigned to a location', js: true do
       visit '/'
       click_link 'Create Equipment'
 
@@ -99,7 +99,7 @@ describe 'Equipment' do
       page.should have_content 'Special Notes'
     end
 
-    it 'should create new equipment assigned to an employee' do
+    it 'should create new equipment assigned to an employee', js: true do
       visit '/'
       click_link 'Create Equipment'
 
@@ -173,7 +173,7 @@ describe 'Equipment' do
       page.should have_content 'Special Notes'
     end
 
-    it 'should alert on future dates' do
+    it 'should alert on future dates', js: true do
       visit '/'
       click_link 'Create Equipment'
 
@@ -214,15 +214,15 @@ describe 'Equipment' do
 
   end
 
-  describe 'Update Equipment', js: true do
+  describe 'Update Equipment' do
     before do
       login_as_equipment_user
-      @denver_location = create_location(name: 'Denver', customer_id: @customer.id)
-      @littleton_location = create_location(name: 'Littleton', customer_id: @customer.id)
-      @special_employee = create_employee(first_name: 'Special', last_name: 'Employee', customer_id: @customer.id)
+      @denver_location = create(:location, name: 'Denver', customer_id: @customer.id)
+      @littleton_location = create(:location, name: 'Littleton', customer_id: @customer.id)
+      @special_employee = create(:employee, first_name: 'Special', last_name: 'Employee', customer_id: @customer.id)
     end
 
-    it 'should update existing equipment' do
+    it 'should update existing equipment', js: true do
       valid_equipment = create(:equipment, 
         customer: @customer,
         name: 'Meter',
@@ -281,7 +281,7 @@ describe 'Equipment' do
       page.should have_content 'Special Notes'
     end
 
-    it 'should alert on future dates' do
+    it 'should alert on future dates', js: true do
       valid_equipment = create(:equipment, 
         customer: @customer,
         name: 'Meter',
@@ -332,13 +332,13 @@ describe 'Equipment' do
     end
   end
 
-  describe 'Delete Equipment', js: true do
+  describe 'Delete Equipment' do
     before do
       login_as_equipment_user
-      @denver_location = create_location(name: 'Denver', customer_id: @customer.id)
+      @denver_location = create(:location, name: 'Denver', customer_id: @customer.id)
     end
 
-    it 'should delete existing equipment' do
+    it 'should delete existing equipment', js: true do
       valid_equipment = create(:equipment, 
         customer: @customer,
         name: 'Meter'
@@ -372,9 +372,9 @@ describe 'Equipment' do
     context 'when an equipment user' do
       before do
         login_as_equipment_user
-        @denver_location = create_location(name: 'Denver', customer_id: @customer.id)
-        @littleton_location = create_location(name: 'Littleton', customer_id: @customer.id)
-        @special_employee = create_employee(first_name: 'Special', last_name: 'Employee', customer_id: @customer.id)
+        @denver_location = create(:location, name: 'Denver', customer_id: @customer.id)
+        @littleton_location = create(:location, name: 'Littleton', customer_id: @customer.id)
+        @special_employee = create(:employee, first_name: 'Special', last_name: 'Employee', customer_id: @customer.id)
       end
 
       it 'should show All Equipment report' do
@@ -536,7 +536,7 @@ describe 'Equipment' do
       it 'should show all equipment for all customers' do
         create(:equipment, name: 'Box 123', customer: @customer)
         create(:equipment, name: 'Meter 456', customer: @customer)
-        create(:equipment, name: 'Gauge 987', customer: create_customer)
+        create(:equipment, name: 'Gauge 987')
 
         click_link 'All Equipment'
 
@@ -703,13 +703,13 @@ describe 'Equipment' do
       end
 
       it 'should sort by assignee' do
-        middle_employee = create_employee(first_name: 'Bob', last_name: 'Baker')
-        first_employee = create_employee(first_name: 'Albert', last_name: 'Alfonso')
-        last_employee = create_employee(first_name: 'Zoe', last_name: 'Zephyr')
+        middle_employee = create(:employee, first_name: 'Bob', last_name: 'Baker')
+        first_employee = create(:employee, first_name: 'Albert', last_name: 'Alfonso')
+        last_employee = create(:employee, first_name: 'Zoe', last_name: 'Zephyr')
 
-        first_location = create_location(name: 'Alcatraz')
-        last_location = create_location(name: 'Zurich')
-        middle_location = create_location(name: 'Burbank')
+        first_location = create(:location, name: 'Alcatraz')
+        last_location = create(:location, name: 'Zurich')
+        middle_location = create(:location, name: 'Burbank')
 
         create(:equipment, employee: middle_employee, customer: @customer)
         create(:equipment, location: last_location, customer: @customer)

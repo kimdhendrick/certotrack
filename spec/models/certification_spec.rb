@@ -16,9 +16,9 @@ describe Certification do
 
   context 'non-units based certification type' do
     before do
-      @certification_type = create_certification_type(units_required: 0)
-      @certification = new_certification(certification_type: @certification_type)
-      @certification_period = create_certification_period(certification: @certification)
+      @certification_type = create(:certification_type, units_required: 0)
+      @certification = build(:certification, certification_type: @certification_type)
+      @certification_period = create(:certification_period, certification: @certification)
     end
 
     it 'should calculate NA status when no expiration date' do
@@ -51,9 +51,9 @@ describe Certification do
 
   context 'units based certification type' do
     before do
-      @certification_type = create_certification_type(units_required: 100)
-      @certification = new_certification(certification_type: @certification_type)
-      @certification_period = create_certification_period(certification: @certification)
+      @certification_type = create(:certification_type, units_required: 100)
+      @certification = build(:certification, certification_type: @certification_type)
+      @certification_period = create(:certification_period, certification: @certification)
     end
 
     it 'should calculate VALID status when units achieved meets or exceeds units required' do
@@ -88,27 +88,27 @@ describe Certification do
   end
 
   it 'should respond to status_code for sorting' do
-    certification_type = create_certification_type(units_required: 100)
-    certification = new_certification(certification_type: certification_type)
+    certification_type = create(:certification_type, units_required: 100)
+    certification = build(:certification, certification_type: certification_type)
 
     certification.status_code.should == certification.status.sort_order
   end
 
   it 'should respond to active_certification_period' do
-    certification = create_certification
+    certification = create(:certification)
 
     certification.active_certification_period.should be_a(CertificationPeriod)
   end
 
   it 'should respond to last_certification_date' do
-    certification = create_certification
+    certification = create(:certification)
     certification.active_certification_period.start_date = Date.new(2010, 5, 10)
 
     certification.last_certification_date.should == Date.new(2010, 5, 10)
   end
 
   it 'should respond to last_certification_date=' do
-    certification = create_certification
+    certification = create(:certification)
     certification.last_certification_date = Date.new(2010, 5, 10)
 
     certification.last_certification_date.should == Date.new(2010, 5, 10)
@@ -116,14 +116,14 @@ describe Certification do
   end
 
   it 'should respond to expiration_date' do
-    certification = create_certification
+    certification = create(:certification)
     certification.active_certification_period.end_date = Date.new(2012, 1, 2)
 
     certification.expiration_date.should == Date.new(2012, 1, 2)
   end
 
   it 'should respond to expiration_date=' do
-    certification = create_certification
+    certification = create(:certification)
     certification.expiration_date = Date.new(2010, 5, 10)
 
     certification.expiration_date.should == Date.new(2010, 5, 10)
@@ -131,14 +131,14 @@ describe Certification do
   end
 
   it 'should respond to trainer' do
-    certification = create_certification
+    certification = create(:certification)
     certification.active_certification_period.trainer = 'Trainer Joe'
 
     certification.trainer.should == 'Trainer Joe'
   end
 
   it 'should respond to trainer=' do
-    certification = create_certification
+    certification = create(:certification)
     certification.trainer = 'Hiya'
 
     certification.trainer.should == 'Hiya'
@@ -146,14 +146,14 @@ describe Certification do
   end
 
   it 'should respond to comments' do
-    certification = create_certification
+    certification = create(:certification)
     certification.active_certification_period.comments= 'something special'
 
     certification.comments.should == 'something special'
   end
 
   it 'should respond to comments=' do
-    certification = create_certification
+    certification = create(:certification)
     certification.comments = 'Hiya'
 
     certification.comments.should == 'Hiya'
@@ -161,14 +161,14 @@ describe Certification do
   end
 
   it 'should respond to units_achieved' do
-    certification = create_certification
+    certification = create(:certification)
     certification.active_certification_period.units_achieved = 10
 
     certification.units_achieved.should == 10
   end
 
   it 'should respond to units_achieved=' do
-    certification = create_certification
+    certification = create(:certification)
     certification.units_achieved = 10
 
     certification.units_achieved.should == 10
@@ -176,8 +176,8 @@ describe Certification do
   end
 
   it 'should respond to name' do
-    certification_type = create_certification_type(name: 'Scrum Master')
-    certification = create_certification(certification_type: certification_type)
+    certification_type = create(:certification_type, name: 'Scrum Master')
+    certification = create(:certification, certification_type: certification_type)
     certification.name.should == 'Scrum Master'
   end
 

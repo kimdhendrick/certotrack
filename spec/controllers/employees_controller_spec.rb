@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe EmployeesController do
   before do
-    @customer = create_customer
+    @customer = create(:customer)
   end
 
   describe 'GET new' do
@@ -17,7 +17,7 @@ describe EmployeesController do
       end
 
       it 'assigns locations' do
-        location = new_location
+        location = build(:location)
         LocationService.any_instance.stub(:get_all_locations).and_return([location])
 
         get :new
@@ -57,18 +57,18 @@ describe EmployeesController do
 
       describe 'with valid params' do
         it 'creates a new Employee' do
-          EmployeeService.any_instance.should_receive(:create_employee).once.and_return(new_employee)
+          EmployeeService.any_instance.should_receive(:create_employee).once.and_return(build(:employee))
           post :create, {:employee => employee_attributes}, {}
         end
 
         it 'assigns a newly created employee as @employee' do
-          EmployeeService.any_instance.stub(:create_employee).and_return(new_employee)
+          EmployeeService.any_instance.stub(:create_employee).and_return(build(:employee))
           post :create, {:employee => employee_attributes}, {}
           assigns(:employee).should be_a(Employee)
         end
 
         it 'redirects to the created employee' do
-          EmployeeService.any_instance.stub(:create_employee).and_return(create_employee)
+          EmployeeService.any_instance.stub(:create_employee).and_return(create(:employee))
           post :create, {:employee => employee_attributes}, {}
           response.should redirect_to(Employee.last)
           flash[:notice].should == 'Employee was successfully created.'
@@ -77,7 +77,7 @@ describe EmployeesController do
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved employee as @employee' do
-          EmployeeService.any_instance.should_receive(:create_employee).once.and_return(new_employee)
+          EmployeeService.any_instance.should_receive(:create_employee).once.and_return(build(:employee))
           Employee.any_instance.stub(:save).and_return(false)
 
           post :create, {:employee => {'name' => 'invalid value'}}, {}
@@ -86,7 +86,7 @@ describe EmployeesController do
         end
 
         it "re-renders the 'new' template" do
-          EmployeeService.any_instance.should_receive(:create_employee).once.and_return(new_employee)
+          EmployeeService.any_instance.should_receive(:create_employee).once.and_return(build(:employee))
           post :create, {:employee => {'name' => 'invalid value'}}, {}
           response.should render_template('new')
         end
@@ -99,12 +99,12 @@ describe EmployeesController do
       end
 
       it 'calls EmployeesService' do
-        EmployeeService.any_instance.should_receive(:create_employee).once.and_return(new_employee)
+        EmployeeService.any_instance.should_receive(:create_employee).once.and_return(build(:employee))
         post :create, {:employee => employee_attributes}, {}
       end
 
       it 'assigns a newly created employee as @employee' do
-        EmployeeService.any_instance.should_receive(:create_employee).once.and_return(new_employee)
+        EmployeeService.any_instance.should_receive(:create_employee).once.and_return(build(:employee))
         post :create, {:employee => employee_attributes}, {}
         assigns(:employee).should be_a(Employee)
       end
@@ -145,7 +145,7 @@ describe EmployeesController do
       end
 
       it 'assigns @employees and @employee_count' do
-        employee = new_employee
+        employee = build(:employee)
         @fake_employee_service = controller.load_employee_service(FakeService.new([employee]))
 
         get :index
@@ -161,7 +161,7 @@ describe EmployeesController do
       end
 
       it 'assigns employee as @employee' do
-        employee = new_employee
+        employee = build(:employee)
         @fake_employee_service = controller.load_employee_service(FakeService.new([employee]))
 
         get :index
@@ -178,7 +178,7 @@ describe EmployeesController do
 
       describe 'GET index' do
         it 'does not assign employee as @employee' do
-          employee = new_employee
+          employee = build(:employee)
           @fake_employee_service = controller.load_employee_service(FakeService.new([employee]))
 
           get :index
@@ -191,7 +191,7 @@ describe EmployeesController do
   end
 
   describe 'GET show' do
-    let(:employee) { create_employee(customer: @customer) }
+    let(:employee) { create(:employee, customer: @customer) }
     let(:certification_service) { double('certification_service') }
     let(:certification) { create(:certification, employee: employee) }
     let(:certifications) { [certification] }
@@ -239,7 +239,7 @@ describe EmployeesController do
       end
 
       it 'does not assign employee as @employee' do
-        employee = create_employee(customer: @customer)
+        employee = create(:employee, customer: @customer)
         get :show, {:id => employee.to_param}, {}
         assigns(:employee).should be_nil
       end
@@ -253,15 +253,15 @@ describe EmployeesController do
       end
 
       it 'assigns the requested employee as @employee' do
-        employee = create_employee(customer: @customer)
+        employee = create(:employee, customer: @customer)
         get :edit, {:id => employee.to_param}, {}
         assigns(:employee).should eq(employee)
       end
 
       it 'assigns locations' do
-        location = new_location
+        location = build(:location)
         @fake_location_service = controller.load_location_service(FakeService.new([location]))
-        employee = create_employee(customer: @customer)
+        employee = create(:employee, customer: @customer)
 
         get :edit, {:id => employee.to_param}, {}
 
@@ -275,7 +275,7 @@ describe EmployeesController do
       end
 
       it 'assigns the requested employee as @employee' do
-        employee = create_employee(customer: @customer)
+        employee = create(:employee, customer: @customer)
         get :edit, {:id => employee.to_param}, {}
         assigns(:employee).should eq(employee)
       end
@@ -287,7 +287,7 @@ describe EmployeesController do
       end
 
       it 'does not assign employee as @employee' do
-        employee = create_employee(customer: @customer)
+        employee = create(:employee, customer: @customer)
         get :edit, {:id => employee.to_param}, {}
         assigns(:employee).should be_nil
       end
@@ -302,7 +302,7 @@ describe EmployeesController do
 
       describe 'with valid params' do
         it 'updates the requested employee' do
-          employee = create_employee(customer: @customer)
+          employee = create(:employee, customer: @customer)
           @fake_employee_service = controller.load_employee_service(FakeService.new([]))
 
           put :update, {:id => employee.to_param, :employee =>
@@ -318,7 +318,7 @@ describe EmployeesController do
         end
 
         it 'assigns the requested employee as @employee' do
-          employee = create_employee(customer: @customer)
+          employee = create(:employee, customer: @customer)
           @fake_employee_service = controller.load_employee_service(FakeService.new(true))
 
           put :update, {:id => employee.to_param, :employee => employee_attributes}, {}
@@ -329,7 +329,7 @@ describe EmployeesController do
 
         it 'redirects to the employee' do
           @fake_employee_service = controller.load_employee_service(FakeService.new(true))
-          employee = create_employee(customer: @customer)
+          employee = create(:employee, customer: @customer)
 
           put :update, {:id => employee.to_param, :employee => employee_attributes}, {}
 
@@ -340,7 +340,7 @@ describe EmployeesController do
 
       describe 'with invalid params' do
         it 'assigns the employee as @employee' do
-          employee = create_employee(customer: @customer)
+          employee = create(:employee, customer: @customer)
           @fake_employee_service = controller.load_employee_service(FakeService.new(false))
 
           put :update, {:id => employee.to_param, :employee => {'name' => 'invalid value'}}, {}
@@ -349,7 +349,7 @@ describe EmployeesController do
         end
 
         it "re-renders the 'edit' template" do
-          employee = create_employee(customer: @customer)
+          employee = create(:employee, customer: @customer)
           @fake_employee_service = controller.load_employee_service(FakeService.new(false))
 
           put :update, {:id => employee.to_param, :employee => {'name' => 'invalid value'}}, {}
@@ -359,9 +359,9 @@ describe EmployeesController do
 
         it 'assigns locations' do
           @fake_employee_service = controller.load_employee_service(FakeService.new(false))
-          location = new_location
+          location = build(:location)
           @fake_location_service = controller.load_location_service(FakeService.new([location]))
-          employee = create_employee(customer: @customer)
+          employee = create(:employee, customer: @customer)
 
           put :update, {:id => employee.to_param, :employee => employee_attributes}, {}
 
@@ -376,7 +376,7 @@ describe EmployeesController do
       end
 
       it 'updates the requested employee' do
-        employee = create_employee(customer: @customer)
+        employee = create(:employee, customer: @customer)
         @fake_employee_service = controller.load_employee_service(FakeService.new(true))
 
         put :update, {:id => employee.to_param, :employee =>
@@ -392,7 +392,7 @@ describe EmployeesController do
       end
 
       it 'assigns the requested employee as @employee' do
-        employee = create_employee(customer: @customer)
+        employee = create(:employee, customer: @customer)
         @fake_employee_service = controller.load_employee_service(FakeService.new(true))
 
         put :update, {:id => employee.to_param, :employee => employee_attributes}, {}
@@ -407,7 +407,7 @@ describe EmployeesController do
       end
 
       it 'does not assign employee as @employee' do
-        employee = create_employee(customer: @customer)
+        employee = create(:employee, customer: @customer)
 
         put :update, {:id => employee.to_param, :employee => employee_attributes}, {}
 
@@ -423,7 +423,7 @@ describe EmployeesController do
       end
 
       it 'calls EmployeesService' do
-        employee = create_employee(customer: @customer)
+        employee = create(:employee, customer: @customer)
         @fake_employee_service = controller.load_employee_service(FakeService.new(true))
 
         delete :destroy, {:id => employee.to_param}, {}
@@ -432,7 +432,7 @@ describe EmployeesController do
       end
 
       it 'redirects to the employee list' do
-        employee = create_employee(customer: @customer)
+        employee = create(:employee, customer: @customer)
         @fake_employee_service = controller.load_employee_service(FakeService.new(true))
 
         delete :destroy, {:id => employee.to_param}, {}
@@ -442,7 +442,7 @@ describe EmployeesController do
       end
 
       it 'gives error message when equipment exists' do
-        employee = create_employee(customer: @customer)
+        employee = create(:employee, customer: @customer)
         @fake_employee_service = controller.load_employee_service(FakeService.new(:equipment_exists))
 
         delete :destroy, {:id => employee.to_param}, {}
@@ -458,7 +458,7 @@ describe EmployeesController do
       end
 
       it 'calls EmployeesService' do
-        employee = create_employee(customer: @customer)
+        employee = create(:employee, customer: @customer)
         @fake_employee_service = controller.load_employee_service(FakeService.new(true))
 
         delete :destroy, {:id => employee.to_param}, {}

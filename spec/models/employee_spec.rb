@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Employee do
-  before { @employee = new_employee }
+  before { @employee = build(:employee) }
 
   subject { @employee }
 
@@ -20,8 +20,8 @@ describe Employee do
   end
 
   it 'should respond to location_name' do
-    location = create_location(name: 'Location Name')
-    employee = create_employee(location_id: location.id)
+    location = create(:location, name: 'Location Name')
+    employee = create(:employee, location_id: location.id)
 
     employee.location_name.should == 'Location Name'
   end

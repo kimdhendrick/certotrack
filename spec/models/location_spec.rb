@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Location do
-  before { @location = new_location }
+  before { @location = build(:location) }
 
   subject { @location }
 

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Employee Certifications' do
+describe 'Employee Certifications', slow: true do
   describe 'Show Employee' do
     let(:employee) { create(:employee, customer: @customer) }
 

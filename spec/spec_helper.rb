@@ -11,7 +11,6 @@ require 'support/fake_service'
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 RSpec.configure do |config|
-  config.include ObjectMother
   config.include LoginHelpers
   config.include CurrentUserHelpers
   config.include ReportHelpers

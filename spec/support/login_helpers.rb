@@ -1,8 +1,8 @@
 module LoginHelpers
   def login_as_user_with_role(role)
     visit "#"
-    @customer ||= create_customer
-    user = create_user(customer: @customer, roles: [role])
+    @customer ||= create(:customer)
+    user = create(:user, customer: @customer, roles: [role])
     fill_in 'Username', with: user.username.upcase
     fill_in 'Password', with: user.password
     click_button 'Login'
@@ -18,8 +18,8 @@ module LoginHelpers
 
   def login_as_equipment_and_certification_user
     visit "#"
-    @customer ||= create_customer
-    user = create_user(customer: @customer, roles: ['equipment', 'certification'])
+    @customer ||= create(:customer)
+    user = create(:user, customer: @customer, roles: ['equipment', 'certification'])
     fill_in 'Username', with: user.username.upcase
     fill_in 'Password', with: user.password
     click_button 'Login'
@@ -31,8 +31,8 @@ module LoginHelpers
 
   def login_as_guest
     visit "#"
-    @customer = create_customer
-    user = create_user(customer: @customer)
+    @customer = create(:customer)
+    user = create(:user, customer: @customer)
     fill_in 'Username', with: user.username.upcase
     fill_in 'Password', with: user.password
     click_button 'Login'

@@ -3,8 +3,8 @@ require 'spec_helper'
 describe CertificationFactory do
   describe 'new_instance' do
     it 'creates a certification' do
-      certification_type = create_certification_type
-      employee = create_employee
+      certification_type = create(:certification_type)
+      employee = create(:employee)
 
       certification = CertificationFactory.new.new_instance(
         employee.id,
@@ -24,8 +24,8 @@ describe CertificationFactory do
 
     it 'handles bad date' do
 
-      certification_type = create_certification_type
-      employee = create_employee
+      certification_type = create(:certification_type)
+      employee = create(:employee)
 
       certification = CertificationFactory.new.new_instance(
         employee.id,
@@ -46,8 +46,8 @@ describe CertificationFactory do
     end
 
     it 'calculates expiration date using calculator' do
-      certification_type = create_certification_type(interval: Interval::ONE_MONTH.text)
-      employee = create_employee
+      certification_type = create(:certification_type, interval: Interval::ONE_MONTH.text)
+      employee = create(:employee)
       fake_expiration_date = Date.new(2001, 1, 1)
 
       certification_factory = CertificationFactory.new
