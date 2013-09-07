@@ -1,2 +1,0 @@
-#!/bin/sh
-rake spec:controllers spec:helpers spec:models spec:services
