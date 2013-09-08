@@ -14,47 +14,20 @@ describe Employee do
   it { should belong_to(:location) }
   it { should have_many(:certifications) }
   it { should have_many(:equipments) }
+  it_should_behave_like 'a stripped model', 'first_name'
+  it_should_behave_like 'a stripped model', 'last_name'
+  it_should_behave_like 'a stripped model', 'employee_number'
 
-  describe 'uniqueness of name' do
-    subject { create(:employee, employee_number: 'cat', customer: customer) }
+  describe 'uniqueness of employee_number' do
     let(:customer) { create(:customer) }
 
     before do
-      subject.valid?
+      create(:employee, employee_number: 'cat', customer: customer)
     end
 
-    it 'should not allow duplicate names when exact match' do
-      copycat = Employee.new(employee_number: 'cat', customer: customer)
-      copycat.should_not be_valid
-      copycat.errors.full_messages_for(:employee_number).should == ['Employee number has already been taken']
-    end
+    subject { Employee.new(customer: customer) }
 
-    it 'should not allow duplicate employee_numbers when differ by case' do
-      copycat = Employee.new(employee_number: 'CAt', customer: customer)
-      copycat.should_not be_valid
-      copycat.errors.full_messages_for(:employee_number).should == ['Employee number has already been taken']
-    end
-
-    it 'should not allow duplicate employee_numbers when differ by leading space' do
-      copycat = Employee.new(employee_number: ' cat', customer: customer)
-      copycat.should_not be_valid
-      copycat.errors.full_messages_for(:employee_number).should == ['Employee number has already been taken']
-    end
-
-    it 'should not allow duplicate employee_numbers when differ by trailing space' do
-      copycat = Employee.new(employee_number: 'cat ', customer: customer)
-      copycat.should_not be_valid
-      copycat.errors.full_messages_for(:employee_number).should == ['Employee number has already been taken']
-    end
-  end
-
-  describe 'whitespace stripping' do
-    it 'should strip trailing and leading whitespace' do
-      customer = create(:customer)
-      cat = create(:employee, employee_number: ' cat ', customer: customer)
-      cat.reload
-      cat.employee_number.should == 'cat'
-    end
+    it_should_behave_like 'a model that prevents duplicates', 'cat', 'employee_number'
   end
 
   it 'should display its name as to_s' do

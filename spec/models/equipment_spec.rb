@@ -12,6 +12,8 @@ describe Equipment do
   it { should validate_presence_of :serial_number }
   it { should validate_presence_of :customer }
   it { should validate_uniqueness_of(:serial_number).scoped_to(:customer_id) }
+  it_should_behave_like 'a stripped model', 'serial_number'
+  it_should_behave_like 'a stripped model', 'name'
 
   describe 'duplication of name' do
     subject { create(:equipment, name: 'cat', customer: customer) }
@@ -29,52 +31,15 @@ describe Equipment do
   end
 
   describe 'uniqueness of serial_number' do
-    subject { create(:equipment, serial_number: 'cat', customer: customer) }
     let(:customer) { create(:customer) }
 
     before do
-      subject.valid?
+      create(:equipment, serial_number: 'cat', customer: customer)
     end
 
-    it 'should not allow duplicate serial_numbers when exact match' do
-      copycat = Equipment.new(serial_number: 'cat', customer: customer)
-      copycat.should_not be_valid
-      copycat.errors.full_messages_for(:serial_number).should == ['Serial number has already been taken']
-    end
+    subject { Equipment.new(customer: customer) }
 
-    it 'should not allow duplicate serial_numbers when differ by case' do
-      copycat = Equipment.new(serial_number: 'CAt', customer: customer)
-      copycat.should_not be_valid
-      copycat.errors.full_messages_for(:serial_number).should == ['Serial number has already been taken']
-    end
-
-    it 'should not allow duplicate serial_numbers when differ by leading space' do
-      copycat = Equipment.new(serial_number: ' cat', customer: customer)
-      copycat.should_not be_valid
-      copycat.errors.full_messages_for(:serial_number).should == ['Serial number has already been taken']
-    end
-
-    it 'should not allow duplicate serial_numbers when differ by trailing space' do
-      copycat = Equipment.new(serial_number: 'cat ', customer: customer)
-      copycat.should_not be_valid
-      copycat.errors.full_messages_for(:serial_number).should == ['Serial number has already been taken']
-    end
-  end
-
-  describe 'whitespace stripping' do
-    it 'should strip trailing and leading whitespace from name' do
-      customer = create(:customer)
-      cat = create(:equipment, name: ' cat ', customer: customer)
-      cat.reload
-      cat.name.should == 'cat'
-    end
-
-    it 'should strip trailing and leading whitespace from serial_number' do
-      customer = create(:customer)
-      cat = create(:equipment, serial_number: ' cat ', customer: customer)
-      cat.reload
-      cat.serial_number.should == 'cat'
-    end
+    it_should_behave_like 'a model that prevents duplicates', 'cat', 'serial_number'
   end
 
   it 'should require last_inspection_date if Inspectable' do
@@ -89,13 +54,13 @@ describe Equipment do
   end
 
   it 'should give invalid date if date is more than 100 years in the future' do
-    equipment = build(:equipment, last_inspection_date: Date.new(3000,1,1))
+    equipment = build(:equipment, last_inspection_date: Date.new(3000, 1, 1))
     equipment.should_not be_valid
     equipment.errors[:last_inspection_date].should == ['out of range']
   end
 
   it 'should give invalid date if date is more than 100 years in the past' do
-    equipment = build(:equipment, last_inspection_date: Date.new(1000,1,1))
+    equipment = build(:equipment, last_inspection_date: Date.new(1000, 1, 1))
     equipment.should_not be_valid
     equipment.errors[:last_inspection_date].should == ['out of range']
   end
@@ -136,7 +101,7 @@ describe Equipment do
     valid_equipment = build(:valid_equipment)
     expiring_equipment = build(:expiring_equipment)
     expired_equipment = build(:expired_equipment)
-    non_inspectable_equipment = build(:equipment, expiration_date: nil, inspection_interval:Interval::NOT_REQUIRED)
+    non_inspectable_equipment = build(:equipment, expiration_date: nil, inspection_interval: Interval::NOT_REQUIRED)
 
     valid_equipment.expired?.should be_false
     expiring_equipment.expired?.should be_false
@@ -148,7 +113,7 @@ describe Equipment do
     valid_equipment = build(:valid_equipment)
     expiring_equipment = build(:expiring_equipment)
     expired_equipment = build(:expired_equipment)
-    non_inspectable_equipment = build(:equipment, expiration_date: nil, inspection_interval:Interval::NOT_REQUIRED)
+    non_inspectable_equipment = build(:equipment, expiration_date: nil, inspection_interval: Interval::NOT_REQUIRED)
 
     valid_equipment.expiring?.should be_false
     expired_equipment.expiring?.should be_false

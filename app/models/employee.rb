@@ -28,5 +28,7 @@ class Employee < ActiveRecord::Base
 
   def _strip_whitespace
     self.employee_number.try(:strip!)
+    self.first_name.try(:strip!)
+    self.last_name.try(:strip!)
   end
 end

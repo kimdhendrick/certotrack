@@ -5,6 +5,7 @@ require 'rspec/rails'
 require 'rspec/autorun'
 require 'capybara/rails'
 require 'support/fake_service'
+require 'support/shared_examples/whitespace_stripping'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.

@@ -8,47 +8,18 @@ describe Location do
   it { should belong_to(:customer) }
   it { should validate_presence_of :customer }
   it { should validate_uniqueness_of(:name).scoped_to(:customer_id) }
+  it_should_behave_like 'a stripped model', 'name'
 
   describe 'uniqueness of name' do
-    subject { create(:location, name: 'cat', customer: customer) }
     let(:customer) { create(:customer) }
 
     before do
-      subject.valid?
+      create(:location, name: 'cat', customer: customer)
     end
 
-    it 'should not allow duplicate names when exact match' do
-      copycat = Location.new(name: 'cat', customer: customer)
-      copycat.should_not be_valid
-      copycat.errors.full_messages_for(:name).should == ['Name has already been taken']
-    end
+    subject { Location.new(customer: customer) }
 
-    it 'should not allow duplicate names when differ by case' do
-      copycat = Location.new(name: 'CAt', customer: customer)
-      copycat.should_not be_valid
-      copycat.errors.full_messages_for(:name).should == ['Name has already been taken']
-    end
-
-    it 'should not allow duplicate names when differ by leading space' do
-      copycat = Location.new(name: ' cat', customer: customer)
-      copycat.should_not be_valid
-      copycat.errors.full_messages_for(:name).should == ['Name has already been taken']
-    end
-
-    it 'should not allow duplicate names when differ by trailing space' do
-      copycat = Location.new(name: 'cat ', customer: customer)
-      copycat.should_not be_valid
-      copycat.errors.full_messages_for(:name).should == ['Name has already been taken']
-    end
-  end
-
-  describe 'whitespace stripping' do
-    it 'should strip trailing and leading whitespace' do
-      customer = create(:customer)
-      cat = create(:location, name: ' cat ', customer: customer)
-      cat.reload
-      cat.name.should == 'cat'
-    end
+    it_should_behave_like 'a model that prevents duplicates', 'cat', 'name'
   end
 
   it 'should display its name as to_s' do
