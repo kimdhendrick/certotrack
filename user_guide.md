@@ -4,6 +4,45 @@
 
 * Create Locations
 
+## Employee
+
+### Create Employee
+
+* First Name
+    * Required
+* Last Name
+    * Required
+* Employee Number
+    * Required
+    * Must be unique within customer
+* Location
+
+### Show Employee
+
+* Employee information
+* Employee's certifications
+    * Certification Type link goes to Show Certification page
+    * Units shows units achieved/required if units based certification
+    * Certification Type and Status columns are sortable
+* Edit
+* Delete
+   * Prevented if any equipment or certifications assigned, can deactivate instead
+* New Employee Certification
+   * Certification Type
+   * Create Certification Type link
+   * Trainer
+   * Last Certification Date
+       * Required
+   * Comments
+
+### All Employees Report
+
+* All employees
+
+### Deactivated Employees Report
+
+* Deactivated employees, contact support for more information on deactivated employees
+
 ## Equipment
 
 * Status
@@ -14,12 +53,13 @@
 
 ### Create Equipment
 
-* Name - must be unique within your company
+* Name
     * Required
-    * Autocomplete matches by 'contains' on name [TBD]
+    * Must be unique within your customer
+    * Autocomplete matches by 'contains' on name
 * Serial Number
-    * Must be unique within customer
     * Required
+    * Must be unique within customer
 * Assignee - Unassigned, Employee or Location
 * Inspection Interval
     * 1 month - 5 years
@@ -39,6 +79,7 @@
 ### Search Equipment
 
 * Search box from home page searches for equipment with matching name.
+* Autocomplete matches by 'contains' on name
 * Clicking Search button from home page without entering value shows full search page with all results.
 * Search Page uses 'or' for all fields
 * Can enter Name, Serial Number, Location, or Employee
@@ -80,11 +121,16 @@
 
 * Name
     * Required
+    * Must be unique within customer
 * Required Units
    * If entered, becomes 'units based' certification type
 * Interval
     * 1 month - 5 years
     * Not Required
+
+### Search Certification Type
+
+* Name contains search
 
 ## Vehicle
 
