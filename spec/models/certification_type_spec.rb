@@ -11,6 +11,48 @@ describe CertificationType do
   it { should validate_uniqueness_of(:name).scoped_to(:customer_id) }
   it { should have_many :certifications }
 
+  describe 'uniqueness of name' do
+    subject { create(:certification_type, name: 'cat', customer: customer) }
+    let(:customer) { create(:customer) }
+
+    before do
+      subject.valid?
+    end
+
+    it 'should not allow duplicate names when exact match' do
+      copycat = CertificationType.new(name: 'cat', customer: customer)
+      copycat.should_not be_valid
+      copycat.errors.full_messages_for(:name).should == ['Name has already been taken']
+    end
+
+    it 'should not allow duplicate names when differ by case' do
+      copycat = CertificationType.new(name: 'CAt', customer: customer)
+      copycat.should_not be_valid
+      copycat.errors.full_messages_for(:name).should == ['Name has already been taken']
+    end
+
+    it 'should not allow duplicate names when differ by leading space' do
+      copycat = CertificationType.new(name: ' cat', customer: customer)
+      copycat.should_not be_valid
+      copycat.errors.full_messages_for(:name).should == ['Name has already been taken']
+    end
+
+    it 'should not allow duplicate names when differ by trailing space' do
+      copycat = CertificationType.new(name: 'cat ', customer: customer)
+      copycat.should_not be_valid
+      copycat.errors.full_messages_for(:name).should == ['Name has already been taken']
+    end
+  end
+
+  describe 'whitespace stripping' do
+    it 'should strip trailing and leading whitespace' do
+      customer = create(:customer)
+      cat = create(:certification_type, name: ' cat ', customer: customer)
+      cat.reload
+      cat.name.should == 'cat'
+    end
+  end
+
   it 'should default units_required to 0' do
     certification_type = CertificationType.new
     certification_type.units_required.should == 0
