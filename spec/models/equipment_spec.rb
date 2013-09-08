@@ -5,13 +5,77 @@ describe Equipment do
 
   subject { @equipment }
 
-  it { should validate_presence_of :name }
-  it { should validate_presence_of :serial_number }
-  it { should validate_presence_of :customer }
   it { should belong_to(:customer) }
   it { should belong_to(:location) }
   it { should belong_to(:employee) }
+  it { should validate_presence_of :name }
+  it { should validate_presence_of :serial_number }
+  it { should validate_presence_of :customer }
   it { should validate_uniqueness_of(:serial_number).scoped_to(:customer_id) }
+
+  describe 'duplication of name' do
+    subject { create(:equipment, name: 'cat', customer: customer) }
+    let(:customer) { create(:customer) }
+
+    before do
+      subject.valid?
+    end
+
+    it 'should allow duplicate names' do
+      copycat = Equipment.new(name: 'cat', customer: customer)
+      copycat.valid?
+      copycat.errors.full_messages_for(:name).should == []
+    end
+  end
+
+  describe 'uniqueness of serial_number' do
+    subject { create(:equipment, serial_number: 'cat', customer: customer) }
+    let(:customer) { create(:customer) }
+
+    before do
+      subject.valid?
+    end
+
+    it 'should not allow duplicate serial_numbers when exact match' do
+      copycat = Equipment.new(serial_number: 'cat', customer: customer)
+      copycat.should_not be_valid
+      copycat.errors.full_messages_for(:serial_number).should == ['Serial number has already been taken']
+    end
+
+    it 'should not allow duplicate serial_numbers when differ by case' do
+      copycat = Equipment.new(serial_number: 'CAt', customer: customer)
+      copycat.should_not be_valid
+      copycat.errors.full_messages_for(:serial_number).should == ['Serial number has already been taken']
+    end
+
+    it 'should not allow duplicate serial_numbers when differ by leading space' do
+      copycat = Equipment.new(serial_number: ' cat', customer: customer)
+      copycat.should_not be_valid
+      copycat.errors.full_messages_for(:serial_number).should == ['Serial number has already been taken']
+    end
+
+    it 'should not allow duplicate serial_numbers when differ by trailing space' do
+      copycat = Equipment.new(serial_number: 'cat ', customer: customer)
+      copycat.should_not be_valid
+      copycat.errors.full_messages_for(:serial_number).should == ['Serial number has already been taken']
+    end
+  end
+
+  describe 'whitespace stripping' do
+    it 'should strip trailing and leading whitespace from name' do
+      customer = create(:customer)
+      cat = create(:equipment, name: ' cat ', customer: customer)
+      cat.reload
+      cat.name.should == 'cat'
+    end
+
+    it 'should strip trailing and leading whitespace from serial_number' do
+      customer = create(:customer)
+      cat = create(:equipment, serial_number: ' cat ', customer: customer)
+      cat.reload
+      cat.serial_number.should == 'cat'
+    end
+  end
 
   it 'should require last_inspection_date if Inspectable' do
     equipment = build(:equipment, inspection_interval: Interval::ONE_YEAR.text, last_inspection_date: nil)
