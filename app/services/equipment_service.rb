@@ -4,9 +4,9 @@ class EquipmentService
   include ServiceSupport::SortingAndPagination
 
   def initialize(params = {})
-    @sort_service = params[:sort_service] || SortService.new
+    @sorter = params[:sorter] || Sorter.new
     @search_service = params[:search_service] || SearchService.new
-    @pagination_service = params[:pagination_service] || PaginationService.new
+    @paginator = params[:paginator] || Paginator.new
   end
 
   def get_all_equipment(current_user, params = {})

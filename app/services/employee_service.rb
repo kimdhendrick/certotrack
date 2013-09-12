@@ -1,8 +1,8 @@
 class EmployeeService
 
   def initialize(params = {})
-    @sort_service = params[:sort_service] || SortService.new
-    @pagination_service = params[:pagination_service] || PaginationService.new
+    @sorter = params[:sorter] || Sorter.new
+    @paginator = params[:paginator] || Paginator.new
   end
 
   def get_all_employees(current_user)
@@ -11,8 +11,8 @@ class EmployeeService
 
   def get_employee_list(current_user, params = {})
     employees = get_all_employees(current_user)
-    employees = @sort_service.sort(employees, params[:sort], params[:direction], 'employee_number')
-    @pagination_service.paginate(employees, params[:page])
+    employees = @sorter.sort(employees, params[:sort], params[:direction], 'employee_number')
+    @paginator.paginate(employees, params[:page])
   end
 
   def create_employee(customer, attributes)

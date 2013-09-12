@@ -7,31 +7,31 @@ describe EquipmentService do
 
   describe 'get_all_equipment' do
     context 'sorting' do
-      it 'should call SortService to ensure sorting' do
-        fake_sort_service = FakeService.new([])
-        equipment_service = EquipmentService.new(sort_service: fake_sort_service)
+      it 'should call Sorter to ensure sorting' do
+        fake_sorter = FakeService.new([])
+        equipment_service = EquipmentService.new(sorter: fake_sorter)
 
         equipment_service.get_all_equipment(my_user)
 
-        fake_sort_service.received_message.should == :sort
+        fake_sorter.received_message.should == :sort
       end
     end
 
     context 'pagination' do
-      it 'should call PaginationService to paginate results' do
-        fake_pagination_service = FakeService.new
-        equipment_service = EquipmentService.new(sort_service: FakeService.new, pagination_service: fake_pagination_service)
+      it 'should call Paginator to paginate results' do
+        fake_paginator = FakeService.new
+        equipment_service = EquipmentService.new(sorter: FakeService.new, paginator: fake_paginator)
 
         equipment_service.get_all_equipment(my_user)
 
-        fake_pagination_service.received_message.should == :paginate
+        fake_paginator.received_message.should == :paginate
       end
     end
 
     context 'search' do
       it 'should call SearchService to filter results' do
         fake_search_service = FakeService.new
-        equipment_service = EquipmentService.new(sort_service: FakeService.new([]), search_service: fake_search_service)
+        equipment_service = EquipmentService.new(sorter: FakeService.new([]), search_service: fake_search_service)
 
         equipment_service.get_all_equipment(my_user, {thing1: 'thing2'})
 
@@ -72,23 +72,23 @@ describe EquipmentService do
 
     context 'sorting' do
       it 'should call Sort Service to ensure sorting' do
-        fake_sort_service = FakeService.new([])
-        equipment_service = EquipmentService.new(sort_service: fake_sort_service)
+        fake_sorter = FakeService.new([])
+        equipment_service = EquipmentService.new(sorter: fake_sorter)
 
         equipment_service.get_expired_equipment(my_user)
 
-        fake_sort_service.received_message.should == :sort
+        fake_sorter.received_message.should == :sort
       end
     end
 
     context 'pagination' do
-      it 'should call PaginationService to paginate results' do
-        fake_pagination_service = FakeService.new
-        equipment_service = EquipmentService.new(sort_service: FakeService.new, pagination_service: fake_pagination_service)
+      it 'should call Paginator to paginate results' do
+        fake_paginator = FakeService.new
+        equipment_service = EquipmentService.new(sorter: FakeService.new, paginator: fake_paginator)
 
         equipment_service.get_expired_equipment(my_user)
 
-        fake_pagination_service.received_message.should == :paginate
+        fake_paginator.received_message.should == :paginate
       end
     end
 
@@ -117,23 +117,23 @@ describe EquipmentService do
 
     context 'sorting' do
       it 'should call Sort Service to ensure sorting' do
-        fake_sort_service = FakeService.new([])
-        equipment_service = EquipmentService.new(sort_service: fake_sort_service)
+        fake_sorter = FakeService.new([])
+        equipment_service = EquipmentService.new(sorter: fake_sorter)
 
         equipment_service.get_expiring_equipment(my_user)
 
-        fake_sort_service.received_message.should == :sort
+        fake_sorter.received_message.should == :sort
       end
     end
 
     context 'pagination' do
-      it 'should call PaginationService to paginate results' do
-        fake_pagination_service = FakeService.new
-        equipment_service = EquipmentService.new(sort_service: FakeService.new, pagination_service: fake_pagination_service)
+      it 'should call Paginator to paginate results' do
+        fake_paginator = FakeService.new
+        equipment_service = EquipmentService.new(sorter: FakeService.new, paginator: fake_paginator)
 
         equipment_service.get_expiring_equipment(my_user)
 
-        fake_pagination_service.received_message.should == :paginate
+        fake_paginator.received_message.should == :paginate
       end
     end
 
@@ -160,23 +160,23 @@ describe EquipmentService do
 
     context 'sorting' do
       it 'should call Sort Service to ensure sorting' do
-        fake_sort_service = FakeService.new([])
-        equipment_service = EquipmentService.new(sort_service: fake_sort_service)
+        fake_sorter = FakeService.new([])
+        equipment_service = EquipmentService.new(sorter: fake_sorter)
 
         equipment_service.get_noninspectable_equipment(my_user)
 
-        fake_sort_service.received_message.should == :sort
+        fake_sorter.received_message.should == :sort
       end
     end
 
     context 'pagination' do
-      it 'should call PaginationService to paginate results' do
-        fake_pagination_service = FakeService.new
-        equipment_service = EquipmentService.new(sort_service: FakeService.new, pagination_service: fake_pagination_service)
+      it 'should call Paginator to paginate results' do
+        fake_paginator = FakeService.new
+        equipment_service = EquipmentService.new(sorter: FakeService.new, paginator: fake_paginator)
 
         equipment_service.get_noninspectable_equipment(my_user)
 
-        fake_pagination_service.received_message.should == :paginate
+        fake_paginator.received_message.should == :paginate
       end
     end
 
@@ -459,7 +459,7 @@ describe EquipmentService do
       #  equipment << new_equipment(expiration_date: Date.new(2013, 1, 2), customer: my_customer)
       #end
       #
-      #sort_service = SortService.new
+      #sorter = Sorter.new
       #
       #puts "1,000..."
       #field_list = ['name', 'serial_number', 'status_code',
@@ -468,29 +468,29 @@ describe EquipmentService do
       #
       #total = 0
       #field_list.each do |field|
-      #  total += _sort_fields(sort_service, equipment[0..999], field)
+      #  total += _sort_fields(sorter, equipment[0..999], field)
       #end
       #puts "Average: #{total/field_list.count} (1,000)"
       #
       #puts "10,000..."
       #total = 0
       #field_list.each do |field|
-      #  total += _sort_fields(sort_service, equipment[0..9999], field)
+      #  total += _sort_fields(sorter, equipment[0..9999], field)
       #end
       #puts "Average: #{total/field_list.count} (10,000)"
       #
       #puts "100,000..."
       #total = 0
       #field_list.each do |field|
-      #  total += _sort_fields(sort_service, equipment, field)
+      #  total += _sort_fields(sorter, equipment, field)
       #end
       #puts "Average: #{total/field_list.count} (100,000)"
     end
   end
 
-  def _sort_fields(sort_service, equipment, field)
+  def _sort_fields(sorter, equipment, field)
     start = Time::now
-    sort_service.sort(equipment, field, 'asc')
+    sorter.sort(equipment, field, 'asc')
     elapsed = Time::now-start
     puts "Time elapsed: #{elapsed} (for #{field})"
     elapsed

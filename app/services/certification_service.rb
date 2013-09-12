@@ -5,8 +5,8 @@ class CertificationService
 
   def initialize(params = {})
     @certification_factory = params[:certification_factory] || CertificationFactory.new
-    @sort_service = params[:sort_service] || SortService.new
-    @pagination_service = params[:pagination_service] || PaginationService.new
+    @sorter = params[:sorter] || Sorter.new
+    @paginator = params[:paginator] || Paginator.new
   end
 
   def new_certification(employee_id)

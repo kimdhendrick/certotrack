@@ -1,5 +1,5 @@
-class SortService
-  def sort(collection, field, direction, default_field = 'name')
+class Sorter
+  def sort(collection, field, direction = 'asc', default_field = 'name')
     field = _sort_field(collection, field, default_field)
 
     partitioned_collection = collection.partition { |item| item.public_send(field).nil? }

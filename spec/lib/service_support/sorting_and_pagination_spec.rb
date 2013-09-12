@@ -5,8 +5,8 @@ class ConcreteSortingAndPagination
   include ServiceSupport::SortingAndPagination
 
   def initialize(params = {})
-    @sort_service = params[:sort_service] || SortService.new
-    @pagination_service = params[:pagination_service] || PaginationService.new
+    @sorter = params[:sorter] || Sorter.new
+    @paginator = params[:paginator] || Paginator.new
   end
 
   def sort_and_paginate(collection, params)
@@ -16,13 +16,13 @@ end
 
 module ServiceSupport
   describe SortingAndPagination do
-    subject { ConcreteSortingAndPagination.new(sort_service: sort_service, pagination_service: pagination_service) }
-    let(:sort_service) { double('sort_service') }
-    let(:pagination_service) { double('pagination_service') }
+    subject { ConcreteSortingAndPagination.new(sorter: sorter, paginator: paginator) }
+    let(:sorter) { double('sorter') }
+    let(:paginator) { double('paginator') }
 
     it 'should sort and paginate' do
-      sort_service.should_receive(:sort)
-      pagination_service.should_receive(:paginate)
+      sorter.should_receive(:sort)
+      paginator.should_receive(:paginate)
       subject.sort_and_paginate([], {})
     end
   end

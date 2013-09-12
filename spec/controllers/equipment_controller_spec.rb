@@ -750,29 +750,39 @@ describe EquipmentController do
       end
 
       it 'should return locations when assignee is Location' do
-        location = build(:location, name: 'Oz')
+        location = create(:location, name: 'Oz')
         fake_employee_service = controller.load_location_service(FakeService.new([location]))
+        fake_sorter = controller.load_sorter(FakeService.new([location]))
+
         get :ajax_assignee, {assignee: 'Location'}
+
+        fake_employee_service.received_message.should == :get_all_locations
+        fake_sorter.received_message.should == :sort
+        fake_sorter.received_params[0].should == [location]
+        fake_sorter.received_params[1].should == 'name'
+
         json = JSON.parse(response.body)
         json.should == [
           [location.id, 'Oz']
         ]
-        fake_employee_service.received_message.should == :get_all_locations
       end
 
       it 'should return employees when assignee is Employee' do
-        employee1 = create(:employee, first_name: 'Wendy', last_name: 'Wizard')
-        employee2 = create(:employee, first_name: 'Allen', last_name: 'Applebee')
-        employee3 = create(:employee, first_name: 'Nancy', last_name: 'Norton')
-        fake_employee_service = controller.load_employee_service(FakeService.new([employee1, employee2, employee3]))
+        employee = create(:employee, first_name: 'Wendy', last_name: 'Wizard')
+        fake_employee_service = controller.load_employee_service(FakeService.new([employee]))
+        fake_sorter = controller.load_sorter(FakeService.new([employee]))
+
         get :ajax_assignee, {assignee: 'Employee'}
+
+        fake_employee_service.received_message.should == :get_all_employees
+        fake_sorter.received_message.should == :sort
+        fake_sorter.received_params[0].should == [employee]
+        fake_sorter.received_params[1].should == 'sort_key'
+
         json = JSON.parse(response.body)
         json.should == [
-          [employee2.id, 'Applebee, Allen'],
-          [employee3.id, 'Norton, Nancy'],
-          [employee1.id, 'Wizard, Wendy']
+          [employee.id, 'Wizard, Wendy']
         ]
-        fake_employee_service.received_message.should == :get_all_employees
       end
     end
 

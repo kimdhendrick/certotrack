@@ -20,6 +20,10 @@ class Employee < ActiveRecord::Base
     "#{last_name}, #{first_name}"
   end
 
+  def sort_key
+    last_name + first_name
+  end
+
   def location_name
     location.try(:to_s) || "Unassigned"
   end

@@ -30,6 +30,12 @@ describe Employee do
     it_should_behave_like 'a model that prevents duplicates', 'cat', 'employee_number'
   end
 
+  it 'should respond to its sort_key' do
+    @employee.first_name = 'John'
+    @employee.last_name = 'Doe'
+    @employee.sort_key.should == 'DoeJohn'
+  end
+
   it 'should display its name as to_s' do
     @employee.first_name = 'John'
     @employee.last_name = 'Doe'

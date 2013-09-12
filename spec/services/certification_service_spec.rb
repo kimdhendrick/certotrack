@@ -82,26 +82,26 @@ describe CertificationService do
     end
 
     context 'sorting' do
-      it 'should call SortService to ensure sorting' do
-        fake_sort_service = FakeService.new([])
+      it 'should call Sorter to ensure sorting' do
+        fake_sorter = FakeService.new([])
 
-        subject = CertificationService.new(sort_service: fake_sort_service)
+        subject = CertificationService.new(sorter: fake_sorter)
 
         subject.get_all_certifications_for(build(:employee))
 
-        fake_sort_service.received_message.should == :sort
+        fake_sorter.received_message.should == :sort
       end
     end
 
     context 'pagination' do
-      it 'should call PaginationService to paginate results' do
-        fake_pagination_service = FakeService.new
+      it 'should call Paginator to paginate results' do
+        fake_paginator = FakeService.new
 
-        subject = CertificationService.new(pagination_service: fake_pagination_service)
+        subject = CertificationService.new(paginator: fake_paginator)
 
         subject.get_all_certifications_for(build(:employee))
 
-        fake_pagination_service.received_message.should == :paginate
+        fake_paginator.received_message.should == :paginate
       end
     end
   end

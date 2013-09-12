@@ -66,13 +66,13 @@ describe EmployeeDeactivationService do
     end
 
     context 'pagination' do
-      it 'should call PaginationService to paginate results' do
-        fake_pagination_service = FakeService.new
-        employee_deactivation_service = EmployeeDeactivationService.new(pagination_service: fake_pagination_service)
+      it 'should call Paginator to paginate results' do
+        fake_paginator = FakeService.new
+        employee_deactivation_service = EmployeeDeactivationService.new(paginator: fake_paginator)
 
         employee_deactivation_service.get_deactivated_employees(@my_user)
 
-        fake_pagination_service.received_message.should == :paginate
+        fake_paginator.received_message.should == :paginate
       end
     end
   end

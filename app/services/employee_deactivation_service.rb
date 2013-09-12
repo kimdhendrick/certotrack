@@ -2,7 +2,7 @@ class EmployeeDeactivationService
 
   def initialize(params = {})
     @equipment_service = params[:equipment_service] || EquipmentService.new
-    @pagination_service = params[:pagination_service] || PaginationService.new
+    @paginator = params[:paginator] || Paginator.new
   end
 
   def deactivate_employee(employee)
@@ -21,6 +21,6 @@ class EmployeeDeactivationService
       Employee.unscoped.where(active: false) :
       Employee.unscoped.where(active: false, customer: current_user.customer)
 
-    @pagination_service.paginate(employees, params[:page])
+    @paginator.paginate(employees, params[:page])
   end
 end

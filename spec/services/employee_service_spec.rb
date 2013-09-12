@@ -32,34 +32,34 @@ describe EmployeeService do
     end
 
     context 'sorting' do
-      it 'should call SortService to ensure sorting' do
-        fake_sort_service = FakeService.new([])
-        employee_service = EmployeeService.new(sort_service: fake_sort_service)
+      it 'should call Sorter to ensure sorting' do
+        fake_sorter = FakeService.new([])
+        employee_service = EmployeeService.new(sorter: fake_sorter)
 
         employee_service.get_employee_list(my_user)
 
-        fake_sort_service.received_message.should == :sort
+        fake_sorter.received_message.should == :sort
       end
 
       it 'should default to sorted ascending by employee_number' do
-        fake_sort_service = FakeService.new([])
-        employee_service = EmployeeService.new(sort_service: fake_sort_service)
+        fake_sorter = FakeService.new([])
+        employee_service = EmployeeService.new(sorter: fake_sorter)
 
         employee_service.get_employee_list(my_user)
 
-        fake_sort_service.received_message.should == :sort
-        fake_sort_service.received_params[3].should == 'employee_number'
+        fake_sorter.received_message.should == :sort
+        fake_sorter.received_params[3].should == 'employee_number'
       end
     end
 
     context 'pagination' do
-      it 'should call PaginationService to paginate results' do
-        fake_pagination_service = FakeService.new
-        employee_service = EmployeeService.new(sort_service: FakeService.new, pagination_service: fake_pagination_service)
+      it 'should call Paginator to paginate results' do
+        fake_paginator = FakeService.new
+        employee_service = EmployeeService.new(sorter: FakeService.new, paginator: fake_paginator)
 
         employee_service.get_employee_list(my_user)
 
-        fake_pagination_service.received_message.should == :paginate
+        fake_paginator.received_message.should == :paginate
       end
     end
   end
