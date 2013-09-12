@@ -761,12 +761,16 @@ describe EquipmentController do
       end
 
       it 'should return employees when assignee is Employee' do
-        employee = build(:employee, first_name: 'The', last_name: 'Wizard')
-        fake_employee_service = controller.load_employee_service(FakeService.new([employee]))
+        employee1 = create(:employee, first_name: 'Wendy', last_name: 'Wizard')
+        employee2 = create(:employee, first_name: 'Allen', last_name: 'Applebee')
+        employee3 = create(:employee, first_name: 'Nancy', last_name: 'Norton')
+        fake_employee_service = controller.load_employee_service(FakeService.new([employee1, employee2, employee3]))
         get :ajax_assignee, {assignee: 'Employee'}
         json = JSON.parse(response.body)
         json.should == [
-          [employee.id, 'Wizard, The']
+          [employee2.id, 'Applebee, Allen'],
+          [employee3.id, 'Norton, Nancy'],
+          [employee1.id, 'Wizard, Wendy']
         ]
         fake_employee_service.received_message.should == :get_all_employees
       end

@@ -104,7 +104,8 @@ class EquipmentController < ApplicationController
     if params[:assignee] == 'Location'
       render json: @location_service.get_all_locations(current_user).map { |l| [l.id, l.name] }
     else
-      render json: @employee_service.get_all_employees(current_user).map { |e| [e.id, e.to_s] }
+      employees = @employee_service.get_all_employees(current_user)
+      render json: employees.sort_by { |e| e.to_s }.map { |e| [e.id, e.to_s] }
     end
   end
 
