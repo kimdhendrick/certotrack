@@ -16,6 +16,19 @@ describe Sorter do
       results.should == ['alpha', 'beta', 'zeta', nil]
     end
 
+    it 'should sort strings ignoring case' do
+      equipment =
+        [
+          build(:equipment, name: 'ZEBRA'),
+          build(:equipment, name: 'zeta'),
+          build(:equipment, name: 'alpha'),
+          build(:equipment, name: 'ACRoBAt')
+        ]
+
+      results = Sorter.new.sort(equipment, 'name', 'asc').map(&:name)
+      results.should == ['ACRoBAt', 'alpha', 'ZEBRA', 'zeta']
+    end
+
     it 'should sort strings descending' do
       equipment =
         [

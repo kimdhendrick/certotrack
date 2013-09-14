@@ -9,7 +9,8 @@ class Sorter
     nil_items = partitioned_collection.first
 
     sorted_items = partitioned_collection.last.to_a.sort_by { |item|
-      item.public_send(field)
+      sort_key = item.public_send(field)
+      sort_key.respond_to?(:downcase) ? sort_key.downcase : sort_key
     }
 
     sorted_items += nil_items
