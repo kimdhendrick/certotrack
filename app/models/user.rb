@@ -57,4 +57,8 @@ class User < ActiveRecord::Base
   def locations
     customer.locations
   end
+
+  def sort_key
+    last_name + first_name
+  end
 end

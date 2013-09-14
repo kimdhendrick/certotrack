@@ -195,4 +195,9 @@ describe User do
       end
     end
   end
+
+  it 'should respond to its sort_key' do
+    user = build(:user, first_name: 'John', last_name: 'Doe')
+    user.sort_key.should == 'DoeJohn'
+  end
 end

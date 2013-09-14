@@ -5,13 +5,14 @@ class EmployeeService
     @paginator = params[:paginator] || Paginator.new
   end
 
-  def get_all_employees(current_user)
-    current_user.admin? ? Employee.all : current_user.employees
+  def get_all_employees(current_user, params = {})
+    employees = _get_employees_for_user(current_user)
+    @sorter.sort(employees, params[:sort], params[:direction])
   end
 
   def get_employee_list(current_user, params = {})
-    employees = get_all_employees(current_user)
-    employees = @sorter.sort(employees, params[:sort] || 'employee_number', params[:direction])
+    params[:sort] = 'employee_number' if params[:sort].blank? || params[:sort].nil?
+    employees = get_all_employees(current_user, params)
     @paginator.paginate(employees, params[:page])
   end
 
@@ -33,5 +34,11 @@ class EmployeeService
     end
 
     employee.destroy
+  end
+
+  private
+
+  def _get_employees_for_user(current_user)
+    current_user.admin? ? Employee.all : current_user.employees
   end
 end

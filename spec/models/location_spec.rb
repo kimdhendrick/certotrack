@@ -26,4 +26,9 @@ describe Location do
     @location.name = 'My Location'
     @location.to_s.should == 'My Location'
   end
+
+  it 'should respond to its sort_key' do
+    @location.name = 'My Location'
+    @location.sort_key.should == 'My Location'
+  end
 end

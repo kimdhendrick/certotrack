@@ -66,6 +66,10 @@ class Equipment < ActiveRecord::Base
         nil
   end
 
+  def sort_key
+    name
+  end
+
   private
 
   def _strip_whitespace

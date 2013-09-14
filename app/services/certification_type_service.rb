@@ -6,12 +6,13 @@ class CertificationTypeService
     @paginator = params[:paginator] || Paginator.new
   end
 
-  def get_all_certification_types(user)
-    user.admin? ? CertificationType.all : user.certification_types
+  def get_all_certification_types(user, params = {})
+    certification_types = _get_certification_types_for_user(user)
+    @sorter.sort(certification_types, params[:sort], params[:direction])
   end
 
   def get_certification_type_list(user, params = {})
-    certification_types = get_all_certification_types(user)
+    certification_types = _get_certification_types_for_user(user)
     certification_types = @search_service.search(certification_types, params)
     certification_types = @sorter.sort(certification_types, params[:sort], params[:direction])
     @paginator.paginate(certification_types, params[:page])
@@ -31,5 +32,11 @@ class CertificationTypeService
 
   def delete_certification_type(certification_type)
     certification_type.destroy
+  end
+
+  private
+
+  def _get_certification_types_for_user(user)
+    user.admin? ? CertificationType.all : user.certification_types
   end
 end

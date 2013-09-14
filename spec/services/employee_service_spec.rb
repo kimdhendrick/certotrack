@@ -43,12 +43,21 @@ describe EmployeeService do
 
       it 'should default to sorted ascending by employee_number' do
         fake_sorter = FakeService.new([])
-        employee_service = EmployeeService.new(sorter: fake_sorter)
 
-        employee_service.get_employee_list(my_user)
+        EmployeeService.new(sorter: fake_sorter).get_employee_list(my_user)
 
         fake_sorter.received_message.should == :sort
         fake_sorter.received_params[1].should == 'employee_number'
+      end
+
+      it 'should be able to specify sort field' do
+        fake_sorter = FakeService.new([])
+
+        EmployeeService.new(sorter: fake_sorter).get_employee_list(my_user, {sort: 'first_name', direction: 'desc'})
+
+        fake_sorter.received_message.should == :sort
+        fake_sorter.received_params[1].should == 'first_name'
+        fake_sorter.received_params[2].should == 'desc'
       end
     end
 
@@ -69,6 +78,7 @@ describe EmployeeService do
       it 'should return all employees' do
         my_employee = create(:employee, customer: my_customer)
         other_employee = create(:employee)
+        Sorter.any_instance.should_receive(:sort).and_call_original
 
         EmployeeService.new.get_all_employees(admin_user).should == [my_employee, other_employee]
       end
@@ -78,6 +88,7 @@ describe EmployeeService do
       it "should return only customer's employees" do
         my_employee = create(:employee, customer: my_customer)
         other_employee = create(:employee)
+        Sorter.any_instance.should_receive(:sort).and_call_original
 
         EmployeeService.new.get_all_employees(my_user).should == [my_employee]
       end
@@ -85,6 +96,7 @@ describe EmployeeService do
       it 'only returns active employees' do
         active_employee = create(:employee, active: true, customer: my_customer)
         inactive_employee = create(:employee, active: false, customer: my_customer)
+        Sorter.any_instance.should_receive(:sort).and_call_original
 
         EmployeeService.new.get_all_employees(my_user).should == [active_employee]
       end

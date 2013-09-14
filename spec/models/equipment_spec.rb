@@ -133,6 +133,11 @@ describe Equipment do
     build(:equipment, inspection_interval: 'blah').should_not be_valid
   end
 
+  it 'should respond to its sort_key' do
+    equipment = build(:equipment, name: 'Box')
+    equipment.sort_key.should == 'Box'
+  end
+
   it 'should answer assigned_to_location?' do
     location = create(:location)
     location_assigned_equipment = create(:equipment, location_id: location.id)

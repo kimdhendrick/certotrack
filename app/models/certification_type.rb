@@ -26,6 +26,10 @@ class CertificationType < ActiveRecord::Base
     "#{name}:#{interval}"
   end
 
+  def sort_key
+    name
+  end
+
 private
 
   def _default_values

@@ -88,6 +88,13 @@ describe Certification do
     end
   end
 
+  it 'should respond to its sort_key' do
+    certification_type = create(:certification_type, units_required: 100)
+    certification = build(:certification, certification_type: certification_type)
+
+    certification.sort_key.should == certification.name
+  end
+
   it 'should respond to status_code for sorting' do
     certification_type = create(:certification_type, units_required: 100)
     certification = build(:certification, certification_type: certification_type)

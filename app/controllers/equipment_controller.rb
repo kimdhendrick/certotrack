@@ -5,8 +5,7 @@ class EquipmentController < ApplicationController
   before_filter :authenticate_user!,
                 :load_equipment_service,
                 :load_location_service,
-                :load_employee_service,
-                :load_sorter
+                :load_employee_service
 
   before_action :_set_equipment, only: [:show, :edit, :update, :destroy]
 
@@ -104,11 +103,9 @@ class EquipmentController < ApplicationController
 
     if params[:assignee] == 'Location'
       locations = @location_service.get_all_locations(current_user)
-      locations = @sorter.sort(locations, 'name')
       render json: locations.map { |l| [l.id, l.name] }
     else
       employees = @employee_service.get_all_employees(current_user)
-      employees = @sorter.sort(employees, 'sort_key')
       render json: employees.map { |e| [e.id, e.to_s] }
     end
   end
@@ -129,11 +126,6 @@ class EquipmentController < ApplicationController
   def load_location_service(service = LocationService.new)
     @location_service ||= service
   end
-
-  def load_sorter(service = Sorter.new)
-    @sorter ||= service
-  end
-
 
   private
 

@@ -75,6 +75,10 @@ class Certification < ActiveRecord::Base
     !achieved_units_required? && !pending?
   end
 
+  def sort_key
+    name
+  end
+
   private
 
   def _calculate_status_for_non_units_based

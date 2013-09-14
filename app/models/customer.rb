@@ -6,4 +6,8 @@ class Customer < ActiveRecord::Base
   has_many :locations
   has_many :equipments
   has_many :users
+
+  def sort_key
+    name
+  end
 end

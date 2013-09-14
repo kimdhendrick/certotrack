@@ -1,8 +1,8 @@
 class Sorter
   def sort(collection, field, direction = 'asc')
 
-    field = 'name' if field.blank? || field.nil?
-    direction ||= 'asc'
+    field = 'sort_key' if field.blank? || field.nil?
+    direction = 'asc' if direction.blank? || direction.nil?
 
     partitioned_collection = collection.partition { |item| item.public_send(field).nil? }
 

@@ -76,6 +76,7 @@ describe CertificationTypeService do
       it 'should return all certification_types' do
         my_certification_type = create(:certification_type, customer: @my_customer)
         other_certification_type = create(:certification_type)
+        Sorter.any_instance.should_receive(:sort).and_call_original
 
         admin_user = create(:user, roles: ['admin'])
 
@@ -87,6 +88,7 @@ describe CertificationTypeService do
       it "should return only that user's certification_types" do
         my_certification_type = create(:certification_type, customer: @my_customer)
         other_certification_type = create(:certification_type)
+        Sorter.any_instance.should_receive(:sort).and_call_original
 
         CertificationTypeService.new.get_all_certification_types(@my_user).should == [my_certification_type]
       end

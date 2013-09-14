@@ -64,4 +64,9 @@ describe CertificationType do
     certification_type = build(:certification_type, name: 'certification name', interval: Interval::ONE_YEAR.text)
     certification_type.to_s.should == 'certification name:Annually'
   end
+
+  it 'should respond to its sort_key' do
+    certification_type = build(:certification_type, name: 'certification name')
+    certification_type.sort_key.should == 'certification name'
+  end
 end

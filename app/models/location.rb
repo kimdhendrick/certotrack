@@ -15,6 +15,10 @@ class Location < ActiveRecord::Base
     name
   end
 
+  def sort_key
+    name
+  end
+
   private
 
   def _strip_whitespace
