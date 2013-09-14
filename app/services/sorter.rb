@@ -1,6 +1,8 @@
 class Sorter
-  def sort(collection, field, direction = 'asc', default_field = 'name')
-    field = _sort_field(collection, field, default_field)
+  def sort(collection, field, direction = 'asc')
+
+    field = 'name' if field.blank? || field.nil?
+    direction ||= 'asc'
 
     partitioned_collection = collection.partition { |item| item.public_send(field).nil? }
 
@@ -14,11 +16,5 @@ class Sorter
     sorted_items.reverse! if direction == 'desc'
 
     sorted_items
-  end
-
-  def _sort_field(collection, sort_field, default_field)
-    return if collection.empty?
-
-    collection.first.respond_to?(sort_field) ? sort_field : default_field
   end
 end

@@ -11,7 +11,7 @@ class EmployeeService
 
   def get_employee_list(current_user, params = {})
     employees = get_all_employees(current_user)
-    employees = @sorter.sort(employees, params[:sort], params[:direction], 'employee_number')
+    employees = @sorter.sort(employees, params[:sort] || 'employee_number', params[:direction])
     @paginator.paginate(employees, params[:page])
   end
 

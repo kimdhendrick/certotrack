@@ -48,7 +48,7 @@ describe EmployeeService do
         employee_service.get_employee_list(my_user)
 
         fake_sorter.received_message.should == :sort
-        fake_sorter.received_params[3].should == 'employee_number'
+        fake_sorter.received_params[1].should == 'employee_number'
       end
     end
 

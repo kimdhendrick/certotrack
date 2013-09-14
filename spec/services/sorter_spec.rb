@@ -54,7 +54,7 @@ describe Sorter do
       results.should == [nil, today]
     end
 
-    it 'should default to name if bad column given' do
+    it 'should default to name if no field provided' do
       equipment =
         [
           build(:equipment, name: 'zeta'),
@@ -62,19 +62,7 @@ describe Sorter do
           build(:equipment, name: 'alpha')
         ]
 
-      results = Sorter.new.sort(equipment, 'bad_column_name', 'asc').map(&:name)
-      results.should == ['alpha', 'beta', 'zeta']
-    end
-
-    it 'should default to specified column if provided' do
-      equipment =
-        [
-          build(:equipment, serial_number: 'zeta', name: 'a'),
-          build(:equipment, serial_number: 'beta', name: 'b'),
-          build(:equipment, serial_number: 'alpha', name: 'c')
-        ]
-
-      results = Sorter.new.sort(equipment, 'bad_column_name', 'asc', 'serial_number').map(&:serial_number)
+      results = Sorter.new.sort(equipment, nil).map(&:name)
       results.should == ['alpha', 'beta', 'zeta']
     end
 
@@ -90,7 +78,7 @@ describe Sorter do
       results.should == ['alpha', 'beta', 'zeta']
     end
 
-    it 'should default to ascending if bad direction given' do
+    it 'should default to ascending if no direction provided' do
       equipment =
         [
           build(:equipment, name: 'zeta'),
@@ -98,7 +86,7 @@ describe Sorter do
           build(:equipment, name: 'alpha')
         ]
 
-      results = Sorter.new.sort(equipment, 'name', 'bad_sort_direction').map(&:name)
+      results = Sorter.new.sort(equipment, 'name').map(&:name)
       results.should == ['alpha', 'beta', 'zeta']
     end
 
