@@ -23,7 +23,8 @@ class CertificationsController < ApplicationController
       params[:certification][:certification_type_id],
       params[:certification][:last_certification_date],
       params[:certification][:trainer],
-      params[:certification][:comments]
+      params[:certification][:comments],
+      params[:certification][:units_achieved]
     )
 
     if !@certification.valid?

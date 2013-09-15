@@ -98,7 +98,8 @@ describe CertificationsController do
             certification_type_id: 1001,
             last_certification_date: '3/3/2003',
             trainer: 'John Jacob Jingle',
-            comments: 'my name too'
+            comments: 'my name too',
+            units_achieved: '15'
           },
           commit: "Create"
         }
@@ -111,6 +112,7 @@ describe CertificationsController do
         fake_certification_service.received_params[2].should == '3/3/2003'
         fake_certification_service.received_params[3].should == 'John Jacob Jingle'
         fake_certification_service.received_params[4].should == 'my name too'
+        fake_certification_service.received_params[5].should == '15'
       end
 
       it 're-renders new on error' do

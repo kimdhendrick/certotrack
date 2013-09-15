@@ -11,7 +11,8 @@ describe CertificationFactory do
         certification_type.id,
         '12/30/2000',
         'Joe Bob',
-        'Great class!'
+        'Great class!',
+        15
       )
 
       certification.should_not be_persisted
@@ -21,6 +22,7 @@ describe CertificationFactory do
       certification.active_certification_period.trainer.should == 'Joe Bob'
       certification.active_certification_period.comments.should == 'Great class!'
       certification.last_certification_date.should == Date.new(2000, 12, 30)
+      certification.units_achieved.should == 15
     end
 
     it 'handles bad date' do

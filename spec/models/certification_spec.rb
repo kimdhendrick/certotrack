@@ -183,6 +183,12 @@ describe Certification do
     certification.active_certification_period.units_achieved.should == 10
   end
 
+  it 'should respond to units_required' do
+    certification_type = create(:certification_type, units_required: 100)
+    certification = create(:certification, certification_type: certification_type, customer: create(:customer))
+    certification.units_required.should == 100
+  end
+
   it 'should respond to name' do
     certification_type = create(:certification_type, name: 'Scrum Master')
     certification = create(:certification, certification_type: certification_type, customer: create(:customer))

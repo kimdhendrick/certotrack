@@ -13,8 +13,8 @@ class CertificationService
     @certification_factory.new_instance(employee_id)
   end
 
-  def certify(employee_id, certification_type_id, certification_date, trainer, comments)
-    certification = @certification_factory.new_instance(employee_id, certification_type_id, certification_date, trainer, comments)
+  def certify(employee_id, certification_type_id, certification_date, trainer, comments, units_achieved)
+    certification = @certification_factory.new_instance(employee_id, certification_type_id, certification_date, trainer, comments, units_achieved)
     certification.save
     certification
   end

@@ -27,6 +27,10 @@ class Certification < ActiveRecord::Base
     certification_type.name
   end
 
+  def units_required
+    certification_type.units_required
+  end
+
   def units_based?
     certification_type.units_based?
   end

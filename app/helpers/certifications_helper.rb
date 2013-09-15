@@ -2,6 +2,6 @@ module CertificationsHelper
 
   def units(certification)
     return '' unless certification.units_based?
-    certification.units_achieved
+    "#{certification.units_achieved} of #{certification.units_required}"
   end
 end

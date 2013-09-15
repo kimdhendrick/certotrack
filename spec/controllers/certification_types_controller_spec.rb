@@ -414,6 +414,67 @@ describe CertificationTypesController do
     end
   end
 
+  describe 'GET ajax_is_units_based' do
+    context 'when certification user' do
+      before do
+        sign_in stub_certification_user
+      end
+
+      it 'should return true when certification type is units based' do
+        certification_type = create(:certification_type, units_required: 1)
+
+        get :ajax_is_units_based, {certification_type_id: certification_type.id}
+
+        json = JSON.parse(response.body)
+        json.should == {'is_units_based' => true}
+      end
+
+      it 'should return false when certification type is not units based' do
+        certification_type = create(:certification_type)
+
+        get :ajax_is_units_based, {certification_type_id: certification_type.id}
+
+        json = JSON.parse(response.body)
+        json.should == {'is_units_based' => false}
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'should redirect, I suppose' do
+        get :ajax_is_units_based, {certification_type_id: nil}
+        response.body.should eq("<html><body>You are being <a href=\"http://test.host/\">redirected</a>.</body></html>")
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'should return true when certification type is units based' do
+        certification_type = create(:certification_type, units_required: 1)
+
+        get :ajax_is_units_based, {certification_type_id: certification_type.id}
+
+        json = JSON.parse(response.body)
+        json.should == {'is_units_based' => true}
+      end
+
+      it 'should return false when certification type is not units based' do
+        certification_type = create(:certification_type)
+
+        get :ajax_is_units_based, {certification_type_id: certification_type.id}
+
+        json = JSON.parse(response.body)
+        json.should == {'is_units_based' => false}
+      end
+    end
+  end
+
   def certification_type_attributes
     {
       name: 'Routine Inspection',

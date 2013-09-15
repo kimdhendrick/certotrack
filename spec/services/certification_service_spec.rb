@@ -29,7 +29,8 @@ describe CertificationService do
         certification_type.id,
         '12/31/2000',
         'Joe Bob',
-        'Great class!'
+        'Great class!',
+        '15'
       )
 
       fake_certification_factory.received_message.should == :new_instance
@@ -38,6 +39,7 @@ describe CertificationService do
       fake_certification_factory.received_params[2].should == '12/31/2000'
       fake_certification_factory.received_params[3].should == 'Joe Bob'
       fake_certification_factory.received_params[4].should == 'Great class!'
+      fake_certification_factory.received_params[5].should == '15'
       certification.should be_persisted
     end
 
@@ -53,7 +55,8 @@ describe CertificationService do
         certification_type.id,
         '999',
         'Joe Bob',
-        'Great class!'
+        'Great class!',
+        nil
       )
 
       certification.should_not be_valid
@@ -64,6 +67,7 @@ describe CertificationService do
       fake_certification_factory.received_params[2].should == '999'
       fake_certification_factory.received_params[3].should == 'Joe Bob'
       fake_certification_factory.received_params[4].should == 'Great class!'
+      fake_certification_factory.received_params[5].should == nil
     end
   end
 
