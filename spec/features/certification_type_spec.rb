@@ -43,10 +43,33 @@ describe 'Certification Type', slow: true do
 
     it 'should render show certification type page' do
       certification_type = create(:certification_type,
-        name: 'CPR',
-        interval: Interval::SIX_MONTHS.text,
-        customer: @customer
+                                  name: 'CPR',
+                                  interval: Interval::SIX_MONTHS.text,
+                                  customer: @customer
       )
+
+      create(:certification_type,
+             name: 'Inspections',
+             interval: Interval::SIX_MONTHS.text,
+             units_required: 30,
+             customer: @customer
+      )
+
+      create(:employee,
+             employee_number: 'SG1',
+             first_name: 'Sarah',
+             last_name: 'Green',
+             customer: @customer
+      )
+
+      certified_employee = create(:employee,
+                                  employee_number: 'JB3',
+                                  first_name: 'Joe',
+                                  last_name: 'Brown',
+                                  customer: @customer
+      )
+
+      create(:certification, employee: certified_employee, certification_type: certification_type, customer: certified_employee.customer)
 
       visit certification_type_path certification_type.id
 
@@ -58,16 +81,31 @@ describe 'Certification Type', slow: true do
       page.should have_content 'Interval 6 months'
       page.should_not have_content 'Required Units'
 
+      page.should have_content 'Non-Certified Employees 1'
+
+      page.all('table tr').count.should == 1 + 1
+
+      within 'table thead tr' do
+        page.should have_content 'Employee Name'
+        page.should have_content 'Employee Number'
+      end
+
+      within 'table tbody tr:nth-of-type(1)' do
+        page.should have_link 'Green, Sarah'
+        page.should have_content 'SG1'
+        page.should have_link 'certify'
+      end
+
       page.should have_link 'Edit'
       page.should have_link 'Delete'
     end
 
     it 'should render show certification type page for units based' do
       certification_type = create(:certification_type,
-        name: 'CPR',
-        interval: Interval::SIX_MONTHS.text,
-        units_required: 123,
-        customer: @customer
+                                  name: 'CPR',
+                                  interval: Interval::SIX_MONTHS.text,
+                                  units_required: 123,
+                                  customer: @customer
       )
 
       visit certification_type_path certification_type.id
@@ -92,9 +130,9 @@ describe 'Certification Type', slow: true do
 
     it 'should update existing certification type' do
       certification_type = create(:certification_type,
-        name: 'CPR',
-        interval: Interval::SIX_MONTHS.text,
-        customer: @customer
+                                  name: 'CPR',
+                                  interval: Interval::SIX_MONTHS.text,
+                                  customer: @customer
       )
 
       visit certification_type_path certification_type.id
@@ -133,8 +171,8 @@ describe 'Certification Type', slow: true do
 
     it 'should delete existing certification_type' do
       certification_type = create(:certification_type,
-        customer: @customer,
-        name: 'CPR'
+                                  customer: @customer,
+                                  name: 'CPR'
       )
 
       visit certification_type_path certification_type.id
@@ -167,17 +205,17 @@ describe 'Certification Type', slow: true do
 
       it 'should show All Certification Types report' do
         create(:certification_type,
-          customer: @customer,
-          name: 'CPR',
-          interval: 'Annually',
-          units_required: 0
+               customer: @customer,
+               name: 'CPR',
+               interval: 'Annually',
+               units_required: 0
         )
 
         create(:certification_type,
-          customer: @customer,
-          name: 'Routine Exam',
-          interval: '1 month',
-          units_required: 99
+               customer: @customer,
+               name: 'Routine Exam',
+               interval: '1 month',
+               units_required: 99
         )
 
         visit '/'
@@ -353,14 +391,14 @@ describe 'Certification Type', slow: true do
       end
 
       it 'should show Search Certification Types page' do
-        create(:certification_type, 
-          customer: @customer,
-          name: 'Unique Name'
+        create(:certification_type,
+               customer: @customer,
+               name: 'Unique Name'
         )
 
-        create(:certification_type, 
-          customer: @customer,
-          name: 'Routine Examination'
+        create(:certification_type,
+               customer: @customer,
+               name: 'Routine Examination'
         )
 
         visit '/'
@@ -384,14 +422,14 @@ describe 'Certification Type', slow: true do
       end
 
       it 'should search and sort simultaneously' do
-        create(:certification_type, 
-          customer: @customer,
-          name: 'Unique Name'
+        create(:certification_type,
+               customer: @customer,
+               name: 'Unique Name'
         )
 
-        create(:certification_type, 
-          customer: @customer,
-          name: 'Routine Examination'
+        create(:certification_type,
+               customer: @customer,
+               name: 'Routine Examination'
         )
 
         visit '/'

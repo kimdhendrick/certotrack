@@ -36,6 +36,17 @@ class EmployeeService
     employee.destroy
   end
 
+  def get_employees_not_certified_for(certification_type, params = {})
+    certified_employees = certification_type.certifications.map(&:employee)
+
+    uncertified_employees =
+      certified_employees.empty? ?
+        Employee.where(customer: certification_type.customer) :
+        Employee.where("id NOT IN (?)", certified_employees)
+
+    @sorter.sort(uncertified_employees, params[:sort], params[:direction])
+  end
+
   private
 
   def _get_employees_for_user(current_user)

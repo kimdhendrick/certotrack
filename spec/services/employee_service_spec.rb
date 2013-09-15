@@ -183,4 +183,84 @@ describe EmployeeService do
       status.should == :equipment_exists
     end
   end
+
+  describe 'get_employees_not_certified_for' do
+    context 'when regular user' do
+      it 'should return empty list when no employees' do
+        certification_type = create(:certification_type, customer: my_customer)
+        EmployeeService.new.get_employees_not_certified_for(certification_type).should == []
+      end
+
+      it 'should return empty list when all employees certified' do
+        certification_type = create(:certification_type, customer: my_customer)
+        certified_employee1 = create(:employee, customer: my_customer)
+        certified_employee2 = create(:employee, customer: my_customer)
+        create(:certification, employee: certified_employee1, certification_type: certification_type, customer: my_customer)
+        create(:certification, employee: certified_employee2, certification_type: certification_type, customer: my_customer)
+
+        EmployeeService.new.get_employees_not_certified_for(certification_type).should == []
+      end
+
+      it "should return only customer's employees" do
+        certification_type = create(:certification_type, customer: my_customer)
+        my_employee = create(:employee, customer: my_customer)
+        other_employee = create(:employee)
+
+        EmployeeService.new.get_employees_not_certified_for(certification_type).should == [my_employee]
+      end
+
+      it 'only returns uncertified employees' do
+        certification_type = create(:certification_type, customer: my_customer)
+        certified_employee = create(:employee, last_name: 'certified', customer: my_customer)
+        create(:certification, employee: certified_employee, certification_type: certification_type, customer: my_customer)
+        uncertified_employee = create(:employee, last_name: 'UNCERTIFIED', customer: my_customer)
+
+        EmployeeService.new.get_employees_not_certified_for(certification_type).should == [uncertified_employee]
+      end
+
+      it 'should return all employees' do
+        certification_type = create(:certification_type, customer: my_customer)
+        uncertified_employee1 = create(:employee, customer: my_customer)
+        uncertified_employee2 = create(:employee, customer: my_customer)
+        EmployeeService.new.get_employees_not_certified_for(certification_type).should == [uncertified_employee1, uncertified_employee2]
+      end
+
+      it 'should sort employees when no certified employees' do
+        certification_type = create(:certification_type, customer: my_customer)
+        uncertified_employee = create(:employee, customer: my_customer)
+        Sorter.any_instance.should_receive(:sort).and_call_original
+
+        EmployeeService.new.get_employees_not_certified_for(certification_type).should == [uncertified_employee]
+      end
+
+      it 'should sort employees when some certified employees' do
+        certification_type = create(:certification_type, customer: my_customer)
+        uncertified_employee = create(:employee, customer: my_customer)
+        certified_employee = create(:employee, last_name: 'certified', customer: my_customer)
+        create(:certification, employee: certified_employee, certification_type: certification_type, customer: my_customer)
+        Sorter.any_instance.should_receive(:sort).and_call_original
+
+        EmployeeService.new.get_employees_not_certified_for(certification_type).should == [uncertified_employee]
+      end
+    end
+
+    context 'when admin user should still limit to customer' do
+      it "should return only customer's employees" do
+        certification_type = create(:certification_type, customer: my_customer)
+        my_employee = create(:employee, customer: my_customer)
+        other_employee = create(:employee)
+
+        EmployeeService.new.get_employees_not_certified_for(certification_type).should == [my_employee]
+      end
+
+      it 'only returns uncertified employees' do
+        certification_type = create(:certification_type, customer: my_customer)
+        certified_employee = create(:employee, last_name: 'certified', customer: my_customer)
+        create(:certification, employee: certified_employee, certification_type: certification_type, customer: my_customer)
+        uncertified_employee = create(:employee, last_name: 'UNCERTIFIED', customer: my_customer)
+
+        EmployeeService.new.get_employees_not_certified_for(certification_type).should == [uncertified_employee]
+      end
+    end
+  end
 end

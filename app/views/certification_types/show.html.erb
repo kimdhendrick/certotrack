@@ -22,6 +22,32 @@
   </p>
 <% end %>
 
+<p>
+  <b>Non-Certified Employees</b>
+  <%= @non_certified_employee_count %>
+</p>
 
 <%= link_to 'Edit', edit_certification_type_path(@certification_type) %> |
 <%= link_to 'Delete', @certification_type, method: :delete, data: {confirm: 'Are you sure you want to delete?'} %>
+
+<br/>
+
+<h2>Non Certified Employees</h2>
+<table class="sortable">
+  <thead>
+  <tr>
+    <th><%= sortable 'sort_key', title = 'Employee Name', options = 'non_certified_employee_name'%></th>
+    <th>Employee Number</th>
+    <th>&nbsp;</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @non_certified_employees.each do |non_certified_employee| %>
+    <tr>
+      <td><%= link_to non_certified_employee.to_s, non_certified_employee %></td></td>
+      <td><%= non_certified_employee.employee_number %></td>
+      <td><a href="#">certify</a></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

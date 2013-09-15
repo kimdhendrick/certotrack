@@ -167,6 +167,76 @@ describe CertificationTypesController do
       end
     end
   end
+  
+  describe 'GET show' do
+    context 'when certification user' do
+      before do
+        sign_in stub_certification_user
+      end
+
+      it 'assigns certification_type as @certification_type' do
+        certification_type = create(:certification_type, customer: @customer)
+        get :show, {:id => certification_type.to_param}, {}
+        assigns(:certification_type).should eq(certification_type)
+      end
+
+      it 'assigns non_certified_employees as @non_certified_employees' do
+        employee = create(:employee, customer: @customer)
+        fake_employee_service = controller.load_employee_service(FakeService.new([employee]))
+        certification_type = create(:certification_type, customer: @customer)
+
+        get :show, {id: certification_type.id}, {}
+
+        assigns(:non_certified_employees).should eq([employee])
+        assigns(:non_certified_employee_count).should == 1
+        fake_employee_service.received_message.should == :get_employees_not_certified_for
+        fake_employee_service.received_params[0].should == certification_type
+        fake_employee_service.received_params[1].should == {}
+      end
+
+      it 'sorts by specified parameters' do
+        employee = create(:employee, customer: @customer)
+        fake_employee_service = controller.load_employee_service(FakeService.new([employee]))
+        certification_type = create(:certification_type, customer: @customer)
+
+        params = {
+          id: certification_type.id,
+          sort: 'sort_key',
+          direction: 'desc',
+          options: 'non_certified_employee_name'
+        }
+        get :show, params, {}
+
+        fake_employee_service.received_message.should == :get_employees_not_certified_for
+        fake_employee_service.received_params[0].should == certification_type
+        fake_employee_service.received_params[1].should == {sort: 'sort_key', direction: 'desc'}
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'assigns certification_type as @certification_type' do
+        certification_type = create(:certification_type, customer: @customer)
+        get :show, {:id => certification_type.to_param}, {}
+        assigns(:certification_type).should eq(certification_type)
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'does not assign certification_type as @certification_type' do
+        certification_type = create(:certification_type, customer: @customer)
+        get :show, {:id => certification_type.to_param}, {}
+        assigns(:certification_type).should be_nil
+      end
+    end
+  end
 
   describe 'PUT update' do
     context 'when certification_type user' do

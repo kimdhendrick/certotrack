@@ -3,7 +3,8 @@ class CertificationTypesController < ApplicationController
   include CertificationTypesHelper
 
   before_filter :authenticate_user!,
-                :load_certification_type_service
+                :load_certification_type_service,
+                :load_employee_service
 
   before_action :set_certification_type, only: [:show, :edit, :update, :destroy]
 
@@ -17,6 +18,16 @@ class CertificationTypesController < ApplicationController
   end
 
   def show
+
+    noncertified_params = {}
+
+    if (params[:options] == 'non_certified_employee_name')
+      noncertified_params[:sort] = 'sort_key'
+      noncertified_params[:direction] = params[:direction]
+    end
+
+    @non_certified_employees = @employee_service.get_employees_not_certified_for(@certification_type, noncertified_params)
+    @non_certified_employee_count = @non_certified_employees.count
   end
 
   def edit
@@ -72,6 +83,10 @@ class CertificationTypesController < ApplicationController
 
   def load_certification_type_service(service = CertificationTypeService.new)
     @certification_type_service ||= service
+  end
+
+  def load_employee_service(service = EmployeeService.new)
+    @employee_service ||= service
   end
 
   private
