@@ -80,7 +80,7 @@ describe CertificationTypeService do
 
         admin_user = create(:user, roles: ['admin'])
 
-        CertificationTypeService.new.get_all_certification_types(admin_user).should == [my_certification_type, other_certification_type]
+        CertificationTypeService.new.get_all_certification_types(admin_user).should =~ [my_certification_type, other_certification_type]
       end
     end
 

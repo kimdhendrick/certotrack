@@ -8,7 +8,7 @@ User.create!(username: 'admin', password: 'Password123', email: 'admin@example.c
 User.create!(username: 'equipment_user', password: 'Password123', email: 'equipment_user@example.com', roles: ['equipment'], customer: customer, first_name: 'First', last_name: 'Last')
 User.create!(username: 'certification_user', password: 'Password123', email: 'certification_user@example.com', roles: ['certification'], customer: customer, first_name: 'First', last_name: 'Last')
 User.create!(username: 'full_rights_user', password: 'Password123', email: 'full_rights_user@example.com', roles: ['equipment', 'certification'], customer: customer, first_name: 'First', last_name: 'Last')
-User.create!(username: 'guest', password: 'Password123', email: 'guest@example.com', first_name: 'First', last_name: 'Last')
+User.create!(username: 'guest', password: 'Password123', email: 'guest@example.com', first_name: 'First', last_name: 'Last', customer: customer)
 
 golden = Location.create!(name: 'Golden', customer: customer)
 boulder = Location.create!(name: 'Boulder', customer: customer)
