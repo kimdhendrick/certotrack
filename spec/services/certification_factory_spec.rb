@@ -2,17 +2,17 @@ require 'spec_helper'
 
 describe CertificationFactory do
   describe 'new_instance' do
-    it 'creates a certification' do
+    it 'creates a certification when given an employee_id' do
       certification_type = create(:certification_type)
       employee = create(:employee)
 
       certification = CertificationFactory.new.new_instance(
-        employee.id,
-        certification_type.id,
-        '12/30/2000',
-        'Joe Bob',
-        'Great class!',
-        15
+        employee_id: employee.id,
+        certification_type_id: certification_type.id,
+        certification_date: '12/30/2000',
+        trainer: 'Joe Bob',
+        comments: 'Great class!',
+        units_achieved: 15
       )
 
       certification.should_not be_persisted
@@ -25,17 +25,26 @@ describe CertificationFactory do
       certification.units_achieved.should == 15
     end
 
+    it 'creates a certification when given a certification_type_id' do
+      certification_type = create(:certification_type)
+
+      certification = CertificationFactory.new.new_instance(
+        employee_id: nil,
+        certification_type_id: certification_type.id
+      )
+    end
+
     it 'handles bad date' do
 
       certification_type = create(:certification_type)
       employee = create(:employee)
 
       certification = CertificationFactory.new.new_instance(
-        employee.id,
-        certification_type.id,
-        '999',
-        'Joe Bob',
-        'Great class!'
+        employee_id: employee.id,
+        certification_type_id: certification_type.id,
+        certification_date: '999',
+        trainer: 'Joe Bob',
+        comments: 'Great class!'
       )
 
       certification.should_not be_persisted
@@ -57,11 +66,11 @@ describe CertificationFactory do
       certification_factory = CertificationFactory.new(expiration_calculator: fake_expiration_calculator)
 
       certification = certification_factory.new_instance(
-        employee.id,
-        certification_type.id,
-        '12/15/2000',
-        nil,
-        nil
+        employee_id: employee.id,
+        certification_type_id: certification_type.id,
+        certification_date: '12/15/2000',
+        trainer: nil,
+        comments: nil
       )
 
       fake_expiration_calculator.received_message.should == :calculate

@@ -46,7 +46,15 @@
     <tr>
       <td><%= link_to non_certified_employee.to_s, non_certified_employee %></td></td>
       <td><%= non_certified_employee.employee_number %></td>
-      <td><a href="#">certify</a></td>
+      <td>
+        <%= link_to 'certify',
+                    new_certification_path(
+                      certification_type_id: @certification_type.id,
+                      employee_id: non_certified_employee.id,
+                      source: :certification_type
+                    )
+        %>
+      </td>
     </tr>
   <% end %>
   </tbody>

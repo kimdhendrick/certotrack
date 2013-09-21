@@ -29,7 +29,7 @@
 <%= link_to 'Deactivate', deactivate_confirm_path(@employee), data: {confirm: 'Deactivate Employee will unassign all equipment and remove employee.  Are you sure?'} %>
 
 <hr/>
-<%= link_to 'New Employee Certification', new_certification_path(employee_id: @employee.id) %>
+<%= link_to 'New Employee Certification', new_certification_path(employee_id: @employee.id, source: :employee) %>
 
 <table class="sortable">
   <thead>

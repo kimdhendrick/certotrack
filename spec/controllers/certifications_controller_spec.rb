@@ -10,7 +10,7 @@ describe CertificationsController do
         @certification_type = create(:certification_type)
       end
 
-      it 'calls certification service' do
+      it 'calls certification service with employee_id' do
         controller.load_certification_type_service(FakeService.new())
         employee = create(:employee)
         certification = create(:certification, employee: employee, customer: employee.customer)
@@ -22,6 +22,19 @@ describe CertificationsController do
         fake_certification_service.received_params[0].should == employee.id.to_s
       end
 
+      it 'calls certification service with certification_type_id' do
+        controller.load_certification_type_service(FakeService.new())
+        certification_type = create(:certification_type)
+        certification = create(:certification, certification_type: certification_type, customer: certification_type.customer)
+        fake_certification_service = controller.load_certification_service(FakeService.new(certification))
+
+        get :new, {certification_type_id: certification_type.id}, {}
+
+        fake_certification_service.received_message.should == :new_certification
+        fake_certification_service.received_params[0].should == nil
+        fake_certification_service.received_params[1].should == certification_type.id.to_s
+      end
+
       it 'assigns @certification' do
         controller.load_certification_type_service(FakeService.new())
         certification = create(:certification, customer: create(:customer))
@@ -30,6 +43,26 @@ describe CertificationsController do
         get :new, {}, {}
 
         assigns(:certification).should == certification
+      end
+
+      it 'assigns @source when employee' do
+        controller.load_certification_service(FakeService.new())
+        certification_type = create(:certification_type)
+        controller.load_certification_type_service(FakeService.new([certification_type]))
+
+        get :new, {source: 'employee'}, {}
+
+        assigns(:source).should eq('employee')
+      end
+
+      it 'assigns @source when certification_type' do
+        controller.load_certification_service(FakeService.new())
+        certification_type = create(:certification_type)
+        controller.load_certification_type_service(FakeService.new([certification_type]))
+
+        get :new, {source: 'certification_type'}, {}
+
+        assigns(:source).should eq('certification_type')
       end
 
       it 'calls certification_type_service' do
@@ -101,6 +134,7 @@ describe CertificationsController do
             comments: 'my name too',
             units_achieved: '15'
           },
+          source: :employee,
           commit: "Create"
         }
 
@@ -171,7 +205,7 @@ describe CertificationsController do
       end
 
       context 'Create' do
-        it 'redirects to show employee on success' do
+        it 'redirects to show employee page on success when source is :employee' do
           employee = create(:employee)
           certification_type = create(:certification_type)
           certification = create(:certification, employee: employee, certification_type: certification_type, customer: employee.customer)
@@ -181,12 +215,32 @@ describe CertificationsController do
           params = {
             employee: {id: 1},
             certification: {certification_type_id: 1},
+            source: :employee,
             commit: 'Create'
           }
 
           post :create, params, {}
 
           response.should redirect_to(employee)
+        end
+
+        it 'redirects to show certification type page on success when source is :certification_type' do
+          employee = create(:employee)
+          certification_type = create(:certification_type)
+          certification = create(:certification, employee: employee, certification_type: certification_type, customer: employee.customer)
+
+          controller.load_certification_service(FakeService.new(certification))
+
+          params = {
+            employee: {id: 1},
+            certification: {certification_type_id: 1},
+            source: :certification_type,
+            commit: 'Create'
+          }
+
+          post :create, params, {}
+
+          response.should redirect_to(certification_type)
         end
 
         it 'gives successful message on success' do

@@ -4,14 +4,16 @@ describe CertificationService do
   describe 'new_certification' do
     it 'calls CertificationFactory' do
       employee = create(:employee)
+      certification_type = create(:certification_type)
       certification = build(:certification, employee: employee)
       fake_certification_factory = FakeService.new(certification)
       certification_service = CertificationService.new(certification_factory: fake_certification_factory)
 
-      certification = certification_service.new_certification(employee.id)
+      certification = certification_service.new_certification(employee.id, certification_type.id)
 
       fake_certification_factory.received_message.should == :new_instance
-      fake_certification_factory.received_params[0].should == employee.id
+      fake_certification_factory.received_params[0][:employee_id].should == employee.id
+      fake_certification_factory.received_params[0][:certification_type_id].should == employee.id
       certification.should_not be_persisted
     end
   end
@@ -34,12 +36,12 @@ describe CertificationService do
       )
 
       fake_certification_factory.received_message.should == :new_instance
-      fake_certification_factory.received_params[0].should == employee.id
-      fake_certification_factory.received_params[1].should == certification_type.id
-      fake_certification_factory.received_params[2].should == '12/31/2000'
-      fake_certification_factory.received_params[3].should == 'Joe Bob'
-      fake_certification_factory.received_params[4].should == 'Great class!'
-      fake_certification_factory.received_params[5].should == '15'
+      fake_certification_factory.received_params[0][:employee_id].should == employee.id
+      fake_certification_factory.received_params[0][:certification_type_id].should == certification_type.id
+      fake_certification_factory.received_params[0][:certification_date].should == '12/31/2000'
+      fake_certification_factory.received_params[0][:trainer].should == 'Joe Bob'
+      fake_certification_factory.received_params[0][:comments].should == 'Great class!'
+      fake_certification_factory.received_params[0][:units_achieved].should == '15'
       certification.should be_persisted
     end
 
@@ -62,12 +64,12 @@ describe CertificationService do
       certification.should_not be_valid
       certification.should_not be_persisted
       fake_certification_factory.received_message.should == :new_instance
-      fake_certification_factory.received_params[0].should == employee.id
-      fake_certification_factory.received_params[1].should == certification_type.id
-      fake_certification_factory.received_params[2].should == '999'
-      fake_certification_factory.received_params[3].should == 'Joe Bob'
-      fake_certification_factory.received_params[4].should == 'Great class!'
-      fake_certification_factory.received_params[5].should == nil
+      fake_certification_factory.received_params[0][:employee_id].should == employee.id
+      fake_certification_factory.received_params[0][:certification_type_id].should == certification_type.id
+      fake_certification_factory.received_params[0][:certification_date].should == '999'
+      fake_certification_factory.received_params[0][:trainer].should == 'Joe Bob'
+      fake_certification_factory.received_params[0][:comments].should == 'Great class!'
+      fake_certification_factory.received_params[0][:units_achieved].should == nil
     end
   end
 

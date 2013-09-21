@@ -96,7 +96,7 @@ class Certification < ActiveRecord::Base
     private
 
     def _achieved_units_required?
-      certification.units_achieved >= _units_required
+      (certification.units_achieved || 0) >= _units_required
     end
 
     def _pending?

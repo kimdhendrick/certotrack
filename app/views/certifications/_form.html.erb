@@ -45,6 +45,8 @@
     <%= f.text_field :comments %>
   </div>
 
+  <input type="hidden" name="source" value="<%=@source%>">
+
   <%= submit_tag "Create" %>
   <%= submit_tag "Save and Create Another" %>
 
