@@ -9,8 +9,8 @@ class Certification < ActiveRecord::Base
   validates_uniqueness_of :certification_type_id, scope: :employee_id, message: "already assigned to this Employee. Please update existing Certification."
 
   validates_presence_of :active_certification_period,
-                        :certification_type,
-                        :customer
+    :certification_type,
+    :customer
 
   delegate :comments, to: :active_certification_period
   delegate :comments=, to: :active_certification_period
@@ -18,10 +18,6 @@ class Certification < ActiveRecord::Base
   delegate :trainer=, to: :active_certification_period
   delegate :units_achieved, to: :active_certification_period
   delegate :units_achieved=, to: :active_certification_period
-
-  def expiration_date
-    active_certification_period.end_date
-  end
 
   def name
     certification_type.name
@@ -33,6 +29,10 @@ class Certification < ActiveRecord::Base
 
   def units_based?
     certification_type.units_based?
+  end
+
+  def expiration_date
+    active_certification_period.end_date
   end
 
   def expiration_date=(date)
@@ -50,33 +50,7 @@ class Certification < ActiveRecord::Base
   end
 
   def status
-    units_based? ?
-      _calculate_status_for_units_based :
-      _calculate_status_for_non_units_based
-  end
-
-  def na?
-    !expiration_date.present?
-  end
-
-  def expired?
-    expiration_date.present? && expiration_date <= Date.today
-  end
-
-  def expiring?
-    expiration_date.present? && !expired? && expiration_date < Date.today + 60.days
-  end
-
-  def pending?
-    expiration_date.present? && !expired? && !achieved_units_required?
-  end
-
-  def achieved_units_required?
-    units_achieved >= certification_type.units_required
-  end
-
-  def recertify?
-    !achieved_units_required? && !pending?
+    _certification_strategy.status
   end
 
   def sort_key
@@ -85,16 +59,73 @@ class Certification < ActiveRecord::Base
 
   private
 
-  def _calculate_status_for_non_units_based
-    return Status::NA if na?
-    return Status::EXPIRED if expired?
-    return Status::EXPIRING if expiring?
-    Status::VALID
+  def _certification_strategy
+    @certification_strategy ||= units_based? ? UnitsBasedCertificationStrategy.new(self) : DateBasedCertificationStrategy.new(self)
   end
 
-  def _calculate_status_for_units_based
-    return Status::VALID if achieved_units_required?
-    return Status::PENDING if pending?
-    return Status::RECERTIFY
+  class CertificationStrategy
+    attr_reader :certification
+
+    def initialize(certification)
+      @certification = certification
+    end
+
+    def status
+      raise NotImplementedError
+    end
+
+    private
+
+    def _expired?
+      _expiration_date.present? && _expiration_date <= Date.today
+    end
+
+    def _expiration_date
+      certification.expiration_date
+    end
+  end
+
+  class UnitsBasedCertificationStrategy < CertificationStrategy
+
+    def status
+      return Status::VALID if _achieved_units_required?
+      return Status::PENDING if _pending?
+      return Status::RECERTIFY
+    end
+
+    private
+
+    def _achieved_units_required?
+      certification.units_achieved >= _units_required
+    end
+
+    def _pending?
+      _expiration_date.present? && !_expired? && !_achieved_units_required?
+    end
+
+    def _units_required
+      certification.certification_type.units_required
+    end
+  end
+
+  class DateBasedCertificationStrategy < CertificationStrategy
+
+    def status
+      return Status::NA if _na?
+      return Status::EXPIRED if _expired?
+      return Status::EXPIRING if _expiring?
+      Status::VALID
+    end
+
+    private
+
+    def _na?
+      !_expiration_date.present?
+    end
+
+    def _expiring?
+      _expiration_date.present? && !_expired? && _expiration_date < Date.today + 60.days
+    end
   end
 end
+

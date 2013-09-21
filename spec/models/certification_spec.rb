@@ -26,7 +26,6 @@ describe Certification do
       @certification.expiration_date = nil
 
       @certification.status.should == Status::NA
-      @certification.should be_na
     end
 
     it 'should calculate VALID status when expiration date is in the future' do
@@ -39,14 +38,12 @@ describe Certification do
       @certification.expiration_date = Date.yesterday
 
       @certification.status.should == Status::EXPIRED
-      @certification.should be_expired
     end
 
     it 'should calculate WARNING status when expiration date is within 60 days in the future' do
       @certification.expiration_date = Date.tomorrow
 
       @certification.status.should == Status::EXPIRING
-      @certification.should be_expiring
     end
   end
 
@@ -68,7 +65,6 @@ describe Certification do
       @certification.expiration_date = nil
 
       @certification.status.should == Status::RECERTIFY
-      @certification.should be_recertify
     end
 
     it 'should calculate recertify when expiration date is in the past and units achieved less than required' do
@@ -76,7 +72,6 @@ describe Certification do
       @certification.expiration_date = Date.yesterday
 
       @certification.status.should == Status::RECERTIFY
-      @certification.should be_recertify
     end
 
     it 'should calculate pending when expiration date is not past and units achieved less than required' do
@@ -84,7 +79,6 @@ describe Certification do
       @certification.expiration_date = Date.tomorrow
 
       @certification.status.should == Status::PENDING
-      @certification.should be_pending
     end
   end
 
