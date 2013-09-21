@@ -311,7 +311,7 @@ describe 'Certifications', slow: true do
       visit certification_type_path @certification_type.id
 
       within 'tbody tr', text: 'JB3' do
-        click_on 'certify'
+        click_on 'Certify'
       end
 
       page.should have_content 'Create Certification'
@@ -348,7 +348,7 @@ describe 'Certifications', slow: true do
       visit certification_type_path @certification_type.id
 
       within 'tbody tr', text: 'JB3' do
-        click_on 'certify'
+        click_on 'Certify'
       end
 
       page.should have_content 'Create Certification'

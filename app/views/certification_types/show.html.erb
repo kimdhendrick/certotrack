@@ -23,6 +23,11 @@
 <% end %>
 
 <p>
+  <b>Certified Employees</b>
+  <%= @certifications_count %>
+</p>
+
+<p>
   <b>Non-Certified Employees</b>
   <%= @non_certified_employee_count %>
 </p>
@@ -32,11 +37,46 @@
 
 <br/>
 
+<h2>Certified Employees</h2>
+<span data-certified="data-certified">
+  <table class="sortable" border="1">
+    <thead>
+    <tr>
+      <th><%= sortable 'sort_key', title = 'Employee Name', options = 'certified_employee_name' %></th>
+      <th>Employee Number</th>
+      <th>Location</th>
+      <th>Trainer</th>
+      <th>Expiration Date</th>
+      <th>Last Certification Date</th>
+      <th>Units</th>
+      <th><%= sortable 'status', title='Status', options = 'certified_status' %></th>
+      <th>Certification</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @certifications.each do |certification| %>
+      <tr>
+        <td><%= link_to certification.employee.to_s, certification.employee %></td>
+        <td><%= certification.employee.employee_number %></td>
+        <td><%= certification.employee.location %></td>
+        <td><%= certification.trainer %></td>
+        <td><%= DateHelpers::date_to_string(certification.expiration_date) %></td>
+        <td><%= DateHelpers::date_to_string(certification.last_certification_date) %></td>
+        <td><%= units(certification) %></td>
+        <td><%= certification.status %></td>
+        <td><a href="#">Edit</a></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</span>
+
 <h2>Non Certified Employees</h2>
-<table class="sortable">
+<span data-uncertified="data-uncertified">
+  <table class="sortable" border="1">
   <thead>
   <tr>
-    <th><%= sortable 'sort_key', title = 'Employee Name', options = 'non_certified_employee_name'%></th>
+    <th><%= sortable 'sort_key', title = 'Employee Name', options = 'non_certified_employee_name' %></th>
     <th>Employee Number</th>
     <th>&nbsp;</th>
   </tr>
@@ -44,10 +84,10 @@
   <tbody>
   <% @non_certified_employees.each do |non_certified_employee| %>
     <tr>
-      <td><%= link_to non_certified_employee.to_s, non_certified_employee %></td></td>
+      <td><%= link_to non_certified_employee.to_s, non_certified_employee %></td>
       <td><%= non_certified_employee.employee_number %></td>
       <td>
-        <%= link_to 'certify',
+        <%= link_to 'Certify',
                     new_certification_path(
                       certification_type_id: @certification_type.id,
                       employee_id: non_certified_employee.id,
@@ -59,3 +99,4 @@
   <% end %>
   </tbody>
 </table>
+</span>

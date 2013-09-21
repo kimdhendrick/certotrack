@@ -4,7 +4,8 @@ class CertificationTypesController < ApplicationController
 
   before_filter :authenticate_user!,
                 :load_certification_type_service,
-                :load_employee_service
+                :load_employee_service,
+                :load_certification_service
 
   before_action :set_certification_type, only: [:show, :edit, :update, :destroy]
 
@@ -18,15 +19,10 @@ class CertificationTypesController < ApplicationController
   end
 
   def show
+    @certifications = @certification_service.get_all_certifications_for_certification_type(@certification_type, _certified_params(params))
+    @certifications_count = @certifications.count
 
-    noncertified_params = {}
-
-    if (params[:options] == 'non_certified_employee_name')
-      noncertified_params[:sort] = 'sort_key'
-      noncertified_params[:direction] = params[:direction]
-    end
-
-    @non_certified_employees = @employee_service.get_employees_not_certified_for(@certification_type, noncertified_params)
+    @non_certified_employees = @employee_service.get_employees_not_certified_for(@certification_type, _noncertified_params(params))
     @non_certified_employee_count = @non_certified_employees.count
   end
 
@@ -85,6 +81,10 @@ class CertificationTypesController < ApplicationController
     @certification_type_service ||= service
   end
 
+  def load_certification_service(service = CertificationService.new)
+    @certification_service ||= service
+  end
+
   def load_employee_service(service = EmployeeService.new)
     @employee_service ||= service
   end
@@ -99,5 +99,26 @@ class CertificationTypesController < ApplicationController
 
   def _certification_type_params
     params.require(:certification_type).permit(certification_type_accessible_parameters)
+  end
+
+  def _certified_params(params)
+    certified_params = {}
+    if (params[:options] == 'certified_employee_name')
+      certified_params[:sort] = 'sort_key'
+      certified_params[:direction] = params[:direction]
+    elsif (params[:options] == 'certified_status')
+      certified_params[:sort] = 'status_code'
+      certified_params[:direction] = params[:direction]
+    end
+    certified_params
+  end
+
+  def _noncertified_params(params)
+    noncertified_params = {}
+    if (params[:options] == 'non_certified_employee_name')
+      noncertified_params[:sort] = 'sort_key'
+      noncertified_params[:direction] = params[:direction]
+    end
+    noncertified_params
   end
 end

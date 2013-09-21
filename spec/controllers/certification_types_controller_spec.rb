@@ -194,7 +194,20 @@ describe CertificationTypesController do
         fake_employee_service.received_params[1].should == {}
       end
 
-      it 'sorts by specified parameters' do
+      it 'assigns certifications as @certifications' do
+        certification = create(:certification, customer: @customer)
+        fake_certification_service = controller.load_certification_service(FakeService.new([certification]))
+        certification_type = create(:certification_type, customer: @customer)
+
+        get :show, {id: certification_type.id}, {}
+
+        assigns(:certifications).should eq([certification])
+        assigns(:certifications_count).should == 1
+        fake_certification_service.received_message.should == :get_all_certifications_for_certification_type
+        fake_certification_service.received_params[0].should == certification_type
+      end
+
+      it 'sorts non_certified_employees by specified parameters' do
         employee = create(:employee, customer: @customer)
         fake_employee_service = controller.load_employee_service(FakeService.new([employee]))
         certification_type = create(:certification_type, customer: @customer)
@@ -210,6 +223,24 @@ describe CertificationTypesController do
         fake_employee_service.received_message.should == :get_employees_not_certified_for
         fake_employee_service.received_params[0].should == certification_type
         fake_employee_service.received_params[1].should == {sort: 'sort_key', direction: 'desc'}
+      end
+
+      it 'sorts certifications by specified parameters' do
+        certification = create(:certification, customer: @customer)
+        fake_certification_service = controller.load_certification_service(FakeService.new([certification]))
+        certification_type = create(:certification_type, customer: @customer)
+
+        params = {
+          id: certification_type.id,
+          sort: 'sort_key',
+          direction: 'desc',
+          options: 'certified_employee_name'
+        }
+        get :show, params, {}
+
+        fake_certification_service.received_message.should == :get_all_certifications_for_certification_type
+        fake_certification_service.received_params[0].should == certification_type
+        fake_certification_service.received_params[1].should == {sort: 'sort_key', direction: 'desc'}
       end
     end
 

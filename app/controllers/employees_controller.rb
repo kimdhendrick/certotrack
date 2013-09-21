@@ -18,7 +18,7 @@ class EmployeesController < ApplicationController
   end
 
   def show
-    @certifications = @certification_service.get_all_certifications_for(@employee, params)
+    @certifications = @certification_service.get_all_certifications_for_employee(@employee, params)
   end
 
   def new

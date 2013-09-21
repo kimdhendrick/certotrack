@@ -29,8 +29,14 @@ class CertificationService
     certification
   end
 
-  def get_all_certifications_for(employee, params = {})
+  def get_all_certifications_for_employee(employee, params = {})
     certifications = employee.certifications
     _sort_and_paginate(certifications, params)
   end
+
+  def get_all_certifications_for_certification_type(certification_type, params = {})
+    certifications = certification_type.certifications
+    _sort_and_paginate(certifications, params)
+  end
+
 end

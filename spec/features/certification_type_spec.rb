@@ -66,10 +66,17 @@ describe 'Certification Type', slow: true do
                                   employee_number: 'JB3',
                                   first_name: 'Joe',
                                   last_name: 'Brown',
+                                  location: create(:location, name: 'Denver', customer_id: @customer.id),
                                   customer: @customer
       )
 
-      create(:certification, employee: certified_employee, certification_type: certification_type, customer: certified_employee.customer)
+      create(:certification,
+             employee: certified_employee,
+             certification_type: certification_type,
+             trainer: 'Trainer Timmy',
+             last_certification_date: Date.new(2010,1,1),
+             expiration_date: Date.new(2010,6,1),
+             customer: certified_employee.customer)
 
       visit certification_type_path certification_type.id
 
@@ -82,18 +89,45 @@ describe 'Certification Type', slow: true do
       page.should_not have_content 'Required Units'
 
       page.should have_content 'Non-Certified Employees 1'
+      page.should have_content 'Certified Employees 1'
 
-      page.all('table tr').count.should == 1 + 1
+      page.all('[data-uncertified] table tr').count.should == 1 + 1
 
-      within 'table thead tr' do
+      within '[data-uncertified] table thead tr' do
         page.should have_content 'Employee Name'
         page.should have_content 'Employee Number'
       end
 
-      within 'table tbody tr:nth-of-type(1)' do
+      within '[data-uncertified] table tbody tr:nth-of-type(1)' do
         page.should have_link 'Green, Sarah'
         page.should have_content 'SG1'
-        page.should have_link 'certify'
+        page.should have_link 'Certify'
+      end
+
+      page.all('[data-certified] table tr').count.should == 1 + 1
+
+      within '[data-certified] table thead tr' do
+        page.should have_content 'Employee Name'
+        page.should have_content 'Employee Number'
+        page.should have_content 'Location'
+        page.should have_content 'Trainer'
+        page.should have_content 'Expiration Date'
+        page.should have_content 'Last Certification Date'
+        page.should have_content 'Units'
+        page.should have_content 'Status'
+        page.should have_content 'Certification'
+      end
+
+      sleep 20
+      within '[data-certified] table tbody tr:nth-of-type(1)' do
+        page.should have_link 'Brown, Joe'
+        page.should have_content 'JB3'
+        page.should have_content 'Denver'
+        page.should have_content 'Trainer Timmy'
+        page.should have_content '06/01/2010'
+        page.should have_content '01/01/2010'
+        page.should have_content 'Expired'
+        page.should have_link 'Edit'
       end
 
       page.should have_link 'Edit'
@@ -108,6 +142,24 @@ describe 'Certification Type', slow: true do
                                   customer: @customer
       )
 
+      certified_employee = create(:employee,
+                                  employee_number: 'JB3',
+                                  first_name: 'Joe',
+                                  last_name: 'Brown',
+                                  location: create(:location, name: 'Denver', customer_id: @customer.id),
+                                  customer: @customer
+      )
+
+      create(:certification,
+             employee: certified_employee,
+             certification_type: certification_type,
+             trainer: 'Trainer Timmy',
+             last_certification_date: Date.new(2010,1,1),
+             expiration_date: Date.new(2010,6,1),
+             units_achieved: 10,
+             customer: certified_employee.customer)
+
+
       visit certification_type_path certification_type.id
 
       page.should have_link 'Home'
@@ -117,6 +169,30 @@ describe 'Certification Type', slow: true do
       page.should have_content 'Name CPR'
       page.should have_content 'Interval 6 months'
       page.should have_content 'Required Units 123'
+
+      within '[data-certified] table thead tr' do
+        page.should have_content 'Employee Name'
+        page.should have_content 'Employee Number'
+        page.should have_content 'Location'
+        page.should have_content 'Trainer'
+        page.should have_content 'Expiration Date'
+        page.should have_content 'Last Certification Date'
+        page.should have_content 'Units'
+        page.should have_content 'Status'
+        page.should have_content 'Certification'
+      end
+
+      within '[data-certified] table tbody tr:nth-of-type(1)' do
+        page.should have_link 'Brown, Joe'
+        page.should have_content 'JB3'
+        page.should have_content 'Denver'
+        page.should have_content 'Trainer Timmy'
+        page.should have_content '06/01/2010'
+        page.should have_content '01/01/2010'
+        page.should have_content '10 of 123'
+        page.should have_content 'Recertify'
+        page.should have_link 'Edit'
+      end
 
       page.should have_link 'Edit'
       page.should have_link 'Delete'

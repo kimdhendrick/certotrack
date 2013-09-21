@@ -73,7 +73,7 @@ describe CertificationService do
     end
   end
 
-  describe '#get_all_certifications_for' do
+  describe '#get_all_certifications_for_employee' do
 
     it 'returns all certifications for a given employee' do
       employee_1 = create(:employee)
@@ -83,8 +83,8 @@ describe CertificationService do
 
       subject = CertificationService.new
 
-      subject.get_all_certifications_for(employee_1).should == [certification_1]
-      subject.get_all_certifications_for(employee_2).should == [certification_2]
+      subject.get_all_certifications_for_employee(employee_1).should == [certification_1]
+      subject.get_all_certifications_for_employee(employee_2).should == [certification_2]
     end
 
     context 'sorting' do
@@ -93,7 +93,7 @@ describe CertificationService do
 
         subject = CertificationService.new(sorter: fake_sorter)
 
-        subject.get_all_certifications_for(build(:employee))
+        subject.get_all_certifications_for_employee(build(:employee))
 
         fake_sorter.received_message.should == :sort
       end
@@ -105,7 +105,46 @@ describe CertificationService do
 
         subject = CertificationService.new(paginator: fake_paginator)
 
-        subject.get_all_certifications_for(build(:employee))
+        subject.get_all_certifications_for_employee(build(:employee))
+
+        fake_paginator.received_message.should == :paginate
+      end
+    end
+  end
+
+  describe '#get_all_certifications_for_certification_type' do
+
+    it 'returns all certifications for a given certification_type' do
+      certification_type_1 = create(:certification_type)
+      certification_type_2 = create(:certification_type)
+      certification_1 = create(:certification, certification_type: certification_type_1, customer: certification_type_1.customer)
+      certification_2 = create(:certification, certification_type: certification_type_2, customer: certification_type_2.customer)
+
+      subject = CertificationService.new
+
+      subject.get_all_certifications_for_certification_type(certification_type_1).should == [certification_1]
+      subject.get_all_certifications_for_certification_type(certification_type_2).should == [certification_2]
+    end
+
+    context 'sorting' do
+      it 'should call Sorter to ensure sorting' do
+        fake_sorter = FakeService.new([])
+
+        subject = CertificationService.new(sorter: fake_sorter)
+
+        subject.get_all_certifications_for_certification_type(build(:certification_type))
+
+        fake_sorter.received_message.should == :sort
+      end
+    end
+
+    context 'pagination' do
+      it 'should call Paginator to paginate results' do
+        fake_paginator = FakeService.new
+
+        subject = CertificationService.new(paginator: fake_paginator)
+
+        subject.get_all_certifications_for_certification_type(build(:certification_type))
 
         fake_paginator.received_message.should == :paginate
       end

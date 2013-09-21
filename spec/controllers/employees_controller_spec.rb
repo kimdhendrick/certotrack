@@ -198,7 +198,7 @@ describe EmployeesController do
 
     before do
       controller.load_certification_service(certification_service)
-      certification_service.stub(:get_all_certifications_for).and_return(certifications)
+      certification_service.stub(:get_all_certifications_for_employee).and_return(certifications)
     end
     
     context 'when certification user' do
