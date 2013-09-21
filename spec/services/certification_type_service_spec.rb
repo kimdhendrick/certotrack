@@ -64,6 +64,21 @@ describe CertificationTypeService do
         CertificationTypeService.new.delete_certification_type(certification_type)
       }.to change(CertificationType, :count).by(-1)
     end
+
+    it 'returns error when certification assigned to certification_type' do
+      certification_type = create(:certification_type, customer: @customer)
+      certification = create(:certification, certification_type: certification_type, customer: @customer)
+
+      status = CertificationTypeService.new.delete_certification_type(certification_type)
+
+      certification_type.reload
+      certification_type.should_not be_nil
+
+      certification.reload
+      certification.should_not be_nil
+
+      status.should == :certification_exists
+    end
   end
 
   describe 'get_all_certification_types' do

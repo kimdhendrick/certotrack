@@ -61,7 +61,13 @@ class CertificationTypesController < ApplicationController
   end
 
   def destroy
-    @certification_type_service.delete_certification_type(@certification_type)
+    status = @certification_type_service.delete_certification_type(@certification_type)
+
+    if status == :certification_exists
+      redirect_to @certification_type, notice: 'This Certification Type is assigned to existing Employee(s).  You must uncertify the employee(s) before removing it.'
+      return
+    end
+
     redirect_to certification_types_path, notice: 'Certification Type was successfully deleted.'
   end
 

@@ -118,7 +118,6 @@ describe 'Certification Type', slow: true do
         page.should have_content 'Certification'
       end
 
-      sleep 20
       within '[data-certified] table tbody tr:nth-of-type(1)' do
         page.should have_link 'Brown, Joe'
         page.should have_content 'JB3'
@@ -270,6 +269,26 @@ describe 'Certification Type', slow: true do
 
       page.should have_content 'All Certification Type'
       page.should have_content 'Certification Type was successfully deleted.'
+    end
+
+    it 'should not allow deletion if certifications exist' do
+      certification_type = create(:certification_type,
+                                  customer: @customer,
+                                  name: 'CPR'
+      )
+      create(:certification, certification_type: certification_type, customer: certification_type.customer)
+
+      visit certification_type_path certification_type.id
+
+      page.should have_content 'Show Certification Type'
+      click_on 'Delete'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete?')
+      alert.accept
+
+      page.should have_content 'Show Certification Type'
+      page.should have_content 'This Certification Type is assigned to existing Employee(s).  You must uncertify the employee(s) before removing it.'
     end
   end
 

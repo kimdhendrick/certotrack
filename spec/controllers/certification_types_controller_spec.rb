@@ -388,6 +388,16 @@ describe CertificationTypesController do
 
         response.should redirect_to(certification_types_path)
       end
+
+      it 'gives error message when certifications exists' do
+        certification_type = create(:certification_type, customer: @customer)
+        controller.load_certification_type_service(FakeService.new(:certification_exists))
+
+        delete :destroy, {:id => certification_type.to_param}, {}
+
+        response.should redirect_to(certification_type_url)
+        flash[:notice].should == 'This Certification Type is assigned to existing Employee(s).  You must uncertify the employee(s) before removing it.'
+      end
     end
 
     context 'when admin user' do
