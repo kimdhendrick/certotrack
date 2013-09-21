@@ -39,6 +39,31 @@ describe EmployeeDeactivationService do
       equipment.reload
       equipment.employee_id.should == other_employee.id
     end
+
+    it "deactivates employee's certifications" do
+      employee = create(:employee)
+      certification = create(:certification, employee: employee, customer: employee.customer)
+
+      EmployeeDeactivationService.new.deactivate_employee(employee)
+
+      certification.reload
+      certification.should_not be_active
+    end
+
+    it "does not deactivate other employee's certifications" do
+      employee = create(:employee)
+      other_employee = create(:employee)
+      certification = create(:certification, employee: employee, customer: employee.customer)
+      other_certification = create(:certification, employee: other_employee, customer: other_employee.customer)
+
+      EmployeeDeactivationService.new.deactivate_employee(employee)
+
+      certification.reload
+      certification.should_not be_active
+
+      other_certification.reload
+      other_certification.should be_active
+    end
   end
 
   describe 'deactivated_employees' do

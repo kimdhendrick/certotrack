@@ -1,14 +1,18 @@
 class EmployeeDeactivationService
 
   def initialize(params = {})
-    @equipment_service = params[:equipment_service] || EquipmentService.new
     @paginator = params[:paginator] || Paginator.new
   end
 
   def deactivate_employee(employee)
-    @equipment_service.get_all_equipment_for_employee(employee).each do |equipment|
+    employee.equipments.each do |equipment|
       equipment.employee = nil
       equipment.save
+    end
+
+    employee.certifications.each do |certification|
+      certification.active = false
+      certification.save
     end
 
     employee.deactivation_date = Date.today

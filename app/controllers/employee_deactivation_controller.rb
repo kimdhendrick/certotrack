@@ -1,6 +1,9 @@
 class EmployeeDeactivationController < ApplicationController
 
-  before_filter :authenticate_user!, :load_equipment_service, :load_employee_deactivation_service
+  before_filter :authenticate_user!,
+                :load_equipment_service,
+                :load_employee_deactivation_service,
+                :load_certification_service
 
   before_action :_set_employee, only: [:deactivate_confirm, :deactivate]
 
@@ -8,6 +11,7 @@ class EmployeeDeactivationController < ApplicationController
 
   def deactivate_confirm
     @equipments = @equipment_service.get_all_equipment_for_employee(@employee)
+    @certifications = @certification_service.get_all_certifications_for_employee(@employee)
   end
 
   def deactivate
@@ -30,6 +34,10 @@ class EmployeeDeactivationController < ApplicationController
 
   def load_equipment_service(service = EquipmentService.new)
     @equipment_service ||= service
+  end
+
+  def load_certification_service(service = CertificationService.new)
+    @certification_service ||= service
   end
 
   private

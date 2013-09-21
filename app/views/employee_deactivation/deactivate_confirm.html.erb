@@ -7,5 +7,9 @@
 
 <%= render 'deactivate_confirm_equipment_list'%>
 
+<h2>*The following certifications will be removed if you continue:</h2>
+
+<%= render 'deactivate_confirm_certification_list'%>
+
 <%= link_to 'Cancel', employee_path(@employee) %> |
-<%= link_to 'Deactivate', deactivate_path(@employee), data: {confirm: 'Deactivate Employee will unassign all equipment and remove employee.  Are you sure?'} %>
+<%= link_to 'Deactivate', deactivate_path(@employee), data: {confirm: 'Deactivate Employee will unassign all equipment and remove certifications and employee. Are you sure?'} %>

@@ -189,9 +189,20 @@ describe Certification do
     certification.name.should == 'Scrum Master'
   end
 
+  it 'should respond to interval' do
+    certification_type = create(:certification_type, interval: Interval::THREE_MONTHS.text)
+    certification = create(:certification, certification_type: certification_type, customer: create(:customer))
+    certification.interval.should == '3 months'
+  end
+
   it 'should respond to units_based?' do
     build(:certification).should_not be_units_based
     build(:units_based_certification).should be_units_based
+  end
+
+  it 'should default active to true' do
+    certification = Certification.new
+    certification.active.should be_true
   end
 
   describe "new date validations" do

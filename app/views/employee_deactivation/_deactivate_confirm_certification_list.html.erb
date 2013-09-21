@@ -1,0 +1,33 @@
+<span data-certifications="data-certifications">
+  <table>
+  <thead>
+  <tr>
+    <th>Certification Type</th>
+    <th>Interval</th>
+    <th>Status</th>
+    <th>Employee</th>
+    <th>Trainer</th>
+    <th>Last Certification Date</th>
+    <th>Expiration Date</th>
+  </tr>
+  </thead>
+  <tbody>
+    <% if @certifications.count == 0 %>
+    <tr>
+      <td colspan="7">No certifications assigned to this employee.</td>
+    </tr>
+  <% end %>
+    <% @certifications.each do |certification| %>
+    <tr>
+      <td><%= certification.name %></td></td>
+      <td><%= certification.interval %></td></td>
+      <td><%= certification.status %></td></td>
+      <td><%= certification.employee.to_s %></td></td>
+      <td><%= certification.trainer %></td></td>
+      <td><%= DateHelpers::date_to_string(certification.last_certification_date) %></td>
+      <td><%= DateHelpers::date_to_string(certification.expiration_date) %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+</span>

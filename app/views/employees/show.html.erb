@@ -26,7 +26,7 @@
 
 <%= link_to 'Edit', edit_employee_path(@employee) %> |
 <%= link_to 'Delete', @employee, method: :delete, data: {confirm: 'Are you sure you want to delete?'} %> |
-<%= link_to 'Deactivate', deactivate_confirm_path(@employee), data: {confirm: 'Deactivate Employee will unassign all equipment and remove employee.  Are you sure?'} %>
+<%= link_to 'Deactivate', deactivate_confirm_path(@employee), data: {confirm: 'Deactivate Employee will unassign all equipment and remove certifications and employee. Are you sure?'} %>
 
 <hr/>
 <%= link_to 'New Employee Certification', new_certification_path(employee_id: @employee.id, source: :employee) %>

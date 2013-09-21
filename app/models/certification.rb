@@ -1,6 +1,8 @@
 class Certification < ActiveRecord::Base
   include SortableByStatus
 
+  default_scope { where('active = true') }
+
   belongs_to :certification_type
   belongs_to :employee
   belongs_to :customer
@@ -19,17 +21,10 @@ class Certification < ActiveRecord::Base
   delegate :units_achieved, to: :active_certification_period
   delegate :units_achieved=, to: :active_certification_period
 
-  def name
-    certification_type.name
-  end
-
-  def units_required
-    certification_type.units_required
-  end
-
-  def units_based?
-    certification_type.units_based?
-  end
+  delegate :name, to: :certification_type
+  delegate :interval, to: :certification_type
+  delegate :units_required, to: :certification_type
+  delegate :units_based?, to: :certification_type
 
   def expiration_date
     active_certification_period.end_date

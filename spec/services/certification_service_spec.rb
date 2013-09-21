@@ -87,6 +87,16 @@ describe CertificationService do
       subject.get_all_certifications_for_employee(employee_2).should == [certification_2]
     end
 
+    it 'only returns active certifications' do
+      employee_1 = create(:employee)
+      active_certification = create(:certification, employee: employee_1, customer: employee_1.customer)
+      inactive_certification = create(:certification, active: false, employee: employee_1, customer: employee_1.customer)
+
+      subject = CertificationService.new
+
+      subject.get_all_certifications_for_employee(employee_1).should == [active_certification]
+    end
+
     context 'sorting' do
       it 'should call Sorter to ensure sorting' do
         fake_sorter = FakeService.new([])
@@ -124,6 +134,16 @@ describe CertificationService do
 
       subject.get_all_certifications_for_certification_type(certification_type_1).should == [certification_1]
       subject.get_all_certifications_for_certification_type(certification_type_2).should == [certification_2]
+    end
+
+    it 'only returns active certifications' do
+      certification_type = create(:certification_type)
+      active_certification = create(:certification, certification_type: certification_type, customer: certification_type.customer)
+      inactive_certification = create(:certification, active: false, certification_type: certification_type, customer: certification_type.customer)
+
+      subject = CertificationService.new
+
+      subject.get_all_certifications_for_certification_type(certification_type).should == [active_certification]
     end
 
     context 'sorting' do

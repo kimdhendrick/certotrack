@@ -7,8 +7,9 @@ describe 'Employee Deactivation', slow: true do
       @denver_location = create(:location, name: 'Denver', customer_id: @customer.id)
     end
 
-    it 'should deactivate employee and unassign equipment', js: true do
-      valid_employee = create(:employee,
+    it 'should deactivate employee, unassign equipment and deactivate certifications', js: true do
+      valid_employee = create(
+        :employee,
         first_name: 'Sandee',
         last_name: 'Walker',
         employee_number: 'PUP789',
@@ -16,7 +17,8 @@ describe 'Employee Deactivation', slow: true do
         customer: @customer
       )
 
-      valid_equipment = create(:equipment,
+      valid_equipment = create(
+        :equipment,
         employee: valid_employee,
         customer: @customer,
         name: 'Meter',
@@ -27,6 +29,22 @@ describe 'Employee Deactivation', slow: true do
         comments: 'my notes'
       )
 
+      certification_type = create(
+        :certification_type,
+        name: 'Certification Type 1',
+        interval: Interval::THREE_MONTHS.text
+      )
+
+      create(
+        :certification,
+        employee: valid_employee,
+        last_certification_date: Date.new(2010, 1, 1),
+        expiration_date: Date.new(2010, 6, 1),
+        certification_type: certification_type,
+        trainer: 'Derek Daring',
+        customer: @customer
+      )
+
       visit '/'
       click_link 'All Employees'
       click_link 'Sandee'
@@ -35,13 +53,13 @@ describe 'Employee Deactivation', slow: true do
       click_on 'Deactivate'
 
       alert = page.driver.browser.switch_to.alert
-      alert.text.should eq('Deactivate Employee will unassign all equipment and remove employee.  Are you sure?')
+      alert.text.should eq('Deactivate Employee will unassign all equipment and remove certifications and employee. Are you sure?')
       alert.dismiss
 
       click_on 'Deactivate'
 
       alert = page.driver.browser.switch_to.alert
-      alert.text.should eq('Deactivate Employee will unassign all equipment and remove employee.  Are you sure?')
+      alert.text.should eq('Deactivate Employee will unassign all equipment and remove certifications and employee. Are you sure?')
       alert.accept
 
       page.should have_content 'Confirm Deactivation'
@@ -58,7 +76,7 @@ describe 'Employee Deactivation', slow: true do
       page.should have_content 'Expiration Date'
       page.should have_content 'Assignee'
 
-      within 'table tbody tr:nth-of-type(1)' do
+      within '[data-equipment] table tbody tr:nth-of-type(1)' do
         page.should have_content 'Meter'
         page.should have_content 'ABC123'
         page.should have_content 'Valid'
@@ -68,19 +86,38 @@ describe 'Employee Deactivation', slow: true do
         page.should have_content 'Walker, Sandee'
       end
 
+      page.should have_content 'The following certifications will be removed if you continue:'
+      page.should have_content 'Certification Type'
+      page.should have_content 'Interval'
+      page.should have_content 'Status'
+      page.should have_content 'Employee'
+      page.should have_content 'Trainer'
+      page.should have_content 'Last Certification Date'
+      page.should have_content 'Expiration Date'
+
+      within '[data-certifications] table tbody tr:nth-of-type(1)' do
+        page.should have_content 'Certification Type 1'
+        page.should have_content '3 months'
+        page.should have_content 'Expired'
+        page.should have_content 'Walker, Sandee'
+        page.should have_content 'Derek Daring'
+        page.should have_content '01/01/2010'
+        page.should have_content '06/01/2010'
+      end
+
       page.should have_content 'Cancel'
       page.should have_content 'Deactivate'
 
       click_on 'Deactivate'
 
       alert = page.driver.browser.switch_to.alert
-      alert.text.should eq('Deactivate Employee will unassign all equipment and remove employee.  Are you sure?')
+      alert.text.should eq('Deactivate Employee will unassign all equipment and remove certifications and employee. Are you sure?')
       alert.dismiss
 
       click_on 'Deactivate'
 
       alert = page.driver.browser.switch_to.alert
-      alert.text.should eq('Deactivate Employee will unassign all equipment and remove employee.  Are you sure?')
+      alert.text.should eq('Deactivate Employee will unassign all equipment and remove certifications and employee. Are you sure?')
       alert.accept
 
       page.should have_content 'All Employees'
@@ -99,12 +136,12 @@ describe 'Employee Deactivation', slow: true do
     end
 
     it 'should cancel deactivation of employee', js: true do
-      valid_employee = create(:employee, 
-        first_name: 'Sandee',
-        last_name: 'Walker',
-        employee_number: 'PUP789',
-        location_id: @denver_location.id,
-        customer: @customer
+      valid_employee = create(:employee,
+                              first_name: 'Sandee',
+                              last_name: 'Walker',
+                              employee_number: 'PUP789',
+                              location_id: @denver_location.id,
+                              customer: @customer
       )
 
       visit '/'
@@ -135,32 +172,32 @@ describe 'Employee Deactivation', slow: true do
       end
 
       it 'should show Deactivated Employees list' do
-        create(:employee, 
-          active: false,
-          deactivation_date: Date.new(2000, 1, 1),
-          employee_number: 'JB3',
-          first_name: 'Joe',
-          last_name: 'Brown',
-          location_id: @denver_location.id,
-          customer_id: @customer.id
+        create(:employee,
+               active: false,
+               deactivation_date: Date.new(2000, 1, 1),
+               employee_number: 'JB3',
+               first_name: 'Joe',
+               last_name: 'Brown',
+               location_id: @denver_location.id,
+               customer_id: @customer.id
         )
 
-        create(:employee, 
-          active: false,
-          deactivation_date: Date.new(2001, 12, 31),
-          employee_number: 'SG99',
-          first_name: 'Sue',
-          last_name: 'Green',
-          location_id: @littleton_location.id,
-          customer_id: @customer.id
+        create(:employee,
+               active: false,
+               deactivation_date: Date.new(2001, 12, 31),
+               employee_number: 'SG99',
+               first_name: 'Sue',
+               last_name: 'Green',
+               location_id: @littleton_location.id,
+               customer_id: @customer.id
         )
 
-        create(:employee, 
-          deactivation_date: Date.new(2013, 4, 4),
-          active: false,
-          employee_number: 'KB123',
-          first_name: 'Kim',
-          last_name: 'Barnes',
+        create(:employee,
+               deactivation_date: Date.new(2013, 4, 4),
+               active: false,
+               employee_number: 'KB123',
+               first_name: 'Kim',
+               last_name: 'Barnes',
         )
 
         visit '/'

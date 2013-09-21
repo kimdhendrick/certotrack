@@ -69,15 +69,20 @@ describe EmployeeDeactivationController do
 
       it 'calls service and makes assignments' do
         employee = create(:employee, customer: @customer)
+        certification = create(:certification, employee: employee, customer: @customer)
         equipment = build(:equipment)
-        @fake_equipment_service = controller.load_equipment_service(FakeService.new([equipment]))
+        fake_equipment_service = controller.load_equipment_service(FakeService.new([equipment]))
+        fake_certification_service = controller.load_certification_service(FakeService.new([certification]))
 
         get :deactivate_confirm, {:id => employee.to_param}, {}
 
         assigns(:employee).should eq(employee)
         assigns(:equipments).should eq([equipment])
-        @fake_equipment_service.received_message.should == :get_all_equipment_for_employee
-        @fake_equipment_service.received_params[0].should == employee
+        assigns(:certifications).should eq([certification])
+        fake_equipment_service.received_message.should == :get_all_equipment_for_employee
+        fake_equipment_service.received_params[0].should == employee
+        fake_certification_service.received_message.should == :get_all_certifications_for_employee
+        fake_certification_service.received_params[0].should == employee
       end
     end
 

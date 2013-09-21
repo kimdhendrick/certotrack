@@ -1,6 +1,6 @@
 class Employee < ActiveRecord::Base
 
-  default_scope { where("active = true") }
+  default_scope { where('active = true') }
 
   belongs_to :customer
   belongs_to :location
