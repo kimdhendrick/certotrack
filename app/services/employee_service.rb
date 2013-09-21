@@ -29,10 +29,8 @@ class EmployeeService
   end
 
   def delete_employee(employee)
-    if employee.equipments.any?
-      return :equipment_exists
-    end
-
+    return :equipment_exists if employee.equipments.any?
+    return :certification_exists if employee.certifications.any?
     employee.destroy
   end
 

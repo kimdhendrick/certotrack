@@ -443,12 +443,22 @@ describe EmployeesController do
 
       it 'gives error message when equipment exists' do
         employee = create(:employee, customer: @customer)
-        @fake_employee_service = controller.load_employee_service(FakeService.new(:equipment_exists))
+        controller.load_employee_service(FakeService.new(:equipment_exists))
 
         delete :destroy, {:id => employee.to_param}, {}
 
         response.should redirect_to(employee_url)
         flash[:notice].should == 'Employee has equipment assigned, you must remove them before deleting the employee. Or Deactivate the employee instead.'
+      end
+
+      it 'gives error message when certifications exists' do
+        employee = create(:employee, customer: @customer)
+        controller.load_employee_service(FakeService.new(:certification_exists))
+
+        delete :destroy, {:id => employee.to_param}, {}
+
+        response.should redirect_to(employee_url)
+        flash[:notice].should == 'Employee has certifications, you must remove them before deleting the employee. Or Deactivate the employee instead.'
       end
     end
 

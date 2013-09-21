@@ -182,6 +182,21 @@ describe EmployeeService do
 
       status.should == :equipment_exists
     end
+
+    it 'returns error when certifications assigned to employee' do
+      employee = create(:employee, customer: my_customer)
+      certification = create(:certification, employee: employee, customer: my_customer)
+
+      status = EmployeeService.new.delete_employee(employee)
+
+      employee.reload
+      employee.should_not be_nil
+
+      certification.reload
+      certification.should_not be_nil
+
+      status.should == :certification_exists
+    end
   end
 
   describe 'get_employees_not_certified_for' do
