@@ -41,6 +41,10 @@ class CertificationsController < ApplicationController
     end
   end
 
+  def show
+    _set_certification
+  end
+
   def load_certification_service(service = CertificationService.new)
     @certification_service ||= service
   end
@@ -51,6 +55,12 @@ class CertificationsController < ApplicationController
 
 
   private
+
+  def _set_certification
+    certification_pending_authorization = Certification.find(params[:id])
+    authorize! :manage, certification_pending_authorization
+    @certification = certification_pending_authorization
+  end
 
   def _set_certification_types(current_user)
     @certification_types = @certification_type_service.get_all_certification_types(current_user)

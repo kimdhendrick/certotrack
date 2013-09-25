@@ -346,4 +346,42 @@ describe CertificationsController do
       end
     end
   end
+
+  describe 'GET show' do
+    context 'when certification user' do
+      before do
+        sign_in stub_certification_user
+      end
+
+      it 'assigns certification as @certification' do
+        certification = create(:certification, customer: @customer)
+        get :show, {:id => certification.to_param}, {}
+        assigns(:certification).should eq(certification)
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'assigns certification as @certification' do
+        certification = create(:certification, customer: @customer)
+        get :show, {:id => certification.to_param}, {}
+        assigns(:certification).should eq(certification)
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'does not assign certification as @certification' do
+        certification = create(:certification, customer: @customer)
+        get :show, {:id => certification.to_param}, {}
+        assigns(:certification).should be_nil
+      end
+    end
+  end
 end

@@ -5,17 +5,17 @@ describe 'Certifications', slow: true do
   describe 'Certify' do
     before do
       login_as_certification_user
-      @certification_type = create(:certification_type,
-                                   name: 'CPR',
-                                   interval: Interval::SIX_MONTHS.text,
-                                   customer: @customer
+      @cpr_certification_type = create(:certification_type,
+                                       name: 'CPR',
+                                       interval: Interval::SIX_MONTHS.text,
+                                       customer: @customer
       )
 
-      create(:certification_type,
-             name: 'Level III Truck Inspection',
-             interval: Interval::SIX_MONTHS.text,
-             units_required: 30,
-             customer: @customer
+      @truck_inspection_certification_type = create(:certification_type,
+                                                    name: 'Level III Truck Inspection',
+                                                    interval: Interval::SIX_MONTHS.text,
+                                                    units_required: 30,
+                                                    customer: @customer
       )
 
       create(:certification_type,
@@ -89,7 +89,7 @@ describe 'Certifications', slow: true do
     end
 
     it 'should give error if already certified' do
-      create(:certification, employee: @employee, certification_type: @certification_type, customer: @employee.customer)
+      create(:certification, employee: @employee, certification_type: @cpr_certification_type, customer: @employee.customer)
 
       visit employee_path @employee.id
 
@@ -116,35 +116,198 @@ describe 'Certifications', slow: true do
       page.should have_content 'Create Certification'
       page.should have_content 'Certification type already assigned to this Employee. Please update existing Certification.'
     end
+
+    it 'should show a certification' do
+      create(:certification,
+             employee: @employee,
+             certification_type: @cpr_certification_type,
+             customer: @employee.customer,
+             last_certification_date: Date.new(2010, 3, 1),
+             expiration_date: Date.new(2010, 9, 1),
+             trainer: 'Trainer Tim',
+             comments: 'Fully qualified')
+      create(:certification,
+             employee: @employee,
+             certification_type: @truck_inspection_certification_type,
+             customer: @employee.customer,
+             units_achieved: 10,
+             last_certification_date: Date.new(2010, 6, 30),
+             expiration_date: Date.new(2010, 12, 30),
+             trainer: 'Trainer Tom',
+             comments: 'Partially qualified')
+
+
+      visit employee_path @employee.id
+
+      click_on 'CPR'
+
+      page.should have_content 'Show Certification'
+
+      page.should have_link 'Home'
+      #TODO
+      #page.should have_link 'All Certifications'
+      page.should have_link 'Create Certification'
+      page.should have_link 'Create Employee'
+
+      page.should have_content 'Certification Type'
+      page.should have_content 'Certification Interval'
+      page.should have_content 'Employee'
+      page.should have_content 'Trainer'
+      page.should have_content 'Status'
+      page.should have_content 'Last Certification Date'
+      page.should have_content 'Expiration Date'
+      page.should_not have_content 'Units Achieved'
+      page.should have_content 'Comments'
+
+      page.should have_link 'CPR'
+      page.should have_content '6 months'
+      page.should have_link 'Brown, Joe'
+      page.should have_content 'Trainer Tim'
+      page.should have_content 'Expired'
+      page.should have_content '03/01/2010'
+      page.should have_content '09/01/2010'
+      page.should have_content 'Fully qualified'
+
+      page.should have_link 'Edit'
+      page.should have_link 'Delete'
+
+      visit certification_type_path @cpr_certification_type.id
+
+      within '[data-certified] table tbody tr:nth-of-type(1)' do
+        click_on 'Edit'
+      end
+
+      page.should have_content 'Show Certification'
+
+      page.should have_link 'Home'
+      #TODO
+      #page.should have_link 'All Certifications'
+      page.should have_link 'Create Certification'
+      page.should have_link 'Create Employee'
+
+      page.should have_content 'Certification Type'
+      page.should have_content 'Certification Interval'
+      page.should have_content 'Employee'
+      page.should have_content 'Trainer'
+      page.should have_content 'Status'
+      page.should have_content 'Last Certification Date'
+      page.should have_content 'Expiration Date'
+      page.should_not have_content 'Units Achieved'
+      page.should have_content 'Comments'
+
+      page.should have_content 'CPR'
+      page.should have_content '6 months'
+      page.should have_link 'Brown, Joe'
+      page.should have_content 'Trainer Tim'
+      page.should have_content 'Expired'
+      page.should have_content '03/01/2010'
+      page.should have_content '09/01/2010'
+      page.should have_content 'Fully qualified'
+
+      page.should have_link 'Edit'
+      page.should have_link 'Delete'
+
+      visit employee_path @employee.id
+
+      click_on 'Level III Truck Inspection'
+      page.should have_content 'Show Certification'
+
+      page.should have_link 'Home'
+      #TODO
+      #page.should have_link 'All Certifications'
+      page.should have_link 'Create Certification'
+      page.should have_link 'Create Employee'
+
+      page.should have_content 'Certification Type'
+      page.should have_content 'Certification Interval'
+      page.should have_content 'Employee'
+      page.should have_content 'Trainer'
+      page.should have_content 'Status'
+      page.should have_content 'Last Certification Date'
+      page.should have_content 'Expiration Date'
+      page.should have_content 'Units Achieved'
+      page.should have_content 'Comments'
+
+      page.should have_link 'Level III Truck Inspection'
+      page.should have_content '6 months'
+      page.should have_link 'Brown, Joe'
+      page.should have_content 'Trainer Tom'
+      page.should have_content 'Recertify'
+      page.should have_content '06/30/2010'
+      page.should have_content '12/30/2010'
+      page.should have_content '10 of 30'
+      page.should have_content 'Partially qualified'
+
+      page.should have_link 'Edit'
+      page.should have_link 'Delete'
+
+      visit certification_type_path @truck_inspection_certification_type.id
+
+      within '[data-certified] table tbody tr:nth-of-type(1)' do
+        click_on 'Edit'
+      end
+
+      page.should have_content 'Show Certification'
+
+      page.should have_link 'Home'
+      #TODO
+      #page.should have_link 'All Certifications'
+      page.should have_link 'Create Certification'
+      page.should have_link 'Create Employee'
+
+      page.should have_content 'Certification Type'
+      page.should have_content 'Certification Interval'
+      page.should have_content 'Employee'
+      page.should have_content 'Trainer'
+      page.should have_content 'Status'
+      page.should have_content 'Last Certification Date'
+      page.should have_content 'Expiration Date'
+      page.should have_content 'Units Achieved'
+      page.should have_content 'Comments'
+
+      page.should have_content 'Level III Truck Inspection'
+      page.should have_content '6 months'
+      page.should have_content 'Trainer Tom'
+      page.should have_content 'Recertify'
+      page.should have_content '06/30/2010'
+      page.should have_content '12/30/2010'
+      page.should have_content '10 of 30'
+      page.should have_content 'Partially qualified'
+
+      #TODO
+      #page.should have_link 'Edit'
+      page.should have_link 'Delete'
+
+    end
   end
 
   describe 'Certify Employee from Show Employee page' do
     before do
       login_as_certification_user
-      @certification_type = create(:certification_type,
-        name: 'CPR',
-        interval: Interval::SIX_MONTHS.text,
-        customer: @customer
+      @cpr_certification_type = create(:certification_type,
+                                       name: 'CPR',
+                                       interval: Interval::SIX_MONTHS.text,
+                                       customer: @customer
       )
 
       create(:certification_type,
-        name: 'Level III Truck Inspection',
-        interval: Interval::SIX_MONTHS.text,
-        units_required: 30,
-        customer: @customer
+             name: 'Level III Truck Inspection',
+             interval: Interval::SIX_MONTHS.text,
+             units_required: 30,
+             customer: @customer
       )
 
       create(:certification_type,
-        name: 'Inspections',
-        interval: Interval::SIX_MONTHS.text,
-        customer: @customer
+             name: 'Inspections',
+             interval: Interval::SIX_MONTHS.text,
+             customer: @customer
       )
 
       @employee = create(:employee,
-        employee_number: 'JB3',
-        first_name: 'Joe',
-        last_name: 'Brown',
-        customer_id: @customer.id
+                         employee_number: 'JB3',
+                         first_name: 'Joe',
+                         last_name: 'Brown',
+                         customer_id: @customer.id
       )
     end
 
@@ -280,35 +443,35 @@ describe 'Certifications', slow: true do
   describe 'Certify Employee from Show Certification Type page' do
     before do
       login_as_certification_user
-      @certification_type = create(:certification_type,
-        name: 'CPR',
-        interval: Interval::SIX_MONTHS.text,
-        customer: @customer
+      @cpr_certification_type = create(:certification_type,
+                                       name: 'CPR',
+                                       interval: Interval::SIX_MONTHS.text,
+                                       customer: @customer
       )
 
       create(:certification_type,
-        name: 'AAA Truck Inspection',
-        interval: Interval::SIX_MONTHS.text,
-        units_required: 30,
-        customer: @customer
+             name: 'AAA Truck Inspection',
+             interval: Interval::SIX_MONTHS.text,
+             units_required: 30,
+             customer: @customer
       )
 
       create(:certification_type,
-        name: 'Inspections',
-        interval: Interval::SIX_MONTHS.text,
-        customer: @customer
+             name: 'Inspections',
+             interval: Interval::SIX_MONTHS.text,
+             customer: @customer
       )
 
       @employee = create(:employee,
-        employee_number: 'JB3',
-        first_name: 'Joe',
-        last_name: 'Brown',
-        customer_id: @customer.id
+                         employee_number: 'JB3',
+                         first_name: 'Joe',
+                         last_name: 'Brown',
+                         customer_id: @customer.id
       )
     end
 
     it 'should certify employee' do
-      visit certification_type_path @certification_type.id
+      visit certification_type_path @cpr_certification_type.id
 
       within 'tbody tr', text: 'JB3' do
         click_on 'Certify'
@@ -333,7 +496,7 @@ describe 'Certifications', slow: true do
       page.should have_button 'Create'
       page.should have_button 'Save and Create Another'
 
-      find_field('Certification Type').value.should eq @certification_type.id.to_s
+      find_field('Certification Type').value.should eq @cpr_certification_type.id.to_s
       fill_in 'Trainer', with: 'Instructor Bob'
       fill_in 'Last Certification Date', with: '01/01/2000'
       fill_in 'Comments', with: 'Special Notes'
@@ -345,7 +508,7 @@ describe 'Certifications', slow: true do
     end
 
     it 'should certify employee and be ready to create another' do
-      visit certification_type_path @certification_type.id
+      visit certification_type_path @cpr_certification_type.id
 
       within 'tbody tr', text: 'JB3' do
         click_on 'Certify'

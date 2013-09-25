@@ -24,6 +24,10 @@ class Ability
         certification_type.try(:customer) == user.customer
       end
 
+      can :manage, Certification do |certification|
+        certification.try(:customer) == user.customer
+      end
+
       can :manage, Employee do |employee|
         employee.try(:customer) == user.customer
       end

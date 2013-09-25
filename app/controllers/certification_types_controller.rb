@@ -7,7 +7,7 @@ class CertificationTypesController < ApplicationController
                 :load_employee_service,
                 :load_certification_service
 
-  before_action :set_certification_type, only: [:show, :edit, :update, :destroy]
+  before_action :_set_certification_type, only: [:show, :edit, :update, :destroy]
 
   check_authorization
 
@@ -97,7 +97,7 @@ class CertificationTypesController < ApplicationController
 
   private
 
-  def set_certification_type
+  def _set_certification_type
     certification_type_pending_authorization = CertificationType.find(params[:id])
     authorize! :manage, certification_type_pending_authorization
     @certification_type = certification_type_pending_authorization

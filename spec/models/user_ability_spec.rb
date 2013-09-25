@@ -72,6 +72,21 @@ describe User do
       it { should_not be_able_to(:manage, other_customer_certification_type) }
     end
 
+    context 'when user is an certification user with certifications' do
+      let(:user) {
+        build(:user, roles: ['certification'])
+      }
+      let(:own_certification) {
+        build(:certification, customer: user.customer)
+      }
+      let(:other_customer_certification) {
+        build(:certification)
+      }
+
+      it { should be_able_to(:manage, own_certification) }
+      it { should_not be_able_to(:manage, other_customer_certification) }
+    end
+
     context 'when user is a certification user with employee' do
       let(:user) {
         build(:user, roles: ['certification'])

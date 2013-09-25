@@ -64,7 +64,7 @@
         <td><%= DateHelpers::date_to_string(certification.last_certification_date) %></td>
         <td><%= units(certification) %></td>
         <td><%= certification.status %></td>
-        <td><a href="#">Edit</a></td>
+        <td><%= link_to 'Edit', certification%></td>
       </tr>
     <% end %>
     </tbody>

@@ -1,0 +1,55 @@
+<h1>Show Certification</h1>
+
+<%= link_to 'Home', root_path %> |
+<%= link_to 'Create Certification', new_certification_path %> |
+<%= link_to 'Create Employee', new_employee_path %>
+
+<p>
+  <b>Certification Type</b>
+  <%= link_to @certification.name, @certification.certification_type %>
+</p>
+
+<p>
+  <b>Certification Interval</b>
+  <%= @certification.interval %>
+</p>
+
+<p>
+  <b>Employee</b>
+  <%= link_to @certification.employee.to_s, @certification.employee %>
+</p>
+
+<p>
+  <b>Trainer</b>
+  <%= @certification.trainer %>
+</p>
+
+<p>
+  <b>Status</b>
+  <%= @certification.status %>
+</p>
+
+<p>
+  <b>Last Certification Date</b>
+  <%= DateHelpers.date_to_string @certification.last_certification_date %>
+</p>
+
+<p>
+  <b>Expiration Date</b>
+  <%= DateHelpers.date_to_string @certification.expiration_date %>
+</p>
+
+<% if @certification.units_based? %>
+  <p>
+    <b>Units Achieved</b>
+    <%= units @certification %>
+  </p>
+<% end %>
+
+<p>
+  <b>Comments</b>
+  <%= @certification.comments %>
+</p>
+
+<%= link_to 'Edit', edit_certification_path(@certification) %> |
+<%= link_to 'Delete', @certification, method: :delete, data: {confirm: 'Are you sure you want to delete?'} %>
