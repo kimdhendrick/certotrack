@@ -1,10 +1,13 @@
 require 'spec_helper'
 
 describe 'Employee Deactivation', slow: true do
+  let(:customer) { create(:customer) }
+
   describe 'Deactivate Employee' do
+    let(:denver_location) { create(:location, name: 'Denver', customer_id: customer.id) }
+
     before do
-      login_as_equipment_and_certification_user
-      @denver_location = create(:location, name: 'Denver', customer_id: @customer.id)
+      login_as_equipment_and_certification_user(customer)
     end
 
     it 'should deactivate employee, unassign equipment and deactivate certifications', js: true do
@@ -13,14 +16,14 @@ describe 'Employee Deactivation', slow: true do
         first_name: 'Sandee',
         last_name: 'Walker',
         employee_number: 'PUP789',
-        location_id: @denver_location.id,
-        customer: @customer
+        location_id: denver_location.id,
+        customer: customer
       )
 
       valid_equipment = create(
         :equipment,
         employee: valid_employee,
-        customer: @customer,
+        customer: customer,
         name: 'Meter',
         serial_number: 'ABC123',
         inspection_interval: 'Annually',
@@ -42,7 +45,7 @@ describe 'Employee Deactivation', slow: true do
         expiration_date: Date.new(2010, 6, 1),
         certification_type: certification_type,
         trainer: 'Derek Daring',
-        customer: @customer
+        customer: customer
       )
 
       visit '/'
@@ -140,8 +143,8 @@ describe 'Employee Deactivation', slow: true do
                               first_name: 'Sandee',
                               last_name: 'Walker',
                               employee_number: 'PUP789',
-                              location_id: @denver_location.id,
-                              customer: @customer
+                              location_id: denver_location.id,
+                              customer: customer
       )
 
       visit '/'
@@ -165,10 +168,11 @@ describe 'Employee Deactivation', slow: true do
 
   describe 'Deactivated Employee List' do
     context 'when a certification user' do
+      let(:littleton_location) { create(:location, name: 'Littleton', customer_id: customer.id) }
+      let(:denver_location) { create(:location, name: 'Denver', customer_id: customer.id) }
+
       before do
-        login_as_certification_user
-        @denver_location = create(:location, name: 'Denver', customer_id: @customer.id)
-        @littleton_location = create(:location, name: 'Littleton', customer_id: @customer.id)
+        login_as_certification_user(customer)
       end
 
       it 'should show Deactivated Employees list' do
@@ -178,8 +182,8 @@ describe 'Employee Deactivation', slow: true do
                employee_number: 'JB3',
                first_name: 'Joe',
                last_name: 'Brown',
-               location_id: @denver_location.id,
-               customer_id: @customer.id
+               location_id: denver_location.id,
+               customer_id: customer.id
         )
 
         create(:employee,
@@ -188,8 +192,8 @@ describe 'Employee Deactivation', slow: true do
                employee_number: 'SG99',
                first_name: 'Sue',
                last_name: 'Green',
-               location_id: @littleton_location.id,
-               customer_id: @customer.id
+               location_id: littleton_location.id,
+               customer_id: customer.id
         )
 
         create(:employee,
@@ -240,8 +244,8 @@ describe 'Employee Deactivation', slow: true do
       end
 
       it 'should show all deactivated employees for all customers' do
-        create(:employee, active: false, first_name: 'Tom', customer: @customer)
-        create(:employee, active: false, first_name: 'Dick', customer: @customer)
+        create(:employee, active: false, first_name: 'Tom', customer: customer)
+        create(:employee, active: false, first_name: 'Dick', customer: customer)
         create(:employee, active: false, first_name: 'Harry')
 
         click_link 'Deactivated Employees'
@@ -254,12 +258,12 @@ describe 'Employee Deactivation', slow: true do
 
     context 'pagination' do
       before do
-        login_as_certification_user
+        login_as_certification_user(customer)
       end
 
       it 'should paginate Deactivated Employees report' do
         55.times do
-          create(:employee, active: false, customer: @customer)
+          create(:employee, active: false, customer: customer)
         end
 
         visit '/'

@@ -2,9 +2,11 @@ require 'spec_helper'
 
 describe 'Certification Type', slow: true do
 
+  let(:customer) { create(:customer) }
+
   describe 'Create Certification Type' do
     before do
-      login_as_certification_user
+      login_as_certification_user(customer)
     end
 
     it 'should create new units based certification type' do
@@ -38,44 +40,44 @@ describe 'Certification Type', slow: true do
 
   describe 'Show Certification Type' do
     before do
-      login_as_certification_user
+      login_as_certification_user(customer)
     end
 
     it 'should render show certification type page' do
       certification_type = create(:certification_type,
                                   name: 'CPR',
                                   interval: Interval::SIX_MONTHS.text,
-                                  customer: @customer
+                                  customer: customer
       )
 
       create(:certification_type,
              name: 'Inspections',
              interval: Interval::SIX_MONTHS.text,
              units_required: 30,
-             customer: @customer
+             customer: customer
       )
 
       create(:employee,
              employee_number: 'SG1',
              first_name: 'Sarah',
              last_name: 'Green',
-             customer: @customer
+             customer: customer
       )
 
       certified_employee = create(:employee,
                                   employee_number: 'JB3',
                                   first_name: 'Joe',
                                   last_name: 'Brown',
-                                  location: create(:location, name: 'Denver', customer_id: @customer.id),
-                                  customer: @customer
+                                  location: create(:location, name: 'Denver', customer_id: customer.id),
+                                  customer: customer
       )
 
       create(:certification,
              employee: certified_employee,
              certification_type: certification_type,
              trainer: 'Trainer Timmy',
-             last_certification_date: Date.new(2010,1,1),
-             expiration_date: Date.new(2010,6,1),
+             last_certification_date: Date.new(2010, 1, 1),
+             expiration_date: Date.new(2010, 6, 1),
              customer: certified_employee.customer)
 
       visit certification_type_path certification_type.id
@@ -138,23 +140,23 @@ describe 'Certification Type', slow: true do
                                   name: 'CPR',
                                   interval: Interval::SIX_MONTHS.text,
                                   units_required: 123,
-                                  customer: @customer
+                                  customer: customer
       )
 
       certified_employee = create(:employee,
                                   employee_number: 'JB3',
                                   first_name: 'Joe',
                                   last_name: 'Brown',
-                                  location: create(:location, name: 'Denver', customer_id: @customer.id),
-                                  customer: @customer
+                                  location: create(:location, name: 'Denver', customer_id: customer.id),
+                                  customer: customer
       )
 
       create(:certification,
              employee: certified_employee,
              certification_type: certification_type,
              trainer: 'Trainer Timmy',
-             last_certification_date: Date.new(2010,1,1),
-             expiration_date: Date.new(2010,6,1),
+             last_certification_date: Date.new(2010, 1, 1),
+             expiration_date: Date.new(2010, 6, 1),
              units_achieved: 10,
              customer: certified_employee.customer)
 
@@ -200,14 +202,14 @@ describe 'Certification Type', slow: true do
 
   describe 'Update Certification Type' do
     before do
-      login_as_certification_user
+      login_as_certification_user(customer)
     end
 
     it 'should update existing certification type' do
       certification_type = create(:certification_type,
                                   name: 'CPR',
                                   interval: Interval::SIX_MONTHS.text,
-                                  customer: @customer
+                                  customer: customer
       )
 
       visit certification_type_path certification_type.id
@@ -241,12 +243,12 @@ describe 'Certification Type', slow: true do
 
   describe 'Delete Certification Type', js: true do
     before do
-      login_as_certification_user
+      login_as_certification_user(customer)
     end
 
     it 'should delete existing certification_type' do
       certification_type = create(:certification_type,
-                                  customer: @customer,
+                                  customer: customer,
                                   name: 'CPR'
       )
 
@@ -273,7 +275,7 @@ describe 'Certification Type', slow: true do
 
     it 'should not allow deletion if certifications exist' do
       certification_type = create(:certification_type,
-                                  customer: @customer,
+                                  customer: customer,
                                   name: 'CPR'
       )
       create(:certification, certification_type: certification_type, customer: certification_type.customer)
@@ -295,19 +297,19 @@ describe 'Certification Type', slow: true do
   describe 'All Certification Type Report' do
     context 'when a certification user' do
       before do
-        login_as_certification_user
+        login_as_certification_user(customer)
       end
 
       it 'should show All Certification Types report' do
         create(:certification_type,
-               customer: @customer,
+               customer: customer,
                name: 'CPR',
                interval: 'Annually',
                units_required: 0
         )
 
         create(:certification_type,
-               customer: @customer,
+               customer: customer,
                name: 'Routine Exam',
                interval: '1 month',
                units_required: 99
@@ -342,8 +344,8 @@ describe 'Certification Type', slow: true do
       end
 
       it 'should show all certification types for all customers' do
-        create(:certification_type, name: 'CPR', customer: @customer)
-        create(:certification_type, name: 'Routine Exam', customer: @customer)
+        create(:certification_type, name: 'CPR', customer: customer)
+        create(:certification_type, name: 'Routine Exam', customer: customer)
         create(:certification_type, name: 'Special Test')
 
         click_link 'All Certification Types'
@@ -356,13 +358,13 @@ describe 'Certification Type', slow: true do
 
     context 'sorting' do
       before do
-        login_as_certification_user
+        login_as_certification_user(customer)
       end
 
       it 'should sort by name' do
-        create(:certification_type, name: 'zeta', customer: @customer)
-        create(:certification_type, name: 'beta', customer: @customer)
-        create(:certification_type, name: 'alpha', customer: @customer)
+        create(:certification_type, name: 'zeta', customer: customer)
+        create(:certification_type, name: 'beta', customer: customer)
+        create(:certification_type, name: 'alpha', customer: customer)
 
         visit '/'
         click_link 'All Certification Types'
@@ -377,14 +379,14 @@ describe 'Certification Type', slow: true do
       end
 
       it 'should sort by interval' do
-        create(:certification_type, interval: Interval::SIX_MONTHS.text, customer: @customer)
-        create(:certification_type, interval: Interval::TWO_YEARS.text, customer: @customer)
-        create(:certification_type, interval: Interval::ONE_YEAR.text, customer: @customer)
-        create(:certification_type, interval: Interval::FIVE_YEARS.text, customer: @customer)
-        create(:certification_type, interval: Interval::NOT_REQUIRED.text, customer: @customer)
-        create(:certification_type, interval: Interval::THREE_YEARS.text, customer: @customer)
-        create(:certification_type, interval: Interval::ONE_MONTH.text, customer: @customer)
-        create(:certification_type, interval: Interval::THREE_MONTHS.text, customer: @customer)
+        create(:certification_type, interval: Interval::SIX_MONTHS.text, customer: customer)
+        create(:certification_type, interval: Interval::TWO_YEARS.text, customer: customer)
+        create(:certification_type, interval: Interval::ONE_YEAR.text, customer: customer)
+        create(:certification_type, interval: Interval::FIVE_YEARS.text, customer: customer)
+        create(:certification_type, interval: Interval::NOT_REQUIRED.text, customer: customer)
+        create(:certification_type, interval: Interval::THREE_YEARS.text, customer: customer)
+        create(:certification_type, interval: Interval::ONE_MONTH.text, customer: customer)
+        create(:certification_type, interval: Interval::THREE_MONTHS.text, customer: customer)
 
         visit '/'
         click_link 'All Certification Types'
@@ -419,12 +421,12 @@ describe 'Certification Type', slow: true do
 
     context 'pagination' do
       before do
-        login_as_certification_user
+        login_as_certification_user(customer)
       end
 
       it 'should paginate All Certification Types report' do
         55.times do
-          create(:certification_type, customer: @customer)
+          create(:certification_type, customer: customer)
         end
 
         visit '/'
@@ -482,17 +484,17 @@ describe 'Certification Type', slow: true do
   describe 'Search Certification Types' do
     context 'when a certification user' do
       before do
-        login_as_certification_user
+        login_as_certification_user(customer)
       end
 
       it 'should show Search Certification Types page' do
         create(:certification_type,
-               customer: @customer,
+               customer: customer,
                name: 'Unique Name'
         )
 
         create(:certification_type,
-               customer: @customer,
+               customer: customer,
                name: 'Routine Examination'
         )
 
@@ -518,12 +520,12 @@ describe 'Certification Type', slow: true do
 
       it 'should search and sort simultaneously' do
         create(:certification_type,
-               customer: @customer,
+               customer: customer,
                name: 'Unique Name'
         )
 
         create(:certification_type,
-               customer: @customer,
+               customer: customer,
                name: 'Routine Examination'
         )
 

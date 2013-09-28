@@ -2,14 +2,15 @@ require 'spec_helper'
 
 describe 'Employee Certifications', slow: true do
   describe 'Show Employee' do
-    let(:employee) { create(:employee, customer: @customer) }
+    let(:customer) { create(:customer) }
+    let(:employee) { create(:employee, customer: customer) }
 
     before do
-      login_as_certification_user
+      login_as_certification_user(customer)
     end
 
     it 'should show certifications' do
-      certification = create(:certification, employee: employee, customer: @customer)
+      certification = create(:certification, employee: employee, customer: customer)
 
       visit employee_path(employee)
       page.should have_content 'Show Employee'
@@ -41,8 +42,8 @@ describe 'Employee Certifications', slow: true do
       end
 
       it 'should sort by certification type (name)' do
-        create(:certification, employee: employee, certification_type: scrum_master_certification_type, customer: @customer)
-        create(:certification, employee: employee, certification_type: scrum_coach_certification_type, customer: @customer)
+        create(:certification, employee: employee, certification_type: scrum_master_certification_type, customer: customer)
+        create(:certification, employee: employee, certification_type: scrum_coach_certification_type, customer: customer)
         visit employee_path(employee)
 
         within 'table thead tr:nth-of-type(1)' do
@@ -59,8 +60,8 @@ describe 'Employee Certifications', slow: true do
       end
 
       it 'should sort by status' do
-        create(:units_based_certification, employee: employee, customer: @customer)
-        create(:certification, employee: employee, customer: @customer)
+        create(:units_based_certification, employee: employee, customer: customer)
+        create(:certification, employee: employee, customer: customer)
         visit employee_path(employee)
 
         within 'table thead tr:nth-of-type(1)' do
@@ -81,7 +82,7 @@ describe 'Employee Certifications', slow: true do
       before do
         26.times do |n|
           certification_type = create(:certification_type, name: "type-#{n}")
-          create(:certification, employee: employee, certification_type: certification_type, customer: @customer)
+          create(:certification, employee: employee, certification_type: certification_type, customer: customer)
         end
         visit employee_path(employee)
       end

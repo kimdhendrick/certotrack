@@ -1,9 +1,11 @@
 require 'spec_helper'
 
 describe 'Navigation', slow: true do
+  let(:customer) { create(:customer) }
+  
   describe 'Equipment Links' do
     before do
-      login_as_equipment_user
+      login_as_equipment_user(customer)
     end
 
     it 'navigates Home page' do
@@ -99,7 +101,7 @@ describe 'Navigation', slow: true do
     end
 
     it 'navigates Show Equipment', js: true do
-      equipment = create(:equipment, customer: @customer)
+      equipment = create(:equipment, customer: customer)
       visit equipment_path equipment.id
       page.should have_content 'Show Equipment'
 
@@ -134,7 +136,7 @@ describe 'Navigation', slow: true do
     end
 
     it 'navigates Edit Equipment', js: true do
-      equipment = create(:equipment, customer: @customer)
+      equipment = create(:equipment, customer: customer)
       visit equipment_path equipment.id
 
       click_on 'Edit'
@@ -188,7 +190,7 @@ describe 'Navigation', slow: true do
 
   describe 'Certification Links' do
     before do
-      login_as_certification_user
+      login_as_certification_user(customer)
     end
 
     it 'navigates Home page' do
@@ -219,7 +221,7 @@ describe 'Navigation', slow: true do
     end
 
     it 'navigates Show Certification Type', js: true do
-      certification_type = create(:certification_type, customer: @customer)
+      certification_type = create(:certification_type, customer: customer)
       visit certification_type_path certification_type.id
       page.should have_content 'Show Certification Type'
 
@@ -254,7 +256,7 @@ describe 'Navigation', slow: true do
     end
 
     it 'navigates Edit Certification Type', js: true do
-      certification_type = create(:certification_type, customer: @customer)
+      certification_type = create(:certification_type, customer: customer)
       visit certification_type_path certification_type.id
 
       click_on 'Edit'
@@ -319,7 +321,7 @@ describe 'Navigation', slow: true do
 
   describe 'Employee Links' do
     before do
-      login_as_certification_user
+      login_as_certification_user(customer)
     end
 
     it 'navigates Create Employee' do
@@ -346,7 +348,7 @@ describe 'Navigation', slow: true do
     end
 
     it 'navigates Show Employee', js: true do
-      employee = create(:employee, customer: @customer)
+      employee = create(:employee, customer: customer)
       visit employee_path employee.id
       page.should have_content 'Show Employee'
 
@@ -377,7 +379,7 @@ describe 'Navigation', slow: true do
     end
 
     it 'navigates Edit Employee', js: true do
-      employee = create(:employee, customer: @customer)
+      employee = create(:employee, customer: customer)
       visit employee_path employee.id
 
       click_on 'Edit'
@@ -411,7 +413,7 @@ describe 'Navigation', slow: true do
 
   describe 'Administration Links' do
     it 'when certification user' do
-      login_as_certification_user
+      login_as_certification_user(customer)
       visit '/'
 
       page.should have_link 'Deactivated Employees'

@@ -258,7 +258,7 @@ describe EmployeesController do
 
       it 'assigns locations' do
         location = build(:location)
-        @fake_location_service = controller.load_location_service(FakeService.new([location]))
+        controller.load_location_service(FakeService.new([location]))
         employee = create(:employee, customer: customer)
 
         get :edit, {:id => employee.to_param}, {}
@@ -358,7 +358,7 @@ describe EmployeesController do
         it 'assigns locations' do
           controller.load_employee_service(FakeService.new(false))
           location = build(:location)
-          @fake_location_service = controller.load_location_service(FakeService.new([location]))
+          controller.load_location_service(FakeService.new([location]))
           employee = create(:employee, customer: customer)
 
           put :update, {:id => employee.to_param, :employee => employee_attributes}, {}

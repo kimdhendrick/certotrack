@@ -1,10 +1,12 @@
 require 'spec_helper'
 
 describe 'Employee', slow: true do
+  let(:customer) { create(:customer) }
+  
   describe 'Create Employee' do
     before do
-      login_as_certification_user
-      create(:location, name: 'Golden', customer_id: @customer.id)
+      login_as_certification_user(customer)
+      create(:location, name: 'Golden', customer_id: customer.id)
     end
 
     it 'should create new Employee' do
@@ -38,33 +40,34 @@ describe 'Employee', slow: true do
 
   describe 'All Employees' do
     context 'when a certification user' do
+      let!(:denver_location) { create(:location, name: 'Denver', customer_id: customer.id) }
+      let!(:littleton_location) { create(:location, name: 'Littleton', customer_id: customer.id) }
+
       before do
-        login_as_certification_user
-        @denver_location = create(:location, name: 'Denver', customer_id: @customer.id)
-        @littleton_location = create(:location, name: 'Littleton', customer_id: @customer.id)
+        login_as_certification_user(customer)
       end
 
       it 'should show All Employee list' do
-        create(:employee, 
-          employee_number: 'JB3',
-          first_name: 'Joe',
-          last_name: 'Brown',
-          location_id: @denver_location.id,
-          customer_id: @customer.id
+        create(:employee,
+               employee_number: 'JB3',
+               first_name: 'Joe',
+               last_name: 'Brown',
+               location_id: denver_location.id,
+               customer_id: customer.id
         )
 
-        create(:employee, 
-          employee_number: 'SG99',
-          first_name: 'Sue',
-          last_name: 'Green',
-          location_id: @littleton_location.id,
-          customer_id: @customer.id
+        create(:employee,
+               employee_number: 'SG99',
+               first_name: 'Sue',
+               last_name: 'Green',
+               location_id: littleton_location.id,
+               customer_id: customer.id
         )
 
-        create(:employee, 
-          employee_number: 'KB123',
-          first_name: 'Kim',
-          last_name: 'Barnes',
+        create(:employee,
+               employee_number: 'KB123',
+               first_name: 'Kim',
+               last_name: 'Barnes',
         )
 
         visit '/'
@@ -100,8 +103,8 @@ describe 'Employee', slow: true do
       end
 
       it 'should show all employees for all customers' do
-        create(:employee, first_name: 'Tom', customer: @customer)
-        create(:employee, first_name: 'Dick', customer: @customer)
+        create(:employee, first_name: 'Tom', customer: customer)
+        create(:employee, first_name: 'Dick', customer: customer)
         create(:employee, first_name: 'Harry')
 
         click_link 'All Employees'
@@ -114,13 +117,13 @@ describe 'Employee', slow: true do
 
     context 'sorting' do
       before do
-        login_as_certification_user
+        login_as_certification_user(customer)
       end
 
       it 'should sort by first name' do
-        create(:employee, first_name: 'zeta', customer: @customer)
-        create(:employee, first_name: 'beta', customer: @customer)
-        create(:employee, first_name: 'alpha', customer: @customer)
+        create(:employee, first_name: 'zeta', customer: customer)
+        create(:employee, first_name: 'beta', customer: customer)
+        create(:employee, first_name: 'alpha', customer: customer)
 
         visit '/'
         click_link 'All Employees'
@@ -135,9 +138,9 @@ describe 'Employee', slow: true do
       end
 
       it 'should sort by last name' do
-        create(:employee, last_name: 'zeta', customer: @customer)
-        create(:employee, last_name: 'beta', customer: @customer)
-        create(:employee, last_name: 'alpha', customer: @customer)
+        create(:employee, last_name: 'zeta', customer: customer)
+        create(:employee, last_name: 'beta', customer: customer)
+        create(:employee, last_name: 'alpha', customer: customer)
 
         visit '/'
         click_link 'All Employees'
@@ -152,9 +155,9 @@ describe 'Employee', slow: true do
       end
 
       it 'should sort by employee number' do
-        create(:employee, employee_number: '222', customer: @customer)
-        create(:employee, employee_number: '333', customer: @customer)
-        create(:employee, employee_number: '111', customer: @customer)
+        create(:employee, employee_number: '222', customer: customer)
+        create(:employee, employee_number: '333', customer: customer)
+        create(:employee, employee_number: '111', customer: customer)
 
         visit '/'
         click_link 'All Employees'
@@ -173,9 +176,9 @@ describe 'Employee', slow: true do
         last_location = create(:location, name: 'Zurich')
         middle_location = create(:location, name: 'Burbank')
 
-        create(:employee, location: first_location, customer: @customer)
-        create(:employee, location: last_location, customer: @customer)
-        create(:employee, location: middle_location, customer: @customer)
+        create(:employee, location: first_location, customer: customer)
+        create(:employee, location: last_location, customer: customer)
+        create(:employee, location: middle_location, customer: customer)
 
         visit '/'
         click_link 'All Employees'
@@ -192,12 +195,12 @@ describe 'Employee', slow: true do
 
     context 'pagination' do
       before do
-        login_as_certification_user
+        login_as_certification_user(customer)
       end
 
       it 'should paginate All Employees report' do
         55.times do
-          create(:employee, customer: @customer)
+          create(:employee, customer: customer)
         end
 
         visit '/'
@@ -254,18 +257,19 @@ describe 'Employee', slow: true do
   end
 
   describe 'Show Employee' do
+    let!(:denver_location) { create(:location, name: 'Denver', customer_id: customer.id) }
+
     before do
-      login_as_certification_user
-      @denver_location = create(:location, name: 'Denver', customer_id: @customer.id)
+      login_as_certification_user(customer)
     end
 
     it 'should render employee show page' do
-      valid_employee = create(:employee, 
-        first_name: 'Sandee',
-        last_name: 'Walker',
-        employee_number: 'PUP789',
-        location_id: @denver_location.id,
-        customer: @customer
+      valid_employee = create(:employee,
+                              first_name: 'Sandee',
+                              last_name: 'Walker',
+                              employee_number: 'PUP789',
+                              location_id: denver_location.id,
+                              customer: customer
       )
 
       visit '/'
@@ -293,19 +297,20 @@ describe 'Employee', slow: true do
   end
 
   describe 'Update Employee' do
+    let!(:denver_location) { create(:location, name: 'Denver', customer_id: customer.id) }
+    let!(:littleton_location) { create(:location, name: 'Littleton', customer_id: customer.id) }
+
     before do
-      login_as_certification_user
-      @denver_location = create(:location, name: 'Denver', customer_id: @customer.id)
-      @littleton_location = create(:location, name: 'Littleton', customer_id: @customer.id)
+      login_as_certification_user(customer)
     end
 
     it 'should update existing employee' do
-      valid_employee = create(:employee, 
-        first_name: 'Sandee',
-        last_name: 'Walker',
-        employee_number: 'PUP789',
-        location_id: @denver_location.id,
-        customer: @customer
+      valid_employee = create(:employee,
+                              first_name: 'Sandee',
+                              last_name: 'Walker',
+                              employee_number: 'PUP789',
+                              location_id: denver_location.id,
+                              customer: customer
       )
 
       visit '/'
@@ -346,18 +351,19 @@ describe 'Employee', slow: true do
   end
 
   describe 'Delete Employee', js: true do
+    let!(:denver_location) { create(:location, name: 'Denver', customer_id: customer.id) }
+
     before do
-      login_as_certification_user
-      @denver_location = create(:location, name: 'Denver', customer_id: @customer.id)
+      login_as_certification_user(customer)
     end
 
     it 'should delete existing employee' do
-      valid_employee = create(:employee, 
-        first_name: 'Sandee',
-        last_name: 'Walker',
-        employee_number: 'PUP789',
-        location_id: @denver_location.id,
-        customer: @customer
+      valid_employee = create(:employee,
+                              first_name: 'Sandee',
+                              last_name: 'Walker',
+                              employee_number: 'PUP789',
+                              location_id: denver_location.id,
+                              customer: customer
       )
 
       visit '/'
@@ -384,12 +390,12 @@ describe 'Employee', slow: true do
     end
 
     it 'should not delete employee with equipment assigned' do
-      valid_employee = create(:employee, 
-        first_name: 'Sandee',
-        last_name: 'Walker',
-        employee_number: 'PUP789',
-        location_id: @denver_location.id,
-        customer: @customer
+      valid_employee = create(:employee,
+                              first_name: 'Sandee',
+                              last_name: 'Walker',
+                              employee_number: 'PUP789',
+                              location_id: denver_location.id,
+                              customer: customer
       )
 
       create(:equipment, employee: valid_employee)
@@ -419,11 +425,11 @@ describe 'Employee', slow: true do
 
     it 'should not delete employee with certifications assigned' do
       valid_employee = create(:employee,
-        first_name: 'Sandee',
-        last_name: 'Walker',
-        employee_number: 'PUP789',
-        location_id: @denver_location.id,
-        customer: @customer
+                              first_name: 'Sandee',
+                              last_name: 'Walker',
+                              employee_number: 'PUP789',
+                              location_id: denver_location.id,
+                              customer: customer
       )
 
       create(:certification, employee: valid_employee, customer: valid_employee.customer)

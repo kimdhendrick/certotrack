@@ -1,24 +1,25 @@
 require 'spec_helper'
 
 describe 'Equipment', slow: true do
+  let(:customer) { create(:customer) }
 
   describe 'Show Equipment' do
+    let!(:denver_location) { create(:location, name: 'Denver', customer_id: customer.id) }
+
     before do
-      login_as_equipment_user
-      @denver_location = create(:location, name: 'Denver', customer_id: @customer.id)
-      @littleton_location = create(:location, name: 'Littleton', customer_id: @customer.id)
+      login_as_equipment_user(customer)
     end
 
     it 'should render equipment show page' do
       valid_equipment = create(:equipment,
-        customer: @customer,
-        name: 'Meter',
-        serial_number: 'ABC123',
-        inspection_interval: 'Annually',
-        last_inspection_date: Date.new(2013, 1, 1),
-        expiration_date: Date.new(2024, 2, 3),
-        comments: 'my notes',
-        location_id: @denver_location.id
+                               customer: customer,
+                               name: 'Meter',
+                               serial_number: 'ABC123',
+                               inspection_interval: 'Annually',
+                               last_inspection_date: Date.new(2013, 1, 1),
+                               expiration_date: Date.new(2024, 2, 3),
+                               comments: 'my notes',
+                               location_id: denver_location.id
       )
 
       visit '/'
@@ -54,11 +55,12 @@ describe 'Equipment', slow: true do
   end
 
   describe 'Create Equipment' do
+    let!(:denver_location) { create(:location, name: 'Denver', customer_id: customer.id) }
+    let!(:littleton_location) { create(:location, name: 'Littleton', customer_id: customer.id) }
+    let!(:special_employee) { create(:employee, first_name: 'Special', last_name: 'Employee', customer_id: customer.id) }
+
     before do
-      login_as_equipment_user
-      @denver_location = create(:location, name: 'Denver', customer_id: @customer.id)
-      @littleton_location = create(:location, name: 'Littleton', customer_id: @customer.id)
-      @special_employee = create(:employee, first_name: 'Special', last_name: 'Employee', customer_id: @customer.id)
+      login_as_equipment_user(customer)
     end
 
     it 'should create new equipment assigned to a location', js: true do
@@ -212,8 +214,8 @@ describe 'Equipment', slow: true do
       page.should have_content '01/01/2055'
     end
 
-    it 'should auto complete on name', js:true do
-      create(:equipment, name: 'Leveler', customer: @customer)
+    it 'should auto complete on name', js: true do
+      create(:equipment, name: 'Leveler', customer: customer)
 
       visit '/'
       click_link 'Create Equipment'
@@ -231,23 +233,24 @@ describe 'Equipment', slow: true do
   end
 
   describe 'Update Equipment' do
+    let!(:denver_location) { create(:location, name: 'Denver', customer_id: customer.id) }
+    let!(:littleton_location) { create(:location, name: 'Littleton', customer_id: customer.id) }
+    let!(:special_employee) { create(:employee, first_name: 'Special', last_name: 'Employee', customer_id: customer.id) }
+
     before do
-      login_as_equipment_user
-      @denver_location = create(:location, name: 'Denver', customer_id: @customer.id)
-      @littleton_location = create(:location, name: 'Littleton', customer_id: @customer.id)
-      @special_employee = create(:employee, first_name: 'Special', last_name: 'Employee', customer_id: @customer.id)
+      login_as_equipment_user(customer)
     end
 
     it 'should update existing equipment', js: true do
       valid_equipment = create(:equipment,
-        customer: @customer,
-        name: 'Meter',
-        serial_number: 'ABC123',
-        inspection_interval: 'Annually',
-        last_inspection_date: Date.new(2013, 1, 1),
-        expiration_date: Date.new(2024, 2, 3),
-        comments: 'my notes',
-        location_id: @littleton_location.id
+                               customer: customer,
+                               name: 'Meter',
+                               serial_number: 'ABC123',
+                               inspection_interval: 'Annually',
+                               last_inspection_date: Date.new(2013, 1, 1),
+                               expiration_date: Date.new(2024, 2, 3),
+                               comments: 'my notes',
+                               location_id: littleton_location.id
       )
 
       visit '/'
@@ -299,14 +302,14 @@ describe 'Equipment', slow: true do
 
     it 'should alert on future dates', js: true do
       valid_equipment = create(:equipment,
-        customer: @customer,
-        name: 'Meter',
-        serial_number: 'ABC123',
-        inspection_interval: 'Annually',
-        last_inspection_date: Date.new(2013, 1, 1),
-        expiration_date: Date.new(2024, 2, 3),
-        comments: 'my notes',
-        location_id: @littleton_location.id
+                               customer: customer,
+                               name: 'Meter',
+                               serial_number: 'ABC123',
+                               inspection_interval: 'Annually',
+                               last_inspection_date: Date.new(2013, 1, 1),
+                               expiration_date: Date.new(2024, 2, 3),
+                               comments: 'my notes',
+                               location_id: littleton_location.id
       )
 
       visit '/'
@@ -349,15 +352,16 @@ describe 'Equipment', slow: true do
   end
 
   describe 'Delete Equipment' do
+    let!(:denver_location) { create(:location, name: 'Denver', customer_id: customer.id) }
+
     before do
-      login_as_equipment_user
-      @denver_location = create(:location, name: 'Denver', customer_id: @customer.id)
+      login_as_equipment_user(customer)
     end
 
     it 'should delete existing equipment', js: true do
       valid_equipment = create(:equipment,
-        customer: @customer,
-        name: 'Meter'
+                               customer: customer,
+                               name: 'Meter'
       )
 
       visit '/'
@@ -386,32 +390,33 @@ describe 'Equipment', slow: true do
 
   describe 'Reports' do
     context 'when an equipment user' do
+      let!(:denver_location) { create(:location, name: 'Denver', customer_id: customer.id) }
+      let!(:littleton_location) { create(:location, name: 'Littleton', customer_id: customer.id) }
+      let!(:special_employee) { create(:employee, first_name: 'Special', last_name: 'Employee', customer_id: customer.id) }
+
       before do
-        login_as_equipment_user
-        @denver_location = create(:location, name: 'Denver', customer_id: @customer.id)
-        @littleton_location = create(:location, name: 'Littleton', customer_id: @customer.id)
-        @special_employee = create(:employee, first_name: 'Special', last_name: 'Employee', customer_id: @customer.id)
+        login_as_equipment_user(customer)
       end
 
       it 'should show All Equipment report' do
         create(:equipment,
-          customer: @customer,
-          name: 'Meter',
-          serial_number: 'ABC123',
-          inspection_interval: 'Annually',
-          last_inspection_date: Date.new(2013, 1, 1),
-          expiration_date: Date.new(2024, 2, 3),
-          employee_id: @special_employee.id
+               customer: customer,
+               name: 'Meter',
+               serial_number: 'ABC123',
+               inspection_interval: 'Annually',
+               last_inspection_date: Date.new(2013, 1, 1),
+               expiration_date: Date.new(2024, 2, 3),
+               employee_id: special_employee.id
         )
 
         create(:equipment,
-          customer: @customer,
-          name: 'Box',
-          serial_number: 'BBB999',
-          inspection_interval: 'Annually',
-          last_inspection_date: Date.new(2012, 1, 1),
-          expiration_date: Date.new(2013, 1, 1),
-          location_id: @denver_location.id
+               customer: customer,
+               name: 'Box',
+               serial_number: 'BBB999',
+               inspection_interval: 'Annually',
+               last_inspection_date: Date.new(2012, 1, 1),
+               expiration_date: Date.new(2013, 1, 1),
+               location_id: denver_location.id
         )
 
         visit '/'
@@ -450,13 +455,13 @@ describe 'Equipment', slow: true do
 
       it 'should show Expired Equipment report' do
         expired_equipment = create(:equipment,
-          customer: @customer,
-          name: 'Gauge',
-          serial_number: 'XYZ987',
-          inspection_interval: Interval::ONE_MONTH.text,
-          last_inspection_date: Date.new(2011, 12, 5),
-          expiration_date: Date.new(2012, 7, 11),
-          location_id: @littleton_location.id
+                                   customer: customer,
+                                   name: 'Gauge',
+                                   serial_number: 'XYZ987',
+                                   inspection_interval: Interval::ONE_MONTH.text,
+                                   last_inspection_date: Date.new(2011, 12, 5),
+                                   expiration_date: Date.new(2012, 7, 11),
+                                   location_id: littleton_location.id
         )
 
         visit '/'
@@ -484,13 +489,13 @@ describe 'Equipment', slow: true do
 
       it 'should show Expiring Equipment report' do
         expiring_equipment = create(:equipment,
-          customer: @customer,
-          name: 'Banana',
-          serial_number: 'BANA',
-          inspection_interval: Interval::ONE_MONTH.text,
-          last_inspection_date: Date.today,
-          expiration_date: Date.tomorrow,
-          location_id: @denver_location.id
+                                    customer: customer,
+                                    name: 'Banana',
+                                    serial_number: 'BANA',
+                                    inspection_interval: Interval::ONE_MONTH.text,
+                                    last_inspection_date: Date.today,
+                                    expiration_date: Date.tomorrow,
+                                    location_id: denver_location.id
         )
 
         visit '/'
@@ -516,11 +521,11 @@ describe 'Equipment', slow: true do
 
       it 'should show Non-Inspectable Equipment report' do
         non_inspectable_equipment = create(:equipment,
-          customer: @customer,
-          name: 'MDC',
-          serial_number: 'mdc1',
-          inspection_interval: Interval::NOT_REQUIRED.text,
-          location_id: @denver_location.id
+                                           customer: customer,
+                                           name: 'MDC',
+                                           serial_number: 'mdc1',
+                                           inspection_interval: Interval::NOT_REQUIRED.text,
+                                           location_id: denver_location.id
         )
 
         visit '/'
@@ -550,8 +555,8 @@ describe 'Equipment', slow: true do
       end
 
       it 'should show all equipment for all customers' do
-        create(:equipment, name: 'Box 123', customer: @customer)
-        create(:equipment, name: 'Meter 456', customer: @customer)
+        create(:equipment, name: 'Box 123', customer: customer)
+        create(:equipment, name: 'Meter 456', customer: customer)
         create(:equipment, name: 'Gauge 987')
 
         click_link 'All Equipment'
@@ -564,13 +569,13 @@ describe 'Equipment', slow: true do
 
     context 'sorting' do
       before do
-        login_as_equipment_user
+        login_as_equipment_user(customer)
       end
 
       it 'should sort by name' do
-        create(:equipment, name: 'zeta', customer: @customer)
-        create(:equipment, name: 'beta', customer: @customer)
-        create(:equipment, name: 'alpha', customer: @customer)
+        create(:equipment, name: 'zeta', customer: customer)
+        create(:equipment, name: 'beta', customer: customer)
+        create(:equipment, name: 'alpha', customer: customer)
 
         visit '/'
         click_link 'All Equipment'
@@ -585,9 +590,9 @@ describe 'Equipment', slow: true do
       end
 
       it 'should sort by serial number' do
-        create(:equipment, serial_number: '222', customer: @customer)
-        create(:equipment, serial_number: '333', customer: @customer)
-        create(:equipment, serial_number: '111', customer: @customer)
+        create(:equipment, serial_number: '222', customer: customer)
+        create(:equipment, serial_number: '333', customer: customer)
+        create(:equipment, serial_number: '111', customer: customer)
 
         visit '/'
         click_link 'All Equipment'
@@ -602,9 +607,9 @@ describe 'Equipment', slow: true do
       end
 
       it 'should sort by status' do
-        create(:expiring_equipment, customer: @customer)
-        create(:expired_equipment, customer: @customer)
-        create(:valid_equipment, customer: @customer)
+        create(:expiring_equipment, customer: customer)
+        create(:expired_equipment, customer: customer)
+        create(:valid_equipment, customer: customer)
 
         visit '/'
         click_link 'All Equipment'
@@ -619,14 +624,14 @@ describe 'Equipment', slow: true do
       end
 
       it 'should sort by inspection interval' do
-        create(:equipment, inspection_interval: Interval::SIX_MONTHS.text, customer: @customer)
-        create(:equipment, inspection_interval: Interval::TWO_YEARS.text, customer: @customer)
-        create(:equipment, inspection_interval: Interval::ONE_YEAR.text, customer: @customer)
-        create(:equipment, inspection_interval: Interval::FIVE_YEARS.text, customer: @customer)
-        create(:equipment, inspection_interval: Interval::NOT_REQUIRED.text, customer: @customer)
-        create(:equipment, inspection_interval: Interval::THREE_YEARS.text, customer: @customer)
-        create(:equipment, inspection_interval: Interval::ONE_MONTH.text, customer: @customer)
-        create(:equipment, inspection_interval: Interval::THREE_MONTHS.text, customer: @customer)
+        create(:equipment, inspection_interval: Interval::SIX_MONTHS.text, customer: customer)
+        create(:equipment, inspection_interval: Interval::TWO_YEARS.text, customer: customer)
+        create(:equipment, inspection_interval: Interval::ONE_YEAR.text, customer: customer)
+        create(:equipment, inspection_interval: Interval::FIVE_YEARS.text, customer: customer)
+        create(:equipment, inspection_interval: Interval::NOT_REQUIRED.text, customer: customer)
+        create(:equipment, inspection_interval: Interval::THREE_YEARS.text, customer: customer)
+        create(:equipment, inspection_interval: Interval::ONE_MONTH.text, customer: customer)
+        create(:equipment, inspection_interval: Interval::THREE_MONTHS.text, customer: customer)
 
         visit '/'
         click_link 'All Equipment'
@@ -663,9 +668,9 @@ describe 'Equipment', slow: true do
         latest_date = Date.new(2013, 12, 31)
         earliest_date = Date.new(2013, 1, 1)
 
-        create(:equipment, last_inspection_date: middle_date, customer: @customer)
-        create(:equipment, last_inspection_date: latest_date, customer: @customer)
-        create(:equipment, last_inspection_date: earliest_date, customer: @customer)
+        create(:equipment, last_inspection_date: middle_date, customer: customer)
+        create(:equipment, last_inspection_date: latest_date, customer: customer)
+        create(:equipment, last_inspection_date: earliest_date, customer: customer)
 
         visit '/'
         click_link 'All Equipment'
@@ -680,9 +685,9 @@ describe 'Equipment', slow: true do
       end
 
       it 'should sort by inspection type' do
-        inspectable1 = create(:equipment, inspection_interval: Interval::ONE_YEAR.text, customer: @customer)
-        not_inspectable = create(:equipment, inspection_interval: Interval::NOT_REQUIRED.text, customer: @customer)
-        inspectable2 = create(:equipment, inspection_interval: Interval::FIVE_YEARS.text, customer: @customer)
+        inspectable1 = create(:equipment, inspection_interval: Interval::ONE_YEAR.text, customer: customer)
+        not_inspectable = create(:equipment, inspection_interval: Interval::NOT_REQUIRED.text, customer: customer)
+        inspectable2 = create(:equipment, inspection_interval: Interval::FIVE_YEARS.text, customer: customer)
 
         visit '/'
         click_link 'All Equipment'
@@ -701,10 +706,10 @@ describe 'Equipment', slow: true do
         latest_date = Date.new(2013, 12, 31)
         earliest_date = Date.new(2013, 1, 1)
 
-        create(:equipment, expiration_date: middle_date, customer: @customer)
-        create(:equipment, expiration_date: latest_date, customer: @customer)
-        create(:equipment, expiration_date: earliest_date, customer: @customer)
-        create(:equipment, expiration_date: nil, customer: @customer)
+        create(:equipment, expiration_date: middle_date, customer: customer)
+        create(:equipment, expiration_date: latest_date, customer: customer)
+        create(:equipment, expiration_date: earliest_date, customer: customer)
+        create(:equipment, expiration_date: nil, customer: customer)
 
         visit '/'
         click_link 'All Equipment'
@@ -727,12 +732,12 @@ describe 'Equipment', slow: true do
         last_location = create(:location, name: 'Zurich')
         middle_location = create(:location, name: 'Burbank')
 
-        create(:equipment, employee: middle_employee, customer: @customer)
-        create(:equipment, location: last_location, customer: @customer)
-        create(:equipment, location: first_location, customer: @customer)
-        create(:equipment, employee: last_employee, customer: @customer)
-        create(:equipment, employee: first_employee, customer: @customer)
-        create(:equipment, location: middle_location, customer: @customer)
+        create(:equipment, employee: middle_employee, customer: customer)
+        create(:equipment, location: last_location, customer: customer)
+        create(:equipment, location: first_location, customer: customer)
+        create(:equipment, employee: last_employee, customer: customer)
+        create(:equipment, employee: first_employee, customer: customer)
+        create(:equipment, location: middle_location, customer: customer)
 
         visit '/'
         click_link 'All Equipment'
@@ -749,12 +754,12 @@ describe 'Equipment', slow: true do
 
     context 'pagination' do
       before do
-        login_as_equipment_user
+        login_as_equipment_user(customer)
       end
 
       it 'should paginate All Equipment report' do
         55.times do
-          create(:equipment, customer: @customer)
+          create(:equipment, customer: customer)
         end
 
         visit '/'
@@ -810,18 +815,18 @@ describe 'Equipment', slow: true do
   describe 'Search' do
     context 'when an equipment user' do
       before do
-        login_as_equipment_user
+        login_as_equipment_user(customer)
       end
 
       it 'should show Search Equipment page' do
         create(:equipment,
-          customer: @customer,
-          name: 'Unique Name'
+               customer: customer,
+               name: 'Unique Name'
         )
 
         create(:equipment,
-          customer: @customer,
-          name: 'Box'
+               customer: customer,
+               name: 'Box'
         )
 
         visit '/'
@@ -850,13 +855,13 @@ describe 'Equipment', slow: true do
 
       it 'should show Search Equipment box', js: true do
         create(:equipment,
-          customer: @customer,
-          name: 'Unique Name'
+               customer: customer,
+               name: 'Unique Name'
         )
 
         create(:equipment,
-          customer: @customer,
-          name: 'Box'
+               customer: customer,
+               name: 'Box'
         )
 
         visit '/'
@@ -881,13 +886,13 @@ describe 'Equipment', slow: true do
 
       it 'should search and sort simultaneously' do
         create(:equipment,
-          customer: @customer,
-          name: 'Unique Name'
+               customer: customer,
+               name: 'Unique Name'
         )
 
         create(:equipment,
-          customer: @customer,
-          name: 'Box'
+               customer: customer,
+               name: 'Box'
         )
 
         visit '/'
@@ -919,7 +924,7 @@ describe 'Equipment', slow: true do
       end
 
       it 'should auto complete on name', js: true do
-        create(:equipment, name: 'Leveler', customer: @customer)
+        create(:equipment, name: 'Leveler', customer: customer)
 
         visit '/'
         click_on 'Search'
