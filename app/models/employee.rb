@@ -16,18 +16,6 @@ class Employee < ActiveRecord::Base
 
   validates_uniqueness_of :employee_number, scope: :customer_id, case_sensitive: false
 
-  def to_s
-    "#{last_name}, #{first_name}"
-  end
-
-  def sort_key
-    last_name + first_name
-  end
-
-  def location_name
-    location.try(:to_s) || "Unassigned"
-  end
-
   private
 
   def _strip_whitespace

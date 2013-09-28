@@ -125,7 +125,7 @@ describe 'Certifications', slow: true do
       page.should have_content 'Certification type already assigned to this Employee. Please update existing Certification.'
     end
 
-    it 'should show a certification' do
+    it 'should show a certification', js:true do
       create(:certification,
              employee: employee,
              certification_type: cpr_certification_type,

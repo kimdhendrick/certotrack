@@ -164,7 +164,7 @@ describe Equipment do
     employee = create(:employee)
     employee_assigned_equipment = create(:equipment, employee: employee)
 
-    employee_assigned_equipment.assigned_to.should == employee
+    employee_assigned_equipment.assigned_to.employee_model.should == employee
     location_assigned_equipment.assigned_to.should == location
   end
 

@@ -105,8 +105,8 @@ class EquipmentController < ApplicationController
       locations = @location_service.get_all_locations(current_user)
       render json: locations.map { |l| [l.id, l.name] }
     else
-      employees = @employee_service.get_all_employees(current_user)
-      render json: employees.map { |e| [e.id, e.to_s] }
+      employees = @employee_service.get_all_employees(current_user).map{ |employee_model| PresentableEmployee.new(employee_model) }
+      render json: employees.map { |e| [e.id, e.name] }
     end
   end
 

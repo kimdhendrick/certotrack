@@ -1,7 +1,7 @@
 module EquipmentHelper
 
   def display_assigned_to(equipment)
-    equipment.assigned_to.try(:to_s) || 'Unassigned'
+    equipment.assigned_to.try(:name) || 'Unassigned'
   end
 
   def equipment_accessible_parameters

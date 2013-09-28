@@ -18,7 +18,7 @@ class EmployeeDeactivationController < ApplicationController
     authorize! :read, :certification
 
     @employee_deactivation_service.deactivate_employee(@employee)
-    redirect_to employees_url, notice: "Employee #{@employee} deactivated"
+    redirect_to employees_url, notice: "Employee #{PresentableEmployee.new(@employee).name} deactivated"
   end
 
   def deactivated_employees
@@ -46,5 +46,6 @@ class EmployeeDeactivationController < ApplicationController
     employee_pending_authorization = Employee.find(params[:id])
     authorize! :manage, employee_pending_authorization
     @employee = employee_pending_authorization
+    #@employee = PresentableEmployee.new(employee_pending_authorization)
   end
 end

@@ -11,7 +11,7 @@ describe EmployeeService do
         my_employee = create(:employee, customer: my_customer)
         other_employee = create(:employee)
 
-        EmployeeService.new.get_employee_list(admin_user).should == [my_employee, other_employee]
+        EmployeeService.new.get_employee_list(admin_user).map(&:employee_model).should =~ [my_employee, other_employee]
       end
     end
 
@@ -20,14 +20,14 @@ describe EmployeeService do
         my_employee = create(:employee, customer: my_customer)
         other_employee = create(:employee)
 
-        EmployeeService.new.get_employee_list(my_user).should == [my_employee]
+        EmployeeService.new.get_employee_list(my_user).map(&:employee_model).should == [my_employee]
       end
 
       it 'only returns active employees' do
         active_employee = create(:employee, active: true, customer: my_customer)
         inactive_employee = create(:employee, active: false, customer: my_customer)
 
-        EmployeeService.new.get_employee_list(my_user).should == [active_employee]
+        EmployeeService.new.get_employee_list(my_user).map(&:employee_model).should == [active_employee]
       end
     end
 
@@ -80,7 +80,7 @@ describe EmployeeService do
         other_employee = create(:employee)
         Sorter.any_instance.should_receive(:sort).and_call_original
 
-        EmployeeService.new.get_all_employees(admin_user).should == [my_employee, other_employee]
+        EmployeeService.new.get_all_employees(admin_user).map(&:employee_model).should == [my_employee, other_employee]
       end
     end
 
@@ -90,7 +90,7 @@ describe EmployeeService do
         other_employee = create(:employee)
         Sorter.any_instance.should_receive(:sort).and_call_original
 
-        EmployeeService.new.get_all_employees(my_user).should == [my_employee]
+        EmployeeService.new.get_all_employees(my_user).map(&:employee_model).should == [my_employee]
       end
 
       it 'only returns active employees' do
@@ -98,7 +98,7 @@ describe EmployeeService do
         inactive_employee = create(:employee, active: false, customer: my_customer)
         Sorter.any_instance.should_receive(:sort).and_call_original
 
-        EmployeeService.new.get_all_employees(my_user).should == [active_employee]
+        EmployeeService.new.get_all_employees(my_user).map(&:employee_model).should == [active_employee]
       end
     end
   end
@@ -203,7 +203,7 @@ describe EmployeeService do
     context 'when regular user' do
       it 'should return empty list when no employees' do
         certification_type = create(:certification_type, customer: my_customer)
-        EmployeeService.new.get_employees_not_certified_for(certification_type).should == []
+        EmployeeService.new.get_employees_not_certified_for(certification_type).map(&:employee_model).should == []
       end
 
       it 'should return empty list when all employees certified' do
@@ -213,7 +213,7 @@ describe EmployeeService do
         create(:certification, employee: certified_employee1, certification_type: certification_type, customer: my_customer)
         create(:certification, employee: certified_employee2, certification_type: certification_type, customer: my_customer)
 
-        EmployeeService.new.get_employees_not_certified_for(certification_type).should == []
+        EmployeeService.new.get_employees_not_certified_for(certification_type).map(&:employee_model).should == []
       end
 
       it "should return only customer's employees" do
@@ -221,7 +221,7 @@ describe EmployeeService do
         my_employee = create(:employee, customer: my_customer)
         other_employee = create(:employee)
 
-        EmployeeService.new.get_employees_not_certified_for(certification_type).should == [my_employee]
+        EmployeeService.new.get_employees_not_certified_for(certification_type).map(&:employee_model).should == [my_employee]
       end
 
       it 'only returns uncertified employees' do
@@ -230,14 +230,14 @@ describe EmployeeService do
         create(:certification, employee: certified_employee, certification_type: certification_type, customer: my_customer)
         uncertified_employee = create(:employee, last_name: 'UNCERTIFIED', customer: my_customer)
 
-        EmployeeService.new.get_employees_not_certified_for(certification_type).should == [uncertified_employee]
+        EmployeeService.new.get_employees_not_certified_for(certification_type).map(&:employee_model).should == [uncertified_employee]
       end
 
       it 'should return all employees' do
         certification_type = create(:certification_type, customer: my_customer)
         uncertified_employee1 = create(:employee, customer: my_customer)
         uncertified_employee2 = create(:employee, customer: my_customer)
-        EmployeeService.new.get_employees_not_certified_for(certification_type).should == [uncertified_employee1, uncertified_employee2]
+        EmployeeService.new.get_employees_not_certified_for(certification_type).map(&:employee_model).should == [uncertified_employee1, uncertified_employee2]
       end
 
       it 'should sort employees when no certified employees' do
@@ -245,7 +245,7 @@ describe EmployeeService do
         uncertified_employee = create(:employee, customer: my_customer)
         Sorter.any_instance.should_receive(:sort).and_call_original
 
-        EmployeeService.new.get_employees_not_certified_for(certification_type).should == [uncertified_employee]
+        EmployeeService.new.get_employees_not_certified_for(certification_type).map(&:employee_model).should == [uncertified_employee]
       end
 
       it 'should sort employees when some certified employees' do
@@ -255,7 +255,7 @@ describe EmployeeService do
         create(:certification, employee: certified_employee, certification_type: certification_type, customer: my_customer)
         Sorter.any_instance.should_receive(:sort).and_call_original
 
-        EmployeeService.new.get_employees_not_certified_for(certification_type).should == [uncertified_employee]
+        EmployeeService.new.get_employees_not_certified_for(certification_type).map(&:employee_model).should == [uncertified_employee]
       end
     end
 
@@ -265,7 +265,7 @@ describe EmployeeService do
         my_employee = create(:employee, customer: my_customer)
         other_employee = create(:employee)
 
-        EmployeeService.new.get_employees_not_certified_for(certification_type).should == [my_employee]
+        EmployeeService.new.get_employees_not_certified_for(certification_type).map(&:employee_model).should == [my_employee]
       end
 
       it 'only returns uncertified employees' do
@@ -274,7 +274,7 @@ describe EmployeeService do
         create(:certification, employee: certified_employee, certification_type: certification_type, customer: my_customer)
         uncertified_employee = create(:employee, last_name: 'UNCERTIFIED', customer: my_customer)
 
-        EmployeeService.new.get_employees_not_certified_for(certification_type).should == [uncertified_employee]
+        EmployeeService.new.get_employees_not_certified_for(certification_type).map(&:employee_model).should == [uncertified_employee]
       end
     end
   end

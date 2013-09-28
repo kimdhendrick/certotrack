@@ -6,7 +6,7 @@ class EmployeeService
   end
 
   def get_all_employees(current_user, params = {})
-    employees = _get_employees_for_user(current_user)
+    employees = _get_employees_for_user(current_user).map{ |employee_model| PresentableEmployee.new(employee_model) }
     @sorter.sort(employees, params[:sort], params[:direction])
   end
 
@@ -42,6 +42,7 @@ class EmployeeService
         Employee.where(customer: certification_type.customer) :
         Employee.where("id NOT IN (?)", certified_employees)
 
+    uncertified_employees = uncertified_employees.map{ |employee_model| PresentableEmployee.new(employee_model) }
     @sorter.sort(uncertified_employees, params[:sort], params[:direction])
   end
 

@@ -10,9 +10,9 @@
   <tbody>
   <% @employees.each do |employee| %>
     <tr>
-      <td><%= link_to employee.employee_number, employee %></td></td>
-      <td><%= link_to employee.first_name, employee %></td></td>
-      <td><%= link_to employee.last_name, employee %></td></td>
+      <td><%= link_to employee.employee_number, employee.employee_model %></td></td>
+      <td><%= link_to employee.first_name, employee.employee_model %></td></td>
+      <td><%= link_to employee.last_name, employee.employee_model %></td></td>
       <td><%= employee.location_name %></td></td>
     </tr>
   <% end %>
