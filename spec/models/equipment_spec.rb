@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe Equipment do
-  before { @equipment = build(:equipment) }
+  let (:equipment) { build(:equipment) }
 
-  subject { @equipment }
+  subject { equipment }
 
   it { should belong_to(:customer) }
   it { should belong_to(:location) }
@@ -16,8 +16,8 @@ describe Equipment do
   it_should_behave_like 'a stripped model', 'name'
 
   describe 'duplication of name' do
-    subject { create(:equipment, name: 'cat', customer: customer) }
     let(:customer) { create(:customer) }
+    subject { create(:equipment, name: 'cat', customer: customer) }
 
     before do
       subject.valid?
@@ -45,7 +45,7 @@ describe Equipment do
   it 'should require last_inspection_date if Inspectable' do
     equipment = build(:equipment, inspection_interval: Interval::ONE_YEAR.text, last_inspection_date: nil)
     equipment.should_not be_valid
-    equipment.errors[:last_inspection_date].should == ["is not a valid date"]
+    equipment.errors[:last_inspection_date].should == ['is not a valid date']
   end
 
   it 'should not require last_inspection_date if Non-Inspectable' do

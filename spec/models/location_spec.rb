@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe Location do
-  before { @location = build(:location) }
+  let(:location) { build(:location) }
 
-  subject { @location }
+  subject { location }
 
   it { should belong_to(:customer) }
   it { should validate_presence_of :customer }
@@ -23,12 +23,12 @@ describe Location do
   end
 
   it 'should display its name as to_s' do
-    @location.name = 'My Location'
-    @location.to_s.should == 'My Location'
+    location.name = 'My Location'
+    location.to_s.should == 'My Location'
   end
 
   it 'should respond to its sort_key' do
-    @location.name = 'My Location'
-    @location.sort_key.should == 'My Location'
+    location.name = 'My Location'
+    location.sort_key.should == 'My Location'
   end
 end

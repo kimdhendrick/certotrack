@@ -2,12 +2,14 @@ require 'spec_helper'
 
 describe CertificationsController do
 
+  let(:customer) { create(:customer) }
+
   describe 'new' do
     context 'when certification user' do
+      let (:current_user) { stub_certification_user(customer) }
+
       before do
-        @current_user = stub_certification_user
-        sign_in @current_user
-        @certification_type = create(:certification_type)
+        sign_in current_user
       end
 
       it 'calls certification service with employee_id' do
@@ -72,10 +74,10 @@ describe CertificationsController do
         get :new, {}, {}
 
         fake_certification_type_service.received_message.should == :get_all_certification_types
-        fake_certification_type_service.received_params[0].should == @current_user
+        fake_certification_type_service.received_params[0].should == current_user
       end
 
-      it 'assigns @certification_types' do
+      it 'assigns certification_types' do
         controller.load_certification_service(FakeService.new())
         certification_type = create(:certification_type)
         controller.load_certification_type_service(FakeService.new([certification_type]))
@@ -88,10 +90,10 @@ describe CertificationsController do
 
     context 'when admin user' do
       before do
-        sign_in stub_admin
+        sign_in stub_admin(customer)
       end
 
-      it 'assigns @certification_types' do
+      it 'assigns certification_types' do
         certification_type = build(:certification_type)
         controller.load_certification_type_service(FakeService.new([certification_type]))
         controller.load_certification_service(FakeService.new())
@@ -107,7 +109,7 @@ describe CertificationsController do
         sign_in stub_guest_user
       end
 
-      it 'does not assign @certification_types' do
+      it 'does not assign certification_types' do
         get :new, {}, {}
         assigns(:certification_types).should be_nil
       end
@@ -116,9 +118,9 @@ describe CertificationsController do
 
   describe 'create' do
     context 'when certification user' do
+      let (:current_user) { stub_certification_user(customer) }
       before do
-        @current_user = stub_certification_user
-        sign_in @current_user
+        sign_in current_user
       end
 
       it 'calls creates certification using CertificationService' do
@@ -179,10 +181,10 @@ describe CertificationsController do
         get :create, {employee: {}, certification: {}}, {}
 
         fake_certification_type_service.received_message.should == :get_all_certification_types
-        fake_certification_type_service.received_params[0].should == @current_user
+        fake_certification_type_service.received_params[0].should == current_user
       end
 
-      it 'assigns @certification_types on error' do
+      it 'assigns certification_types on error' do
         Certification.any_instance.stub(:valid?).and_return(false)
         controller.load_certification_service(FakeService.new(build(:certification)))
 
@@ -276,7 +278,7 @@ describe CertificationsController do
           post :create, params, {}
 
           fake_certification_type_service.received_message.should == :get_all_certification_types
-          fake_certification_type_service.received_params[0].should == @current_user
+          fake_certification_type_service.received_params[0].should == current_user
         end
 
         it 'assigns certification and certification_types on success' do
@@ -349,12 +351,14 @@ describe CertificationsController do
 
   describe 'GET show' do
     context 'when certification user' do
+      let (:current_user) { stub_certification_user(customer) }
+
       before do
-        sign_in stub_certification_user
+        sign_in current_user
       end
 
       it 'assigns certification as @certification' do
-        certification = create(:certification, customer: @customer)
+        certification = create(:certification, customer: customer)
         get :show, {:id => certification.to_param}, {}
         assigns(:certification).should eq(certification)
       end
@@ -362,11 +366,11 @@ describe CertificationsController do
 
     context 'when admin user' do
       before do
-        sign_in stub_admin
+        sign_in stub_admin(customer)
       end
 
       it 'assigns certification as @certification' do
-        certification = create(:certification, customer: @customer)
+        certification = create(:certification, customer: customer)
         get :show, {:id => certification.to_param}, {}
         assigns(:certification).should eq(certification)
       end
@@ -378,7 +382,7 @@ describe CertificationsController do
       end
 
       it 'does not assign certification as @certification' do
-        certification = create(:certification, customer: @customer)
+        certification = create(:certification, customer: customer)
         get :show, {:id => certification.to_param}, {}
         assigns(:certification).should be_nil
       end

@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe CertificationType do
-  before { @certification_type = build(:certification_type) }
+  let(:certification_type) { build(:certification_type) }
 
-  subject { @certification_type }
+  subject { certification_type }
 
   it { should validate_presence_of :name }
   it { should validate_presence_of :customer }

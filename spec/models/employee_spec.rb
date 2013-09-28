@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe Employee do
-  before { @employee = build(:employee) }
+  let(:employee) { build(:employee) }
 
-  subject { @employee }
+  subject { employee }
 
   it { should validate_presence_of :first_name }
   it { should validate_presence_of :last_name }
@@ -31,15 +31,15 @@ describe Employee do
   end
 
   it 'should respond to its sort_key' do
-    @employee.first_name = 'John'
-    @employee.last_name = 'Doe'
-    @employee.sort_key.should == 'DoeJohn'
+    employee.first_name = 'John'
+    employee.last_name = 'Doe'
+    employee.sort_key.should == 'DoeJohn'
   end
 
   it 'should display its name as to_s' do
-    @employee.first_name = 'John'
-    @employee.last_name = 'Doe'
-    @employee.to_s.should == 'Doe, John'
+    employee.first_name = 'John'
+    employee.last_name = 'Doe'
+    employee.to_s.should == 'Doe, John'
   end
 
   it 'should respond to location_name' do

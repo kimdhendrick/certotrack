@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe CertificationTypeService do
-  before do
-    @customer = create(:customer)
-  end
+  let(:customer) { create(:customer) }
 
   describe 'create_certification_type' do
     it 'should create certification type' do
@@ -27,7 +25,7 @@ describe CertificationTypeService do
 
   describe 'update_certification_type' do
     it 'should update certification_types attributes' do
-      certification_type = create(:certification_type, name: 'Certification', customer: @customer)
+      certification_type = create(:certification_type, name: 'Certification', customer: customer)
       attributes =
         {
           'id' => certification_type.id,
@@ -45,7 +43,7 @@ describe CertificationTypeService do
     end
 
     it 'should return false if errors' do
-      certification_type = create(:certification_type, name: 'Certification', customer: @customer)
+      certification_type = create(:certification_type, name: 'Certification', customer: customer)
       certification_type.stub(:save).and_return(false)
 
       success = CertificationTypeService.new.update_certification_type(certification_type, {})
@@ -58,7 +56,7 @@ describe CertificationTypeService do
 
   describe 'delete_certification_type' do
     it 'destroys the requested certification_type' do
-      certification_type = create(:certification_type, customer: @customer)
+      certification_type = create(:certification_type, customer: customer)
 
       expect {
         CertificationTypeService.new.delete_certification_type(certification_type)
@@ -66,8 +64,8 @@ describe CertificationTypeService do
     end
 
     it 'returns error when certification assigned to certification_type' do
-      certification_type = create(:certification_type, customer: @customer)
-      certification = create(:certification, certification_type: certification_type, customer: @customer)
+      certification_type = create(:certification_type, customer: customer)
+      certification = create(:certification, certification_type: certification_type, customer: customer)
 
       status = CertificationTypeService.new.delete_certification_type(certification_type)
 
@@ -82,14 +80,12 @@ describe CertificationTypeService do
   end
 
   describe 'get_all_certification_types' do
-    before do
-      @my_customer = create(:customer)
-      @my_user = create(:user, customer: @my_customer)
-    end
+    let(:my_customer) { create(:customer) }
+    let(:my_user) { create(:user, customer: my_customer) }
 
     context 'an admin user' do
       it 'should return all certification_types' do
-        my_certification_type = create(:certification_type, customer: @my_customer)
+        my_certification_type = create(:certification_type, customer: my_customer)
         other_certification_type = create(:certification_type)
         Sorter.any_instance.should_receive(:sort).and_call_original
 
@@ -101,27 +97,25 @@ describe CertificationTypeService do
 
     context 'a regular user' do
       it "should return only that user's certification_types" do
-        my_certification_type = create(:certification_type, customer: @my_customer)
+        my_certification_type = create(:certification_type, customer: my_customer)
         other_certification_type = create(:certification_type)
         Sorter.any_instance.should_receive(:sort).and_call_original
 
-        CertificationTypeService.new.get_all_certification_types(@my_user).should == [my_certification_type]
+        CertificationTypeService.new.get_all_certification_types(my_user).should == [my_certification_type]
       end
     end
   end
 
   describe 'get_certification_type_list' do
-    before do
-      @my_customer = create(:customer)
-      @my_user = create(:user, customer: @my_customer)
-    end
+    let(:my_customer) { create(:customer) }
+    let(:my_user) { create(:user, customer: my_customer) }
 
     context 'sorting' do
       it 'should call Sorter to ensure sorting' do
         fake_sorter = FakeService.new([])
         certification_type_service = CertificationTypeService.new(sorter: fake_sorter)
 
-        certification_type_service.get_certification_type_list(@my_user)
+        certification_type_service.get_certification_type_list(my_user)
 
         fake_sorter.received_message.should == :sort
       end
@@ -132,7 +126,7 @@ describe CertificationTypeService do
         fake_paginator = FakeService.new
         certification_type_service = CertificationTypeService.new(sorter: FakeService.new, paginator: fake_paginator)
 
-        certification_type_service.get_certification_type_list(@my_user)
+        certification_type_service.get_certification_type_list(my_user)
 
         fake_paginator.received_message.should == :paginate
       end
@@ -143,7 +137,7 @@ describe CertificationTypeService do
         fake_search_service = FakeService.new([])
         certification_type_service = CertificationTypeService.new(sorter: FakeService.new([]), search_service: fake_search_service)
 
-        certification_type_service.get_certification_type_list(@my_user, {thing1: 'thing2'})
+        certification_type_service.get_certification_type_list(my_user, {thing1: 'thing2'})
 
         fake_search_service.received_message.should == :search
         fake_search_service.received_params[0].should == []
@@ -153,7 +147,7 @@ describe CertificationTypeService do
 
     context 'an admin user' do
       it 'should return all certification_types' do
-        my_certification_type = create(:certification_type, customer: @my_customer)
+        my_certification_type = create(:certification_type, customer: my_customer)
         other_certification_type = create(:certification_type)
 
         admin_user = create(:user, roles: ['admin'])
@@ -164,10 +158,10 @@ describe CertificationTypeService do
 
     context 'a regular user' do
       it "should return only that user's certification_types" do
-        my_certification_type = create(:certification_type, customer: @my_customer)
+        my_certification_type = create(:certification_type, customer: my_customer)
         other_certification_type = create(:certification_type)
 
-        CertificationTypeService.new.get_certification_type_list(@my_user).should == [my_certification_type]
+        CertificationTypeService.new.get_certification_type_list(my_user).should == [my_certification_type]
       end
     end
   end

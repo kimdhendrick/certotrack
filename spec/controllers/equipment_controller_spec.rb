@@ -1,29 +1,26 @@
 require 'spec_helper'
 
 describe EquipmentController do
-
-  before do
-    @customer = build(:customer)
-  end
+  let(:customer) { build(:customer) }
 
   describe 'GET index' do
     it 'calls get_all_equipment with current_user and params' do
-      my_user = stub_equipment_user
+      my_user = stub_equipment_user(customer)
       sign_in my_user
-      @fake_equipment_service = controller.load_equipment_service(FakeService.new([]))
+      fake_equipment_service = controller.load_equipment_service(FakeService.new([]))
       params = {sort: 'name', direction: 'asc'}
 
       get :index, params
 
-      @fake_equipment_service.received_messages.should == [:get_all_equipment]
-      @fake_equipment_service.received_params[0].should == my_user
-      @fake_equipment_service.received_params[1]['sort'].should == 'name'
-      @fake_equipment_service.received_params[1]['direction'].should == 'asc'
+      fake_equipment_service.received_messages.should == [:get_all_equipment]
+      fake_equipment_service.received_params[0].should == my_user
+      fake_equipment_service.received_params[1]['sort'].should == 'name'
+      fake_equipment_service.received_params[1]['direction'].should == 'asc'
     end
 
     context 'when equipment user' do
       before do
-        sign_in stub_equipment_user
+        sign_in stub_equipment_user(customer)
       end
 
       it 'assigns equipment as @equipment' do
@@ -87,26 +84,26 @@ describe EquipmentController do
 
   describe 'GET expired' do
     it 'calls get_expired_equipment with current_user and params' do
-      my_user = stub_equipment_user
+      my_user = stub_equipment_user(customer)
       sign_in my_user
-      @fake_equipment_service = controller.load_equipment_service(FakeService.new([]))
+      fake_equipment_service = controller.load_equipment_service(FakeService.new([]))
       params = {sort: 'name', direction: 'asc'}
 
       get :expired, params
 
-      @fake_equipment_service.received_messages.should == [:get_expired_equipment]
-      @fake_equipment_service.received_params[0].should == my_user
-      @fake_equipment_service.received_params[1]['sort'].should == 'name'
-      @fake_equipment_service.received_params[1]['direction'].should == 'asc'
+      fake_equipment_service.received_messages.should == [:get_expired_equipment]
+      fake_equipment_service.received_params[0].should == my_user
+      fake_equipment_service.received_params[1]['sort'].should == 'name'
+      fake_equipment_service.received_params[1]['direction'].should == 'asc'
     end
 
     context 'when equipment user' do
       before do
-        sign_in stub_equipment_user
+        sign_in stub_equipment_user(customer)
       end
 
       it 'assigns equipment as @equipment' do
-        expired_equipment = build(:expired_equipment, customer: @customer)
+        expired_equipment = build(:expired_equipment, customer: customer)
 
         EquipmentService.any_instance.stub(:get_expired_equipment).and_return([expired_equipment])
 
@@ -138,7 +135,7 @@ describe EquipmentController do
       end
 
       it 'assigns equipment as @equipment' do
-        expired_equipment = build(:expired_equipment, customer: @customer)
+        expired_equipment = build(:expired_equipment, customer: customer)
         EquipmentService.any_instance.stub(:get_expired_equipment).and_return([expired_equipment])
 
         get :expired
@@ -167,26 +164,26 @@ describe EquipmentController do
 
   describe 'GET expiring' do
     it 'calls get_expiring_equipment with current_user and params' do
-      my_user = stub_equipment_user
+      my_user = stub_equipment_user(customer)
       sign_in my_user
-      @fake_equipment_service = controller.load_equipment_service(FakeService.new([]))
+      fake_equipment_service = controller.load_equipment_service(FakeService.new([]))
       params = {sort: 'name', direction: 'asc'}
 
       get :expiring, params
 
-      @fake_equipment_service.received_messages.should == [:get_expiring_equipment]
-      @fake_equipment_service.received_params[0].should == my_user
-      @fake_equipment_service.received_params[1]['sort'].should == 'name'
-      @fake_equipment_service.received_params[1]['direction'].should == 'asc'
+      fake_equipment_service.received_messages.should == [:get_expiring_equipment]
+      fake_equipment_service.received_params[0].should == my_user
+      fake_equipment_service.received_params[1]['sort'].should == 'name'
+      fake_equipment_service.received_params[1]['direction'].should == 'asc'
     end
 
     context 'when equipment user' do
       before do
-        sign_in stub_equipment_user
+        sign_in stub_equipment_user(customer)
       end
 
       it 'assigns equipment as @equipment' do
-        expiring_equipment = build(:expiring_equipment, customer: @customer)
+        expiring_equipment = build(:expiring_equipment, customer: customer)
 
         EquipmentService.any_instance.stub(:get_expiring_equipment).and_return([expiring_equipment])
 
@@ -218,7 +215,7 @@ describe EquipmentController do
       end
 
       it 'assigns equipment as @equipment' do
-        expiring_equipment = build(:expiring_equipment, customer: @customer)
+        expiring_equipment = build(:expiring_equipment, customer: customer)
         EquipmentService.any_instance.stub(:get_expiring_equipment).and_return([expiring_equipment])
 
         get :expiring
@@ -247,26 +244,26 @@ describe EquipmentController do
 
   describe 'GET noninspectable' do
     it 'calls get_noninspectable_equipment with current_user and params' do
-      my_user = stub_equipment_user
+      my_user = stub_equipment_user(customer)
       sign_in my_user
-      @fake_equipment_service = controller.load_equipment_service(FakeService.new([]))
+      fake_equipment_service = controller.load_equipment_service(FakeService.new([]))
       params = {sort: 'name', direction: 'asc'}
 
       get :noninspectable, params
 
-      @fake_equipment_service.received_messages.should == [:get_noninspectable_equipment]
-      @fake_equipment_service.received_params[0].should == my_user
-      @fake_equipment_service.received_params[1]['sort'].should == 'name'
-      @fake_equipment_service.received_params[1]['direction'].should == 'asc'
+      fake_equipment_service.received_messages.should == [:get_noninspectable_equipment]
+      fake_equipment_service.received_params[0].should == my_user
+      fake_equipment_service.received_params[1]['sort'].should == 'name'
+      fake_equipment_service.received_params[1]['direction'].should == 'asc'
     end
 
     context 'when equipment user' do
       before do
-        sign_in stub_equipment_user
+        sign_in stub_equipment_user(customer)
       end
 
       it 'assigns equipment as @equipment' do
-        noninspectable_equipment = build(:noninspectable_equipment, customer: @customer)
+        noninspectable_equipment = build(:noninspectable_equipment, customer: customer)
 
         EquipmentService.any_instance.stub(:get_noninspectable_equipment).and_return([noninspectable_equipment])
 
@@ -298,7 +295,7 @@ describe EquipmentController do
       end
 
       it 'assigns equipment as @equipment' do
-        noninspectable_equipment = build(:noninspectable_equipment, customer: @customer)
+        noninspectable_equipment = build(:noninspectable_equipment, customer: customer)
         EquipmentService.any_instance.stub(:get_noninspectable_equipment).and_return([noninspectable_equipment])
 
         get :noninspectable
@@ -328,11 +325,11 @@ describe EquipmentController do
   describe 'GET show' do
     context 'when equipment user' do
       before do
-        sign_in stub_equipment_user
+        sign_in stub_equipment_user(customer)
       end
 
       it 'assigns equipment as @equipment' do
-        equipment = create(:equipment, customer: @customer)
+        equipment = create(:equipment, customer: customer)
         get :show, {:id => equipment.to_param}, {}
         assigns(:equipment).should eq(equipment)
       end
@@ -344,7 +341,7 @@ describe EquipmentController do
       end
 
       it 'assigns equipment as @equipment' do
-        equipment = create(:equipment, customer: @customer)
+        equipment = create(:equipment, customer: customer)
         get :show, {:id => equipment.to_param}, {}
         assigns(:equipment).should eq(equipment)
       end
@@ -356,7 +353,7 @@ describe EquipmentController do
       end
 
       it 'does not assign equipment as @equipment' do
-        equipment = create(:equipment, customer: @customer)
+        equipment = create(:equipment, customer: customer)
         get :show, {:id => equipment.to_param}, {}
         assigns(:equipment).should be_nil
       end
@@ -366,7 +363,7 @@ describe EquipmentController do
   describe 'GET new' do
     context 'when equipment user' do
       before do
-        sign_in stub_equipment_user
+        sign_in stub_equipment_user(customer)
       end
 
       it 'assigns a new equipment as @equipment' do
@@ -375,7 +372,7 @@ describe EquipmentController do
       end
 
       it 'assigns @intervals' do
-        equipment = create(:equipment, customer: @customer)
+        equipment = create(:equipment, customer: customer)
         get :new, {:id => equipment.to_param}, {}
         assigns(:intervals).should eq(Interval.all.to_a)
       end
@@ -407,17 +404,17 @@ describe EquipmentController do
   describe 'GET edit' do
     context 'when equipment user' do
       before do
-        sign_in stub_equipment_user
+        sign_in stub_equipment_user(customer)
       end
 
       it 'assigns the requested equipment as @equipment' do
-        equipment = create(:equipment, customer: @customer)
+        equipment = create(:equipment, customer: customer)
         get :edit, {:id => equipment.to_param}, {}
         assigns(:equipment).should eq(equipment)
       end
 
       it 'assigns @intervals' do
-        equipment = create(:equipment, customer: @customer)
+        equipment = create(:equipment, customer: customer)
         get :edit, {:id => equipment.to_param}, {}
         assigns(:intervals).should eq(Interval.all.to_a)
       end
@@ -430,7 +427,7 @@ describe EquipmentController do
       end
 
       it 'assigns the requested equipment as @equipment' do
-        equipment = create(:equipment, customer: @customer)
+        equipment = create(:equipment, customer: customer)
         get :edit, {:id => equipment.to_param}, {}
         assigns(:equipment).should eq(equipment)
       end
@@ -442,7 +439,7 @@ describe EquipmentController do
       end
 
       it 'does not assign equipment as @equipment' do
-        equipment = create(:equipment, customer: @customer)
+        equipment = create(:equipment, customer: customer)
         get :edit, {:id => equipment.to_param}, {}
         assigns(:equipment).should be_nil
       end
@@ -452,7 +449,7 @@ describe EquipmentController do
   describe 'POST create' do
     context 'when equipment user' do
       before do
-        sign_in stub_equipment_user
+        sign_in stub_equipment_user(customer)
       end
 
       describe 'with valid params' do
@@ -536,12 +533,12 @@ describe EquipmentController do
   describe 'PUT update' do
     context 'when equipment user' do
       before do
-        sign_in stub_equipment_user
+        sign_in stub_equipment_user(customer)
       end
 
       describe 'with valid params' do
         it 'updates the requested equipment' do
-          equipment = create(:equipment, customer: @customer)
+          equipment = create(:equipment, customer: customer)
           EquipmentService.any_instance.should_receive(:update_equipment).once
 
           put :update, {:id => equipment.to_param, :equipment =>
@@ -557,14 +554,14 @@ describe EquipmentController do
 
         it 'assigns the requested equipment as @equipment' do
           EquipmentService.any_instance.stub(:update_equipment).and_return(true)
-          equipment = create(:equipment, customer: @customer)
+          equipment = create(:equipment, customer: customer)
           put :update, {:id => equipment.to_param, :equipment => equipment_attributes}, {}
           assigns(:equipment).should eq(equipment)
         end
 
         it 'redirects to the equipment' do
           EquipmentService.any_instance.stub(:update_equipment).and_return(true)
-          equipment = create(:equipment, customer: @customer)
+          equipment = create(:equipment, customer: customer)
 
           put :update, {:id => equipment.to_param, :equipment => equipment_attributes}, {}
 
@@ -575,21 +572,21 @@ describe EquipmentController do
 
       describe 'with invalid params' do
         it 'assigns the equipment as @equipment' do
-          equipment = create(:equipment, customer: @customer)
+          equipment = create(:equipment, customer: customer)
           EquipmentService.any_instance.stub(:update_equipment).and_return(false)
           put :update, {:id => equipment.to_param, :equipment => {'name' => 'invalid value'}}, {}
           assigns(:equipment).should eq(equipment)
         end
 
         it "re-renders the 'edit' template" do
-          equipment = create(:equipment, customer: @customer)
+          equipment = create(:equipment, customer: customer)
           EquipmentService.any_instance.stub(:update_equipment).and_return(false)
           put :update, {:id => equipment.to_param, :equipment => {'name' => 'invalid value'}}, {}
           response.should render_template('edit')
         end
 
         it 'assigns @intervals' do
-          equipment = create(:equipment, customer: @customer)
+          equipment = create(:equipment, customer: customer)
           EquipmentService.any_instance.stub(:update_equipment).and_return(false)
           put :update, {:id => equipment.to_param, :equipment => {'name' => 'invalid value'}}, {}
           assigns(:intervals).should eq(Interval.all.to_a)
@@ -604,7 +601,7 @@ describe EquipmentController do
       end
 
       it 'updates the requested equipment' do
-        equipment = create(:equipment, customer: @customer)
+        equipment = create(:equipment, customer: customer)
         EquipmentService.any_instance.should_receive(:update_equipment).once
 
         put :update, {:id => equipment.to_param, :equipment =>
@@ -619,7 +616,7 @@ describe EquipmentController do
       end
 
       it 'assigns the requested equipment as @equipment' do
-        equipment = create(:equipment, customer: @customer)
+        equipment = create(:equipment, customer: customer)
         EquipmentService.any_instance.stub(:update_equipment).and_return(equipment)
         put :update, {:id => equipment.to_param, :equipment => equipment_attributes}, {}
         assigns(:equipment).should eq(equipment)
@@ -632,7 +629,7 @@ describe EquipmentController do
       end
 
       it 'does not assign equipment as @equipment' do
-        equipment = create(:equipment, customer: @customer)
+        equipment = create(:equipment, customer: customer)
         put :update, {:id => equipment.to_param, :equipment => equipment_attributes}, {}
         assigns(:equipment).should be_nil
       end
@@ -642,18 +639,18 @@ describe EquipmentController do
   describe 'DELETE destroy' do
     context 'when equipment user' do
       before do
-        sign_in stub_equipment_user
+        sign_in stub_equipment_user(customer)
       end
 
       it 'calls EquipmentService' do
-        equipment = create(:equipment, customer: @customer)
+        equipment = create(:equipment, customer: customer)
         EquipmentService.any_instance.should_receive(:delete_equipment).once
 
         delete :destroy, {:id => equipment.to_param}, {}
       end
 
       it 'redirects to the equipment list' do
-        equipment = create(:equipment, customer: @customer)
+        equipment = create(:equipment, customer: customer)
         EquipmentService.any_instance.should_receive(:delete_equipment).once
 
         delete :destroy, {:id => equipment.to_param}, {}
@@ -669,7 +666,7 @@ describe EquipmentController do
       end
 
       it 'calls EquipmentService' do
-        equipment = create(:equipment, customer: @customer)
+        equipment = create(:equipment, customer: customer)
         EquipmentService.any_instance.should_receive(:delete_equipment).once
 
         delete :destroy, {:id => equipment.to_param}, {}
@@ -679,7 +676,7 @@ describe EquipmentController do
 
   describe 'GET search' do
     it 'calls get_all_equipment with current_user and params' do
-      my_user = stub_equipment_user
+      my_user = stub_equipment_user(customer)
       sign_in my_user
       fake_equipment_service = controller.load_equipment_service(FakeService.new([]))
       params = {sort: 'name', direction: 'asc'}
@@ -694,11 +691,11 @@ describe EquipmentController do
 
     context 'when equipment user' do
       before do
-        sign_in stub_equipment_user
+        sign_in stub_equipment_user(customer)
       end
 
       it 'assigns equipment as @equipment' do
-        equipment = build(:equipment, customer: @customer)
+        equipment = build(:equipment, customer: customer)
 
         EquipmentService.any_instance.stub(:get_all_equipment).and_return([equipment])
 
@@ -746,7 +743,7 @@ describe EquipmentController do
   describe 'GET ajax_assignee' do
     context 'when equipment user' do
       before do
-        sign_in stub_equipment_user
+        sign_in stub_equipment_user(customer)
       end
 
       it 'should return locations when assignee is Location' do
@@ -806,9 +803,9 @@ describe EquipmentController do
 
   describe 'GET ajax_equipment_name' do
     context 'when equipment user' do
+      let (:current_user) { stub_equipment_user(customer) }
       before do
-        @current_user = stub_equipment_user
-        sign_in @current_user
+        sign_in current_user
       end
 
       it 'should call equipment_service to retrieve names' do
@@ -819,7 +816,7 @@ describe EquipmentController do
         json = JSON.parse(response.body)
         json.should == ['cat']
         fake_employee_service.received_message.should == :get_equipment_names
-        fake_employee_service.received_params[0].should == @current_user
+        fake_employee_service.received_params[0].should == current_user
         fake_employee_service.received_params[1].should == 'cat'
       end
     end
@@ -836,9 +833,9 @@ describe EquipmentController do
     end
 
     context 'when admin user' do
+      let (:current_user) { stub_admin(customer) }
       before do
-        @current_user = stub_admin
-        sign_in @current_user
+        sign_in current_user
       end
 
       it 'should call equipment_service to retrieve names' do
@@ -849,7 +846,7 @@ describe EquipmentController do
         json = JSON.parse(response.body)
         json.should == ['cat']
         fake_employee_service.received_message.should == :get_equipment_names
-        fake_employee_service.received_params[0].should == @current_user
+        fake_employee_service.received_params[0].should == current_user
         fake_employee_service.received_params[1].should == 'cat'
       end
     end

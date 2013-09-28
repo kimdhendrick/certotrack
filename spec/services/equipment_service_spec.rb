@@ -61,14 +61,12 @@ describe EquipmentService do
   end
 
   describe 'get_expired_equipment' do
-    before do
-      @my_expired_equipment = create(:expired_equipment, customer: my_customer)
-      @other_expired_equipment = create(:expired_equipment)
-      @my_valid_equipment = create(:valid_equipment, customer: my_customer)
-      @other_valid_equipment = create(:valid_equipment)
-      @my_expiring_equipment = create(:expiring_equipment, customer: my_customer)
-      @other_expiring_equipment = create(:expiring_equipment)
-    end
+    let!(:my_expired_equipment) { create(:expired_equipment, customer: my_customer) }
+    let!(:other_expired_equipment) { create(:expired_equipment) }
+    let!(:my_valid_equipment) { create(:valid_equipment, customer: my_customer) }
+    let!(:other_valid_equipment) { create(:valid_equipment) }
+    let!(:my_expiring_equipment) { create(:expiring_equipment, customer: my_customer) }
+    let!(:other_expiring_equipment) { create(:expiring_equipment) }
 
     context 'sorting' do
       it 'should call Sort Service to ensure sorting' do
@@ -94,26 +92,24 @@ describe EquipmentService do
 
     context 'an admin user' do
       it 'should return all expired equipment' do
-        EquipmentService.new.get_expired_equipment(admin_user).should == [@my_expired_equipment, @other_expired_equipment]
+        EquipmentService.new.get_expired_equipment(admin_user).should == [my_expired_equipment, other_expired_equipment]
       end
     end
 
     context 'a regular user' do
       it "should return only that user's expired equipment" do
-        EquipmentService.new.get_expired_equipment(my_user).should == [@my_expired_equipment]
+        EquipmentService.new.get_expired_equipment(my_user).should == [my_expired_equipment]
       end
     end
   end
 
   describe 'get_expiring_equipment' do
-    before do
-      @my_expiring_equipment = create(:expiring_equipment, customer: my_customer)
-      @other_expiring_equipment = create(:expiring_equipment)
-      @my_expired_equipment = create(:expired_equipment, customer: my_customer)
-      @other_expired_equipment = create(:expired_equipment)
-      @my_valid_equipment = create(:valid_equipment, customer: my_customer)
-      @other_valid_equipment = create(:valid_equipment)
-    end
+    let!(:my_expiring_equipment) { create(:expiring_equipment, customer: my_customer) }
+    let!(:other_expiring_equipment) { create(:expiring_equipment) }
+    let!(:my_expired_equipment) { create(:expired_equipment, customer: my_customer) }
+    let!(:other_expired_equipment) { create(:expired_equipment) }
+    let!(:my_valid_equipment) { create(:valid_equipment, customer: my_customer) }
+    let!(:other_valid_equipment) { create(:valid_equipment) }
 
     context 'sorting' do
       it 'should call Sort Service to ensure sorting' do
@@ -139,24 +135,22 @@ describe EquipmentService do
 
     context 'an admin user' do
       it 'should return all expiring equipment' do
-        EquipmentService.new.get_expiring_equipment(admin_user).should == [@my_expiring_equipment, @other_expiring_equipment]
+        EquipmentService.new.get_expiring_equipment(admin_user).should == [my_expiring_equipment, other_expiring_equipment]
       end
     end
 
     context 'a regular user' do
       it "should return only that user's expiring equipment" do
-        EquipmentService.new.get_expiring_equipment(my_user).should == [@my_expiring_equipment]
+        EquipmentService.new.get_expiring_equipment(my_user).should == [my_expiring_equipment]
       end
     end
   end
 
   describe 'get_noninspectable_equipment' do
-    before do
-      @my_noninspectable_equipment = create(:noninspectable_equipment, customer: my_customer)
-      @other_noninspectable_equipment = create(:noninspectable_equipment)
-      @my_valid_equipment = create(:valid_equipment, customer: my_customer)
-      @other_valid_equipment = create(:valid_equipment)
-    end
+    let!(:my_noninspectable_equipment) { create(:noninspectable_equipment, customer: my_customer) }
+    let!(:other_noninspectable_equipment) { create(:noninspectable_equipment) }
+    let!(:my_valid_equipment) { create(:valid_equipment, customer: my_customer) }
+    let!(:other_valid_equipment) { create(:valid_equipment) }
 
     context 'sorting' do
       it 'should call Sort Service to ensure sorting' do
@@ -182,22 +176,22 @@ describe EquipmentService do
 
     context 'an admin user' do
       it 'should return all noninspectable equipment' do
-        EquipmentService.new.get_noninspectable_equipment(admin_user).should == [@my_noninspectable_equipment, @other_noninspectable_equipment]
+        EquipmentService.new.get_noninspectable_equipment(admin_user).should == [my_noninspectable_equipment, other_noninspectable_equipment]
       end
     end
 
     context 'a regular user' do
       it "should return only that user's noninspectable equipment" do
-        EquipmentService.new.get_noninspectable_equipment(my_user).should == [@my_noninspectable_equipment]
+        EquipmentService.new.get_noninspectable_equipment(my_user).should == [my_noninspectable_equipment]
       end
     end
   end
 
   describe 'count_all_equipment' do
+    let(:customer_one) { create(:customer) }
     before do
-      @customer_one = create(:customer)
-      @equipment_one = create(:equipment, customer: @customer_one)
-      @equipment_two = create(:equipment)
+      equipment_one = create(:equipment, customer: customer_one)
+      equipment_two = create(:equipment)
     end
 
     context 'an admin user' do
@@ -208,7 +202,7 @@ describe EquipmentService do
 
     context 'a regular user' do
       it "should return count that includes only that user's equipment" do
-        user = create(:user, customer: @customer_one)
+        user = create(:user, customer: customer_one)
 
         EquipmentService.new.count_all_equipment(user).should == 1
       end
@@ -216,13 +210,14 @@ describe EquipmentService do
   end
 
   describe 'count_expired_equipment' do
+    let(:customer_one) { create(:customer) }
+
     before do
-      @customer_one = create(:customer)
-      @customer_two = create(:customer)
-      @valid_equipment_customer_one = create(:equipment, customer: @customer_one, expiration_date: Date.today + 61.days)
-      @valid_equipment_customer_two = create(:equipment, customer: @customer_two, expiration_date: Date.today + 61.days)
-      @expired_equipment_customer_one = create(:equipment, customer: @customer_one, expiration_date: Date.yesterday)
-      @expired_equipment_customer_two = create(:equipment, customer: @customer_two, expiration_date: Date.yesterday)
+      customer_two = create(:customer)
+      valid_equipment_customer_one = create(:equipment, customer: customer_one, expiration_date: Date.today + 61.days)
+      valid_equipment_customer_two = create(:equipment, customer: customer_two, expiration_date: Date.today + 61.days)
+      expired_equipment_customer_one = create(:equipment, customer: customer_one, expiration_date: Date.yesterday)
+      expired_equipment_customer_two = create(:equipment, customer: customer_two, expiration_date: Date.yesterday)
     end
 
     context 'an admin user' do
@@ -233,7 +228,7 @@ describe EquipmentService do
 
     context 'a regular user' do
       it "should return count that includes only that user's expired equipment" do
-        user = create(:user, customer: @customer_one)
+        user = create(:user, customer: customer_one)
 
         EquipmentService.new.count_expired_equipment(user).should == 1
       end
@@ -241,15 +236,16 @@ describe EquipmentService do
   end
 
   describe 'count_expiring_equipment' do
+    let(:customer_one) { create(:customer) }
+
     before do
-      @customer_one = create(:customer)
-      @customer_two = create(:customer)
-      @customer_three = create(:customer)
-      @valid_equipment_customer_one = create(:equipment, customer: @customer_one, expiration_date: Date.today + 61.days)
-      @valid_equipment_customer_two = create(:equipment, customer: @customer_two, expiration_date: Date.today + 61.days)
-      @valid_equipment_customer_three = create(:equipment, customer: @customer_three, expiration_date: Date.today + 61.days)
-      @expiring_equipment_customer_one = create(:equipment, customer: @customer_one, expiration_date: Date.tomorrow)
-      @expiring_equipment_customer_two = create(:equipment, customer: @customer_two, expiration_date: Date.tomorrow)
+      customer_two = create(:customer)
+      customer_three = create(:customer)
+      valid_equipment_customer_one = create(:equipment, customer: customer_one, expiration_date: Date.today + 61.days)
+      valid_equipment_customer_two = create(:equipment, customer: customer_two, expiration_date: Date.today + 61.days)
+      valid_equipment_customer_three = create(:equipment, customer: customer_three, expiration_date: Date.today + 61.days)
+      expiring_equipment_customer_one = create(:equipment, customer: customer_one, expiration_date: Date.tomorrow)
+      expiring_equipment_customer_two = create(:equipment, customer: customer_two, expiration_date: Date.tomorrow)
     end
 
     context 'an admin user' do
@@ -260,7 +256,7 @@ describe EquipmentService do
 
     context 'a regular user' do
       it "should return count that includes only that user's expiring equipment" do
-        user = create(:user, customer: @customer_one)
+        user = create(:user, customer: customer_one)
 
         EquipmentService.new.count_expiring_equipment(user).should == 1
       end

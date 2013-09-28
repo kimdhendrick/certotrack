@@ -2,14 +2,13 @@ require 'spec_helper'
 
 describe CertificationTypesController do
 
-  before do
-    @customer = create(:customer)
-  end
+  let(:customer) {create(:customer)}
 
   describe 'GET new' do
     context 'when certification user' do
+      let(:customer) {create(:customer)}
       before do
-        sign_in stub_certification_user
+        sign_in stub_certification_user(customer)
       end
 
       it 'assigns a new certification type as @certification_type' do
@@ -20,7 +19,7 @@ describe CertificationTypesController do
 
     context 'when admin user' do
       before do
-        sign_in stub_admin
+        sign_in stub_admin(customer)
       end
 
       it 'assigns a new certification_type as @certification_type' do
@@ -44,7 +43,7 @@ describe CertificationTypesController do
   describe 'POST create' do
     context 'when certification_type user' do
       before do
-        sign_in stub_certification_user
+        sign_in stub_certification_user(customer)
       end
 
       describe 'with valid params' do
@@ -94,7 +93,7 @@ describe CertificationTypesController do
 
     context 'when admin user' do
       before do
-        sign_in stub_admin
+        sign_in stub_admin(customer)
       end
 
       it 'calls CertificationTypeService' do
@@ -126,17 +125,17 @@ describe CertificationTypesController do
   describe 'GET edit' do
     context 'when certification user' do
       before do
-        sign_in stub_certification_user
+        sign_in stub_certification_user(customer)
       end
 
       it 'assigns the requested certification_type as @certification_type' do
-        certification_type = create(:certification_type, customer: @customer)
+        certification_type = create(:certification_type, customer: customer)
         get :edit, {:id => certification_type.to_param}, {}
         assigns(:certification_type).should eq(certification_type)
       end
 
       it 'assigns @intervals' do
-        certification_type = create(:certification_type, customer: @customer)
+        certification_type = create(:certification_type, customer: customer)
         get :edit, {:id => certification_type.to_param}, {}
         assigns(:intervals).should eq(Interval.all.to_a)
       end
@@ -145,11 +144,11 @@ describe CertificationTypesController do
 
     context 'when admin user' do
       before do
-        sign_in stub_admin
+        sign_in stub_admin(customer)
       end
 
       it 'assigns the requested certification_type as @certification_type' do
-        certification_type = create(:certification_type, customer: @customer)
+        certification_type = create(:certification_type, customer: customer)
         get :edit, {:id => certification_type.to_param}, {}
         assigns(:certification_type).should eq(certification_type)
       end
@@ -161,7 +160,7 @@ describe CertificationTypesController do
       end
 
       it 'does not assign certification_type as @certification_type' do
-        certification_type = create(:certification_type, customer: @customer)
+        certification_type = create(:certification_type, customer: customer)
         get :edit, {:id => certification_type.to_param}, {}
         assigns(:certification_type).should be_nil
       end
@@ -171,19 +170,19 @@ describe CertificationTypesController do
   describe 'GET show' do
     context 'when certification user' do
       before do
-        sign_in stub_certification_user
+        sign_in stub_certification_user(customer)
       end
 
       it 'assigns certification_type as @certification_type' do
-        certification_type = create(:certification_type, customer: @customer)
+        certification_type = create(:certification_type, customer: customer)
         get :show, {:id => certification_type.to_param}, {}
         assigns(:certification_type).should eq(certification_type)
       end
 
       it 'assigns non_certified_employees as @non_certified_employees' do
-        employee = create(:employee, customer: @customer)
+        employee = create(:employee, customer: customer)
         fake_employee_service = controller.load_employee_service(FakeService.new([employee]))
-        certification_type = create(:certification_type, customer: @customer)
+        certification_type = create(:certification_type, customer: customer)
 
         get :show, {id: certification_type.id}, {}
 
@@ -195,9 +194,9 @@ describe CertificationTypesController do
       end
 
       it 'assigns certifications as @certifications' do
-        certification = create(:certification, customer: @customer)
+        certification = create(:certification, customer: customer)
         fake_certification_service = controller.load_certification_service(FakeService.new([certification]))
-        certification_type = create(:certification_type, customer: @customer)
+        certification_type = create(:certification_type, customer: customer)
 
         get :show, {id: certification_type.id}, {}
 
@@ -208,9 +207,9 @@ describe CertificationTypesController do
       end
 
       it 'sorts non_certified_employees by specified parameters' do
-        employee = create(:employee, customer: @customer)
+        employee = create(:employee, customer: customer)
         fake_employee_service = controller.load_employee_service(FakeService.new([employee]))
-        certification_type = create(:certification_type, customer: @customer)
+        certification_type = create(:certification_type, customer: customer)
 
         params = {
           id: certification_type.id,
@@ -226,9 +225,9 @@ describe CertificationTypesController do
       end
 
       it 'sorts certifications by specified parameters' do
-        certification = create(:certification, customer: @customer)
+        certification = create(:certification, customer: customer)
         fake_certification_service = controller.load_certification_service(FakeService.new([certification]))
-        certification_type = create(:certification_type, customer: @customer)
+        certification_type = create(:certification_type, customer: customer)
 
         params = {
           id: certification_type.id,
@@ -246,11 +245,11 @@ describe CertificationTypesController do
 
     context 'when admin user' do
       before do
-        sign_in stub_admin
+        sign_in stub_admin(customer)
       end
 
       it 'assigns certification_type as @certification_type' do
-        certification_type = create(:certification_type, customer: @customer)
+        certification_type = create(:certification_type, customer: customer)
         get :show, {:id => certification_type.to_param}, {}
         assigns(:certification_type).should eq(certification_type)
       end
@@ -262,7 +261,7 @@ describe CertificationTypesController do
       end
 
       it 'does not assign certification_type as @certification_type' do
-        certification_type = create(:certification_type, customer: @customer)
+        certification_type = create(:certification_type, customer: customer)
         get :show, {:id => certification_type.to_param}, {}
         assigns(:certification_type).should be_nil
       end
@@ -272,12 +271,12 @@ describe CertificationTypesController do
   describe 'PUT update' do
     context 'when certification_type user' do
       before do
-        sign_in stub_certification_user
+        sign_in stub_certification_user(customer)
       end
 
       describe 'with valid params' do
         it 'updates the requested certification_type' do
-          certification_type = create(:certification_type, customer: @customer)
+          certification_type = create(:certification_type, customer: customer)
           CertificationTypeService.any_instance.should_receive(:update_certification_type).once
 
           put :update, {:id => certification_type.to_param, :certification_type =>
@@ -291,14 +290,14 @@ describe CertificationTypesController do
 
         it 'assigns the requested certification_type as @certification_type' do
           CertificationTypeService.any_instance.stub(:update_certification_type).and_return(true)
-          certification_type = create(:certification_type, customer: @customer)
+          certification_type = create(:certification_type, customer: customer)
           put :update, {:id => certification_type.to_param, :certification_type => certification_type_attributes}, {}
           assigns(:certification_type).should eq(certification_type)
         end
 
         it 'redirects to the certification_type' do
           CertificationTypeService.any_instance.stub(:update_certification_type).and_return(true)
-          certification_type = create(:certification_type, customer: @customer)
+          certification_type = create(:certification_type, customer: customer)
           put :update, {:id => certification_type.to_param, :certification_type => certification_type_attributes}, {}
           response.should redirect_to(certification_type)
         end
@@ -306,21 +305,21 @@ describe CertificationTypesController do
 
       describe 'with invalid params' do
         it 'assigns the certification_type as @certification_type' do
-          certification_type = create(:certification_type, customer: @customer)
+          certification_type = create(:certification_type, customer: customer)
           CertificationTypeService.any_instance.stub(:update_certification_type).and_return(false)
           put :update, {:id => certification_type.to_param, :certification_type => {'name' => 'invalid value'}}, {}
           assigns(:certification_type).should eq(certification_type)
         end
 
         it "re-renders the 'edit' template" do
-          certification_type = create(:certification_type, customer: @customer)
+          certification_type = create(:certification_type, customer: customer)
           CertificationTypeService.any_instance.stub(:update_certification_type).and_return(false)
           put :update, {:id => certification_type.to_param, :certification_type => {'name' => 'invalid value'}}, {}
           response.should render_template('edit')
         end
 
         it 'assigns @intervals' do
-          certification_type = create(:certification_type, customer: @customer)
+          certification_type = create(:certification_type, customer: customer)
           CertificationTypeService.any_instance.stub(:update_certification_type).and_return(false)
           put :update, {:id => certification_type.to_param, :certification_type => {'name' => 'invalid value'}}, {}
           assigns(:intervals).should eq(Interval.all.to_a)
@@ -330,11 +329,11 @@ describe CertificationTypesController do
 
     context 'when admin user' do
       before do
-        sign_in stub_admin
+        sign_in stub_admin(customer)
       end
 
       it 'updates the requested certification_type' do
-        certification_type = create(:certification_type, customer: @customer)
+        certification_type = create(:certification_type, customer: customer)
         CertificationTypeService.any_instance.should_receive(:update_certification_type).once
 
         put :update, {:id => certification_type.to_param, :certification_type =>
@@ -347,7 +346,7 @@ describe CertificationTypesController do
       end
 
       it 'assigns the requested certification_type as @certification_type' do
-        certification_type = create(:certification_type, customer: @customer)
+        certification_type = create(:certification_type, customer: customer)
         CertificationTypeService.any_instance.stub(:update_certification_type).and_return(certification_type)
         put :update, {:id => certification_type.to_param, :certification_type => certification_type_attributes}, {}
         assigns(:certification_type).should eq(certification_type)
@@ -360,7 +359,7 @@ describe CertificationTypesController do
       end
 
       it 'does not assign certification_type as @certification_type' do
-        certification_type = create(:certification_type, customer: @customer)
+        certification_type = create(:certification_type, customer: customer)
         put :update, {:id => certification_type.to_param, :certification_type => certification_type_attributes}, {}
         assigns(:certification_type).should be_nil
       end
@@ -370,18 +369,18 @@ describe CertificationTypesController do
   describe 'DELETE destroy' do
     context 'when certification_type user' do
       before do
-        sign_in stub_certification_user
+        sign_in stub_certification_user(customer)
       end
 
       it 'calls CertificationTypeService' do
-        certification_type = create(:certification_type, customer: @customer)
+        certification_type = create(:certification_type, customer: customer)
         CertificationTypeService.any_instance.should_receive(:delete_certification_type).once
 
         delete :destroy, {:id => certification_type.to_param}, {}
       end
 
       it 'redirects to the certification_type list' do
-        certification_type = create(:certification_type, customer: @customer)
+        certification_type = create(:certification_type, customer: customer)
         CertificationTypeService.any_instance.should_receive(:delete_certification_type).once
 
         delete :destroy, {:id => certification_type.to_param}, {}
@@ -390,7 +389,7 @@ describe CertificationTypesController do
       end
 
       it 'gives error message when certifications exists' do
-        certification_type = create(:certification_type, customer: @customer)
+        certification_type = create(:certification_type, customer: customer)
         controller.load_certification_type_service(FakeService.new(:certification_exists))
 
         delete :destroy, {:id => certification_type.to_param}, {}
@@ -402,11 +401,11 @@ describe CertificationTypesController do
 
     context 'when admin user' do
       before do
-        sign_in stub_admin
+        sign_in stub_admin(customer)
       end
 
       it 'calls certification_typeService' do
-        certification_type = create(:certification_type, customer: @customer)
+        certification_type = create(:certification_type, customer: customer)
         CertificationTypeService.any_instance.should_receive(:delete_certification_type).once
 
         delete :destroy, {:id => certification_type.to_param}, {}
@@ -416,22 +415,22 @@ describe CertificationTypesController do
 
   describe 'GET index' do
     it 'calls get_certification_type_list with current_user and params' do
-      my_user = stub_certification_user
+      my_user = stub_certification_user(customer)
       sign_in my_user
-      @fake_certification_type_service = controller.load_certification_type_service(FakeService.new([]))
+      fake_certification_type_service = controller.load_certification_type_service(FakeService.new([]))
       params = {sort: 'name', direction: 'asc'}
 
       get :index, params
 
-      @fake_certification_type_service.received_messages.should == [:get_certification_type_list]
-      @fake_certification_type_service.received_params[0].should == my_user
-      @fake_certification_type_service.received_params[1]['sort'].should == 'name'
-      @fake_certification_type_service.received_params[1]['direction'].should == 'asc'
+      fake_certification_type_service.received_messages.should == [:get_certification_type_list]
+      fake_certification_type_service.received_params[0].should == my_user
+      fake_certification_type_service.received_params[1]['sort'].should == 'name'
+      fake_certification_type_service.received_params[1]['direction'].should == 'asc'
     end
 
     context 'when certification user' do
       before do
-        sign_in stub_certification_user
+        sign_in stub_certification_user(customer)
       end
 
       it 'assigns certification_types as @certification_types' do
@@ -454,7 +453,7 @@ describe CertificationTypesController do
 
     context 'when admin user' do
       before do
-        sign_in stub_admin
+        sign_in stub_admin(customer)
       end
 
       it 'assigns certification_types as @certification_types' do
@@ -487,7 +486,7 @@ describe CertificationTypesController do
 
   describe 'GET search' do
     it 'calls get_certification_type_list with current_user and params' do
-      my_user = stub_certification_user
+      my_user = stub_certification_user(customer)
       sign_in my_user
       fake_certification_type_service = controller.load_certification_type_service(FakeService.new([]))
       params = {sort: 'name', direction: 'asc'}
@@ -502,11 +501,11 @@ describe CertificationTypesController do
 
     context 'when certification user' do
       before do
-        sign_in stub_certification_user
+        sign_in stub_certification_user(customer)
       end
 
       it 'assigns certification_types as @certification_types' do
-        certification_type = build(:certification_type, customer: @customer)
+        certification_type = build(:certification_type, customer: customer)
 
         CertificationTypeService.any_instance.stub(:get_certification_type_list).and_return([certification_type])
 
@@ -528,7 +527,7 @@ describe CertificationTypesController do
   describe 'GET ajax_is_units_based' do
     context 'when certification user' do
       before do
-        sign_in stub_certification_user
+        sign_in stub_certification_user(customer)
       end
 
       it 'should return true when certification type is units based' do
@@ -563,7 +562,7 @@ describe CertificationTypesController do
 
     context 'when admin user' do
       before do
-        sign_in stub_admin
+        sign_in stub_admin(customer)
       end
 
       it 'should return true when certification type is units based' do

@@ -1,29 +1,27 @@
 require 'spec_helper'
 
 describe EmployeeDeactivationController do
-  before do
-    @customer = create(:customer)
-  end
+  let(:customer) {create(:customer)}
 
   describe 'GET deactivate' do
     context 'when certification user' do
       before do
-        sign_in stub_certification_user
+        sign_in stub_certification_user(customer)
       end
 
       it 'calls EmployeesService' do
-        employee = create(:employee, customer: @customer)
-        @fake_employee_service = controller.load_employee_deactivation_service(FakeService.new(true))
+        employee = create(:employee, customer: customer)
+        fake_employee_service = controller.load_employee_deactivation_service(FakeService.new(true))
 
         delete :deactivate, {:id => employee.to_param}, {}
 
-        @fake_employee_service.received_message.should == :deactivate_employee
-        @fake_employee_service.received_params[0].should == employee
+        fake_employee_service.received_message.should == :deactivate_employee
+        fake_employee_service.received_params[0].should == employee
       end
 
       it 'redirects to the employee list' do
-        employee = create(:employee, customer: @customer, last_name: 'last', first_name: 'first')
-        @fake_employee_service = controller.load_employee_deactivation_service(FakeService.new(true))
+        employee = create(:employee, customer: customer, last_name: 'last', first_name: 'first')
+        controller.load_employee_deactivation_service(FakeService.new(true))
 
         delete :deactivate, {:id => employee.to_param}, {}
 
@@ -34,12 +32,12 @@ describe EmployeeDeactivationController do
 
     context 'when admin user' do
       before do
-        sign_in stub_admin
+        sign_in stub_admin(customer)
       end
 
       it 'calls EmployeesService' do
-        employee = create(:employee, customer: @customer)
-        @fake_employee_service = controller.load_employee_deactivation_service(FakeService.new(true))
+        employee = create(:employee, customer: customer)
+        controller.load_employee_deactivation_service(FakeService.new(true))
 
         delete :deactivate, {:id => employee.to_param}, {}
       end
@@ -52,11 +50,11 @@ describe EmployeeDeactivationController do
 
       it 'does not deactivate' do
         employee = build(:employee)
-        @fake_employee_service = controller.load_employee_deactivation_service(FakeService.new([employee]))
+        fake_employee_service = controller.load_employee_deactivation_service(FakeService.new([employee]))
 
         get :deactivated_employees
 
-        @fake_employee_service.received_message.should be_nil
+        fake_employee_service.received_message.should be_nil
       end
     end
   end
@@ -64,12 +62,12 @@ describe EmployeeDeactivationController do
   describe 'GET deactivate_confirm' do
     context 'when certification user' do
       before do
-        sign_in stub_certification_user
+        sign_in stub_certification_user(customer)
       end
 
       it 'calls service and makes assignments' do
-        employee = create(:employee, customer: @customer)
-        certification = create(:certification, employee: employee, customer: @customer)
+        employee = create(:employee, customer: customer)
+        certification = create(:certification, employee: employee, customer: customer)
         equipment = build(:equipment)
         fake_equipment_service = controller.load_equipment_service(FakeService.new([equipment]))
         fake_certification_service = controller.load_certification_service(FakeService.new([certification]))
@@ -88,20 +86,20 @@ describe EmployeeDeactivationController do
 
     context 'when admin user' do
       before do
-        sign_in stub_admin
+        sign_in stub_admin(customer)
       end
 
       it 'calls service and makes assignments' do
-        employee = create(:employee, customer: @customer)
+        employee = create(:employee, customer: customer)
         equipment = build(:equipment)
-        @fake_equipment_service = controller.load_equipment_service(FakeService.new([equipment]))
+        fake_equipment_service = controller.load_equipment_service(FakeService.new([equipment]))
 
         get :deactivate_confirm, {:id => employee.to_param}, {}
 
         assigns(:employee).should eq(employee)
         assigns(:equipments).should eq([equipment])
-        @fake_equipment_service.received_message.should == :get_all_equipment_for_employee
-        @fake_equipment_service.received_params[0].should == employee
+        fake_equipment_service.received_message.should == :get_all_equipment_for_employee
+        fake_equipment_service.received_params[0].should == employee
       end
     end
 
@@ -111,7 +109,7 @@ describe EmployeeDeactivationController do
       end
 
       it 'does not assign anything' do
-        employee = create(:employee, customer: @customer)
+        employee = create(:employee, customer: customer)
 
         get :deactivate_confirm, {:id => employee.to_param}, {}
 
@@ -123,25 +121,25 @@ describe EmployeeDeactivationController do
 
   describe 'GET deactivated_employees' do
     it 'calls get_deactivated_employees with current_user and params' do
-      my_user = stub_certification_user
+      my_user = stub_certification_user(customer)
       sign_in my_user
-      @fake_employee_service = controller.load_employee_deactivation_service(FakeService.new([]))
+      fake_employee_service = controller.load_employee_deactivation_service(FakeService.new([]))
       params = {}
 
       get :deactivated_employees, params
 
-      @fake_employee_service.received_messages.should == [:get_deactivated_employees]
-      @fake_employee_service.received_params[0].should == my_user
+      fake_employee_service.received_messages.should == [:get_deactivated_employees]
+      fake_employee_service.received_params[0].should == my_user
     end
 
     context 'when certification user' do
       before do
-        sign_in stub_certification_user
+        sign_in stub_certification_user(customer)
       end
 
       it 'assigns @employees and @employee_count' do
         employee = build(:employee)
-        @fake_employee_service = controller.load_employee_deactivation_service(FakeService.new([employee]))
+        controller.load_employee_deactivation_service(FakeService.new([employee]))
 
         get :deactivated_employees
 
@@ -152,12 +150,12 @@ describe EmployeeDeactivationController do
 
     context 'when admin user' do
       before do
-        sign_in stub_admin
+        sign_in stub_admin(customer)
       end
 
       it 'assigns employees as @employees' do
         employee = build(:employee)
-        @fake_employee_service = controller.load_employee_deactivation_service(FakeService.new([employee]))
+        controller.load_employee_deactivation_service(FakeService.new([employee]))
 
         get :deactivated_employees
 
@@ -173,7 +171,7 @@ describe EmployeeDeactivationController do
 
       it 'does not assign employees as @employees' do
         employee = build(:employee)
-        @fake_employee_service = controller.load_employee_deactivation_service(FakeService.new([employee]))
+        controller.load_employee_deactivation_service(FakeService.new([employee]))
 
         get :deactivated_employees
 

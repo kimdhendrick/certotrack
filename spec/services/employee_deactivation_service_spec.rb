@@ -67,25 +67,23 @@ describe EmployeeDeactivationService do
   end
 
   describe 'deactivated_employees' do
-    before do
-      @my_customer = create(:customer)
-      @my_user = create(:user, customer: @my_customer)
-    end
+    let(:my_customer) { create(:customer) }
+    let(:my_user) { create(:user, customer: my_customer) }
 
     it 'includes only inactive employees' do
-      inactive_employee = create(:employee, active: false, customer: @my_customer)
-      active_employee = create(:employee, active: true, customer: @my_customer)
+      inactive_employee = create(:employee, active: false, customer: my_customer)
+      active_employee = create(:employee, active: true, customer: my_customer)
 
-      results = EmployeeDeactivationService.new.get_deactivated_employees(@my_user)
+      results = EmployeeDeactivationService.new.get_deactivated_employees(my_user)
 
       results.should == [inactive_employee]
     end
 
     it 'includes only inactive employees for customer' do
-      my_inactive_employee = create(:employee, active: false, customer: @my_customer)
+      my_inactive_employee = create(:employee, active: false, customer: my_customer)
       other_inactive_employee = create(:employee, active: false)
 
-      results = EmployeeDeactivationService.new.get_deactivated_employees(@my_user)
+      results = EmployeeDeactivationService.new.get_deactivated_employees(my_user)
 
       results.should == [my_inactive_employee]
     end
@@ -95,7 +93,7 @@ describe EmployeeDeactivationService do
         fake_paginator = FakeService.new
         employee_deactivation_service = EmployeeDeactivationService.new(paginator: fake_paginator)
 
-        employee_deactivation_service.get_deactivated_employees(@my_user)
+        employee_deactivation_service.get_deactivated_employees(my_user)
 
         fake_paginator.received_message.should == :paginate
       end

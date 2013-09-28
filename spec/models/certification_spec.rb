@@ -16,69 +16,65 @@ describe Certification do
   it { should validate_presence_of :customer }
 
   context 'non-units based certification type' do
-    before do
-      @certification_type = create(:certification_type, units_required: 0)
-      @certification = build(:certification, certification_type: @certification_type)
-      @certification_period = create(:certification_period, certification: @certification)
-    end
+    let (:certification_type) { create(:certification_type, units_required: 0) }
+    let (:certification) { build(:certification, certification_type: certification_type) }
+    let (:certification_period) { create(:certification_period, certification: certification) }
 
     it 'should calculate NA status when no expiration date' do
-      @certification.expiration_date = nil
+      certification.expiration_date = nil
 
-      @certification.status.should == Status::NA
+      certification.status.should == Status::NA
     end
 
     it 'should calculate VALID status when expiration date is in the future' do
-      @certification.expiration_date = Date.today + 61.days
+      certification.expiration_date = Date.today + 61.days
 
-      @certification.status.should == Status::VALID
+      certification.status.should == Status::VALID
     end
 
     it 'should calculate EXPIRED status when expiration date is in the past' do
-      @certification.expiration_date = Date.yesterday
+      certification.expiration_date = Date.yesterday
 
-      @certification.status.should == Status::EXPIRED
+      certification.status.should == Status::EXPIRED
     end
 
     it 'should calculate WARNING status when expiration date is within 60 days in the future' do
-      @certification.expiration_date = Date.tomorrow
+      certification.expiration_date = Date.tomorrow
 
-      @certification.status.should == Status::EXPIRING
+      certification.status.should == Status::EXPIRING
     end
   end
 
   context 'units based certification type' do
-    before do
-      @certification_type = create(:certification_type, units_required: 100)
-      @certification = build(:certification, certification_type: @certification_type)
-      @certification_period = create(:certification_period, certification: @certification)
-    end
+    let (:certification_type) { create(:certification_type, units_required: 100) }
+    let (:certification) { build(:certification, certification_type: certification_type) }
+    let (:certification_period) { create(:certification_period, certification: certification) }
 
     it 'should calculate VALID status when units achieved meets or exceeds units required' do
-      @certification.units_achieved = 101
+      certification.units_achieved = 101
 
-      @certification.status.should == Status::VALID
+      certification.status.should == Status::VALID
     end
 
     it 'should calculate recertify when expiration date is not set and units achieved less than required' do
-      @certification.units_achieved = 99
-      @certification.expiration_date = nil
+      certification.units_achieved = 99
+      certification.expiration_date = nil
 
-      @certification.status.should == Status::RECERTIFY
+      certification.status.should == Status::RECERTIFY
     end
 
     it 'should calculate recertify when expiration date is in the past and units achieved less than required' do
-      @certification.units_achieved = 99
-      @certification.expiration_date = Date.yesterday
+      certification.units_achieved = 99
+      certification.expiration_date = Date.yesterday
 
-      @certification.status.should == Status::RECERTIFY
+      certification.status.should == Status::RECERTIFY
     end
 
     it 'should calculate pending when expiration date is not past and units achieved less than required' do
-      @certification.units_achieved = 99
-      @certification.expiration_date = Date.tomorrow
+      certification.units_achieved = 99
+      certification.expiration_date = Date.tomorrow
 
-      @certification.status.should == Status::PENDING
+      certification.status.should == Status::PENDING
     end
   end
 

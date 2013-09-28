@@ -1,16 +1,14 @@
 require 'spec_helper'
 
 describe CertotrackController do
-
-  before do
-    @customer = create(:customer)
-  end
+  
+  let(:customer) {create(:customer)}
 
   describe 'GET home' do
     context 'an equipment user'
 
     it 'assigns equipment counts' do
-      user = stub_equipment_user
+      user = stub_equipment_user(customer)
       sign_in user
 
       EquipmentService.any_instance.stub(:count_all_equipment).and_return(3)

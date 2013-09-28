@@ -1,14 +1,12 @@
 require 'spec_helper'
 
 describe EmployeesController do
-  before do
-    @customer = create(:customer)
-  end
+  let(:customer) {create(:customer)}
 
   describe 'GET new' do
     context 'when certification user' do
       before do
-        sign_in stub_certification_user
+        sign_in stub_certification_user(customer)
       end
 
       it 'assigns a new employee as @employee' do
@@ -28,7 +26,7 @@ describe EmployeesController do
 
     context 'when admin user' do
       before do
-        sign_in stub_admin
+        sign_in stub_admin(customer)
       end
 
       it 'assigns a new employee as @employee' do
@@ -52,7 +50,7 @@ describe EmployeesController do
   describe 'POST create' do
     context 'when certification user' do
       before do
-        sign_in stub_certification_user
+        sign_in stub_certification_user(customer)
       end
 
       describe 'with valid params' do
@@ -95,7 +93,7 @@ describe EmployeesController do
 
     context 'when admin user' do
       before do
-        sign_in stub_admin
+        sign_in stub_admin(customer)
       end
 
       it 'calls EmployeesService' do
@@ -126,27 +124,27 @@ describe EmployeesController do
   
   describe 'GET index' do
     it 'calls get_employee_list with current_user and params' do
-      my_user = stub_certification_user
+      my_user = stub_certification_user(customer)
       sign_in my_user
-      @fake_employee_service = controller.load_employee_service(FakeService.new([]))
+      fake_employee_service = controller.load_employee_service(FakeService.new([]))
       params = {sort: 'name', direction: 'asc'}
 
       get :index, params
 
-      @fake_employee_service.received_messages.should == [:get_employee_list]
-      @fake_employee_service.received_params[0].should == my_user
-      @fake_employee_service.received_params[1]['sort'].should == 'name'
-      @fake_employee_service.received_params[1]['direction'].should == 'asc'
+      fake_employee_service.received_messages.should == [:get_employee_list]
+      fake_employee_service.received_params[0].should == my_user
+      fake_employee_service.received_params[1]['sort'].should == 'name'
+      fake_employee_service.received_params[1]['direction'].should == 'asc'
     end
 
     context 'when certification user' do
       before do
-        sign_in stub_certification_user
+        sign_in stub_certification_user(customer)
       end
 
       it 'assigns @employees and @employee_count' do
         employee = build(:employee)
-        @fake_employee_service = controller.load_employee_service(FakeService.new([employee]))
+        controller.load_employee_service(FakeService.new([employee]))
 
         get :index
 
@@ -157,12 +155,12 @@ describe EmployeesController do
 
     context 'when admin user' do
       before do
-        sign_in stub_admin
+        sign_in stub_admin(customer)
       end
 
       it 'assigns employee as @employee' do
         employee = build(:employee)
-        @fake_employee_service = controller.load_employee_service(FakeService.new([employee]))
+        controller.load_employee_service(FakeService.new([employee]))
 
         get :index
 
@@ -179,7 +177,7 @@ describe EmployeesController do
       describe 'GET index' do
         it 'does not assign employee as @employee' do
           employee = build(:employee)
-          @fake_employee_service = controller.load_employee_service(FakeService.new([employee]))
+          controller.load_employee_service(FakeService.new([employee]))
 
           get :index
 
@@ -191,7 +189,7 @@ describe EmployeesController do
   end
 
   describe 'GET show' do
-    let(:employee) { create(:employee, customer: @customer) }
+    let(:employee) { create(:employee, customer: customer) }
     let(:certification_service) { double('certification_service') }
     let(:certification) { create(:certification, employee: employee, customer: employee.customer) }
     let(:certifications) { [certification] }
@@ -203,7 +201,7 @@ describe EmployeesController do
     
     context 'when certification user' do
       before do
-        sign_in stub_certification_user
+        sign_in stub_certification_user(customer)
       end
 
       it 'assigns employee as @employee' do
@@ -219,7 +217,7 @@ describe EmployeesController do
 
     context 'when admin user' do
       before do
-        sign_in stub_admin
+        sign_in stub_admin(customer)
       end
 
       it 'assigns employee as @employee' do
@@ -239,7 +237,7 @@ describe EmployeesController do
       end
 
       it 'does not assign employee as @employee' do
-        employee = create(:employee, customer: @customer)
+        employee = create(:employee, customer: customer)
         get :show, {:id => employee.to_param}, {}
         assigns(:employee).should be_nil
       end
@@ -249,11 +247,11 @@ describe EmployeesController do
   describe 'GET edit' do
     context 'when certification user' do
       before do
-        sign_in stub_certification_user
+        sign_in stub_certification_user(customer)
       end
 
       it 'assigns the requested employee as @employee' do
-        employee = create(:employee, customer: @customer)
+        employee = create(:employee, customer: customer)
         get :edit, {:id => employee.to_param}, {}
         assigns(:employee).should eq(employee)
       end
@@ -261,7 +259,7 @@ describe EmployeesController do
       it 'assigns locations' do
         location = build(:location)
         @fake_location_service = controller.load_location_service(FakeService.new([location]))
-        employee = create(:employee, customer: @customer)
+        employee = create(:employee, customer: customer)
 
         get :edit, {:id => employee.to_param}, {}
 
@@ -271,11 +269,11 @@ describe EmployeesController do
 
     context 'when admin user' do
       before do
-        sign_in stub_admin
+        sign_in stub_admin(customer)
       end
 
       it 'assigns the requested employee as @employee' do
-        employee = create(:employee, customer: @customer)
+        employee = create(:employee, customer: customer)
         get :edit, {:id => employee.to_param}, {}
         assigns(:employee).should eq(employee)
       end
@@ -287,7 +285,7 @@ describe EmployeesController do
       end
 
       it 'does not assign employee as @employee' do
-        employee = create(:employee, customer: @customer)
+        employee = create(:employee, customer: customer)
         get :edit, {:id => employee.to_param}, {}
         assigns(:employee).should be_nil
       end
@@ -297,13 +295,13 @@ describe EmployeesController do
   describe 'PUT update' do
     context 'when certification user' do
       before do
-        sign_in stub_certification_user
+        sign_in stub_certification_user(customer)
       end
 
       describe 'with valid params' do
         it 'updates the requested employee' do
-          employee = create(:employee, customer: @customer)
-          @fake_employee_service = controller.load_employee_service(FakeService.new([]))
+          employee = create(:employee, customer: customer)
+          fake_employee_service = controller.load_employee_service(FakeService.new([]))
 
           put :update, {:id => employee.to_param, :employee =>
             {
@@ -314,22 +312,22 @@ describe EmployeesController do
             }
           }, {}
 
-          @fake_employee_service.received_messages.should == [:update_employee]
+          fake_employee_service.received_messages.should == [:update_employee]
         end
 
         it 'assigns the requested employee as @employee' do
-          employee = create(:employee, customer: @customer)
-          @fake_employee_service = controller.load_employee_service(FakeService.new(true))
+          employee = create(:employee, customer: customer)
+          fake_employee_service = controller.load_employee_service(FakeService.new(true))
 
           put :update, {:id => employee.to_param, :employee => employee_attributes}, {}
 
           assigns(:employee).should eq(employee)
-          @fake_employee_service.received_messages.should == [:update_employee]
+          fake_employee_service.received_messages.should == [:update_employee]
         end
 
         it 'redirects to the employee' do
-          @fake_employee_service = controller.load_employee_service(FakeService.new(true))
-          employee = create(:employee, customer: @customer)
+          controller.load_employee_service(FakeService.new(true))
+          employee = create(:employee, customer: customer)
 
           put :update, {:id => employee.to_param, :employee => employee_attributes}, {}
 
@@ -340,8 +338,8 @@ describe EmployeesController do
 
       describe 'with invalid params' do
         it 'assigns the employee as @employee' do
-          employee = create(:employee, customer: @customer)
-          @fake_employee_service = controller.load_employee_service(FakeService.new(false))
+          employee = create(:employee, customer: customer)
+          controller.load_employee_service(FakeService.new(false))
 
           put :update, {:id => employee.to_param, :employee => {'name' => 'invalid value'}}, {}
 
@@ -349,8 +347,8 @@ describe EmployeesController do
         end
 
         it "re-renders the 'edit' template" do
-          employee = create(:employee, customer: @customer)
-          @fake_employee_service = controller.load_employee_service(FakeService.new(false))
+          employee = create(:employee, customer: customer)
+          controller.load_employee_service(FakeService.new(false))
 
           put :update, {:id => employee.to_param, :employee => {'name' => 'invalid value'}}, {}
 
@@ -358,10 +356,10 @@ describe EmployeesController do
         end
 
         it 'assigns locations' do
-          @fake_employee_service = controller.load_employee_service(FakeService.new(false))
+          controller.load_employee_service(FakeService.new(false))
           location = build(:location)
           @fake_location_service = controller.load_location_service(FakeService.new([location]))
-          employee = create(:employee, customer: @customer)
+          employee = create(:employee, customer: customer)
 
           put :update, {:id => employee.to_param, :employee => employee_attributes}, {}
 
@@ -372,12 +370,12 @@ describe EmployeesController do
 
     context 'when admin user' do
       before do
-        sign_in stub_admin
+        sign_in stub_admin(customer)
       end
 
       it 'updates the requested employee' do
-        employee = create(:employee, customer: @customer)
-        @fake_employee_service = controller.load_employee_service(FakeService.new(true))
+        employee = create(:employee, customer: customer)
+        fake_employee_service = controller.load_employee_service(FakeService.new(true))
 
         put :update, {:id => employee.to_param, :employee =>
           {
@@ -388,12 +386,12 @@ describe EmployeesController do
           }
         }, {}
 
-        @fake_employee_service.received_messages.should == [:update_employee]
+        fake_employee_service.received_messages.should == [:update_employee]
       end
 
       it 'assigns the requested employee as @employee' do
-        employee = create(:employee, customer: @customer)
-        @fake_employee_service = controller.load_employee_service(FakeService.new(true))
+        employee = create(:employee, customer: customer)
+        controller.load_employee_service(FakeService.new(true))
 
         put :update, {:id => employee.to_param, :employee => employee_attributes}, {}
 
@@ -407,7 +405,7 @@ describe EmployeesController do
       end
 
       it 'does not assign employee as @employee' do
-        employee = create(:employee, customer: @customer)
+        employee = create(:employee, customer: customer)
 
         put :update, {:id => employee.to_param, :employee => employee_attributes}, {}
 
@@ -419,21 +417,21 @@ describe EmployeesController do
   describe 'DELETE destroy' do
     context 'when certification user' do
       before do
-        sign_in stub_certification_user
+        sign_in stub_certification_user(customer)
       end
 
       it 'calls EmployeesService' do
-        employee = create(:employee, customer: @customer)
-        @fake_employee_service = controller.load_employee_service(FakeService.new(true))
+        employee = create(:employee, customer: customer)
+        fake_employee_service = controller.load_employee_service(FakeService.new(true))
 
         delete :destroy, {:id => employee.to_param}, {}
 
-        @fake_employee_service.received_message.should == :delete_employee
+        fake_employee_service.received_message.should == :delete_employee
       end
 
       it 'redirects to the employee list' do
-        employee = create(:employee, customer: @customer)
-        @fake_employee_service = controller.load_employee_service(FakeService.new(true))
+        employee = create(:employee, customer: customer)
+        controller.load_employee_service(FakeService.new(true))
 
         delete :destroy, {:id => employee.to_param}, {}
 
@@ -442,7 +440,7 @@ describe EmployeesController do
       end
 
       it 'gives error message when equipment exists' do
-        employee = create(:employee, customer: @customer)
+        employee = create(:employee, customer: customer)
         controller.load_employee_service(FakeService.new(:equipment_exists))
 
         delete :destroy, {:id => employee.to_param}, {}
@@ -452,7 +450,7 @@ describe EmployeesController do
       end
 
       it 'gives error message when certifications exists' do
-        employee = create(:employee, customer: @customer)
+        employee = create(:employee, customer: customer)
         controller.load_employee_service(FakeService.new(:certification_exists))
 
         delete :destroy, {:id => employee.to_param}, {}
@@ -464,12 +462,12 @@ describe EmployeesController do
 
     context 'when admin user' do
       before do
-        sign_in stub_admin
+        sign_in stub_admin(customer)
       end
 
       it 'calls EmployeesService' do
-        employee = create(:employee, customer: @customer)
-        @fake_employee_service = controller.load_employee_service(FakeService.new(true))
+        employee = create(:employee, customer: customer)
+        controller.load_employee_service(FakeService.new(true))
 
         delete :destroy, {:id => employee.to_param}, {}
       end
