@@ -13,18 +13,19 @@ class EmployeesController < ApplicationController
   def index
     authorize! :read, :certification
 
-    @employees = @employee_service.get_employee_list(current_user, params)
+    employees_collection = @employee_service.get_all_employees(current_user, params)
+    @employees = EmployeeListPresenter.new(employees_collection).present(params)
     @employee_count = @employees.count
   end
 
   def show
-    @certifications = @certification_service.get_all_certifications_for_employee(@employee, params)
+    @certifications = @certification_service.get_all_certifications_for_employee(@employee.model, params)
   end
 
   def new
     authorize! :create, :certification
     @locations = @location_service.get_all_locations(current_user)
-    @employee = PresentableEmployee.new(Employee.new)
+    @employee = EmployeePresenter.new(Employee.new)
   end
 
   def create
@@ -45,10 +46,10 @@ class EmployeesController < ApplicationController
   end
 
   def update
-    success = @employee_service.update_employee(@employee.employee_model, _employees_params)
+    success = @employee_service.update_employee(@employee.model, _employees_params)
 
     if success
-      redirect_to @employee.employee_model, notice: 'Employee was successfully updated.'
+      redirect_to @employee.model, notice: 'Employee was successfully updated.'
     else
       @locations = @location_service.get_all_locations(current_user)
       render action: 'edit'
@@ -56,15 +57,15 @@ class EmployeesController < ApplicationController
   end
 
   def destroy
-    status = @employee_service.delete_employee(@employee.employee_model)
+    status = @employee_service.delete_employee(@employee.model)
 
     if status == :equipment_exists
-      redirect_to @employee.employee_model, notice: 'Employee has equipment assigned, you must remove them before deleting the employee. Or Deactivate the employee instead.'
+      redirect_to @employee.model, notice: 'Employee has equipment assigned, you must remove them before deleting the employee. Or Deactivate the employee instead.'
       return
     end
 
     if status == :certification_exists
-      redirect_to @employee.employee_model, notice: 'Employee has certifications, you must remove them before deleting the employee. Or Deactivate the employee instead.'
+      redirect_to @employee.model, notice: 'Employee has certifications, you must remove them before deleting the employee. Or Deactivate the employee instead.'
       return
     end
 
@@ -88,7 +89,7 @@ class EmployeesController < ApplicationController
   def _set_employee
     employee_pending_authorization = Employee.find(params[:id])
     authorize! :manage, employee_pending_authorization
-    @employee = PresentableEmployee.new(employee_pending_authorization)
+    @employee = EmployeePresenter.new(employee_pending_authorization)
   end
 
   def _employees_params

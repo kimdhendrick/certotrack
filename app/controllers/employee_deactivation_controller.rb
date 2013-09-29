@@ -18,7 +18,7 @@ class EmployeeDeactivationController < ApplicationController
     authorize! :read, :certification
 
     @employee_deactivation_service.deactivate_employee(@employee)
-    redirect_to employees_url, notice: "Employee #{PresentableEmployee.new(@employee).name} deactivated"
+    redirect_to employees_url, notice: "Employee #{EmployeePresenter.new(@employee).name} deactivated"
   end
 
   def deactivated_employees

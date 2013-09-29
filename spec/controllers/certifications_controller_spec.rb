@@ -13,10 +13,10 @@ describe CertificationsController do
       end
 
       it 'calls certification service with employee_id' do
-        controller.load_certification_type_service(FakeService.new())
+        controller.load_certification_type_service(Faker.new())
         employee = create(:employee)
         certification = create(:certification, employee: employee, customer: employee.customer)
-        fake_certification_service = controller.load_certification_service(FakeService.new(certification))
+        fake_certification_service = controller.load_certification_service(Faker.new(certification))
 
         get :new, {employee_id: employee.id}, {}
 
@@ -25,10 +25,10 @@ describe CertificationsController do
       end
 
       it 'calls certification service with certification_type_id' do
-        controller.load_certification_type_service(FakeService.new())
+        controller.load_certification_type_service(Faker.new())
         certification_type = create(:certification_type)
         certification = create(:certification, certification_type: certification_type, customer: certification_type.customer)
-        fake_certification_service = controller.load_certification_service(FakeService.new(certification))
+        fake_certification_service = controller.load_certification_service(Faker.new(certification))
 
         get :new, {certification_type_id: certification_type.id}, {}
 
@@ -38,9 +38,9 @@ describe CertificationsController do
       end
 
       it 'assigns @certification' do
-        controller.load_certification_type_service(FakeService.new())
+        controller.load_certification_type_service(Faker.new())
         certification = create(:certification, customer: create(:customer))
-        controller.load_certification_service(FakeService.new(certification))
+        controller.load_certification_service(Faker.new(certification))
 
         get :new, {}, {}
 
@@ -48,9 +48,9 @@ describe CertificationsController do
       end
 
       it 'assigns @source when employee' do
-        controller.load_certification_service(FakeService.new())
+        controller.load_certification_service(Faker.new())
         certification_type = create(:certification_type)
-        controller.load_certification_type_service(FakeService.new([certification_type]))
+        controller.load_certification_type_service(Faker.new([certification_type]))
 
         get :new, {source: 'employee'}, {}
 
@@ -58,9 +58,9 @@ describe CertificationsController do
       end
 
       it 'assigns @source when certification_type' do
-        controller.load_certification_service(FakeService.new())
+        controller.load_certification_service(Faker.new())
         certification_type = create(:certification_type)
-        controller.load_certification_type_service(FakeService.new([certification_type]))
+        controller.load_certification_type_service(Faker.new([certification_type]))
 
         get :new, {source: 'certification_type'}, {}
 
@@ -68,8 +68,8 @@ describe CertificationsController do
       end
 
       it 'calls certification_type_service' do
-        controller.load_certification_service(FakeService.new())
-        fake_certification_type_service = controller.load_certification_type_service(FakeService.new([]))
+        controller.load_certification_service(Faker.new())
+        fake_certification_type_service = controller.load_certification_type_service(Faker.new([]))
 
         get :new, {}, {}
 
@@ -78,9 +78,9 @@ describe CertificationsController do
       end
 
       it 'assigns certification_types' do
-        controller.load_certification_service(FakeService.new())
+        controller.load_certification_service(Faker.new())
         certification_type = create(:certification_type)
-        controller.load_certification_type_service(FakeService.new([certification_type]))
+        controller.load_certification_type_service(Faker.new([certification_type]))
 
         get :new, {}, {}
 
@@ -95,8 +95,8 @@ describe CertificationsController do
 
       it 'assigns certification_types' do
         certification_type = build(:certification_type)
-        controller.load_certification_type_service(FakeService.new([certification_type]))
-        controller.load_certification_service(FakeService.new())
+        controller.load_certification_type_service(Faker.new([certification_type]))
+        controller.load_certification_service(Faker.new())
 
         get :new, {}, {}
 
@@ -125,7 +125,7 @@ describe CertificationsController do
 
       it 'calls creates certification using CertificationService' do
         Certification.any_instance.stub(:valid?).and_return(true)
-        fake_certification_service = controller.load_certification_service(FakeService.new(build(:certification)))
+        fake_certification_service = controller.load_certification_service(Faker.new(build(:certification)))
 
         params = {
           employee: {id: 99},
@@ -152,9 +152,9 @@ describe CertificationsController do
       end
 
       it 're-renders new on error' do
-        controller.load_certification_type_service(FakeService.new())
+        controller.load_certification_type_service(Faker.new())
         Certification.any_instance.stub(:valid?).and_return(false)
-        controller.load_certification_service(FakeService.new(build(:certification)))
+        controller.load_certification_service(Faker.new(build(:certification)))
 
         post :create, {employee: {}, certification: {}}, {}
 
@@ -162,9 +162,9 @@ describe CertificationsController do
       end
 
       it 'assigns @certification on error' do
-        controller.load_certification_type_service(FakeService.new())
+        controller.load_certification_type_service(Faker.new())
         Certification.any_instance.stub(:valid?).and_return(false)
-        controller.load_certification_service(FakeService.new(build(:certification)))
+        controller.load_certification_service(Faker.new(build(:certification)))
 
         get :create, {employee: {id: 1}, certification: {certification_type_id: 1}}, {}
 
@@ -173,10 +173,10 @@ describe CertificationsController do
 
       it 'calls certification_type_service on error' do
         Certification.any_instance.stub(:valid?).and_return(false)
-        controller.load_certification_service(FakeService.new(build(:certification)))
+        controller.load_certification_service(Faker.new(build(:certification)))
 
         certification_type = create(:certification_type)
-        fake_certification_type_service = controller.load_certification_type_service(FakeService.new([certification_type]))
+        fake_certification_type_service = controller.load_certification_type_service(Faker.new([certification_type]))
 
         get :create, {employee: {}, certification: {}}, {}
 
@@ -186,10 +186,10 @@ describe CertificationsController do
 
       it 'assigns certification_types on error' do
         Certification.any_instance.stub(:valid?).and_return(false)
-        controller.load_certification_service(FakeService.new(build(:certification)))
+        controller.load_certification_service(Faker.new(build(:certification)))
 
         certification_type = create(:certification_type)
-        controller.load_certification_type_service(FakeService.new([certification_type]))
+        controller.load_certification_type_service(Faker.new([certification_type]))
 
         get :create, {employee: {}, certification: {}}, {}
 
@@ -212,7 +212,7 @@ describe CertificationsController do
           certification_type = create(:certification_type)
           certification = create(:certification, employee: employee, certification_type: certification_type, customer: employee.customer)
 
-          controller.load_certification_service(FakeService.new(certification))
+          controller.load_certification_service(Faker.new(certification))
 
           params = {
             employee: {id: 1},
@@ -231,7 +231,7 @@ describe CertificationsController do
           certification_type = create(:certification_type)
           certification = create(:certification, employee: employee, certification_type: certification_type, customer: employee.customer)
 
-          controller.load_certification_service(FakeService.new(certification))
+          controller.load_certification_service(Faker.new(certification))
 
           params = {
             employee: {id: 1},
@@ -250,7 +250,7 @@ describe CertificationsController do
           certification_type = create(:certification_type, name: 'certType24')
           certification = create(:certification, employee: employee, certification_type: certification_type, customer: employee.customer)
 
-          controller.load_certification_service(FakeService.new(certification))
+          controller.load_certification_service(Faker.new(certification))
 
           params = {
             employee: {id: 1},
@@ -266,8 +266,8 @@ describe CertificationsController do
 
       context 'Save and Create Another' do
         it 'calls certification_type_service on success' do
-          controller.load_certification_service(FakeService.new(build(:certification)))
-          fake_certification_type_service = controller.load_certification_type_service(FakeService.new([]))
+          controller.load_certification_service(Faker.new(build(:certification)))
+          fake_certification_type_service = controller.load_certification_type_service(Faker.new([]))
 
           params = {
             employee: {},
@@ -282,9 +282,9 @@ describe CertificationsController do
         end
 
         it 'assigns certification and certification_types on success' do
-          controller.load_certification_service(FakeService.new(build(:certification)))
+          controller.load_certification_service(Faker.new(build(:certification)))
           certification_type = create(:certification_type)
-          controller.load_certification_type_service(FakeService.new([certification_type]))
+          controller.load_certification_type_service(Faker.new([certification_type]))
 
           params = {
             employee: {id: 1},
@@ -299,8 +299,8 @@ describe CertificationsController do
         end
 
         it 'renders create certification on success' do
-          controller.load_certification_service(FakeService.new(build(:certification)))
-          controller.load_certification_type_service(FakeService.new())
+          controller.load_certification_service(Faker.new(build(:certification)))
+          controller.load_certification_type_service(Faker.new())
 
           params = {
             employee: {},
@@ -318,8 +318,8 @@ describe CertificationsController do
           certification_type = create(:certification_type, name: 'certType24')
           certification = create(:certification, employee: employee, certification_type: certification_type, customer: employee.customer)
 
-          controller.load_certification_service(FakeService.new(certification))
-          controller.load_certification_type_service(FakeService.new([]))
+          controller.load_certification_service(Faker.new(certification))
+          controller.load_certification_type_service(Faker.new([]))
 
           params = {
             employee: {id: 1},
@@ -340,7 +340,7 @@ describe CertificationsController do
       end
 
       it 'does not call factory' do
-        fake_certification_service = controller.load_certification_service(FakeService.new())
+        fake_certification_service = controller.load_certification_service(Faker.new())
 
         post :create, {}, {}
 

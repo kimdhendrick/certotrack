@@ -19,10 +19,13 @@ class CertificationTypesController < ApplicationController
   end
 
   def show
-    @certifications = @certification_service.get_all_certifications_for_certification_type(@certification_type, _certified_params(params))
+    @certifications = @certification_service.
+      get_all_certifications_for_certification_type(@certification_type, _certified_params(params))
+
     @certifications_count = @certifications.count
 
-    @non_certified_employees = @employee_service.get_employees_not_certified_for(@certification_type, _noncertified_params(params))
+    employees_collection = @employee_service.get_employees_not_certified_for(@certification_type)
+    @non_certified_employees = EmployeeListPresenter.new(employees_collection).present(_noncertified_params(params))
     @non_certified_employee_count = @non_certified_employees.count
   end
 

@@ -67,7 +67,7 @@ class CertificationsController < ApplicationController
   end
 
   def _success_message(certification)
-    "Certification: #{certification.name} created for #{PresentableEmployee.new(certification.employee).name}."
+    "Certification: #{certification.name} created for #{EmployeePresenter.new(certification.employee).name}."
   end
 
   def _set_new_certification(employee_id, certification_type_id)

@@ -6,7 +6,7 @@ describe CertificationService do
       employee = create(:employee)
       certification_type = create(:certification_type)
       certification = build(:certification, employee: employee)
-      fake_certification_factory = FakeService.new(certification)
+      fake_certification_factory = Faker.new(certification)
       certification_service = CertificationService.new(certification_factory: fake_certification_factory)
 
       certification = certification_service.new_certification(employee.id, certification_type.id)
@@ -23,7 +23,7 @@ describe CertificationService do
       employee = create(:employee)
       certification_type = create(:certification_type)
       certification = build(:certification, certification_type: certification_type, employee: employee, customer: employee.customer)
-      fake_certification_factory = FakeService.new(certification)
+      fake_certification_factory = Faker.new(certification)
       certification_service = CertificationService.new(certification_factory: fake_certification_factory)
 
       certification = certification_service.certify(
@@ -49,7 +49,7 @@ describe CertificationService do
       employee = create(:employee)
       certification_type = create(:certification_type)
       certification = Certification.new
-      fake_certification_factory = FakeService.new(certification)
+      fake_certification_factory = Faker.new(certification)
       certification_service = CertificationService.new(certification_factory: fake_certification_factory)
 
       certification = certification_service.certify(
@@ -99,7 +99,7 @@ describe CertificationService do
 
     context 'sorting' do
       it 'should call Sorter to ensure sorting' do
-        fake_sorter = FakeService.new([])
+        fake_sorter = Faker.new([])
 
         subject = CertificationService.new(sorter: fake_sorter)
 
@@ -111,7 +111,7 @@ describe CertificationService do
 
     context 'pagination' do
       it 'should call Paginator to paginate results' do
-        fake_paginator = FakeService.new
+        fake_paginator = Faker.new
 
         subject = CertificationService.new(paginator: fake_paginator)
 
@@ -148,7 +148,7 @@ describe CertificationService do
 
     context 'sorting' do
       it 'should call Sorter to ensure sorting' do
-        fake_sorter = FakeService.new([])
+        fake_sorter = Faker.new([])
 
         subject = CertificationService.new(sorter: fake_sorter)
 
@@ -160,7 +160,7 @@ describe CertificationService do
 
     context 'pagination' do
       it 'should call Paginator to paginate results' do
-        fake_paginator = FakeService.new
+        fake_paginator = Faker.new
 
         subject = CertificationService.new(paginator: fake_paginator)
 

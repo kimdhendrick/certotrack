@@ -175,28 +175,38 @@ describe CertificationTypesController do
 
       it 'assigns certification_type as @certification_type' do
         certification_type = create(:certification_type, customer: customer)
+        #noinspection RubyArgCount
+        EmployeeListPresenter.stub(:new).and_return(Faker.new([]))
+
         get :show, {:id => certification_type.to_param}, {}
         assigns(:certification_type).should eq(certification_type)
       end
 
       it 'assigns non_certified_employees as @non_certified_employees' do
         employee = create(:employee, customer: customer)
-        fake_employee_service = controller.load_employee_service(FakeService.new([employee]))
+        fake_employee_service = controller.load_employee_service(Faker.new([employee]))
         certification_type = create(:certification_type, customer: customer)
+        fake_employee_list_presenter = Faker.new([EmployeePresenter.new(employee)])
+        #noinspection RubyArgCount
+        EmployeeListPresenter.stub(:new).and_return(fake_employee_list_presenter)
 
         get :show, {id: certification_type.id}, {}
 
-        assigns(:non_certified_employees).should eq([employee])
+        assigns(:non_certified_employees).map(&:model).should eq([employee])
         assigns(:non_certified_employee_count).should == 1
         fake_employee_service.received_message.should == :get_employees_not_certified_for
         fake_employee_service.received_params[0].should == certification_type
-        fake_employee_service.received_params[1].should == {}
+
+        fake_employee_list_presenter.received_message.should == :present
+        fake_employee_list_presenter.received_params[0].should == {}
       end
 
       it 'assigns certifications as @certifications' do
         certification = create(:certification, customer: customer)
-        fake_certification_service = controller.load_certification_service(FakeService.new([certification]))
+        fake_certification_service = controller.load_certification_service(Faker.new([certification]))
         certification_type = create(:certification_type, customer: customer)
+        #noinspection RubyArgCount
+        EmployeeListPresenter.stub(:new).and_return(Faker.new([]))
 
         get :show, {id: certification_type.id}, {}
 
@@ -208,8 +218,12 @@ describe CertificationTypesController do
 
       it 'sorts non_certified_employees by specified parameters' do
         employee = create(:employee, customer: customer)
-        fake_employee_service = controller.load_employee_service(FakeService.new([employee]))
+        fake_employee_service = controller.load_employee_service(Faker.new([employee]))
         certification_type = create(:certification_type, customer: customer)
+
+        fake_employee_list_presenter = Faker.new([employee])
+        #noinspection RubyArgCount
+        EmployeeListPresenter.stub(:new).and_return(fake_employee_list_presenter)
 
         params = {
           id: certification_type.id,
@@ -217,17 +231,22 @@ describe CertificationTypesController do
           direction: 'desc',
           options: 'non_certified_employee_name'
         }
+
         get :show, params, {}
 
         fake_employee_service.received_message.should == :get_employees_not_certified_for
         fake_employee_service.received_params[0].should == certification_type
-        fake_employee_service.received_params[1].should == {sort: 'sort_key', direction: 'desc'}
+
+        fake_employee_list_presenter.received_message.should == :present
+        fake_employee_list_presenter.received_params[0].should == {sort: 'sort_key', direction: 'desc'}
       end
 
       it 'sorts certifications by specified parameters' do
         certification = create(:certification, customer: customer)
-        fake_certification_service = controller.load_certification_service(FakeService.new([certification]))
+        fake_certification_service = controller.load_certification_service(Faker.new([certification]))
         certification_type = create(:certification_type, customer: customer)
+        #noinspection RubyArgCount
+        EmployeeListPresenter.stub(:new).and_return(Faker.new([]))
 
         params = {
           id: certification_type.id,
@@ -235,6 +254,7 @@ describe CertificationTypesController do
           direction: 'desc',
           options: 'certified_employee_name'
         }
+
         get :show, params, {}
 
         fake_certification_service.received_message.should == :get_all_certifications_for_certification_type
@@ -250,6 +270,9 @@ describe CertificationTypesController do
 
       it 'assigns certification_type as @certification_type' do
         certification_type = create(:certification_type, customer: customer)
+        #noinspection RubyArgCount
+        EmployeeListPresenter.stub(:new).and_return(Faker.new([]))
+
         get :show, {:id => certification_type.to_param}, {}
         assigns(:certification_type).should eq(certification_type)
       end
@@ -390,7 +413,7 @@ describe CertificationTypesController do
 
       it 'gives error message when certifications exists' do
         certification_type = create(:certification_type, customer: customer)
-        controller.load_certification_type_service(FakeService.new(:certification_exists))
+        controller.load_certification_type_service(Faker.new(:certification_exists))
 
         delete :destroy, {:id => certification_type.to_param}, {}
 
@@ -417,7 +440,7 @@ describe CertificationTypesController do
     it 'calls get_certification_type_list with current_user and params' do
       my_user = stub_certification_user(customer)
       sign_in my_user
-      fake_certification_type_service = controller.load_certification_type_service(FakeService.new([]))
+      fake_certification_type_service = controller.load_certification_type_service(Faker.new([]))
       params = {sort: 'name', direction: 'asc'}
 
       get :index, params
@@ -488,7 +511,7 @@ describe CertificationTypesController do
     it 'calls get_certification_type_list with current_user and params' do
       my_user = stub_certification_user(customer)
       sign_in my_user
-      fake_certification_type_service = controller.load_certification_type_service(FakeService.new([]))
+      fake_certification_type_service = controller.load_certification_type_service(Faker.new([]))
       params = {sort: 'name', direction: 'asc'}
 
       get :search, params

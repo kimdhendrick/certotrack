@@ -24,9 +24,9 @@
   <%= @employee.location_name %>
 </p>
 
-<%= link_to 'Edit', edit_employee_path(@employee.employee_model) %> |
-<%= link_to 'Delete', @employee.employee_model, method: :delete, data: {confirm: 'Are you sure you want to delete?'} %> |
-<%= link_to 'Deactivate', deactivate_confirm_path(@employee.employee_model), data: {confirm: 'Deactivate Employee will unassign all equipment and remove certifications and employee. Are you sure?'} %>
+<%= link_to 'Edit', edit_employee_path(@employee.model) %> |
+<%= link_to 'Delete', @employee.model, method: :delete, data: {confirm: 'Are you sure you want to delete?'} %> |
+<%= link_to 'Deactivate', deactivate_confirm_path(@employee.model), data: {confirm: 'Deactivate Employee will unassign all equipment and remove certifications and employee. Are you sure?'} %>
 
 <hr/>
 <%= link_to 'New Employee Certification', new_certification_path(employee_id: @employee.id, source: :employee) %>

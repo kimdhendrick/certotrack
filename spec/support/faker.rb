@@ -1,4 +1,4 @@
-class FakeService
+class Faker
   attr_accessor :received_messages, :received_params
 
   def initialize(fake_return_value = nil)

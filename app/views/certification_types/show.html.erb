@@ -56,7 +56,7 @@
     <tbody>
     <% @certifications.each do |certification| %>
       <tr>
-        <td><%= link_to PresentableEmployee.new(certification.employee).name, certification.employee %></td>
+        <td><%= link_to EmployeePresenter.new(certification.employee).name, certification.employee %></td>
         <td><%= certification.employee.employee_number %></td>
         <td><%= certification.employee.location %></td>
         <td><%= certification.trainer %></td>
@@ -84,7 +84,7 @@
   <tbody>
   <% @non_certified_employees.each do |non_certified_employee| %>
     <tr>
-      <td><%= link_to non_certified_employee.name, non_certified_employee.employee_model %></td>
+      <td><%= link_to non_certified_employee.name, non_certified_employee.model %></td>
       <td><%= non_certified_employee.employee_number %></td>
       <td>
         <%= link_to 'Certify',

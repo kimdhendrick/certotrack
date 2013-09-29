@@ -4,7 +4,7 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
 require 'capybara/rails'
-require 'support/fake_service'
+require 'support/faker'
 require 'support/shared_examples/whitespace_stripping'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
