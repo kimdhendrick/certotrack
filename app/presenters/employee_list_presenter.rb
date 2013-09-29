@@ -12,12 +12,21 @@ class EmployeeListPresenter
     @collection = collection.map { |model| EmployeePresenter.new(model) }
   end
 
-  def present(params = {})
+  def sort(params = {})
     params[:sort] = 'employee_number' if params[:sort].blank? || params[:sort].nil?
-
     @collection = @sorter.sort(@collection, params[:sort], params[:direction])
-    @collection = @paginator.paginate(@collection, params[:page])
-
     @collection
+  end
+
+  def present(params = {})
+    @collection = sort(params)
+    @collection = _paginate(params)
+    @collection
+  end
+
+  private
+
+  def _paginate(params)
+    @paginator.paginate(@collection, params[:page])
   end
 end

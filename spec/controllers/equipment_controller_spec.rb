@@ -773,13 +773,17 @@ describe EquipmentController do
         ]
       end
 
-      it 'should return employees when assignee is Employee' do
+      it 'should return sorted employees when assignee is Employee' do
         employee = create(:employee, first_name: 'Wendy', last_name: 'Wizard')
         fake_employee_service = controller.load_employee_service(Faker.new([employee]))
+        fake_employee_list_presenter = Faker.new([EmployeePresenter.new(employee)])
+        #noinspection RubyArgCount
+        EmployeeListPresenter.stub(:new).and_return(fake_employee_list_presenter)
 
         get :ajax_assignee, {assignee: 'Employee'}
 
         fake_employee_service.received_message.should == :get_all_employees
+        fake_employee_list_presenter.received_message.should == :sort
         json = JSON.parse(response.body)
         json.should == [
           [employee.id, 'Wizard, Wendy']
