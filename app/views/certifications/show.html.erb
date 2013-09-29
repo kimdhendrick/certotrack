@@ -16,7 +16,7 @@
 
 <p>
   <b>Employee</b>
-  <%= link_to EmployeePresenter.new(@certification.employee).name, @certification.employee %>
+  <%= link_to employee_presenter_for(@certification.employee).name, @certification.employee %>
 </p>
 
 <p>

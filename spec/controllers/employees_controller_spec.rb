@@ -11,7 +11,7 @@ describe EmployeesController do
 
       it 'assigns a new employee as @employee' do
         get :new, {}, {}
-        assigns(:employee).model.should be_a_new(Employee)
+        assigns(:employee).should be_a_new(Employee)
       end
 
       it 'assigns locations' do
@@ -31,7 +31,7 @@ describe EmployeesController do
 
       it 'assigns a new employee as @employee' do
         get :new, {}, {}
-        assigns(:employee).model.should be_a_new(Employee)
+        assigns(:employee).should be_a_new(Employee)
       end
     end
 
@@ -257,7 +257,7 @@ describe EmployeesController do
       it 'assigns the requested employee as @employee' do
         employee = create(:employee, customer: customer)
         get :edit, {:id => employee.to_param}, {}
-        assigns(:employee).model.should eq(employee)
+        assigns(:employee).should eq(employee)
       end
 
       it 'assigns locations' do
@@ -279,7 +279,7 @@ describe EmployeesController do
       it 'assigns the requested employee as @employee' do
         employee = create(:employee, customer: customer)
         get :edit, {:id => employee.to_param}, {}
-        assigns(:employee).model.should eq(employee)
+        assigns(:employee).should eq(employee)
       end
     end
 
@@ -325,7 +325,7 @@ describe EmployeesController do
 
           put :update, {:id => employee.to_param, :employee => employee_attributes}, {}
 
-          assigns(:employee).model.should eq(employee)
+          assigns(:employee).should eq(employee)
           fake_employee_service.received_messages.should == [:update_employee]
         end
 
@@ -347,7 +347,7 @@ describe EmployeesController do
 
           put :update, {:id => employee.to_param, :employee => {'name' => 'invalid value'}}, {}
 
-          assigns(:employee).model.should eq(employee)
+          assigns(:employee).should eq(employee)
         end
 
         it "re-renders the 'edit' template" do
@@ -399,7 +399,7 @@ describe EmployeesController do
 
         put :update, {:id => employee.to_param, :employee => employee_attributes}, {}
 
-        assigns(:employee).model.should eq(employee)
+        assigns(:employee).should eq(employee)
       end
     end
 

@@ -1,7 +1,12 @@
 module EquipmentHelper
 
-  def display_assigned_to(equipment)
-    EquipmentPresenter.new(equipment).assigned_to
+  def equipment_presenter_for(equipment = @equipment)
+    presenter = EquipmentPresenter.new(equipment, self)
+    if block_given?
+      yield presenter
+    else
+      presenter
+    end
   end
 
   def equipment_accessible_parameters

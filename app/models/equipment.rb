@@ -57,7 +57,7 @@ class Equipment < ActiveRecord::Base
   end
 
   def assignee
-    # TODO GET OUTTA HERE when we introduce EquipmentPresenter
+    # TODO GET OUTTA HERE when we introduce EquipmentListPresenter
     assigned_to =
       assigned_to_location? ? location :
         assigned_to_employee? ? EmployeePresenter.new(employee) :

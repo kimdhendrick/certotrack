@@ -22,7 +22,7 @@
       <td><%= certification.name %></td></td>
       <td><%= certification.interval %></td></td>
       <td><%= certification.status %></td></td>
-      <td><%= EmployeePresenter.new(certification.employee).name %></td></td>
+      <td><%= employee_presenter_for(certification.employee).name %></td></td>
       <td><%= certification.trainer %></td></td>
       <td><%= DateHelpers::date_to_string(certification.last_certification_date) %></td>
       <td><%= DateHelpers::date_to_string(certification.expiration_date) %></td>

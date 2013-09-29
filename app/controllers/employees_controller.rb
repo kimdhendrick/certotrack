@@ -19,13 +19,14 @@ class EmployeesController < ApplicationController
   end
 
   def show
-    @certifications = @certification_service.get_all_certifications_for_employee(@employee.model, params)
+    @certifications = @certification_service.get_all_certifications_for_employee(@employee, params)
+    @employee = EmployeePresenter.new(@employee)
   end
 
   def new
     authorize! :create, :certification
     @locations = @location_service.get_all_locations(current_user)
-    @employee = EmployeePresenter.new(Employee.new)
+    @employee = Employee.new
   end
 
   def create
@@ -46,10 +47,10 @@ class EmployeesController < ApplicationController
   end
 
   def update
-    success = @employee_service.update_employee(@employee.model, _employees_params)
+    success = @employee_service.update_employee(@employee, _employees_params)
 
     if success
-      redirect_to @employee.model, notice: 'Employee was successfully updated.'
+      redirect_to @employee, notice: 'Employee was successfully updated.'
     else
       @locations = @location_service.get_all_locations(current_user)
       render action: 'edit'
@@ -57,15 +58,15 @@ class EmployeesController < ApplicationController
   end
 
   def destroy
-    status = @employee_service.delete_employee(@employee.model)
+    status = @employee_service.delete_employee(@employee)
 
     if status == :equipment_exists
-      redirect_to @employee.model, notice: 'Employee has equipment assigned, you must remove them before deleting the employee. Or Deactivate the employee instead.'
+      redirect_to @employee, notice: 'Employee has equipment assigned, you must remove them before deleting the employee. Or Deactivate the employee instead.'
       return
     end
 
     if status == :certification_exists
-      redirect_to @employee.model, notice: 'Employee has certifications, you must remove them before deleting the employee. Or Deactivate the employee instead.'
+      redirect_to @employee, notice: 'Employee has certifications, you must remove them before deleting the employee. Or Deactivate the employee instead.'
       return
     end
 
@@ -89,7 +90,7 @@ class EmployeesController < ApplicationController
   def _set_employee
     employee_pending_authorization = Employee.find(params[:id])
     authorize! :manage, employee_pending_authorization
-    @employee = EmployeePresenter.new(employee_pending_authorization)
+    @employee = employee_pending_authorization
   end
 
   def _employees_params
