@@ -2,18 +2,20 @@ require 'spec_helper'
 
 describe CertificationTypeService do
   let(:customer) { create(:customer) }
+  let(:sorter) { Sorter.new }
+  let(:search_service) { SearchService.new }
+  let(:paginator) { Paginator.new }
+  subject { CertificationTypeService.new(sorter: sorter, search_service: search_service, paginator: paginator) }
 
   describe 'create_certification_type' do
     it 'should create certification type' do
       attributes =
-        {
-          'name' => 'Box',
-          'units_required' => '15',
-          'interval' => '5 years'
-        }
-      customer = build(:customer)
-
-      certification_type = CertificationTypeService.new.create_certification_type(customer, attributes)
+      {
+        'name' => 'Box',
+        'units_required' => '15',
+        'interval' => '5 years'
+      }
+      certification_type = subject.create_certification_type(customer, attributes)
 
       certification_type.should be_persisted
       certification_type.name.should == 'Box'
@@ -24,144 +26,122 @@ describe CertificationTypeService do
   end
 
   describe 'update_certification_type' do
+    let!(:certification_type) { create(:certification_type, customer: customer) }
+    let(:attributes) do
+      {
+        'name' => 'CPR',
+        'interval' => '5 years'
+      }
+    end
+
+    it 'should return true' do
+      subject.update_certification_type(certification_type, attributes).should be_true
+    end
+
     it 'should update certification_types attributes' do
-      certification_type = create(:certification_type, name: 'Certification', customer: customer)
-      attributes =
-        {
-          'id' => certification_type.id,
-          'name' => 'CPR',
-          'interval' => '5 years',
-          'units_required' => '1009'
-        }
-
-      success = CertificationTypeService.new.update_certification_type(certification_type, attributes)
-      success.should be_true
-
+      subject.update_certification_type(certification_type, attributes)
       certification_type.reload
       certification_type.name.should == 'CPR'
       certification_type.interval.should == '5 years'
     end
 
-    it 'should return false if errors' do
-      certification_type = create(:certification_type, name: 'Certification', customer: customer)
-      certification_type.stub(:save).and_return(false)
+    context 'when errors' do
+      before { certification_type.stub(:save).and_return(false) }
 
-      success = CertificationTypeService.new.update_certification_type(certification_type, {})
-      success.should be_false
-
-      certification_type.reload
-      certification_type.name.should_not == 'CPR'
+      it 'should return false' do
+        subject.update_certification_type(certification_type, {}).should be_false
+      end
     end
   end
 
   describe 'delete_certification_type' do
-    it 'destroys the requested certification_type' do
-      certification_type = create(:certification_type, customer: customer)
+    let!(:certification_type) { create(:certification_type, customer: customer) }
 
+    it 'destroys the requested certification_type' do
       expect {
-        CertificationTypeService.new.delete_certification_type(certification_type)
+        subject.delete_certification_type(certification_type)
       }.to change(CertificationType, :count).by(-1)
     end
 
-    it 'returns error when certification assigned to certification_type' do
-      certification_type = create(:certification_type, customer: customer)
-      certification = create(:certification, certification_type: certification_type, customer: customer)
+    context 'when certification assigned to certification_type' do
+      let!(:certification) { create(:certification, certification_type: certification_type, customer: customer) }
 
-      status = CertificationTypeService.new.delete_certification_type(certification_type)
-
-      certification_type.reload
-      certification_type.should_not be_nil
-
-      certification.reload
-      certification.should_not be_nil
-
-      status.should == :certification_exists
-    end
-  end
-
-  describe 'get_all_certification_types' do
-    let(:my_customer) { create(:customer) }
-    let(:my_user) { create(:user, customer: my_customer) }
-
-    context 'an admin user' do
-      it 'should return all certification_types' do
-        my_certification_type = create(:certification_type, customer: my_customer)
-        other_certification_type = create(:certification_type)
-        Sorter.any_instance.should_receive(:sort).and_call_original
-
-        admin_user = create(:user, roles: ['admin'])
-
-        CertificationTypeService.new.get_all_certification_types(admin_user).should =~ [my_certification_type, other_certification_type]
+      it 'returns error' do
+        subject.delete_certification_type(certification_type).should == :certification_exists
       end
-    end
 
-    context 'a regular user' do
-      it "should return only that user's certification_types" do
-        my_certification_type = create(:certification_type, customer: my_customer)
-        other_certification_type = create(:certification_type)
-        Sorter.any_instance.should_receive(:sort).and_call_original
+      it 'does not destroy the certification_type' do
+        subject.delete_certification_type(certification_type)
+        certification_type.reload.should_not be_nil
+      end
 
-        CertificationTypeService.new.get_all_certification_types(my_user).should == [my_certification_type]
+      it 'does not destroy the certification' do
+        subject.delete_certification_type(certification_type)
+        certification.reload.should_not be_nil
       end
     end
   end
 
-  describe 'get_certification_type_list' do
-    let(:my_customer) { create(:customer) }
-    let(:my_user) { create(:user, customer: my_customer) }
+  describe 'certification_type retrieval' do
+    let(:admin_user) { create(:user, roles: ['admin']) }
+    let(:my_user) { create(:user, customer: customer) }
+    let!(:my_certification_type) { create(:certification_type, customer: customer) }
+    let!(:other_certification_type) { create(:certification_type) }
 
-    context 'sorting' do
-      it 'should call Sorter to ensure sorting' do
-        fake_sorter = FakeService.new([])
-        certification_type_service = CertificationTypeService.new(sorter: fake_sorter)
+    describe '#get_all_certification_types' do
+      context 'when an admin user' do
+        it 'should return all certification_types' do
+          subject.get_all_certification_types(admin_user).should =~ [my_certification_type, other_certification_type]
+        end
+      end
 
-        certification_type_service.get_certification_type_list(my_user)
-
-        fake_sorter.received_message.should == :sort
+      context 'when a regular user' do
+        it "should return only that user's certification_types" do
+          subject.get_all_certification_types(my_user).should == [my_certification_type]
+        end
       end
     end
 
-    context 'pagination' do
-      it 'should call Paginator to paginate results' do
-        fake_paginator = FakeService.new
-        certification_type_service = CertificationTypeService.new(sorter: FakeService.new, paginator: fake_paginator)
+    describe '#get_certification_type_list' do
+      context 'sorting' do
+        let(:sorter) { FakeService.new([]) }
 
-        certification_type_service.get_certification_type_list(my_user)
-
-        fake_paginator.received_message.should == :paginate
+        it 'should call Sorter to ensure sorting' do
+          subject.get_certification_type_list(my_user)
+          sorter.received_message.should == :sort
+        end
       end
-    end
 
-    context 'search' do
-      it 'should call SearchService to filter results' do
-        fake_search_service = FakeService.new([])
-        certification_type_service = CertificationTypeService.new(sorter: FakeService.new([]), search_service: fake_search_service)
+      context 'pagination' do
+        let(:paginator) { FakeService.new }
 
-        certification_type_service.get_certification_type_list(my_user, {thing1: 'thing2'})
-
-        fake_search_service.received_message.should == :search
-        fake_search_service.received_params[0].should == []
-        fake_search_service.received_params[1].should == {thing1: 'thing2'}
+        it 'should call Paginator to paginate results' do
+          subject.get_certification_type_list(my_user)
+          paginator.received_message.should == :paginate
+        end
       end
-    end
 
-    context 'an admin user' do
-      it 'should return all certification_types' do
-        my_certification_type = create(:certification_type, customer: my_customer)
-        other_certification_type = create(:certification_type)
+      context 'search' do
+        let(:search_service) { double('search_service', search: []) }
 
-        admin_user = create(:user, roles: ['admin'])
-
-        CertificationTypeService.new.get_certification_type_list(admin_user).should =~ [my_certification_type, other_certification_type]
+        it 'should call SearchService to filter results' do
+          subject.get_certification_type_list(my_user, {thing1: 'thing2'})
+          expect(search_service).to have_received(:search).with(anything(), {thing1: 'thing2'})
+        end
       end
-    end
 
-    context 'a regular user' do
-      it "should return only that user's certification_types" do
-        my_certification_type = create(:certification_type, customer: my_customer)
-        other_certification_type = create(:certification_type)
+      describe 'authorization' do
+        context 'when an admin user' do
+          it 'should return all certification_types' do
+            subject.get_certification_type_list(admin_user).should =~ [my_certification_type, other_certification_type]
+          end
+        end
 
-        CertificationTypeService.new.get_certification_type_list(my_user).should == [my_certification_type]
+        context 'when a regular user' do
+          it "should return only that user's certification_types" do
+            subject.get_certification_type_list(my_user).should == [my_certification_type]
+          end
+        end
       end
     end
   end

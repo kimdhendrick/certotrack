@@ -11,7 +11,7 @@ describe EmployeeService do
         my_employee = create(:employee, customer: my_customer)
         other_employee = create(:employee)
 
-        EmployeeService.new.get_employee_list(admin_user).sort.should == [my_employee, other_employee].sort
+        EmployeeService.new.get_employee_list(admin_user).should =~ [my_employee, other_employee]
       end
     end
 
