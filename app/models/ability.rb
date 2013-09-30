@@ -32,11 +32,5 @@ class Ability
         employee.try(:customer) == user.customer
       end
     end
-
-    # TODO
-    if user.role?('vehicle')
-      can :read, :vehicle
-      can :create, :vehicle
-    end
   end
 end

@@ -6,14 +6,7 @@ class EmployeeService
   end
 
   def get_all_employees(current_user, params = {})
-    employees = _get_employees_for_user(current_user)
-    @sorter.sort(employees, params[:sort], params[:direction])
-  end
-
-  def get_employee_list(current_user, params = {})
-    params[:sort] = 'employee_number' if params[:sort].blank? || params[:sort].nil?
-    employees = get_all_employees(current_user, params)
-    @paginator.paginate(employees, params[:page])
+    current_user.admin? ? Employee.all : current_user.employees
   end
 
   def create_employee(customer, attributes)
@@ -37,17 +30,8 @@ class EmployeeService
   def get_employees_not_certified_for(certification_type, params = {})
     certified_employees = certification_type.certifications.map(&:employee)
 
-    uncertified_employees =
-      certified_employees.empty? ?
-        Employee.where(customer: certification_type.customer) :
-        Employee.where("id NOT IN (?)", certified_employees)
-
-    @sorter.sort(uncertified_employees, params[:sort], params[:direction])
-  end
-
-  private
-
-  def _get_employees_for_user(current_user)
-    current_user.admin? ? Employee.all : current_user.employees
+    certified_employees.empty? ?
+      Employee.where(customer: certification_type.customer) :
+      Employee.where("id NOT IN (?)", certified_employees)
   end
 end

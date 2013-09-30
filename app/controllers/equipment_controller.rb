@@ -95,7 +95,9 @@ class EquipmentController < ApplicationController
     @equipments = @equipment_service.get_all_equipment(current_user, params)
     @equipment_count = @equipments.count
     @locations = @location_service.get_all_locations(current_user)
-    @employees = @employee_service.get_employee_list(current_user, {sort: :sort_key})
+
+    employees_collection = @employee_service.get_all_employees(current_user)
+    @employees = EmployeeListPresenter.new(employees_collection).present({sort: :sort_key})
   end
 
   def ajax_assignee
@@ -106,7 +108,8 @@ class EquipmentController < ApplicationController
       render json: locations.map { |l| [l.id, l.name] }
     else
       employees = @employee_service.get_all_employees(current_user)
-      render json: employees.map { |e| [e.id, e.to_s] }
+      employees = EmployeeListPresenter.new(employees).sort
+      render json: employees.map { |employee| [employee.id, employee.name] }
     end
   end
 

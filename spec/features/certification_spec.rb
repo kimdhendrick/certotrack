@@ -125,7 +125,7 @@ describe 'Certifications', slow: true do
       page.should have_content 'Certification type already assigned to this Employee. Please update existing Certification.'
     end
 
-    it 'should show a certification' do
+    it 'should show a certification', js:true do
       create(:certification,
              employee: employee,
              certification_type: cpr_certification_type,
@@ -152,7 +152,7 @@ describe 'Certifications', slow: true do
       page.should have_content 'Show Certification'
 
       page.should have_link 'Home'
-      #TODO
+      #PENDING_NAVIGATION
       #page.should have_link 'All Certifications'
       page.should have_link 'Create Certification'
       page.should have_link 'Create Employee'
@@ -188,7 +188,7 @@ describe 'Certifications', slow: true do
       page.should have_content 'Show Certification'
 
       page.should have_link 'Home'
-      #TODO
+      #PENDING_NAVIGATION
       #page.should have_link 'All Certifications'
       page.should have_link 'Create Certification'
       page.should have_link 'Create Employee'
@@ -221,7 +221,7 @@ describe 'Certifications', slow: true do
       page.should have_content 'Show Certification'
 
       page.should have_link 'Home'
-      #TODO
+      #PENDING_NAVIGATION
       #page.should have_link 'All Certifications'
       page.should have_link 'Create Certification'
       page.should have_link 'Create Employee'
@@ -258,7 +258,7 @@ describe 'Certifications', slow: true do
       page.should have_content 'Show Certification'
 
       page.should have_link 'Home'
-      #TODO
+      #PENDING_NAVIGATION
       #page.should have_link 'All Certifications'
       page.should have_link 'Create Certification'
       page.should have_link 'Create Employee'
@@ -282,7 +282,7 @@ describe 'Certifications', slow: true do
       page.should have_content '10 of 30'
       page.should have_content 'Partially qualified'
 
-      #TODO
+      #PENDING_NAVIGATION
       #page.should have_link 'Edit'
       page.should have_link 'Delete'
 
@@ -332,7 +332,7 @@ describe 'Certifications', slow: true do
       page.should have_content 'Create Certification'
 
       page.should have_link 'Home'
-      #TODO
+      #PENDING_NAVIGATION
       #page.should have_link 'All Certifications'
       page.should have_link 'Create Certification Type'
       page.should have_link 'Create Employee'
@@ -403,7 +403,7 @@ describe 'Certifications', slow: true do
       page.should have_content 'Create Certification'
 
       page.should have_link 'Home'
-      #TODO
+      #PENDING_NAVIGATION
       #page.should have_link 'All Certifications'
       page.should have_link 'Create Certification Type'
       page.should have_link 'Create Employee'
@@ -496,7 +496,7 @@ describe 'Certifications', slow: true do
       page.should have_content 'Create Certification'
 
       page.should have_link 'Home'
-      #TODO
+      #PENDING_NAVIGATION
       #page.should have_link 'All Certifications'
       page.should have_link 'Create Certification Type'
       page.should have_link 'Create Employee'
@@ -567,7 +567,7 @@ describe 'Certifications', slow: true do
       page.should have_content 'Create Certification'
 
       page.should have_link 'Home'
-      #TODO
+      #PENDING_NAVIGATION
       #page.should have_link 'All Certifications'
       page.should have_link 'Create Certification Type'
       page.should have_link 'Create Employee'
@@ -660,7 +660,7 @@ describe 'Certifications', slow: true do
       page.should have_content 'Create Certification'
 
       page.should have_link 'Home'
-      #TODO
+      #PENDING_NAVIGATION
       #page.should have_link 'All Certifications'
       page.should have_link 'Create Certification Type'
       page.should have_link 'Create Employee'

@@ -13,12 +13,14 @@ class EmployeesController < ApplicationController
   def index
     authorize! :read, :certification
 
-    @employees = @employee_service.get_employee_list(current_user, params)
+    employees_collection = @employee_service.get_all_employees(current_user, params)
+    @employees = EmployeeListPresenter.new(employees_collection).present(params)
     @employee_count = @employees.count
   end
 
   def show
     @certifications = @certification_service.get_all_certifications_for_employee(@employee, params)
+    @employee = EmployeePresenter.new(@employee)
   end
 
   def new

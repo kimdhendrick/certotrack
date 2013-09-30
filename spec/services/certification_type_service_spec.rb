@@ -104,7 +104,7 @@ describe CertificationTypeService do
 
     describe '#get_certification_type_list' do
       context 'sorting' do
-        let(:sorter) { FakeService.new([]) }
+        let(:sorter) { Faker.new([]) }
 
         it 'should call Sorter to ensure sorting' do
           subject.get_certification_type_list(my_user)
@@ -113,7 +113,7 @@ describe CertificationTypeService do
       end
 
       context 'pagination' do
-        let(:paginator) { FakeService.new }
+        let(:paginator) { Faker.new }
 
         it 'should call Paginator to paginate results' do
           subject.get_certification_type_list(my_user)

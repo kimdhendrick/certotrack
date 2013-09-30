@@ -12,16 +12,16 @@
   </tr>
   </thead>
   <tbody>
-  <% @equipments.each do |equipment| %>
+  <% @equipments.map{ |equipment| equipment_presenter_for(equipment) }.each do |equipment| %>
     <tr>
-      <td><%= link_to equipment.name, equipment %></td></td>
+      <td><%= link_to equipment.name, equipment.model %></td></td>
       <td><%= equipment.serial_number %></td>
       <td><%= equipment.status %></td>
       <td><%= equipment.inspection_interval %></td>
-      <td><%= DateHelpers::date_to_string(equipment.last_inspection_date) %></td>
+      <td><%= equipment.last_inspection_date %></td>
       <td><%= equipment.inspection_type %></td>
-      <td><%= DateHelpers::date_to_string(equipment.expiration_date) %></td>
-      <td><%= display_assigned_to(equipment) %></td>
+      <td><%= equipment.expiration_date %></td>
+      <td><%= equipment.assigned_to %></td>
     </tr>
   <% end %>
   </tbody>

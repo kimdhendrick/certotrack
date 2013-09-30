@@ -123,18 +123,22 @@ describe EmployeesController do
   end
   
   describe 'GET index' do
-    it 'calls get_employee_list with current_user and params' do
+    it 'calls get_all_employees with current_user and params' do
       my_user = stub_certification_user(customer)
       sign_in my_user
-      fake_employee_service = controller.load_employee_service(FakeService.new([]))
-      params = {sort: 'name', direction: 'asc'}
+      fake_employee_service = controller.load_employee_service(Faker.new([]))
+      fake_employee_list_presenter = Faker.new([])
+      #noinspection RubyArgCount
+      EmployeeListPresenter.stub(:new).and_return(fake_employee_list_presenter)
 
-      get :index, params
+      get :index, {sort: 'name', direction: 'asc'}
 
-      fake_employee_service.received_messages.should == [:get_employee_list]
+      fake_employee_service.received_message.should == :get_all_employees
       fake_employee_service.received_params[0].should == my_user
-      fake_employee_service.received_params[1]['sort'].should == 'name'
-      fake_employee_service.received_params[1]['direction'].should == 'asc'
+
+      fake_employee_list_presenter.received_message.should == :present
+      fake_employee_list_presenter.received_params[0]['sort'].should == 'name'
+      fake_employee_list_presenter.received_params[0]['direction'].should == 'asc'
     end
 
     context 'when certification user' do
@@ -144,11 +148,11 @@ describe EmployeesController do
 
       it 'assigns @employees and @employee_count' do
         employee = build(:employee)
-        controller.load_employee_service(FakeService.new([employee]))
+        controller.load_employee_service(Faker.new([employee]))
 
         get :index
 
-        assigns(:employees).should eq([employee])
+        assigns(:employees).map(&:model).should eq([employee])
         assigns(:employee_count).should eq(1)
       end
     end
@@ -160,11 +164,11 @@ describe EmployeesController do
 
       it 'assigns employee as @employee' do
         employee = build(:employee)
-        controller.load_employee_service(FakeService.new([employee]))
+        controller.load_employee_service(Faker.new([employee]))
 
         get :index
 
-        assigns(:employees).should eq([employee])
+        assigns(:employees).map(&:model).should eq([employee])
         assigns(:employee_count).should eq(1)
       end
     end
@@ -177,7 +181,7 @@ describe EmployeesController do
       describe 'GET index' do
         it 'does not assign employee as @employee' do
           employee = build(:employee)
-          controller.load_employee_service(FakeService.new([employee]))
+          controller.load_employee_service(Faker.new([employee]))
 
           get :index
 
@@ -206,7 +210,7 @@ describe EmployeesController do
 
       it 'assigns employee as @employee' do
         get :show, {:id => employee.to_param}, {}
-        assigns(:employee).should eq(employee)
+        assigns(:employee).model.should eq(employee)
       end
 
       it 'assigns certifications as @certifications' do
@@ -222,7 +226,7 @@ describe EmployeesController do
 
       it 'assigns employee as @employee' do
         get :show, {:id => employee.to_param}, {}
-        assigns(:employee).should eq(employee)
+        assigns(:employee).model.should eq(employee)
       end
 
       it 'assigns certifications as @certifications' do
@@ -258,7 +262,7 @@ describe EmployeesController do
 
       it 'assigns locations' do
         location = build(:location)
-        controller.load_location_service(FakeService.new([location]))
+        controller.load_location_service(Faker.new([location]))
         employee = create(:employee, customer: customer)
 
         get :edit, {:id => employee.to_param}, {}
@@ -301,7 +305,7 @@ describe EmployeesController do
       describe 'with valid params' do
         it 'updates the requested employee' do
           employee = create(:employee, customer: customer)
-          fake_employee_service = controller.load_employee_service(FakeService.new([]))
+          fake_employee_service = controller.load_employee_service(Faker.new([]))
 
           put :update, {:id => employee.to_param, :employee =>
             {
@@ -317,7 +321,7 @@ describe EmployeesController do
 
         it 'assigns the requested employee as @employee' do
           employee = create(:employee, customer: customer)
-          fake_employee_service = controller.load_employee_service(FakeService.new(true))
+          fake_employee_service = controller.load_employee_service(Faker.new(true))
 
           put :update, {:id => employee.to_param, :employee => employee_attributes}, {}
 
@@ -326,7 +330,7 @@ describe EmployeesController do
         end
 
         it 'redirects to the employee' do
-          controller.load_employee_service(FakeService.new(true))
+          controller.load_employee_service(Faker.new(true))
           employee = create(:employee, customer: customer)
 
           put :update, {:id => employee.to_param, :employee => employee_attributes}, {}
@@ -339,7 +343,7 @@ describe EmployeesController do
       describe 'with invalid params' do
         it 'assigns the employee as @employee' do
           employee = create(:employee, customer: customer)
-          controller.load_employee_service(FakeService.new(false))
+          controller.load_employee_service(Faker.new(false))
 
           put :update, {:id => employee.to_param, :employee => {'name' => 'invalid value'}}, {}
 
@@ -348,7 +352,7 @@ describe EmployeesController do
 
         it "re-renders the 'edit' template" do
           employee = create(:employee, customer: customer)
-          controller.load_employee_service(FakeService.new(false))
+          controller.load_employee_service(Faker.new(false))
 
           put :update, {:id => employee.to_param, :employee => {'name' => 'invalid value'}}, {}
 
@@ -356,9 +360,9 @@ describe EmployeesController do
         end
 
         it 'assigns locations' do
-          controller.load_employee_service(FakeService.new(false))
+          controller.load_employee_service(Faker.new(false))
           location = build(:location)
-          controller.load_location_service(FakeService.new([location]))
+          controller.load_location_service(Faker.new([location]))
           employee = create(:employee, customer: customer)
 
           put :update, {:id => employee.to_param, :employee => employee_attributes}, {}
@@ -375,7 +379,7 @@ describe EmployeesController do
 
       it 'updates the requested employee' do
         employee = create(:employee, customer: customer)
-        fake_employee_service = controller.load_employee_service(FakeService.new(true))
+        fake_employee_service = controller.load_employee_service(Faker.new(true))
 
         put :update, {:id => employee.to_param, :employee =>
           {
@@ -391,7 +395,7 @@ describe EmployeesController do
 
       it 'assigns the requested employee as @employee' do
         employee = create(:employee, customer: customer)
-        controller.load_employee_service(FakeService.new(true))
+        controller.load_employee_service(Faker.new(true))
 
         put :update, {:id => employee.to_param, :employee => employee_attributes}, {}
 
@@ -422,7 +426,7 @@ describe EmployeesController do
 
       it 'calls EmployeesService' do
         employee = create(:employee, customer: customer)
-        fake_employee_service = controller.load_employee_service(FakeService.new(true))
+        fake_employee_service = controller.load_employee_service(Faker.new(true))
 
         delete :destroy, {:id => employee.to_param}, {}
 
@@ -431,7 +435,7 @@ describe EmployeesController do
 
       it 'redirects to the employee list' do
         employee = create(:employee, customer: customer)
-        controller.load_employee_service(FakeService.new(true))
+        controller.load_employee_service(Faker.new(true))
 
         delete :destroy, {:id => employee.to_param}, {}
 
@@ -441,7 +445,7 @@ describe EmployeesController do
 
       it 'gives error message when equipment exists' do
         employee = create(:employee, customer: customer)
-        controller.load_employee_service(FakeService.new(:equipment_exists))
+        controller.load_employee_service(Faker.new(:equipment_exists))
 
         delete :destroy, {:id => employee.to_param}, {}
 
@@ -451,7 +455,7 @@ describe EmployeesController do
 
       it 'gives error message when certifications exists' do
         employee = create(:employee, customer: customer)
-        controller.load_employee_service(FakeService.new(:certification_exists))
+        controller.load_employee_service(Faker.new(:certification_exists))
 
         delete :destroy, {:id => employee.to_param}, {}
 
@@ -467,7 +471,7 @@ describe EmployeesController do
 
       it 'calls EmployeesService' do
         employee = create(:employee, customer: customer)
-        controller.load_employee_service(FakeService.new(true))
+        controller.load_employee_service(Faker.new(true))
 
         delete :destroy, {:id => employee.to_param}, {}
       end
@@ -482,3 +486,8 @@ describe EmployeesController do
     }
   end
 end
+
+def a_presentable_employee_for(employee)
+  EmployeePresenter.new(employee)
+end
+

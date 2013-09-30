@@ -57,7 +57,13 @@ class Equipment < ActiveRecord::Base
   end
 
   def assignee
-    assigned_to.try(:to_s) || "Unassigned"
+    # TODO GET OUTTA HERE when we introduce EquipmentListPresenter
+    assigned_to =
+      assigned_to_location? ? location :
+        assigned_to_employee? ? EmployeePresenter.new(employee) :
+          nil
+
+    assigned_to.try(:name) || 'Unassigned'
   end
 
   def assigned_to

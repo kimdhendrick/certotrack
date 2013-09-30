@@ -7,7 +7,7 @@ describe EquipmentController do
     it 'calls get_all_equipment with current_user and params' do
       my_user = stub_equipment_user(customer)
       sign_in my_user
-      fake_equipment_service = controller.load_equipment_service(FakeService.new([]))
+      fake_equipment_service = controller.load_equipment_service(Faker.new([]))
       params = {sort: 'name', direction: 'asc'}
 
       get :index, params
@@ -86,7 +86,7 @@ describe EquipmentController do
     it 'calls get_expired_equipment with current_user and params' do
       my_user = stub_equipment_user(customer)
       sign_in my_user
-      fake_equipment_service = controller.load_equipment_service(FakeService.new([]))
+      fake_equipment_service = controller.load_equipment_service(Faker.new([]))
       params = {sort: 'name', direction: 'asc'}
 
       get :expired, params
@@ -166,7 +166,7 @@ describe EquipmentController do
     it 'calls get_expiring_equipment with current_user and params' do
       my_user = stub_equipment_user(customer)
       sign_in my_user
-      fake_equipment_service = controller.load_equipment_service(FakeService.new([]))
+      fake_equipment_service = controller.load_equipment_service(Faker.new([]))
       params = {sort: 'name', direction: 'asc'}
 
       get :expiring, params
@@ -246,7 +246,7 @@ describe EquipmentController do
     it 'calls get_noninspectable_equipment with current_user and params' do
       my_user = stub_equipment_user(customer)
       sign_in my_user
-      fake_equipment_service = controller.load_equipment_service(FakeService.new([]))
+      fake_equipment_service = controller.load_equipment_service(Faker.new([]))
       params = {sort: 'name', direction: 'asc'}
 
       get :noninspectable, params
@@ -675,29 +675,32 @@ describe EquipmentController do
   end
 
   describe 'GET search' do
-    it 'calls get_all_equipment with current_user and params' do
-      my_user = stub_equipment_user(customer)
-      sign_in my_user
-      fake_equipment_service = controller.load_equipment_service(FakeService.new([]))
-      params = {sort: 'name', direction: 'asc'}
-
-      get :search, params
-
-      fake_equipment_service.received_messages.should == [:get_all_equipment]
-      fake_equipment_service.received_params[0].should == my_user
-      fake_equipment_service.received_params[1]['sort'].should == 'name'
-      fake_equipment_service.received_params[1]['direction'].should == 'asc'
-    end
-
     context 'when equipment user' do
       before do
         sign_in stub_equipment_user(customer)
       end
 
+      it 'calls get_all_equipment with current_user and params' do
+        my_user = stub_equipment_user(customer)
+        sign_in my_user
+        fake_equipment_service = controller.load_equipment_service(Faker.new([]))
+        params = {sort: 'name', direction: 'asc'}
+        #noinspection RubyArgCount
+        EmployeeListPresenter.stub(:new).and_return(Faker.new([]))
+
+        get :search, params
+
+        fake_equipment_service.received_messages.should == [:get_all_equipment]
+        fake_equipment_service.received_params[0].should == my_user
+        fake_equipment_service.received_params[1]['sort'].should == 'name'
+        fake_equipment_service.received_params[1]['direction'].should == 'asc'
+      end
+
       it 'assigns equipment as @equipment' do
         equipment = build(:equipment, customer: customer)
-
         EquipmentService.any_instance.stub(:get_all_equipment).and_return([equipment])
+        #noinspection RubyArgCount
+        EmployeeListPresenter.stub(:new).and_return(Faker.new([]))
 
         get :search
 
@@ -706,6 +709,8 @@ describe EquipmentController do
 
       it 'assigns equipment_count' do
         EquipmentService.any_instance.stub(:get_all_equipment).and_return([build(:equipment)])
+        #noinspection RubyArgCount
+        EmployeeListPresenter.stub(:new).and_return(Faker.new([]))
 
         get :search
 
@@ -714,6 +719,8 @@ describe EquipmentController do
 
       it 'assigns report_title' do
         EquipmentService.any_instance.stub(:get_all_equipment).and_return([build(:equipment)])
+        #noinspection RubyArgCount
+        EmployeeListPresenter.stub(:new).and_return(Faker.new([]))
 
         get :search
 
@@ -723,6 +730,8 @@ describe EquipmentController do
       it 'assigns locations' do
         location = build(:location)
         LocationService.any_instance.stub(:get_all_locations).and_return([location])
+        #noinspection RubyArgCount
+        EmployeeListPresenter.stub(:new).and_return(Faker.new([]))
 
         get :search
 
@@ -731,11 +740,16 @@ describe EquipmentController do
 
       it 'assigns employees' do
         employee = build(:employee)
-        EmployeeService.any_instance.stub(:get_employee_list).and_return([employee])
+        controller.load_employee_service(Faker.new([employee]))
+        fake_equipment_list_presenter = Faker.new([EmployeePresenter.new(employee)])
+        #noinspection RubyArgCount
+        EmployeeListPresenter.stub(:new).and_return(fake_equipment_list_presenter)
 
         get :search
 
-        assigns(:employees).should == [employee]
+        assigns(:employees).map(&:model).should == [employee]
+        fake_equipment_list_presenter.received_message.should == :present
+        fake_equipment_list_presenter.received_params[0].should == {sort: :sort_key}
       end
     end
   end
@@ -748,7 +762,7 @@ describe EquipmentController do
 
       it 'should return locations when assignee is Location' do
         location = create(:location, name: 'Oz')
-        fake_employee_service = controller.load_location_service(FakeService.new([location]))
+        fake_employee_service = controller.load_location_service(Faker.new([location]))
 
         get :ajax_assignee, {assignee: 'Location'}
 
@@ -759,13 +773,17 @@ describe EquipmentController do
         ]
       end
 
-      it 'should return employees when assignee is Employee' do
+      it 'should return sorted employees when assignee is Employee' do
         employee = create(:employee, first_name: 'Wendy', last_name: 'Wizard')
-        fake_employee_service = controller.load_employee_service(FakeService.new([employee]))
+        fake_employee_service = controller.load_employee_service(Faker.new([employee]))
+        fake_employee_list_presenter = Faker.new([EmployeePresenter.new(employee)])
+        #noinspection RubyArgCount
+        EmployeeListPresenter.stub(:new).and_return(fake_employee_list_presenter)
 
         get :ajax_assignee, {assignee: 'Employee'}
 
         fake_employee_service.received_message.should == :get_all_employees
+        fake_employee_list_presenter.received_message.should == :sort
         json = JSON.parse(response.body)
         json.should == [
           [employee.id, 'Wizard, Wendy']
@@ -809,7 +827,7 @@ describe EquipmentController do
       end
 
       it 'should call equipment_service to retrieve names' do
-        fake_employee_service = controller.load_equipment_service(FakeService.new(['cat']))
+        fake_employee_service = controller.load_equipment_service(Faker.new(['cat']))
 
         get :ajax_equipment_name, {term: 'cat'}
 
@@ -839,7 +857,7 @@ describe EquipmentController do
       end
 
       it 'should call equipment_service to retrieve names' do
-        fake_employee_service = controller.load_equipment_service(FakeService.new(['cat']))
+        fake_employee_service = controller.load_equipment_service(Faker.new(['cat']))
 
         get :ajax_equipment_name, {term: 'cat'}
 

@@ -44,7 +44,7 @@
         <select name="employee_id">
           <option value='' selected='selected'>Any Employee</option>
           <%=
-              options_from_collection_for_select(@employees, 'id', 'to_s', params[:employee_id])
+              options_from_collection_for_select(@employees, 'id', 'name', params[:employee_id])
           %>
         </select>
       </td>
