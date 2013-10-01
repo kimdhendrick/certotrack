@@ -20,7 +20,6 @@ class EmployeesController < ApplicationController
 
   def show
     @certifications = @certification_service.get_all_certifications_for_employee(@employee, params)
-    @employee = EmployeePresenter.new(@employee)
   end
 
   def new

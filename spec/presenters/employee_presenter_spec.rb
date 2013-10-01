@@ -27,11 +27,6 @@ describe EmployeePresenter do
     EmployeePresenter.new(employee).employee_number.should == '123ABC'
   end
 
-  it 'should respond to location_id' do
-    employee.location_id = 123
-    EmployeePresenter.new(employee).location_id.should == 123
-  end
-
   it 'should respond to name' do
     employee.first_name = 'John'
     employee.last_name = 'Doe'

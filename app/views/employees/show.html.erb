@@ -1,48 +1,50 @@
-<h1>Show Employee</h1>
+<% employee_presenter_for do |employee| %>
+  <h1>Show Employee</h1>
 
-<%= link_to 'Home', root_path %> |
-<%= link_to 'All Employees', employees_path %> |
-<%= link_to 'Create Employee', new_employee_path %>
+  <%= link_to 'Home', root_path %> |
+  <%= link_to 'All Employees', employees_path %> |
+  <%= link_to 'Create Employee', new_employee_path %>
 
-<p>
-  <b>Employee Number</b>
-  <%= @employee.employee_number %>
-</p>
+  <p>
+    <b>Employee Number</b>
+    <%= employee.employee_number %>
+  </p>
 
-<p>
-  <b>First Name</b>
-  <%= @employee.first_name %>
-</p>
+  <p>
+    <b>First Name</b>
+    <%= employee.first_name %>
+  </p>
 
-<p>
-  <b>Last Name</b>
-  <%= @employee.last_name %>
-</p>
+  <p>
+    <b>Last Name</b>
+    <%= employee.last_name %>
+  </p>
 
-<p>
-  <b>Location</b>
-  <%= @employee.location_name %>
-</p>
+  <p>
+    <b>Location</b>
+    <%= employee.location_name %>
+  </p>
 
-<%= link_to 'Edit', edit_employee_path(@employee.model) %> |
-<%= link_to 'Delete', @employee.model, method: :delete, data: {confirm: 'Are you sure you want to delete?'} %> |
-<%= link_to 'Deactivate', deactivate_confirm_path(@employee.model), data: {confirm: 'Deactivate Employee will unassign all equipment and remove certifications and employee. Are you sure?'} %>
+  <%= employee.edit_link %> |
+  <%= employee.delete_link %> |
+  <%= employee.deactivate_link %>
 
-<hr/>
-<%= link_to 'New Employee Certification', new_certification_path(employee_id: @employee.id, source: :employee) %>
+  <hr/>
+  <%= employee.new_certification_link %>
 
-<table class="sortable">
-  <thead>
+
+  <table class="sortable">
+    <thead>
     <tr>
-      <th><%= sortable 'name', title = 'Certification Type'%></th>
+      <th><%= sortable 'name', title = 'Certification Type' %></th>
       <th>Trainer</th>
       <th>Expiration Date</th>
       <th>Last Certification Date</th>
       <th>Units</th>
       <th><%= sortable 'status_code', title='Status' %></th>
     </tr>
-  </thead>
-  <tbody>
+    </thead>
+    <tbody>
     <% @certifications.each do |certification| %>
       <tr>
         <td><%= link_to certification.name, certification %></td>
@@ -53,7 +55,9 @@
         <td><%= certification.status %></td>
       </tr>
     <% end %>
-  </tbody>
-</table>
+    </tbody>
+  </table>
 
-<%= will_paginate @certifications %>
+  <%= will_paginate @certifications %>
+
+<% end %>

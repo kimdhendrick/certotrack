@@ -210,7 +210,7 @@ describe EmployeesController do
 
       it 'assigns employee as @employee' do
         get :show, {:id => employee.to_param}, {}
-        assigns(:employee).model.should eq(employee)
+        assigns(:employee).should eq(employee)
       end
 
       it 'assigns certifications as @certifications' do
@@ -226,7 +226,7 @@ describe EmployeesController do
 
       it 'assigns employee as @employee' do
         get :show, {:id => employee.to_param}, {}
-        assigns(:employee).model.should eq(employee)
+        assigns(:employee).should eq(employee)
       end
 
       it 'assigns certifications as @certifications' do
