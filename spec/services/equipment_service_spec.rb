@@ -6,41 +6,6 @@ describe EquipmentService do
   let(:admin_user) { create(:user, roles: ['admin']) }
 
   describe 'get_all_equipment' do
-    context 'sorting' do
-      it 'should call Sorter to ensure sorting' do
-        fake_sorter = Faker.new([])
-        equipment_service = EquipmentService.new(sorter: fake_sorter)
-
-        equipment_service.get_all_equipment(my_user)
-
-        fake_sorter.received_message.should == :sort
-      end
-    end
-
-    context 'pagination' do
-      it 'should call Paginator to paginate results' do
-        fake_paginator = Faker.new
-        equipment_service = EquipmentService.new(sorter: Faker.new, paginator: fake_paginator)
-
-        equipment_service.get_all_equipment(my_user)
-
-        fake_paginator.received_message.should == :paginate
-      end
-    end
-
-    context 'search' do
-      it 'should call SearchService to filter results' do
-        fake_search_service = Faker.new
-        equipment_service = EquipmentService.new(sorter: Faker.new([]), search_service: fake_search_service)
-
-        equipment_service.get_all_equipment(my_user, {thing1: 'thing2'})
-
-        fake_search_service.received_message.should == :search
-        fake_search_service.received_params[0].should == []
-        fake_search_service.received_params[1].should == {thing1: 'thing2'}
-      end
-    end
-
     context 'an admin user' do
       it 'should return all equipment' do
         my_equipment = create(:equipment, customer: my_customer)
@@ -60,6 +25,39 @@ describe EquipmentService do
     end
   end
 
+  describe 'search_equipment' do
+    context 'search' do
+      it 'should call SearchService to filter results' do
+        fake_search_service = Faker.new
+        equipment_service = EquipmentService.new(search_service: fake_search_service)
+
+        equipment_service.search_equipment(my_user, {thing1: 'thing2'})
+
+        fake_search_service.received_message.should == :search
+        fake_search_service.received_params[0].should == []
+        fake_search_service.received_params[1].should == {thing1: 'thing2'}
+      end
+    end
+
+    context 'an admin user' do
+      it 'should return all equipment' do
+        my_equipment = create(:equipment, customer: my_customer)
+        other_equipment = create(:equipment)
+
+        EquipmentService.new.search_equipment(admin_user, {}).should == [my_equipment, other_equipment]
+      end
+    end
+
+    context 'a regular user' do
+      it "should return only that user's equipment" do
+        my_equipment = create(:equipment, customer: my_customer)
+        other_equipment = create(:equipment)
+
+        EquipmentService.new.search_equipment(my_user, {}).should == [my_equipment]
+      end
+    end
+  end
+
   describe 'get_expired_equipment' do
     let!(:my_expired_equipment) { create(:expired_equipment, customer: my_customer) }
     let!(:other_expired_equipment) { create(:expired_equipment) }
@@ -67,28 +65,6 @@ describe EquipmentService do
     let!(:other_valid_equipment) { create(:valid_equipment) }
     let!(:my_expiring_equipment) { create(:expiring_equipment, customer: my_customer) }
     let!(:other_expiring_equipment) { create(:expiring_equipment) }
-
-    context 'sorting' do
-      it 'should call Sort Service to ensure sorting' do
-        fake_sorter = Faker.new([])
-        equipment_service = EquipmentService.new(sorter: fake_sorter)
-
-        equipment_service.get_expired_equipment(my_user)
-
-        fake_sorter.received_message.should == :sort
-      end
-    end
-
-    context 'pagination' do
-      it 'should call Paginator to paginate results' do
-        fake_paginator = Faker.new
-        equipment_service = EquipmentService.new(sorter: Faker.new, paginator: fake_paginator)
-
-        equipment_service.get_expired_equipment(my_user)
-
-        fake_paginator.received_message.should == :paginate
-      end
-    end
 
     context 'an admin user' do
       it 'should return all expired equipment' do
@@ -111,28 +87,6 @@ describe EquipmentService do
     let!(:my_valid_equipment) { create(:valid_equipment, customer: my_customer) }
     let!(:other_valid_equipment) { create(:valid_equipment) }
 
-    context 'sorting' do
-      it 'should call Sort Service to ensure sorting' do
-        fake_sorter = Faker.new([])
-        equipment_service = EquipmentService.new(sorter: fake_sorter)
-
-        equipment_service.get_expiring_equipment(my_user)
-
-        fake_sorter.received_message.should == :sort
-      end
-    end
-
-    context 'pagination' do
-      it 'should call Paginator to paginate results' do
-        fake_paginator = Faker.new
-        equipment_service = EquipmentService.new(sorter: Faker.new, paginator: fake_paginator)
-
-        equipment_service.get_expiring_equipment(my_user)
-
-        fake_paginator.received_message.should == :paginate
-      end
-    end
-
     context 'an admin user' do
       it 'should return all expiring equipment' do
         EquipmentService.new.get_expiring_equipment(admin_user).should == [my_expiring_equipment, other_expiring_equipment]
@@ -151,28 +105,6 @@ describe EquipmentService do
     let!(:other_noninspectable_equipment) { create(:noninspectable_equipment) }
     let!(:my_valid_equipment) { create(:valid_equipment, customer: my_customer) }
     let!(:other_valid_equipment) { create(:valid_equipment) }
-
-    context 'sorting' do
-      it 'should call Sort Service to ensure sorting' do
-        fake_sorter = Faker.new([])
-        equipment_service = EquipmentService.new(sorter: fake_sorter)
-
-        equipment_service.get_noninspectable_equipment(my_user)
-
-        fake_sorter.received_message.should == :sort
-      end
-    end
-
-    context 'pagination' do
-      it 'should call Paginator to paginate results' do
-        fake_paginator = Faker.new
-        equipment_service = EquipmentService.new(sorter: Faker.new, paginator: fake_paginator)
-
-        equipment_service.get_noninspectable_equipment(my_user)
-
-        fake_paginator.received_message.should == :paginate
-      end
-    end
 
     context 'an admin user' do
       it 'should return all noninspectable equipment' do
@@ -484,11 +416,11 @@ describe EquipmentService do
     end
   end
 
-  def _sort_fields(sorter, equipment, field)
-    start = Time::now
-    sorter.sort(equipment, field, 'asc')
-    elapsed = Time::now-start
-    puts "Time elapsed: #{elapsed} (for #{field})"
-    elapsed
-  end
+  #def _sort_fields(sorter, equipment, field)
+  #  start = Time::now
+  #  sorter.sort(equipment, field, 'asc')
+  #  elapsed = Time::now-start
+  #  puts "Time elapsed: #{elapsed} (for #{field})"
+  #  elapsed
+  #end
 end

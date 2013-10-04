@@ -1,4 +1,5 @@
 class EquipmentPresenter
+  include SortableByStatus
 
   attr_reader :model
 
@@ -9,7 +10,7 @@ class EquipmentPresenter
   delegate :inspection_type, to: :model
   delegate :comments, to: :model
 
-  def initialize(model, template)
+  def initialize(model, template = nil)
     @model = model
     @template = template
   end
@@ -24,13 +25,21 @@ class EquipmentPresenter
     end
   end
 
-  def assigned_to
+  def assignee
     assigned_to =
       model.assigned_to_location? ? model.location :
-      model.assigned_to_employee? ? EmployeePresenter.new(model.employee) :
-      nil
+        model.assigned_to_employee? ? EmployeePresenter.new(model.employee) :
+          nil
 
     assigned_to.try(:name) || 'Unassigned'
+  end
+
+  def sort_key
+    name
+  end
+
+  def inspection_interval_code
+    Interval.lookup(inspection_interval)
   end
 
   def last_inspection_date
@@ -41,6 +50,10 @@ class EquipmentPresenter
     DateHelpers::date_to_string(model.expiration_date)
   end
 
+  def expiration
+    model.expiration_date
+  end
+
   def edit_link
     @template.link_to 'Edit', @template.edit_equipment_path(model)
   end
@@ -48,5 +61,4 @@ class EquipmentPresenter
   def delete_link
     @template.link_to 'Delete', model, method: :delete, data: {confirm: 'Are you sure you want to delete?'}
   end
-
 end

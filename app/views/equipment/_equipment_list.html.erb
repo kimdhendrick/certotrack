@@ -7,12 +7,12 @@
     <th><%= sortable 'inspection_interval_code', title="Inspection Interval" %></th>
     <th><%= sortable 'last_inspection_date' %></th>
     <th><%= sortable 'inspection_type' %></th>
-    <th><%= sortable 'expiration_date' %></th>
+    <th><%= sortable 'expiration', title='Expiration Date' %></th>
     <th><%= sortable 'assignee' %></th>
   </tr>
   </thead>
   <tbody>
-  <% @equipments.map{ |equipment| equipment_presenter_for(equipment) }.each do |equipment| %>
+  <% @equipments.each do |equipment| %>
     <tr>
       <td><%= link_to equipment.name, equipment.model %></td></td>
       <td><%= equipment.serial_number %></td>
@@ -21,7 +21,7 @@
       <td><%= equipment.last_inspection_date %></td>
       <td><%= equipment.inspection_type %></td>
       <td><%= equipment.expiration_date %></td>
-      <td><%= equipment.assigned_to %></td>
+      <td><%= equipment.assignee %></td>
     </tr>
   <% end %>
   </tbody>

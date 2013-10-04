@@ -1,36 +1,26 @@
-require 'service_support/sorting_and_pagination'
-
 class EquipmentService
-  include ServiceSupport::SortingAndPagination
-
   def initialize(params = {})
-    @sorter = params[:sorter] || Sorter.new
     @search_service = params[:search_service] || SearchService.new
-    @paginator = params[:paginator] || Paginator.new
   end
 
-  def get_all_equipment(current_user, params = {})
-    equipment = _get_equipment_for_user(current_user)
-    equipment = @search_service.search(equipment, params)
-    _sort_and_paginate(equipment, params)
+  def search_equipment(current_user, params)
+    @search_service.search(_get_equipment_for_user(current_user), params)
   end
 
-  def get_expired_equipment(current_user, params = {})
-    equipment = _get_equipment_for_user(current_user).select { |e| e.expired? }
-
-    _sort_and_paginate(equipment, params)
+  def get_all_equipment(current_user)
+    _get_equipment_for_user(current_user)
   end
 
-  def get_expiring_equipment(current_user, params = {})
-    equipment = _get_equipment_for_user(current_user).select { |e| e.expiring? }
-
-    _sort_and_paginate(equipment, params)
+  def get_expired_equipment(current_user)
+    _get_equipment_for_user(current_user).select { |e| e.expired? }
   end
 
-  def get_noninspectable_equipment(current_user, params = {})
-    equipment = _get_equipment_for_user(current_user).select { |e| !e.inspectable? }
+  def get_expiring_equipment(current_user)
+    _get_equipment_for_user(current_user).select { |e| e.expiring? }
+  end
 
-    _sort_and_paginate(equipment, params)
+  def get_noninspectable_equipment(current_user)
+    _get_equipment_for_user(current_user).select { |e| !e.inspectable? }
   end
 
   def count_all_equipment(current_user)

@@ -15,7 +15,8 @@ class EquipmentController < ApplicationController
     authorize! :read, :equipment
 
     @report_title = 'All Equipment'
-    @equipments = @equipment_service.get_all_equipment(current_user, params)
+    equipment_collection = @equipment_service.get_all_equipment(current_user)
+    @equipments = EquipmentListPresenter.new(equipment_collection).present(params)
     @equipment_count = @equipments.count
   end
 
@@ -23,7 +24,8 @@ class EquipmentController < ApplicationController
     authorize! :read, :equipment
 
     @report_title = 'Expired Equipment List'
-    @equipments = @equipment_service.get_expired_equipment(current_user, params)
+    equipment_collection = @equipment_service.get_expired_equipment(current_user)
+    @equipments = EquipmentListPresenter.new(equipment_collection).present(params)
     @equipment_count = @equipments.count
     render 'equipment/index'
   end
@@ -32,7 +34,8 @@ class EquipmentController < ApplicationController
     authorize! :read, :equipment
 
     @report_title = 'Expiring Equipment List'
-    @equipments = @equipment_service.get_expiring_equipment(current_user, params)
+    equipment_collection = @equipment_service.get_expiring_equipment(current_user)
+    @equipments = EquipmentListPresenter.new(equipment_collection).present(params)
     @equipment_count = @equipments.count
     render 'equipment/index'
   end
@@ -41,7 +44,8 @@ class EquipmentController < ApplicationController
     authorize! :read, :equipment
 
     @report_title = 'Non-Inspectable Equipment List'
-    @equipments = @equipment_service.get_noninspectable_equipment(current_user, params)
+    equipment_collection = @equipment_service.get_noninspectable_equipment(current_user)
+    @equipments = EquipmentListPresenter.new(equipment_collection).present(params)
     @equipment_count = @equipments.count
     render 'equipment/index'
   end
@@ -92,7 +96,8 @@ class EquipmentController < ApplicationController
     authorize! :read, :equipment
 
     @report_title = 'Search Equipment'
-    @equipments = @equipment_service.get_all_equipment(current_user, params)
+    equipment_collection = @equipment_service.search_equipment(current_user, params)
+    @equipments = EquipmentListPresenter.new(equipment_collection).present(params)
     @equipment_count = @equipments.count
     @locations = @location_service.get_all_locations(current_user)
 

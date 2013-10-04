@@ -8,14 +8,19 @@ describe EquipmentController do
       my_user = stub_equipment_user(customer)
       sign_in my_user
       fake_equipment_service = controller.load_equipment_service(Faker.new([]))
+      fake_equipment_list_presenter = Faker.new([])
+      #noinspection RubyArgCount
+      EquipmentListPresenter.stub(:new).and_return(fake_equipment_list_presenter)
       params = {sort: 'name', direction: 'asc'}
 
       get :index, params
 
       fake_equipment_service.received_messages.should == [:get_all_equipment]
       fake_equipment_service.received_params[0].should == my_user
-      fake_equipment_service.received_params[1]['sort'].should == 'name'
-      fake_equipment_service.received_params[1]['direction'].should == 'asc'
+
+      fake_equipment_list_presenter.received_message.should == :present
+      fake_equipment_list_presenter.received_params[0]['sort'].should == 'name'
+      fake_equipment_list_presenter.received_params[0]['direction'].should == 'asc'
     end
 
     context 'when equipment user' do
@@ -29,7 +34,7 @@ describe EquipmentController do
 
         get :index
 
-        assigns(:equipments).should eq([equipment])
+        assigns(:equipments).map(&:model).should eq([equipment])
       end
 
       it 'assigns equipment_count' do
@@ -60,7 +65,7 @@ describe EquipmentController do
 
         get :index
 
-        assigns(:equipments).should eq([equipment])
+        assigns(:equipments).map(&:model).should eq([equipment])
       end
     end
 
@@ -87,14 +92,19 @@ describe EquipmentController do
       my_user = stub_equipment_user(customer)
       sign_in my_user
       fake_equipment_service = controller.load_equipment_service(Faker.new([]))
+      fake_equipment_list_presenter = Faker.new([])
+      #noinspection RubyArgCount
+      EquipmentListPresenter.stub(:new).and_return(fake_equipment_list_presenter)
       params = {sort: 'name', direction: 'asc'}
 
       get :expired, params
 
       fake_equipment_service.received_messages.should == [:get_expired_equipment]
       fake_equipment_service.received_params[0].should == my_user
-      fake_equipment_service.received_params[1]['sort'].should == 'name'
-      fake_equipment_service.received_params[1]['direction'].should == 'asc'
+
+      fake_equipment_list_presenter.received_message.should == :present
+      fake_equipment_list_presenter.received_params[0]['sort'].should == 'name'
+      fake_equipment_list_presenter.received_params[0]['direction'].should == 'asc'
     end
 
     context 'when equipment user' do
@@ -109,7 +119,7 @@ describe EquipmentController do
 
         get :expired
 
-        assigns(:equipments).should eq([expired_equipment])
+        assigns(:equipments).map(&:model).should eq([expired_equipment])
       end
 
       it 'assigns equipment_count' do
@@ -140,7 +150,7 @@ describe EquipmentController do
 
         get :expired
 
-        assigns(:equipments).should eq([expired_equipment])
+        assigns(:equipments).map(&:model).should eq([expired_equipment])
       end
     end
 
@@ -167,14 +177,20 @@ describe EquipmentController do
       my_user = stub_equipment_user(customer)
       sign_in my_user
       fake_equipment_service = controller.load_equipment_service(Faker.new([]))
+      fake_equipment_list_presenter = Faker.new([])
+      #noinspection RubyArgCount
+      EquipmentListPresenter.stub(:new).and_return(fake_equipment_list_presenter)
+
       params = {sort: 'name', direction: 'asc'}
 
       get :expiring, params
 
       fake_equipment_service.received_messages.should == [:get_expiring_equipment]
       fake_equipment_service.received_params[0].should == my_user
-      fake_equipment_service.received_params[1]['sort'].should == 'name'
-      fake_equipment_service.received_params[1]['direction'].should == 'asc'
+
+      fake_equipment_list_presenter.received_message.should == :present
+      fake_equipment_list_presenter.received_params[0]['sort'].should == 'name'
+      fake_equipment_list_presenter.received_params[0]['direction'].should == 'asc'
     end
 
     context 'when equipment user' do
@@ -189,7 +205,7 @@ describe EquipmentController do
 
         get :expiring
 
-        assigns(:equipments).should eq([expiring_equipment])
+        assigns(:equipments).map(&:model).should eq([expiring_equipment])
       end
 
       it 'assigns equipment_count' do
@@ -220,7 +236,7 @@ describe EquipmentController do
 
         get :expiring
 
-        assigns(:equipments).should eq([expiring_equipment])
+        assigns(:equipments).map(&:model).should eq([expiring_equipment])
       end
     end
 
@@ -247,14 +263,19 @@ describe EquipmentController do
       my_user = stub_equipment_user(customer)
       sign_in my_user
       fake_equipment_service = controller.load_equipment_service(Faker.new([]))
+      fake_equipment_list_presenter = Faker.new([])
+      #noinspection RubyArgCount
+      EquipmentListPresenter.stub(:new).and_return(fake_equipment_list_presenter)
       params = {sort: 'name', direction: 'asc'}
 
       get :noninspectable, params
 
       fake_equipment_service.received_messages.should == [:get_noninspectable_equipment]
       fake_equipment_service.received_params[0].should == my_user
-      fake_equipment_service.received_params[1]['sort'].should == 'name'
-      fake_equipment_service.received_params[1]['direction'].should == 'asc'
+
+      fake_equipment_list_presenter.received_message.should == :present
+      fake_equipment_list_presenter.received_params[0]['sort'].should == 'name'
+      fake_equipment_list_presenter.received_params[0]['direction'].should == 'asc'
     end
 
     context 'when equipment user' do
@@ -269,7 +290,7 @@ describe EquipmentController do
 
         get :noninspectable
 
-        assigns(:equipments).should eq([noninspectable_equipment])
+        assigns(:equipments).map(&:model).should eq([noninspectable_equipment])
       end
 
       it 'assigns equipment_count' do
@@ -300,7 +321,7 @@ describe EquipmentController do
 
         get :noninspectable
 
-        assigns(:equipments).should eq([noninspectable_equipment])
+        assigns(:equipments).map(&:model).should eq([noninspectable_equipment])
       end
     end
 
@@ -687,30 +708,33 @@ describe EquipmentController do
         params = {sort: 'name', direction: 'asc'}
         #noinspection RubyArgCount
         EmployeeListPresenter.stub(:new).and_return(Faker.new([]))
+        fake_equipment_list_presenter = Faker.new([])
+        #noinspection RubyArgCount
+        EquipmentListPresenter.stub(:new).and_return(fake_equipment_list_presenter)
 
         get :search, params
 
-        fake_equipment_service.received_messages.should == [:get_all_equipment]
+        fake_equipment_service.received_message.should == :search_equipment
         fake_equipment_service.received_params[0].should == my_user
-        fake_equipment_service.received_params[1]['sort'].should == 'name'
-        fake_equipment_service.received_params[1]['direction'].should == 'asc'
+
+        fake_equipment_list_presenter.received_message.should == :present
+        fake_equipment_list_presenter.received_params[0]['sort'].should == 'name'
+        fake_equipment_list_presenter.received_params[0]['direction'].should == 'asc'
       end
 
       it 'assigns equipment as @equipment' do
         equipment = build(:equipment, customer: customer)
-        EquipmentService.any_instance.stub(:get_all_equipment).and_return([equipment])
+        EquipmentService.any_instance.stub(:search_equipment).and_return([equipment])
         #noinspection RubyArgCount
-        EmployeeListPresenter.stub(:new).and_return(Faker.new([]))
+        EmployeeListPresenter.stub(:new).and_return(Faker.new([EquipmentPresenter.new(equipment)]))
 
         get :search
 
-        assigns(:equipments).should eq([equipment])
+        assigns(:equipments).map(&:model).should eq([equipment])
       end
 
       it 'assigns equipment_count' do
-        EquipmentService.any_instance.stub(:get_all_equipment).and_return([build(:equipment)])
-        #noinspection RubyArgCount
-        EmployeeListPresenter.stub(:new).and_return(Faker.new([]))
+        EquipmentService.any_instance.stub(:search_equipment).and_return([build(:equipment)])
 
         get :search
 

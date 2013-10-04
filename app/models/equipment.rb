@@ -1,5 +1,4 @@
 class Equipment < ActiveRecord::Base
-  include SortableByStatus
 
   belongs_to :customer
   belongs_to :location
@@ -20,10 +19,6 @@ class Equipment < ActiveRecord::Base
     return Status::EXPIRED if expired?
     return Status::EXPIRING if expiring?
     Status::VALID
-  end
-
-  def inspection_interval_code
-    Interval.lookup(inspection_interval)
   end
 
   def na?
@@ -54,16 +49,6 @@ class Equipment < ActiveRecord::Base
 
   def assigned_to_employee?
     employee.present?
-  end
-
-  def assignee
-    # TODO GET OUTTA HERE when we introduce EquipmentListPresenter
-    assigned_to =
-      assigned_to_location? ? location :
-        assigned_to_employee? ? EmployeePresenter.new(employee) :
-          nil
-
-    assigned_to.try(:name) || 'Unassigned'
   end
 
   def assigned_to
