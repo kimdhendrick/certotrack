@@ -57,7 +57,9 @@ describe 'Equipment', slow: true do
   describe 'Create Equipment' do
     let!(:denver_location) { create(:location, name: 'Denver', customer_id: customer.id) }
     let!(:littleton_location) { create(:location, name: 'Littleton', customer_id: customer.id) }
+    let!(:alpha_first_employee) { create(:employee, first_name: 'Alpha', last_name: 'Alpha', customer_id: customer.id) }
     let!(:special_employee) { create(:employee, first_name: 'Special', last_name: 'Employee', customer_id: customer.id) }
+    let!(:alpha_last_employee) { create(:employee, first_name: 'Zeta', last_name: 'Zeta', customer_id: customer.id) }
 
     before do
       login_as_equipment_user(customer)
@@ -81,6 +83,10 @@ describe 'Equipment', slow: true do
       fill_in 'Serial Number', with: '765-CKD'
       select 'Location', from: 'Assignee'
       find '#assignedTo'
+      page.should have_select(
+                    'assignedTo',
+                    :options => ['Denver', 'Littleton']
+                  )
       select 'Littleton', from: 'assignedTo'
       select '5 years', from: 'Inspection Interval'
       fill_in 'Last Inspection Date', with: '01/01/2000'
@@ -120,6 +126,11 @@ describe 'Equipment', slow: true do
       fill_in 'Serial Number', with: '765-CKD'
       select 'Employee', from: 'Assignee'
       find '#assignedTo'
+      page.should have_select(
+                    'assignedTo',
+                    :options => ['Alpha, Alpha', 'Employee, Special', 'Zeta, Zeta']
+                  )
+
       select 'Employee, Special', from: 'assignedTo'
       select '5 years', from: 'Inspection Interval'
       fill_in 'Last Inspection Date', with: '01/01/2000'
