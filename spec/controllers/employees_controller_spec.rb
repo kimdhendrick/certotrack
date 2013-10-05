@@ -215,7 +215,7 @@ describe EmployeesController do
 
       it 'assigns certifications as @certifications' do
         get :show, { id: employee.to_param }, {}
-        assigns(:certifications).should == certifications
+        assigns(:certifications).map(&:model).should == certifications
       end
     end
 
@@ -231,7 +231,7 @@ describe EmployeesController do
 
       it 'assigns certifications as @certifications' do
         get :show, { id: employee.to_param }, {}
-        assigns(:certifications).should == certifications
+        assigns(:certifications).map(&:model).should == certifications
       end
     end
 

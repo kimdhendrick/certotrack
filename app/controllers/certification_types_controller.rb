@@ -14,14 +14,14 @@ class CertificationTypesController < ApplicationController
   def index
     authorize! :read, :certification
 
-    @certification_types = @certification_type_service.get_certification_type_list(current_user, params)
+    certification_types_collection = @certification_type_service.get_all_certification_types(current_user)
+    @certification_types = CertificationTypeListPresenter.new(certification_types_collection).present(params)
     @certification_types_count = @certification_types.count
   end
 
   def show
-    @certifications = @certification_service.
-      get_all_certifications_for_certification_type(@certification_type, _certified_params(params))
-
+    certifications_collection = @certification_service.get_all_certifications_for_certification_type(@certification_type)
+    @certifications = CertificationListPresenter.new(certifications_collection).present(_certified_params(params))
     @certifications_count = @certifications.count
 
     employees_collection = @employee_service.get_employees_not_certified_for(@certification_type)
@@ -76,7 +76,8 @@ class CertificationTypesController < ApplicationController
 
   def search
     authorize! :read, :certification
-    @certification_types = @certification_type_service.get_certification_type_list(current_user, params)
+    certification_types_collection = @certification_type_service.search_certification_types(current_user, params)
+    @certification_types = CertificationTypeListPresenter.new(certification_types_collection).present(params)
     @certification_types_count = @certification_types.count
   end
 

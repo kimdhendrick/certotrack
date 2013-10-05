@@ -10,8 +10,8 @@ class EmployeeDeactivationController < ApplicationController
   check_authorization
 
   def deactivate_confirm
-    @equipments = @equipment_service.get_all_equipment_for_employee(@employee)
-    @certifications = @certification_service.get_all_certifications_for_employee(@employee)
+    @equipments = EquipmentListPresenter.new(@equipment_service.get_all_equipment_for_employee(@employee)).present
+    @certifications = CertificationListPresenter.new(@certification_service.get_all_certifications_for_employee(@employee)).present
   end
 
   def deactivate
@@ -46,6 +46,5 @@ class EmployeeDeactivationController < ApplicationController
     employee_pending_authorization = Employee.find(params[:id])
     authorize! :manage, employee_pending_authorization
     @employee = employee_pending_authorization
-    #@employee = PresentableEmployee.new(employee_pending_authorization)
   end
 end

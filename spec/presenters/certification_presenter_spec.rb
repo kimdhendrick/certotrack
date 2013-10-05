@@ -88,7 +88,30 @@ describe CertificationPresenter do
     CertificationPresenter.new(certification).expiration_date.should == '06/20/2012'
   end
 
-  it 'should present EmployeePresenter' do
+  it 'should respond to location' do
+    location = create(:location)
+    employee = create(:employee, location: location)
+    certification = create(
+      :certification,
+      customer: create(:customer),
+      employee: employee
+    )
+
+    CertificationPresenter.new(certification).location.should == location
+  end
+
+  it 'should respond to employee_name' do
+    employee = create(:employee, first_name: 'First', last_name: 'Last')
+    certification = create(
+      :certification,
+      customer: create(:customer),
+      employee: employee
+    )
+
+    CertificationPresenter.new(certification).employee_name.should == 'Last, First'
+  end
+
+  it 'should respond to employee' do
     employee = create(:employee)
     certification = create(
       :certification,
@@ -100,5 +123,39 @@ describe CertificationPresenter do
     presented_employee = CertificationPresenter.new(certification).employee
     presented_employee.should be_an_instance_of(EmployeePresenter)
     presented_employee.model.should == employee
+  end
+
+  describe 'units_achieved' do
+    context 'when Certification is date based' do
+      it 'should be blank' do
+        certification = build(:certification)
+        CertificationPresenter.new(certification).units_achieved.should be_blank
+      end
+    end
+    context 'when Certification is unit based' do
+      it 'should be the value of #units_achieved of #units_required' do
+        certification = build(:units_based_certification)
+        certification.units_achieved = 2
+        certification.certification_type.units_required = 3
+        CertificationPresenter.new(certification).units_achieved.should == '2 of 3'
+      end
+    end
+  end
+
+  describe 'units_achieved_label' do
+    context 'when Certification is date based' do
+      it 'should be blank' do
+        certification = build(:certification)
+        CertificationPresenter.new(certification).units_achieved_label.should be_blank
+      end
+    end
+    context 'when Certification is unit based' do
+      it 'should be the value of #units_achieved_label of #units_required' do
+        certification = build(:units_based_certification)
+        certification.units_achieved = 2
+        certification.certification_type.units_required = 3
+        CertificationPresenter.new(certification).units_achieved_label.should == 'Units Achieved'
+      end
+    end
   end
 end

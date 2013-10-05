@@ -1,0 +1,2 @@
+class CertificationListPresenter < ListPresenter
+end

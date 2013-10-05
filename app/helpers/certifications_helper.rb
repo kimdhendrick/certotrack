@@ -8,10 +8,4 @@ module CertificationsHelper
       presenter
     end
   end
-
-  #TODO KDB
-  def units(certification)
-    return '' unless certification.units_based?
-    "#{certification.units_achieved} of #{certification.units_required}"
-  end
 end

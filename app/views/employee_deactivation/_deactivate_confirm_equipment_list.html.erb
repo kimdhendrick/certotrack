@@ -18,7 +18,7 @@
       <td colspan="8">No equipment assigned to this employee.</td>
     </tr>
   <% end %>
-    <% @equipments.map{ |equipment| equipment_presenter_for(equipment) }.each do |equipment| %>
+    <% @equipments.each do |equipment| %>
     <tr>
       <td><%= equipment.name %></td></td>
       <td><%= equipment.serial_number %></td>

@@ -26,11 +26,6 @@ class Certification < ActiveRecord::Base
   delegate :units_required, to: :certification_type
   delegate :units_based?, to: :certification_type
 
-#TODO KDB
-  def sort_key
-    name
-  end
-
   def expiration_date
     active_certification_period.end_date
   end

@@ -55,15 +55,15 @@
     <tbody>
     <% @certifications.each do |certification| %>
       <tr>
-        <td><%= link_to employee_presenter_for(certification.employee).name, certification.employee %></td>
+        <td><%= link_to certification.employee_name, certification.employee_model %></td>
         <td><%= certification.employee.employee_number %></td>
-        <td><%= certification.employee.location %></td>
+        <td><%= certification.location %></td>
         <td><%= certification.trainer %></td>
-        <td><%= DateHelpers::date_to_string(certification.expiration_date) %></td>
-        <td><%= DateHelpers::date_to_string(certification.last_certification_date) %></td>
-        <td><%= units(certification) %></td>
+        <td><%= certification.expiration_date %></td>
+        <td><%= certification.last_certification_date %></td>
+        <td><%= certification.units_achieved %></td>
         <td><%= certification.status %></td>
-        <td><%= link_to 'Edit', certification %></td>
+        <td><%= link_to 'Edit', certification.model %></td>
       </tr>
     <% end %>
     </tbody>

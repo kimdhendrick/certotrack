@@ -1,5 +1,5 @@
 class CertificationPresenter
-  #include SortableByStatus
+  include SortableByStatus
   include EmployeesHelper
 
   attr_reader :model
@@ -9,6 +9,7 @@ class CertificationPresenter
   delegate :trainer, to: :model
   delegate :status, to: :model
   delegate :comments, to: :model
+  delegate :name, to: :model
 
   def initialize(model, template = nil)
     @model = model
@@ -35,8 +36,20 @@ class CertificationPresenter
     @template.link_to employee.name, model.employee
   end
 
+  def employee_model
+    model.employee
+  end
+
+  def location
+      model.employee.location
+  end
+
   def employee
     employee_presenter_for(model.employee)
+  end
+
+  def employee_name
+    employee.name
   end
 
   def units_achieved_label

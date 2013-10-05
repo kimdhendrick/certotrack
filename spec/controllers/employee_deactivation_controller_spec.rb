@@ -75,8 +75,8 @@ describe EmployeeDeactivationController do
         get :deactivate_confirm, {:id => employee.to_param}, {}
 
         assigns(:employee).should eq(employee)
-        assigns(:equipments).should eq([equipment])
-        assigns(:certifications).should eq([certification])
+        assigns(:equipments).map(&:model).should eq([equipment])
+        assigns(:certifications).map(&:model).should eq([certification])
         fake_equipment_service.received_message.should == :get_all_equipment_for_employee
         fake_equipment_service.received_params[0].should == employee
         fake_certification_service.received_message.should == :get_all_certifications_for_employee
@@ -97,7 +97,7 @@ describe EmployeeDeactivationController do
         get :deactivate_confirm, {:id => employee.to_param}, {}
 
         assigns(:employee).should eq(employee)
-        assigns(:equipments).should eq([equipment])
+        assigns(:equipments).map(&:model).should eq([equipment])
         fake_equipment_service.received_message.should == :get_all_equipment_for_employee
         fake_equipment_service.received_params[0].should == employee
       end

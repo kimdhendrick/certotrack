@@ -2,10 +2,8 @@ require 'spec_helper'
 
 describe CertificationTypeService do
   let(:customer) { create(:customer) }
-  let(:sorter) { Sorter.new }
   let(:search_service) { SearchService.new }
-  let(:paginator) { Paginator.new }
-  subject { CertificationTypeService.new(sorter: sorter, search_service: search_service, paginator: paginator) }
+  subject { CertificationTypeService.new(search_service: search_service) }
 
   describe 'create_certification_type' do
     it 'should create certification type' do
@@ -102,30 +100,12 @@ describe CertificationTypeService do
       end
     end
 
-    describe '#get_certification_type_list' do
-      context 'sorting' do
-        let(:sorter) { Faker.new([]) }
-
-        it 'should call Sorter to ensure sorting' do
-          subject.get_certification_type_list(my_user)
-          sorter.received_message.should == :sort
-        end
-      end
-
-      context 'pagination' do
-        let(:paginator) { Faker.new }
-
-        it 'should call Paginator to paginate results' do
-          subject.get_certification_type_list(my_user)
-          paginator.received_message.should == :paginate
-        end
-      end
-
+    describe '#search_certification_types' do
       context 'search' do
         let(:search_service) { double('search_service', search: []) }
 
         it 'should call SearchService to filter results' do
-          subject.get_certification_type_list(my_user, {thing1: 'thing2'})
+          subject.search_certification_types(my_user, {thing1: 'thing2'})
           expect(search_service).to have_received(:search).with(anything(), {thing1: 'thing2'})
         end
       end
@@ -133,13 +113,13 @@ describe CertificationTypeService do
       describe 'authorization' do
         context 'when an admin user' do
           it 'should return all certification_types' do
-            subject.get_certification_type_list(admin_user).should =~ [my_certification_type, other_certification_type]
+            subject.search_certification_types(admin_user).should =~ [my_certification_type, other_certification_type]
           end
         end
 
         context 'when a regular user' do
           it "should return only that user's certification_types" do
-            subject.get_certification_type_list(my_user).should == [my_certification_type]
+            subject.search_certification_types(my_user).should == [my_certification_type]
           end
         end
       end

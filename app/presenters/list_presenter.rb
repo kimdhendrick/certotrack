@@ -3,15 +3,15 @@ class ListPresenter
   attr_reader :collection
 
   def initialize(collection, params = {})
-    @collection = collection
+    @collection = collection || []
     @sorter = params[:sorter] || Sorter.new
     @paginator = params[:paginator] || Paginator.new
 
-    return if collection.empty?
+    return if @collection.empty?
 
-    klass = "#{collection.first.class}Presenter".constantize
+    klass = "#{@collection.first.class}Presenter".constantize
 
-    @collection = collection.map { |model| klass.new(model) }
+    @collection = @collection.map { |model| klass.new(model) }
   end
 
   def present(params = {})
@@ -26,4 +26,8 @@ class ListPresenter
     @paginator.paginate(@collection, params[:page])
   end
 
+  def _sort(params = {})
+    @collection = @sorter.sort(@collection, params[:sort], params[:direction])
+    @collection
+  end
 end

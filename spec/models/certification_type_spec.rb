@@ -51,17 +51,4 @@ describe CertificationType do
     build(:certification_type, units_required: 0).should_not be_units_based
     build(:certification_type, units_required: 1).should be_units_based
   end
-
-  it 'should respond to interval_code' do
-    one_month_certification_type = build(:certification_type, interval: Interval::ONE_MONTH.text)
-    not_required_certification_type = build(:certification_type, interval: Interval::NOT_REQUIRED.text)
-
-    one_month_certification_type.interval_code.should == Interval::ONE_MONTH.id
-    not_required_certification_type.interval_code.should == Interval::NOT_REQUIRED.id
-  end
-
-  it 'should respond to its sort_key' do
-    certification_type = build(:certification_type, name: 'certification name')
-    certification_type.sort_key.should == 'certification name'
-  end
 end

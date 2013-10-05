@@ -210,7 +210,7 @@ describe CertificationTypesController do
 
         get :show, {id: certification_type.id}, {}
 
-        assigns(:certifications).should eq([certification])
+        assigns(:certifications).map(&:model).should eq([certification])
         assigns(:certifications_count).should == 1
         fake_certification_service.received_message.should == :get_all_certifications_for_certification_type
         fake_certification_service.received_params[0].should == certification_type
@@ -248,6 +248,10 @@ describe CertificationTypesController do
         #noinspection RubyArgCount
         EmployeeListPresenter.stub(:new).and_return(Faker.new([]))
 
+        fake_certification_list_presenter = Faker.new([certification])
+        #noinspection RubyArgCount
+        CertificationListPresenter.stub(:new).and_return(fake_certification_list_presenter)
+
         params = {
           id: certification_type.id,
           sort: 'sort_key',
@@ -258,8 +262,9 @@ describe CertificationTypesController do
         get :show, params, {}
 
         fake_certification_service.received_message.should == :get_all_certifications_for_certification_type
-        fake_certification_service.received_params[0].should == certification_type
-        fake_certification_service.received_params[1].should == {sort: 'sort_key', direction: 'desc'}
+
+        fake_certification_list_presenter.received_message.should == :present
+        fake_certification_list_presenter.received_params[0].should == {sort: 'sort_key', direction: 'desc'}
       end
     end
 
@@ -437,18 +442,24 @@ describe CertificationTypesController do
   end
 
   describe 'GET index' do
-    it 'calls get_certification_type_list with current_user and params' do
+    it 'calls get_all_certification_types with current_user and params' do
       my_user = stub_certification_user(customer)
       sign_in my_user
       fake_certification_type_service = controller.load_certification_type_service(Faker.new([]))
       params = {sort: 'name', direction: 'asc'}
 
+      fake_certification_type_list_presenter = Faker.new([])
+      #noinspection RubyArgCount
+      CertificationTypeListPresenter.stub(:new).and_return(fake_certification_type_list_presenter)
+
       get :index, params
 
-      fake_certification_type_service.received_messages.should == [:get_certification_type_list]
+      fake_certification_type_service.received_messages.should == [:get_all_certification_types]
       fake_certification_type_service.received_params[0].should == my_user
-      fake_certification_type_service.received_params[1]['sort'].should == 'name'
-      fake_certification_type_service.received_params[1]['direction'].should == 'asc'
+
+      fake_certification_type_list_presenter.received_message.should == :present
+      fake_certification_type_list_presenter.received_params[0][:sort].should == 'name'
+      fake_certification_type_list_presenter.received_params[0][:direction].should == 'asc'
     end
 
     context 'when certification user' do
@@ -458,15 +469,15 @@ describe CertificationTypesController do
 
       it 'assigns certification_types as @certification_types' do
         certification_type = build(:certification_type)
-        CertificationTypeService.any_instance.stub(:get_certification_type_list).and_return([certification_type])
+        CertificationTypeService.any_instance.stub(:get_all_certification_types).and_return([certification_type])
 
         get :index
 
-        assigns(:certification_types).should eq([certification_type])
+        assigns(:certification_types).map(&:model).should eq([certification_type])
       end
 
       it 'assigns certification_types_count' do
-        CertificationTypeService.any_instance.stub(:get_certification_type_list).and_return([build(:certification_type)])
+        CertificationTypeService.any_instance.stub(:get_all_certification_types).and_return([build(:certification_type)])
 
         get :index
 
@@ -481,11 +492,11 @@ describe CertificationTypesController do
 
       it 'assigns certification_types as @certification_types' do
         certification_type = build(:certification_type)
-        CertificationTypeService.any_instance.stub(:get_certification_type_list).and_return([certification_type])
+        CertificationTypeService.any_instance.stub(:get_all_certification_types).and_return([certification_type])
 
         get :index
 
-        assigns(:certification_types).should eq([certification_type])
+        assigns(:certification_types).map(&:model).should eq([certification_type])
       end
     end
 
@@ -497,7 +508,7 @@ describe CertificationTypesController do
       describe 'GET index' do
         it 'does not assign certification_types as @certification_types' do
           certification_type = build(:certification_type)
-          CertificationTypeService.any_instance.stub(:get_certification_type_list).and_return([certification_type])
+          CertificationTypeService.any_instance.stub(:get_all_certification_types).and_return([certification_type])
 
           get :index
 
@@ -508,18 +519,24 @@ describe CertificationTypesController do
   end
 
   describe 'GET search' do
-    it 'calls get_certification_type_list with current_user and params' do
+    it 'calls search_certification_types with current_user and params' do
       my_user = stub_certification_user(customer)
       sign_in my_user
       fake_certification_type_service = controller.load_certification_type_service(Faker.new([]))
       params = {sort: 'name', direction: 'asc'}
 
+      fake_certification_type_list_presenter = Faker.new([])
+      #noinspection RubyArgCount
+      CertificationTypeListPresenter.stub(:new).and_return(fake_certification_type_list_presenter)
+
       get :search, params
 
-      fake_certification_type_service.received_messages.should == [:get_certification_type_list]
+      fake_certification_type_service.received_messages.should == [:search_certification_types]
       fake_certification_type_service.received_params[0].should == my_user
-      fake_certification_type_service.received_params[1]['sort'].should == 'name'
-      fake_certification_type_service.received_params[1]['direction'].should == 'asc'
+
+      fake_certification_type_list_presenter.received_message.should == :present
+      fake_certification_type_list_presenter.received_params[0][:sort].should == 'name'
+      fake_certification_type_list_presenter.received_params[0][:direction].should == 'asc'
     end
 
     context 'when certification user' do
@@ -530,15 +547,15 @@ describe CertificationTypesController do
       it 'assigns certification_types as @certification_types' do
         certification_type = build(:certification_type, customer: customer)
 
-        CertificationTypeService.any_instance.stub(:get_certification_type_list).and_return([certification_type])
+        CertificationTypeService.any_instance.stub(:search_certification_types).and_return([certification_type])
 
         get :search
 
-        assigns(:certification_types).should eq([certification_type])
+        assigns(:certification_types).map(&:model).should eq([certification_type])
       end
 
       it 'assigns certification_types_count' do
-        CertificationTypeService.any_instance.stub(:get_certification_type_list).and_return([build(:certification_type)])
+        CertificationTypeService.any_instance.stub(:search_certification_types).and_return([build(:certification_type)])
 
         get :search
 

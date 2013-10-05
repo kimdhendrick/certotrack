@@ -96,30 +96,6 @@ describe CertificationService do
 
       subject.get_all_certifications_for_employee(employee_1).should == [active_certification]
     end
-
-    context 'sorting' do
-      it 'should call Sorter to ensure sorting' do
-        fake_sorter = Faker.new([])
-
-        subject = CertificationService.new(sorter: fake_sorter)
-
-        subject.get_all_certifications_for_employee(build(:employee))
-
-        fake_sorter.received_message.should == :sort
-      end
-    end
-
-    context 'pagination' do
-      it 'should call Paginator to paginate results' do
-        fake_paginator = Faker.new
-
-        subject = CertificationService.new(paginator: fake_paginator)
-
-        subject.get_all_certifications_for_employee(build(:employee))
-
-        fake_paginator.received_message.should == :paginate
-      end
-    end
   end
 
   describe '#get_all_certifications_for_certification_type' do
@@ -144,30 +120,6 @@ describe CertificationService do
       subject = CertificationService.new
 
       subject.get_all_certifications_for_certification_type(certification_type).should == [active_certification]
-    end
-
-    context 'sorting' do
-      it 'should call Sorter to ensure sorting' do
-        fake_sorter = Faker.new([])
-
-        subject = CertificationService.new(sorter: fake_sorter)
-
-        subject.get_all_certifications_for_certification_type(build(:certification_type))
-
-        fake_sorter.received_message.should == :sort
-      end
-    end
-
-    context 'pagination' do
-      it 'should call Paginator to paginate results' do
-        fake_paginator = Faker.new
-
-        subject = CertificationService.new(paginator: fake_paginator)
-
-        subject.get_all_certifications_for_certification_type(build(:certification_type))
-
-        fake_paginator.received_message.should == :paginate
-      end
     end
   end
 end

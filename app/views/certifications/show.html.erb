@@ -50,6 +50,6 @@
     <%= certification.comments %>
   </p>
 
-  <%= link_to 'Edit', edit_certification_path(@certification) %> |
-  <%= link_to 'Delete', @certification, method: :delete, data: {confirm: 'Are you sure you want to delete?'} %>
+  <%= certification.edit_link %> |
+  <%= certification.delete_link %>
 <% end %>
