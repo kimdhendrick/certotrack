@@ -84,7 +84,7 @@ describe CertificationsController do
 
         get :new, {}, {}
 
-        assigns(:certification_types).should eq([certification_type])
+        assigns(:certification_types).map(&:model).should eq([certification_type])
       end
     end
 
@@ -100,7 +100,7 @@ describe CertificationsController do
 
         get :new, {}, {}
 
-        assigns(:certification_types).should eq([certification_type])
+        assigns(:certification_types).map(&:model).should eq([certification_type])
       end
     end
 
@@ -193,7 +193,7 @@ describe CertificationsController do
 
         get :create, {employee: {}, certification: {}}, {}
 
-        assigns(:certification_types).should eq([certification_type])
+        assigns(:certification_types).map(&:model).should eq([certification_type])
       end
 
       it 'handles missing employee_id' do
@@ -295,7 +295,7 @@ describe CertificationsController do
           post :create, params, {}
 
           assigns(:certification).should be_a(Certification)
-          assigns(:certification_types).should eq([certification_type])
+          assigns(:certification_types).map(&:model).should eq([certification_type])
         end
 
         it 'renders create certification on success' do

@@ -1,5 +1,5 @@
 class CertificationPresenter
-  include SortableByStatus
+  #include SortableByStatus
   include EmployeesHelper
 
   attr_reader :model

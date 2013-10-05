@@ -1,44 +1,43 @@
-<h1>Show Certification Type</h1>
+<% certification_type_presenter_for do |certification_type| %>
+  <h1>Show Certification Type</h1>
 
-<%= link_to 'Home', root_path %> |
-<%= link_to "All Certification Types", certification_types_path %> |
-<%= link_to "Search Certification Types", search_certification_types_path %> |
-<%= link_to 'Create Certification Type', new_certification_type_path %>
+  <%= link_to 'Home', root_path %> |
+  <%= link_to "All Certification Types", certification_types_path %> |
+  <%= link_to "Search Certification Types", search_certification_types_path %> |
+  <%= link_to 'Create Certification Type', new_certification_type_path %>
 
-<p>
-  <b>Name</b>
-  <%= @certification_type.name %>
-</p>
-
-<p>
-  <b>Interval</b>
-  <%= @certification_type.interval %>
-</p>
-
-<% if @certification_type.units_based? %>
   <p>
-    <b>Required Units</b>
-    <%= @certification_type.units_required %>
+    <b>Name</b>
+    <%= certification_type.name %>
   </p>
-<% end %>
 
-<p>
-  <b>Certified Employees</b>
-  <%= @certifications_count %>
-</p>
+  <p>
+    <b>Interval</b>
+    <%= certification_type.interval %>
+  </p>
 
-<p>
-  <b>Non-Certified Employees</b>
-  <%= @non_certified_employee_count %>
-</p>
+  <p>
+    <b><%= certification_type.units_required_label %></b>
+    <%= certification_type.units_required %>
+  </p>
 
-<%= link_to 'Edit', edit_certification_type_path(@certification_type) %> |
-<%= link_to 'Delete', @certification_type, method: :delete, data: {confirm: 'Are you sure you want to delete?'} %>
+  <p>
+    <b>Certified Employees</b>
+    <%= @certifications_count %>
+  </p>
 
-<br/>
+  <p>
+    <b>Non-Certified Employees</b>
+    <%= @non_certified_employee_count %>
+  </p>
 
-<h2>Certified Employees</h2>
-<span data-certified="data-certified">
+  <%= certification_type.edit_link %> |
+  <%= certification_type.delete_link %>
+
+  <br/>
+
+  <h2>Certified Employees</h2>
+  <span data-certified="data-certified">
   <table class="sortable" border="1">
     <thead>
     <tr>
@@ -64,39 +63,41 @@
         <td><%= DateHelpers::date_to_string(certification.last_certification_date) %></td>
         <td><%= units(certification) %></td>
         <td><%= certification.status %></td>
-        <td><%= link_to 'Edit', certification%></td>
+        <td><%= link_to 'Edit', certification %></td>
       </tr>
     <% end %>
     </tbody>
   </table>
 </span>
 
-<h2>Non Certified Employees</h2>
-<span data-uncertified="data-uncertified">
+  <h2>Non Certified Employees</h2>
+  <span data-uncertified="data-uncertified">
   <table class="sortable" border="1">
-  <thead>
-  <tr>
-    <th><%= sortable 'sort_key', title = 'Employee Name', options = 'non_certified_employee_name' %></th>
-    <th>Employee Number</th>
-    <th>&nbsp;</th>
-  </tr>
-  </thead>
-  <tbody>
-  <% @non_certified_employees.each do |non_certified_employee| %>
+    <thead>
     <tr>
-      <td><%= link_to non_certified_employee.name, non_certified_employee.model %></td>
-      <td><%= non_certified_employee.employee_number %></td>
-      <td>
-        <%= link_to 'Certify',
-                    new_certification_path(
-                      certification_type_id: @certification_type.id,
-                      employee_id: non_certified_employee.id,
-                      source: :certification_type
-                    )
-        %>
-      </td>
+      <th><%= sortable 'sort_key', title = 'Employee Name', options = 'non_certified_employee_name' %></th>
+      <th>Employee Number</th>
+      <th>&nbsp;</th>
     </tr>
-  <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+    <% @non_certified_employees.each do |non_certified_employee| %>
+      <tr>
+        <td><%= link_to non_certified_employee.name, non_certified_employee.model %></td>
+        <td><%= non_certified_employee.employee_number %></td>
+        <td>
+          <%= link_to 'Certify',
+                      new_certification_path(
+                        certification_type_id: certification_type.id,
+                        employee_id: non_certified_employee.id,
+                        source: :certification_type
+                      )
+          %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
 </span>
+
+<% end %>

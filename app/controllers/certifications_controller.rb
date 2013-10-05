@@ -63,7 +63,15 @@ class CertificationsController < ApplicationController
   end
 
   def _set_certification_types(current_user)
-    @certification_types = @certification_type_service.get_all_certification_types(current_user)
+    certification_types = @certification_type_service.get_all_certification_types(current_user)
+    #TODO KDB
+    if certification_types.nil?
+      @certification_types = nil
+    else
+      @certification_types = certification_types.map do |certification_type|
+        CertificationTypePresenter.new(certification_type)
+      end
+    end
   end
 
   def _success_message(certification)

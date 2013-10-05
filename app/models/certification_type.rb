@@ -18,14 +18,12 @@ class CertificationType < ActiveRecord::Base
     units_required > 0
   end
 
+  #TODO KDB
   def interval_code
     Interval.lookup(interval)
   end
 
-  def to_s
-    "#{name}:#{interval}"
-  end
-
+  #TODO KDB
   def sort_key
     name
   end
