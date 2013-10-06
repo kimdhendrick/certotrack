@@ -4,15 +4,17 @@ class CertificationService
     @certification_factory = params[:certification_factory] || CertificationFactory.new
   end
 
-  def new_certification(employee_id, certification_type_id)
+  def new_certification(current_user, employee_id, certification_type_id)
     @certification_factory.new_instance(
+      current_user_id: current_user.id,
       employee_id: employee_id,
       certification_type_id: certification_type_id
     )
   end
 
-  def certify(employee_id, certification_type_id, certification_date, trainer, comments, units_achieved)
+  def certify(current_user, employee_id, certification_type_id, certification_date, trainer, comments, units_achieved)
     certification = @certification_factory.new_instance(
+      current_user_id: current_user.id,
       employee_id: employee_id,
       certification_type_id: certification_type_id,
       certification_date: certification_date,

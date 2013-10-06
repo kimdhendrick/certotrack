@@ -21,7 +21,8 @@ describe CertificationsController do
         get :new, {employee_id: employee.id}, {}
 
         fake_certification_service.received_message.should == :new_certification
-        fake_certification_service.received_params[0].should == employee.id.to_s
+        fake_certification_service.received_params[0].should == current_user
+        fake_certification_service.received_params[1].should == employee.id.to_s
       end
 
       it 'calls certification service with certification_type_id' do
@@ -33,8 +34,9 @@ describe CertificationsController do
         get :new, {certification_type_id: certification_type.id}, {}
 
         fake_certification_service.received_message.should == :new_certification
-        fake_certification_service.received_params[0].should == nil
-        fake_certification_service.received_params[1].should == certification_type.id.to_s
+        fake_certification_service.received_params[0].should == current_user
+        fake_certification_service.received_params[1].should == nil
+        fake_certification_service.received_params[2].should == certification_type.id.to_s
       end
 
       it 'assigns @certification' do
@@ -86,6 +88,16 @@ describe CertificationsController do
 
         assigns(:certification_types).map(&:model).should eq([certification_type])
       end
+
+      it 'assigns employees' do
+        controller.load_certification_service(Faker.new())
+        employee = create(:employee)
+        controller.load_employee_service(Faker.new([employee]))
+
+        get :new, {}, {}
+
+        assigns(:employees).map(&:model).should eq([employee])
+      end
     end
 
     context 'when admin user' do
@@ -102,6 +114,16 @@ describe CertificationsController do
 
         assigns(:certification_types).map(&:model).should eq([certification_type])
       end
+
+      it 'assigns employees' do
+        controller.load_certification_service(Faker.new())
+        employee = create(:employee)
+        controller.load_employee_service(Faker.new([employee]))
+
+        get :new, {}, {}
+
+        assigns(:employees).map(&:model).should eq([employee])
+      end
     end
 
     context 'when guest user' do
@@ -112,6 +134,11 @@ describe CertificationsController do
       it 'does not assign certification_types' do
         get :new, {}, {}
         assigns(:certification_types).should be_nil
+      end
+
+      it 'does not assign employees' do
+        get :new, {}, {}
+        assigns(:employees).should be_nil
       end
     end
   end
@@ -128,8 +155,8 @@ describe CertificationsController do
         fake_certification_service = controller.load_certification_service(Faker.new(build(:certification)))
 
         params = {
-          employee: {id: 99},
           certification: {
+            employee_id: 99,
             certification_type_id: 1001,
             last_certification_date: '3/3/2003',
             trainer: 'John Jacob Jingle',
@@ -143,12 +170,13 @@ describe CertificationsController do
         post :create, params, {}
 
         fake_certification_service.received_message.should == :certify
-        fake_certification_service.received_params[0].should == '99'
-        fake_certification_service.received_params[1].should == '1001'
-        fake_certification_service.received_params[2].should == '3/3/2003'
-        fake_certification_service.received_params[3].should == 'John Jacob Jingle'
-        fake_certification_service.received_params[4].should == 'my name too'
-        fake_certification_service.received_params[5].should == '15'
+        fake_certification_service.received_params[0].should == current_user
+        fake_certification_service.received_params[1].should == '99'
+        fake_certification_service.received_params[2].should == '1001'
+        fake_certification_service.received_params[3].should == '3/3/2003'
+        fake_certification_service.received_params[4].should == 'John Jacob Jingle'
+        fake_certification_service.received_params[5].should == 'my name too'
+        fake_certification_service.received_params[6].should == '15'
       end
 
       it 're-renders new on error' do
@@ -166,7 +194,7 @@ describe CertificationsController do
         Certification.any_instance.stub(:valid?).and_return(false)
         controller.load_certification_service(Faker.new(build(:certification)))
 
-        get :create, {employee: {id: 1}, certification: {certification_type_id: 1}}, {}
+        get :create, {certification: {employee_id: 1, certification_type_id: 1}}, {}
 
         assigns(:certification).should be_a(Certification)
       end
@@ -196,6 +224,18 @@ describe CertificationsController do
         assigns(:certification_types).map(&:model).should eq([certification_type])
       end
 
+      it 'assigns employees on error' do
+        Certification.any_instance.stub(:valid?).and_return(false)
+        controller.load_certification_service(Faker.new(build(:certification)))
+
+        employee = create(:employee)
+        controller.load_employee_service(Faker.new([employee]))
+
+        get :create, {employee: {}, certification: {}}, {}
+
+        assigns(:employees).map(&:model).should eq([employee])
+      end
+
       it 'handles missing employee_id' do
         params = {
           employee: {id: nil},
@@ -215,8 +255,10 @@ describe CertificationsController do
           controller.load_certification_service(Faker.new(certification))
 
           params = {
-            employee: {id: 1},
-            certification: {certification_type_id: 1},
+            certification: {
+              employee_id: 1,
+              certification_type_id: 1
+            },
             source: :employee,
             commit: 'Create'
           }
@@ -234,8 +276,10 @@ describe CertificationsController do
           controller.load_certification_service(Faker.new(certification))
 
           params = {
-            employee: {id: 1},
-            certification: {certification_type_id: 1},
+            certification: {
+              employee_id: 1,
+              certification_type_id: 1
+            },
             source: :certification_type,
             commit: 'Create'
           }
@@ -243,6 +287,27 @@ describe CertificationsController do
           post :create, params, {}
 
           response.should redirect_to(certification_type)
+        end
+
+        it 'redirects to show certification page on success when source is :certification' do
+          employee = create(:employee)
+          certification_type = create(:certification_type)
+          certification = create(:certification, employee: employee, certification_type: certification_type, customer: employee.customer)
+
+          controller.load_certification_service(Faker.new(certification))
+
+          params = {
+            certification: {
+              employee_id: 1,
+              certification_type_id: 1
+            },
+            source: :certification,
+            commit: 'Create'
+          }
+
+          post :create, params, {}
+
+          response.should redirect_to(certification)
         end
 
         it 'gives successful message on success' do
@@ -253,8 +318,10 @@ describe CertificationsController do
           controller.load_certification_service(Faker.new(certification))
 
           params = {
-            employee: {id: 1},
-            certification: {certification_type_id: 1},
+            certification: {
+              employee_id: 1,
+              certification_type_id: 1
+            },
             commit: 'Create'
           }
 
@@ -281,14 +348,18 @@ describe CertificationsController do
           fake_certification_type_service.received_params[0].should == current_user
         end
 
-        it 'assigns certification and certification_types on success' do
+        it 'assigns certification, employees and certification_types on success' do
           controller.load_certification_service(Faker.new(build(:certification)))
           certification_type = create(:certification_type)
           controller.load_certification_type_service(Faker.new([certification_type]))
+          employee = create(:employee)
+          controller.load_employee_service(Faker.new([employee]))
 
           params = {
-            employee: {id: 1},
-            certification: {certification_type_id: 1},
+            certification: {
+              employee_id: 1,
+              certification_type_id: 1
+            },
             commit: 'Save and Create Another'
           }
 
@@ -296,6 +367,7 @@ describe CertificationsController do
 
           assigns(:certification).should be_a(Certification)
           assigns(:certification_types).map(&:model).should eq([certification_type])
+          assigns(:employees).map(&:model).should eq([employee])
         end
 
         it 'renders create certification on success' do
@@ -322,8 +394,10 @@ describe CertificationsController do
           controller.load_certification_type_service(Faker.new([]))
 
           params = {
-            employee: {id: 1},
-            certification: {certification_type_id: 1},
+            certification: {
+              employee_id: 1,
+              certification_type_id: 1
+            },
             commit: 'Save and Create Another'
           }
 

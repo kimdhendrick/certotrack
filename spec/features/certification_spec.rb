@@ -363,7 +363,7 @@ describe 'Certifications', slow: true do
       page.should have_content '01/01/2000'
     end
 
-    it 'should certify employee for units based certifications' do
+    it 'should certify employee for units based certifications', js:true do
       visit employee_path employee.id
       click_on 'New Employee Certification'
 
@@ -374,7 +374,7 @@ describe 'Certifications', slow: true do
       page.should have_content 'Certification Type'
       page.should have_content 'Create Certification Type'
       page.should have_content 'Trainer'
-      page.should have_content 'Units Achieved'
+      page.should_not have_content 'Units Achieved'
       page.should have_content 'Last Certification Date'
       page.should have_content 'Comments'
 
@@ -382,6 +382,7 @@ describe 'Certifications', slow: true do
       page.should have_button 'Save and Create Another'
 
       select 'Level III Truck Inspection', from: 'Certification Type'
+      page.should have_content 'Units Achieved'
       fill_in 'Trainer', with: 'Instructor Bob'
       fill_in 'Units Achieved', with: '15'
       fill_in 'Last Certification Date', with: '01/01/2000'
@@ -470,8 +471,22 @@ describe 'Certifications', slow: true do
       )
     end
 
+    let(:certification) do
+      create(
+        :certification,
+        employee: employee,
+        certification_type: cpr_certification_type,
+        customer: employee.customer)
+    end
+
     before do
       login_as_certification_user(customer)
+
+      create(:certification_type,
+             name: 'Inspections',
+             interval: Interval::SIX_MONTHS.text,
+             customer: customer
+      )
 
       create(:certification_type,
              name: 'Level III Truck Inspection',
@@ -480,31 +495,25 @@ describe 'Certifications', slow: true do
              customer: customer
       )
 
-      create(:certification_type,
-             name: 'Inspections',
-             interval: Interval::SIX_MONTHS.text,
-             customer: customer
-      )
     end
 
-    it 'should certify employee' do
-      visit employee_path employee.id
+    it 'should certify employee', js:true do
+      visit certification_path certification.id
 
-      page.should have_link 'New Employee Certification'
-      click_on 'New Employee Certification'
+      page.should have_content 'Show Certification'
+      click_on 'Create Certification'
 
       page.should have_content 'Create Certification'
 
       page.should have_link 'Home'
       #PENDING_NAVIGATION
       #page.should have_link 'All Certifications'
-      page.should have_link 'Create Certification Type'
       page.should have_link 'Create Employee'
 
       page.should have_content 'Employee'
-      page.should have_link 'Joe Brown'
       page.should have_content 'Certification Type'
-      page.should have_content 'Create Certification Type'
+      page.should have_link 'Create Certification Type'
+      page.should_not have_content 'Units Achieved'
       page.should have_content 'Trainer'
       page.should have_content 'Last Certification Date'
       page.should have_content 'Comments'
@@ -512,33 +521,34 @@ describe 'Certifications', slow: true do
       page.should have_button 'Create'
       page.should have_button 'Save and Create Another'
 
-      select 'CPR', from: 'Certification Type'
+      select 'Inspections', from: 'Certification Type'
       fill_in 'Trainer', with: 'Instructor Bob'
       fill_in 'Last Certification Date', with: '01/01/2000'
       fill_in 'Comments', with: 'Special Notes'
 
       click_on 'Create'
 
-      page.should have_content 'Show Employee'
-      page.should have_content 'Certification: CPR created for Brown, Joe.'
+      page.should have_content 'Show Certification'
+      page.should have_content 'Certification: Inspections created for Brown, Joe.'
 
       page.should have_content 'Joe'
       page.should have_content 'Brown'
       page.should have_content '01/01/2000'
     end
 
-    it 'should certify employee for units based certifications' do
-      visit employee_path employee.id
-      click_on 'New Employee Certification'
+    it 'should certify employee for units based certifications', js:true do
+      visit certification_path certification.id
+      page.should have_content 'Show Certification'
+
+      click_on 'Create Certification'
 
       page.should have_content 'Create Certification'
 
       page.should have_content 'Employee'
-      page.should have_link 'Joe Brown'
       page.should have_content 'Certification Type'
       page.should have_content 'Create Certification Type'
       page.should have_content 'Trainer'
-      page.should have_content 'Units Achieved'
+      page.should_not have_content 'Units Achieved'
       page.should have_content 'Last Certification Date'
       page.should have_content 'Comments'
 
@@ -546,6 +556,7 @@ describe 'Certifications', slow: true do
       page.should have_button 'Save and Create Another'
 
       select 'Level III Truck Inspection', from: 'Certification Type'
+      page.should have_content 'Units Achieved'
       fill_in 'Trainer', with: 'Instructor Bob'
       fill_in 'Units Achieved', with: '15'
       fill_in 'Last Certification Date', with: '01/01/2000'
@@ -553,27 +564,25 @@ describe 'Certifications', slow: true do
 
       click_on 'Create'
 
-      page.should have_content 'Show Employee'
+      page.should have_content 'Show Certification'
       page.should have_content 'Certification: Level III Truck Inspection created for Brown, Joe.'
       page.should have_content '15 of 30'
     end
 
     it 'should certify employee and be ready to create another' do
-      visit employee_path employee.id
+      visit certification_path certification.id
 
-      page.should have_link 'New Employee Certification'
-      click_on 'New Employee Certification'
+      page.should have_content 'Show Certification'
+      click_on 'Create Certification'
 
       page.should have_content 'Create Certification'
 
       page.should have_link 'Home'
       #PENDING_NAVIGATION
       #page.should have_link 'All Certifications'
-      page.should have_link 'Create Certification Type'
       page.should have_link 'Create Employee'
 
       page.should have_content 'Employee'
-      page.should have_link 'Joe Brown'
       page.should have_content 'Certification Type'
       page.should have_content 'Create Certification Type'
       page.should have_content 'Trainer'
@@ -583,7 +592,7 @@ describe 'Certifications', slow: true do
       page.should have_button 'Create'
       page.should have_button 'Save and Create Another'
 
-      select 'CPR', from: 'Certification Type'
+      select 'Inspections', from: 'Certification Type'
       fill_in 'Trainer', with: 'Instructor Bob'
       fill_in 'Last Certification Date', with: '01/01/2000'
       fill_in 'Comments', with: 'Special Notes'
@@ -591,10 +600,9 @@ describe 'Certifications', slow: true do
       click_on 'Save and Create Another'
 
       page.should have_content 'Create Certification'
-      page.should have_content 'Certification: CPR created for Brown, Joe.'
+      page.should have_content 'Certification: Inspections created for Brown, Joe.'
 
       page.should have_content 'Employee'
-      page.should have_link 'Joe Brown'
       page.should have_content 'Certification Type'
       page.should have_content 'Create Certification Type'
       page.should have_content 'Trainer'
@@ -611,7 +619,7 @@ describe 'Certifications', slow: true do
 
       click_on 'Create'
 
-      page.should have_content 'Show Employee'
+      page.should have_content 'Show Certification'
       page.should have_content 'Certification: Level III Truck Inspection created for Brown, Joe.'
     end
   end

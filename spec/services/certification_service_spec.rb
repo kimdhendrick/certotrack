@@ -3,15 +3,17 @@ require 'spec_helper'
 describe CertificationService do
   describe 'new_certification' do
     it 'calls CertificationFactory' do
+      user = create(:user)
       employee = create(:employee)
       certification_type = create(:certification_type)
       certification = build(:certification, employee: employee)
       fake_certification_factory = Faker.new(certification)
       certification_service = CertificationService.new(certification_factory: fake_certification_factory)
 
-      certification = certification_service.new_certification(employee.id, certification_type.id)
+      certification = certification_service.new_certification(user, employee.id, certification_type.id)
 
       fake_certification_factory.received_message.should == :new_instance
+      fake_certification_factory.received_params[0][:current_user_id].should == user.id
       fake_certification_factory.received_params[0][:employee_id].should == employee.id
       fake_certification_factory.received_params[0][:certification_type_id].should == employee.id
       certification.should_not be_persisted
@@ -27,6 +29,7 @@ describe CertificationService do
       certification_service = CertificationService.new(certification_factory: fake_certification_factory)
 
       certification = certification_service.certify(
+        create(:user),
         employee.id,
         certification_type.id,
         '12/31/2000',
@@ -53,6 +56,7 @@ describe CertificationService do
       certification_service = CertificationService.new(certification_factory: fake_certification_factory)
 
       certification = certification_service.certify(
+        create(:user),
         employee.id,
         certification_type.id,
         '999',

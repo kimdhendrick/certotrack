@@ -5,7 +5,7 @@ class EmployeeService
     @paginator = params[:paginator] || Paginator.new
   end
 
-  def get_all_employees(current_user, params = {})
+  def get_all_employees(current_user)
     current_user.admin? ? Employee.all : current_user.employees
   end
 

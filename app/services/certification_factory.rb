@@ -11,10 +11,7 @@ class CertificationFactory
     trainer = attributes[:trainer]
     comments = attributes[:comments]
     units_achieved = attributes[:units_achieved]
-
-    employee = Employee.find_by_id(employee_id)
-    certification_type = CertificationType.find_by_id(certification_type_id)
-    customer = employee ? employee.customer : certification_type.customer
+    customer = User.find(attributes[:current_user_id]).customer
 
     certification = Certification.new(employee_id: employee_id, certification_type_id: certification_type_id, customer: customer)
     certification_period_params = {certification: certification, start_date: certification_date, trainer: trainer, comments: comments, units_achieved: units_achieved}

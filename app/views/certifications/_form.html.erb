@@ -2,10 +2,20 @@
 
   <%= render 'errors' %>
 
-  <div class="field">
-    Employee <%= link_to "#{@certification.employee.first_name} #{@certification.employee.last_name}", @certification.employee %>
-    <%= hidden_field(:employee, :id, value: @certification.employee.id) %>
-  </div>
+  <% if @certification.employee.present? %>
+    <div class="field">
+      Employee <%= link_to "#{@certification.employee.first_name} #{@certification.employee.last_name}", @certification.employee %>
+      <%= hidden_field(:certification, :employee_id, value: @certification.employee_id) %>
+    </div>
+  <% else %>
+    <div class="field">
+      <%= f.label :employee_id, 'Employee' %>
+      <br/>
+      <%= select(:certification, :employee_id,
+                 options_from_collection_for_select(@employees, 'id', 'name',
+                                                    @certification.employee_id)) %>
+    </div>
+  <% end %>
 
   <div class="field">
     <%= f.label :certification_type_id, 'Certification Type' %>

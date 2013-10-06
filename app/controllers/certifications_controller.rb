@@ -2,7 +2,8 @@ class CertificationsController < ApplicationController
 
   before_filter :authenticate_user!,
                 :load_certification_service,
-                :load_certification_type_service
+                :load_certification_type_service,
+                :load_employee_service
 
   check_authorization
 
@@ -11,16 +12,18 @@ class CertificationsController < ApplicationController
 
     @source = params[:source]
     _set_certification_types(current_user)
-    _set_new_certification(params[:employee_id], params[:certification_type_id])
+    _set_new_certification(current_user, params[:employee_id], params[:certification_type_id])
+    _set_employees(current_user)
   end
 
   def create
     authorize! :create, :certification
 
-    return _render_new if params[:employee][:id].blank?
+    return _render_new if params[:certification][:employee_id].blank?
 
     @certification = @certification_service.certify(
-      params[:employee][:id],
+      current_user,
+      params[:certification][:employee_id],
       params[:certification][:certification_type_id],
       params[:certification][:last_certification_date],
       params[:certification][:trainer],
@@ -30,12 +33,12 @@ class CertificationsController < ApplicationController
 
     if !@certification.valid?
       return _render_new
-    end
-
-    if _redirect_to_employee?
+    elsif _redirect_to_employee?
       redirect_to @certification.employee, notice: _success_message(@certification)
     elsif _redirect_to_certification_type?
       redirect_to @certification.certification_type, notice: _success_message(@certification)
+    elsif _redirect_to_show_certification_page?
+      redirect_to @certification, notice: _success_message(@certification)
     else
       return _render_new_with_message _success_message(@certification)
     end
@@ -53,6 +56,10 @@ class CertificationsController < ApplicationController
     @certification_type_service ||= service
   end
 
+  def load_employee_service(service = EmployeeService.new)
+    @employee_service ||= service
+  end
+
 
   private
 
@@ -67,33 +74,43 @@ class CertificationsController < ApplicationController
     @certification_types = CertificationTypeListPresenter.new(certification_types).sort
   end
 
+  def _set_employees(current_user)
+    employees = @employee_service.get_all_employees(current_user)
+    @employees = EmployeeListPresenter.new(employees).sort
+  end
+
   def _success_message(certification)
     "Certification: #{certification.name} created for #{EmployeePresenter.new(certification.employee).name}."
   end
 
-  def _set_new_certification(employee_id, certification_type_id)
-    @certification = @certification_service.new_certification(employee_id, certification_type_id)
+  def _set_new_certification(current_user, employee_id, certification_type_id)
+    @certification = @certification_service.new_certification(current_user, employee_id, certification_type_id)
   end
 
   def _redirect_to_employee?
-    params[:commit] == "Create" && params[:source] == 'employee'
+    params[:commit] == 'Create' && params[:source] == 'employee'
   end
 
   def _redirect_to_certification_type?
-    params[:commit] == "Create" && params[:source] == 'certification_type'
+    params[:commit] == 'Create' && params[:source] == 'certification_type'
+  end
+
+  def _redirect_to_show_certification_page?
+    params[:commit] == 'Create' && params[:source] == 'certification'
   end
 
   def _render_new_with_message(message)
     flash[:notice] = message
     @source = params[:source]
     _set_certification_types(current_user)
-    _set_new_certification(params[:employee][:id], nil)
+    _set_new_certification(current_user, params[:certification][:employee_id], nil)
     render action: 'new'
     nil
   end
 
   def _render_new
     _set_certification_types(current_user)
+    _set_employees(current_user)
     render action: 'new'
     nil
   end

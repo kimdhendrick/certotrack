@@ -2,11 +2,24 @@ require 'spec_helper'
 
 describe CertificationFactory do
   describe 'new_instance' do
+
+    it 'creates a certification when given no certification data' do
+      customer = create(:customer)
+      certification = CertificationFactory.new.new_instance(
+        current_user_id: create(:user, customer: customer).id
+      )
+
+      certification.should_not be_persisted
+      certification.customer.should == customer
+    end
+
     it 'creates a certification when given an employee_id' do
       certification_type = create(:certification_type)
+      customer = create(:customer)
       employee = create(:employee)
 
       certification = CertificationFactory.new.new_instance(
+        current_user_id: create(:user, customer: customer).id,
         employee_id: employee.id,
         certification_type_id: certification_type.id,
         certification_date: '12/30/2000',
@@ -17,7 +30,7 @@ describe CertificationFactory do
 
       certification.should_not be_persisted
       certification.employee.should == employee
-      certification.customer.should == employee.customer
+      certification.customer.should == customer
       certification.certification_type.should == certification_type
       certification.active_certification_period.trainer.should == 'Joe Bob'
       certification.active_certification_period.comments.should == 'Great class!'
@@ -26,12 +39,18 @@ describe CertificationFactory do
     end
 
     it 'creates a certification when given a certification_type_id' do
+      customer = create(:customer)
       certification_type = create(:certification_type)
 
       certification = CertificationFactory.new.new_instance(
+        current_user_id: create(:user, customer: customer).id,
         employee_id: nil,
         certification_type_id: certification_type.id
       )
+
+      certification.should_not be_persisted
+      certification.customer.should == customer
+      certification.certification_type.should == certification_type
     end
 
     it 'handles bad date' do
@@ -40,6 +59,7 @@ describe CertificationFactory do
       employee = create(:employee)
 
       certification = CertificationFactory.new.new_instance(
+        current_user_id: create(:user).id,
         employee_id: employee.id,
         certification_type_id: certification_type.id,
         certification_date: '999',
@@ -66,6 +86,7 @@ describe CertificationFactory do
       certification_factory = CertificationFactory.new(expiration_calculator: fake_expiration_calculator)
 
       certification = certification_factory.new_instance(
+        current_user_id: create(:user).id,
         employee_id: employee.id,
         certification_type_id: certification_type.id,
         certification_date: '12/15/2000',
