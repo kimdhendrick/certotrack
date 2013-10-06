@@ -521,6 +521,7 @@ describe 'Certifications', slow: true do
       page.should have_button 'Create'
       page.should have_button 'Save and Create Another'
 
+      select 'Brown, Joe', from: 'Employee'
       select 'Inspections', from: 'Certification Type'
       fill_in 'Trainer', with: 'Instructor Bob'
       fill_in 'Last Certification Date', with: '01/01/2000'
@@ -555,6 +556,7 @@ describe 'Certifications', slow: true do
       page.should have_button 'Create'
       page.should have_button 'Save and Create Another'
 
+      select 'Brown, Joe', from: 'Employee'
       select 'Level III Truck Inspection', from: 'Certification Type'
       page.should have_content 'Units Achieved'
       fill_in 'Trainer', with: 'Instructor Bob'
@@ -592,6 +594,7 @@ describe 'Certifications', slow: true do
       page.should have_button 'Create'
       page.should have_button 'Save and Create Another'
 
+      select 'Brown, Joe', from: 'Employee'
       select 'Inspections', from: 'Certification Type'
       fill_in 'Trainer', with: 'Instructor Bob'
       fill_in 'Last Certification Date', with: '01/01/2000'

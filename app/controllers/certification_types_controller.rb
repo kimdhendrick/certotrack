@@ -83,7 +83,7 @@ class CertificationTypesController < ApplicationController
 
   def ajax_is_units_based
     authorize! :read, :certification
-    results = {is_units_based: CertificationType.find(params[:certification_type_id]).units_based?}
+    results = {is_units_based: CertificationType.find_by_id(params[:certification_type_id]).try(&:units_based?)}
     render json: results
   end
 
