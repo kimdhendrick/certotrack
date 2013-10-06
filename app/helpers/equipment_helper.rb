@@ -2,11 +2,7 @@ module EquipmentHelper
 
   def equipment_presenter_for(equipment = @equipment)
     presenter = EquipmentPresenter.new(equipment, self)
-    if block_given?
-      yield presenter
-    else
-      presenter
-    end
+    yield presenter
   end
 
   def equipment_accessible_parameters

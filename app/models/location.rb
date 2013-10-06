@@ -7,10 +7,6 @@ class Location < ActiveRecord::Base
   validates_presence_of :customer
   validates_uniqueness_of :name, scope: :customer_id, case_sensitive: false
 
-  def self.accessible_parameters
-    [:name]
-  end
-
   def to_s
     name
   end

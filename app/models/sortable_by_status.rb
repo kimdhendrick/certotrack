@@ -1,6 +1,8 @@
 module SortableByStatus
   def status
+    # :nocov:
     raise NotImplementedError
+    # :nocov:
   end
 
   def status_code

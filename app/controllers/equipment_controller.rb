@@ -109,11 +109,11 @@ class EquipmentController < ApplicationController
     authorize! :read, :equipment
 
     if params[:assignee] == 'Location'
-      locations = @location_service.get_all_locations(current_user)
+      locations = @location_service.get_all_locations(current_user, ({sort: 'name', direction: 'asc'}))
       render json: locations.map { |l| [l.id, l.name] }
     else
       employees = @employee_service.get_all_employees(current_user)
-      employees = EmployeeListPresenter.new(employees).sort
+      employees = EmployeeListPresenter.new(employees).sort({sort: 'sort_key', direction: 'asc'})
       render json: employees.map { |employee| [employee.id, employee.name] }
     end
   end

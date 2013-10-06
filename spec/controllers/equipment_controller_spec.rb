@@ -791,6 +791,9 @@ describe EquipmentController do
         get :ajax_assignee, {assignee: 'Location'}
 
         fake_employee_service.received_message.should == :get_all_locations
+        fake_employee_service.received_params[1][:sort].should == 'name'
+        fake_employee_service.received_params[1][:direction].should == 'asc'
+
         json = JSON.parse(response.body)
         json.should == [
           [location.id, 'Oz']
@@ -808,6 +811,8 @@ describe EquipmentController do
 
         fake_employee_service.received_message.should == :get_all_employees
         fake_employee_list_presenter.received_message.should == :sort
+        fake_employee_list_presenter.received_params[0][:sort].should == 'sort_key'
+        fake_employee_list_presenter.received_params[0][:direction].should == 'asc'
         json = JSON.parse(response.body)
         json.should == [
           [employee.id, 'Wizard, Wendy']

@@ -62,10 +62,6 @@ class Certification < ActiveRecord::Base
       @certification = certification
     end
 
-    def status
-      raise NotImplementedError
-    end
-
     private
 
     def _expired?
