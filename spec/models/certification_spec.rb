@@ -13,6 +13,7 @@ describe Certification do
   end
   it { should validate_presence_of :active_certification_period }
   it { should validate_presence_of :certification_type }
+  it { should validate_presence_of :employee }
   it { should validate_presence_of :customer }
 
   context 'non-units based certification type' do

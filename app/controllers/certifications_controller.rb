@@ -19,8 +19,6 @@ class CertificationsController < ApplicationController
   def create
     authorize! :create, :certification
 
-    return _render_new if params[:certification][:employee_id].blank?
-
     @certification = @certification_service.certify(
       current_user,
       params[:certification][:employee_id],
@@ -37,8 +35,6 @@ class CertificationsController < ApplicationController
       redirect_to @certification.employee, notice: _success_message(@certification)
     elsif _redirect_to_certification_type?
       redirect_to @certification.certification_type, notice: _success_message(@certification)
-    elsif _redirect_to_show_certification_page?
-      redirect_to @certification, notice: _success_message(@certification)
     else
       return _render_new_with_message _success_message(@certification)
     end
@@ -92,23 +88,18 @@ class CertificationsController < ApplicationController
   end
 
   def _redirect_to_certification_type?
-    params[:commit] == 'Create' && params[:source] == 'certification_type'
+    params[:commit] == 'Create' &&
+      (params[:source] == 'certification_type' || params[:source] == 'certification')
   end
 
-  def _redirect_to_show_certification_page?
-    params[:commit] == 'Create' && params[:source] == 'certification'
-  end
-
-  def _render_new_with_message(message)
+  def _render_new_with_message(message = nil)
     flash[:notice] = message
-    @source = params[:source]
-    _set_certification_types(current_user)
     _set_new_certification(current_user, params[:certification][:employee_id], nil)
-    render action: 'new'
-    nil
+    _render_new
   end
 
   def _render_new
+    @source = params[:source]
     _set_certification_types(current_user)
     _set_employees(current_user)
     render action: 'new'

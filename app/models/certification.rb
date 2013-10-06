@@ -12,6 +12,7 @@ class Certification < ActiveRecord::Base
 
   validates_presence_of :active_certification_period,
     :certification_type,
+    :employee,
     :customer
 
   delegate :comments, to: :active_certification_period

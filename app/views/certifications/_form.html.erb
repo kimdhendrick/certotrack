@@ -2,7 +2,7 @@
 
   <%= render 'errors' %>
 
-  <% if @certification.employee.present? %>
+  <% if @certification.employee.present? && @source != 'certification' %>
     <div class="field">
       Employee <%= link_to "#{@certification.employee.first_name} #{@certification.employee.last_name}", @certification.employee %>
       <%= hidden_field(:certification, :employee_id, value: @certification.employee_id) %>

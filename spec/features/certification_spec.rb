@@ -529,7 +529,7 @@ describe 'Certifications', slow: true do
 
       click_on 'Create'
 
-      page.should have_content 'Show Certification'
+      page.should have_content 'Show Certification Type'
       page.should have_content 'Certification: Inspections created for Brown, Joe.'
 
       page.should have_content 'Joe'
@@ -566,7 +566,7 @@ describe 'Certifications', slow: true do
 
       click_on 'Create'
 
-      page.should have_content 'Show Certification'
+      page.should have_content 'Show Certification Type'
       page.should have_content 'Certification: Level III Truck Inspection created for Brown, Joe.'
       page.should have_content '15 of 30'
     end
@@ -622,7 +622,7 @@ describe 'Certifications', slow: true do
 
       click_on 'Create'
 
-      page.should have_content 'Show Certification'
+      page.should have_content 'Show Certification Type'
       page.should have_content 'Certification: Level III Truck Inspection created for Brown, Joe.'
     end
   end

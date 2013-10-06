@@ -289,7 +289,7 @@ describe CertificationsController do
           response.should redirect_to(certification_type)
         end
 
-        it 'redirects to show certification page on success when source is :certification' do
+        it 'redirects to show certification type page on success when source is :certification' do
           employee = create(:employee)
           certification_type = create(:certification_type)
           certification = create(:certification, employee: employee, certification_type: certification_type, customer: employee.customer)
@@ -307,7 +307,7 @@ describe CertificationsController do
 
           post :create, params, {}
 
-          response.should redirect_to(certification)
+          response.should redirect_to(certification_type)
         end
 
         it 'gives successful message on success' do
