@@ -216,7 +216,7 @@ describe CertificationTypesController do
         fake_certification_service.received_params[0].should == certification_type
       end
 
-      it 'sorts non_certified_employees by specified parameters' do
+      it 'sorts non_certified_employees by employee name' do
         employee = create(:employee, customer: customer)
         fake_employee_service = controller.load_employee_service(Faker.new([employee]))
         certification_type = create(:certification_type, customer: customer)
@@ -241,7 +241,7 @@ describe CertificationTypesController do
         fake_employee_list_presenter.received_params[0].should == {sort: 'sort_key', direction: 'desc'}
       end
 
-      it 'sorts certifications by specified parameters' do
+      it 'sorts certifications by employee name' do
         certification = create(:certification, customer: customer)
         fake_certification_service = controller.load_certification_service(Faker.new([certification]))
         certification_type = create(:certification_type, customer: customer)
@@ -265,6 +265,32 @@ describe CertificationTypesController do
 
         fake_certification_list_presenter.received_message.should == :present
         fake_certification_list_presenter.received_params[0].should == {sort: 'sort_key', direction: 'desc'}
+      end
+
+      it 'sorts certifications by status' do
+        certification = create(:certification, customer: customer)
+        fake_certification_service = controller.load_certification_service(Faker.new([certification]))
+        certification_type = create(:certification_type, customer: customer)
+        #noinspection RubyArgCount
+        EmployeeListPresenter.stub(:new).and_return(Faker.new([]))
+
+        fake_certification_list_presenter = Faker.new([certification])
+        #noinspection RubyArgCount
+        CertificationListPresenter.stub(:new).and_return(fake_certification_list_presenter)
+
+        params = {
+          id: certification_type.id,
+          sort: 'sort_key',
+          direction: 'desc',
+          options: 'certified_status'
+        }
+
+        get :show, params, {}
+
+        fake_certification_service.received_message.should == :get_all_certifications_for_certification_type
+
+        fake_certification_list_presenter.received_message.should == :present
+        fake_certification_list_presenter.received_params[0].should == {sort: 'status_code', direction: 'desc'}
       end
     end
 
