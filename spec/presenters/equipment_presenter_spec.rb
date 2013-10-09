@@ -50,4 +50,7 @@ describe EquipmentPresenter do
     equipment = EquipmentPresenter.new(create(:equipment, expiration_date: Date.new(2012, 6, 20)))
     equipment.expiration_date.should == "06/20/2012"
   end
+
+  subject { EquipmentPresenter.new(create(:equipment)) }
+  it_behaves_like "sortable by status"
 end

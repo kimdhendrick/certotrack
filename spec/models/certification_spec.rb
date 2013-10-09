@@ -231,4 +231,6 @@ describe Certification do
       end
     end
   end
+
+  it_behaves_like "sortable by status"
 end
