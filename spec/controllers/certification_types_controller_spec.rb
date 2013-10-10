@@ -202,7 +202,7 @@ describe CertificationTypesController do
       end
 
       it 'assigns certifications as @certifications' do
-        certification = create(:certification, customer: customer)
+        certification = create(:certification)
         fake_certification_service = controller.load_certification_service(Faker.new([certification]))
         certification_type = create(:certification_type, customer: customer)
         #noinspection RubyArgCount
@@ -242,7 +242,7 @@ describe CertificationTypesController do
       end
 
       it 'sorts certifications by employee name' do
-        certification = create(:certification, customer: customer)
+        certification = create(:certification)
         fake_certification_service = controller.load_certification_service(Faker.new([certification]))
         certification_type = create(:certification_type, customer: customer)
         #noinspection RubyArgCount
@@ -268,7 +268,7 @@ describe CertificationTypesController do
       end
 
       it 'sorts certifications by status' do
-        certification = create(:certification, customer: customer)
+        certification = create(:certification)
         fake_certification_service = controller.load_certification_service(Faker.new([certification]))
         certification_type = create(:certification_type, customer: customer)
         #noinspection RubyArgCount

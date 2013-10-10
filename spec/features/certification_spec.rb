@@ -125,7 +125,7 @@ describe 'Certifications', slow: true do
       page.should have_content 'Certification type already assigned to this Employee. Please update existing Certification.'
     end
 
-    it 'should show a certification', js:true do
+    it 'should show a certification', js: true do
       create(:certification,
              employee: employee,
              certification_type: cpr_certification_type,
@@ -363,7 +363,7 @@ describe 'Certifications', slow: true do
       page.should have_content '01/01/2000'
     end
 
-    it 'should certify employee for units based certifications', js:true do
+    it 'should certify employee for units based certifications', js: true do
       visit employee_path employee.id
       click_on 'New Employee Certification'
 
@@ -497,7 +497,7 @@ describe 'Certifications', slow: true do
 
     end
 
-    it 'should certify employee', js:true do
+    it 'should certify employee', js: true do
       visit certification_path certification.id
 
       page.should have_content 'Show Certification'
@@ -537,7 +537,7 @@ describe 'Certifications', slow: true do
       page.should have_content '01/01/2000'
     end
 
-    it 'should certify employee for units based certifications', js:true do
+    it 'should certify employee for units based certifications', js: true do
       visit certification_path certification.id
       page.should have_content 'Show Certification'
 
@@ -737,6 +737,128 @@ describe 'Certifications', slow: true do
 
       page.should have_content 'Show Certification Type'
       page.should have_content 'Certification: AAA Truck Inspection created for Brown, Joe.'
+    end
+  end
+
+  describe 'Edit Certification from Show Certification page', js: true do
+
+    let!(:cpr_certification_type) do
+      create(:certification_type,
+             name: 'CPR',
+             interval: Interval::SIX_MONTHS.text,
+             customer: customer
+      )
+    end
+
+    let!(:employee) do
+      create(:employee,
+             employee_number: 'JB3',
+             first_name: 'Joe',
+             last_name: 'Brown',
+             location: create(:location, name: 'Denver'),
+             customer_id: customer.id
+      )
+    end
+
+    let(:certification) do
+      create(
+        :certification,
+        employee: employee,
+        certification_type: cpr_certification_type,
+        last_certification_date: Date.new(2005, 7, 8),
+        trainer: 'Trainer Tim',
+        comments: 'Fully qualified',
+        customer: employee.customer)
+    end
+
+    before do
+      login_as_certification_user(customer)
+
+      create(:certification_type,
+             name: 'Level III Truck Inspection',
+             interval: Interval::SIX_MONTHS.text,
+             units_required: 30,
+             customer: customer
+      )
+    end
+
+    it 'should edit certification' do
+      visit certification_path certification.id
+
+      page.should have_content 'Show Certification'
+      click_on 'Edit'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to edit instead of recertify?')
+      alert.dismiss
+
+      page.should have_content 'Show Certification'
+      click_on 'Edit'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to edit instead of recertify?')
+      alert.accept
+
+      page.should have_content 'Edit Certification'
+
+      page.should have_link 'Home'
+      #PENDING_NAVIGATION
+      #page.should have_link 'All Certifications'
+      page.should have_link 'Create Certification'
+
+      page.should have_content 'Employee'
+      page.should have_content 'Certification Type'
+      page.should have_content 'Trainer'
+      page.should_not have_content 'Units Achieved'
+      page.should have_content 'Last Certification Date'
+      page.should have_content 'Comments'
+
+      page.should have_field 'Certification Type', with: certification.certification_type.id.to_s
+      page.should have_link 'Joe Brown'
+      page.should have_field 'Trainer', with: 'Trainer Tim'
+      page.should have_field 'Last Certification Date', with: '07/08/2005'
+      page.should have_field 'Comments', with: 'Fully qualified'
+
+      page.should have_link 'Delete'
+
+      click_on 'Delete'
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete?')
+      alert.dismiss
+
+      select 'Level III Truck Inspection', from: 'Certification Type'
+      fill_in 'Trainer', with: 'Trainer Tom'
+      fill_in 'Units Achieved', with: '13'
+      fill_in 'Last Certification Date', with: '07/09/2005'
+
+      click_on 'Update'
+
+      page.should have_content 'Show Certification Type'
+      page.should have_content 'Certification was successfully updated.'
+      page.should have_content 'Level III Truck Inspection'
+
+      within '[data-certified] table tbody tr:nth-of-type(1)' do
+        page.should have_link 'Brown, Joe'
+        page.should have_content 'JB3'
+        page.should have_content 'Denver'
+        page.should have_content '13'
+        page.should have_content 'Trainer Tom'
+        page.should have_content '07/09/2005'
+        page.should have_content '01/09/2006'
+        page.should have_content 'Recertify'
+        page.should have_link 'Edit'
+      end
+
+      visit certification_path certification.id
+
+      page.should have_content 'Show Certification'
+      click_on 'Edit'
+
+      page.driver.browser.switch_to.alert.accept
+
+      page.should have_content 'Edit Certification'
+
+      page.should have_field 'Units Achieved', with: '13'
     end
   end
 end

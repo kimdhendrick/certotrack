@@ -1,4 +1,5 @@
 class CertificationsController < ApplicationController
+  include CertificationsHelper
 
   before_filter :authenticate_user!,
                 :load_certification_service,
@@ -42,6 +43,24 @@ class CertificationsController < ApplicationController
 
   def show
     _set_certification
+  end
+
+  def edit
+    authorize! :create, :certification
+    _set_certification_types(current_user)
+    _set_certification
+  end
+
+  def update
+    _set_certification
+
+    success = @certification_service.update_certification(@certification, _certification_params)
+
+    if success
+      redirect_to @certification.certification_type, notice: 'Certification was successfully updated.'
+    else
+      render action: 'edit'
+    end
   end
 
   def load_certification_service(service = CertificationService.new)
@@ -104,5 +123,9 @@ class CertificationsController < ApplicationController
     _set_employees(current_user)
     render action: 'new'
     nil
+  end
+
+  def _certification_params
+    params.require(:certification).permit(certification_accessible_parameters)
   end
 end

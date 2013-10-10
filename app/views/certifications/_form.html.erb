@@ -14,7 +14,7 @@
       <%= select(:certification, :employee_id,
                  options_from_collection_for_select(@employees, 'id', 'name',
                                                     @certification.employee_id),
-                 { prompt: 'Select Employee...' }) %>
+                 {prompt: 'Select Employee...'}) %>
     </div>
   <% end %>
 
@@ -24,7 +24,7 @@
     <%= select(:certification, :certification_type_id,
                options_from_collection_for_select(@certification_types, 'id', 'name',
                                                   @certification.certification_type_id),
-               { prompt: 'Select Certification Type...' }) %>
+               {prompt: 'Select Certification Type...'}) %>
   </div>
 
   <%= link_to 'Create Certification Type', new_certification_type_path %>
@@ -57,10 +57,12 @@
     <%= f.text_field :comments %>
   </div>
 
-  <input type="hidden" name="source" value="<%=@source%>">
+  <input type="hidden" name="source" value="<%= @source %>">
 
-  <%= submit_tag "Create" %>
-  <%= submit_tag "Save and Create Another" %>
+  <%= submit_tag(user_action) %>
+  <% if user_action == 'Create' %>
+    <%= submit_tag "Save and Create Another" %>
+  <% end %>
 
 <% end %>
 
@@ -70,7 +72,6 @@
       do_if_units_based(
         function() {
           $('[data-units_achieved]').show();
-          $('#certification_units_achieved').val(0);
         },
         function() {
           $('[data-units_achieved]').hide();

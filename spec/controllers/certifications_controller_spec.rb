@@ -423,6 +423,175 @@ describe CertificationsController do
     end
   end
 
+  describe 'GET edit' do
+    context 'when certification user' do
+      before do
+        sign_in stub_certification_user(customer)
+      end
+
+      it 'assigns the requested certification as @certification' do
+        certification = create(:certification, customer: customer)
+        get :edit, {:id => certification.to_param}, {}
+        assigns(:certification).should eq(certification)
+      end
+
+      it 'assigns certification_types' do
+        certification = create(:certification, customer: customer)
+        controller.load_certification_service(Faker.new())
+        certification_type = create(:certification_type)
+        controller.load_certification_type_service(Faker.new([certification_type]))
+
+        get :edit, {:id => certification.to_param}, {}
+
+        assigns(:certification_types).map(&:model).should eq([certification_type])
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'assigns the requested certification as @certification' do
+        certification = create(:certification, customer: customer)
+        get :edit, {:id => certification.to_param}, {}
+        assigns(:certification).should eq(certification)
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'does not assign certification as @certification' do
+        certification = create(:certification, customer: customer)
+        get :edit, {:id => certification.to_param}, {}
+        assigns(:certification).should be_nil
+      end
+    end
+  end
+
+  describe 'PUT update' do
+    context 'when certification user' do
+      before do
+        sign_in stub_certification_user(customer)
+      end
+
+      describe 'with valid params' do
+        it 'updates the requested certification' do
+          certification = create(:certification, customer: customer)
+          new_certification_type = create(:certification_type, units_required: 100, customer: customer)
+          fake_certification_service = Faker.new(certification)
+          controller.load_certification_service(fake_certification_service)
+
+          put :update, {:id => certification.to_param, :certification =>
+            {
+              'certification_type_id' => new_certification_type.id,
+              'trainer' => 'new trainer',
+              'units_achieved' => 45,
+              'last_certification_date' => '01/01/2001',
+              'comments' => 'some new notes'
+            }
+          }, {}
+
+          fake_certification_service.received_message.should == :update_certification
+          fake_certification_service.received_params[0].should == certification
+          fake_certification_service.received_params[1][:certification_type_id].should == new_certification_type.id.to_s
+          fake_certification_service.received_params[1][:trainer].should == 'new trainer'
+          fake_certification_service.received_params[1][:units_achieved].should == '45'
+          fake_certification_service.received_params[1][:last_certification_date].should == '01/01/2001'
+          fake_certification_service.received_params[1][:comments].should == 'some new notes'
+        end
+
+        it 'assigns the requested certification as @certification' do
+          CertificationService.any_instance.stub(:update_certification).and_return(true)
+          certification = create(:certification, customer: customer)
+          put :update, {:id => certification.to_param, :certification => {'name' => 'Test'}}, {}
+          assigns(:certification).should eq(certification)
+        end
+
+        it 'redirects to the show certification type page' do
+          CertificationService.any_instance.stub(:update_certification).and_return(true)
+          certification = create(:certification, customer: customer)
+
+          put :update, {:id => certification.to_param, :certification => {'name' => 'Test'}}, {}
+
+          response.should redirect_to(certification.certification_type)
+          flash[:notice].should == 'Certification was successfully updated.'
+        end
+      end
+
+      describe 'with invalid params' do
+        it 'assigns the certification as @certification' do
+          certification = create(:certification, customer: customer)
+          CertificationService.any_instance.stub(:update_certification).and_return(false)
+          put :update, {:id => certification.to_param, :certification => {'name' => 'invalid value'}}, {}
+          assigns(:certification).should eq(certification)
+        end
+
+        it "re-renders the 'edit' template" do
+          certification = create(:certification, customer: customer)
+          CertificationService.any_instance.stub(:update_certification).and_return(false)
+          put :update, {:id => certification.to_param, :certification => {'name' => 'invalid value'}}, {}
+          response.should render_template('edit')
+        end
+
+        it 'assigns @certification_types' do
+          certification = create(:certification, customer: customer)
+          controller.load_certification_service(Faker.new())
+          certification_type = create(:certification_type)
+          controller.load_certification_type_service(Faker.new([certification_type]))
+
+          get :edit, {:id => certification.to_param}, {}
+
+          assigns(:certification_types).map(&:model).should eq([certification_type])
+        end
+
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'updates the requested certification' do
+        certification = create(:certification, customer: customer)
+        CertificationService.any_instance.should_receive(:update_certification).once.and_return(true)
+
+        put :update, {:id => certification.to_param, :certification =>
+          {
+            'name' => 'Test',
+            'serial_number' => 'newSN',
+            'inspection_interval' => 'Annually',
+            'last_inspection_date' => '01/01/2001',
+            'comments' => 'some new notes'
+          }
+        }, {}
+      end
+
+      it 'assigns the requested certification as @certification' do
+        certification = create(:certification, customer: customer)
+        CertificationService.any_instance.stub(:update_certification).and_return(certification)
+        put :update, {:id => certification.to_param, :certification => {'name' => 'Test'}}, {}
+        assigns(:certification).should eq(certification)
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'does not assign certification as @certification' do
+        certification = create(:certification, customer: customer)
+        put :update, {:id => certification.to_param, :certification => {'name' => 'Test'}}, {}
+        assigns(:certification).should be_nil
+      end
+    end
+  end
+
   describe 'GET show' do
     context 'when certification user' do
       let (:current_user) { stub_certification_user(customer) }

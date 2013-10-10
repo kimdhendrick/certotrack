@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'Navigation', slow: true do
   let(:customer) { create(:customer) }
-  
+
   describe 'Equipment Links' do
     before do
       login_as_equipment_user(customer)
@@ -316,6 +316,57 @@ describe 'Navigation', slow: true do
 
       visit search_certification_types_path
       click_and_test_link_with_title 'Create Certification Type'
+    end
+
+    it 'navigates Edit Certification', js:true do
+      certification = create(:certification,
+                             employee: create(:employee, first_name: 'First', last_name: 'Last', customer: customer),
+                             certification_type: create(:certification_type, customer: customer)
+      )
+      visit certification_path certification.id
+
+      click_on 'Edit'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to edit instead of recertify?')
+      alert.accept
+
+      page.should have_content 'Edit Certification'
+
+      page.should have_link 'Home'
+      #PENDING NAVIGATION
+      #page.should have_link 'All Certification'
+      page.should have_link 'Create Certification'
+
+      page.should have_link 'Delete'
+
+      click_and_test_home_link
+      visit certification_path certification.id
+      click_on 'Edit'
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to edit instead of recertify?')
+      alert.accept
+
+      click_on 'First Last'
+      page.should have_content 'Show Employee'
+      visit certification_path certification.id
+      click_on 'Edit'
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to edit instead of recertify?')
+      alert.accept
+
+      click_and_test_link_with_title 'Create Certification Type'
+
+      visit certification_path certification.id
+      click_on 'Edit'
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to edit instead of recertify?')
+      alert.accept
+
+      click_link 'Delete'
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete?')
+      alert.dismiss
     end
   end
 

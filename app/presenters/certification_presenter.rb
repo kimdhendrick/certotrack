@@ -41,7 +41,7 @@ class CertificationPresenter
   end
 
   def location
-      model.employee.location
+    model.employee.location
   end
 
   def employee
@@ -63,12 +63,13 @@ class CertificationPresenter
   end
 
   def edit_link
-    @template.link_to 'Edit', '#'
-                      #@template.edit_certification_path(model)
+    @template.link_to 'Edit',
+                      @template.edit_certification_path(model),
+                      data: {confirm: 'Are you sure you want to edit instead of recertify?'}
   end
 
   def delete_link
     @template.link_to 'Delete', '#'
-                      #model, method: :delete, data: {confirm: 'Are you sure you want to delete?'}
+    #model, method: :delete, data: {confirm: 'Are you sure you want to delete?'}
   end
 end

@@ -7,7 +7,7 @@ describe CertificationPresenter do
   end
 
   it 'should respond false to units_based?' do
-    certification = create(:certification, customer: create(:customer))
+    certification = create(:certification)
     CertificationPresenter.new(certification, nil).units_based?.should be_false
   end
 

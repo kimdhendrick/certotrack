@@ -26,6 +26,11 @@ class CertificationService
     certification
   end
 
+  def update_certification(certification, attributes)
+    certification.update(attributes)
+    certification.update(expiration_date: _expires_on(certification))
+  end
+
   def get_all_certifications_for_employee(employee)
     employee.certifications
   end
@@ -34,4 +39,9 @@ class CertificationService
     certification_type.certifications
   end
 
+  private
+
+  def _expires_on(certification)
+    ExpirationCalculator.new.calculate(certification.last_certification_date, Interval.find_by_text(certification.interval))
+  end
 end
