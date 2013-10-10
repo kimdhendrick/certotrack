@@ -8,11 +8,11 @@ describe CertificationTypeService do
   describe 'create_certification_type' do
     it 'should create certification type' do
       attributes =
-      {
-        'name' => 'Box',
-        'units_required' => '15',
-        'interval' => '5 years'
-      }
+        {
+          'name' => 'Box',
+          'units_required' => '15',
+          'interval' => '5 years'
+        }
       certification_type = subject.create_certification_type(customer, attributes)
 
       certification_type.should be_persisted
@@ -41,6 +41,20 @@ describe CertificationTypeService do
       certification_type.reload
       certification_type.name.should == 'CPR'
       certification_type.interval.should == '5 years'
+    end
+
+    it 'should recalculate expiration date for associated certifications' do
+      certification = create(
+        :certification,
+        certification_type: certification_type,
+        last_certification_date: '2012-03-29'.to_date,
+        expiration_date: '2000-01-01'.to_date
+      )
+
+      subject.update_certification_type(certification_type, attributes)
+
+      certification.reload
+      certification.expiration_date.should == '2017-03-29'.to_date
     end
 
     context 'when errors' do
