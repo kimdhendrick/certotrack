@@ -163,4 +163,17 @@ describe CertificationService do
       subject.get_all_certifications_for_certification_type(certification_type).should == [active_certification]
     end
   end
+
+  describe 'delete_certification' do
+    it 'destroys the requested certification' do
+      certification = create(:certification)
+      CertificationPeriod.count.should > 0
+
+      expect {
+        CertificationService.new.delete_certification(certification)
+      }.to change(Certification, :count).by(-1)
+
+      CertificationPeriod.count.should == 0
+    end
+  end
 end

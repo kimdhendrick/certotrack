@@ -31,6 +31,10 @@ class CertificationService
     CertificationExpirationUpdater.update(certification)
   end
 
+  def delete_certification(certification)
+    certification.destroy
+  end
+
   def get_all_certifications_for_employee(employee)
     employee.certifications
   end

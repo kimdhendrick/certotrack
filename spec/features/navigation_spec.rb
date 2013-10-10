@@ -365,7 +365,7 @@ describe 'Navigation', slow: true do
 
       click_link 'Delete'
       alert = page.driver.browser.switch_to.alert
-      alert.text.should eq('Are you sure you want to delete?')
+      alert.text.should eq('Are you sure you want to delete this certification?')
       alert.dismiss
     end
   end

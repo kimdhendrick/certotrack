@@ -823,7 +823,7 @@ describe 'Certifications', slow: true do
 
       click_on 'Delete'
       alert = page.driver.browser.switch_to.alert
-      alert.text.should eq('Are you sure you want to delete?')
+      alert.text.should eq('Are you sure you want to delete this certification?')
       alert.dismiss
 
       select 'Level III Truck Inspection', from: 'Certification Type'
@@ -859,6 +859,85 @@ describe 'Certifications', slow: true do
       page.should have_content 'Edit Certification'
 
       page.should have_field 'Units Achieved', with: '13'
+    end
+  end
+
+  describe 'Delete Certification' do
+    let!(:cpr_certification_type) do
+      create(:certification_type,
+             name: 'CPR',
+             interval: Interval::SIX_MONTHS.text,
+             customer: customer
+      )
+    end
+
+    let!(:employee) do
+      create(:employee,
+             employee_number: 'JB3',
+             first_name: 'Joe',
+             last_name: 'Brown',
+             location: create(:location, name: 'Denver'),
+             customer_id: customer.id
+      )
+    end
+
+    let(:certification) do
+      create(
+        :certification,
+        employee: employee,
+        certification_type: cpr_certification_type,
+        last_certification_date: Date.new(2005, 7, 8),
+        trainer: 'Trainer Tim',
+        comments: 'Fully qualified',
+        customer: employee.customer)
+    end
+
+    before do
+      login_as_certification_user(customer)
+    end
+
+    it 'should delete existing certification from show page', js: true do
+      visit certification_path certification.id
+
+      page.should have_content 'Show Certification'
+      click_on 'Delete'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete this certification?')
+      alert.dismiss
+
+      page.should have_content 'Show Certification'
+      click_on 'Delete'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete this certification?')
+      alert.accept
+
+      page.should have_content 'Show Certification Type'
+      page.should have_content 'Certification for Brown, Joe deleted'
+    end
+
+    it 'should delete existing certification from edit page', js: true do
+      visit certification_path certification.id
+      click_on 'Edit'
+
+      page.driver.browser.switch_to.alert.accept
+
+      click_on 'Delete'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete this certification?')
+      alert.dismiss
+
+      page.should have_content 'Edit Certification'
+      click_on 'Delete'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete this certification?')
+      alert.accept
+
+      page.should have_content 'Show Certification Type'
+      page.should have_content 'Certification for Brown, Joe deleted'
     end
   end
 end

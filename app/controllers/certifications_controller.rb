@@ -6,6 +6,8 @@ class CertificationsController < ApplicationController
                 :load_certification_type_service,
                 :load_employee_service
 
+  before_action :_set_certification, only: [:show, :edit, :update, :destroy]
+
   check_authorization
 
   def new
@@ -42,18 +44,14 @@ class CertificationsController < ApplicationController
   end
 
   def show
-    _set_certification
   end
 
   def edit
     authorize! :create, :certification
     _set_certification_types(current_user)
-    _set_certification
   end
 
   def update
-    _set_certification
-
     success = @certification_service.update_certification(@certification, _certification_params)
 
     if success
@@ -61,6 +59,13 @@ class CertificationsController < ApplicationController
     else
       render action: 'edit'
     end
+  end
+
+  def destroy
+    certification_type = @certification.certification_type
+    employee = @certification.employee
+    @certification_service.delete_certification(@certification)
+    redirect_to certification_type, notice: "Certification for #{employee.last_name}, #{employee.first_name} deleted."
   end
 
   def load_certification_service(service = CertificationService.new)

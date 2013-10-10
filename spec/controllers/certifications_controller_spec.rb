@@ -591,7 +591,7 @@ describe CertificationsController do
       end
     end
   end
-
+  
   describe 'GET show' do
     context 'when certification user' do
       let (:current_user) { stub_certification_user(customer) }
@@ -628,6 +628,45 @@ describe CertificationsController do
         certification = create(:certification, customer: customer)
         get :show, {:id => certification.to_param}, {}
         assigns(:certification).should be_nil
+      end
+    end
+  end
+
+  describe 'DELETE destroy' do
+    context 'when certification user' do
+      before do
+        sign_in stub_certification_user(customer)
+      end
+
+      it 'calls CertificationService' do
+        certification = create(:certification, customer: customer)
+        CertificationService.any_instance.should_receive(:delete_certification).once
+
+        delete :destroy, {:id => certification.to_param}, {}
+      end
+
+      it 'redirects to the show certification type page' do
+        employee = create(:employee, first_name: 'first', last_name: 'last')
+        certification = create(:certification, employee: employee, customer: customer)
+        CertificationService.any_instance.should_receive(:delete_certification).once
+
+        delete :destroy, {:id => certification.to_param}, {}
+
+        response.should redirect_to(certification.certification_type)
+        flash[:notice].should == "Certification for last, first deleted."
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'calls CertificationService' do
+        certification = create(:certification, customer: customer)
+        CertificationService.any_instance.should_receive(:delete_certification).once
+
+        delete :destroy, {:id => certification.to_param}, {}
       end
     end
   end
