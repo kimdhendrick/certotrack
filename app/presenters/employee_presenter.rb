@@ -50,4 +50,13 @@ class EmployeePresenter
     @template.link_to 'New Employee Certification',
                       @template.new_certification_path(employee_id: model.id, source: :employee)
   end
+
+  def hidden_id_field
+    @template.hidden_field_tag :employee_id, model.id
+  end
+
+  def units_input_field(certification, batch_certification)
+    default_units = batch_certification.present? ? batch_certification.units(certification.id) : certification.units
+    @template.text_field_tag "certification_ids[#{certification.id}]", default_units, size: 2
+  end
 end

@@ -28,4 +28,6 @@ Certotrack::Application.routes.draw do
   get 'deactivated_employees', action: 'deactivated_employees', controller: 'employee_deactivation'
 
   resources :certifications
+
+  resources :batch_certifications, only: [:create]
 end

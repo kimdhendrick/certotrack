@@ -142,6 +142,23 @@ describe CertificationPresenter do
     end
   end
 
+  describe 'units' do
+    context 'when Certification is date based' do
+      it 'should be blank' do
+        certification = build(:certification)
+        CertificationPresenter.new(certification).units.should be_blank
+      end
+    end
+    context 'when Certification is unit based' do
+      it 'should be the value of #units_achieved' do
+        certification = build(:units_based_certification)
+        certification.units_achieved = 2
+        certification.certification_type.units_required = 3
+        CertificationPresenter.new(certification).units.should == '2'
+      end
+    end
+  end
+
   describe 'units_achieved_label' do
     context 'when Certification is date based' do
       it 'should be blank' do

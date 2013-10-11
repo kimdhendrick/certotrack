@@ -1,3 +1,11 @@
+<% if @batch_certification.present? %>
+  <div class="errors">
+    <ul>
+      <li>Errors occurred during the batch update. See below for details.</li>
+    </ul>
+  </div>
+<% end %>
+
 <% employee_presenter_for do |employee| %>
   <h1>Show Employee</h1>
 
@@ -30,34 +38,97 @@
   <%= employee.deactivate_link %>
 
   <hr/>
-  <%= employee.new_certification_link %>
 
+  <h2>Employee's Certifications</h2>
 
-  <table class="sortable">
-    <thead>
-    <tr>
-      <th><%= sortable 'name', title = 'Certification Type' %></th>
-      <th>Trainer</th>
-      <th>Expiration Date</th>
-      <th>Last Certification Date</th>
-      <th>Units</th>
-      <th><%= sortable 'status_code', title='Status' %></th>
-    </tr>
-    </thead>
-    <tbody>
-    <% @certifications.each do |certification| %>
+  <% if @certifications.any?(&:units_based?) %>
+    <input type="checkbox" id="editModeButton"/>
+    <label for="editModeButton">Batch Edit Mode</label>
+  <% end %>
+
+  <%= form_tag(controller: 'batch_certifications', action: 'create') do %>
+    <%= employee.hidden_id_field %>
+    <table class="sortable">
+      <thead>
       <tr>
-        <td><%= link_to certification.name, certification.model %></td>
-        <td><%= certification.trainer %></td>
-        <td><%= certification.expiration_date %></td>
-        <td><%= certification.last_certification_date %></td>
-        <td><%= certification.units_achieved %></td>
-        <td><%= certification.status %></td>
+        <th><%= sortable 'name', title = 'Certification Type' %></th>
+        <th>Trainer</th>
+        <th>Expiration Date</th>
+        <th>Last Certification Date</th>
+        <th>Units</th>
+        <th><%= sortable 'status_code', title='Status' %></th>
       </tr>
-    <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+      <% @certifications.each do |certification| %>
+        <tr>
+          <td><%= link_to certification.name, certification.model %></td>
+          <td><%= certification.trainer %></td>
+          <td><%= certification.expiration_date %></td>
+          <td><%= certification.last_certification_date %></td>
+          <td>
+            <% if certification.units_based? %>
+              <span data-units-achieved-editable='data-units-achieved-editable'>
+                <%= employee.units_input_field(certification, @batch_certification) %> of <%= certification.units_required %>
+              </span>
+              <span data-units-achieved-read-only='data-units-achieved-read-only'>
+                <%= certification.units_achieved %>
+              </span>
+              <% if @batch_certification.present? %>
+                <div class="errors">
+                  <%= @batch_certification.error(certification.id) %>
+                </div>
+              <% end %>
+            <% end %>
+          </td>
+          <td><%= certification.status %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+
+    <div id="batchUpdateButtons">
+      <button type="submit" id="batchUpdateButton">
+        Update
+      </button>
+      <button type="reset" id="resetButton">
+        Reset
+      </button>
+    </div>
+
+  <% end %>
 
   <%= will_paginate @certifications %>
 
+  <br/>
+  <%= employee.new_certification_link %>
 <% end %>
+
+<script type="text/javascript">
+  $(function() {
+    $('[data-units-achieved-editable]').add('#batchUpdateButtons').hide();
+    $('#batchUpdateButton').add('#resetButton').button();
+    $('#editModeButton').button({icons: {primary: "ui-icon-locked"}}).bind('click', function() {
+      if ($(this).is(':checked')) {
+        $(this).button("option", "icons", {primary: 'ui-icon-unlocked'});
+      }
+      else {
+        $(this).button("option", "icons", {primary: 'ui-icon-locked'});
+      }
+      $('[data-units-achieved-read-only]').toggle();
+      $('[data-units-achieved-editable]').toggle();
+      $('#batchUpdateButtons').toggle();
+      $('input[type="text"]').not(':hidden').first().focus();
+    });
+    $('#resetButton').click(function() {
+      $('#batchUpdateButtons').toggle();
+      window.location.href = "<%=employee_path @employee%>";
+    });
+
+    <% if @batch_certification.present? %>
+    $('#editModeButton').click();
+    $('#editModeButton').button("option", "icons", {primary: 'ui-icon-unlocked'});
+    <% end %>
+
+  })
+</script>

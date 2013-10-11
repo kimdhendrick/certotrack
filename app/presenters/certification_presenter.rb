@@ -4,6 +4,11 @@ class CertificationPresenter
 
   attr_reader :model
 
+  #TODO KDB
+  delegate :id, to: :model
+  #TODO KDB
+  delegate :units_required, to: :model
+
   delegate :units_based?, to: :model
   delegate :interval, to: :model
   delegate :trainer, to: :model
@@ -60,6 +65,10 @@ class CertificationPresenter
   def units_achieved
     return '' unless model.units_based?
     "#{model.units_achieved} of #{model.units_required}"
+  end
+
+  def units
+    model.units_achieved.to_s if model.units_based?
   end
 
   def edit_link
