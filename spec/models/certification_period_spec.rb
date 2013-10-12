@@ -9,6 +9,12 @@ describe CertificationPeriod do
     subject.units_achieved.should == 0
   end
 
+  it 'should not allow negative units_achieved' do
+    subject.units_achieved = -1
+    subject.should_not be_valid
+    subject.errors[:units_achieved].should == ['must be greater than or equal to 0']
+  end
+
   it 'should validate presence of start_date' do
     subject.start_date = nil
     subject.should_not be_valid
