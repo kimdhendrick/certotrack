@@ -160,5 +160,5 @@ describe CertificationPresenter do
   end
 
   subject { CertificationPresenter.new(build(:units_based_certification)) }
-  it_behaves_like "sortable by status"
+  it_behaves_like 'an object that is sortable by status'
 end

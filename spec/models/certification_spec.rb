@@ -232,5 +232,5 @@ describe Certification do
     end
   end
 
-  it_behaves_like "sortable by status"
+  it_behaves_like 'an object that is sortable by status'
 end
