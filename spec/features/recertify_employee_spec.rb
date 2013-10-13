@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Recertify Employee', js: true do
+describe 'Recertify Employee' do
 
   let(:customer) { create(:customer) }
   let(:certification) { create(:units_based_certification, customer: customer) }
@@ -41,16 +41,30 @@ describe 'Recertify Employee', js: true do
       subject.should have_no_select('Certification Type')
     end
 
-    it 'should have Trainer field'
+    it 'should have Trainer field' do
+      subject.should have_field('Trainer')
+    end
 
-    it 'should have Last Certification Date field'
+    it 'should have Last Certification Date field' do
+      subject.should have_field('Last Certification Date')
+    end
 
-    it 'should have Comments field'
-
+    it 'should have Comments field' do
+      subject.should have_field('Comments')
+    end
 
     context 'when units based certification' do
-      it 'should have Units Achieved field'
+      it 'should have Units Achieved field' do
+        subject.should have_field('Units Achieved')
+      end
+    end
 
+    context 'when date based certification', slow: true, js: true do
+      let(:certification) { create(:date_based_certification, customer: customer) }
+
+      it 'should NOT have Units Achieved field' do
+        subject.should have_no_field('Units Achieved')
+      end
     end
   end
 end

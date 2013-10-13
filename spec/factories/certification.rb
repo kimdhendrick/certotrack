@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :certification do
+  factory :certification, aliases: [:date_based_certification] do
     employee
     certification_type
     customer { employee.customer || certification_type.customer }
