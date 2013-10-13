@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe CertificationPresenter do
+  include ActionView::TestCase::Behavior
+
   it 'should respond true to units_based?' do
     certification = create(:units_based_certification, customer: create(:customer))
     CertificationPresenter.new(certification, nil).units_based?.should be_true
@@ -156,6 +158,14 @@ describe CertificationPresenter do
         certification.certification_type.units_required = 3
         CertificationPresenter.new(certification).units_achieved_label.should == 'Units Achieved'
       end
+    end
+  end
+
+  describe 'recertify_link' do
+    it 'should create a link to the recertify page' do
+      certification = create(:certification)
+      subject = CertificationPresenter.new(certification, view)
+      subject.recertify_link.should =~ /<a.*>Recertify<\/a>/
     end
   end
 

@@ -6,7 +6,7 @@ class CertificationsController < ApplicationController
                 :load_certification_type_service,
                 :load_employee_service
 
-  before_action :_set_certification, only: [:show, :edit, :update, :destroy]
+  before_action :_set_certification, only: [:show, :edit, :update, :destroy, :recertify]
 
   check_authorization
 
@@ -80,6 +80,9 @@ class CertificationsController < ApplicationController
     @employee_service ||= service
   end
 
+  def recertify
+    _set_certification_types(current_user)
+  end
 
   private
 
