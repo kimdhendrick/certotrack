@@ -76,6 +76,6 @@ class CertificationPresenter
   end
 
   def recertify_link
-    @template.link_to 'Recertify', @template.recertify_certification_path(model)
+    @template.link_to 'Recertify', @template.new_certification_recertification_path(model)
   end
 end

@@ -66,5 +66,33 @@ describe 'Recertify Employee' do
         subject.should have_no_field('Units Achieved')
       end
     end
+
+    describe 'click recertify' do
+      context 'with valid data' do
+        before do
+          original_certification_period = certification.active_certification_period
+          fill_in 'Trainer', with: 'Instructor Joe'
+          fill_in 'Last Certification Date', with: '01/01/2000'
+          fill_in 'Comments', with: 'Recertifying'
+          click_button 'Recertify'
+        end
+
+        it 'should display success message' do
+          subject.should have_content 'Brown, Joe recertifed for Certification: Inspections.'
+        end
+
+        it 'should recertify employee' do
+          pending
+          certification.active_certification_period.start_date.should == Date.new(2000, 1, 1)
+          certification.active_certification_period.comments.should == 'Recertifying'
+          certification.active_certification_period.trainer.should == 'Instructor Joe'
+          certification.certification_periods.should include(original_certification_period)
+        end
+      end
+
+      context 'with invalid data' do
+        it 'should display error message'
+      end
+    end
   end
 end

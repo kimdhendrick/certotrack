@@ -1,6 +1,6 @@
 <%= form_for(@certification) do |f| %>
 
-  <%= render 'errors' %>
+  <%= render 'errors'%>
 
   <% if @certification.employee.present? && @source != 'certification' %>
     <div class="field">
