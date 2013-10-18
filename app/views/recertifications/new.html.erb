@@ -1,5 +1,8 @@
 <h1>Recertify Employee</h1>
 
+<%= link_to 'Home', root_path %> |
+<%= link_to 'Create Certification', new_certification_path(source: :certification) %>
+
 <%= form_tag(certification_recertifications_path(@certification)) do |f| %>
 
   <%= render 'errors'%>
@@ -9,7 +12,8 @@
   </div>
 
   <div class="field">
-    Certification Type <%= @certification.certification_type.name %>
+    <span id="certification_type", data-id="<%= @certification.certification_type.id %>">Certification Type</span>
+    <%= link_to "#{@certification.certification_type.name}", certification_type_path(@certification.certification_type) %>
   </div>
 
   <div class="field">
@@ -21,7 +25,7 @@
   <div data-units_achieved="data-units_achieved" class="field">
     <%= label_tag :units_achieved, 'Units Achieved' %>
     <br/>
-    <%= text_field_tag :units_achieved, @certification.units_achieved %>
+    <%= text_field_tag :units_achieved, 0 %>
   </div>
 
   <div class="field">
@@ -77,7 +81,7 @@
 
   function do_if_units_based(true_callback, false_callback) {
     $.getJSON('<%= ajax_is_units_based_path %>',
-      {certification_type_id: $('#certification_certification_type_id').val()},
+      {certification_type_id: $('#certification_type').data('id')},
       function(data) {
         if (data.is_units_based) {
           true_callback();

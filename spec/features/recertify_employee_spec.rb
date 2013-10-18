@@ -27,11 +27,13 @@ describe 'Recertify Employee' do
       subject.should have_content('Employee')
       subject.should have_content(certification.employee.first_name)
       subject.should have_content(certification.employee.last_name)
+      subject.should have_link("#{certification.employee.first_name} #{certification.employee.last_name}", href: employee_path(certification.employee))
     end
 
     it 'should have Certification Type' do
       subject.should have_content('Certification Type')
       subject.should have_content(certification.certification_type.name)
+      subject.should have_link("#{certification.certification_type.name}", href: certification_type_path(certification.certification_type))
     end
 
     it 'should not have link to create certification type' do
@@ -72,7 +74,7 @@ describe 'Recertify Employee' do
       end
 
       it 'should have the original Units Achieved value' do
-      find_field('Units Achieved').value.should eq '42'
+      find_field('Units Achieved').value.should eq '0'
     end
     end
 

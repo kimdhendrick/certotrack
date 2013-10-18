@@ -478,6 +478,26 @@ describe 'Navigation', slow: true do
     end
   end
 
+  describe 'Recertification Links' do
+    let(:certification) { create(:certification, customer: customer) }
+    subject { page }
+
+    before do
+      login_as_certification_user(customer)
+      visit new_certification_recertification_path(certification)
+    end
+
+    it 'should have link to home' do
+      page.should have_link 'Home'
+      click_and_test_link_with_title 'Home'
+    end
+
+    it 'should have link to create certfication' do
+      page.should have_link 'Create Certification'
+      click_and_test_link_with_title 'Create Certification'
+    end
+  end
+
   def click_and_test_home_link
     click_link 'Home'
     page.should have_content 'Welcome to CertoTrack'
