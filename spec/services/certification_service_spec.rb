@@ -176,4 +176,30 @@ describe CertificationService do
       CertificationPeriod.count.should == 0
     end
   end
+
+  describe '#recertify' do
+
+    subject { CertificationService.new }
+
+    let(:certification) { create(:certification) }
+    let(:recertification_attrs) { {} }
+
+    before do
+      certification.stub(:recertify)
+    end
+ 
+    it 'should return true is recertification was successful' do
+      subject.recertify(certification, recertification_attrs).should be_true
+    end
+
+    it 'should return false is recertification was unsuccessful' do
+      certification.stub(:valid?).and_return(false)
+      subject.recertify(certification, recertification_attrs).should be_false
+    end
+
+    it 'should delegate recertification to the certification' do
+      certification.should_receive(:recertify).with(recertification_attrs)
+      subject.recertify(certification, recertification_attrs)
+    end
+  end
 end

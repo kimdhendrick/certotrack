@@ -3,7 +3,8 @@ require 'spec_helper'
 describe 'Recertify Employee' do
 
   let(:customer) { create(:customer) }
-  let(:certification) { create(:units_based_certification, customer: customer) }
+  let(:certification_period) { create(:units_based_certification_period) }
+  let(:certification) { create(:units_based_certification, customer: customer, active_certification_period: certification_period) }
   subject { page }
 
   before do
@@ -45,18 +46,34 @@ describe 'Recertify Employee' do
       subject.should have_field('Trainer')
     end
 
+    it 'should have the original Trainer value' do
+      find_field('Trainer').value.should eq 'Trainer'
+    end
+
     it 'should have Last Certification Date field' do
       subject.should have_field('Last Certification Date')
+    end
+
+    it 'should have the original Last Certification Date value' do
+      find_field('Last Certification Date').value.should eq '05/15/2013'
     end
 
     it 'should have Comments field' do
       subject.should have_field('Comments')
     end
 
+    it 'should have the original Comments value' do
+      find_field('Comments').value.should eq 'Comments'
+    end
+
     context 'when units based certification' do
       it 'should have Units Achieved field' do
         subject.should have_field('Units Achieved')
       end
+
+      it 'should have the original Units Achieved value' do
+      find_field('Units Achieved').value.should eq '42'
+    end
     end
 
     context 'when date based certification', slow: true, js: true do
@@ -69,8 +86,9 @@ describe 'Recertify Employee' do
 
     describe 'click recertify' do
       context 'with valid data' do
+        let!(:original_certification_period) { certification.active_certification_period }
+
         before do
-          original_certification_period = certification.active_certification_period
           fill_in 'Trainer', with: 'Instructor Joe'
           fill_in 'Last Certification Date', with: '01/01/2000'
           fill_in 'Comments', with: 'Recertifying'
@@ -78,11 +96,11 @@ describe 'Recertify Employee' do
         end
 
         it 'should display success message' do
-          subject.should have_content 'Brown, Joe recertifed for Certification: Inspections.'
+          subject.should have_content 'Smith, John recertified for Certification: Scrum Master'
         end
 
         it 'should recertify employee' do
-          pending
+          certification.reload
           certification.active_certification_period.start_date.should == Date.new(2000, 1, 1)
           certification.active_certification_period.comments.should == 'Recertifying'
           certification.active_certification_period.trainer.should == 'Instructor Joe'
@@ -91,7 +109,15 @@ describe 'Recertify Employee' do
       end
 
       context 'with invalid data' do
-        it 'should display error message'
+        it 'should display error message' do
+          fill_in 'Trainer', with: 'Instructor Joe'
+          fill_in 'Last Certification Date', with: ''
+          fill_in 'Comments', with: 'Recertifying'
+          click_button 'Recertify'
+
+          subject.should have_content 'Recertify Employee'
+          subject.should have_content('Last certification date is not a valid date')
+        end
       end
     end
   end

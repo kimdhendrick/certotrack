@@ -2,6 +2,8 @@
 
 <%= form_tag(certification_recertifications_path(@certification)) do |f| %>
 
+  <%= render 'errors'%>
+
   <div class="field">
     Employee <%= link_to "#{@certification.employee.first_name} #{@certification.employee.last_name}", @certification.employee %>
   </div>
