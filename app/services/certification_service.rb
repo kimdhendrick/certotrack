@@ -42,4 +42,9 @@ class CertificationService
   def get_all_certifications_for_certification_type(certification_type)
     certification_type.certifications
   end
+
+  def recertify(certification, attributes)
+    certification.recertify(attributes)
+    certification.save
+  end
 end

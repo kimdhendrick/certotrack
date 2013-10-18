@@ -83,4 +83,8 @@ class CertificationPresenter
                       method: :delete,
                       data: {confirm: 'Are you sure you want to delete this certification?'}
   end
+
+  def recertify_link
+    @template.link_to 'Recertify', @template.new_certification_recertification_path(model)
+  end
 end

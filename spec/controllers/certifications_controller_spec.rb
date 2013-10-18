@@ -486,14 +486,14 @@ describe CertificationsController do
           controller.load_certification_service(fake_certification_service)
 
           put :update, {:id => certification.to_param, :certification =>
-            {
-              'certification_type_id' => new_certification_type.id,
-              'trainer' => 'new trainer',
-              'units_achieved' => 45,
-              'last_certification_date' => '01/01/2001',
-              'comments' => 'some new notes'
-            }
-          }, {}
+                        {
+                          'certification_type_id' => new_certification_type.id,
+                          'trainer' => 'new trainer',
+                          'units_achieved' => 45,
+                          'last_certification_date' => '01/01/2001',
+                          'comments' => 'some new notes'
+                        }
+                        }, {}
 
           fake_certification_service.received_message.should == :update_certification
           fake_certification_service.received_params[0].should == certification
@@ -561,14 +561,14 @@ describe CertificationsController do
         CertificationService.any_instance.should_receive(:update_certification).once.and_return(true)
 
         put :update, {:id => certification.to_param, :certification =>
-          {
-            'name' => 'Test',
-            'serial_number' => 'newSN',
-            'inspection_interval' => 'Annually',
-            'last_inspection_date' => '01/01/2001',
-            'comments' => 'some new notes'
-          }
-        }, {}
+                      {
+                        'name' => 'Test',
+                        'serial_number' => 'newSN',
+                        'inspection_interval' => 'Annually',
+                        'last_inspection_date' => '01/01/2001',
+                        'comments' => 'some new notes'
+                      }
+                      }, {}
       end
 
       it 'assigns the requested certification as @certification' do
@@ -591,7 +591,7 @@ describe CertificationsController do
       end
     end
   end
-  
+
   describe 'GET show' do
     context 'when certification user' do
       let (:current_user) { stub_certification_user(customer) }

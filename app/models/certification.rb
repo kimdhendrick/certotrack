@@ -6,10 +6,14 @@ class Certification < ActiveRecord::Base
   belongs_to :certification_type
   belongs_to :employee
   belongs_to :customer
-  has_one :active_certification_period,
-          class_name: 'CertificationPeriod',
-          autosave: true,
-          dependent: :destroy
+  belongs_to :active_certification_period,
+    class_name: 'CertificationPeriod',
+    autosave: true,
+    dependent: :destroy
+  has_many :certification_periods,
+    class_name: 'CertificationPeriod',
+    autosave: true,
+    dependent: :destroy
 
   validates_uniqueness_of :certification_type_id, scope: :employee_id, message: "already assigned to this Employee. Please update existing Certification."
 
@@ -50,6 +54,10 @@ class Certification < ActiveRecord::Base
 
   def status
     _certification_strategy.status
+  end
+
+  def recertify(attributes)
+   self.active_certification_period = CertificationPeriod.new(attributes)
   end
 
   private
@@ -119,4 +127,3 @@ class Certification < ActiveRecord::Base
     end
   end
 end
-

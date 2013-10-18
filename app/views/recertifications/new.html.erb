@@ -1,0 +1,97 @@
+<h1>Recertify Employee</h1>
+
+<%= link_to 'Home', root_path %> |
+<%= link_to 'Create Certification', new_certification_path(source: :certification) %>
+
+<%= form_tag(certification_recertifications_path(@certification)) do |f| %>
+
+  <%= render 'errors'%>
+
+  <div class="field">
+    Employee <%= link_to "#{@certification.employee.first_name} #{@certification.employee.last_name}", @certification.employee %>
+  </div>
+
+  <div class="field">
+    <span id="certification_type", data-id="<%= @certification.certification_type.id %>">Certification Type</span>
+    <%= link_to "#{@certification.certification_type.name}", certification_type_path(@certification.certification_type) %>
+  </div>
+
+  <div class="field">
+    <%= label_tag :trainer %>
+    <br/>
+    <%= text_field_tag :trainer, @certification.trainer %>
+  </div>
+
+  <div data-units_achieved="data-units_achieved" class="field">
+    <%= label_tag :units_achieved, 'Units Achieved' %>
+    <br/>
+    <%= text_field_tag :units_achieved, 0 %>
+  </div>
+
+  <div class="field">
+    <%= label_tag :last_certification_date, 'Last Certification Date' %>
+    <br/>
+    <input class="datepicker"
+           id="last_certification_date"
+           name="last_certification_date"
+           type="text"
+           value="<%= DateHelpers.date_to_string(@certification.last_certification_date) %>">
+  </div>
+
+  <div class="field">
+    <%= label_tag :comments %>
+    <br/>
+    <%= text_field_tag :comments, @certification.comments %>
+  </div>
+
+  <%= submit_tag('Recertify') %>
+
+<% end %>
+
+<script type="text/javascript">
+
+  $(function() {
+      do_if_units_based(
+        function() {
+          $('[data-units_achieved]').show();
+        },
+        function() {
+          $('[data-units_achieved]').hide();
+        });
+    }
+  );
+
+  $('[name=commit]').click(function() {
+    return confirm_future_date(new Date(document.getElementById('certification_last_certification_date').value));
+  });
+
+  $('#certification_certification_type_id').change(function() {
+    do_if_units_based(
+      function() {
+        $('[data-units_achieved]').slideDown();
+        $('[data-units_achieved]').show('slide');
+        $('#certification_units_achieved').val(0);
+      },
+      function() {
+        $('[data-units_achieved]').hide('explode');
+        $('#certification_units_achieved').val(null);
+      });
+
+  });
+
+  function do_if_units_based(true_callback, false_callback) {
+    $.getJSON('<%= ajax_is_units_based_path %>',
+      {certification_type_id: $('#certification_type').data('id')},
+      function(data) {
+        if (data.is_units_based) {
+          true_callback();
+        }
+        else {
+          false_callback();
+        }
+      }
+    );
+  }
+  ;
+
+</script>

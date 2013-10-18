@@ -4,7 +4,7 @@ describe Certification do
   it { should belong_to(:customer) }
   it { should belong_to(:certification_type) }
   it { should belong_to(:employee) }
-  it { should have_one(:active_certification_period) }
+  it { should belong_to(:active_certification_period) }
   it do
     should validate_uniqueness_of(:certification_type_id).
              scoped_to(:employee_id).
@@ -195,6 +195,7 @@ describe Certification do
     certification.active.should be_true
   end
 
+
   describe "new date validations" do
     subject { Certification.new }
     let(:certification_period) { CertificationPeriod.new(start_date: start_date) }
@@ -233,4 +234,52 @@ describe Certification do
   end
 
   it_behaves_like 'an object that is sortable by status'
+
+  describe '#recertify' do
+    subject { create(:certification) }
+    let(:start_date) { 2.days.from_now }
+    let(:trainer) { 'New Trainer' }
+    let(:comments) { 'New Comments' }
+    let(:units_achieved) { 42 }
+    let(:attributes) { {start_date: start_date, trainer: trainer, comments: comments, units_achieved: units_achieved}}
+
+    before do
+      @original_certification_period = subject.active_certification_period
+    end
+
+    it 'should keep the original certification period in its history' do
+      subject.recertify(attributes)
+      subject.certification_periods.should include(@original_certification_period)
+    end
+
+    it 'should create a new active_certification_period' do
+      subject.recertify(attributes)
+      subject.active_certification_period.should_not  == @original_certification_period
+    end
+
+    it 'should set new trainer in active_certification_period' do
+      subject.recertify(trainer: trainer)
+      subject.active_certification_period.trainer.should == trainer
+    end
+
+    it 'should set new start_date in active_certification_period' do
+      subject.recertify(start_date: start_date)
+      subject.active_certification_period.start_date.should == start_date
+    end
+
+    it 'should set new comments in active_certification_period' do
+      subject.recertify(comments: comments)
+      subject.active_certification_period.comments.should == comments
+    end
+
+    it 'should set new units_achieved in active_certification_period' do
+      subject.recertify(units_achieved: units_achieved)
+      subject.active_certification_period.units_achieved.should == units_achieved
+    end
+
+    it 'should create a valid active_certification_period' do
+      subject.recertify(attributes)
+      subject.active_certification_period.should be_valid
+    end
+  end
 end

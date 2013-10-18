@@ -1,0 +1,10 @@
+<div class="field">
+  <%= f.label :certification_type_id, 'Certification Type' %>
+  <br/>
+  <%= select(:certification, :certification_type_id,
+             options_from_collection_for_select(@certification_types, 'id', 'name',
+                                                @certification.certification_type_id),
+             {prompt: 'Select Certification Type...'}) %>
+</div>
+
+<%= link_to 'Create Certification Type', new_certification_type_path %>

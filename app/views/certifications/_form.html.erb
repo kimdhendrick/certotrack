@@ -1,6 +1,6 @@
 <%= form_for(@certification) do |f| %>
 
-  <%= render 'errors' %>
+  <%= render 'errors'%>
 
   <% if @certification.employee.present? && @source != 'certification' %>
     <div class="field">
@@ -18,16 +18,11 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :certification_type_id, 'Certification Type' %>
-    <br/>
-    <%= select(:certification, :certification_type_id,
-               options_from_collection_for_select(@certification_types, 'id', 'name',
-                                                  @certification.certification_type_id),
-               {prompt: 'Select Certification Type...'}) %>
-  </div>
-
-  <%= link_to 'Create Certification Type', new_certification_type_path %>
+  <% if (user_action == 'Recertify') %>
+    <%= render partial: 'show_certification_type', locals: {f: f} %>
+  <% else %>
+    <%= render partial: 'choose_certification_type', locals: {f: f} %>
+  <% end %>
 
   <div class="field">
     <%= f.label :trainer %>
