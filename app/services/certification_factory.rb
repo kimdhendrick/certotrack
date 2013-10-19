@@ -15,7 +15,8 @@ class CertificationFactory
 
     certification = Certification.new(employee_id: employee_id, certification_type_id: certification_type_id, customer: customer)
     certification_period_params = {certification: certification, start_date: certification_date, trainer: trainer, comments: comments, units_achieved: units_achieved}
-    certification.active_certification_period = CertificationPeriod.new(certification_period_params)
+    active_certification_period = certification.create_active_certification_period(certification_period_params)
+    certification.certification_periods << active_certification_period
     certification.expiration_date = _expires_on(certification_type_id, certification.last_certification_date)
     certification
   end
