@@ -131,7 +131,7 @@ describe CertificationPresenter do
     context 'when Certification is date based' do
       it 'should be blank' do
         certification = build(:certification)
-        CertificationPresenter.new(certification).units_achieved.should be_blank
+        CertificationPresenter.new(certification).units_achieved_of_required.should be_blank
       end
     end
     context 'when Certification is unit based' do
@@ -139,7 +139,7 @@ describe CertificationPresenter do
         certification = build(:units_based_certification)
         certification.units_achieved = 2
         certification.certification_type.units_required = 3
-        CertificationPresenter.new(certification).units_achieved.should == '2 of 3'
+        CertificationPresenter.new(certification).units_achieved_of_required.should == '2 of 3'
       end
     end
   end

@@ -19,3 +19,29 @@ function autocomplete_equipment_name(input_field_selector, ajax_path) {
     minLength: 2, delay: 500
   });
 }
+
+function setup_batch_certification(resetUrl, batchModeActive) {
+  $('[data-units-achieved-editable]').add('#batchUpdateButtons').hide();
+  $('#batchUpdateButton').add('#resetButton').button();
+  $('#editModeButton').button({icons: {primary: "ui-icon-locked"}}).bind('click', function() {
+    if ($(this).is(':checked')) {
+      $(this).button("option", "icons", {primary: 'ui-icon-unlocked'});
+    }
+    else {
+      $(this).button("option", "icons", {primary: 'ui-icon-locked'});
+    }
+    $('[data-units-achieved-read-only]').toggle();
+    $('[data-units-achieved-editable]').toggle();
+    $('#batchUpdateButtons').toggle();
+    $('input[type="text"]').not(':hidden').first().focus();
+  });
+  $('#resetButton').click(function() {
+    $('#batchUpdateButtons').toggle();
+    window.location.href = resetUrl;
+  });
+
+  if (batchModeActive=='true') {
+    $('#editModeButton').click();
+    $('#editModeButton').button("option", "icons", {primary: 'ui-icon-unlocked'});
+  }
+}

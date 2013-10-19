@@ -72,7 +72,7 @@
                 <%= employee.units_input_field(certification, @batch_certification) %> of <%= certification.units_required %>
               </span>
               <span data-units-achieved-read-only='data-units-achieved-read-only'>
-                <%= certification.units_achieved %>
+                <%= certification.units_achieved_of_required %>
               </span>
               <% if @batch_certification.present? %>
                 <div class="errors">
@@ -106,29 +106,8 @@
 
 <script type="text/javascript">
   $(function() {
-    $('[data-units-achieved-editable]').add('#batchUpdateButtons').hide();
-    $('#batchUpdateButton').add('#resetButton').button();
-    $('#editModeButton').button({icons: {primary: "ui-icon-locked"}}).bind('click', function() {
-      if ($(this).is(':checked')) {
-        $(this).button("option", "icons", {primary: 'ui-icon-unlocked'});
-      }
-      else {
-        $(this).button("option", "icons", {primary: 'ui-icon-locked'});
-      }
-      $('[data-units-achieved-read-only]').toggle();
-      $('[data-units-achieved-editable]').toggle();
-      $('#batchUpdateButtons').toggle();
-      $('input[type="text"]').not(':hidden').first().focus();
-    });
-    $('#resetButton').click(function() {
-      $('#batchUpdateButtons').toggle();
-      window.location.href = "<%=employee_path @employee%>";
-    });
-
-    <% if @batch_certification.present? %>
-    $('#editModeButton').click();
-    $('#editModeButton').button("option", "icons", {primary: 'ui-icon-unlocked'});
-    <% end %>
-
+    setup_batch_certification(
+      "<%=employee_path @employee%>",
+      "<%=@batch_certification.present?%>");
   })
 </script>

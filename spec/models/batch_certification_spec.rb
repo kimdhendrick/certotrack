@@ -2,13 +2,20 @@ require 'spec_helper'
 
 describe BatchCertification do
   let (:employee) { create(:employee) }
-  let! (:certification) { create(:certification, employee: employee) }
+  let! (:certification_type) { create(:units_based_certification_type) }
+  let! (:certification) { create(:certification, certification_type: certification_type, employee: employee) }
 
   describe '#initialize' do
-    it 'should set employee' do
+    it 'should set employee if provided' do
       batch_certification = BatchCertification.new({employee_id: employee.id, certification_ids: {}})
 
       batch_certification.employee.should == employee
+    end
+
+    it 'should set certification type if provided' do
+      batch_certification = BatchCertification.new({certification_type_id: certification_type.id, certification_ids: {}})
+
+      batch_certification.certification_type.should == certification_type
     end
 
     it 'should set certifications' do

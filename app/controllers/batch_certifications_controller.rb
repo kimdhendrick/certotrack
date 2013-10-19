@@ -10,18 +10,18 @@ class BatchCertificationsController < ApplicationController
 
     _authorize_certifications(batch_certification.certifications)
 
-    success = batch_certification.update
-
-    if !success
-      @batch_certification = batch_certification
-      @certifications = batch_certification.certifications
-      @employee = batch_certification.employee
-      render 'employees/show'
+    if !batch_certification.update
+      _handle_error(batch_certification)
       return
     end
 
     flash[:notice] = 'Certifications updated successfully.'
-    redirect_to employee_path(params[:employee_id]) and return
+
+    if batch_certification.employee_update?
+      redirect_to employee_path(params[:employee_id]) and return
+    else
+      redirect_to certification_type_path(params[:certification_type_id]) and return
+    end
   end
 
   def load_batch_certification(instance = nil)
@@ -29,6 +29,22 @@ class BatchCertificationsController < ApplicationController
   end
 
   private
+
+  def _handle_error(batch_certification)
+    @certifications = batch_certification.certifications
+    @batch_certification = batch_certification
+
+    if batch_certification.employee_update?
+      @employee = batch_certification.employee
+      render 'employees/show'
+    else
+      @certification_type = batch_certification.certification_type
+      @certifications_count = @certifications.count
+      @non_certified_employees = batch_certification.non_certified_employees
+      @non_certified_employee_count = @non_certified_employees.count
+      render 'certification_types/show'
+    end
+  end
 
   def _authorize_certifications(certifications)
     certifications.map(&:model).each do |certification|

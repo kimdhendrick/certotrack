@@ -2,8 +2,9 @@ require 'spec_helper'
 
 describe BatchCertificationsController do
   let(:customer) { create(:customer) }
-  let(:employee) { create(:employee) }
-  let(:certification) { create(:certification, customer: customer) }
+  let(:employee) { create(:employee, customer: customer) }
+  let(:certification_type) { create(:certification_type, customer: customer) }
+  let(:certification) { create(:certification, certification_type: certification_type, customer: customer) }
 
   describe 'POST create' do
     before do
@@ -32,7 +33,31 @@ describe BatchCertificationsController do
       response.should redirect_to(employee)
     end
 
+    it 'should redirect to certification type on success' do
+      params = {
+        certification_type_id: certification_type.id,
+        certification_ids: []
+      }
+
+      post :create, params, {}
+
+      response.should redirect_to(certification_type)
+    end
+
     it 'should render employee show on error' do
+      BatchCertification.any_instance.stub(:update).and_return(false)
+
+      params = {
+        certification_type_id: certification_type.id,
+        certification_ids: []
+      }
+
+      post :create, params, {}
+
+      response.should render_template('certification_types/show')
+    end
+
+    it 'should render certification type show on error' do
       BatchCertification.any_instance.stub(:update).and_return(false)
 
       params = {

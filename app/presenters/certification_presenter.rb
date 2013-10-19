@@ -62,7 +62,7 @@ class CertificationPresenter
     "Units Achieved"
   end
 
-  def units_achieved
+  def units_achieved_of_required
     return '' unless model.units_based?
     "#{model.units_achieved} of #{model.units_required}"
   end
