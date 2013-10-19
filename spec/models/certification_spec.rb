@@ -5,8 +5,9 @@ describe Certification do
   it { should belong_to(:certification_type) }
   it { should belong_to(:employee) }
   it { should belong_to(:active_certification_period) }
-  it do
-    should validate_uniqueness_of(:certification_type_id).
+  it 'should validate the uniqueness of certification_type_id' do
+    certification = create(:certification)
+    certification.should validate_uniqueness_of(:certification_type_id).
              scoped_to(:employee_id).
              with_message(/already assigned to this Employee. Please update existing Certification/)
 
