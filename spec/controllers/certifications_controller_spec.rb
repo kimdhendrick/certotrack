@@ -670,4 +670,65 @@ describe CertificationsController do
       end
     end
   end
+
+  describe 'GET certification_history' do
+    context 'when certification user' do
+      let (:current_user) { stub_certification_user(customer) }
+
+      before do
+        sign_in current_user
+      end
+
+      it 'assigns certification presenter as @certification' do
+        certification = create(:certification, customer: customer)
+        get :certification_history, {:id => certification.to_param}, {}
+        assigns(:certification).should eq(certification)
+      end
+
+      it 'assigns certification_periods as @certification_periods' do
+        certification_period = create(:certification_period)
+        certification = create(:certification, customer: customer, active_certification_period: certification_period)
+        get :certification_history, {:id => certification.to_param}, {}
+        assigns(:certification_periods).map(&:model).should eq([certification_period])
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin(customer)
+      end
+
+      it 'assigns certification presenter as @certification' do
+        certification = create(:certification, customer: customer)
+        get :certification_history, {:id => certification.to_param}, {}
+        assigns(:certification).should eq(certification)
+      end
+
+      it 'assigns certification_periods as @certification_periods' do
+        certification_period = create(:certification_period)
+        certification = create(:certification, customer: customer, active_certification_period: certification_period)
+        get :certification_history, {:id => certification.to_param}, {}
+        assigns(:certification_periods).map(&:model).should eq([certification_period])
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'does not assign certification presenter as @certification' do
+        certification = create(:certification, customer: customer)
+        get :certification_history, {:id => certification.to_param}, {}
+        assigns(:certification).should be_nil
+      end
+
+      it 'does not assign certification_periods as @certification_periods' do
+        certification_period = create(:certification_period)
+        certification = create(:certification, customer: customer, active_certification_period: certification_period)
+        get :certification_history, {:id => certification.to_param}, {}
+        assigns(:certification_periods).should be_nil
+      end
+    end
+  end
 end

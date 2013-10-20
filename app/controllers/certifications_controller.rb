@@ -6,7 +6,8 @@ class CertificationsController < ApplicationController
                 :load_certification_type_service,
                 :load_employee_service
 
-  before_action :_set_certification, only: [:show, :edit, :update, :destroy, :recertify, :save_recertification]
+  before_action :_set_certification,
+                only: [:show, :edit, :update, :destroy, :recertify, :save_recertification, :certification_history]
 
   check_authorization
 
@@ -66,6 +67,10 @@ class CertificationsController < ApplicationController
     employee = @certification.employee
     @certification_service.delete_certification(@certification)
     redirect_to certification_type, notice: "Certification for #{employee.last_name}, #{employee.first_name} deleted."
+  end
+
+  def certification_history
+    @certification_periods = CertificationPeriodListPresenter.new(@certification.certification_periods).present
   end
 
   def load_certification_service(service = CertificationService.new)

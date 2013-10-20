@@ -57,6 +57,10 @@ class CertificationPresenter
     employee.name
   end
 
+  def certification_type
+    model.certification_type.name
+  end
+
   def units_achieved_label
     return '' unless model.units_based?
     "Units Achieved"
@@ -86,5 +90,13 @@ class CertificationPresenter
 
   def recertify_link
     @template.link_to 'Recertify', @template.new_certification_recertification_path(model)
+  end
+
+  def show_history_link
+    @template.link_to 'Certification History', @template.certification_history_path(model)
+  end
+
+  def show_link
+    @template.link_to 'Back to certification', @template.certification_path(model)
   end
 end

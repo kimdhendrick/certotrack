@@ -31,4 +31,5 @@ Certotrack::Application.routes.draw do
   resources :certifications do
     resources :recertifications, only: [:new, :create]
   end
+  get '/certification_history/:id', to: 'certifications#certification_history', as: 'certification_history'
 end

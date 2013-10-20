@@ -1,0 +1,57 @@
+<% certification_presenter_for do |certification| %>
+  <h1>Show Certification History</h1>
+
+  <%= link_to 'Home', root_path %>
+
+  <p>
+    <b>Employee</b>
+    <%= certification.employee_show_link %>
+  </p>
+
+  <p>
+    <b>Certification Type</b>
+    <%= certification.certification_type_show_link %>
+  </p>
+
+  <p>
+    <b>Certification Interval</b>
+    <%= certification.interval %>
+  </p>
+
+
+  <h2>Certification History (<%= certification.certification_type %>)</h2>
+
+  <span data-historical="data-historical">
+        <table border="1">
+          <thead>
+          <tr>
+            <th>&nbsp;</th>
+            <th>Last Certification Date</th>
+            <th>Expiration Date</th>
+            <% if certification.units_based? %>
+              <th>Units</th>
+            <% end %>
+            <th>Trainer</th>
+            <th>Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @certification_periods.each do |certification_period| %>
+            <tr>
+              <td><%= certification_period.active %></td>
+              <td><%= certification_period.last_certification_date %></td>
+              <td><%= certification_period.expiration_date %></td>
+              <% if certification.units_based? %>
+                <td><%= certification_period.units %></td>
+              <% end %>
+              <td><%= certification_period.trainer %></td>
+              <td><%= certification_period.status %></td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </span>
+
+  <br/>
+  <%= certification.show_link %>
+<% end %>

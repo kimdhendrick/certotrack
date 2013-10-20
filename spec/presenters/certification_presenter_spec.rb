@@ -113,6 +113,17 @@ describe CertificationPresenter do
     CertificationPresenter.new(certification).employee_name.should == 'Last, First'
   end
 
+  it 'should respond to certification_type' do
+    certification_type = create(:certification_type, name: 'CertType')
+    certification = create(
+      :certification,
+      customer: create(:customer),
+      certification_type: certification_type
+    )
+
+    CertificationPresenter.new(certification).certification_type.should == 'CertType'
+  end
+
   it 'should respond to employee' do
     employee = create(:employee)
     certification = create(

@@ -940,5 +940,168 @@ describe 'Certifications', slow: true do
       page.should have_content 'Certification for Brown, Joe deleted'
     end
   end
+
+  describe 'Certification History' do
+    let!(:cpr_certification_type) do
+      create(:certification_type,
+             name: 'CPR',
+             interval: Interval::SIX_MONTHS.text,
+             customer: customer
+      )
+    end
+
+    let!(:truck_certification_type) do
+      create(:certification_type,
+             name: 'Level III Truck Inspection',
+             interval: Interval::SIX_MONTHS.text,
+             units_required: 30,
+             customer: customer
+      )
+    end
+
+    let!(:employee) do
+      create(:employee,
+             employee_number: 'JB3',
+             first_name: 'Joe',
+             last_name: 'Brown',
+             location: create(:location, name: 'Denver'),
+             customer_id: customer.id
+      )
+    end
+
+    let(:cpr_certification) do
+      create(
+        :certification,
+        employee: employee,
+        certification_type: cpr_certification_type,
+        last_certification_date: Date.new(2005, 7, 8),
+        trainer: 'Trainer Tim',
+        customer: employee.customer)
+    end
+
+    let(:truck_certification) do
+      create(
+        :certification,
+        employee: employee,
+        certification_type: truck_certification_type,
+        last_certification_date: Date.new(2007, 12, 10),
+        trainer: 'Trucker Joe',
+        customer: employee.customer)
+    end
+
+    before do
+      login_as_certification_user(customer)
+    end
+
+    context 'date based certification' do
+      it 'should list historical certifications' do
+        visit certification_path(cpr_certification)
+
+        click_on 'Recertify'
+        fill_in 'Trainer', with: 'Instructor Joe'
+        fill_in 'Last Certification Date', with: '07/08/2006'
+        click_button 'Recertify'
+
+        page.should have_link 'Certification History'
+
+        page.should have_link 'Home'
+        #PENDING_NAVIGATION page.should have_link 'All Certifications'
+
+        click_on 'Certification History'
+
+        page.should have_content 'Show Certification History'
+
+        page.should have_content 'Employee'
+        page.should have_content 'Certification Type'
+        page.should have_content 'Certification Interval'
+
+        page.should have_link 'Brown, Joe'
+        page.should have_link 'CPR'
+        page.should have_content '6 months'
+
+        page.should have_content 'Certification History (CPR)'
+
+        within '[data-historical] table thead tr' do
+          page.should have_content 'Last Certification Date'
+          page.should have_content 'Expiration Date'
+          page.should have_content 'Trainer'
+          page.should have_content 'Status'
+        end
+
+        within '[data-historical] table tbody tr:nth-of-type(1)' do
+          page.should have_content 'Active'
+          page.should have_content '07/08/2006'
+#TODO          #page.should have_content '12/08/2006'
+          page.should have_content 'Instructor Joe'
+          #page.should have_content 'Expired'
+        end
+
+        within '[data-historical] table tbody tr:nth-of-type(2)' do
+          page.should_not have_content 'Active'
+          page.should have_content '07/08/2005'
+#TODO          page.should have_content '12/08/2005'
+          page.should have_content 'Trainer Tim'
+          page.should_not have_content 'Expired'
+        end
+      end
+    end
+
+    context 'units based certification' do
+      it 'should list historical certifications', js:true do
+        visit certification_path(truck_certification)
+
+        click_on 'Recertify'
+        fill_in 'Trainer', with: 'Instructor Joe'
+        fill_in 'Last Certification Date', with: '07/08/2008'
+        fill_in 'Units Achieved', with: '7'
+        click_button 'Recertify'
+
+        page.should have_link 'Certification History'
+
+        page.should have_link 'Home'
+        #PENDING_NAVIGATION page.should have_link 'All Certifications'
+
+        click_on 'Certification History'
+
+        page.should have_content 'Show Certification History'
+
+        page.should have_content 'Employee'
+        page.should have_content 'Certification Type'
+        page.should have_content 'Certification Interval'
+
+        page.should have_link 'Brown, Joe'
+        page.should have_link 'Level III Truck Inspection'
+        page.should have_content '6 months'
+
+        page.should have_content 'Certification History (Level III Truck Inspection)'
+
+        within '[data-historical] table thead tr' do
+          page.should have_content 'Last Certification Date'
+          page.should have_content 'Expiration Date'
+          page.should have_content 'Units'
+          page.should have_content 'Trainer'
+          page.should have_content 'Status'
+        end
+
+        within '[data-historical] table tbody tr:nth-of-type(1)' do
+          page.should have_content 'Active'
+          page.should have_content '07/08/2008'
+#TODO          #page.should have_content '12/08/2009'
+          page.should have_content '7 of 30'
+          page.should have_content 'Instructor Joe'
+          #page.should have_content 'Expired'
+        end
+
+        within '[data-historical] table tbody tr:nth-of-type(2)' do
+          page.should_not have_content 'Active'
+          page.should have_content '12/10/2007'
+#TODO          page.should have_content '06/10/2008'
+          page.should have_content '0 of 30'
+          page.should have_content 'Trucker Joe'
+          page.should_not have_content 'Expired'
+        end
+      end
+    end
+  end
 end
 
