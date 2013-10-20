@@ -3,14 +3,19 @@ require 'spec_helper'
 describe CertificationPresenter do
   include ActionView::TestCase::Behavior
 
+  it 'should respond to id' do
+    certification = create(:certification)
+    CertificationPresenter.new(certification).id.should == certification.id
+  end
+
   it 'should respond true to units_based?' do
     certification = create(:units_based_certification, customer: create(:customer))
-    CertificationPresenter.new(certification, nil).units_based?.should be_true
+    CertificationPresenter.new(certification).units_based?.should be_true
   end
 
   it 'should respond false to units_based?' do
     certification = create(:certification)
-    CertificationPresenter.new(certification, nil).units_based?.should be_false
+    CertificationPresenter.new(certification).units_based?.should be_false
   end
 
   it 'should respond to interval' do
@@ -25,7 +30,7 @@ describe CertificationPresenter do
       customer: certification_type.customer
     )
 
-    CertificationPresenter.new(certification, nil).interval.should == '3 months'
+    CertificationPresenter.new(certification).interval.should == '3 months'
   end
 
   it 'should respond to trainer' do
@@ -35,7 +40,7 @@ describe CertificationPresenter do
       trainer: 'Trainer'
     )
 
-    CertificationPresenter.new(certification, nil).trainer.should == 'Trainer'
+    CertificationPresenter.new(certification).trainer.should == 'Trainer'
   end
 
   it 'should respond to status' do
@@ -45,8 +50,8 @@ describe CertificationPresenter do
       expiration_date: Date.new(2012, 4, 2)
     )
 
-    CertificationPresenter.new(certification, nil).status.should == certification.status
-    CertificationPresenter.new(certification, nil).status.text.should == 'Expired'
+    CertificationPresenter.new(certification).status.should == certification.status
+    CertificationPresenter.new(certification).status.text.should == 'Expired'
   end
 
   it 'should respond to comments' do
@@ -56,7 +61,7 @@ describe CertificationPresenter do
       comments: 'Hello!'
     )
 
-    CertificationPresenter.new(certification, nil).comments.should == 'Hello!'
+    CertificationPresenter.new(certification).comments.should == 'Hello!'
   end
 
   it 'should respond to sort_key' do
@@ -67,7 +72,7 @@ describe CertificationPresenter do
       comments: 'Hello!'
     )
 
-    CertificationPresenter.new(certification, nil).sort_key.should == 'Cert type 123'
+    CertificationPresenter.new(certification).sort_key.should == 'Cert type 123'
   end
 
   it 'should respond to last_inspection_date' do

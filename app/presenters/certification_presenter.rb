@@ -4,9 +4,7 @@ class CertificationPresenter
 
   attr_reader :model
 
-  #TODO KDB
   delegate :id, to: :model
-  #TODO KDB
   delegate :units_required, to: :model
 
   delegate :units_based?, to: :model
