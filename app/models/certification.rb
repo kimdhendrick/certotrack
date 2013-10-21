@@ -57,7 +57,8 @@ class Certification < ActiveRecord::Base
   end
 
   def recertify(attributes)
-   self.active_certification_period = CertificationPeriod.new(attributes)
+    self.active_certification_period = CertificationPeriod.new(attributes)
+    self.expiration_date = ExpirationCalculator.new.calculate(last_certification_date, Interval.find_by_text(interval))
   end
 
   private

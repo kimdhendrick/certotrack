@@ -246,7 +246,10 @@ describe Certification do
 
     before do
       @original_certification_period = subject.active_certification_period
+      Timecop.freeze(Time.local(2013, 10, 20, 18, 16, 00))
     end
+
+    after { Timecop.return }
 
     it 'should keep the original certification period in its history' do
       subject.recertify(attributes)
@@ -265,7 +268,7 @@ describe Certification do
 
     it 'should set new start_date in active_certification_period' do
       subject.recertify(start_date: start_date)
-      subject.active_certification_period.start_date.should == start_date
+      subject.last_certification_date.should == start_date
     end
 
     it 'should set new comments in active_certification_period' do
@@ -281,6 +284,11 @@ describe Certification do
     it 'should create a valid active_certification_period' do
       subject.recertify(attributes)
       subject.active_certification_period.should be_valid
+    end
+
+    it 'should recalculate expiration_date' do
+      subject.recertify(attributes)
+      subject.expiration_date.should == Time.utc(2014, 10, 23, 0, 16, 0)
     end
   end
 end
