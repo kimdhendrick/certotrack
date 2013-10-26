@@ -975,6 +975,7 @@ describe 'Certifications', slow: true do
         employee: employee,
         certification_type: cpr_certification_type,
         last_certification_date: Date.new(2005, 7, 8),
+        expiration_date: Date.new(2006, 1, 8),
         trainer: 'Trainer Tim',
         customer: employee.customer)
     end
@@ -985,6 +986,7 @@ describe 'Certifications', slow: true do
         employee: employee,
         certification_type: truck_certification_type,
         last_certification_date: Date.new(2007, 12, 10),
+        expiration_date: Date.new(2008, 6, 10),
         trainer: 'Trucker Joe',
         customer: employee.customer)
     end
@@ -1031,15 +1033,15 @@ describe 'Certifications', slow: true do
         within '[data-historical] table tbody tr:nth-of-type(1)' do
           page.should have_content 'Active'
           page.should have_content '07/08/2006'
-#TODO          #page.should have_content '12/08/2006'
+          page.should have_content '01/08/2007'
           page.should have_content 'Instructor Joe'
-          #page.should have_content 'Expired'
+          page.should have_content 'Expired'
         end
 
         within '[data-historical] table tbody tr:nth-of-type(2)' do
           page.should_not have_content 'Active'
           page.should have_content '07/08/2005'
-#TODO          page.should have_content '12/08/2005'
+          page.should have_content '01/08/2006'
           page.should have_content 'Trainer Tim'
           page.should_not have_content 'Expired'
         end
@@ -1086,16 +1088,16 @@ describe 'Certifications', slow: true do
         within '[data-historical] table tbody tr:nth-of-type(1)' do
           page.should have_content 'Active'
           page.should have_content '07/08/2008'
-#TODO          #page.should have_content '12/08/2009'
+          page.should have_content '01/08/2009'
           page.should have_content '7 of 30'
           page.should have_content 'Instructor Joe'
-          #page.should have_content 'Expired'
+          page.should have_content 'Recertify'
         end
 
         within '[data-historical] table tbody tr:nth-of-type(2)' do
           page.should_not have_content 'Active'
           page.should have_content '12/10/2007'
-#TODO          page.should have_content '06/10/2008'
+          page.should have_content '06/10/2008'
           page.should have_content '0 of 30'
           page.should have_content 'Trucker Joe'
           page.should_not have_content 'Expired'
