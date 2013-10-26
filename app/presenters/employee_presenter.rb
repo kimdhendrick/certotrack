@@ -32,6 +32,10 @@ class EmployeePresenter
     model.errors.count
   end
 
+  def show_batch_edit_button?(certifications)
+    certifications.any?(&:units_based?)
+  end
+
   def edit_link
     @template.link_to 'Edit', @template.edit_employee_path(model)
   end

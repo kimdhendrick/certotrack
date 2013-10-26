@@ -3,12 +3,12 @@ require 'spec_helper'
 describe CertificationTypePresenter do
   it 'should respond to id' do
     certification_type = create(:certification_type)
-    CertificationTypePresenter.new(certification_type, nil).id.should == certification_type.id
+    CertificationTypePresenter.new(certification_type).id.should == certification_type.id
   end
 
   it 'should respond to name' do
     certification_type = create(:certification_type, name: 'My Name')
-    CertificationTypePresenter.new(certification_type, nil).name.should == 'My Name'
+    CertificationTypePresenter.new(certification_type).name.should == 'My Name'
   end
 
   it 'should respond to interval' do
@@ -17,17 +17,28 @@ describe CertificationTypePresenter do
       customer: create(:customer),
       interval: Interval::THREE_MONTHS.text
     )
-    CertificationPresenter.new(certification_type, nil).interval.should == '3 months'
+    CertificationPresenter.new(certification_type).interval.should == '3 months'
   end
 
   it 'should respond true to units_based?' do
     certification_type = create(:certification_type, units_required: 10, customer: create(:customer))
-    CertificationTypePresenter.new(certification_type, nil).units_based?.should be_true
+    CertificationTypePresenter.new(certification_type).units_based?.should be_true
   end
 
   it 'should respond false to units_based?' do
     certification_type = create(:certification_type, customer: create(:customer))
-    CertificationTypePresenter.new(certification_type, nil).units_based?.should be_false
+    CertificationTypePresenter.new(certification_type).units_based?.should be_false
+  end
+
+  it 'should respond true to show_batch_edit_button?' do
+    certification_type = create(:certification_type, units_required: 10, customer: create(:customer))
+    certification = build(:certification, certification_type: certification_type)
+    CertificationTypePresenter.new(certification_type).show_batch_edit_button?([certification]).should be_true
+  end
+
+  it 'should respond false to show_batch_edit_button?' do
+    certification_type = create(:certification_type, units_required: 10, customer: create(:customer))
+    CertificationTypePresenter.new(certification_type).show_batch_edit_button?([]).should be_false
   end
 
   it 'should respond to interval_code' do
@@ -37,12 +48,12 @@ describe CertificationTypePresenter do
       interval: Interval::THREE_MONTHS.text
     )
 
-    CertificationTypePresenter.new(certification_type, nil).interval_code.should == Interval::THREE_MONTHS.id
+    CertificationTypePresenter.new(certification_type).interval_code.should == Interval::THREE_MONTHS.id
   end
 
   it 'should respond to sort_key' do
     certification_type = create(:certification_type, customer: create(:customer), name: 'MyCertType')
-    CertificationTypePresenter.new(certification_type, nil).sort_key.should == 'MyCertType'
+    CertificationTypePresenter.new(certification_type).sort_key.should == 'MyCertType'
   end
 
   it 'should respond to units_required_sort_key' do

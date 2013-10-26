@@ -52,5 +52,19 @@ describe EmployeePresenter do
     EmployeePresenter.new(employee).error_count.should == employee.errors.count
   end
 
+  it 'should respond true to show_batch_edit_button?' do
+    certification_type = create(:certification_type, units_required: 10, customer: create(:customer))
+    certification = build(:certification, employee: employee, certification_type: certification_type)
+    EmployeePresenter.new(employee).show_batch_edit_button?([certification]).should be_true
+  end
 
+  it 'should respond false to show_batch_edit_button? when no units based certifications' do
+    certification_type = create(:certification_type, units_required: 0, customer: create(:customer))
+    certification = build(:certification, employee: employee, certification_type: certification_type)
+    EmployeePresenter.new(employee).show_batch_edit_button?([certification]).should be_false
+  end
+
+  it 'should respond false to show_batch_edit_button? when no certifications' do
+    EmployeePresenter.new(employee).show_batch_edit_button?([]).should be_false
+  end
 end

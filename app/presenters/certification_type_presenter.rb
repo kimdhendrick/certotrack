@@ -33,6 +33,10 @@ class CertificationTypePresenter
     model.units_required
   end
 
+  def show_batch_edit_button?(certifications)
+    model.units_based? && certifications.present?
+  end
+
   def edit_link
     @template.link_to 'Edit', @template.edit_certification_type_path(model)
   end

@@ -46,7 +46,7 @@
 
   <h2>Certified Employees</h2>
 
-  <% if certification_type.units_based? %>
+  <% if certification_type.show_batch_edit_button?(@certifications) %>
     <input type="checkbox" id="editModeButton"/>
     <label for="editModeButton">Batch Edit Mode</label>
   <% end %>
