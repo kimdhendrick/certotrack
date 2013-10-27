@@ -88,7 +88,91 @@ describe CertificationsController do
     end
   end
 
-  describe 'new' do
+  describe 'GET expired' do
+    it 'calls get_expired with current_user and params' do
+      my_user = stub_certification_user(customer)
+      sign_in my_user
+      fake_certification_service = controller.load_certification_service(Faker.new([]))
+      fake_certification_list_presenter = Faker.new([])
+      #noinspection RubyArgCount
+      CertificationListPresenter.stub(:new).and_return(fake_certification_list_presenter)
+      params = {sort: 'name', direction: 'asc'}
+
+      get :expired, params
+
+      fake_certification_service.received_messages.should == [:get_expired_certifications]
+      fake_certification_service.received_params[0].should == my_user
+
+      fake_certification_list_presenter.received_message.should == :present
+      fake_certification_list_presenter.received_params[0]['sort'].should == 'name'
+      fake_certification_list_presenter.received_params[0]['direction'].should == 'asc'
+    end
+
+    context 'when certification user' do
+      before do
+        sign_in stub_certification_user(customer)
+      end
+
+      it 'assigns certifications as @certifications' do
+        certification = build(:certification)
+        CertificationService.any_instance.stub(:get_expired_certifications).and_return([certification])
+
+        get :expired
+
+        assigns(:certifications).map(&:model).should eq([certification])
+      end
+
+      it 'assigns certifications_count' do
+        CertificationService.any_instance.stub(:get_expired_certifications).and_return([build(:certification)])
+
+        get :expired
+
+        assigns(:certification_count).should eq(1)
+      end
+
+      it 'assigns report_title' do
+        CertificationService.any_instance.stub(:get_expired_certifications).and_return([build(:certification)])
+
+        get :expired
+
+        assigns(:report_title).should eq('Expired Certifications')
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'assigns certifications as @certifications' do
+        certification = build(:certification)
+        CertificationService.any_instance.stub(:get_expired_certifications).and_return([certification])
+
+        get :expired
+
+        assigns(:certifications).map(&:model).should eq([certification])
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      describe 'GET expired' do
+        it 'does not assign certification as @certification' do
+          certification = build(:certification)
+          CertificationService.any_instance.stub(:get_expired_certifications).and_return([certification])
+
+          get :expired
+
+          assigns(:certifications).should be_nil
+        end
+      end
+    end
+  end
+
+  describe 'GET new' do
     context 'when certification user' do
       let (:current_user) { stub_certification_user(customer) }
 
@@ -227,7 +311,7 @@ describe CertificationsController do
     end
   end
 
-  describe 'create' do
+  describe 'POST create' do
     context 'when certification user' do
       let (:current_user) { stub_certification_user(customer) }
       before do

@@ -36,13 +36,13 @@ describe CertotrackController do
     context 'a certification user' do
       it 'assigns certification counts' do
         sign_in stub_certification_user(customer)
-        fake_certification_service = Faker.new(3)
-        controller.load_certification_service(fake_certification_service)
+        CertificationService.any_instance.stub(:count_all_certifications).and_return(3)
+        CertificationService.any_instance.stub(:count_expired_certifications).and_return(2)
 
         get :home
 
         assigns(:total_certification_count).should eq(3)
-        fake_certification_service.received_message.should == :count_all_certifications
+        assigns(:total_expired_certification_count).should eq(2)
       end
     end
 

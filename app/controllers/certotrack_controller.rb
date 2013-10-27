@@ -12,6 +12,7 @@ class CertotrackController < ApplicationController
 
     if can? :read, :certification
       @total_certification_count = @certification_service.count_all_certifications(current_user)
+      @total_expired_certification_count = @certification_service.count_expired_certifications(current_user)
     end
   end
 

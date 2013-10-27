@@ -5,15 +5,21 @@ class CertificationService
   end
 
   def get_all_certifications(current_user)
-    current_user.admin? ?
-      Certification.all :
-      current_user.certifications
+    _get_all_certifications(current_user)
   end
 
   def count_all_certifications(current_user)
     current_user.admin? ?
       Certification.count :
       current_user.certifications.count
+  end
+
+  def count_expired_certifications(current_user)
+    _get_all_certifications(current_user).select { |e| e.expired? }.count
+  end
+
+  def get_expired_certifications(current_user)
+    _get_all_certifications(current_user).select { |e| e.expired? }
   end
 
   def new_certification(current_user, employee_id, certification_type_id)
@@ -58,5 +64,13 @@ class CertificationService
   def recertify(certification, attributes)
     certification.recertify(attributes)
     certification.save
+  end
+
+  private
+
+  def _get_all_certifications(current_user)
+    current_user.admin? ?
+      Certification.all :
+      current_user.certifications
   end
 end

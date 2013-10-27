@@ -20,6 +20,16 @@ class CertificationsController < ApplicationController
     @certification_count = @certifications.count
   end
 
+  def expired
+    authorize! :read, :certification
+
+    @report_title = 'Expired Certifications'
+    certifications_collection = @certification_service.get_expired_certifications(current_user)
+    @certifications = CertificationListPresenter.new(certifications_collection).present(params)
+    @certification_count = @certifications.count
+    render 'certifications/index'
+  end
+
   def new
     authorize! :create, :certification
 
