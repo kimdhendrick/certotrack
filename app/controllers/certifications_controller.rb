@@ -7,7 +7,7 @@ class CertificationsController < ApplicationController
                 :load_employee_service
 
   before_action :_set_certification,
-                only: [:show, :edit, :update, :destroy, :recertify, :save_recertification, :certification_history]
+                only: [:show, :edit, :update, :destroy, :certification_history]
 
   check_authorization
 
