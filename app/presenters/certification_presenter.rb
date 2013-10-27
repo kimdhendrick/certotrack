@@ -59,6 +59,14 @@ class CertificationPresenter
     model.certification_type.name
   end
 
+  def interval_code
+    Interval.lookup(interval)
+  end
+
+  def units_required_sort_key
+    model.units_required
+  end
+
   def units_achieved_label
     return '' unless model.units_based?
     "Units Achieved"

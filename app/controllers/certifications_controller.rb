@@ -11,6 +11,15 @@ class CertificationsController < ApplicationController
 
   check_authorization
 
+  def index
+    authorize! :read, :certification
+
+    @report_title = 'All Employee Certifications'
+    certifications_collection = @certification_service.get_all_certifications(current_user)
+    @certifications = CertificationListPresenter.new(certifications_collection).present(params)
+    @certification_count = @certifications.count
+  end
+
   def new
     authorize! :create, :certification
 

@@ -54,6 +54,10 @@ class User < ActiveRecord::Base
     customer.equipments
   end
 
+  def certifications
+    customer.certifications
+  end
+
   def locations
     customer.locations
   end

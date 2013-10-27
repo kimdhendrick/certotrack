@@ -129,6 +129,19 @@ describe CertificationPresenter do
     CertificationPresenter.new(certification).certification_type.should == 'CertType'
   end
 
+  it 'should respond to interval_code' do
+    certification_type = create(:certification_type, interval: Interval::THREE_MONTHS.text)
+    certification = create(:certification, certification_type: certification_type)
+
+    CertificationTypePresenter.new(certification).interval_code.should == Interval::THREE_MONTHS.id
+  end
+
+  it 'should respond to units_required_sort_key' do
+    certification_type = build(:certification_type, units_required: 3)
+    certification = build(:certification, certification_type: certification_type)
+    CertificationPresenter.new(certification).units_required_sort_key.should == 3
+  end
+
   it 'should respond to employee' do
     employee = create(:employee)
     certification = create(

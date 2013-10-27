@@ -37,6 +37,13 @@ describe User do
       user.equipments.should == [equipment]
     end
 
+    it 'should respond to certifications' do
+      user = create(:user, username: 'ABC')
+      certification = create(:certification, customer: user.customer)
+
+      user.certifications.should == [certification]
+    end
+
     it 'should respond to locations' do
       user = create(:user, username: 'ABC')
       location = create(:location, customer: user.customer)

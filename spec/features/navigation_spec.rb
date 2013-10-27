@@ -211,6 +211,12 @@ describe 'Navigation', slow: true do
       click_and_test_link_with_title 'Create Employee'
     end
 
+    it 'navigates All Employee Certifications' do
+      visit certifications_path
+      page.should have_link 'Home'
+      page.should have_link 'Create Certification'
+    end
+
     it 'navigates Create Certification Type' do
       visit new_certification_type_path
       page.should have_content 'Create Certification Type'
@@ -318,13 +324,39 @@ describe 'Navigation', slow: true do
       click_and_test_link_with_title 'Create Certification Type'
     end
 
-    it 'navigates Edit Certification', js:true do
+    it 'navigates Certification', js:true do
       certification = create(:certification,
                              employee: create(:employee, first_name: 'First', last_name: 'Last', customer: customer),
                              certification_type: create(:certification_type, customer: customer)
       )
       visit certification_path certification.id
+      click_on 'Create Certification'
 
+      page.should have_link 'Home'
+      page.should have_link 'All Employee Certifications'
+      page.should have_link 'Create Certification Type'
+      page.should have_link 'Create Employee'
+
+      visit certification_path certification.id
+      click_on 'Certification History'
+
+      page.should have_link 'Home'
+      page.should have_link 'All Employee Certifications'
+
+      visit certification_path certification.id
+
+      page.should have_link 'Home'
+      page.should have_link 'All Employee Certifications'
+      page.should have_link 'Create Certification'
+      page.should have_link 'Create Employee'
+
+      click_on 'Recertify'
+
+      page.should have_link 'Home'
+      page.should have_link 'All Employee Certifications'
+      page.should have_link 'Create Certification'
+
+      visit certification_path certification.id
       click_on 'Edit'
 
       alert = page.driver.browser.switch_to.alert
@@ -334,8 +366,7 @@ describe 'Navigation', slow: true do
       page.should have_content 'Edit Certification'
 
       page.should have_link 'Home'
-      #PENDING NAVIGATION
-      #page.should have_link 'All Certification'
+      page.should have_link 'All Employee Certifications'
       page.should have_link 'Create Certification'
 
       page.should have_link 'Delete'

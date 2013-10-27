@@ -1,7 +1,57 @@
 require 'spec_helper'
 
 describe CertificationService do
-  describe 'new_certification' do
+  describe '#count_all_certifications' do
+    let(:my_customer) { create(:customer) }
+    before do
+      certification_one = create(:certification, customer: my_customer)
+      certification_two = create(:certification)
+    end
+
+    context 'an admin user' do
+      it 'should return count that includes all equipment' do
+        admin_user = create(:user, roles: ['admin'])
+
+        CertificationService.new.count_all_certifications(admin_user).should == 2
+      end
+    end
+
+    context 'a regular user' do
+      it "should return count that includes only that user's equipment" do
+        user = create(:user, customer: my_customer)
+
+        CertificationService.new.count_all_certifications(user).should == 1
+      end
+    end
+  end
+
+  describe 'get_all_certifications' do
+    let(:my_customer) { create(:customer) }
+
+    context 'an admin user' do
+      it 'should return all certifications' do
+        admin_user = create(:user, roles: ['admin'])
+
+        my_certification = create(:certification, customer: my_customer)
+        other_certification = create(:certification)
+
+        CertificationService.new.get_all_certifications(admin_user).should == [my_certification, other_certification]
+      end
+    end
+
+    context 'a regular user' do
+      it "should return only that user's certifications" do
+        my_user = create(:user, customer: my_customer)
+
+        my_certification = create(:certification, customer: my_customer)
+        other_certification = create(:certification)
+
+        CertificationService.new.get_all_certifications(my_user).should == [my_certification]
+      end
+    end
+  end
+
+  describe '#new_certification' do
     it 'calls CertificationFactory' do
       user = create(:user)
       employee = create(:employee)
@@ -20,7 +70,7 @@ describe CertificationService do
     end
   end
 
-  describe 'certify' do
+  describe '#certify' do
     it 'creates a certification' do
       employee = create(:employee)
       certification_type = create(:certification_type)
@@ -164,7 +214,7 @@ describe CertificationService do
     end
   end
 
-  describe 'delete_certification' do
+  describe '#delete_certification' do
     it 'destroys the requested certification' do
       certification = create(:certification)
       CertificationPeriod.count.should > 0

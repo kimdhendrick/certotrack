@@ -1,0 +1,10 @@
+<h1><%=@report_title%></h1>
+
+<div>Total: <%=@certification_count%></div>
+
+<%= link_to 'Home', root_path %> |
+<%= link_to 'Create Certification', new_certification_path %>
+
+<%= render 'certification_list'%>
+
+<%= will_paginate @certifications %>

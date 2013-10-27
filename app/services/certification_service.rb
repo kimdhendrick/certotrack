@@ -4,6 +4,18 @@ class CertificationService
     @certification_factory = params[:certification_factory] || CertificationFactory.new
   end
 
+  def get_all_certifications(current_user)
+    current_user.admin? ?
+      Certification.all :
+      current_user.certifications
+  end
+
+  def count_all_certifications(current_user)
+    current_user.admin? ?
+      Certification.count :
+      current_user.certifications.count
+  end
+
   def new_certification(current_user, employee_id, certification_type_id)
     @certification_factory.new_instance(
       current_user_id: current_user.id,
