@@ -38,11 +38,13 @@ describe CertotrackController do
         sign_in stub_certification_user(customer)
         CertificationService.any_instance.stub(:count_all_certifications).and_return(3)
         CertificationService.any_instance.stub(:count_expired_certifications).and_return(2)
+        CertificationService.any_instance.stub(:count_expiring_certifications).and_return(1)
 
         get :home
 
         assigns(:total_certification_count).should eq(3)
         assigns(:total_expired_certification_count).should eq(2)
+        assigns(:total_expiring_certification_count).should eq(1)
       end
     end
 

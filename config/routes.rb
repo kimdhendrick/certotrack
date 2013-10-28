@@ -33,4 +33,5 @@ Certotrack::Application.routes.draw do
   end
   get '/certification_history/:id', to: 'certifications#certification_history', as: 'certification_history'
   get 'expired_certifications', action: 'expired', controller: 'certifications'
+  get 'expiring_certifications', action: 'expiring', controller: 'certifications'
 end

@@ -15,19 +15,21 @@ class CertificationsController < ApplicationController
     authorize! :read, :certification
 
     @report_title = 'All Employee Certifications'
-    certifications_collection = @certification_service.get_all_certifications(current_user)
-    @certifications = CertificationListPresenter.new(certifications_collection).present(params)
-    @certification_count = @certifications.count
+    _render_certifications(@certification_service.get_all_certifications(current_user))
   end
 
   def expired
     authorize! :read, :certification
 
     @report_title = 'Expired Certifications'
-    certifications_collection = @certification_service.get_expired_certifications(current_user)
-    @certifications = CertificationListPresenter.new(certifications_collection).present(params)
-    @certification_count = @certifications.count
-    render 'certifications/index'
+    _render_certifications(@certification_service.get_expired_certifications(current_user))
+  end
+
+  def expiring
+    authorize! :read, :certification
+
+    @report_title = 'Certifications Expiring Soon'
+    _render_certifications(@certification_service.get_expiring_certifications(current_user))
   end
 
   def new
@@ -105,6 +107,12 @@ class CertificationsController < ApplicationController
   end
 
   private
+
+  def _render_certifications(certifications_collection)
+    @certifications = CertificationListPresenter.new(certifications_collection).present(params)
+    @certification_count = @certifications.count
+    render 'certifications/index'
+  end
 
   def _set_certification
     certification_pending_authorization = Certification.find(params[:id])

@@ -57,6 +57,18 @@ describe Certification do
 
       certification.should_not be_expired
     end
+
+    it 'should answer expiring? when expiring' do
+      certification.expiration_date = Date.tomorrow
+
+      certification.should be_expiring
+    end
+
+    it 'should answer expiring? when not expiring' do
+      certification.expiration_date = Date.today
+
+      certification.should_not be_expiring
+    end
   end
 
   context 'units based certification type' do

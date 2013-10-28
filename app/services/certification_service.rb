@@ -18,8 +18,16 @@ class CertificationService
     _get_all_certifications(current_user).select { |e| e.expired? }.count
   end
 
+  def count_expiring_certifications(current_user)
+    _get_all_certifications(current_user).select { |e| e.expiring? }.count
+  end
+
   def get_expired_certifications(current_user)
     _get_all_certifications(current_user).select { |e| e.expired? }
+  end
+
+  def get_expiring_certifications(current_user)
+    _get_all_certifications(current_user).select { |e| e.expiring? }
   end
 
   def new_certification(current_user, employee_id, certification_type_id)
