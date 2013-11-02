@@ -503,6 +503,7 @@ describe 'Certifications', slow: true do
       page.should have_link 'Create Employee'
 
       page.should have_content 'Employee'
+      page.should have_link 'Create Employee'
       page.should have_content 'Certification Type'
       page.should have_link 'Create Certification Type'
       page.should_not have_content 'Units Achieved'
@@ -538,6 +539,7 @@ describe 'Certifications', slow: true do
       page.should have_content 'Create Certification'
 
       page.should have_content 'Employee'
+      page.should have_link 'Create Employee'
       page.should have_content 'Certification Type'
       page.should have_content 'Create Certification Type'
       page.should have_content 'Trainer'

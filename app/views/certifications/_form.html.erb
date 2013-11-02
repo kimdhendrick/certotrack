@@ -3,19 +3,9 @@
   <%= render 'errors'%>
 
   <% if @certification.employee.present? && @source != 'certification' %>
-    <div class="field">
-      Employee <%= link_to "#{@certification.employee.first_name} #{@certification.employee.last_name}", @certification.employee %>
-      <%= hidden_field(:certification, :employee_id, value: @certification.employee_id) %>
-    </div>
+    <%= render partial: 'show_employee', locals: {f: f} %>
   <% else %>
-    <div class="field">
-      <%= f.label :employee_id, 'Employee' %>
-      <br/>
-      <%= select(:certification, :employee_id,
-                 options_from_collection_for_select(@employees, 'id', 'name',
-                                                    @certification.employee_id),
-                 {prompt: 'Select Employee...'}) %>
-    </div>
+    <%= render partial: 'choose_employee', locals: {f: f} %>
   <% end %>
 
   <% if (user_action == 'Recertify') %>

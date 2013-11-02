@@ -1,0 +1,10 @@
+<div class="field">
+  <%= f.label :employee_id, 'Employee' %>
+  <br/>
+  <%= select(:certification, :employee_id,
+             options_from_collection_for_select(@employees, 'id', 'name',
+                                                @certification.employee_id),
+             {prompt: 'Select Employee...'}) %>
+</div>
+
+<%= link_to 'Create Employee', new_employee_path %>
