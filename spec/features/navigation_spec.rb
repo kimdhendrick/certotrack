@@ -232,7 +232,6 @@ describe 'Navigation', slow: true do
       page.should have_content 'Show Certification Type'
 
       page.should have_link 'Home'
-      page.should have_link 'All Certification Types'
       page.should have_link 'Search Certification Types'
       page.should have_link 'Create Certification Type'
 
@@ -240,9 +239,6 @@ describe 'Navigation', slow: true do
       page.should have_link 'Delete'
 
       click_and_test_home_link
-
-      visit certification_type_path certification_type.id
-      click_and_test_link_with_title 'All Certification Types'
 
       visit certification_type_path certification_type.id
       click_and_test_link_with_title 'Search Certification Types'
@@ -270,16 +266,12 @@ describe 'Navigation', slow: true do
       page.should have_content 'Edit Certification Type'
 
       page.should have_link 'Home'
-      page.should have_link 'All Certification Types'
+      page.should have_link 'Search Certification Types'
       page.should have_link 'Create Certification Type'
 
       page.should have_link 'Delete'
 
       click_and_test_home_link
-      visit certification_type_path certification_type.id
-      click_on 'Edit'
-
-      click_and_test_link_with_title 'All Certification Types'
       visit certification_type_path certification_type.id
       click_on 'Edit'
 

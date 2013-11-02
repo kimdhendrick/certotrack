@@ -83,7 +83,7 @@ describe 'Certification Type', slow: true do
       visit certification_type_path certification_type.id
 
       page.should have_link 'Home'
-      page.should have_link 'All Certification Types'
+      page.should have_link 'Search Certification Types'
       page.should have_link 'Create Certification Type'
 
       page.should have_content 'Name CPR'
@@ -164,7 +164,7 @@ describe 'Certification Type', slow: true do
       visit certification_type_path certification_type.id
 
       page.should have_link 'Home'
-      page.should have_link 'All Certification Types'
+      page.should have_link 'Search Certification Types'
       page.should have_link 'Create Certification Type'
 
       page.should have_content 'Name CPR'
@@ -218,7 +218,7 @@ describe 'Certification Type', slow: true do
 
       page.should have_content 'Edit Certification Type'
       page.should have_link 'Home'
-      page.should have_link 'All Certification Types'
+      page.should have_link 'Search Certification Types'
       page.should have_link 'Create Certification Type'
 
       page.should have_link 'Delete'
