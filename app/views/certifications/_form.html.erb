@@ -33,7 +33,7 @@
            id="certification_last_certification_date"
            name="certification[last_certification_date]"
            type="text"
-           value="<%= DateHelpers.date_to_string(@certification.last_certification_date) %>">
+           value="<%= DateHelpers.date_to_string(@certification.last_certification_date || Date.today) %>">
   </div>
 
   <div class="field">
