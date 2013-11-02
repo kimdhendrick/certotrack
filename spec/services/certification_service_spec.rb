@@ -9,7 +9,7 @@ describe CertificationService do
     end
 
     context 'an admin user' do
-      it 'should return count that includes all equipment' do
+      it 'should return count that includes all certifications' do
         admin_user = create(:user, roles: ['admin'])
 
         CertificationService.new.count_all_certifications(admin_user).should == 2
@@ -17,7 +17,7 @@ describe CertificationService do
     end
 
     context 'a regular user' do
-      it "should return count that includes only that user's equipment" do
+      it "should return count that includes only that user's certifications" do
         user = create(:user, customer: my_customer)
 
         CertificationService.new.count_all_certifications(user).should == 1
@@ -35,7 +35,7 @@ describe CertificationService do
     end
 
     context 'an admin user' do
-      it 'should return count that includes all equipment' do
+      it 'should return count that includes all expired certifications' do
         admin_user = create(:user, roles: ['admin'])
 
         CertificationService.new.count_expired_certifications(admin_user).should == 2
@@ -43,7 +43,7 @@ describe CertificationService do
     end
 
     context 'a regular user' do
-      it "should return count that includes only that user's equipment" do
+      it "should return count that includes only that user's expired certifications" do
         user = create(:user, customer: my_customer)
 
         CertificationService.new.count_expired_certifications(user).should == 1
@@ -61,7 +61,7 @@ describe CertificationService do
     end
 
     context 'an admin user' do
-      it 'should return count that includes all equipment' do
+      it 'should return count that includes all expiring certifications' do
         admin_user = create(:user, roles: ['admin'])
 
         CertificationService.new.count_expiring_certifications(admin_user).should == 2
@@ -69,7 +69,7 @@ describe CertificationService do
     end
 
     context 'a regular user' do
-      it "should return count that includes only that user's equipment" do
+      it "should return count that includes only that user's expiring certifications" do
         user = create(:user, customer: my_customer)
 
         CertificationService.new.count_expiring_certifications(user).should == 1
@@ -77,52 +77,28 @@ describe CertificationService do
     end
   end
 
-  describe '#get_expired_certifications' do
+  describe '#count_units_based_certifications' do
     let(:my_customer) { create(:customer) }
-    let!(:certification_one_expired) { create(:certification, customer: my_customer, expiration_date: Date.yesterday) }
-    let!(:certification_one_valid) { create(:certification, customer: my_customer, expiration_date: Date.tomorrow) }
-    let!(:certification_two_expired) { create(:certification, expiration_date: Date.yesterday) }
-    let!(:certification_two_valid) { create(:certification, expiration_date: Date.tomorrow) }
+    before do
+      units_based_certification_for_my_customer = create(:units_based_certification, customer: my_customer, expiration_date: Date.yesterday)
+      date_based_certification_for_my_customer = create(:certification, customer: my_customer, expiration_date: Date.tomorrow)
+      units_based_certification_for_other_customer = create(:units_based_certification, expiration_date: Date.yesterday)
+      date_based_certification_for_other_customer = create(:certification, expiration_date: Date.tomorrow)
+    end
 
     context 'an admin user' do
-      it 'should return count that includes all equipment' do
+      it 'should return count that includes all units based certifications' do
         admin_user = create(:user, roles: ['admin'])
 
-        CertificationService.new.get_expired_certifications(admin_user).should =~
-          [certification_one_expired, certification_two_expired]
+        CertificationService.new.count_units_based_certifications(admin_user).should == 2
       end
     end
 
     context 'a regular user' do
-      it "should return count that includes only that user's equipment" do
+      it "should return count that includes only that user's units based certifications" do
         user = create(:user, customer: my_customer)
 
-        CertificationService.new.get_expired_certifications(user).should == [certification_one_expired]
-      end
-    end
-  end
-
-  describe '#get_expiring_certifications' do
-    let(:my_customer) { create(:customer) }
-    let!(:certification_one_expiring) { create(:certification, customer: my_customer, expiration_date: Date.tomorrow) }
-    let!(:certification_one_expired) { create(:certification, customer: my_customer, expiration_date: Date.today) }
-    let!(:certification_two_expiring) { create(:certification, expiration_date: Date.tomorrow) }
-    let!(:certification_two_expired) { create(:certification, expiration_date: Date.today) }
-
-    context 'an admin user' do
-      it 'should return count that includes all equipment' do
-        admin_user = create(:user, roles: ['admin'])
-
-        CertificationService.new.get_expiring_certifications(admin_user).should =~
-          [certification_one_expiring, certification_two_expiring]
-      end
-    end
-
-    context 'a regular user' do
-      it "should return count that includes only that user's equipment" do
-        user = create(:user, customer: my_customer)
-
-        CertificationService.new.get_expiring_certifications(user).should == [certification_one_expiring]
+        CertificationService.new.count_units_based_certifications(user).should == 1
       end
     end
   end
@@ -149,6 +125,83 @@ describe CertificationService do
         other_certification = create(:certification)
 
         CertificationService.new.get_all_certifications(my_user).should == [my_certification]
+      end
+    end
+  end
+
+  describe '#get_expired_certifications' do
+    let(:my_customer) { create(:customer) }
+    let!(:certification_one_expired) { create(:certification, customer: my_customer, expiration_date: Date.yesterday) }
+    let!(:certification_one_valid) { create(:certification, customer: my_customer, expiration_date: Date.tomorrow) }
+    let!(:certification_two_expired) { create(:certification, expiration_date: Date.yesterday) }
+    let!(:certification_two_valid) { create(:certification, expiration_date: Date.tomorrow) }
+
+    context 'an admin user' do
+      it 'should return count that includes all expired certifications' do
+        admin_user = create(:user, roles: ['admin'])
+
+        CertificationService.new.get_expired_certifications(admin_user).should =~
+          [certification_one_expired, certification_two_expired]
+      end
+    end
+
+    context 'a regular user' do
+      it "should return count that includes only that user's expired certifications" do
+        user = create(:user, customer: my_customer)
+
+        CertificationService.new.get_expired_certifications(user).should == [certification_one_expired]
+      end
+    end
+  end
+
+  describe '#get_expiring_certifications' do
+    let(:my_customer) { create(:customer) }
+    let!(:certification_one_expiring) { create(:certification, customer: my_customer, expiration_date: Date.tomorrow) }
+    let!(:certification_one_expired) { create(:certification, customer: my_customer, expiration_date: Date.today) }
+    let!(:certification_two_expiring) { create(:certification, expiration_date: Date.tomorrow) }
+    let!(:certification_two_expired) { create(:certification, expiration_date: Date.today) }
+
+    context 'an admin user' do
+      it 'should return count that includes all expiring certifications' do
+        admin_user = create(:user, roles: ['admin'])
+
+        CertificationService.new.get_expiring_certifications(admin_user).should =~
+          [certification_one_expiring, certification_two_expiring]
+      end
+    end
+
+    context 'a regular user' do
+      it "should return count that includes only that user's expiring certifications" do
+        user = create(:user, customer: my_customer)
+
+        CertificationService.new.get_expiring_certifications(user).should == [certification_one_expiring]
+      end
+    end
+  end
+
+  describe '#get_units_based_certifications' do
+    let(:my_customer) { create(:customer) }
+    before do
+      @units_based_certification_for_my_customer = create(:units_based_certification, customer: my_customer, expiration_date: Date.yesterday)
+      @date_based_certification_for_my_customer = create(:certification, customer: my_customer, expiration_date: Date.tomorrow)
+      @units_based_certification_for_other_customer = create(:units_based_certification, expiration_date: Date.yesterday)
+      @date_based_certification_for_other_customer = create(:certification, expiration_date: Date.tomorrow)
+    end
+
+    context 'an admin user' do
+      it 'should return count that includes all units based certifications' do
+        admin_user = create(:user, roles: ['admin'])
+
+        CertificationService.new.get_units_based_certifications(admin_user).should =~
+          [@units_based_certification_for_my_customer, @units_based_certification_for_other_customer]
+      end
+    end
+
+    context 'a regular user' do
+      it "should return count that includes only that user's units based certifications" do
+        user = create(:user, customer: my_customer)
+
+        CertificationService.new.get_units_based_certifications(user).should == [@units_based_certification_for_my_customer]
       end
     end
   end

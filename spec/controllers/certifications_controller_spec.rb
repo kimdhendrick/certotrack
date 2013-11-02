@@ -255,7 +255,91 @@ describe CertificationsController do
       end
     end
   end
+  
+  describe 'GET units_based' do
+    it 'calls get_units_based with current_user and params' do
+      my_user = stub_certification_user(customer)
+      sign_in my_user
+      fake_certification_service = controller.load_certification_service(Faker.new([]))
+      fake_certification_list_presenter = Faker.new([])
+      #noinspection RubyArgCount
+      CertificationListPresenter.stub(:new).and_return(fake_certification_list_presenter)
+      params = {sort: 'name', direction: 'asc'}
 
+      get :units_based, params
+
+      fake_certification_service.received_messages.should == [:get_units_based_certifications]
+      fake_certification_service.received_params[0].should == my_user
+
+      fake_certification_list_presenter.received_message.should == :present
+      fake_certification_list_presenter.received_params[0]['sort'].should == 'name'
+      fake_certification_list_presenter.received_params[0]['direction'].should == 'asc'
+    end
+
+    context 'when certification user' do
+      before do
+        sign_in stub_certification_user(customer)
+      end
+
+      it 'assigns certifications as @certifications' do
+        certification = build(:certification)
+        CertificationService.any_instance.stub(:get_units_based_certifications).and_return([certification])
+
+        get :units_based
+
+        assigns(:certifications).map(&:model).should eq([certification])
+      end
+
+      it 'assigns certifications_count' do
+        CertificationService.any_instance.stub(:get_units_based_certifications).and_return([build(:certification)])
+
+        get :units_based
+
+        assigns(:certification_count).should eq(1)
+      end
+
+      it 'assigns report_title' do
+        CertificationService.any_instance.stub(:get_units_based_certifications).and_return([build(:certification)])
+
+        get :units_based
+
+        assigns(:report_title).should eq('Units Based Certifications')
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'assigns certifications as @certifications' do
+        certification = build(:certification)
+        CertificationService.any_instance.stub(:get_units_based_certifications).and_return([certification])
+
+        get :units_based
+
+        assigns(:certifications).map(&:model).should eq([certification])
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      describe 'GET units_based' do
+        it 'does not assign certification as @certification' do
+          certification = build(:certification)
+          CertificationService.any_instance.stub(:get_units_based_certifications).and_return([certification])
+
+          get :units_based
+
+          assigns(:certifications).should be_nil
+        end
+      end
+    end
+  end
+  
   describe 'GET new' do
     context 'when certification user' do
       let (:current_user) { stub_certification_user(customer) }

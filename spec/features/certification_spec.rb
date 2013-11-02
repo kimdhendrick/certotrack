@@ -125,7 +125,7 @@ describe 'Certifications', slow: true do
       page.should have_content 'Certification type already assigned to this Employee. Please update existing Certification.'
     end
 
-    it 'should show a certification', js: true do
+    it 'should show a certification' do
       create(:certification,
              employee: employee,
              certification_type: cpr_certification_type,
@@ -731,7 +731,6 @@ describe 'Certifications', slow: true do
   end
 
   describe 'Edit Certification from Show Certification page', js: true do
-
     let!(:cpr_certification_type) do
       create(:certification_type,
              name: 'CPR',
@@ -1038,7 +1037,7 @@ describe 'Certifications', slow: true do
     end
 
     context 'units based certification' do
-      it 'should list historical certifications', js: true do
+      it 'should list historical certifications' do
         visit certification_path(truck_certification)
 
         click_on 'Recertify'
@@ -1150,7 +1149,7 @@ describe 'Certifications', slow: true do
         login_as_certification_user(customer)
       end
 
-      it 'should list all employee certifications', js: true do
+      it 'should list all employee certifications' do
         visit '/'
         page.should have_content 'All Employee Certifications (2)'
         click_link 'All Employee Certifications (2)'
@@ -1242,7 +1241,7 @@ describe 'Certifications', slow: true do
         login_as_admin
       end
 
-      it 'should show all certifications for all customers', js: true do
+      it 'should show all certifications for all customers' do
         click_link 'All Employee Certifications (2)'
 
         page.should have_content 'CPR'
@@ -1523,7 +1522,7 @@ describe 'Certifications', slow: true do
         login_as_certification_user(customer)
       end
 
-      it 'should list expired employee certifications', js: true do
+      it 'should list expired employee certifications' do
         visit '/'
         page.should have_content 'Expired Certifications (1)'
         click_link 'Expired Certifications (1)'
@@ -1606,7 +1605,7 @@ describe 'Certifications', slow: true do
         login_as_admin
       end
 
-      it 'should show expired certification for all customers', js: true do
+      it 'should show expired certification for all customers' do
         click_link 'Expired Certifications (2)'
 
         page.should have_content 'CPR'
@@ -1881,7 +1880,7 @@ describe 'Certifications', slow: true do
         login_as_certification_user(customer)
       end
 
-      it 'should list expiring employee certifications', js: true do
+      it 'should list expiring employee certifications' do
         visit '/'
         page.should have_content 'Certifications Expiring Soon (1)'
         click_link 'Certifications Expiring Soon (1)'
@@ -1964,7 +1963,7 @@ describe 'Certifications', slow: true do
         login_as_admin
       end
 
-      it 'should show expiring certifications for all customers', js: true do
+      it 'should show expiring certifications for all customers' do
         click_link 'Certifications Expiring Soon (2)'
 
         page.should have_content 'CPR'
@@ -2180,6 +2179,87 @@ describe 'Certifications', slow: true do
           page.should have_link '2'
           page.should have_link '3'
           page.should have_link 'Next'
+        end
+      end
+    end
+  end
+
+  describe 'Units Based Certifications' do
+    context 'when a certification user' do
+      before do
+        cpr_certification_type =
+          create(:certification_type,
+                 name: 'CPR',
+                 interval: Interval::ONE_YEAR.text,
+                 customer: customer
+          )
+
+        truck_certification_type =
+          create(:units_based_certification_type,
+                 name: 'Level III Truck Inspection',
+                 units_required: 100,
+                 interval: Interval::SIX_MONTHS.text,
+                 customer: customer
+          )
+
+        employee =
+          create(:employee,
+                 employee_number: 'JB3',
+                 first_name: 'Joe',
+                 last_name: 'Brown',
+                 location: create(:location, name: 'Denver'),
+                 customer_id: customer.id
+          )
+
+        date_based_cpr_certification =
+          create(
+            :certification,
+            employee: employee,
+            certification_type: cpr_certification_type,
+            customer: employee.customer)
+
+        units_based_truck_certification =
+          create(
+            :certification,
+            employee: employee,
+            certification_type: truck_certification_type,
+            last_certification_date: Date.yesterday,
+            expiration_date: Date.tomorrow,
+            units_achieved: 13,
+            trainer: 'Trucker Joe',
+            customer: employee.customer)
+
+        login_as_certification_user(customer)
+      end
+
+      it 'should list units based employee certifications' do
+        visit '/'
+        page.should have_content 'Units Based Certifications (1)'
+        click_link 'Units Based Certifications (1)'
+
+        page.should have_content 'Units Based Certifications'
+        page.should have_content 'Total: 1'
+
+        within 'table thead tr' do
+          page.should have_link 'Certification Type'
+          page.should have_link 'Interval'
+          page.should have_link 'Units'
+          page.should have_link 'Status'
+          page.should have_link 'Employee'
+          page.should have_link 'Trainer'
+          page.should have_link 'Last Certification Date'
+          page.should have_link 'Expiration Date'
+        end
+
+        within 'table tbody tr:nth-of-type(1)' do
+          page.should have_link 'Level III Truck Inspection'
+          page.should have_content '6 months'
+          page.should have_content '13 of 100'
+          page.should have_content 'Pending'
+          page.should have_content 'Brown, Joe'
+          page.should have_content 'Trucker Joe'
+          page.should have_content Date.yesterday.strftime("%m/%d/%Y")
+          page.should have_content Date.tomorrow.strftime("%m/%d/%Y")
         end
       end
     end

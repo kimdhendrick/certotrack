@@ -32,6 +32,13 @@ class CertificationsController < ApplicationController
     _render_certifications(@certification_service.get_expiring_certifications(current_user))
   end
 
+  def units_based
+    authorize! :read, :certification
+
+    @report_title = 'Units Based Certifications'
+    _render_certifications(@certification_service.get_units_based_certifications(current_user))
+  end
+
   def new
     authorize! :create, :certification
 

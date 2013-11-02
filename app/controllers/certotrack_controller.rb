@@ -14,6 +14,7 @@ class CertotrackController < ApplicationController
       @total_certification_count = @certification_service.count_all_certifications(current_user)
       @total_expired_certification_count = @certification_service.count_expired_certifications(current_user)
       @total_expiring_certification_count = @certification_service.count_expiring_certifications(current_user)
+      @total_units_based_certification_count = @certification_service.count_units_based_certifications(current_user)
     end
   end
 
