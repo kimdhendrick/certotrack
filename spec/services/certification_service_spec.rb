@@ -103,6 +103,33 @@ describe CertificationService do
     end
   end
 
+  describe '#count_recertification_required_certifications' do
+    let(:my_customer) { create(:customer) }
+    before do
+      certification_type = create(:units_based_certification_type, units_required: 1)
+      recertify_certification_for_my_customer = create(:units_based_certification, customer: my_customer, certification_type: certification_type, units_achieved: 0)
+      valid_certification_for_my_customer = create(:certification, customer: my_customer, certification_type: certification_type, units_achieved: 1)
+      recertify_certification_for_other_customer = create(:units_based_certification, certification_type: certification_type, units_achieved: 0)
+      valid_certification_for_other_customer = create(:certification, certification_type: certification_type, units_achieved: 1)
+    end
+
+    context 'an admin user' do
+      it 'should return count that includes all units based certifications' do
+        admin_user = create(:user, roles: ['admin'])
+
+        CertificationService.new.count_recertification_required_certifications(admin_user).should == 2
+      end
+    end
+
+    context 'a regular user' do
+      it "should return count that includes only that user's units based certifications" do
+        user = create(:user, customer: my_customer)
+
+        CertificationService.new.count_recertification_required_certifications(user).should == 1
+      end
+    end
+  end
+
   describe '#get_all_certifications' do
     let(:my_customer) { create(:customer) }
 
@@ -202,6 +229,34 @@ describe CertificationService do
         user = create(:user, customer: my_customer)
 
         CertificationService.new.get_units_based_certifications(user).should == [@units_based_certification_for_my_customer]
+      end
+    end
+  end
+
+  describe '#get_recertification_required_certifications' do
+    let(:my_customer) { create(:customer) }
+    before do
+      certification_type = create(:units_based_certification_type, units_required: 1)
+      @recertify_certification_for_my_customer = create(:units_based_certification, customer: my_customer, certification_type: certification_type, units_achieved: 0)
+      @valid_certification_for_my_customer = create(:certification, customer: my_customer, certification_type: certification_type, units_achieved: 1)
+      @recertify_certification_for_other_customer = create(:units_based_certification, certification_type: certification_type, units_achieved: 0)
+      @valid_certification_for_other_customer = create(:certification, certification_type: certification_type, units_achieved: 1)
+    end
+
+    context 'an admin user' do
+      it 'should return count that includes all units based certifications' do
+        admin_user = create(:user, roles: ['admin'])
+
+        CertificationService.new.get_recertification_required_certifications(admin_user).should =~
+          [@recertify_certification_for_my_customer, @recertify_certification_for_other_customer]
+      end
+    end
+
+    context 'a regular user' do
+      it "should return count that includes only that user's units based certifications" do
+        user = create(:user, customer: my_customer)
+
+        CertificationService.new.get_recertification_required_certifications(user).should == [@recertify_certification_for_my_customer]
       end
     end
   end

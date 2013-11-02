@@ -2,6 +2,7 @@
 <p><%= link_to "Expired Certifications (#{@total_expired_certification_count})", expired_certifications_path %></p>
 <p><%= link_to "Certifications Expiring Soon (#{@total_expiring_certification_count})", expiring_certifications_path %></p>
 <p><%= link_to "Units Based Certifications (#{@total_units_based_certification_count})", units_based_certifications_path %></p>
+<p><%= link_to "Recertification Required Certifications (#{@total_recertification_required_certification_count})", recertification_required_certifications_path %></p>
 <p><%= link_to 'Create Certification Type', new_certification_type_path %></p>
 <p><%= link_to 'All Certification Types', certification_types_path %></p>
 <p><%= link_to 'Search Certification Types', search_certification_types_path %></p>

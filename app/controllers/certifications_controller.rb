@@ -39,6 +39,13 @@ class CertificationsController < ApplicationController
     _render_certifications(@certification_service.get_units_based_certifications(current_user))
   end
 
+  def recertification_required
+    authorize! :read, :certification
+
+    @report_title = 'Recertification Required Certifications'
+    _render_certifications(@certification_service.get_recertification_required_certifications(current_user))
+  end
+
   def new
     authorize! :create, :certification
 

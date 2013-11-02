@@ -28,6 +28,10 @@ class CertificationService
     get_units_based_certifications(current_user).count
   end
 
+  def count_recertification_required_certifications(current_user)
+    get_recertification_required_certifications(current_user).count
+  end
+
   def get_expired_certifications(current_user)
     get_all_certifications(current_user).select { |e| e.expired? }
   end
@@ -38,6 +42,10 @@ class CertificationService
 
   def get_units_based_certifications(current_user)
     get_all_certifications(current_user).select { |e| e.units_based? }
+  end
+
+  def get_recertification_required_certifications(current_user)
+    get_all_certifications(current_user).select { |e| e.recertification_required? }
   end
 
   def new_certification(current_user, employee_id, certification_type_id)

@@ -2264,4 +2264,90 @@ describe 'Certifications', slow: true do
       end
     end
   end
+
+  describe 'Recertification Required Certifications' do
+    context 'when a certification user' do
+      before do
+        cpr_certification_type =
+          create(:units_based_certification_type,
+                 name: 'CPR',
+                 units_required: 100,
+                 interval: Interval::ONE_YEAR.text,
+                 customer: customer
+          )
+
+        truck_certification_type =
+          create(:units_based_certification_type,
+                 name: 'Level III Truck Inspection',
+                 units_required: 100,
+                 interval: Interval::SIX_MONTHS.text,
+                 customer: customer
+          )
+
+        employee =
+          create(:employee,
+                 employee_number: 'JB3',
+                 first_name: 'Joe',
+                 last_name: 'Brown',
+                 location: create(:location, name: 'Denver'),
+                 customer_id: customer.id
+          )
+
+        units_based_truck_certification_requiring_recertification =
+          create(
+            :certification,
+            employee: employee,
+            certification_type: truck_certification_type,
+            last_certification_date: Date.new(2009, 1, 1),
+            expiration_date: Date.new(2010, 1, 1),
+            units_achieved: 13,
+            trainer: 'Trucker Joe',
+            customer: employee.customer)
+
+        valid_units_based_truck_certification =
+          create(
+            :certification,
+            employee: employee,
+            certification_type: cpr_certification_type,
+            last_certification_date: Date.yesterday,
+            expiration_date: Date.tomorrow,
+            units_achieved: 101,
+            trainer: 'Trucker Jim',
+            customer: employee.customer)
+
+        login_as_certification_user(customer)
+      end
+
+      it 'should list recertification required employee certifications' do
+        visit '/'
+        page.should have_content 'Recertification Required Certifications (1)'
+        click_link 'Recertification Required Certifications (1)'
+
+        page.should have_content 'Recertification Required Certifications'
+        page.should have_content 'Total: 1'
+
+        within 'table thead tr' do
+          page.should have_link 'Certification Type'
+          page.should have_link 'Interval'
+          page.should have_link 'Units'
+          page.should have_link 'Status'
+          page.should have_link 'Employee'
+          page.should have_link 'Trainer'
+          page.should have_link 'Last Certification Date'
+          page.should have_link 'Expiration Date'
+        end
+
+        within 'table tbody tr:nth-of-type(1)' do
+          page.should have_link 'Level III Truck Inspection'
+          page.should have_content '6 months'
+          page.should have_content '13 of 100'
+          page.should have_content 'Recertify'
+          page.should have_content 'Brown, Joe'
+          page.should have_content 'Trucker Joe'
+          page.should have_content '01/01/2009'
+          page.should have_content '01/01/2010'
+        end
+      end
+    end
+  end
 end

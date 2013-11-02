@@ -36,14 +36,16 @@ describe CertotrackController do
     context 'a certification user' do
       it 'assigns certification counts' do
         sign_in stub_certification_user(customer)
-        CertificationService.any_instance.stub(:count_all_certifications).and_return(4)
+        CertificationService.any_instance.stub(:count_all_certifications).and_return(5)
+        CertificationService.any_instance.stub(:count_recertification_required_certifications).and_return(4)
         CertificationService.any_instance.stub(:count_units_based_certifications).and_return(3)
         CertificationService.any_instance.stub(:count_expired_certifications).and_return(2)
         CertificationService.any_instance.stub(:count_expiring_certifications).and_return(1)
 
         get :home
 
-        assigns(:total_certification_count).should eq(4)
+        assigns(:total_certification_count).should eq(5)
+        assigns(:total_recertification_required_certification_count).should eq(4)
         assigns(:total_units_based_certification_count).should eq(3)
         assigns(:total_expired_certification_count).should eq(2)
         assigns(:total_expiring_certification_count).should eq(1)

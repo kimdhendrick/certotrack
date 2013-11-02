@@ -35,4 +35,5 @@ Certotrack::Application.routes.draw do
   get 'expired_certifications', action: 'expired', controller: 'certifications'
   get 'expiring_certifications', action: 'expiring', controller: 'certifications'
   get 'units_based_certifications', action: 'units_based', controller: 'certifications'
+  get 'recertification_required_certifications', action: 'recertification_required', controller: 'certifications'
 end

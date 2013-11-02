@@ -102,6 +102,19 @@ describe Certification do
 
       certification.status.should == Status::PENDING
     end
+
+    it 'should answer recertification_required? when recertification is required' do
+      certification.units_achieved = 99
+      certification.expiration_date = Date.yesterday
+
+      certification.should be_recertification_required
+    end
+
+    it 'should answer recertification_required? when valid' do
+      certification.units_achieved = 101
+
+      certification.should_not be_recertification_required
+    end
   end
 
   it 'should respond to status_code for sorting' do
