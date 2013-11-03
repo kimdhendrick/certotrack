@@ -79,7 +79,7 @@ describe 'Employee', slow: true do
         page.should have_link 'Home'
         page.should have_link 'Create Employee'
 
-        assert_report_headers_are_correct
+        _assert_report_headers_are_correct
 
         within 'table tbody tr:nth-of-type(1)' do
           page.should have_link 'JB3'
@@ -458,7 +458,7 @@ describe 'Employee', slow: true do
     end
   end
 
-  def assert_report_headers_are_correct
+  def _assert_report_headers_are_correct
     within 'table thead tr' do
       page.should have_link 'Employee Number'
       page.should have_link 'First Name'

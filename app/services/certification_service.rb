@@ -2,6 +2,7 @@ class CertificationService
 
   def initialize(params = {})
     @certification_factory = params[:certification_factory] || CertificationFactory.new
+    @search_service = params[:search_service] || SearchService.new
   end
 
   def get_all_certifications(current_user)
@@ -14,6 +15,18 @@ class CertificationService
     current_user.admin? ?
       Certification.count :
       current_user.certifications.count
+  end
+
+  def search_certifications(current_user, params)
+    certifications = []
+
+    if current_user.admin?
+      certifications = Certification.all.joins(:certification_type).joins(:employee)
+    else
+      certifications = current_user.certifications.joins(:certification_type).joins(:employee)
+    end
+
+    @search_service.search(certifications, params)
   end
 
   def count_expired_certifications(current_user)

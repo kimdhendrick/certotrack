@@ -439,7 +439,7 @@ describe 'Equipment', slow: true do
         page.should have_link 'Home'
         page.should have_link 'Create Equipment'
 
-        assert_report_headers_are_correct
+        _assert_report_headers_are_correct
 
         within 'table tbody tr:nth-of-type(1)' do
           page.should have_link 'Box'
@@ -484,7 +484,7 @@ describe 'Equipment', slow: true do
         page.should have_link 'Home'
         page.should have_link 'Create Equipment'
 
-        assert_report_headers_are_correct
+        _assert_report_headers_are_correct
 
         within 'tbody tr', text: 'Gauge' do
           page.should have_link 'Gauge'
@@ -518,7 +518,7 @@ describe 'Equipment', slow: true do
         page.should have_link 'Home'
         page.should have_link 'Create Equipment'
 
-        assert_report_headers_are_correct
+        _assert_report_headers_are_correct
 
         within 'tbody tr', text: 'Banana' do
           page.should have_link 'Banana'
@@ -548,7 +548,7 @@ describe 'Equipment', slow: true do
         page.should have_link 'Home'
         page.should have_link 'Create Equipment'
 
-        assert_report_headers_are_correct
+        _assert_report_headers_are_correct
 
         within 'tbody tr', text: 'MDC' do
           page.should have_link 'MDC'
@@ -856,7 +856,7 @@ describe 'Equipment', slow: true do
 
         page.should have_content 'Search Equipment'
 
-        assert_report_headers_are_correct
+        _assert_report_headers_are_correct
 
         find 'table.sortable'
 
@@ -886,7 +886,7 @@ describe 'Equipment', slow: true do
 
         page.should have_content 'Search Equipment'
 
-        assert_report_headers_are_correct
+        _assert_report_headers_are_correct
 
         find 'table.sortable'
 
@@ -921,7 +921,7 @@ describe 'Equipment', slow: true do
 
         page.should have_content 'Search Equipment'
 
-        assert_report_headers_are_correct
+        _assert_report_headers_are_correct
 
         find 'table.sortable'
 
@@ -946,7 +946,7 @@ describe 'Equipment', slow: true do
     end
   end
 
-  def assert_report_headers_are_correct
+  def _assert_report_headers_are_correct
     within 'table thead tr' do
       page.should have_link 'Name'
       page.should have_link 'Serial Number'

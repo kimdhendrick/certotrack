@@ -1,10 +1,12 @@
 class CertificationsController < ApplicationController
   include CertificationsHelper
+  include CertificationTypesHelper
 
   before_filter :authenticate_user!,
                 :load_certification_service,
                 :load_certification_type_service,
-                :load_employee_service
+                :load_employee_service,
+                :load_location_service
 
   before_action :_set_certification,
                 only: [:show, :edit, :update, :destroy, :certification_history]
@@ -106,6 +108,20 @@ class CertificationsController < ApplicationController
 
   def certification_history
     @certification_periods = CertificationPeriodListPresenter.new(@certification.certification_periods).present
+  end
+
+  def search
+    authorize! :read, :certification
+    @report_title = 'Search Certifications'
+    certification_collection = @certification_service.search_certifications(current_user, params)
+    @certifications = CertificationListPresenter.new(certification_collection).present(params)
+    @certification_count = @certifications.count
+    @locations = @location_service.get_all_locations(current_user)
+    @certification_types = get_certification_type_types
+  end
+
+  def load_location_service(service = LocationService.new)
+    @location_service ||= service
   end
 
   def load_certification_service(service = CertificationService.new)

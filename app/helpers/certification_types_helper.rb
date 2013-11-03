@@ -24,4 +24,14 @@ module CertificationTypesHelper
     @certifications = CertificationListPresenter.new(certifications_collection).present(params)
     @certifications_count = @certifications.count
   end
+
+  CertificationTypeType = Struct.new(:id, :name)
+
+  def get_certification_type_types
+    @certification_types = [
+      CertificationTypeType.new('units_based', 'Units Based'),
+      CertificationTypeType.new('date_based', 'Date Based')
+    ]
+  end
+
 end

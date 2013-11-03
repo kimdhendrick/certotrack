@@ -1,7 +1,7 @@
 class Certification < ActiveRecord::Base
   include SortableByStatus
 
-  default_scope { where('active = true') }
+  default_scope { where('certifications.active = true') }
 
   belongs_to :certification_type
   belongs_to :employee

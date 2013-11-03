@@ -1151,4 +1151,82 @@ describe CertificationsController do
       end
     end
   end
+
+  describe 'GET search' do
+    context 'when certification user' do
+      before do
+        @my_user = stub_certification_user(customer)
+        sign_in @my_user
+      end
+
+      it 'calls get_all_certifications with current_user and params' do
+        fake_certification_service = controller.load_certification_service(Faker.new([]))
+        params = {sort: 'name', direction: 'asc'}
+        #noinspection RubyArgCount
+        CertificationListPresenter.stub(:new).and_return(Faker.new([]))
+        fake_certification_list_presenter = Faker.new([])
+        #noinspection RubyArgCount
+        CertificationListPresenter.stub(:new).and_return(fake_certification_list_presenter)
+
+        get :search, params
+
+        fake_certification_service.received_message.should == :search_certifications
+        fake_certification_service.received_params[0].should == @my_user
+
+        fake_certification_list_presenter.received_message.should == :present
+        fake_certification_list_presenter.received_params[0]['sort'].should == 'name'
+        fake_certification_list_presenter.received_params[0]['direction'].should == 'asc'
+      end
+
+      it 'assigns certifications as @certifications' do
+        certifications = build(:certification, customer: customer)
+        CertificationService.any_instance.stub(:search_certifications).and_return([certifications])
+        #noinspection RubyArgCount
+        CertificationListPresenter.stub(:new).and_return(Faker.new([CertificationPresenter.new(certifications)]))
+
+        get :search
+
+        assigns(:certifications).map(&:model).should eq([certifications])
+      end
+
+      it 'assigns certifications_count' do
+        CertificationService.any_instance.stub(:search_certifications).and_return([build(:certification)])
+
+        get :search
+
+        assigns(:certification_count).should eq(1)
+      end
+
+      it 'assigns report_title' do
+        CertificationService.any_instance.stub(:get_all_certifications).and_return([build(:certification)])
+        #noinspection RubyArgCount
+        CertificationListPresenter.stub(:new).and_return(Faker.new([]))
+
+        get :search
+
+        assigns(:report_title).should eq('Search Certifications')
+      end
+
+      it 'assigns locations' do
+        location = build(:location)
+        LocationService.any_instance.stub(:get_all_locations).and_return([location])
+        #noinspection RubyArgCount
+        CertificationListPresenter.stub(:new).and_return(Faker.new([]))
+
+        get :search
+
+        assigns(:locations).should == [location]
+      end
+
+      it 'assigns certification type types' do
+        get :search
+
+        assigns(:certification_types).size.should == 2
+        assigns(:certification_types).first.id.should == 'units_based'
+        assigns(:certification_types).first.name.should == 'Units Based'
+        assigns(:certification_types).last.id.should == 'date_based'
+        assigns(:certification_types).last.name.should == 'Date Based'
+      end
+    end
+  end
 end

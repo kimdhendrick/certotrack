@@ -462,4 +462,41 @@ describe CertificationService do
       subject.recertify(certification, recertification_attrs)
     end
   end
+
+  describe 'search_certifications' do
+    let(:my_customer) { create(:customer) }
+    let(:my_user) { create(:user, customer: my_customer) }
+
+    context 'search' do
+      it 'should call SearchService to filter results' do
+        fake_search_service = Faker.new
+        certifications_service = CertificationService.new(search_service: fake_search_service)
+
+        certifications_service.search_certifications(my_user, {thing1: 'thing2'})
+
+        fake_search_service.received_message.should == :search
+        fake_search_service.received_params[0].should == []
+        fake_search_service.received_params[1].should == {thing1: 'thing2'}
+      end
+    end
+
+    context 'an admin user' do
+      it 'should return all certifications' do
+        admin_user = create(:user, roles: ['admin'])
+        my_certifications = create(:certification, customer: my_customer)
+        other_certifications = create(:certification)
+
+        CertificationService.new.search_certifications(admin_user, {}).should == [my_certifications, other_certifications]
+      end
+    end
+
+    context 'a regular user' do
+      it "should return only that user's certifications" do
+        my_certifications = create(:certification, customer: my_customer)
+        other_certifications = create(:certification)
+
+        CertificationService.new.search_certifications(my_user, {}).should == [my_certifications]
+      end
+    end
+  end
 end

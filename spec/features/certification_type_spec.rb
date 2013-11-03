@@ -322,7 +322,7 @@ describe 'Certification Type', slow: true do
         page.should have_content 'All Certification Types'
         page.should have_content 'Total: 2'
 
-        assert_report_headers_are_correct
+        _assert_report_headers_are_correct
 
         within 'table tbody tr:nth-of-type(1)' do
           page.should have_link 'CPR'
@@ -510,7 +510,7 @@ describe 'Certification Type', slow: true do
 
         page.should have_content 'Search Certification Types'
 
-        assert_report_headers_are_correct
+        _assert_report_headers_are_correct
 
         find 'table.sortable'
 
@@ -530,7 +530,7 @@ describe 'Certification Type', slow: true do
         )
 
         visit '/'
-        click_on 'Search'
+        click_on 'Search Certification Types'
 
         page.should have_content 'Search Certification Types'
 
@@ -540,7 +540,7 @@ describe 'Certification Type', slow: true do
 
         page.should have_content 'Search Certification Types'
 
-        assert_report_headers_are_correct
+        _assert_report_headers_are_correct
 
         find 'table.sortable'
 
@@ -555,7 +555,7 @@ describe 'Certification Type', slow: true do
     end
   end
 
-  def assert_report_headers_are_correct
+  def _assert_report_headers_are_correct
     within 'table thead tr' do
       page.should have_link 'Name'
       page.should have_link 'Interval'
