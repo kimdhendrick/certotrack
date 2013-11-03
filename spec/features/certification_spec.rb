@@ -152,7 +152,7 @@ describe 'Certifications', slow: true do
       page.should have_content 'Show Certification'
 
       page.should have_link 'Home'
-      page.should have_link 'All Employee Certifications'
+      page.should have_link 'Search Certifications'
       page.should have_link 'Create Certification'
       page.should have_link 'Create Employee'
 
@@ -187,7 +187,7 @@ describe 'Certifications', slow: true do
       page.should have_content 'Show Certification'
 
       page.should have_link 'Home'
-      page.should have_link 'All Employee Certifications'
+      page.should have_link 'Search Certifications'
       page.should have_link 'Create Certification'
       page.should have_link 'Create Employee'
 
@@ -219,7 +219,7 @@ describe 'Certifications', slow: true do
       page.should have_content 'Show Certification'
 
       page.should have_link 'Home'
-      page.should have_link 'All Employee Certifications'
+      page.should have_link 'Search Certifications'
       page.should have_link 'Create Certification'
       page.should have_link 'Create Employee'
 
@@ -255,7 +255,7 @@ describe 'Certifications', slow: true do
       page.should have_content 'Show Certification'
 
       page.should have_link 'Home'
-      page.should have_link 'All Employee Certifications'
+      page.should have_link 'Search Certifications'
       page.should have_link 'Create Certification'
       page.should have_link 'Create Employee'
 
@@ -327,7 +327,7 @@ describe 'Certifications', slow: true do
       page.should have_content 'Create Certification'
 
       page.should have_link 'Home'
-      page.should have_link 'All Employee Certifications'
+      page.should have_link 'Search Certifications'
       page.should have_link 'Create Certification Type'
       page.should have_link 'Create Employee'
 
@@ -398,7 +398,7 @@ describe 'Certifications', slow: true do
       page.should have_content 'Create Certification'
 
       page.should have_link 'Home'
-      page.should have_link 'All Employee Certifications'
+      page.should have_link 'Search Certifications'
       page.should have_link 'Create Certification Type'
       page.should have_link 'Create Employee'
 
@@ -499,7 +499,7 @@ describe 'Certifications', slow: true do
       page.should have_content 'Create Certification'
 
       page.should have_link 'Home'
-      page.should have_link 'All Employee Certifications'
+      page.should have_link 'Search Certifications'
       page.should have_link 'Create Employee'
 
       page.should have_content 'Employee'
@@ -574,7 +574,7 @@ describe 'Certifications', slow: true do
       page.should have_content 'Create Certification'
 
       page.should have_link 'Home'
-      page.should have_link 'All Employee Certifications'
+      page.should have_link 'Search Certifications'
       page.should have_link 'Create Employee'
 
       page.should have_content 'Employee'
@@ -664,7 +664,7 @@ describe 'Certifications', slow: true do
       page.should have_content 'Create Certification'
 
       page.should have_link 'Home'
-      page.should have_link 'All Employee Certifications'
+      page.should have_link 'Search Certifications'
       page.should have_link 'Create Certification Type'
       page.should have_link 'Create Employee'
 
@@ -793,7 +793,7 @@ describe 'Certifications', slow: true do
       page.should have_content 'Edit Certification'
 
       page.should have_link 'Home'
-      page.should have_link 'All Employee Certifications'
+      page.should have_link 'Search Certifications'
       page.should have_link 'Create Certification'
 
       page.should have_content 'Employee'
@@ -997,7 +997,7 @@ describe 'Certifications', slow: true do
         page.should have_link 'Certification History'
 
         page.should have_link 'Home'
-        page.should have_link 'All Employee Certifications'
+        page.should have_link 'Search Certifications'
 
         click_on 'Certification History'
 
@@ -1051,7 +1051,7 @@ describe 'Certifications', slow: true do
         page.should have_link 'Certification History'
 
         page.should have_link 'Home'
-        page.should have_link 'All Employee Certifications'
+        page.should have_link 'Search Certifications'
 
         click_on 'Certification History'
 

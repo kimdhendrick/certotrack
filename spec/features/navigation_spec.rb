@@ -325,7 +325,7 @@ describe 'Navigation', slow: true do
       click_on 'Create Certification'
 
       page.should have_link 'Home'
-      page.should have_link 'All Employee Certifications'
+      page.should have_link 'Search Certifications'
       page.should have_link 'Create Certification Type'
       page.should have_link 'Create Employee'
 
@@ -333,19 +333,14 @@ describe 'Navigation', slow: true do
       click_on 'Certification History'
 
       page.should have_link 'Home'
-      page.should have_link 'All Employee Certifications'
+      page.should have_link 'Search Certifications'
 
       visit certification_path certification.id
-
-      page.should have_link 'Home'
-      page.should have_link 'All Employee Certifications'
-      page.should have_link 'Create Certification'
-      page.should have_link 'Create Employee'
 
       click_on 'Recertify'
 
       page.should have_link 'Home'
-      page.should have_link 'All Employee Certifications'
+      page.should have_link 'Search Certifications'
       page.should have_link 'Create Certification'
 
       visit certification_path certification.id
@@ -358,7 +353,7 @@ describe 'Navigation', slow: true do
       page.should have_content 'Edit Certification'
 
       page.should have_link 'Home'
-      page.should have_link 'All Employee Certifications'
+      page.should have_link 'Search Certifications'
       page.should have_link 'Create Certification'
 
       page.should have_link 'Delete'
