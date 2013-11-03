@@ -7,20 +7,22 @@ class Certification < ActiveRecord::Base
   belongs_to :employee
   belongs_to :customer
   belongs_to :active_certification_period,
-    class_name: 'CertificationPeriod',
-    autosave: true,
-    dependent: :destroy
+             class_name: 'CertificationPeriod',
+             autosave: true,
+             dependent: :destroy
   has_many :certification_periods,
-    class_name: 'CertificationPeriod',
-    autosave: true,
-    dependent: :destroy
+           class_name: 'CertificationPeriod',
+           autosave: true,
+           dependent: :destroy
 
   validates_uniqueness_of :certification_type_id, scope: :employee_id, message: "already assigned to this Employee. Please update existing Certification."
 
   validates_presence_of :active_certification_period,
-    :certification_type,
-    :employee,
-    :customer
+                        :certification_type,
+                        :employee,
+                        :customer
+
+  validate :_certification_period_start_dates
 
   delegate :comments, to: :active_certification_period
   delegate :comments=, to: :active_certification_period
@@ -74,6 +76,19 @@ class Certification < ActiveRecord::Base
   end
 
   private
+
+  def _certification_period_start_dates
+    return if last_certification_date.nil?
+
+    if certification_periods.any? { |certification_period| _start_date_before_last_certification?(certification_period) }
+      errors.add(:last_certification_date, 'must be after previous Last certification date')
+    end
+  end
+
+  def _start_date_before_last_certification?(certification_period)
+    certification_period != active_certification_period &&
+      certification_period.start_date >= active_certification_period.start_date
+  end
 
   def _certification_strategy
     @certification_strategy ||= units_based? ? UnitsBasedCertificationStrategy.new(self) : DateBasedCertificationStrategy.new(self)

@@ -1,21 +1,23 @@
 require 'spec_helper'
 
 describe Certification do
+
   it { should belong_to(:customer) }
   it { should belong_to(:certification_type) }
   it { should belong_to(:employee) }
   it { should belong_to(:active_certification_period) }
-  it 'should validate the uniqueness of certification_type_id' do
-    certification = create(:certification)
-    certification.should validate_uniqueness_of(:certification_type_id).
-             scoped_to(:employee_id).
-             with_message(/already assigned to this Employee. Please update existing Certification/)
-
-  end
   it { should validate_presence_of :active_certification_period }
   it { should validate_presence_of :certification_type }
   it { should validate_presence_of :employee }
   it { should validate_presence_of :customer }
+
+  it 'should validate the uniqueness of certification_type_id' do
+    certification = create(:certification)
+    certification.should validate_uniqueness_of(:certification_type_id).
+                           scoped_to(:employee_id).
+                           with_message(/already assigned to this Employee. Please update existing Certification/)
+
+  end
 
   context 'non-units based certification type' do
     let (:certification_type) { create(:certification_type, units_required: 0) }
@@ -233,8 +235,7 @@ describe Certification do
     certification.active.should be_true
   end
 
-
-  describe "new date validations" do
+  describe 'new date validations' do
     subject { Certification.new }
     let(:certification_period) { CertificationPeriod.new(start_date: start_date) }
 
@@ -271,15 +272,29 @@ describe Certification do
     end
   end
 
+  describe 'certification_period validation' do
+    context 'when start_date is not after last_certification_date' do
+      it 'should have correct message' do
+        certification = create(:certification, last_certification_date: 1.day.ago)
+        certification.reload
+
+        certification.recertify(start_date: 1.year.ago)
+
+        certification.should_not be_valid
+        certification.errors.full_messages_for(:last_certification_date).first.should == 'Last certification date must be after previous Last certification date'
+      end
+    end
+  end
+
   it_behaves_like 'an object that is sortable by status'
 
   describe '#recertify' do
-    subject { create(:certification) }
+    subject { create(:certification, last_certification_date: 1.year.ago) }
     let(:start_date) { 2.days.from_now }
     let(:trainer) { 'New Trainer' }
     let(:comments) { 'New Comments' }
     let(:units_achieved) { 42 }
-    let(:attributes) { {start_date: start_date, trainer: trainer, comments: comments, units_achieved: units_achieved}}
+    let(:attributes) { {start_date: start_date, trainer: trainer, comments: comments, units_achieved: units_achieved} }
 
     before do
       @original_certification_period = subject.active_certification_period
@@ -289,13 +304,15 @@ describe Certification do
     after { Timecop.return }
 
     it 'should keep the original certification period in its history' do
+      subject.reload
       subject.recertify(attributes)
       subject.certification_periods.should include(@original_certification_period)
     end
 
     it 'should create a new active_certification_period' do
+      subject.reload
       subject.recertify(attributes)
-      subject.active_certification_period.should_not  == @original_certification_period
+      subject.active_certification_period.should_not == @original_certification_period
     end
 
     it 'should set new trainer in active_certification_period' do

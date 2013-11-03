@@ -4,7 +4,7 @@ describe 'Recertify Employee' do
 
   let(:customer) { create(:customer) }
   let(:certification_period) { create(:units_based_certification_period) }
-  let(:certification) { create(:units_based_certification, customer: customer, active_certification_period: certification_period) }
+  let(:certification) { create(:units_based_certification, customer: customer, active_certification_period: certification_period, last_certification_date: Date.new(1999, 1, 1)) }
   subject { page }
 
   before do
@@ -57,7 +57,7 @@ describe 'Recertify Employee' do
     end
 
     it 'should have the original Last Certification Date value' do
-      find_field('Last Certification Date').value.should eq '05/15/2013'
+      find_field('Last Certification Date').value.should eq '01/01/1999'
     end
 
     it 'should have Comments field' do
