@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Certification Search' do
+describe 'Certification Search', slow: true do
 
   let(:customer) { create(:customer) }
 
@@ -61,7 +61,7 @@ describe 'Certification Search' do
       )
     end
 
-    it 'should show Search Certifications page', js: true do
+    it 'should show Search Certifications page' do
       _navigate_to_search
 
       page.should have_content 'Search Certifications'
