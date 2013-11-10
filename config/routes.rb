@@ -37,4 +37,9 @@ Certotrack::Application.routes.draw do
   get 'units_based_certifications', action: 'units_based', controller: 'certifications'
   get 'recertification_required_certifications', action: 'recertification_required', controller: 'certifications'
   get 'search_certifications', action: 'search', controller: 'certifications'
+
+  resources :training_events, only: [:new, :create]
+  get 'employee_list_training_event', action: 'list_employees', controller: 'training_events'
+  get 'certification_type_list_training_event', action: 'list_certification_types', controller: 'training_events'
+
 end

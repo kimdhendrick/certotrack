@@ -8,6 +8,14 @@ class CertificationTypeService
     user.admin? ? CertificationType.all : user.certification_types
   end
 
+  def find(certification_type_ids, user)
+    certification_types = CertificationType.find(certification_type_ids)
+
+    return certification_types if user.admin?
+
+    certification_types.select { |certification_type| certification_type.customer == user.customer }
+  end
+
   def search_certification_types(user, params = {})
     @search_service.search(get_all_certification_types(user), params)
   end

@@ -16,7 +16,7 @@ class EmployeePresenter
     "#{last_name}, #{first_name}"
   end
 
-  def location_name # employee show view
+  def location_name
     model.location.try(:name) || "Unassigned"
   end
 

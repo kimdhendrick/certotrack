@@ -1,0 +1,27 @@
+<%= link_to 'Home', root_path %>
+
+<h2>Create Training Event - Select Certification Types</h2>
+
+<%= form_tag new_training_event_path, method: 'get' do %>
+  <%= hidden_field_tag :employee_ids, @employee_ids %>
+  <table border='1'>
+    <thead>
+    <tr>
+      <td>Select</td>
+      <th><%= sortable 'name' %></th>
+      <th><%= sortable 'interval_code', title="Interval" %></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @certification_types.each do |certification_type| %>
+      <tr>
+        <td><%= check_box_tag "certification_type_ids[]", certification_type.id %></td>
+        <td><%= certification_type.name %></td>
+        <td><%= certification_type.interval %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+
+  <%= submit_tag 'Next' %>
+<% end %>

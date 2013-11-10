@@ -1,0 +1,71 @@
+<%= link_to 'Home', root_path %>
+
+<h2>Create Training Event</h2>
+
+<h3>Please confirm that these employees:</h3>
+
+<%= form_tag training_events_path do %>
+  <span data-employee-list="data-employee-list">
+    <table border="1">
+      <thead>
+      <tr>
+        <td>Employee Number</td>
+        <td>First Name</td>
+        <td>Last Name</td>
+        <td>Location</td>
+      </tr>
+      </thead>
+      <tbody>
+        <% @employees.each do |employee| %>
+          <%= hidden_field_tag "employee_ids[]", employee.id %>
+          <tr>
+            <td><%= employee.employee_number %></td>
+            <td><%= employee.first_name %></td>
+            <td><%= employee.last_name %></td>
+            <td><%= employee.location %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+   </span>
+
+  <h3>Will be registered for these certification types:</h3>
+
+  <span data-certification-type-list="data-certification-type-list">
+    <table border="1">
+      <thead>
+      <tr>
+        <td>Name</td>
+        <td>Interval</td>
+      </tr>
+      </thead>
+      <tbody>
+      <% @certification_types.each do |certification_type| %>
+        <%= hidden_field_tag "certification_type_ids[]", certification_type.id %>
+        <tr>
+          <td><%= certification_type.name %></td>
+          <td><%= certification_type.interval %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+   </span>
+
+  <div class="field">
+    <%= label_tag "trainer", "Trainer" %>
+    <br/>
+    <%= text_field_tag "trainer" %>
+  </div>
+
+  <div class="field">
+    <%= label_tag "certification_date", "Certification Date" %>
+    <br/>
+    <input class="datepicker"
+           id="certification_date"
+           name="certification_date"
+           type="text"
+           value="<%= DateHelpers.date_to_string(Date.today) %>">
+  </div>
+
+  <%= submit_tag "Save" %>
+<% end %>

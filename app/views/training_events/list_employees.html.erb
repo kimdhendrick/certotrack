@@ -1,0 +1,31 @@
+<%= link_to 'Home', root_path %>
+
+<h2>Create Training Event - Select Employees</h2>
+
+<%= form_tag certification_type_list_training_event_path, method: 'get' do %>
+  <table border='1'>
+    <thead>
+    <tr>
+      <td>Select</td>
+      <th><%= sortable 'employee_number' %></th>
+      <th><%= sortable 'first_name' %></th>
+      <th><%= sortable 'last_name' %></th>
+      <th><%= sortable 'location_name' %></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @employees.each do |employee| %>
+      <tr>
+        <td><%= check_box_tag "employee_ids[]", employee.id %></td>
+        <td><%= employee.employee_number %></td>
+        <td><%= employee.first_name %></td>
+        <td><%= employee.last_name %></td>
+        <td><%= employee.location_name %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+
+  <%= submit_tag "Next" %>
+
+<% end %>

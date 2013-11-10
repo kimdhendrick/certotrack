@@ -9,6 +9,14 @@ class EmployeeService
     current_user.admin? ? Employee.all : current_user.employees
   end
 
+  def find(employee_ids, user)
+    employees = Employee.find(employee_ids)
+
+    return employees if user.admin?
+
+    employees.select { |employee| employee.customer == user.customer }
+  end
+
   def create_employee(customer, attributes)
     @employee = Employee.new(attributes)
     @employee.customer = customer

@@ -32,6 +32,26 @@ describe EmployeeService do
     end
   end
 
+  describe '#find' do
+    context 'when an admin user' do
+      it 'should return all employees' do
+        my_employee = create(:employee, customer: my_customer)
+        other_employee = create(:employee)
+
+        EmployeeService.new.find([my_employee.id, other_employee.id], admin_user).should =~ [my_employee, other_employee]
+      end
+    end
+
+    context 'when a regular user' do
+      it "should return only that user's employees" do
+        my_employee = create(:employee, customer: my_customer)
+        other_employee = create(:employee)
+
+        EmployeeService.new.find([my_employee.id, other_employee.id], my_user).should == [my_employee]
+      end
+    end
+  end
+
   describe 'create_employee' do
     it 'should create employee' do
       attributes =

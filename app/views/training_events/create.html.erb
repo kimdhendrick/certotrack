@@ -1,0 +1,79 @@
+<%= link_to 'Home', root_path %> |
+<%= link_to 'Search Certifications', search_certifications_path %>
+
+<h2>Create Training Event - Confirmation</h2>
+
+<h3>Training event has been created, please print out this page for your records.</h3>
+
+<% if @employees_with_errors.any? %>
+  <div class="errors"> The following employee/certification combinations had errors and were not certified:
+    <ul>
+      <% @employees_with_errors.each_with_index do |error_employee, i| %>
+        <li><%= "#{error_employee.last_name}, #{error_employee.first_name} : #{@certification_types_with_errors[i].name}" %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<span data-employee-list="data-employee-list">
+  <table border='1'>
+    <thead>
+    <tr>
+      <td>Employee Number</td>
+      <td>First Name</td>
+      <td>Last Name</td>
+      <td>Location</td>
+    </tr>
+    </thead>
+    <tbody>
+    <% @employees.each do |employee| %>
+      <tr>
+        <td><%= employee.employee_number %></td>
+        <td><%= employee.first_name %></td>
+        <td><%= employee.last_name %></td>
+        <td><%= employee.location %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</span>
+
+<br/>
+
+<span data-certification-type-list="data-certification-type-list">
+  <table border='1'>
+    <thead>
+    <tr>
+      <td>Name</td>
+      <td>Interval</td>
+    </tr>
+    </thead>
+    <tbody>
+    <% @certification_types.each do |certification_type| %>
+      <tr>
+        <td><%= certification_type.name %></td>
+        <td><%= certification_type.interval %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</span>
+
+<br/>
+
+<span data-details="data-details">
+  <table border='1'>
+    <thead>
+    <tr>
+      <td>Trainer</td>
+      <td>Certification Date</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td><%= @trainer %></td>
+      <td><%= @certification_date %></td>
+    </tr>
+    </tbody>
+  </table>
+</span>
