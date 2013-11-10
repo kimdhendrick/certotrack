@@ -1,4 +1,7 @@
 class BatchCertificationsController < ApplicationController
+
+  include AuthorizationHelper
+
   before_filter :authenticate_user!
 
   check_authorization
@@ -47,8 +50,6 @@ class BatchCertificationsController < ApplicationController
   end
 
   def _authorize_certifications(certifications)
-    certifications.map(&:model).each do |certification|
-      authorize! :manage, certification
-    end
+    authorize_all(certifications.map(&:model), :manage)
   end
 end
