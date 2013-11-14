@@ -11,12 +11,13 @@ describe EmployeesController do
 
       it 'assigns a new employee as @employee' do
         get :new, {}, {}
+
         assigns(:employee).should be_a_new(Employee)
       end
 
       it 'assigns locations' do
         location = build(:location)
-        LocationService.any_instance.stub(:get_all_locations).and_return([location])
+        controller.load_location_service(Faker.new([location]))
 
         get :new
 
@@ -54,20 +55,28 @@ describe EmployeesController do
       end
 
       describe 'with valid params' do
-        it 'creates a new Employee' do
-          EmployeeService.any_instance.should_receive(:create_employee).once.and_return(build(:employee))
+        it 'creates a new employee' do
+          fake_employee_service = Faker.new(create(:employee))
+          controller.load_employee_service(fake_employee_service)
+
           post :create, {:employee => employee_attributes}, {}
+
+          fake_employee_service.received_message.should == :create_employee
         end
 
         it 'assigns a newly created employee as @employee' do
-          EmployeeService.any_instance.stub(:create_employee).and_return(build(:employee))
+          controller.load_employee_service(Faker.new(create(:employee)))
+
           post :create, {:employee => employee_attributes}, {}
+
           assigns(:employee).should be_a(Employee)
         end
 
         it 'redirects to the created employee' do
-          EmployeeService.any_instance.stub(:create_employee).and_return(create(:employee))
+          controller.load_employee_service(Faker.new(create(:employee)))
+
           post :create, {:employee => employee_attributes}, {}
+
           response.should redirect_to(Employee.last)
           flash[:notice].should == 'Employee was successfully created.'
         end
@@ -75,17 +84,20 @@ describe EmployeesController do
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved employee as @employee' do
-          EmployeeService.any_instance.should_receive(:create_employee).once.and_return(build(:employee))
-          Employee.any_instance.stub(:save).and_return(false)
+          fake_employee_service = Faker.new(build(:employee))
+          controller.load_employee_service(fake_employee_service)
 
           post :create, {:employee => {'name' => 'invalid value'}}, {}
 
           assigns(:employee).should be_a_new(Employee)
+          fake_employee_service.received_message.should == :create_employee
         end
 
         it "re-renders the 'new' template" do
-          EmployeeService.any_instance.should_receive(:create_employee).once.and_return(build(:employee))
+          controller.load_employee_service(Faker.new(build(:employee)))
+
           post :create, {:employee => {'name' => 'invalid value'}}, {}
+
           response.should render_template('new')
         end
       end
@@ -97,13 +109,19 @@ describe EmployeesController do
       end
 
       it 'calls EmployeesService' do
-        EmployeeService.any_instance.should_receive(:create_employee).once.and_return(build(:employee))
+        fake_employee_service = Faker.new(build(:employee))
+        controller.load_employee_service(fake_employee_service)
+
         post :create, {:employee => employee_attributes}, {}
+
+        fake_employee_service.received_message.should == :create_employee
       end
 
       it 'assigns a newly created employee as @employee' do
-        EmployeeService.any_instance.should_receive(:create_employee).once.and_return(build(:employee))
+        controller.load_employee_service(Faker.new(build(:employee)))
+
         post :create, {:employee => employee_attributes}, {}
+
         assigns(:employee).should be_a(Employee)
       end
     end
@@ -128,7 +146,6 @@ describe EmployeesController do
       sign_in my_user
       fake_employee_service = controller.load_employee_service(Faker.new([]))
       fake_employee_list_presenter = Faker.new([])
-      #noinspection RubyArgCount
       EmployeeListPresenter.stub(:new).and_return(fake_employee_list_presenter)
 
       get :index, {sort: 'name', direction: 'asc'}

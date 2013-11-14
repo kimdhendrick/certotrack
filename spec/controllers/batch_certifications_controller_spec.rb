@@ -44,8 +44,11 @@ describe BatchCertificationsController do
       response.should redirect_to(certification_type)
     end
 
-    it 'should render employee show on error' do
-      BatchCertification.any_instance.stub(:update).and_return(false)
+    it 'should render certification_type show on error' do
+      fake_batch_certification = BatchCertification.new({certification_type_id: certification_type.id,
+                                                         certification_ids: [certification.id]})
+      fake_batch_certification.stub(:update).and_return(false)
+      controller.load_batch_certification(fake_batch_certification)
 
       params = {
         certification_type_id: certification_type.id,
@@ -57,8 +60,12 @@ describe BatchCertificationsController do
       response.should render_template('certification_types/show')
     end
 
-    it 'should render certification type show on error' do
-      BatchCertification.any_instance.stub(:update).and_return(false)
+    it 'should render employee show on error' do
+      fake_batch_certification = BatchCertification.new({employee_id: employee.id,
+                                                        certification_ids: [certification.id]})
+      fake_batch_certification.stub(:update).and_return(false)
+      controller.load_batch_certification(fake_batch_certification)
+
 
       params = {
         employee_id: employee.id,

@@ -3,14 +3,16 @@ require 'spec_helper'
 describe CertificationsController do
 
   let(:customer) { create(:customer) }
+  let(:certification) { build(:certification) }
+  let(:fake_certification_service_that_returns_list) { Faker.new([certification]) }
+  let(:faker_that_returns_empty_list ) { Faker.new([]) }
 
   describe 'GET index' do
     it 'calls get_all_certifications with current_user and params' do
       my_user = stub_certification_user(customer)
       sign_in my_user
-      fake_certification_service = controller.load_certification_service(Faker.new([]))
+      fake_certification_service = controller.load_certification_service(faker_that_returns_empty_list)
       fake_certification_list_presenter = Faker.new([])
-      #noinspection RubyArgCount
       CertificationListPresenter.stub(:new).and_return(fake_certification_list_presenter)
       params = {sort: 'name', direction: 'asc'}
 
@@ -30,8 +32,7 @@ describe CertificationsController do
       end
 
       it 'assigns certifications as @certifications' do
-        certification = build(:certification)
-        CertificationService.any_instance.stub(:get_all_certifications).and_return([certification])
+        controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :index
 
@@ -39,7 +40,7 @@ describe CertificationsController do
       end
 
       it 'assigns certifications_count' do
-        CertificationService.any_instance.stub(:get_all_certifications).and_return([build(:certification)])
+        controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :index
 
@@ -47,7 +48,7 @@ describe CertificationsController do
       end
 
       it 'assigns report_title' do
-        CertificationService.any_instance.stub(:get_all_certifications).and_return([build(:certification)])
+        controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :index
 
@@ -61,8 +62,7 @@ describe CertificationsController do
       end
 
       it 'assigns certifications as @certifications' do
-        certification = build(:certification)
-        CertificationService.any_instance.stub(:get_all_certifications).and_return([certification])
+        controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :index
 
@@ -77,9 +77,6 @@ describe CertificationsController do
 
       describe 'GET index' do
         it 'does not assign certification as @certification' do
-          certification = build(:certification)
-          CertificationService.any_instance.stub(:get_all_certifications).and_return([certification])
-
           get :index
 
           assigns(:certifications).should be_nil
@@ -92,9 +89,8 @@ describe CertificationsController do
     it 'calls get_expired with current_user and params' do
       my_user = stub_certification_user(customer)
       sign_in my_user
-      fake_certification_service = controller.load_certification_service(Faker.new([]))
+      fake_certification_service = controller.load_certification_service(faker_that_returns_empty_list)
       fake_certification_list_presenter = Faker.new([])
-      #noinspection RubyArgCount
       CertificationListPresenter.stub(:new).and_return(fake_certification_list_presenter)
       params = {sort: 'name', direction: 'asc'}
 
@@ -114,8 +110,7 @@ describe CertificationsController do
       end
 
       it 'assigns certifications as @certifications' do
-        certification = build(:certification)
-        CertificationService.any_instance.stub(:get_expired_certifications).and_return([certification])
+        controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :expired
 
@@ -123,7 +118,7 @@ describe CertificationsController do
       end
 
       it 'assigns certifications_count' do
-        CertificationService.any_instance.stub(:get_expired_certifications).and_return([build(:certification)])
+        controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :expired
 
@@ -131,7 +126,7 @@ describe CertificationsController do
       end
 
       it 'assigns report_title' do
-        CertificationService.any_instance.stub(:get_expired_certifications).and_return([build(:certification)])
+        controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :expired
 
@@ -145,8 +140,7 @@ describe CertificationsController do
       end
 
       it 'assigns certifications as @certifications' do
-        certification = build(:certification)
-        CertificationService.any_instance.stub(:get_expired_certifications).and_return([certification])
+        controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :expired
 
@@ -161,9 +155,6 @@ describe CertificationsController do
 
       describe 'GET expired' do
         it 'does not assign certification as @certification' do
-          certification = build(:certification)
-          CertificationService.any_instance.stub(:get_expired_certifications).and_return([certification])
-
           get :expired
 
           assigns(:certifications).should be_nil
@@ -176,9 +167,8 @@ describe CertificationsController do
     it 'calls get_expiring with current_user and params' do
       my_user = stub_certification_user(customer)
       sign_in my_user
-      fake_certification_service = controller.load_certification_service(Faker.new([]))
+      fake_certification_service = controller.load_certification_service(faker_that_returns_empty_list)
       fake_certification_list_presenter = Faker.new([])
-      #noinspection RubyArgCount
       CertificationListPresenter.stub(:new).and_return(fake_certification_list_presenter)
       params = {sort: 'name', direction: 'asc'}
 
@@ -198,8 +188,7 @@ describe CertificationsController do
       end
 
       it 'assigns certifications as @certifications' do
-        certification = build(:certification)
-        CertificationService.any_instance.stub(:get_expiring_certifications).and_return([certification])
+        controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :expiring
 
@@ -207,7 +196,7 @@ describe CertificationsController do
       end
 
       it 'assigns certifications_count' do
-        CertificationService.any_instance.stub(:get_expiring_certifications).and_return([build(:certification)])
+        controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :expiring
 
@@ -215,7 +204,7 @@ describe CertificationsController do
       end
 
       it 'assigns report_title' do
-        CertificationService.any_instance.stub(:get_expiring_certifications).and_return([build(:certification)])
+        controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :expiring
 
@@ -229,8 +218,7 @@ describe CertificationsController do
       end
 
       it 'assigns certifications as @certifications' do
-        certification = build(:certification)
-        CertificationService.any_instance.stub(:get_expiring_certifications).and_return([certification])
+        controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :expiring
 
@@ -245,9 +233,6 @@ describe CertificationsController do
 
       describe 'GET expiring' do
         it 'does not assign certification as @certification' do
-          certification = build(:certification)
-          CertificationService.any_instance.stub(:get_expiring_certifications).and_return([certification])
-
           get :expiring
 
           assigns(:certifications).should be_nil
@@ -255,14 +240,13 @@ describe CertificationsController do
       end
     end
   end
-  
+
   describe 'GET units_based' do
     it 'calls get_units_based with current_user and params' do
       my_user = stub_certification_user(customer)
       sign_in my_user
-      fake_certification_service = controller.load_certification_service(Faker.new([]))
+      fake_certification_service = controller.load_certification_service(faker_that_returns_empty_list)
       fake_certification_list_presenter = Faker.new([])
-      #noinspection RubyArgCount
       CertificationListPresenter.stub(:new).and_return(fake_certification_list_presenter)
       params = {sort: 'name', direction: 'asc'}
 
@@ -282,8 +266,7 @@ describe CertificationsController do
       end
 
       it 'assigns certifications as @certifications' do
-        certification = build(:certification)
-        CertificationService.any_instance.stub(:get_units_based_certifications).and_return([certification])
+        controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :units_based
 
@@ -291,7 +274,7 @@ describe CertificationsController do
       end
 
       it 'assigns certifications_count' do
-        CertificationService.any_instance.stub(:get_units_based_certifications).and_return([build(:certification)])
+        controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :units_based
 
@@ -299,7 +282,7 @@ describe CertificationsController do
       end
 
       it 'assigns report_title' do
-        CertificationService.any_instance.stub(:get_units_based_certifications).and_return([build(:certification)])
+        controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :units_based
 
@@ -313,8 +296,7 @@ describe CertificationsController do
       end
 
       it 'assigns certifications as @certifications' do
-        certification = build(:certification)
-        CertificationService.any_instance.stub(:get_units_based_certifications).and_return([certification])
+        controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :units_based
 
@@ -329,9 +311,6 @@ describe CertificationsController do
 
       describe 'GET units_based' do
         it 'does not assign certification as @certification' do
-          certification = build(:certification)
-          CertificationService.any_instance.stub(:get_units_based_certifications).and_return([certification])
-
           get :units_based
 
           assigns(:certifications).should be_nil
@@ -339,14 +318,13 @@ describe CertificationsController do
       end
     end
   end
-  
+
   describe 'GET recertification_required' do
     it 'calls get_recertification_required with current_user and params' do
       my_user = stub_certification_user(customer)
       sign_in my_user
-      fake_certification_service = controller.load_certification_service(Faker.new([]))
+      fake_certification_service = controller.load_certification_service(faker_that_returns_empty_list)
       fake_certification_list_presenter = Faker.new([])
-      #noinspection RubyArgCount
       CertificationListPresenter.stub(:new).and_return(fake_certification_list_presenter)
       params = {sort: 'name', direction: 'asc'}
 
@@ -366,8 +344,7 @@ describe CertificationsController do
       end
 
       it 'assigns certifications as @certifications' do
-        certification = build(:certification)
-        CertificationService.any_instance.stub(:get_recertification_required_certifications).and_return([certification])
+        controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :recertification_required
 
@@ -375,7 +352,7 @@ describe CertificationsController do
       end
 
       it 'assigns certifications_count' do
-        CertificationService.any_instance.stub(:get_recertification_required_certifications).and_return([build(:certification)])
+        controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :recertification_required
 
@@ -383,7 +360,7 @@ describe CertificationsController do
       end
 
       it 'assigns report_title' do
-        CertificationService.any_instance.stub(:get_recertification_required_certifications).and_return([build(:certification)])
+        controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :recertification_required
 
@@ -397,8 +374,7 @@ describe CertificationsController do
       end
 
       it 'assigns certifications as @certifications' do
-        certification = build(:certification)
-        CertificationService.any_instance.stub(:get_recertification_required_certifications).and_return([certification])
+        controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :recertification_required
 
@@ -413,9 +389,6 @@ describe CertificationsController do
 
       describe 'GET recertification_required' do
         it 'does not assign certification as @certification' do
-          certification = build(:certification)
-          CertificationService.any_instance.stub(:get_recertification_required_certifications).and_return([certification])
-
           get :recertification_required
 
           assigns(:certifications).should be_nil
@@ -423,7 +396,7 @@ describe CertificationsController do
       end
     end
   end
-  
+
   describe 'GET new' do
     context 'when certification user' do
       let (:current_user) { stub_certification_user(customer) }
@@ -433,7 +406,7 @@ describe CertificationsController do
       end
 
       it 'calls certification service with employee_id' do
-        controller.load_certification_type_service(Faker.new())
+        controller.load_certification_type_service(Faker.new)
         employee = create(:employee)
         certification = create(:certification, employee: employee, customer: employee.customer)
         fake_certification_service = controller.load_certification_service(Faker.new(certification))
@@ -446,7 +419,7 @@ describe CertificationsController do
       end
 
       it 'calls certification service with certification_type_id' do
-        controller.load_certification_type_service(Faker.new())
+        controller.load_certification_type_service(Faker.new)
         certification_type = create(:certification_type)
         certification = create(:certification, certification_type: certification_type, customer: certification_type.customer)
         fake_certification_service = controller.load_certification_service(Faker.new(certification))
@@ -460,7 +433,7 @@ describe CertificationsController do
       end
 
       it 'assigns @certification' do
-        controller.load_certification_type_service(Faker.new())
+        controller.load_certification_type_service(Faker.new)
         certification = create(:certification, customer: create(:customer))
         controller.load_certification_service(Faker.new(certification))
 
@@ -470,7 +443,7 @@ describe CertificationsController do
       end
 
       it 'assigns @source when employee' do
-        controller.load_certification_service(Faker.new())
+        controller.load_certification_service(Faker.new)
         certification_type = create(:certification_type)
         controller.load_certification_type_service(Faker.new([certification_type]))
 
@@ -480,7 +453,7 @@ describe CertificationsController do
       end
 
       it 'assigns @source when certification_type' do
-        controller.load_certification_service(Faker.new())
+        controller.load_certification_service(Faker.new)
         certification_type = create(:certification_type)
         controller.load_certification_type_service(Faker.new([certification_type]))
 
@@ -490,8 +463,8 @@ describe CertificationsController do
       end
 
       it 'calls certification_type_service' do
-        controller.load_certification_service(Faker.new())
-        fake_certification_type_service = controller.load_certification_type_service(Faker.new([]))
+        controller.load_certification_service(Faker.new)
+        fake_certification_type_service = controller.load_certification_type_service(faker_that_returns_empty_list)
 
         get :new, {}, {}
 
@@ -500,7 +473,7 @@ describe CertificationsController do
       end
 
       it 'assigns certification_types' do
-        controller.load_certification_service(Faker.new())
+        controller.load_certification_service(Faker.new)
         certification_type = create(:certification_type)
         controller.load_certification_type_service(Faker.new([certification_type]))
 
@@ -510,7 +483,7 @@ describe CertificationsController do
       end
 
       it 'assigns employees' do
-        controller.load_certification_service(Faker.new())
+        controller.load_certification_service(Faker.new)
         employee = create(:employee)
         controller.load_employee_service(Faker.new([employee]))
 
@@ -528,7 +501,7 @@ describe CertificationsController do
       it 'assigns certification_types' do
         certification_type = build(:certification_type)
         controller.load_certification_type_service(Faker.new([certification_type]))
-        controller.load_certification_service(Faker.new())
+        controller.load_certification_service(Faker.new)
 
         get :new, {}, {}
 
@@ -536,7 +509,7 @@ describe CertificationsController do
       end
 
       it 'assigns employees' do
-        controller.load_certification_service(Faker.new())
+        controller.load_certification_service(Faker.new)
         employee = create(:employee)
         controller.load_employee_service(Faker.new([employee]))
 
@@ -571,7 +544,6 @@ describe CertificationsController do
       end
 
       it 'calls creates certification using CertificationService' do
-        Certification.any_instance.stub(:valid?).and_return(true)
         fake_certification_service = controller.load_certification_service(Faker.new(build(:certification)))
 
         params = {
@@ -600,9 +572,10 @@ describe CertificationsController do
       end
 
       it 're-renders new on error' do
-        controller.load_certification_type_service(Faker.new())
-        Certification.any_instance.stub(:valid?).and_return(false)
-        controller.load_certification_service(Faker.new(build(:certification)))
+        controller.load_certification_type_service(Faker.new([build(:certification_type)]))
+        certification = build(:certification)
+        certification.stub(:valid?).and_return(false)
+        controller.load_certification_service(Faker.new(certification))
 
         post :create, {employee: {}, certification: {}}, {}
 
@@ -610,19 +583,20 @@ describe CertificationsController do
       end
 
       it 'assigns @certification on error' do
-        controller.load_certification_type_service(Faker.new())
-        Certification.any_instance.stub(:valid?).and_return(false)
-        controller.load_certification_service(Faker.new(build(:certification)))
+        controller.load_certification_type_service(Faker.new)
+        certification = build(:certification)
+        certification.stub(:valid?).and_return(false)
+        controller.load_certification_service(Faker.new(certification))
 
         get :create, {certification: {employee_id: 1, certification_type_id: 1}}, {}
 
-        assigns(:certification).should be_a(Certification)
+        assigns(:certification).should == certification
       end
 
       it 'calls certification_type_service on error' do
-        Certification.any_instance.stub(:valid?).and_return(false)
-        controller.load_certification_service(Faker.new(build(:certification)))
-
+        certification = build(:certification)
+        certification.stub(:valid?).and_return(false)
+        controller.load_certification_service(Faker.new(certification))
         certification_type = create(:certification_type)
         fake_certification_type_service = controller.load_certification_type_service(Faker.new([certification_type]))
 
@@ -633,9 +607,9 @@ describe CertificationsController do
       end
 
       it 'assigns certification_types on error' do
-        Certification.any_instance.stub(:valid?).and_return(false)
-        controller.load_certification_service(Faker.new(build(:certification)))
-
+        certification = build(:certification)
+        certification.stub(:valid?).and_return(false)
+        controller.load_certification_service(Faker.new(certification))
         certification_type = create(:certification_type)
         controller.load_certification_type_service(Faker.new([certification_type]))
 
@@ -645,9 +619,9 @@ describe CertificationsController do
       end
 
       it 'assigns employees on error' do
-        Certification.any_instance.stub(:valid?).and_return(false)
-        controller.load_certification_service(Faker.new(build(:certification)))
-
+        certification = build(:certification)
+        certification.stub(:valid?).and_return(false)
+        controller.load_certification_service(Faker.new(certification))
         employee = create(:employee)
         controller.load_employee_service(Faker.new([employee]))
 
@@ -661,6 +635,7 @@ describe CertificationsController do
           employee: {id: nil},
           certification: {}
         }
+
         post :create, params, {}
 
         response.should render_template('new')
@@ -754,7 +729,7 @@ describe CertificationsController do
       context 'Save and Create Another' do
         it 'calls certification_type_service on success' do
           controller.load_certification_service(Faker.new(build(:certification)))
-          fake_certification_type_service = controller.load_certification_type_service(Faker.new([]))
+          fake_certification_type_service = controller.load_certification_type_service(faker_that_returns_empty_list)
 
           params = {
             employee: {},
@@ -792,7 +767,7 @@ describe CertificationsController do
 
         it 'renders create certification on success' do
           controller.load_certification_service(Faker.new(build(:certification)))
-          controller.load_certification_type_service(Faker.new())
+          controller.load_certification_type_service(Faker.new)
 
           params = {
             employee: {},
@@ -811,7 +786,7 @@ describe CertificationsController do
           certification = create(:certification, employee: employee, certification_type: certification_type, customer: employee.customer)
 
           controller.load_certification_service(Faker.new(certification))
-          controller.load_certification_type_service(Faker.new([]))
+          controller.load_certification_type_service(faker_that_returns_empty_list)
 
           params = {
             certification: {
@@ -834,7 +809,7 @@ describe CertificationsController do
       end
 
       it 'does not call factory' do
-        fake_certification_service = controller.load_certification_service(Faker.new())
+        fake_certification_service = controller.load_certification_service(Faker.new)
 
         post :create, {}, {}
 
@@ -857,7 +832,7 @@ describe CertificationsController do
 
       it 'assigns certification_types' do
         certification = create(:certification, customer: customer)
-        controller.load_certification_service(Faker.new())
+        controller.load_certification_service(Faker.new)
         certification_type = create(:certification_type)
         controller.load_certification_type_service(Faker.new([certification_type]))
 
@@ -906,14 +881,14 @@ describe CertificationsController do
           controller.load_certification_service(fake_certification_service)
 
           put :update, {:id => certification.to_param, :certification =>
-                        {
-                          'certification_type_id' => new_certification_type.id,
-                          'trainer' => 'new trainer',
-                          'units_achieved' => 45,
-                          'last_certification_date' => '01/01/2001',
-                          'comments' => 'some new notes'
-                        }
-                        }, {}
+            {
+              'certification_type_id' => new_certification_type.id,
+              'trainer' => 'new trainer',
+              'units_achieved' => 45,
+              'last_certification_date' => '01/01/2001',
+              'comments' => 'some new notes'
+            }
+          }, {}
 
           fake_certification_service.received_message.should == :update_certification
           fake_certification_service.received_params[0].should == certification
@@ -925,14 +900,16 @@ describe CertificationsController do
         end
 
         it 'assigns the requested certification as @certification' do
-          CertificationService.any_instance.stub(:update_certification).and_return(true)
+          controller.load_certification_service(Faker.new(true))
           certification = create(:certification, customer: customer)
+
           put :update, {:id => certification.to_param, :certification => {'name' => 'Test'}}, {}
+
           assigns(:certification).should eq(certification)
         end
 
         it 'redirects to the show certification type page' do
-          CertificationService.any_instance.stub(:update_certification).and_return(true)
+          controller.load_certification_service(Faker.new(true))
           certification = create(:certification, customer: customer)
 
           put :update, {:id => certification.to_param, :certification => {'name' => 'Test'}}, {}
@@ -944,22 +921,26 @@ describe CertificationsController do
 
       describe 'with invalid params' do
         it 'assigns the certification as @certification' do
+          controller.load_certification_service(Faker.new(false))
           certification = create(:certification, customer: customer)
-          CertificationService.any_instance.stub(:update_certification).and_return(false)
+
           put :update, {:id => certification.to_param, :certification => {'name' => 'invalid value'}}, {}
+
           assigns(:certification).should eq(certification)
         end
 
         it "re-renders the 'edit' template" do
+          controller.load_certification_service(Faker.new(false))
           certification = create(:certification, customer: customer)
-          CertificationService.any_instance.stub(:update_certification).and_return(false)
+
           put :update, {:id => certification.to_param, :certification => {'name' => 'invalid value'}}, {}
+
           response.should render_template('edit')
         end
 
         it 'assigns @certification_types' do
           certification = create(:certification, customer: customer)
-          controller.load_certification_service(Faker.new())
+          controller.load_certification_service(Faker.new)
           certification_type = create(:certification_type)
           controller.load_certification_type_service(Faker.new([certification_type]))
 
@@ -977,24 +958,29 @@ describe CertificationsController do
       end
 
       it 'updates the requested certification' do
+        fake_certification_service = Faker.new(true)
+        controller.load_certification_service(fake_certification_service)
         certification = create(:certification, customer: customer)
-        CertificationService.any_instance.should_receive(:update_certification).once.and_return(true)
 
         put :update, {:id => certification.to_param, :certification =>
-                      {
-                        'name' => 'Test',
-                        'serial_number' => 'newSN',
-                        'inspection_interval' => 'Annually',
-                        'last_inspection_date' => '01/01/2001',
-                        'comments' => 'some new notes'
-                      }
-                      }, {}
+          {
+            'name' => 'Test',
+            'serial_number' => 'newSN',
+            'inspection_interval' => 'Annually',
+            'last_inspection_date' => '01/01/2001',
+            'comments' => 'some new notes'
+          }
+        }, {}
+
+        fake_certification_service.received_message.should == :update_certification
       end
 
       it 'assigns the requested certification as @certification' do
         certification = create(:certification, customer: customer)
-        CertificationService.any_instance.stub(:update_certification).and_return(certification)
+        controller.load_certification_service(Faker.new(certification))
+
         put :update, {:id => certification.to_param, :certification => {'name' => 'Test'}}, {}
+
         assigns(:certification).should eq(certification)
       end
     end
@@ -1006,7 +992,9 @@ describe CertificationsController do
 
       it 'does not assign certification as @certification' do
         certification = create(:certification, customer: customer)
+
         put :update, {:id => certification.to_param, :certification => {'name' => 'Test'}}, {}
+
         assigns(:certification).should be_nil
       end
     end
@@ -1022,7 +1010,9 @@ describe CertificationsController do
 
       it 'assigns certification as @certification' do
         certification = create(:certification, customer: customer)
+
         get :show, {:id => certification.to_param}, {}
+
         assigns(:certification).should eq(certification)
       end
     end
@@ -1034,7 +1024,9 @@ describe CertificationsController do
 
       it 'assigns certification as @certification' do
         certification = create(:certification, customer: customer)
+
         get :show, {:id => certification.to_param}, {}
+
         assigns(:certification).should eq(certification)
       end
     end
@@ -1046,7 +1038,9 @@ describe CertificationsController do
 
       it 'does not assign certification as @certification' do
         certification = create(:certification, customer: customer)
+
         get :show, {:id => certification.to_param}, {}
+
         assigns(:certification).should be_nil
       end
     end
@@ -1059,20 +1053,31 @@ describe CertificationsController do
       end
 
       it 'calls CertificationService' do
+        fake_certification_service = Faker.new
+        controller.load_certification_service(fake_certification_service)
         certification = create(:certification, customer: customer)
-        CertificationService.any_instance.should_receive(:delete_certification).once
 
         delete :destroy, {:id => certification.to_param}, {}
+
+        fake_certification_service.received_message.should == :delete_certification
       end
 
       it 'redirects to the show certification type page' do
-        employee = create(:employee, first_name: 'first', last_name: 'last')
-        certification = create(:certification, employee: employee, customer: customer)
-        CertificationService.any_instance.should_receive(:delete_certification).once
+        certification = create(:certification, customer: customer)
+        controller.load_certification_service(Faker.new)
 
         delete :destroy, {:id => certification.to_param}, {}
 
         response.should redirect_to(certification.certification_type)
+      end
+
+      it 'displays the success message' do
+        employee = create(:employee, first_name: 'first', last_name: 'last')
+        certification = create(:certification, employee: employee, customer: customer)
+        controller.load_certification_service(Faker.new)
+
+        delete :destroy, {:id => certification.to_param}, {}
+
         flash[:notice].should == "Certification for last, first deleted."
       end
     end
@@ -1083,10 +1088,13 @@ describe CertificationsController do
       end
 
       it 'calls CertificationService' do
+        fake_certification_service = Faker.new
+        controller.load_certification_service(fake_certification_service)
         certification = create(:certification, customer: customer)
-        CertificationService.any_instance.should_receive(:delete_certification).once
 
         delete :destroy, {:id => certification.to_param}, {}
+
+        fake_certification_service.received_message.should == :delete_certification
       end
     end
   end
@@ -1160,12 +1168,10 @@ describe CertificationsController do
       end
 
       it 'calls get_all_certifications with current_user and params' do
-        fake_certification_service = controller.load_certification_service(Faker.new([]))
+        fake_certification_service = controller.load_certification_service(faker_that_returns_empty_list)
         params = {sort: 'name', direction: 'asc'}
-        #noinspection RubyArgCount
-        CertificationListPresenter.stub(:new).and_return(Faker.new([]))
+        CertificationListPresenter.stub(:new).and_return(faker_that_returns_empty_list)
         fake_certification_list_presenter = Faker.new([])
-        #noinspection RubyArgCount
         CertificationListPresenter.stub(:new).and_return(fake_certification_list_presenter)
 
         get :search, params
@@ -1179,18 +1185,16 @@ describe CertificationsController do
       end
 
       it 'assigns certifications as @certifications' do
-        certifications = build(:certification, customer: customer)
-        CertificationService.any_instance.stub(:search_certifications).and_return([certifications])
-        #noinspection RubyArgCount
-        CertificationListPresenter.stub(:new).and_return(Faker.new([CertificationPresenter.new(certifications)]))
+        certification = build(:certification, customer: customer)
+        CertificationListPresenter.stub(:new).and_return(Faker.new([CertificationPresenter.new(certification)]))
 
         get :search
 
-        assigns(:certifications).map(&:model).should eq([certifications])
+        assigns(:certifications).map(&:model).should eq([certification])
       end
 
       it 'assigns certifications_count' do
-        CertificationService.any_instance.stub(:search_certifications).and_return([build(:certification)])
+        controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :search
 
@@ -1198,9 +1202,7 @@ describe CertificationsController do
       end
 
       it 'assigns report_title' do
-        CertificationService.any_instance.stub(:get_all_certifications).and_return([build(:certification)])
-        #noinspection RubyArgCount
-        CertificationListPresenter.stub(:new).and_return(Faker.new([]))
+        CertificationListPresenter.stub(:new).and_return(faker_that_returns_empty_list)
 
         get :search
 
@@ -1209,9 +1211,7 @@ describe CertificationsController do
 
       it 'assigns locations' do
         location = build(:location)
-        LocationService.any_instance.stub(:get_all_locations).and_return([location])
-        #noinspection RubyArgCount
-        CertificationListPresenter.stub(:new).and_return(Faker.new([]))
+        controller.load_location_service(Faker.new([location]))
 
         get :search
 
