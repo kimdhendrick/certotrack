@@ -9,9 +9,12 @@ describe CertotrackController do
       it 'assigns equipment counts' do
         sign_in stub_equipment_user(customer)
 
-        EquipmentService.any_instance.stub(:count_all_equipment).and_return(3)
-        EquipmentService.any_instance.stub(:count_expired_equipment).and_return(2)
-        EquipmentService.any_instance.stub(:count_expiring_equipment).and_return(1)
+        equipment_service = EquipmentService.new
+        equipment_service.stub(:count_all_equipment).and_return(3)
+        equipment_service.stub(:count_expired_equipment).and_return(2)
+        equipment_service.stub(:count_expiring_equipment).and_return(1)
+
+        controller.load_equipment_service(equipment_service)
 
         get :home
 
@@ -36,11 +39,13 @@ describe CertotrackController do
     context 'a certification user' do
       it 'assigns certification counts' do
         sign_in stub_certification_user(customer)
-        CertificationService.any_instance.stub(:count_all_certifications).and_return(5)
-        CertificationService.any_instance.stub(:count_recertification_required_certifications).and_return(4)
-        CertificationService.any_instance.stub(:count_units_based_certifications).and_return(3)
-        CertificationService.any_instance.stub(:count_expired_certifications).and_return(2)
-        CertificationService.any_instance.stub(:count_expiring_certifications).and_return(1)
+        certification_service = CertificationService.new
+        certification_service.stub(:count_all_certifications).and_return(5)
+        certification_service.stub(:count_recertification_required_certifications).and_return(4)
+        certification_service.stub(:count_units_based_certifications).and_return(3)
+        certification_service.stub(:count_expired_certifications).and_return(2)
+        certification_service.stub(:count_expiring_certifications).and_return(1)
+        controller.load_certification_service(certification_service)
 
         get :home
 
