@@ -40,18 +40,6 @@ describe EmployeePresenter do
     EmployeePresenter.new(employee).location_name.should == 'Location Name'
   end
 
-  it 'should respond to errors' do
-    employee.customer = nil
-    employee.should_not be_valid
-    EmployeePresenter.new(employee).errors.should == employee.errors
-  end
-
-  it 'should respond to error count' do
-    employee.customer = nil
-    employee.should_not be_valid
-    EmployeePresenter.new(employee).error_count.should == employee.errors.count
-  end
-
   it 'should respond true to show_batch_edit_button?' do
     certification_type = create(:certification_type, units_required: 10, customer: create(:customer))
     certification = build(:certification, employee: employee, certification_type: certification_type)

@@ -24,14 +24,6 @@ class EmployeePresenter
     last_name + first_name
   end
 
-  def errors
-    model.errors
-  end
-
-  def error_count
-    model.errors.count
-  end
-
   def show_batch_edit_button?(certifications)
     certifications.any?(&:units_based?)
   end
