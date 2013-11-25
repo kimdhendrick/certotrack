@@ -11,6 +11,7 @@ describe User do
       let(:user) { build(:user, roles: ['admin']) }
 
       it { should be_able_to(:manage, :all) }
+      it { should be_able_to(:manage, :customer) }
     end
 
     context 'when user is a guest' do
@@ -26,23 +27,37 @@ describe User do
 
       it { should be_able_to(:read, :equipment) }
       it { should be_able_to(:create, :equipment) }
+      it { should be_able_to(:read, :location) }
+      it { should be_able_to(:read, :employee) }
       it { should_not be_able_to(:manage, :all) }
       it { should_not be_able_to(:manage, :certification) }
     end
 
     context 'when user is an equipment user with equipment' do
-      let(:user) {
-        build(:user, roles: ['equipment'])
-      }
-      let(:own_equipment) {
-        build(:equipment, customer: user.customer)
-      }
-      let(:other_customer_equipment) {
-        build(:equipment)
-      }
+      let(:user) { build(:user, roles: ['equipment']) }
+      let(:own_equipment) { build(:equipment, customer: user.customer) }
+      let(:other_customer_equipment) { build(:equipment) }
 
       it { should be_able_to(:manage, own_equipment) }
       it { should_not be_able_to(:manage, other_customer_equipment) }
+    end
+
+    context 'when user is a equipment user with employee' do
+      let(:user) { build(:user, roles: ['equipment']) }
+      let(:own_employee) { build(:employee, customer: user.customer) }
+      let(:other_employee) { build(:employee) }
+
+      it { should be_able_to(:manage, own_employee) }
+      it { should_not be_able_to(:manage, other_employee) }
+    end
+
+    context 'when user is an equipment user with locations' do
+      let(:user) { build(:user, roles: ['equipment']) }
+      let(:own_location) { build(:location, customer: user.customer) }
+      let(:other_customer_location) { build(:location) }
+
+      it { should be_able_to(:manage, own_location) }
+      it { should_not be_able_to(:manage, other_customer_location) }
     end
 
     context 'when user is a certification user' do
@@ -50,53 +65,46 @@ describe User do
 
       it { should be_able_to(:read, :certification) }
       it { should be_able_to(:create, :certification) }
+      it { should be_able_to(:read, :location) }
+      it { should be_able_to(:read, :employee) }
       it { should_not be_able_to(:manage, :all) }
       it { should_not be_able_to(:manage, :equipment) }
     end
 
     context 'when user is an certification user with certification types' do
-      let(:user) {
-        build(:user, roles: ['certification'])
-      }
-      let(:own_certification_type) {
-        build(:certification_type, customer: user.customer)
-      }
-      let(:other_customer_certification_type) {
-        build(:certification_type)
-      }
+      let(:user) { build(:user, roles: ['certification']) }
+      let(:own_certification_type) { build(:certification_type, customer: user.customer) }
+      let(:other_customer_certification_type) { build(:certification_type) }
 
       it { should be_able_to(:manage, own_certification_type) }
       it { should_not be_able_to(:manage, other_customer_certification_type) }
     end
 
     context 'when user is an certification user with certifications' do
-      let(:user) {
-        build(:user, roles: ['certification'])
-      }
-      let(:own_certification) {
-        build(:certification, customer: user.customer)
-      }
-      let(:other_customer_certification) {
-        build(:certification)
-      }
+      let(:user) { build(:user, roles: ['certification']) }
+      let(:own_certification) { build(:certification, customer: user.customer) }
+      let(:other_customer_certification) { build(:certification) }
 
       it { should be_able_to(:manage, own_certification) }
       it { should_not be_able_to(:manage, other_customer_certification) }
     end
 
     context 'when user is a certification user with employee' do
-      let(:user) {
-        build(:user, roles: ['certification'])
-      }
-      let(:own_employee) {
-        build(:employee, customer: user.customer)
-      }
-      let(:other_employee) {
-        build(:employee)
-      }
+      let(:user) { build(:user, roles: ['certification']) }
+      let(:own_employee) { build(:employee, customer: user.customer) }
+      let(:other_employee) { build(:employee) }
 
       it { should be_able_to(:manage, own_employee) }
       it { should_not be_able_to(:manage, other_employee) }
+    end
+
+    context 'when user is an certification user with locations' do
+      let(:user) { build(:user, roles: ['certification']) }
+      let(:own_location) { build(:location, customer: user.customer) }
+      let(:other_customer_location) { build(:location) }
+
+      it { should be_able_to(:manage, own_location) }
+      it { should_not be_able_to(:manage, other_customer_location) }
     end
   end
 end

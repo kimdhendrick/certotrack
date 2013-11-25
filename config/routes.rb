@@ -42,4 +42,5 @@ Certotrack::Application.routes.draw do
   get 'employee_list_training_event', action: 'list_employees', controller: 'training_events'
   get 'certification_type_list_training_event', action: 'list_certification_types', controller: 'training_events'
 
+  resources :locations, only: [:index]
 end

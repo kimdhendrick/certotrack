@@ -1,0 +1,2 @@
+class LocationListPresenter < ListPresenter
+end

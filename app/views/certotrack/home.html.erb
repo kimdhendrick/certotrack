@@ -12,6 +12,10 @@ CertoTrack - Home
   <hr/>
   Certification Links:
   <%= render 'certification_links' %>
+<% end %>
+
+
+<% if (can? :read, :equipment) || (can? :read, :certification) %>
   <hr/>
   User Administration Links:
   <%= render 'user_administration_links' %>

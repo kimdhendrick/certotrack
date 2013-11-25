@@ -1,7 +1,10 @@
 FactoryGirl.define do
+  sequence :name do |n|
+    "Denver-#{n}"
+  end
 
   factory :location do
-    name 'Denver'
+    name
     customer
   end
 end

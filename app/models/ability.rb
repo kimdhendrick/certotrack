@@ -3,11 +3,24 @@ class Ability
 
   def initialize(user)
     user ||= User.new
+
     if user.role?('admin')
       can :manage, :all
     end
 
-    if user.role?('equipment')
+    if _equipment_user?(user) || _certification_user?(user)
+      can :read, :employee
+      can :manage, Employee do |employee|
+        employee.try(:customer) == user.customer
+      end
+
+      can :read, :location
+      can :manage, Location do |location|
+        location.try(:customer) == user.customer
+      end
+    end
+
+    if _equipment_user?(user)
       can :create, :equipment
       can :read, :equipment
 
@@ -16,7 +29,7 @@ class Ability
       end
     end
 
-    if user.role?('certification')
+    if _certification_user?(user)
       can :create, :certification
       can :read, :certification
 
@@ -27,10 +40,16 @@ class Ability
       can :manage, Certification do |certification|
         certification.try(:customer) == user.customer
       end
-
-      can :manage, Employee do |employee|
-        employee.try(:customer) == user.customer
-      end
     end
+  end
+
+  private
+
+  def _certification_user?(user)
+    user.role?('certification')
+  end
+
+  def _equipment_user?(user)
+    user.role?('equipment')
   end
 end

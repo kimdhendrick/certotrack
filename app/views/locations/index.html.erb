@@ -1,0 +1,9 @@
+<h1><%=@report_title%></h1>
+
+<div>Total: <%=@location_count%></div>
+
+<%= link_to 'Home', root_path %>
+
+<%= render 'locations_list'%>
+
+<%= will_paginate @locations %>
