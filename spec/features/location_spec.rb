@@ -4,7 +4,7 @@ describe 'Locations', slow: true do
 
   let(:customer) { create(:customer) }
 
-  describe 'All Locations' do
+  describe 'Locations' do
     context 'when an equipment user' do
       before do
         login_as_equipment_user(customer)
@@ -33,12 +33,31 @@ describe 'Locations', slow: true do
         end
       end
 
-      it 'should show location' do
+      it 'should show and edit a location' do
         visit root_path
         click_on 'All Locations'
         click_on 'Alaska'
         page.should have_content 'Show Location'
         page.should have_content 'Alaska'
+
+        page.should have_link 'Edit'
+
+        click_on 'Edit'
+
+        page.should have_content 'Edit Location'
+        page.should have_link 'Home'
+        page.should have_link 'All Locations'
+        page.should have_link 'Create Location'
+
+        fill_in 'Location', with: 'China'
+        page.should_not have_content 'Customer'
+
+        click_on 'Update'
+
+        page.should have_content 'Show Location'
+        page.should have_content 'Location was successfully updated.'
+        page.should have_content 'China'
+        page.should_not have_content 'Customer'
       end
 
       it 'should be able to create a new location' do
@@ -85,6 +104,34 @@ describe 'Locations', slow: true do
 
         page.should have_content 'Texas'
         page.should have_content 'Florida'
+      end
+
+      it 'should show and edit a location' do
+        visit root_path
+        click_on 'All Locations'
+        click_on 'Texas'
+        page.should have_content 'Show Location'
+        page.should have_content 'Texas'
+        page.should have_content 'Customer1'
+
+        page.should have_link 'Edit'
+
+        click_on 'Edit'
+
+        page.should have_content 'Edit Location'
+        page.should have_link 'Home'
+        page.should have_link 'All Locations'
+        page.should have_link 'Create Location'
+
+        fill_in 'Location', with: 'China'
+        select 'Husky League', from: 'Customer'
+
+        click_on 'Update'
+
+        page.should have_content 'Show Location'
+        page.should have_content 'Location was successfully updated.'
+        page.should have_content 'China'
+        page.should have_content 'Husky League'
       end
 
       it 'should be able to create a new location for any customer' do

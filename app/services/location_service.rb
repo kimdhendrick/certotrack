@@ -12,4 +12,12 @@ class LocationService
     location.save
     location
   end
+
+  def update_location(current_user, location, attributes)
+    location.update(attributes)
+    unless current_user.admin?
+      location.customer_id = current_user.customer_id
+    end
+    location.save
+  end
 end

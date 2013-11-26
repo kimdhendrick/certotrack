@@ -5,6 +5,8 @@ class LocationsController < ApplicationController
                 :load_location_service,
                 :load_customer_service
 
+  before_action :_set_location, only: [:show, :edit, :update]
+
   check_authorization
 
   def index
@@ -29,13 +31,27 @@ class LocationsController < ApplicationController
     if @location.persisted?
       redirect_to @location, notice: 'Location was successfully created.'
     else
-      @customers = CustomerListPresenter.new(@customer_service.get_all_customers(current_user)).sort
+      _set_customers
       render action: 'new'
     end
   end
 
+  def edit
+    _set_customers
+  end
+
+  def update
+    success = @location_service.update_location(current_user, @location, _location_params)
+
+    if success
+      redirect_to @location, notice: 'Location was successfully updated.'
+    else
+      _set_customers
+      render action: 'edit'
+    end
+  end
+
   def show
-    _set_location
   end
 
   def load_location_service(service = LocationService.new)
@@ -47,6 +63,10 @@ class LocationsController < ApplicationController
   end
 
   private
+
+  def _set_customers
+    @customers = CustomerListPresenter.new(@customer_service.get_all_customers(current_user)).sort
+  end
 
   def _set_location
     location_pending_authorization = Location.find(params[:id])

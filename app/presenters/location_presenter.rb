@@ -17,4 +17,8 @@ class LocationPresenter
   def customer_name
     model.customer.name
   end
+
+  def edit_link
+    @template.link_to 'Edit', @template.edit_location_path(model)
+  end
 end

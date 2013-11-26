@@ -46,6 +46,7 @@ describe LocationService do
         location.customer.should == customer
       end
     end
+
     context 'as an admin user' do
       it 'should create location' do
         other_customer = create(:customer)
@@ -61,6 +62,62 @@ describe LocationService do
         location.should be_persisted
         location.name.should == 'Alaska'
         location.customer.should == other_customer
+      end
+    end
+  end
+
+  describe '#update_location' do
+    context 'admin user' do
+      it 'should update locations attributes' do
+        admin_user = create(:user, roles: ['admin'])
+        other_customer = create(:customer)
+        location = create(:location, customer: my_customer)
+        attributes =
+          {
+            'id' => location.id,
+            'name' => 'Aruba',
+            'customer_id' => other_customer.id
+          }
+
+        success = LocationService.new.update_location(admin_user, location, attributes)
+        success.should be_true
+
+        location.reload
+        location.name.should == 'Aruba'
+        location.customer.should == other_customer
+      end
+    end
+
+    context 'a normal user' do
+      let (:current_user) { create(:user, customer: my_customer)}
+
+      it 'should update locations attributes except customer' do
+        other_customer = create(:customer)
+        location = create(:location, customer: my_customer)
+        attributes =
+          {
+            'id' => location.id,
+            'name' => 'Aruba',
+            'customer_id' => other_customer.id
+          }
+
+        success = LocationService.new.update_location(current_user, location, attributes)
+        success.should be_true
+
+        location.reload
+        location.name.should == 'Aruba'
+        location.customer.should == my_customer
+      end
+
+      it 'should return false if errors' do
+        location = create(:location, customer: my_customer)
+        location.stub(:save).and_return(false)
+
+        success = LocationService.new.update_location(current_user, location, {})
+        success.should be_false
+
+        location.reload
+        location.name.should_not == 'Box'
       end
     end
   end
