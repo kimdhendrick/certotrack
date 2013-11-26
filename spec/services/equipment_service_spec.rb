@@ -250,7 +250,7 @@ describe EquipmentService do
     end
   end
 
-  describe 'create(:equipment)' do
+  describe 'create_equipment' do
     it 'should create equipment' do
       attributes =
         {

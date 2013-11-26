@@ -1,0 +1,25 @@
+<%= form_for(@location, data: { location_form: "data-location-form" }) do |f| %>
+
+  <%= render 'errors'%>
+
+  <div class="field">
+    <%= f.label :name, 'Location' %>
+    <br/>
+    <%= f.text_field :name %>
+  </div>
+
+  <% if can? :manage, :customer %>
+      <div class="field">
+      <%= f.label :customer_id, 'Customer' %>
+      <br/>
+      <%= select(:location, :customer_id,
+                 options_from_collection_for_select(@customers, 'id', 'name',
+                                                    @location.customer_id)) %>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= submit_tag(user_action) %>
+  </div>
+
+<% end %>

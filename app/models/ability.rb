@@ -15,6 +15,7 @@ class Ability
       end
 
       can :read, :location
+      can :create, :location
       can :manage, Location do |location|
         location.try(:customer) == user.customer
       end

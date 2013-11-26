@@ -1,0 +1,19 @@
+<% location_presenter_for do |location| %>
+  <h1>Show Location</h1>
+
+  <%= link_to 'Home', root_path %> |
+  <%= link_to "All Locations", locations_path %> |
+  <%= link_to 'Create Location', new_location_path %>
+
+  <p>
+    <b>Name</b>
+    <%= location.name %>
+  </p>
+
+  <% if can? :manage, :customer %>
+    <p>
+      <b>Customer</b>
+      <%= location.customer_name %>
+    </p>
+  <% end %>
+<% end %>

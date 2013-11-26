@@ -25,20 +25,51 @@ describe 'Locations', slow: true do
         end
 
         within 'table tbody tr:nth-of-type(1)' do
-          #page.should have_link 'Alaska'
-          page.should have_content 'Alaska'
+          page.should have_link 'Alaska'
         end
 
         within 'table tbody tr:nth-of-type(2)' do
-          #page.should have_link 'Hawaii'
-          page.should have_content 'Hawaii'
+          page.should have_link 'Hawaii'
         end
+      end
+
+      it 'should show location' do
+        visit root_path
+        click_on 'All Locations'
+        click_on 'Alaska'
+        page.should have_content 'Show Location'
+        page.should have_content 'Alaska'
+      end
+
+      it 'should be able to create a new location' do
+        visit root_path
+
+        page.should have_link 'All Locations'
+        click_on 'All Locations'
+
+        page.should have_link 'Create Location'
+
+        click_on 'Create Location'
+
+        page.should have_content 'Create Location'
+        page.should have_link 'Home'
+        page.should have_link 'All Locations'
+
+        fill_in 'Location', with: 'Siberia'
+        page.should_not have_content 'Customer'
+
+        click_on 'Create'
+
+        page.should have_content 'Show Location'
+        page.should have_content 'Location was successfully created'
+        page.should have_content 'Siberia'
+        page.should_not have_content 'Customer'
       end
     end
 
     context 'when an admin user' do
-      let(:customer1) { create(:customer) }
-      let(:customer2) { create(:customer) }
+      let(:customer1) { create(:customer, name: 'Customer1') }
+      let(:customer2) { create(:customer, name: 'Husky League') }
 
       before do
         login_as_admin
@@ -54,6 +85,31 @@ describe 'Locations', slow: true do
 
         page.should have_content 'Texas'
         page.should have_content 'Florida'
+      end
+
+      it 'should be able to create a new location for any customer' do
+        visit root_path
+
+        page.should have_link 'All Locations'
+        click_on 'All Locations'
+
+        page.should have_link 'Create Location'
+
+        click_on 'Create Location'
+
+        page.should have_content 'Create Location'
+        page.should have_link 'Home'
+        page.should have_link 'All Locations'
+
+        fill_in 'Location', with: 'Siberia'
+        select 'Husky League', from: 'Customer'
+
+        click_on 'Create'
+
+        page.should have_content 'Show Location'
+        page.should have_content 'Location was successfully created'
+        page.should have_content 'Siberia'
+        page.should have_content 'Husky League'
       end
     end
 

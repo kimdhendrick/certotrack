@@ -10,7 +10,7 @@
   <tbody>
   <% @locations.each do |location| %>
     <tr>
-      <td><%= location.name %></td></td>
+      <td><%= link_to location.name, location.model %></td></td>
       <% if can? :manage, :customer %>
         <td><%= location.customer_name %></td></td>
       <% end %>

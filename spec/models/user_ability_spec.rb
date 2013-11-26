@@ -12,6 +12,7 @@ describe User do
 
       it { should be_able_to(:manage, :all) }
       it { should be_able_to(:manage, :customer) }
+      it { should be_able_to(:manage, :location) }
     end
 
     context 'when user is a guest' do
@@ -28,6 +29,7 @@ describe User do
       it { should be_able_to(:read, :equipment) }
       it { should be_able_to(:create, :equipment) }
       it { should be_able_to(:read, :location) }
+      it { should be_able_to(:create, :location) }
       it { should be_able_to(:read, :employee) }
       it { should_not be_able_to(:manage, :all) }
       it { should_not be_able_to(:manage, :certification) }
@@ -66,6 +68,7 @@ describe User do
       it { should be_able_to(:read, :certification) }
       it { should be_able_to(:create, :certification) }
       it { should be_able_to(:read, :location) }
+      it { should be_able_to(:create, :location) }
       it { should be_able_to(:read, :employee) }
       it { should_not be_able_to(:manage, :all) }
       it { should_not be_able_to(:manage, :equipment) }
