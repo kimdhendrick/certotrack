@@ -1209,12 +1209,15 @@ describe CertificationsController do
         assigns(:report_title).should eq('Search Certifications')
       end
 
-      it 'assigns locations' do
+      it 'assigns sorted locations' do
         location = build(:location)
+        fake_location_list_presenter = Faker.new([location])
+        LocationListPresenter.stub(:new).and_return(fake_location_list_presenter)
         controller.load_location_service(Faker.new([location]))
 
         get :search
 
+        fake_location_list_presenter.received_message.should == :sort
         assigns(:locations).should == [location]
       end
 

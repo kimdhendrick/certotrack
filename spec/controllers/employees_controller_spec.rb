@@ -15,13 +15,16 @@ describe EmployeesController do
         assigns(:employee).should be_a_new(Employee)
       end
 
-      it 'assigns locations' do
+      it 'assigns sorted locations' do
         location = build(:location)
+        fake_location_list_presenter = Faker.new([location])
+        LocationListPresenter.stub(:new).and_return(fake_location_list_presenter)
         controller.load_location_service(Faker.new([location]))
 
         get :new
 
         assigns(:locations).should == [location]
+        fake_location_list_presenter.received_message.should == :sort
       end
     end
 
@@ -99,6 +102,19 @@ describe EmployeesController do
           post :create, {:employee => {'name' => 'invalid value'}}, {}
 
           response.should render_template('new')
+        end
+
+        it 'assigns sorted locations' do
+          controller.load_employee_service(Faker.new(build(:employee)))
+          location = build(:location)
+          fake_location_list_presenter = Faker.new([location])
+          LocationListPresenter.stub(:new).and_return(fake_location_list_presenter)
+          controller.load_location_service(Faker.new([location]))
+
+          post :create, {:employee => {'name' => 'invalid value'}}, {}
+
+          assigns(:locations).should == [location]
+          fake_location_list_presenter.received_message.should == :sort
         end
       end
     end
@@ -277,14 +293,16 @@ describe EmployeesController do
         assigns(:employee).should eq(employee)
       end
 
-      it 'assigns locations' do
+      it 'assigns sorted locations' do
         location = build(:location)
+        fake_location_list_presenter = Faker.new([location])
+        LocationListPresenter.stub(:new).and_return(fake_location_list_presenter)
         controller.load_location_service(Faker.new([location]))
-        employee = create(:employee, customer: customer)
 
-        get :edit, {:id => employee.to_param}, {}
+        get :new
 
         assigns(:locations).should == [location]
+        fake_location_list_presenter.received_message.should == :sort
       end
     end
 
@@ -376,15 +394,16 @@ describe EmployeesController do
           response.should render_template('edit')
         end
 
-        it 'assigns locations' do
-          controller.load_employee_service(Faker.new(false))
+        it 'assigns sorted locations' do
           location = build(:location)
+          fake_location_list_presenter = Faker.new([location])
+          LocationListPresenter.stub(:new).and_return(fake_location_list_presenter)
           controller.load_location_service(Faker.new([location]))
-          employee = create(:employee, customer: customer)
 
-          put :update, {:id => employee.to_param, :employee => employee_attributes}, {}
+          get :new
 
           assigns(:locations).should == [location]
+          fake_location_list_presenter.received_message.should == :sort
         end
       end
     end

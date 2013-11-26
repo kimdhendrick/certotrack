@@ -99,7 +99,7 @@ class EquipmentController < ApplicationController
     equipment_collection = @equipment_service.search_equipment(current_user, params)
     @equipments = EquipmentListPresenter.new(equipment_collection).present(params)
     @equipment_count = @equipments.count
-    @locations = @location_service.get_all_locations(current_user)
+    @locations = LocationListPresenter.new(@location_service.get_all_locations(current_user)).sort
 
     employees_collection = @employee_service.get_all_employees(current_user)
     @employees = EmployeeListPresenter.new(employees_collection).present({sort: :sort_key})
@@ -109,7 +109,8 @@ class EquipmentController < ApplicationController
     authorize! :read, :equipment
 
     if params[:assignee] == 'Location'
-      locations = @location_service.get_all_locations(current_user, ({sort: 'name', direction: 'asc'}))
+      locations = @location_service.get_all_locations(current_user)
+      locations = LocationListPresenter.new(locations).sort
       render json: locations.map { |l| [l.id, l.name] }
     else
       employees = @employee_service.get_all_employees(current_user)

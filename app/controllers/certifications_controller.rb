@@ -116,7 +116,7 @@ class CertificationsController < ApplicationController
     certification_collection = @certification_service.search_certifications(current_user, params)
     @certifications = CertificationListPresenter.new(certification_collection).present(params)
     @certification_count = @certifications.count
-    @locations = @location_service.get_all_locations(current_user)
+    @locations = LocationListPresenter.new(@location_service.get_all_locations(current_user)).sort
     @certification_types = get_certification_type_types
   end
 

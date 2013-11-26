@@ -24,7 +24,7 @@ class EmployeesController < ApplicationController
 
   def new
     authorize! :create, :certification
-    @locations = @location_service.get_all_locations(current_user)
+    _set_locations
     @employee = Employee.new
   end
 
@@ -36,13 +36,13 @@ class EmployeesController < ApplicationController
     if @employee.persisted?
       redirect_to @employee, notice: 'Employee was successfully created.'
     else
-      @locations = @location_service.get_all_locations(current_user)
+      _set_locations
       render action: 'new'
     end
   end
 
   def edit
-    @locations = @location_service.get_all_locations(current_user)
+    _set_locations
   end
 
   def update
@@ -51,7 +51,7 @@ class EmployeesController < ApplicationController
     if success
       redirect_to @employee, notice: 'Employee was successfully updated.'
     else
-      @locations = @location_service.get_all_locations(current_user)
+      _set_locations
       render action: 'edit'
     end
   end
@@ -85,6 +85,10 @@ class EmployeesController < ApplicationController
   end
 
   private
+
+  def _set_locations
+    @locations = LocationListPresenter.new(@location_service.get_all_locations(current_user)).sort
+  end
 
   def _set_employee
     employee_pending_authorization = Employee.find(params[:id])

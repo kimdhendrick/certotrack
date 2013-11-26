@@ -772,14 +772,17 @@ describe EquipmentController do
         assigns(:report_title).should eq('Search Equipment')
       end
 
-      it 'assigns locations' do
+      it 'assigns sorted locations' do
         location = build(:location)
+        fake_location_list_presenter = Faker.new([location])
+        LocationListPresenter.stub(:new).and_return(fake_location_list_presenter)
         controller.load_location_service(Faker.new([location]))
         EmployeeListPresenter.stub(:new).and_return(Faker.new([]))
 
         get :search
 
         assigns(:locations).should == [location]
+        fake_location_list_presenter.received_message.should == :sort
       end
 
       it 'assigns employees' do
@@ -803,16 +806,17 @@ describe EquipmentController do
         sign_in stub_equipment_user(customer)
       end
 
-      it 'should return locations when assignee is Location' do
+      it 'should return sorted locations when assignee is Location' do
         location = create(:location, name: 'Oz')
+        fake_location_list_presenter = Faker.new([location])
+        LocationListPresenter.stub(:new).and_return(fake_location_list_presenter)
+        controller.load_location_service(Faker.new([location]))
         fake_employee_service = controller.load_location_service(Faker.new([location]))
 
         get :ajax_assignee, {assignee: 'Location'}
 
         fake_employee_service.received_message.should == :get_all_locations
-        fake_employee_service.received_params[1][:sort].should == 'name'
-        fake_employee_service.received_params[1][:direction].should == 'asc'
-
+        fake_location_list_presenter.received_message.should == :sort
         json = JSON.parse(response.body)
         json.should == [
           [location.id, 'Oz']
@@ -823,7 +827,6 @@ describe EquipmentController do
         employee = create(:employee, first_name: 'Wendy', last_name: 'Wizard')
         fake_employee_service = controller.load_employee_service(Faker.new([employee]))
         fake_employee_list_presenter = Faker.new([EmployeePresenter.new(employee)])
-        #noinspection RubyArgCount
         EmployeeListPresenter.stub(:new).and_return(fake_employee_list_presenter)
 
         get :ajax_assignee, {assignee: 'Employee'}
