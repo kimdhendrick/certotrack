@@ -5,7 +5,7 @@ class LocationsController < ApplicationController
                 :load_location_service,
                 :load_customer_service
 
-  before_action :_set_location, only: [:show, :edit, :update]
+  before_action :_set_location, only: [:show, :edit, :update, :destroy]
 
   check_authorization
 
@@ -52,6 +52,23 @@ class LocationsController < ApplicationController
   end
 
   def show
+  end
+
+  def destroy
+    location_name = @location.name
+    status = @location_service.delete_location(@location)
+
+    if status == :equipment_exists
+      redirect_to @location, notice: 'Location has equipment assigned, you must reassign them before deleting the location.'
+      return
+    end
+
+    if status == :employee_exists
+      redirect_to @location, notice: 'Location has employees assigned, you must reassign them before deleting the location.'
+      return
+    end
+
+    redirect_to locations_path, notice: "Location #{location_name} was successfully deleted."
   end
 
   def load_location_service(service = LocationService.new)

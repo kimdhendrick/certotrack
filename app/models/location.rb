@@ -1,6 +1,8 @@
 class Location < ActiveRecord::Base
 
   belongs_to :customer
+  has_many :equipments
+  has_many :employees
 
   before_validation :_strip_whitespace
 

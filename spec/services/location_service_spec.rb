@@ -121,4 +121,44 @@ describe LocationService do
       end
     end
   end
+
+  describe '#delete_location' do
+    it 'destroys the requested location' do
+      location = create(:location, customer: my_customer)
+
+      expect {
+        LocationService.new.delete_location(location)
+      }.to change(Location, :count).by(-1)
+    end
+
+    it 'returns error when equipment assigned to location' do
+      location = create(:location, customer: my_customer)
+      equipment = create(:equipment, location: location, customer: my_customer)
+
+      status = LocationService.new.delete_location(location)
+
+      location.reload
+      location.should_not be_nil
+
+      equipment.reload
+      equipment.should_not be_nil
+
+      status.should == :equipment_exists
+    end
+
+    it 'returns error when employee assigned to location' do
+      location = create(:location, customer: my_customer)
+      employee = create(:employee, location: location, customer: my_customer)
+
+      status = LocationService.new.delete_location(location)
+
+      location.reload
+      location.should_not be_nil
+
+      employee.reload
+      employee.should_not be_nil
+
+      status.should == :employee_exists
+    end
+  end
 end

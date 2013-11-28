@@ -84,6 +84,24 @@ describe 'Locations', slow: true do
         page.should have_content 'Siberia'
         page.should_not have_content 'Customer'
       end
+
+      it 'should be able to delete a location', js:true do
+        visit root_path
+        click_on 'All Locations'
+        click_on 'Alaska'
+        click_on 'Delete'
+        alert = page.driver.browser.switch_to.alert
+        alert.text.should eq('Are you sure you want to delete this location?')
+        alert.dismiss
+
+        click_on 'Delete'
+        alert = page.driver.browser.switch_to.alert
+        alert.text.should eq('Are you sure you want to delete this location?')
+        alert.accept
+
+        page.should have_content 'Location Alaska was successfully deleted'
+        page.should have_content 'All Location'
+      end
     end
 
     context 'when an admin user' do
@@ -106,7 +124,7 @@ describe 'Locations', slow: true do
         page.should have_content 'Florida'
       end
 
-      it 'should show and edit a location' do
+      it 'should show and edit a location', js:true do
         visit root_path
         click_on 'All Locations'
         click_on 'Texas'
@@ -122,6 +140,12 @@ describe 'Locations', slow: true do
         page.should have_link 'Home'
         page.should have_link 'All Locations'
         page.should have_link 'Create Location'
+
+        page.should have_link 'Delete'
+        click_on 'Delete'
+        alert = page.driver.browser.switch_to.alert
+        alert.text.should eq('Are you sure you want to delete this location?')
+        alert.dismiss
 
         fill_in 'Location', with: 'China'
         select 'Husky League', from: 'Customer'
@@ -157,6 +181,24 @@ describe 'Locations', slow: true do
         page.should have_content 'Location was successfully created'
         page.should have_content 'Siberia'
         page.should have_content 'Husky League'
+      end
+
+      it 'should be able to delete a location', js:true do
+        visit root_path
+        click_on 'All Locations'
+        click_on 'Florida'
+        click_on 'Delete'
+        alert = page.driver.browser.switch_to.alert
+        alert.text.should eq('Are you sure you want to delete this location?')
+        alert.dismiss
+
+        click_on 'Delete'
+        alert = page.driver.browser.switch_to.alert
+        alert.text.should eq('Are you sure you want to delete this location?')
+        alert.accept
+
+        page.should have_content 'Location Florida was successfully deleted'
+        page.should have_content 'All Locations'
       end
     end
 

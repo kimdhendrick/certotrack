@@ -21,4 +21,8 @@ class LocationPresenter
   def edit_link
     @template.link_to 'Edit', @template.edit_location_path(model)
   end
+
+  def delete_link
+    @template.link_to 'Delete', model, method: :delete, data: {confirm: 'Are you sure you want to delete this location?'}
+  end
 end

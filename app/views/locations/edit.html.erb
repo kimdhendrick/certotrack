@@ -5,3 +5,5 @@
 <%= link_to "Create Location", new_location_path %>
 
 <%= render 'form', user_action: 'Update' %>
+
+<%= link_to 'Delete', @location, method: :delete, data: {confirm: 'Are you sure you want to delete this location?'} %>

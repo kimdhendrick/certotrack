@@ -6,6 +6,8 @@ describe Location do
   subject { location }
 
   it { should belong_to(:customer) }
+  it { should have_many(:equipments) }
+  it { should have_many(:employees) }
   it { should validate_presence_of :customer }
   it { should validate_presence_of :name }
   it { should validate_uniqueness_of(:name).scoped_to(:customer_id) }
