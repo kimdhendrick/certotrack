@@ -316,7 +316,7 @@ describe 'Navigation', slow: true do
       click_and_test_link_with_title 'Create Certification Type'
     end
 
-    it 'navigates Certification', js:true do
+    it 'navigates Certification', js: true do
       certification = create(:certification,
                              employee: create(:employee, first_name: 'First', last_name: 'Last', customer: customer),
                              certification_type: create(:certification_type, customer: customer)
@@ -510,9 +510,50 @@ describe 'Navigation', slow: true do
       click_and_test_link_with_title 'Home'
     end
 
-    it 'should have link to create certfication' do
+    it 'should have link to create certification' do
       page.should have_link 'Create Certification'
       click_and_test_link_with_title 'Create Certification'
+    end
+  end
+
+  describe 'Location Links' do
+    before do
+      login_as_certification_user(customer)
+      create(:location, name: 'My Location', customer: customer)
+    end
+
+    it 'should have all the right stuff' do
+      visit root_path
+      click_on 'All Locations'
+      page.should have_content 'All Locations'
+
+      click_and_test_home_link
+      click_on 'All Locations'
+      click_and_test_link_with_title 'Create Location'
+      visit root_path
+      click_on 'All Locations'
+
+      click_on 'My Location'
+      page.should have_content 'Show Location'
+      click_and_test_home_link
+      click_on 'All Locations'
+      click_on 'My Location'
+
+      click_and_test_link_with_title 'All Locations'
+      visit root_path
+      click_on 'All Locations'
+      click_on 'My Location'
+
+      click_and_test_link_with_title 'Create Location'
+      visit root_path
+      click_on 'All Locations'
+      click_on 'My Location'
+
+      click_on 'Edit'
+      page.should have_content 'Edit Location'
+      click_and_test_home_link
+      click_and_test_link_with_title 'All Locations'
+      click_and_test_link_with_title 'Create Location'
     end
   end
 
