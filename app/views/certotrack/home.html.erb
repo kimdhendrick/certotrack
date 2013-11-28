@@ -14,8 +14,11 @@ CertoTrack - Home
   <%= render 'certification_links' %>
 <% end %>
 
-
-<% if (can? :read, :equipment) || (can? :read, :certification) %>
+<% if (can? :manage, :all) %>
+  <hr/>
+  Administration Links:
+  <%= render 'administration_links' %>
+<% elsif (can? :read, :equipment) || (can? :read, :certification) %>
   <hr/>
   User Administration Links:
   <%= render 'user_administration_links' %>
