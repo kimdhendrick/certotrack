@@ -81,6 +81,9 @@ Answer 'yes' when prompted. Copy & paste command to ignore rvm warnings.
 ## Recreate database
     heroku pg:reset DATABASE
 
+## Migrate database
+    heroku run rake db:migrate
+
 ## Reseed database
     heroku run rake db:seed
 
@@ -96,5 +99,6 @@ Answer 'yes' when prompted. Copy & paste command to ignore rvm warnings.
 ## Seed data
     equipment_user
     certification_user
+    vehicle_user
     full_rights_user
     admin
