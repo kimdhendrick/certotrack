@@ -1,6 +1,7 @@
 class CertificationsController < ApplicationController
   include CertificationsHelper
   include CertificationTypesHelper
+  include PresentableModelHelper
 
   before_filter :authenticate_user!,
                 :load_certification_service,
@@ -148,6 +149,7 @@ class CertificationsController < ApplicationController
     certification_pending_authorization = Certification.find(params[:id])
     authorize! :manage, certification_pending_authorization
     @certification = certification_pending_authorization
+    @model = certification_pending_authorization
   end
 
   def _set_certification_types(current_user)

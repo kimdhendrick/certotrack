@@ -3,7 +3,7 @@
 <%= link_to 'Home', root_path %> |
 <%= link_to 'Search Certifications', search_certifications_path %>
 
-<% certification_presenter_for do |certification| %>
+<% presenter_for do |certification| %>
   <p>
     <b>Employee</b>
     <%= certification.employee_show_link %>

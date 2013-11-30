@@ -1,4 +1,5 @@
 class VehiclesController < ApplicationController
+  include PresentableModelHelper
   include VehiclesHelper
 
   before_filter :authenticate_user!,
@@ -52,7 +53,7 @@ class VehiclesController < ApplicationController
   def _set_vehicle
     vehicle_pending_authorization = Vehicle.find(params[:id])
     authorize! :manage, vehicle_pending_authorization
-    @vehicle = vehicle_pending_authorization
+    @model = vehicle_pending_authorization
   end
 
   def _set_locations

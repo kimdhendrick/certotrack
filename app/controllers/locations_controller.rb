@@ -1,4 +1,5 @@
 class LocationsController < ApplicationController
+  include PresentableModelHelper
   include LocationsHelper
 
   before_filter :authenticate_user!,
@@ -89,6 +90,7 @@ class LocationsController < ApplicationController
     location_pending_authorization = Location.find(params[:id])
     authorize! :manage, location_pending_authorization
     @location = location_pending_authorization
+    @model = location_pending_authorization
   end
 
   def _location_params

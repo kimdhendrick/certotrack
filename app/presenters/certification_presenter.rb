@@ -1,6 +1,7 @@
 class CertificationPresenter
   include SortableByStatus
   include EmployeesHelper
+  include PresentableModelHelper
 
   attr_reader :model
 
@@ -48,7 +49,7 @@ class CertificationPresenter
   end
 
   def employee
-    employee_presenter_for(model.employee)
+    presenter_for(model.employee)
   end
 
   def employee_name

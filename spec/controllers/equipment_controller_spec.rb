@@ -313,7 +313,7 @@ describe EquipmentController do
 
         get :show, {:id => equipment.to_param}, {}
 
-        assigns(:equipment).should eq(equipment)
+        assigns(:model).should eq(equipment)
       end
     end
 
@@ -328,7 +328,7 @@ describe EquipmentController do
 
         get :show, {:id => equipment.to_param}, {}
 
-        assigns(:equipment).should eq(equipment)
+        assigns(:model).should eq(equipment)
       end
     end
 
@@ -342,7 +342,7 @@ describe EquipmentController do
 
         get :show, {:id => equipment.to_param}, {}
 
-        assigns(:equipment).should be_nil
+        assigns(:model).should be_nil
       end
     end
   end

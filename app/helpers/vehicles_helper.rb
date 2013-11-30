@@ -1,9 +1,5 @@
 module VehiclesHelper
 
-  def vehicle_presenter_for(vehicle = @vehicle)
-    yield VehiclePresenter.new(vehicle, self)
-  end
-
   def vehicle_accessible_parameters
     [
       :vehicle_number,

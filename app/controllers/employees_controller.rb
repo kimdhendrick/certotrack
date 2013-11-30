@@ -1,5 +1,6 @@
 class EmployeesController < ApplicationController
   include EmployeesHelper
+  include PresentableModelHelper
 
   before_filter :authenticate_user!,
                 :load_employee_service,
@@ -94,6 +95,7 @@ class EmployeesController < ApplicationController
     employee_pending_authorization = Employee.find(params[:id])
     authorize! :manage, employee_pending_authorization
     @employee = employee_pending_authorization
+    @model = employee_pending_authorization
   end
 
   def _employees_params

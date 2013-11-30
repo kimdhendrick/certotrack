@@ -1,6 +1,7 @@
 class EquipmentController < ApplicationController
   include ControllerHelper
   include EquipmentHelper
+  include PresentableModelHelper
 
   before_filter :authenticate_user!,
                 :load_equipment_service,
@@ -142,6 +143,7 @@ class EquipmentController < ApplicationController
     equipment_pending_authorization = Equipment.find(params[:id])
     authorize! :manage, equipment_pending_authorization
     @equipment = equipment_pending_authorization
+    @model = equipment_pending_authorization
   end
 
   def _equipment_params

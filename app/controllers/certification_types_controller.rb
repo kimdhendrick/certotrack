@@ -100,6 +100,7 @@ class CertificationTypesController < ApplicationController
     certification_type_pending_authorization = CertificationType.find(params[:id])
     authorize! :manage, certification_type_pending_authorization
     @certification_type = certification_type_pending_authorization
+    @model = certification_type_pending_authorization
   end
 
   def _certification_type_params

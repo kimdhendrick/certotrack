@@ -269,7 +269,7 @@ describe LocationsController do
 
         get :show, {:id => location.to_param}, {}
 
-        assigns(:location).should eq(location)
+        assigns(:model).should eq(location)
       end
     end
 
@@ -284,7 +284,7 @@ describe LocationsController do
 
         get :show, {:id => location.to_param}, {}
 
-        assigns(:location).should eq(location)
+        assigns(:model).should eq(location)
       end
     end
 
@@ -298,7 +298,7 @@ describe LocationsController do
 
         get :show, {:id => location.to_param}, {}
 
-        assigns(:location).should be_nil
+        assigns(:model).should be_nil
       end
     end
   end
