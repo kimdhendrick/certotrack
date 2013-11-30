@@ -1,10 +1,5 @@
-class BatchCertificationsController < ApplicationController
-
+class BatchCertificationsController < ModelController
   include AuthorizationHelper
-
-  before_filter :authenticate_user!
-
-  check_authorization
 
   def create
     authorize! :read, :certification
@@ -39,9 +34,11 @@ class BatchCertificationsController < ApplicationController
 
     if batch_certification.employee_update?
       @employee = batch_certification.employee
+      @model = @employee
       render 'employees/show'
     else
       @certification_type = batch_certification.certification_type
+      @model = @certification_type
       @certifications_count = @certifications.count
       @non_certified_employees = batch_certification.non_certified_employees
       @non_certified_employee_count = @non_certified_employees.count

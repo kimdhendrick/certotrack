@@ -1,6 +1,6 @@
 class CertotrackController < ApplicationController
-  before_filter :authenticate_user!,
-                :load_equipment_service,
+
+  before_filter :load_equipment_service,
                 :load_certification_service
 
   def home

@@ -1,18 +1,16 @@
-class CertificationsController < ApplicationController
+class CertificationsController < ModelController
+  include ControllerHelper
   include CertificationsHelper
   include CertificationTypesHelper
   include PresentableModelHelper
 
-  before_filter :authenticate_user!,
-                :load_certification_service,
+  before_filter :load_certification_service,
                 :load_certification_type_service,
                 :load_employee_service,
                 :load_location_service
 
   before_action :_set_certification,
                 only: [:show, :edit, :update, :destroy, :certification_history]
-
-  check_authorization
 
   def index
     authorize! :read, :certification
@@ -121,22 +119,6 @@ class CertificationsController < ApplicationController
     @certification_types = get_certification_type_types
   end
 
-  def load_location_service(service = LocationService.new)
-    @location_service ||= service
-  end
-
-  def load_certification_service(service = CertificationService.new)
-    @certification_service ||= service
-  end
-
-  def load_certification_type_service(service = CertificationTypeService.new)
-    @certification_type_service ||= service
-  end
-
-  def load_employee_service(service = EmployeeService.new)
-    @employee_service ||= service
-  end
-
   private
 
   def _render_certifications(certifications_collection)
@@ -146,10 +128,8 @@ class CertificationsController < ApplicationController
   end
 
   def _set_certification
-    certification_pending_authorization = Certification.find(params[:id])
-    authorize! :manage, certification_pending_authorization
-    @certification = certification_pending_authorization
-    @model = certification_pending_authorization
+    _set_model(Certification)
+    @certification = @model
   end
 
   def _set_certification_types(current_user)

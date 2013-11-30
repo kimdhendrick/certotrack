@@ -1,15 +1,13 @@
-class EmployeesController < ApplicationController
+class EmployeesController < ModelController
   include EmployeesHelper
+  include ControllerHelper
   include PresentableModelHelper
 
-  before_filter :authenticate_user!,
-                :load_employee_service,
+  before_filter :load_employee_service,
                 :load_location_service,
                 :load_certification_service
 
   before_action :_set_employee, only: [:show, :edit, :update, :destroy]
-
-  check_authorization
 
   def index
     authorize! :read, :certification
@@ -73,18 +71,6 @@ class EmployeesController < ApplicationController
     redirect_to employees_url, notice: 'Employee was successfully deleted.'
   end
 
-  def load_employee_service(service = EmployeeService.new)
-    @employee_service ||= service
-  end
-
-  def load_location_service(service = LocationService.new)
-    @location_service ||= service
-  end
-
-  def load_certification_service(service = CertificationService.new)
-    @certification_service ||= service
-  end
-
   private
 
   def _set_locations
@@ -92,10 +78,8 @@ class EmployeesController < ApplicationController
   end
 
   def _set_employee
-    employee_pending_authorization = Employee.find(params[:id])
-    authorize! :manage, employee_pending_authorization
-    @employee = employee_pending_authorization
-    @model = employee_pending_authorization
+    _set_model(Employee)
+    @employee = @model
   end
 
   def _employees_params

@@ -1,14 +1,10 @@
-class TrainingEventsController < ApplicationController
-
+class TrainingEventsController < ModelController
   include AuthorizationHelper
 
-  before_filter :authenticate_user!,
-                :_authorize_certification,
+  before_filter :_authorize_certification,
                 :load_employee_service,
                 :load_certification_type_service,
                 :load_training_event_service
-
-  check_authorization
 
   def list_employees
     @employees = EmployeeListPresenter.new(

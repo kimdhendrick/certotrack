@@ -1,14 +1,12 @@
-class LocationsController < ApplicationController
+class LocationsController < ModelController
+  include ControllerHelper
   include PresentableModelHelper
   include LocationsHelper
 
-  before_filter :authenticate_user!,
-                :load_location_service,
+  before_filter :load_location_service,
                 :load_customer_service
 
   before_action :_set_location, only: [:show, :edit, :update, :destroy]
-
-  check_authorization
 
   def index
     authorize! :read, :location
@@ -72,14 +70,6 @@ class LocationsController < ApplicationController
     redirect_to locations_path, notice: "Location #{location_name} was successfully deleted."
   end
 
-  def load_location_service(service = LocationService.new)
-    @location_service ||= service
-  end
-
-  def load_customer_service(service = CustomerService.new)
-    @customer_service ||= service
-  end
-
   private
 
   def _set_customers
@@ -87,10 +77,8 @@ class LocationsController < ApplicationController
   end
 
   def _set_location
-    location_pending_authorization = Location.find(params[:id])
-    authorize! :manage, location_pending_authorization
-    @location = location_pending_authorization
-    @model = location_pending_authorization
+    _set_model(Location)
+    @location = @model
   end
 
   def _location_params

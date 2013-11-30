@@ -1,11 +1,8 @@
-class RecertificationsController < ApplicationController
+class RecertificationsController < ModelController
 
-  before_filter :authenticate_user!,
-    :load_certification_service
+  before_filter :load_certification_service
 
   before_action :_set_certification, only: [:new, :create]
-
-  check_authorization
 
   def new
   end

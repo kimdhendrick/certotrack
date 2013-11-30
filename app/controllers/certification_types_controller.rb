@@ -1,15 +1,12 @@
-class CertificationTypesController < ApplicationController
+class CertificationTypesController < ModelController
   include ControllerHelper
   include CertificationTypesHelper
 
-  before_filter :authenticate_user!,
-                :load_certification_type_service,
+  before_filter :load_certification_type_service,
                 :load_employee_service,
                 :load_certification_service
 
   before_action :_set_certification_type, only: [:show, :edit, :update, :destroy]
-
-  check_authorization
 
   def index
     authorize! :read, :certification
@@ -82,25 +79,11 @@ class CertificationTypesController < ApplicationController
     render json: results
   end
 
-  def load_certification_type_service(service = CertificationTypeService.new)
-    @certification_type_service ||= service
-  end
-
-  def load_certification_service(service = CertificationService.new)
-    @certification_service ||= service
-  end
-
-  def load_employee_service(service = EmployeeService.new)
-    @employee_service ||= service
-  end
-
   private
 
   def _set_certification_type
-    certification_type_pending_authorization = CertificationType.find(params[:id])
-    authorize! :manage, certification_type_pending_authorization
-    @certification_type = certification_type_pending_authorization
-    @model = certification_type_pending_authorization
+    _set_model(CertificationType)
+    @certification_type = @model
   end
 
   def _certification_type_params

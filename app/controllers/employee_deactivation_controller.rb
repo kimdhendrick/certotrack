@@ -1,13 +1,10 @@
-class EmployeeDeactivationController < ApplicationController
+class EmployeeDeactivationController < ModelController
 
-  before_filter :authenticate_user!,
-                :load_equipment_service,
+  before_filter :load_equipment_service,
                 :load_employee_deactivation_service,
                 :load_certification_service
 
   before_action :_set_employee, only: [:deactivate_confirm, :deactivate]
-
-  check_authorization
 
   def deactivate_confirm
     @equipments = EquipmentListPresenter.new(@equipment_service.get_all_equipment_for_employee(@employee)).present

@@ -1,16 +1,13 @@
-class EquipmentController < ApplicationController
+class EquipmentController < ModelController
   include ControllerHelper
   include EquipmentHelper
   include PresentableModelHelper
 
-  before_filter :authenticate_user!,
-                :load_equipment_service,
+  before_filter :load_equipment_service,
                 :load_location_service,
                 :load_employee_service
 
   before_action :_set_equipment, only: [:show, :edit, :update, :destroy]
-
-  check_authorization
 
   def index
     authorize! :read, :equipment
@@ -125,25 +122,11 @@ class EquipmentController < ApplicationController
     render json: @equipment_service.get_equipment_names(current_user, params[:term])
   end
 
-  def load_equipment_service(service = EquipmentService.new)
-    @equipment_service ||= service
-  end
-
-  def load_employee_service(service = EmployeeService.new)
-    @employee_service ||= service
-  end
-
-  def load_location_service(service = LocationService.new)
-    @location_service ||= service
-  end
-
   private
 
   def _set_equipment
-    equipment_pending_authorization = Equipment.find(params[:id])
-    authorize! :manage, equipment_pending_authorization
-    @equipment = equipment_pending_authorization
-    @model = equipment_pending_authorization
+    _set_model(Equipment)
+    @equipment = @model
   end
 
   def _equipment_params

@@ -1,14 +1,12 @@
-class VehiclesController < ApplicationController
+class VehiclesController < ModelController
+  include ControllerHelper
   include PresentableModelHelper
   include VehiclesHelper
 
-  before_filter :authenticate_user!,
-                :load_vehicle_service,
+  before_filter :load_vehicle_service,
                 :load_location_service
 
   before_action :_set_vehicle, only: [:show]
-
-  check_authorization
 
   def index
     authorize! :read, :vehicle
@@ -40,20 +38,10 @@ class VehiclesController < ApplicationController
   def show
   end
 
-  def load_vehicle_service(service = VehicleService.new)
-    @vehicle_service ||= service
-  end
-
-  def load_location_service(service = LocationService.new)
-    @location_service ||= service
-  end
-
   private
 
   def _set_vehicle
-    vehicle_pending_authorization = Vehicle.find(params[:id])
-    authorize! :manage, vehicle_pending_authorization
-    @model = vehicle_pending_authorization
+    _set_model(Vehicle)
   end
 
   def _set_locations
