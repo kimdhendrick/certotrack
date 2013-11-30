@@ -6,9 +6,9 @@ describe 'Vehicles', slow: true do
 
   context 'when an vehicle user' do
     before do
-      denver = create(:location, name: 'Denver')
-      golden = create(:location, name: 'Golden')
-      boulder = create(:location, name: 'Boulder')
+      denver = create(:location, name: 'Denver', customer: customer)
+      golden = create(:location, name: 'Golden', customer: customer)
+      boulder = create(:location, name: 'Boulder', customer: customer)
 
       create(:vehicle, vehicle_number: '987345', vin: '1M8GDM9AXKP042788', license_plate: 'ABC-123',
              year: 2013, make: 'Chevrolet', vehicle_model: 'Chevette', mileage: 10000, location: denver, customer: customer)
@@ -84,6 +84,78 @@ describe 'Vehicles', slow: true do
         page.should have_content 'N/A'
       end
     end
+
+    it 'should be able to create a new vehicle' do
+      visit root_path
+
+      page.should have_link 'All Vehicles'
+      click_on 'All Vehicles'
+
+      page.should have_link 'Create Vehicle'
+
+      click_on 'Create Vehicle'
+
+      page.should have_content 'Create Vehicle'
+      page.should have_link 'Home'
+      page.should have_link 'All Vehicles'
+
+      fill_in 'Vehicle Number', with: '3921-A'
+      fill_in 'VIN', with: '98765432109876543'
+      fill_in 'License Plate', with: 'CTIsCool'
+      fill_in 'Year', with: '2013'
+      fill_in 'Make', with: 'Audi'
+      fill_in 'Model', with: 'A3'
+      fill_in 'Mileage', with: '15'
+      select 'Golden', from: 'vehicle_location_id'
+
+      click_on 'Create'
+
+      page.should have_content 'Show Vehicle'
+      page.should have_content 'Vehicle was successfully created'
+      page.should have_content '3921-A'
+      page.should have_content '98765432109876543'
+      page.should have_content 'CTIsCool'
+      page.should have_content '2013'
+      page.should have_content 'Audi'
+      page.should have_content 'A3'
+      page.should have_content '15'
+      page.should have_content 'Golden'
+    end
+
+    it 'should show a vehicle' do
+      visit root_path
+      click_on 'All Vehicles'
+      click_on '1M8GDM9AXKP042788'
+
+      page.should have_content 'Show Vehicle'
+
+      page.should have_link 'Home'
+      page.should have_link 'All Vehicles'
+      page.should have_link 'Create Vehicle'
+
+      page.should have_content '1M8GDM9AXKP042788'
+      page.should have_content '987345'
+      page.should have_content 'ABC-123'
+      page.should have_content '2013'
+      page.should have_content 'Chevrolet'
+      page.should have_content 'Chevette'
+      page.should have_content '10,000'
+      page.should have_content 'Denver'
+
+      visit root_path
+      click_on 'All Vehicles'
+      click_on '987345'
+
+      page.should have_content 'Show Vehicle'
+      page.should have_content '1M8GDM9AXKP042788'
+      page.should have_content '987345'
+      page.should have_content 'ABC-123'
+      page.should have_content '2013'
+      page.should have_content 'Chevrolet'
+      page.should have_content 'Chevette'
+      page.should have_content '10,000'
+      page.should have_content 'Denver'
+    end
   end
 
   context 'when an admin user' do
@@ -93,15 +165,50 @@ describe 'Vehicles', slow: true do
     before do
       create(:vehicle, vehicle_number: '987345', customer: customer1)
       create(:vehicle, vehicle_number: '34987', customer: customer2)
+      create(:location, name: 'Golden')
 
       login_as_admin
     end
 
-    it 'should show all vehicles for all customers' do
+    it 'should list all vehicles for all customers' do
       click_link 'All Vehicles'
 
       page.should have_content '987345'
       page.should have_content '34987'
+    end
+
+    it 'should be able to create a new vehicle' do
+      visit root_path
+
+      page.should have_link 'Create Vehicle'
+
+      click_on 'Create Vehicle'
+
+      page.should have_content 'Create Vehicle'
+      page.should have_link 'Home'
+      page.should have_link 'All Vehicles'
+
+      fill_in 'Vehicle Number', with: '3921-A'
+      fill_in 'VIN', with: '98765432109876543'
+      fill_in 'License Plate', with: 'CTIsCool'
+      fill_in 'Year', with: '2013'
+      fill_in 'Make', with: 'Audi'
+      fill_in 'Model', with: 'A3'
+      fill_in 'Mileage', with: '15'
+      select 'Golden', from: 'vehicle_location_id'
+
+      click_on 'Create'
+
+      page.should have_content 'Show Vehicle'
+      page.should have_content 'Vehicle was successfully created'
+      page.should have_content '3921-A'
+      page.should have_content '98765432109876543'
+      page.should have_content 'CTIsCool'
+      page.should have_content '2013'
+      page.should have_content 'Audi'
+      page.should have_content 'A3'
+      page.should have_content '15'
+      page.should have_content 'Golden'
     end
   end
 

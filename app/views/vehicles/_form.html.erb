@@ -1,0 +1,59 @@
+<%= form_for(@vehicle, data: { vehicle_form: "data-vehicle-form" }) do |f| %>
+
+  <%= render 'errors'%>
+
+  <div class="field">
+    <%= f.label :vehicle_number, 'Vehicle Number' %>
+    <br/>
+    <%= f.text_field :vehicle_number %>
+  </div>
+
+  <div class="field">
+    <%= f.label :vin, 'VIN' %>
+    <br/>
+    <%= f.text_field :vin %>
+  </div>
+
+  <div class="field">
+    <%= f.label :license_plate, 'License Plate' %>
+    <br/>
+    <%= f.text_field :license_plate %>
+  </div>
+
+  <div class="field">
+    <%= f.label :year %>
+    <br/>
+    <%= f.text_field :year %>
+  </div>
+
+  <div class="field">
+    <%= f.label :make %>
+    <br/>
+    <%= f.text_field :make %>
+  </div>
+
+  <div class="field">
+    <%= f.label :vehicle_model, 'Model' %>
+    <br/>
+    <%= f.text_field :vehicle_model %>
+  </div>
+
+  <div class="field">
+    <%= f.label :mileage %>
+    <br/>
+    <%= f.text_field :mileage %>
+  </div>
+
+  <div class="field">
+    <%= f.label :location_id, 'Location' %>
+    <br/>
+    <%= select(:vehicle, :location_id,
+               options_from_collection_for_select(@locations, 'id', 'name',
+                                                  @vehicle.location_id)) %>
+  </div>
+
+  <div class="actions">
+    <%= submit_tag(user_action) %>
+  </div>
+
+<% end %>

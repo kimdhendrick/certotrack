@@ -1,0 +1,52 @@
+<% vehicle_presenter_for do |vehicle| %>
+  <h1>Show Vehicle</h1>
+
+  <%= link_to 'Home', root_path %> |
+  <%= link_to "All Vehicles", vehicles_path %> |
+  <%= link_to 'Create Vehicle', new_vehicle_path %>
+
+  <p>
+    <b>Vehicle Number</b>
+    <%= vehicle.vehicle_number %>
+  </p>
+
+  <p>
+    <b>VIN</b>
+    <%= vehicle.vin %>
+  </p>
+
+  <p>
+    <b>License Plate</b>
+    <%= vehicle.license_plate %>
+  </p>
+
+  <p>
+    <b>Year</b>
+    <%= vehicle.year %>
+  </p>
+
+  <p>
+    <b>Make</b>
+    <%= vehicle.make %>
+  </p>
+
+  <p>
+    <b>Model</b>
+    <%= vehicle.vehicle_model %>
+  </p>
+
+  <p>
+    <b>Mileage</b>
+    <%= vehicle.mileage %>
+  </p>
+
+  <p>
+    <b>Location</b>
+    <%= vehicle.location %>
+  </p>
+
+  <p>
+    <b>Status</b>
+    <%= vehicle.status %>
+  </p>
+<% end %>

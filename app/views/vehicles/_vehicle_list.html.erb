@@ -15,8 +15,8 @@
   <tbody>
   <% @vehicles.each do |vehicle| %>
     <tr>
-      <td><%= vehicle.vehicle_number %></td>
-      <td><%= vehicle.vin %></td>
+      <td><%= link_to vehicle.vehicle_number, vehicle.model %></td>
+      <td><%= link_to vehicle.vin, vehicle.model %></td>
       <td><%= vehicle.license_plate %></td>
       <td><%= vehicle.year %></td>
       <td><%= vehicle.make %></td>

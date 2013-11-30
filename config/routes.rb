@@ -44,5 +44,5 @@ Certotrack::Application.routes.draw do
 
   resources :locations
 
-  resources :vehicles, only: [:index]
+  resources :vehicles, only: [:index, :new, :create, :show]
 end
