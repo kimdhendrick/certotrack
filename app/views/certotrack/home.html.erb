@@ -14,17 +14,23 @@ CertoTrack - Home
   <%= render 'certification_links' %>
 <% end %>
 
+<% if can? :read, :vehicle %>
+  <hr/>
+  Vehicle Links:
+  <%= render 'vehicle_links' %>
+<% end %>
+
 <% if (can? :manage, :all) %>
   <hr/>
   Administration Links:
   <%= render 'administration_links' %>
-<% elsif (can? :read, :equipment) || (can? :read, :certification) %>
+<% elsif (can? :read, :equipment) || (can? :read, :certification) || (can? :read, :vehicle) %>
   <hr/>
   User Administration Links:
   <%= render 'user_administration_links' %>
 <% end %>
 
-<% if (cannot? :read, :equipment) && (cannot? :read, :certification) %>
+<% if (cannot? :read, :equipment) && (cannot? :read, :certification) && (cannot? :read, :vehicle) %>
   <p>You are not authorized for any services. Please contact support@certotrack.com.</p>
 <% end %>
 

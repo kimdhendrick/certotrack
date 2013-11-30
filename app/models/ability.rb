@@ -2,55 +2,54 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-    user ||= User.new
+    @user = user || User.new
 
-    if user.role?('admin')
-      can :manage, :all
-    end
+    _setup_abilities_for([Equipment]) if _equipment_user?
+    _setup_abilities_for([Certification, CertificationType]) if _certification_user?
+    _setup_abilities_for([Vehicle]) if _vehicle_user?
+    _setup_abilities_for([Location]) if _location_user?
+    _setup_abilities_for([Employee]) if _employee_user?
 
-    if _equipment_user?(user) || _certification_user?(user)
-      can :read, :employee
-      can :manage, Employee do |employee|
-        employee.try(:customer) == user.customer
-      end
-
-      can :read, :location
-      can :create, :location
-      can :manage, Location do |location|
-        location.try(:customer) == user.customer
-      end
-    end
-
-    if _equipment_user?(user)
-      can :create, :equipment
-      can :read, :equipment
-
-      can :manage, Equipment do |equipment|
-        equipment.try(:customer) == user.customer
-      end
-    end
-
-    if _certification_user?(user)
-      can :create, :certification
-      can :read, :certification
-
-      can :manage, CertificationType do |certification_type|
-        certification_type.try(:customer) == user.customer
-      end
-
-      can :manage, Certification do |certification|
-        certification.try(:customer) == user.customer
-      end
-    end
+    can :manage, :all if _admin_user?
   end
 
   private
 
-  def _certification_user?(user)
+  attr_reader :user
+
+  def _admin_user?
+    user.role?('admin')
+  end
+
+  def _certification_user?
     user.role?('certification')
   end
 
-  def _equipment_user?(user)
+  def _equipment_user?
     user.role?('equipment')
+  end
+
+  def _vehicle_user?
+    user.role?('vehicle')
+  end
+
+  def _employee_user?
+    _equipment_user? || _certification_user?
+  end
+
+  def _location_user?
+    _equipment_user? || _certification_user? || _vehicle_user?
+  end
+
+  def _setup_abilities_for(resource_classes)
+    resource_classes.each do |resource_class|
+      resource = resource_class.name.downcase.to_sym
+      can :read, resource
+      can :create, resource
+
+      can :manage, resource_class do |resource_instance|
+        resource_instance.try(:customer) == user.customer
+      end
+    end
   end
 end

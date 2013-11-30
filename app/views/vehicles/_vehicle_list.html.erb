@@ -1,0 +1,30 @@
+<table class="sortable">
+  <thead>
+  <tr>
+    <th><%= sortable 'vehicle_number' %></th>
+    <th><%= sortable 'vin', title='VIN' %></th>
+    <th><%= sortable 'license_plate' %></th>
+    <th><%= sortable 'year' %></th>
+    <th><%= sortable 'make' %></th>
+    <th><%= sortable 'vehicle_model', title="Model" %></th>
+    <th><%= sortable 'mileage' %></th>
+    <th><%= sortable 'location' %></th>
+    <th><%= sortable 'status_code', title='Status' %></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @vehicles.each do |vehicle| %>
+    <tr>
+      <td><%= vehicle.vehicle_number %></td>
+      <td><%= vehicle.vin %></td>
+      <td><%= vehicle.license_plate %></td>
+      <td><%= vehicle.year %></td>
+      <td><%= vehicle.make %></td>
+      <td><%= vehicle.vehicle_model %></td>
+      <td><%= vehicle.mileage %></td>
+      <td><%= vehicle.location %></td>
+      <td><%= vehicle.status %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

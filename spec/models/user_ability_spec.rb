@@ -12,7 +12,11 @@ describe User do
 
       it { should be_able_to(:manage, :all) }
       it { should be_able_to(:manage, :customer) }
+      it { should be_able_to(:manage, :equipment) }
+      it { should be_able_to(:manage, :certification) }
+      it { should be_able_to(:manage, :employee) }
       it { should be_able_to(:manage, :location) }
+      it { should be_able_to(:manage, :vehicle) }
     end
 
     context 'when user is a guest' do
@@ -21,6 +25,10 @@ describe User do
       it { should_not be_able_to(:manage, :all) }
       it { should_not be_able_to(:manage, :equipment) }
       it { should_not be_able_to(:manage, :certification) }
+      it { should_not be_able_to(:manage, :employee) }
+      it { should_not be_able_to(:manage, :location) }
+      it { should_not be_able_to(:manage, :vehicle) }
+      it { should_not be_able_to(:manage, :customer) }
     end
 
     context 'when user is an equipment user' do
@@ -31,8 +39,11 @@ describe User do
       it { should be_able_to(:read, :location) }
       it { should be_able_to(:create, :location) }
       it { should be_able_to(:read, :employee) }
+      it { should be_able_to(:create, :employee) }
+      it { should_not be_able_to(:read, :vehicle) }
+      it { should_not be_able_to(:read, :certification) }
+      it { should_not be_able_to(:manage, :customer) }
       it { should_not be_able_to(:manage, :all) }
-      it { should_not be_able_to(:manage, :certification) }
     end
 
     context 'when user is an equipment user with equipment' do
@@ -70,8 +81,11 @@ describe User do
       it { should be_able_to(:read, :location) }
       it { should be_able_to(:create, :location) }
       it { should be_able_to(:read, :employee) }
-      it { should_not be_able_to(:manage, :all) }
       it { should_not be_able_to(:manage, :equipment) }
+      it { should_not be_able_to(:read, :vehicle) }
+      it { should_not be_able_to(:manage, :customer) }
+      it { should_not be_able_to(:manage, :all) }
+
     end
 
     context 'when user is an certification user with certification types' do
@@ -108,6 +122,29 @@ describe User do
 
       it { should be_able_to(:manage, own_location) }
       it { should_not be_able_to(:manage, other_customer_location) }
+    end
+
+    context 'when user is an vehicle user' do
+      let(:user) { build(:user, roles: ['vehicle']) }
+
+      it { should be_able_to(:read, :vehicle) }
+      it { should be_able_to(:create, :vehicle) }
+      it { should be_able_to(:read, :location) }
+      it { should be_able_to(:create, :location) }
+      it { should_not be_able_to(:read, :equipment) }
+      it { should_not be_able_to(:read, :certification) }
+      it { should_not be_able_to(:read, :employee) }
+      it { should_not be_able_to(:manage, :customer) }
+      it { should_not be_able_to(:manage, :all) }
+    end
+
+    context 'when user is an vehicle user with vehicle' do
+      let(:user) { build(:user, roles: ['vehicle']) }
+      let(:own_vehicle) { build(:vehicle, customer: user.customer) }
+      let(:other_customer_vehicle) { build(:vehicle) }
+
+      it { should be_able_to(:manage, own_vehicle) }
+      it { should_not be_able_to(:manage, other_customer_vehicle) }
     end
   end
 end

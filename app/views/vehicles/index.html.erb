@@ -1,0 +1,9 @@
+<h1><%=@report_title%></h1>
+
+<div>Total: <%=@vehicle_count%></div>
+
+<%= link_to 'Home', root_path %> |
+
+<%= render 'vehicle_list'%>
+
+<%= will_paginate @vehicles %>

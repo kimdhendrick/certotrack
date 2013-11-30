@@ -12,6 +12,10 @@ module CurrentUserHelpers
     stub_current_user_with(_create_stub_user_with_roles(['certification'], customer))
   end
 
+  def stub_vehicle_user(customer = nil)
+    stub_current_user_with(_create_stub_user_with_roles(['vehicle'], customer))
+  end
+
   def stub_guest_user
     stub_current_user_with(_create_stub_user_with_roles([]))
   end

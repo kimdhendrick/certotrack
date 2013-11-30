@@ -7,7 +7,8 @@ customer = Customer.create!(name: 'Test Customer')
 User.create!(username: 'admin', password: 'Password123', email: 'admin@example.com', roles: ['admin'], customer: customer, first_name: 'First', last_name: 'Last')
 User.create!(username: 'equipment_user', password: 'Password123', email: 'equipment_user@example.com', roles: ['equipment'], customer: customer, first_name: 'First', last_name: 'Last')
 User.create!(username: 'certification_user', password: 'Password123', email: 'certification_user@example.com', roles: ['certification'], customer: customer, first_name: 'First', last_name: 'Last')
-User.create!(username: 'full_rights_user', password: 'Password123', email: 'full_rights_user@example.com', roles: ['equipment', 'certification'], customer: customer, first_name: 'First', last_name: 'Last')
+User.create!(username: 'vehicle_user', password: 'Password123', email: 'vehicle_user@example.com', roles: ['vehicle'], customer: customer, first_name: 'First', last_name: 'Last')
+User.create!(username: 'full_rights_user', password: 'Password123', email: 'full_rights_user@example.com', roles: ['equipment', 'certification', 'vehicle'], customer: customer, first_name: 'First', last_name: 'Last')
 User.create!(username: 'guest', password: 'Password123', email: 'guest@example.com', first_name: 'First', last_name: 'Last', customer: customer)
 
 golden = Location.create!(name: 'Golden', customer: customer)
@@ -38,3 +39,12 @@ Equipment.create!(name: 'Air Bottle', serial_number: 'SCOTT', customer: customer
 
 Equipment.create!(name: 'Mobile Data Computer', serial_number: 'MDC999', customer: customer, last_inspection_date: Date.today,
                        inspection_interval: Interval::NOT_REQUIRED.text)
+
+Vehicle.create!(vehicle_number: '987345', vin: '1M8GDM9AXKP042788', license_plate: 'ABC-123',
+                year: 2013, make: 'Chevrolet', vehicle_model: 'Chevette', mileage: 10000, location: denver, customer: customer)
+
+Vehicle.create!(vehicle_number: '34987', vin: '2B8GDM9AXKP042790', license_plate: '123-ABC',
+                year: 1999, make: 'Dodge', vehicle_model: 'Dart', mileage: 20000, location: golden, customer: customer)
+
+Vehicle.create!(vehicle_number: '77777', vin: '3C8GDM9AXKP042701', license_plate: '789-XYZ',
+                year: 1970, make: 'Buick', vehicle_model: 'Riviera', mileage: 56000, location: boulder, customer: customer)

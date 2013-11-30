@@ -12,6 +12,10 @@ module LoginHelpers
     login_as_user_with_role('equipment', customer)
   end
 
+  def login_as_vehicle_user(customer = nil)
+    login_as_user_with_role('vehicle', customer)
+  end
+
   def login_as_certification_user(customer = nil)
     login_as_user_with_role('certification', customer)
   end

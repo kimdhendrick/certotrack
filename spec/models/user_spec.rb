@@ -50,6 +50,13 @@ describe User do
 
       user.locations.should == [location]
     end
+    
+    it 'should respond to vehicles' do
+      user = create(:user, username: 'ABC')
+      vehicle = create(:vehicle, customer: user.customer)
+
+      user.vehicles.should == [vehicle]
+    end
   end
 
   describe 'when username has mixed case' do
