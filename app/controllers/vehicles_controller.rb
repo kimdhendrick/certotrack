@@ -5,9 +5,9 @@ class VehiclesController < ApplicationController
                 :load_vehicle_service,
                 :load_location_service
 
-  check_authorization
-
   before_action :_set_vehicle, only: [:show]
+
+  check_authorization
 
   def index
     authorize! :read, :vehicle

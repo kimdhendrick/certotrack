@@ -20,7 +20,7 @@ class LocationsController < ApplicationController
   def new
     authorize! :create, :location
     @location = Location.new
-    @customers = CustomerListPresenter.new(@customer_service.get_all_customers(current_user)).sort
+    _set_customers
   end
 
   def create
