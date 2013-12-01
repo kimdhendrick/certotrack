@@ -1,6 +1,6 @@
 <%= form_for(@certification) do |f| %>
 
-  <%= render 'errors'%>
+  <%= render 'shared/errors', model: @certification %>
 
   <% if @certification.employee.present? && @source != 'certification' %>
     <%= render partial: 'show_employee', locals: {f: f} %>

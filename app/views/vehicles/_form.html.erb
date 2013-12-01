@@ -1,6 +1,6 @@
 <%= form_for(@vehicle, data: { vehicle_form: "data-vehicle-form" }) do |f| %>
 
-  <%= render 'errors'%>
+  <%= render 'shared/errors', model: @vehicle %>
 
   <div class="field">
     <%= f.label :vehicle_number, 'Vehicle Number' %>

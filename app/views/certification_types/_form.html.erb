@@ -1,6 +1,6 @@
 <%= form_for(@certification_type) do |f| %>
 
-  <%= render 'errors'%>
+  <%= render 'shared/errors', model: @certification_type %>
 
   <div class="field">
     <%= f.label :name %>

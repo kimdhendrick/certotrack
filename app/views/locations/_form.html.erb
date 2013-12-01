@@ -1,6 +1,6 @@
 <%= form_for(@location, data: { location_form: "data-location-form" }) do |f| %>
 
-  <%= render 'errors'%>
+  <%= render 'shared/errors', model: @location %>
 
   <div class="field">
     <%= f.label :name, 'Location' %>

@@ -1,6 +1,6 @@
 <%= form_for(@employee, data: { employee_form: "data-employee-form" }) do |f| %>
 
-  <%= render 'errors'%>
+  <%= render 'shared/errors', model: @employee %>
 
   <div class="field">
     <%= f.label :first_name, 'First Name' %>
