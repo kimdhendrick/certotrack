@@ -43,10 +43,8 @@ describe 'Vehicles', slow: true do
       end
 
       within 'table tbody tr:nth-of-type(1)' do
-        page.should have_content '34987'
-        #page.should have_link '34987'
-        page.should have_content '2B8GDM9AXKP042790'
-        #page.should have_link '2B8GDM9AXKP042790'
+        page.should have_link '34987'
+        page.should have_link '2B8GDM9AXKP042790'
         page.should have_content '123-ABC'
         page.should have_content '1999'
         page.should have_content 'Dodge'
@@ -57,10 +55,8 @@ describe 'Vehicles', slow: true do
       end
 
       within 'table tbody tr:nth-of-type(2)' do
-        page.should have_content '77777'
-        #page.should have_link '77777'
-        page.should have_content '3C8GDM9AXKP042701'
-        #page.should have_link '3C8GDM9AXKP042701'
+        page.should have_link '77777'
+        page.should have_link '3C8GDM9AXKP042701'
         page.should have_content '789-XYZ'
         page.should have_content '1970'
         page.should have_content 'Buick'
@@ -71,10 +67,8 @@ describe 'Vehicles', slow: true do
       end
 
       within 'table tbody tr:nth-of-type(3)' do
-        page.should have_content '987345'
-        #page.should have_link '987345'
-        page.should have_content '1M8GDM9AXKP042788'
-        #page.should have_link '1M8GDM9AXKP042788'
+        page.should have_link '987345'
+        page.should have_link '1M8GDM9AXKP042788'
         page.should have_content 'ABC-123'
         page.should have_content '2013'
         page.should have_content 'Chevrolet'
@@ -122,7 +116,7 @@ describe 'Vehicles', slow: true do
       page.should have_content 'Golden'
     end
 
-    it 'should show a vehicle' do
+    it 'should show and edit a vehicle' do
       visit root_path
       click_on 'All Vehicles'
       click_on '1M8GDM9AXKP042788'
@@ -155,6 +149,58 @@ describe 'Vehicles', slow: true do
       page.should have_content 'Chevette'
       page.should have_content '10,000'
       page.should have_content 'Denver'
+
+      page.should have_link 'Edit'
+
+      click_on 'Edit'
+
+      page.should have_content 'Edit Vehicle'
+      page.should have_link 'Home'
+      page.should have_link 'All Vehicles'
+      page.should have_link 'Create Vehicle'
+      page.should have_link 'Delete'
+
+      fill_in 'Vehicle Number', with: '3921-A'
+      fill_in 'VIN', with: '98765432109876543'
+      fill_in 'License Plate', with: 'CTIsCool'
+      fill_in 'Year', with: '2010'
+      fill_in 'Make', with: 'Audi'
+      fill_in 'Model', with: 'A3'
+      fill_in 'Mileage', with: '15'
+      select 'Golden', from: 'vehicle_location_id'
+
+      click_on 'Update'
+
+      page.should have_content 'Show Vehicle'
+      page.should have_content 'Vehicle number 3921-A was successfully updated.'
+      page.should have_content '3921-A'
+
+      page.should have_content '3921-A'
+      page.should have_content '98765432109876543'
+      page.should have_content 'CTIsCool'
+      page.should have_content '2010'
+      page.should have_content 'Audi'
+      page.should have_content 'A3'
+      page.should have_content '15'
+      page.should have_content 'Golden'
+    end
+
+    it 'should be able to delete a vehicle', js: true do
+      visit root_path
+      click_on 'All Vehicles'
+      click_on '1M8GDM9AXKP042788'
+      click_on 'Delete'
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete this vehicle?')
+      alert.dismiss
+
+      click_on 'Delete'
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete this vehicle?')
+      alert.accept
+
+      page.should have_content 'Vehicle number 987345 was successfully deleted'
+      page.should have_content 'All Vehicles'
     end
   end
 

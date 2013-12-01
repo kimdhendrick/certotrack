@@ -304,5 +304,244 @@ describe VehiclesController do
       end
     end
   end
+
+  describe 'GET edit' do
+    context 'when vehicle user' do
+      before do
+        sign_in stub_vehicle_user(customer)
+      end
+
+      it 'assigns the requested vehicle as @vehicle' do
+        vehicle = create(:vehicle, customer: customer)
+
+        get :edit, {:id => vehicle.to_param}, {}
+
+        assigns(:vehicle).should eq(vehicle)
+      end
+
+      it 'assigns a sorted list of locations to @locations' do
+        location = build(:location)
+        fake_location_service = Faker.new([location])
+        controller.load_location_service(fake_location_service)
+        fake_location_list_presenter = Faker.new([location])
+        LocationListPresenter.stub(:new).and_return(fake_location_list_presenter)
+        controller.load_vehicle_service(Faker.new(build(:vehicle)))
+        vehicle = create(:vehicle, customer: customer)
+
+        get :edit, {:id => vehicle.to_param}, {}
+
+        assigns(:locations).should == [location]
+        fake_location_list_presenter.received_message.should == :sort
+      end
+    end
+
+    context 'when admin user' do
+      let(:customer) { build(:customer) }
+      let(:vehicle) { create(:vehicle, customer: customer) }
+
+      before do
+        sign_in stub_admin
+      end
+
+      it 'assigns the requested vehicle as @vehicle' do
+        get :edit, {:id => vehicle.to_param}, {}
+
+        assigns(:vehicle).should eq(vehicle)
+      end
+
+      it 'assigns a sorted list of locations to @locations' do
+        location = build(:location)
+        fake_location_service = Faker.new([location])
+        controller.load_location_service(fake_location_service)
+        fake_location_list_presenter = Faker.new([location])
+        LocationListPresenter.stub(:new).and_return(fake_location_list_presenter)
+        controller.load_vehicle_service(Faker.new(build(:vehicle)))
+        vehicle = create(:vehicle, customer: customer)
+
+        get :edit, {:id => vehicle.to_param}, {}
+
+        assigns(:locations).should == [location]
+        fake_location_list_presenter.received_message.should == :sort
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'does not assign vehicle as @vehicle' do
+        vehicle = create(:vehicle, customer: customer)
+
+        get :edit, {:id => vehicle.to_param}, {}
+
+        assigns(:vehicle).should be_nil
+      end
+    end
+  end
+
+  describe 'PUT update' do
+    context 'when vehicle user' do
+      before do
+        sign_in stub_vehicle_user(customer)
+      end
+
+      describe 'with valid params' do
+        it 'updates the requested vehicle' do
+          vehicle = create(:vehicle, customer: customer)
+          fake_vehicle_service = Faker.new(true)
+          controller.load_vehicle_service(fake_vehicle_service)
+
+          put :update, {:id => vehicle.to_param, :vehicle => {'vehicle_number' => '123'}}, {}
+
+          fake_vehicle_service.received_message.should == :update_vehicle
+          fake_vehicle_service.received_params[0].should == vehicle
+          fake_vehicle_service.received_params[1].should == {'vehicle_number' => '123'}
+        end
+
+        it 'assigns the requested vehicle as @vehicle' do
+          controller.load_vehicle_service(Faker.new(true))
+          vehicle = create(:vehicle, customer: customer)
+
+          put :update, {:id => vehicle.to_param, :vehicle => {'vehicle_number' => '123'}}, {}
+
+          assigns(:vehicle).should eq(vehicle)
+        end
+
+        it 'redirects to the vehicle' do
+          controller.load_vehicle_service(Faker.new(true))
+          vehicle = create(:vehicle, customer: customer)
+
+          put :update, {:id => vehicle.to_param, :vehicle => {'vehicle_number' => '123'}}, {}
+
+          response.should redirect_to(vehicle)
+          flash[:notice].should == "Vehicle number #{vehicle.vehicle_number} was successfully updated."
+        end
+      end
+
+      describe 'with invalid params' do
+        it 'assigns the vehicle as @vehicle' do
+          controller.load_vehicle_service(Faker.new(false))
+          vehicle = create(:vehicle, customer: customer)
+
+          put :update, {:id => vehicle.to_param, :vehicle => {'vehicle_number' => 'invalid value'}}, {}
+
+          assigns(:vehicle).should eq(vehicle)
+        end
+
+        it "re-renders the 'edit' template" do
+          vehicle = create(:vehicle, customer: customer)
+          controller.load_vehicle_service(Faker.new(false))
+
+          put :update, {:id => vehicle.to_param, :vehicle => {'vehicle_number' => 'invalid value'}}, {}
+
+          response.should render_template('edit')
+        end
+
+        it 'assigns a sorted list of locations to @locations' do
+          location = build(:location)
+          fake_location_service = Faker.new([location])
+          controller.load_location_service(fake_location_service)
+          fake_location_list_presenter = Faker.new([location])
+          LocationListPresenter.stub(:new).and_return(fake_location_list_presenter)
+          vehicle = create(:vehicle, customer: customer)
+          controller.load_vehicle_service(Faker.new(false))
+
+          put :update, {:id => vehicle.to_param, :vehicle => {'vehicle_number' => 'invalid value'}}, {}
+
+          assigns(:locations).should == [location]
+          fake_location_list_presenter.received_message.should == :sort
+        end
+      end
+
+    end
+
+    context 'when admin user' do
+      let(:customer) { build(:customer) }
+      let(:vehicle) { create(:vehicle, customer: customer) }
+
+      before do
+        sign_in stub_admin
+      end
+
+      it 'updates the requested vehicle' do
+        fake_vehicle_service = Faker.new(true)
+        controller.load_vehicle_service(fake_vehicle_service)
+        put :update, {:id => vehicle.to_param, :vehicle => {'vehicle_number' => 'J123'}}, {}
+
+        fake_vehicle_service.received_message.should == :update_vehicle
+        fake_vehicle_service.received_params[0].should == vehicle
+        fake_vehicle_service.received_params[1].should == {'vehicle_number' => 'J123'}
+      end
+
+      it 'assigns the requested vehicle as @vehicle' do
+        controller.load_vehicle_service(Faker.new(vehicle))
+
+        put :update, {:id => vehicle.id, :vehicle => {'vehicle_number' => '123'}}, {}
+
+        assigns(:vehicle).should eq(vehicle)
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'does not assign vehicle as @vehicle' do
+        vehicle = create(:vehicle, customer: customer)
+
+        put :update, {:id => vehicle.to_param, :vehicle => {'vehicle_number' => '123'}}, {}
+
+        assigns(:vehicle).should be_nil
+      end
+    end
+  end
+
+  describe 'DELETE destroy' do
+    context 'when vehicle user' do
+      before do
+        sign_in stub_vehicle_user(customer)
+      end
+
+      it 'calls vehicle_service' do
+        vehicle = create(:vehicle, customer: customer)
+        fake_vehicle_service = Faker.new(true)
+        controller.load_vehicle_service(fake_vehicle_service)
+
+        delete :destroy, {:id => vehicle.to_param}, {}
+
+        fake_vehicle_service.received_message.should == :delete_vehicle
+        fake_vehicle_service.received_params[0].should == vehicle
+      end
+
+      it 'redirects to the vehicle list' do
+        vehicle = create(:vehicle, vehicle_number: 'blah123', customer: customer)
+        controller.load_vehicle_service(Faker.new(true))
+
+        delete :destroy, {:id => vehicle.to_param}, {}
+
+        response.should redirect_to(vehicles_path)
+        flash[:notice].should == 'Vehicle number blah123 was successfully deleted.'
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'calls vehicle_service' do
+        vehicle = create(:vehicle, customer: customer)
+        fake_vehicle_service = Faker.new(true)
+        controller.load_vehicle_service(fake_vehicle_service)
+
+        delete :destroy, {:id => vehicle.to_param}, {}
+
+        fake_vehicle_service.received_message.should == :delete_vehicle
+        fake_vehicle_service.received_params[0].should == vehicle
+      end
+    end
+  end
 end
 

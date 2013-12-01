@@ -10,4 +10,16 @@ class VehicleService
     vehicle.save
     vehicle
   end
+
+  def update_vehicle(vehicle, attributes)
+    vehicle.update(attributes)
+    if attributes['mileage']
+      vehicle.mileage = attributes['mileage'].gsub(/[^\d\.]/, '')
+    end
+    vehicle.save
+  end
+
+  def delete_vehicle(vehicle)
+    vehicle.destroy
+  end
 end

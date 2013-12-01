@@ -29,4 +29,12 @@ class VehiclePresenter
   def sort_key
     vehicle_number
   end
+
+  def edit_link
+    @template.link_to 'Edit', @template.edit_vehicle_path(model)
+  end
+
+  def delete_link
+    @template.link_to 'Delete', model, method: :delete, data: {confirm: 'Are you sure you want to delete this vehicle?'}
+  end
 end

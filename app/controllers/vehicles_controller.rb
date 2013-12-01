@@ -5,7 +5,7 @@ class VehiclesController < ModelController
   before_filter :load_vehicle_service,
                 :load_location_service
 
-  before_action :_set_vehicle, only: [:show]
+  before_action :_set_vehicle, only: [:show, :edit, :update, :destroy]
 
   def index
     authorize! :read, :vehicle
@@ -35,6 +35,28 @@ class VehiclesController < ModelController
   end
 
   def show
+  end
+
+  def edit
+    _set_locations
+  end
+
+  def update
+    success = @vehicle_service.update_vehicle(@vehicle, _vehicle_params)
+
+    if success
+      redirect_to @vehicle, notice: "Vehicle number #{@vehicle.vehicle_number} was successfully updated."
+    else
+      _set_locations
+      render action: 'edit'
+    end
+  end
+  
+  def destroy
+    vehicle_number = @vehicle.vehicle_number
+    @vehicle_service.delete_vehicle(@vehicle)
+
+    redirect_to vehicles_path, notice: "Vehicle number #{vehicle_number} was successfully deleted."
   end
 
   private

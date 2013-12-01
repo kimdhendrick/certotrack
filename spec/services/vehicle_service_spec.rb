@@ -60,4 +60,75 @@ describe VehicleService do
       end
     end
   end
+
+  describe '#update_vehicle' do
+    context 'a normal user' do
+      let (:current_user) { create(:user, customer: my_customer)}
+
+      it 'should update vehicles attributes except customer' do
+        denver = create(:location, name: 'Denver')
+        vehicle = create(:vehicle, customer: my_customer)
+        attributes =
+          {
+            'id' => vehicle.id,
+            'vehicle_number' => '123',
+            'vin' => '12345678901234567',
+            'license_plate' => '111',
+            'year' => '1989',
+            'make' => 'Hyundai',
+            'vehicle_model' => 'Hybrid',
+            'mileage' => '123000',
+            'location_id' => denver.id
+          }
+
+        success = VehicleService.new.update_vehicle(vehicle, attributes)
+        success.should be_true
+
+        vehicle.reload
+        vehicle.vehicle_number.should == '123'
+        vehicle.vin.should == '12345678901234567'
+        vehicle.license_plate.should == '111'
+        vehicle.year.should == 1989
+        vehicle.make.should == 'Hyundai'
+        vehicle.vehicle_model.should == 'Hybrid'
+        vehicle.mileage.should == 123000
+        vehicle.location.should == denver
+        vehicle.customer.should == my_customer
+      end
+
+      it 'should handle punctuation in mileage' do
+        vehicle = create(:vehicle, mileage: 0, customer: my_customer)
+        attributes =
+          {
+            'id' => vehicle.id,
+            'mileage' => '123,000.50'
+          }
+
+        VehicleService.new.update_vehicle(vehicle, attributes)
+
+        vehicle.reload
+        vehicle.mileage.should == 123000
+      end
+
+      it 'should return false if errors' do
+        vehicle = create(:vehicle, customer: my_customer)
+        vehicle.stub(:save).and_return(false)
+
+        success = VehicleService.new.update_vehicle(vehicle, {})
+        success.should be_false
+
+        vehicle.reload
+      end
+    end
+  end
+
+  describe '#delete_vehicle' do
+    it 'destroys the requested vehicle' do
+      vehicle = create(:vehicle, customer: my_customer)
+
+      expect {
+        VehicleService.new.delete_vehicle(vehicle)
+      }.to change(Vehicle, :count).by(-1)
+    end
+  end
 end
