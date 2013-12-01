@@ -1,7 +1,6 @@
 class EmployeesController < ModelController
   include EmployeesHelper
   include ControllerHelper
-  include PresentableModelHelper
 
   before_filter :load_employee_service,
                 :load_location_service,
@@ -78,8 +77,7 @@ class EmployeesController < ModelController
   end
 
   def _set_employee
-    _set_model(Employee)
-    @employee = @model
+    @employee = _get_model(Employee)
   end
 
   def _employees_params

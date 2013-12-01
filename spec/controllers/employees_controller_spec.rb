@@ -243,7 +243,7 @@ describe EmployeesController do
 
       it 'assigns employee as @employee' do
         get :show, {:id => employee.to_param}, {}
-        assigns(:model).should eq(employee)
+        assigns(:employee).should eq(employee)
       end
 
       it 'assigns certifications as @certifications' do
@@ -259,7 +259,7 @@ describe EmployeesController do
 
       it 'assigns employee as @employee' do
         get :show, {:id => employee.to_param}, {}
-        assigns(:model).should eq(employee)
+        assigns(:employee).should eq(employee)
       end
 
       it 'assigns certifications as @certifications' do
@@ -276,7 +276,7 @@ describe EmployeesController do
       it 'does not assign employee as @employee' do
         employee = create(:employee, customer: customer)
         get :show, {:id => employee.to_param}, {}
-        assigns(:model).should be_nil
+        assigns(:employee).should be_nil
       end
     end
   end

@@ -1013,7 +1013,7 @@ describe CertificationsController do
 
         get :show, {:id => certification.to_param}, {}
 
-        assigns(:model).should eq(certification)
+        assigns(:certification).should eq(certification)
       end
     end
 
@@ -1027,7 +1027,7 @@ describe CertificationsController do
 
         get :show, {:id => certification.to_param}, {}
 
-        assigns(:model).should eq(certification)
+        assigns(:certification).should eq(certification)
       end
     end
 
@@ -1041,7 +1041,7 @@ describe CertificationsController do
 
         get :show, {:id => certification.to_param}, {}
 
-        assigns(:model).should be_nil
+        assigns(:certification).should be_nil
       end
     end
   end

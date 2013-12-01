@@ -1,6 +1,5 @@
 class LocationsController < ModelController
   include ControllerHelper
-  include PresentableModelHelper
   include LocationsHelper
 
   before_filter :load_location_service,
@@ -77,8 +76,7 @@ class LocationsController < ModelController
   end
 
   def _set_location
-    _set_model(Location)
-    @location = @model
+    @location = _get_model(Location)
   end
 
   def _location_params

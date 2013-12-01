@@ -82,8 +82,7 @@ class CertificationTypesController < ModelController
   private
 
   def _set_certification_type
-    _set_model(CertificationType)
-    @certification_type = @model
+    @certification_type = _get_model(CertificationType)
   end
 
   def _certification_type_params

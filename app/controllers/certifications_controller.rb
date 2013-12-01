@@ -2,7 +2,6 @@ class CertificationsController < ModelController
   include ControllerHelper
   include CertificationsHelper
   include CertificationTypesHelper
-  include PresentableModelHelper
 
   before_filter :load_certification_service,
                 :load_certification_type_service,
@@ -128,8 +127,7 @@ class CertificationsController < ModelController
   end
 
   def _set_certification
-    _set_model(Certification)
-    @certification = @model
+    @certification = _get_model(Certification)
   end
 
   def _set_certification_types(current_user)

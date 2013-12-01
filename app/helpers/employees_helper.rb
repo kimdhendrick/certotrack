@@ -1,4 +1,14 @@
 module EmployeesHelper
+
+  def employee_presenter_for(employee = @employee)
+    presenter = EmployeePresenter.new(employee, self)
+    if block_given?
+      yield presenter
+    else
+      presenter
+    end
+  end
+
   def employees_accessible_parameters
     [
       :first_name,

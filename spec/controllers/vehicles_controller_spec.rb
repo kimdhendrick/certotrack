@@ -271,7 +271,7 @@ describe VehiclesController do
 
         get :show, {:id => vehicle.to_param}, {}
 
-        assigns(:model).should eq(vehicle)
+        assigns(:vehicle).should eq(vehicle)
       end
     end
 
@@ -286,7 +286,7 @@ describe VehiclesController do
 
         get :show, {:id => vehicle.to_param}, {}
 
-        assigns(:model).should eq(vehicle)
+        assigns(:vehicle).should eq(vehicle)
       end
     end
 
@@ -300,8 +300,9 @@ describe VehiclesController do
 
         get :show, {:id => vehicle.to_param}, {}
 
-        assigns(:model).should be_nil
+        assigns(:vehicle).should be_nil
       end
     end
   end
 end
+

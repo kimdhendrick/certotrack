@@ -1,7 +1,6 @@
 class EquipmentController < ModelController
   include ControllerHelper
   include EquipmentHelper
-  include PresentableModelHelper
 
   before_filter :load_equipment_service,
                 :load_location_service,
@@ -125,8 +124,7 @@ class EquipmentController < ModelController
   private
 
   def _set_equipment
-    _set_model(Equipment)
-    @equipment = @model
+    @equipment = _get_model(Equipment)
   end
 
   def _equipment_params

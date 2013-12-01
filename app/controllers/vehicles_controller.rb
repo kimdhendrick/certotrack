@@ -1,6 +1,5 @@
 class VehiclesController < ModelController
   include ControllerHelper
-  include PresentableModelHelper
   include VehiclesHelper
 
   before_filter :load_vehicle_service,
@@ -41,7 +40,7 @@ class VehiclesController < ModelController
   private
 
   def _set_vehicle
-    _set_model(Vehicle)
+    @vehicle = _get_model(Vehicle)
   end
 
   def _set_locations
