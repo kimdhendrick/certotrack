@@ -1,8 +1,5 @@
 module LocationsHelper
-
-  def location_presenter_for(location = @location)
-    yield LocationPresenter.new(location, self)
-  end
+  include PresentableModelHelper
 
   def location_accessible_parameters
     [

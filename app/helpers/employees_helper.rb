@@ -1,13 +1,5 @@
 module EmployeesHelper
-
-  def employee_presenter_for(employee = @employee)
-    presenter = EmployeePresenter.new(employee, self)
-    if block_given?
-      yield presenter
-    else
-      presenter
-    end
-  end
+  include PresentableModelHelper
 
   def employees_accessible_parameters
     [

@@ -14,7 +14,7 @@
       <td><%= employee.employee_number %></td></td>
       <td><%= employee.first_name %></td></td>
       <td><%= employee.last_name %></td></td>
-      <td><%= employee_presenter_for(employee).location_name %></td></td>
+      <td><%= presenter_for(employee).location_name %></td></td>
       <td><%= DateHelpers::date_to_string(employee.deactivation_date) %></td></td>
     </tr>
   <% end %>

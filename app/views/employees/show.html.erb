@@ -6,7 +6,7 @@
   </div>
 <% end %>
 
-<% employee_presenter_for do |employee| %>
+<% presenter_for(@employee) do |employee| %>
   <h1>Show Employee</h1>
 
   <%= link_to 'Home', root_path %> |
