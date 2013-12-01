@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20131224221659) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "certification_periods", force: true do |t|
     t.string   "trainer"
     t.datetime "start_date"
@@ -40,6 +43,7 @@ ActiveRecord::Schema.define(version: 20131224221659) do
     t.boolean  "active",                         default: true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "type"
     t.integer  "active_certification_period_id",                null: false
   end
 

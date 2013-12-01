@@ -18,8 +18,8 @@ describe Certification do
     it 'should validate the uniqueness of certification_type_id' do
       certification = create(:certification)
       certification.should validate_uniqueness_of(:certification_type_id).
-                             scoped_to(:employee_id).
-                             with_message(/already assigned to this Employee. Please update existing Certification/)
+                               scoped_to(:employee_id).
+                               with_message(/already assigned to this Employee. Please update existing Certification/)
 
     end
 
@@ -58,16 +58,28 @@ describe Certification do
         certification.should be_expired
       end
 
-      it 'should answer expired? when not expired' do
-        certification.expiration_date = Date.tomorrow
-
-        certification.should_not be_expired
-      end
-
       it 'should answer expiring? when expiring' do
         certification.expiration_date = Date.tomorrow
 
         certification.should be_expiring
+      end
+
+      it 'should answer current? when valid' do
+        certification.expiration_date = Date.today + 61.days
+
+        certification.should be_current
+      end
+
+      it 'should answer current? when not current' do
+        certification.expiration_date = Date.yesterday
+
+        certification.should_not be_current
+      end
+
+      it 'should answer expired? when not expired' do
+        certification.expiration_date = Date.tomorrow
+
+        certification.should_not be_expired
       end
 
       it 'should answer expiring? when not expiring' do

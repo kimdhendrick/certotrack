@@ -1,0 +1,71 @@
+<h1>Valid Certifications</h1>
+<h2><%= @certification_type.name %></h2>
+
+<%= link_to 'Home', root_path %> |
+<%= link_to 'All Certifications', certifications_path %>
+
+<%= form_tag(certification_type_auto_recertifications_path(@certification_type)) do %>
+    <table>
+      <thead>
+      <tr>
+        <th>
+          Select
+        </th>
+        <th>
+          Certification Type
+        </th>
+        <th>
+          Interval
+        </th>
+        <th>
+          Status
+        </th>
+        <th>
+          Employee
+        </th>
+        <th>
+          Trainer
+        </th>
+        <th>
+          Last Certification Date
+        </th>
+        <th>
+          Expiration Date
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @certifications.each do |certification| %>
+          <% certification_presenter_for(certification) do |certification| %>
+              <tr>
+                <td>
+                  <%= check_box_tag(:certification, certification.id, false, id: "certification_#{certification.id}") %>
+                </td>
+                <td class="certification_type">
+                  <%= certification.name %>
+                </td>
+                <td class="interval">
+                  <%= certification.interval %>
+                </td>
+                <td class="status">
+                  <%= certification.status %>
+                </td>
+                <td class="employee">
+                  <%= certification.employee_name %>
+                </td>
+                <td class="trainer">
+                  <%= certification.trainer %>
+                </td>
+                <td class="last_certification_date">
+                  <%= certification.last_certification_date %>
+                </td>
+                <td class="expiration_date">
+                  <%= certification.expiration_date %>
+                </td>
+              </tr>
+          <% end %>
+      <% end %>
+      </tbody>
+    </table>
+    <%= button_tag 'Recertify' %>
+<% end %>

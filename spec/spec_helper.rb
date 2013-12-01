@@ -21,6 +21,8 @@ RSpec.configure do |config|
   config.include ReportHelpers
   config.include FactoryGirl::Syntax::Methods
 
+  config.include ActionView::TestCase::Behavior, example_group: {file_path: %r{spec/presenters}}
+
   # ## Mock Framework
   #
   # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:

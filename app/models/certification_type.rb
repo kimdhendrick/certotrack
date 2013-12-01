@@ -18,6 +18,14 @@ class CertificationType < ActiveRecord::Base
     units_required > 0
   end
 
+  def has_valid_certification?
+    valid_certifications.present?
+  end
+
+  def valid_certifications
+    self.certifications.select { |certification| certification.current? }
+  end
+
 private
 
   def _default_values
@@ -27,5 +35,4 @@ private
   def _strip_whitespace
     self.name.try(:strip!)
   end
-
 end

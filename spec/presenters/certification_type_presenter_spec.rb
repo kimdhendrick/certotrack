@@ -1,94 +1,141 @@
 require 'spec_helper'
 
 describe CertificationTypePresenter do
+  let(:customer) { create(:customer) }
+  let(:interval) { Interval::THREE_MONTHS.text }
+  let(:units_required) { 10 }
+  let(:name) { 'My Name' }
+  let(:certification_type) do
+    create(:units_based_certification_type, customer: customer, interval: interval,
+           units_required: units_required, name: name)
+  end
+
+  subject { CertificationTypePresenter.new(certification_type, view) }
+
   it 'should respond to id' do
-    certification_type = create(:certification_type)
-    CertificationTypePresenter.new(certification_type).id.should == certification_type.id
+    subject.id.should == certification_type.id
   end
 
   it 'should respond to name' do
-    certification_type = create(:certification_type, name: 'My Name')
-    CertificationTypePresenter.new(certification_type).name.should == 'My Name'
+    subject.name.should == 'My Name'
   end
 
   it 'should respond to interval' do
-    certification_type = create(
-      :certification_type,
-      customer: create(:customer),
-      interval: Interval::THREE_MONTHS.text
-    )
-    CertificationPresenter.new(certification_type).interval.should == '3 months'
+    subject.interval.should == '3 months'
   end
 
-  it 'should respond true to units_based?' do
-    certification_type = create(:certification_type, units_required: 10, customer: create(:customer))
-    CertificationTypePresenter.new(certification_type).units_based?.should be_true
-  end
+  describe '#units_based?' do
+    context 'when Certification Type is units based' do
+      it 'should respond true to units_based?' do
+        subject.units_based?.should be_true
+      end
+    end
 
-  it 'should respond false to units_based?' do
-    certification_type = create(:certification_type, customer: create(:customer))
-    CertificationTypePresenter.new(certification_type).units_based?.should be_false
+    context 'when Certification Type is not units based' do
+      let(:certification_type) do
+        create(:date_based_certification_type, customer: customer, interval: interval, name: name)
+      end
+
+      it 'should respond false to units_based?' do
+        subject.units_based?.should be_false
+      end
+    end
   end
 
   it 'should respond true to show_batch_edit_button?' do
-    certification_type = create(:certification_type, units_required: 10, customer: create(:customer))
     certification = build(:certification, certification_type: certification_type)
-    CertificationTypePresenter.new(certification_type).show_batch_edit_button?([certification]).should be_true
+    subject.show_batch_edit_button?([certification]).should be_true
   end
 
   it 'should respond false to show_batch_edit_button?' do
-    certification_type = create(:certification_type, units_required: 10, customer: create(:customer))
-    CertificationTypePresenter.new(certification_type).show_batch_edit_button?([]).should be_false
+    subject.show_batch_edit_button?([]).should be_false
   end
 
   it 'should respond to interval_code' do
-    certification_type = create(
-      :certification_type,
-      customer: create(:customer),
-      interval: Interval::THREE_MONTHS.text
-    )
-
-    CertificationTypePresenter.new(certification_type).interval_code.should == Interval::THREE_MONTHS.id
+    subject.interval_code.should == Interval::THREE_MONTHS.id
   end
 
   it 'should respond to sort_key' do
-    certification_type = create(:certification_type, customer: create(:customer), name: 'MyCertType')
-    CertificationTypePresenter.new(certification_type).sort_key.should == 'MyCertType'
+    subject.sort_key.should == 'My Name'
   end
 
   it 'should respond to units_required_sort_key' do
-    certification_type = build(:certification_type, units_required: 3)
-    CertificationTypePresenter.new(certification_type).units_required_sort_key.should == 3
+    subject.units_required_sort_key.should == 10
+  end
+
+  describe '#auto_recertify_link' do
+    let(:certification_type) { double('certification_type') }
+
+    before do
+      certification_type.stub(:to_s).and_return(1)
+    end
+
+    context 'when Certification Type is units based' do
+      before { certification_type.stub(:units_based?).and_return(true) }
+
+      context 'when has no valid certifications' do
+        before { certification_type.stub(:has_valid_certification?).and_return(false) }
+
+        it 'should be blank' do
+          subject.auto_recertify_link.should == ''
+        end
+      end
+
+      context 'when has valid certification' do
+        before { certification_type.stub(:has_valid_certification?).and_return(true) }
+
+        it 'should return the link to Auto Recertify' do
+          subject.auto_recertify_link.should == "<a href=\"/certification_types/1/auto_recertify\">Auto Recertify</a>"
+        end
+      end
+    end
+
+    context 'when Certification Type is not units based' do
+      before { certification_type.stub(:units_based?).and_return(false) }
+
+      it 'should be blank' do
+        subject.auto_recertify_link.should == ''
+      end
+    end
   end
 
   describe 'units_required' do
+
     context 'when Certification is date based' do
+      let(:certification_type) do
+        create(:date_based_certification_type, customer: customer, interval: interval, name: name)
+      end
+
       it 'should be blank' do
-        certification_type = build(:certification_type)
-        CertificationTypePresenter.new(certification_type).units_required.should be_blank
+        subject.units_required.should be_blank
       end
     end
+
     context 'when Certification is unit based' do
+
       it 'should be the value of #units_required of #units_required' do
-        certification_type = build(:certification_type, units_required: 3)
-        CertificationTypePresenter.new(certification_type).units_required.should == 3
+        subject.units_required.should == 10
       end
     end
   end
 
   describe 'units_required_label' do
+
     context 'when Certification is date based' do
+      let(:certification_type) do
+        create(:date_based_certification_type, customer: customer, interval: interval, name: name)
+      end
+
       it 'should be blank' do
-        certification_type = build(:certification_type)
-        CertificationTypePresenter.new(certification_type).units_required_label.should be_blank
+        subject.units_required_label.should be_blank
       end
     end
+
     context 'when Certification is unit based' do
+
       it 'should be the value of #units_required_label of #units_required' do
-        certification_type = build(:certification_type, units_required: 3)
-        CertificationTypePresenter.new(certification_type).units_required_label.should == 'Required Units'
+        subject.units_required_label.should == 'Required Units'
       end
     end
   end
-
 end

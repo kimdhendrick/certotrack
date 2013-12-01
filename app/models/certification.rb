@@ -58,6 +58,10 @@ class Certification < ActiveRecord::Base
     _certification_strategy.status
   end
 
+  def current?
+    status == Status::VALID
+  end
+
   def expired?
     _certification_strategy.status == Status::EXPIRED
   end

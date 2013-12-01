@@ -45,6 +45,11 @@ class CertificationTypePresenter
     @template.link_to 'Delete', model, method: :delete, data: {confirm: 'Are you sure you want to delete?'}
   end
 
+  def auto_recertify_link
+    return '' unless model.units_based? && model.has_valid_certification?
+    "| #{@template.link_to('Auto Recertify', @template.new_certification_type_auto_recertification_path(model))}"
+  end
+
   def hidden_id_field
     @template.hidden_field_tag :certification_type_id, model.id
   end

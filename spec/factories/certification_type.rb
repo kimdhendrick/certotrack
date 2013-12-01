@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :certification_type do
+  factory :certification_type, aliases: [:date_based_certification_type] do
     sequence :name do |n|
       "Scrum Master-#{n}"
     end
@@ -11,6 +11,4 @@ FactoryGirl.define do
       units_required 1
     end
   end
-
-
 end

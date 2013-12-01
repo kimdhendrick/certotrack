@@ -51,4 +51,66 @@ describe CertificationType do
     build(:certification_type, units_required: 0).should_not be_units_based
     build(:certification_type, units_required: 1).should be_units_based
   end
+
+  describe '#has_valid_certification?' do
+    let(:certification_type) { create(:units_based_certification_type) }
+
+    before do
+      @certification = create(:units_based_certification, certification_type: certification_type, units_achieved:
+          certification_type.units_required)
+    end
+
+    context 'when no Certifications exist' do
+      before { Certification.destroy_all }
+
+      it 'should be false' do
+        certification_type.should_not have_valid_certification
+      end
+    end
+
+    context 'when no valid Certifications exist' do
+      before { @certification.update_attribute(:units_achieved, certification_type.units_required - 1) }
+
+      it 'should be false' do
+        certification_type.should_not have_valid_certification
+      end
+    end
+
+    context 'when a valid Certification exists' do
+      it 'should be true' do
+        certification_type.should have_valid_certification
+      end
+    end
+  end
+
+  describe '#valid_certifications' do
+    let(:certification_type) { create(:units_based_certification_type) }
+
+    before do
+      @certification = create(:units_based_certification, certification_type: certification_type, units_achieved:
+          certification_type.units_required)
+    end
+
+    context 'when no Certifications exist' do
+      before { Certification.destroy_all }
+
+      it 'should be false' do
+        certification_type.valid_certifications.should == []
+      end
+    end
+
+    context 'when no valid Certifications exist' do
+      before { @certification.update_attribute(:units_achieved, certification_type.units_required - 1) }
+
+      it 'should be false' do
+        certification_type.valid_certifications.should == []
+      end
+    end
+
+    context 'when a valid Certification exists' do
+      it 'should be true' do
+        certification_type.valid_certifications.should == [@certification]
+      end
+    end
+  end
 end
