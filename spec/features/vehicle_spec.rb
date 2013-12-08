@@ -216,8 +216,6 @@ describe 'Vehicles', slow: true do
 
       page.should have_link 'Create Vehicle'
 
-      page.should have_content 'Search Vehicles'
-
       within 'table thead tr' do
         page.should have_link 'Vehicle Number'
         page.should have_link 'VIN'
@@ -324,6 +322,21 @@ describe 'Vehicles', slow: true do
 
       page.should have_content 'Unique Name'
       page.should_not have_content 'Zippy'
+    end
+
+    it 'should search from home page' do
+      visit root_path
+
+      within '[data-vehicle-search-form]' do
+        fill_in 'make', with: 'Chevro'
+        click_on 'Search'
+      end
+
+      page.should have_content 'Search Vehicles'
+
+      page.should have_content 'Chevrolet'
+      page.should_not have_content 'Buick'
+      page.should_not have_content 'Dodge'
     end
   end
 
