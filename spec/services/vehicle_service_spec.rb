@@ -2,10 +2,11 @@ require 'spec_helper'
 
 describe VehicleService do
   let(:my_customer) { create(:customer) }
-  let!(:my_vehicle) { create(:vehicle, customer: my_customer) }
-  let!(:other_vehicle) { create(:vehicle) }
 
   describe '#get_all_vehicles' do
+    let!(:my_vehicle) { create(:vehicle, customer: my_customer) }
+    let!(:other_vehicle) { create(:vehicle) }
+
     context 'when admin user' do
       it 'should return all vehicles' do
         admin_user = create(:user, roles: ['admin'])
@@ -36,15 +37,15 @@ describe VehicleService do
         other_customer = build(:customer)
         attributes =
           {
-              vehicle_number: '123',
-              vin: '98765432109876543',
-              license_plate: 'CTIsCool',
-              year: '2013',
-              make: 'Audi',
-              vehicle_model: 'A3',
-              mileage: '15',
-              location_id: golden.id
-            }
+            vehicle_number: '123',
+            vin: '98765432109876543',
+            license_plate: 'CTIsCool',
+            year: '2013',
+            make: 'Audi',
+            vehicle_model: 'A3',
+            mileage: '15',
+            location_id: golden.id
+          }
 
         vehicle = VehicleService.new.create_vehicle(current_user, attributes)
 
@@ -63,7 +64,7 @@ describe VehicleService do
 
   describe '#update_vehicle' do
     context 'a normal user' do
-      let (:current_user) { create(:user, customer: my_customer)}
+      let (:current_user) { create(:user, customer: my_customer) }
 
       it 'should update vehicles attributes except customer' do
         denver = create(:location, name: 'Denver')
@@ -129,6 +130,42 @@ describe VehicleService do
       expect {
         VehicleService.new.delete_vehicle(vehicle)
       }.to change(Vehicle, :count).by(-1)
+    end
+  end
+
+  describe '#search_vehicles' do
+    let(:my_user) { create(:user, customer: my_customer) }
+
+    context 'search' do
+      it 'should call SearchService to filter results' do
+        fake_search_service = Faker.new
+        vehicle_service = VehicleService.new(search_service: fake_search_service)
+
+        vehicle_service.search_vehicles(my_user, {make: 'Ford'})
+
+        fake_search_service.received_message.should == :search
+        fake_search_service.received_params[0].should == []
+        fake_search_service.received_params[1].should == {make: 'Ford'}
+      end
+    end
+
+    context 'an admin user' do
+      it 'should return all vehicles' do
+        admin_user = create(:user, roles: ['admin'])
+        my_vehicle = create(:vehicle, customer: my_customer)
+        other_vehicle = create(:vehicle)
+
+        VehicleService.new.search_vehicles(admin_user, {}).should == [my_vehicle, other_vehicle]
+      end
+    end
+
+    context 'a regular user' do
+      it "should return only that user's vehicles" do
+        my_vehicle = create(:vehicle, customer: my_customer)
+        other_vehicle = create(:vehicle)
+
+        VehicleService.new.search_vehicles(my_user, {}).should == [my_vehicle]
+      end
     end
   end
 end

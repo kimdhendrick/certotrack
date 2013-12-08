@@ -154,4 +154,30 @@ describe SearchService do
       SearchService.new.search(CertificationType.all, {name: 'amina'}).should == [match]
     end
   end
+
+  describe 'search by Vehicle' do
+    it 'should search by make' do
+      match = create(:vehicle, make: 'Toyota')
+      no_match = create(:vehicle, make: 'Ford')
+
+      SearchService.new.search(Vehicle.all, {make: 'Toyota'}).should == [match]
+      SearchService.new.search(Vehicle.all, {make: 'TOYOTA'}).should == [match]
+      SearchService.new.search(Vehicle.all, {make: 'toyota'}).should == [match]
+      SearchService.new.search(Vehicle.all, {make: 'Toy'}).should == [match]
+      SearchService.new.search(Vehicle.all, {make: 'ota'}).should == [match]
+      SearchService.new.search(Vehicle.all, {make: 'yot'}).should == [match]
+    end
+
+    it 'should search by vehicle_model' do
+      match = create(:vehicle, vehicle_model: 'Corolla')
+      no_match = create(:vehicle, vehicle_model: 'Tundra')
+
+      SearchService.new.search(Vehicle.all, {vehicle_model: 'Corolla'}).should == [match]
+      SearchService.new.search(Vehicle.all, {vehicle_model: 'COROLLA'}).should == [match]
+      SearchService.new.search(Vehicle.all, {vehicle_model: 'corolla'}).should == [match]
+      SearchService.new.search(Vehicle.all, {vehicle_model: 'Cor'}).should == [match]
+      SearchService.new.search(Vehicle.all, {vehicle_model: 'lla'}).should == [match]
+      SearchService.new.search(Vehicle.all, {vehicle_model: 'roll'}).should == [match]
+    end
+  end
 end

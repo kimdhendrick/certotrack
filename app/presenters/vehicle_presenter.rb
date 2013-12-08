@@ -22,6 +22,10 @@ class VehiclePresenter
     number_with_delimiter(model.mileage, :delimiter => ",")
   end
 
+  def sortable_mileage
+    model.mileage
+  end
+
   def location
     model.location.try(&:name) || 'Unassigned'
   end

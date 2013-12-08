@@ -1,5 +1,13 @@
 class VehicleService
 
+  def initialize(params = {})
+    @search_service = params[:search_service] || SearchService.new
+  end
+
+  def search_vehicles(current_user, attributes)
+    @search_service.search(get_all_vehicles(current_user), attributes)
+  end
+
   def get_all_vehicles(current_user)
     current_user.admin? ? Vehicle.all : current_user.vehicles
   end

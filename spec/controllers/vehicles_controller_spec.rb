@@ -543,5 +543,75 @@ describe VehiclesController do
       end
     end
   end
+
+  describe 'GET search' do
+    context 'when vehicle user' do
+      before do
+        sign_in stub_vehicle_user(customer)
+      end
+
+      it 'calls get_all_vehicles with current_user and params' do
+        my_user = stub_vehicle_user(customer)
+        sign_in my_user
+        fake_vehicle_service = controller.load_vehicle_service(Faker.new([]))
+        fake_vehicle_list_presenter = Faker.new([])
+        VehicleListPresenter.stub(:new).and_return(fake_vehicle_list_presenter)
+
+        get :search, {sort: 'name', direction: 'asc'}
+
+        fake_vehicle_service.received_message.should == :search_vehicles
+        fake_vehicle_service.received_params[0].should == my_user
+
+        fake_vehicle_list_presenter.received_message.should == :present
+        fake_vehicle_list_presenter.received_params[0]['sort'].should == 'name'
+        fake_vehicle_list_presenter.received_params[0]['direction'].should == 'asc'
+      end
+
+      it 'assigns vehicles as @vehicles' do
+        vehicle = build(:vehicle, customer: customer)
+        fake_vehicle_service = Faker.new([vehicle])
+        controller.load_vehicle_service(fake_vehicle_service)
+        VehicleListPresenter.stub(:new).and_return(Faker.new([VehiclePresenter.new(vehicle)]))
+
+        get :search
+
+        assigns(:vehicles).map(&:model).should eq([vehicle])
+        fake_vehicle_service.received_message.should == :search_vehicles
+      end
+
+      it 'assigns vehicle_count' do
+        controller.load_vehicle_service(Faker.new([build(:vehicle)]))
+
+        get :search
+
+        assigns(:vehicle_count).should eq(1)
+      end
+
+      it 'assigns report_title' do
+        controller.load_vehicle_service(Faker.new([]))
+
+        get :search
+
+        assigns(:report_title).should eq('Search Vehicles')
+      end
+
+      it 'assigns sorted locations' do
+        my_user = stub_vehicle_user(customer)
+        sign_in my_user
+        location = build(:location)
+        fake_location_list_presenter = Faker.new([location])
+        LocationListPresenter.stub(:new).and_return(fake_location_list_presenter)
+        fake_location_service = Faker.new([location])
+        controller.load_location_service(fake_location_service)
+
+        get :search
+
+        fake_location_service.received_message.should == :get_all_locations
+        fake_location_service.received_params[0].should == my_user
+        assigns(:locations).should == [location]
+        fake_location_list_presenter.received_message.should == :sort
+      end
+    end
+  end
 end
 

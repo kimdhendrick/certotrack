@@ -45,4 +45,5 @@ Certotrack::Application.routes.draw do
   resources :locations
 
   resources :vehicles
+  get 'search_vehicles', action: 'search', controller: 'vehicles'
 end

@@ -59,6 +59,16 @@ class VehiclesController < ModelController
     redirect_to vehicles_path, notice: "Vehicle number #{vehicle_number} was successfully deleted."
   end
 
+  def search
+    authorize! :read, :vehicle
+
+    vehicles = @vehicle_service.search_vehicles(current_user, params)
+    @vehicles = VehicleListPresenter.new(vehicles).present(params)
+    @vehicle_count = @vehicles.count
+    @report_title = "Search Vehicles"
+    @locations = LocationListPresenter.new(@location_service.get_all_locations(current_user)).sort
+  end
+
   private
 
   def _set_vehicle

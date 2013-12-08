@@ -202,6 +202,129 @@ describe 'Vehicles', slow: true do
       page.should have_content 'Vehicle number 987345 was successfully deleted'
       page.should have_content 'All Vehicles'
     end
+
+    it 'should be able to search vehicles' do
+      visit root_path
+
+      within '[data-vehicle-search-form]' do
+        click_on 'Search'
+      end
+
+      page.should have_content 'Search Vehicles'
+
+      page.should have_link 'Home'
+
+      page.should have_link 'Create Vehicle'
+
+      page.should have_content 'Search Vehicles'
+
+      within 'table thead tr' do
+        page.should have_link 'Vehicle Number'
+        page.should have_link 'VIN'
+        page.should have_link 'License Plate'
+        page.should have_link 'Year'
+        page.should have_link 'Make'
+        page.should have_link 'Model'
+        page.should have_link 'Mileage'
+        page.should have_link 'Location'
+        page.should have_link 'Status'
+      end
+
+      within 'table.sortable tbody tr:nth-of-type(1)' do
+        page.should have_link '34987'
+        page.should have_link '2B8GDM9AXKP042790'
+        page.should have_content '123-ABC'
+        page.should have_content '1999'
+        page.should have_content 'Dodge'
+        page.should have_content 'Dart'
+        page.should have_content '20,000'
+        page.should have_content 'Golden'
+        page.should have_content 'N/A'
+      end
+
+      within 'table.sortable tbody tr:nth-of-type(2)' do
+        page.should have_link '77777'
+        page.should have_link '3C8GDM9AXKP042701'
+        page.should have_content 'Buick'
+      end
+
+      within 'table.sortable tbody tr:nth-of-type(3)' do
+        page.should have_link '987345'
+        page.should have_link '1M8GDM9AXKP042788'
+        page.should have_content 'Chevrolet'
+      end
+
+      fill_in 'Make', with: 'Chevro'
+      click_on 'Search'
+
+      page.should have_content 'Chevrolet'
+      page.should_not have_content 'Buick'
+      page.should_not have_content 'Dodge'
+
+      within 'table thead tr' do
+        page.should have_link 'Vehicle Number'
+        page.should have_link 'VIN'
+        page.should have_link 'License Plate'
+        page.should have_link 'Year'
+        page.should have_link 'Make'
+        page.should have_link 'Model'
+        page.should have_link 'Mileage'
+        page.should have_link 'Location'
+        page.should have_link 'Status'
+      end
+
+      fill_in 'Make', with: ''
+      fill_in 'Model contains:', with: 'Riviera'
+      click_on 'Search'
+
+      page.should_not have_content 'Chevrolet'
+      page.should have_content 'Buick'
+      page.should_not have_content 'Dodge'
+
+      fill_in 'Make', with: ''
+      fill_in 'Model contains:', with: ''
+      select 'Golden', from: 'location_id'
+      click_on 'Search'
+
+      page.should have_content 'Dodge'
+      page.should_not have_content 'Chevrolet'
+      page.should_not have_content 'Buick'
+
+      fill_in 'Make', with: 'Chevro'
+      fill_in 'Model contains:', with: 'Riviera'
+      select 'Golden', from: 'location_id'
+      click_on 'Search'
+
+      page.should have_content 'Dodge'
+      page.should have_content 'Chevrolet'
+      page.should have_content 'Buick'
+    end
+
+    it 'should search and sort simultaneously', js: true do
+      create(:vehicle, customer: customer, make: 'Unique Name')
+      create(:vehicle, customer: customer, make: 'Zippy')
+
+      visit '/'
+      within '[data-vehicle-search-form]' do
+        click_on 'Search'
+      end
+
+      page.should have_content 'Search Vehicle'
+      page.should have_content 'Unique Name'
+      page.should have_content 'Zippy'
+
+      fill_in 'Make', with: 'Unique'
+
+      click_on 'Search'
+
+      page.should have_content 'Unique Name'
+      page.should_not have_content 'Zippy'
+
+      click_on 'Make'
+
+      page.should have_content 'Unique Name'
+      page.should_not have_content 'Zippy'
+    end
   end
 
   context 'when an admin user' do
@@ -366,7 +489,7 @@ describe 'Vehicles', slow: true do
     end
 
     it 'should sort by mileage' do
-      zeta = create(:vehicle, mileage: 300000, customer: customer)
+      zeta = create(:vehicle, mileage: 300, customer: customer)
       beta = create(:vehicle, mileage:  20000, customer: customer)
       alpha = create(:vehicle, mileage:  1000, customer: customer)
 
@@ -375,11 +498,11 @@ describe 'Vehicles', slow: true do
 
       # Ascending sort
       click_link 'Mileage'
-      column_data_should_be_in_order('1,000', '20,000', '300,000')
+      column_data_should_be_in_order('300', '1,000', '20,000')
 
       # Descending sort
       click_link 'Mileage'
-      column_data_should_be_in_order('300,000', '20,000', '1,000')
+      column_data_should_be_in_order('20,000', '1,000', '300')
     end
 
     it 'should sort by location' do

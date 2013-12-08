@@ -1,2 +1,14 @@
 <p><%= link_to "All Vehicles", vehicles_path %></p>
 <p><%= link_to "Create Vehicle", new_vehicle_path %></p>
+<%= form_tag({:controller => "vehicles", :action => "search"}, :method => "get", 'data-vehicle-search-form' => 'data-vehicle-search-form') do %>
+  <table>
+    <tr>
+      <td>
+        <%= text_field_tag :name, params[:name] %>
+      </td>
+      <td>
+        <%= submit_tag "Search", :name => nil %>
+      </td>
+    </tr>
+  </table>
+<% end %>
