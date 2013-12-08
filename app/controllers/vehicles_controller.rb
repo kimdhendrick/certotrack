@@ -69,6 +69,16 @@ class VehiclesController < ModelController
     @locations = LocationListPresenter.new(@location_service.get_all_locations(current_user)).sort
   end
 
+  def ajax_vehicle_make
+    authorize! :read, :vehicle
+    render json: @vehicle_service.get_vehicle_makes(current_user, params[:term])
+  end
+
+  def ajax_vehicle_model
+    authorize! :read, :vehicle
+    render json: @vehicle_service.get_vehicle_models(current_user, params[:term])
+  end
+
   private
 
   def _set_vehicle

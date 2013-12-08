@@ -338,6 +338,24 @@ describe 'Vehicles', slow: true do
       page.should_not have_content 'Buick'
       page.should_not have_content 'Dodge'
     end
+
+    it 'should auto complete on make', js: true do
+      create(:vehicle, make: 'Toyota', customer: customer)
+
+      visit '/'
+      click_on 'Search'
+
+      assert_autocomplete('make', 'toy', 'Toyota')
+    end
+
+    it 'should auto complete on model', js: true do
+      create(:vehicle, vehicle_model: 'Corolla', customer: customer)
+
+      visit '/'
+      click_on 'Search'
+
+      assert_autocomplete('vehicle_model', 'cor', 'Corolla')
+    end
   end
 
   context 'when an admin user' do

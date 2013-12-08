@@ -30,4 +30,16 @@ class VehicleService
   def delete_vehicle(vehicle)
     vehicle.destroy
   end
+
+  def get_vehicle_makes(current_user, search_term)
+    vehicles = get_all_vehicles(current_user)
+    vehicles = vehicles.where("make ILIKE :make", {make: "%#{search_term}%"})
+    vehicles.map(&:make).uniq
+  end
+
+  def get_vehicle_models(current_user, search_term)
+    vehicles = get_all_vehicles(current_user)
+    vehicles = vehicles.where("vehicle_model ILIKE :model", {model: "%#{search_term}%"})
+    vehicles.map(&:vehicle_model).uniq
+  end
 end

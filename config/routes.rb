@@ -46,4 +46,6 @@ Certotrack::Application.routes.draw do
 
   resources :vehicles
   get 'search_vehicles', action: 'search', controller: 'vehicles'
+  get 'ajax_vehicle_make', action: 'ajax_vehicle_make', controller: 'vehicles'
+  get 'ajax_vehicle_model', action: 'ajax_vehicle_model', controller: 'vehicles'
 end

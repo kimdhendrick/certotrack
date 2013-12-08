@@ -613,5 +613,107 @@ describe VehiclesController do
       end
     end
   end
+
+  describe 'GET ajax_vehicle_make' do
+    context 'when vehicle user' do
+      let (:current_user) { stub_vehicle_user(customer) }
+      before do
+        sign_in current_user
+      end
+
+      it 'should call vehicle_service to retrieve names' do
+        fake_employee_service = controller.load_vehicle_service(Faker.new(['cat']))
+
+        get :ajax_vehicle_make, {term: 'cat'}
+
+        json = JSON.parse(response.body)
+        json.should == ['cat']
+        fake_employee_service.received_message.should == :get_vehicle_makes
+        fake_employee_service.received_params[0].should == current_user
+        fake_employee_service.received_params[1].should == 'cat'
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'should redirect, I suppose' do
+        get :ajax_vehicle_make, {term: 'cat'}
+        response.body.should eq("<html><body>You are being <a href=\"http://test.host/\">redirected</a>.</body></html>")
+      end
+    end
+
+    context 'when admin user' do
+      let (:current_user) { stub_admin(customer) }
+      before do
+        sign_in current_user
+      end
+
+      it 'should call vehicle_service to retrieve names' do
+        fake_employee_service = controller.load_vehicle_service(Faker.new(['cat']))
+
+        get :ajax_vehicle_make, {term: 'cat'}
+
+        json = JSON.parse(response.body)
+        json.should == ['cat']
+        fake_employee_service.received_message.should == :get_vehicle_makes
+        fake_employee_service.received_params[0].should == current_user
+        fake_employee_service.received_params[1].should == 'cat'
+      end
+    end
+  end
+
+  describe 'GET ajax_vehicle_model' do
+    context 'when vehicle user' do
+      let (:current_user) { stub_vehicle_user(customer) }
+      before do
+        sign_in current_user
+      end
+
+      it 'should call vehicle_service to retrieve names' do
+        fake_employee_service = controller.load_vehicle_service(Faker.new(['cat']))
+
+        get :ajax_vehicle_model, {term: 'cat'}
+
+        json = JSON.parse(response.body)
+        json.should == ['cat']
+        fake_employee_service.received_message.should == :get_vehicle_models
+        fake_employee_service.received_params[0].should == current_user
+        fake_employee_service.received_params[1].should == 'cat'
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'should redirect, I suppose' do
+        get :ajax_vehicle_model, {term: 'cat'}
+        response.body.should eq("<html><body>You are being <a href=\"http://test.host/\">redirected</a>.</body></html>")
+      end
+    end
+
+    context 'when admin user' do
+      let (:current_user) { stub_admin(customer) }
+      before do
+        sign_in current_user
+      end
+
+      it 'should call vehicle_service to retrieve names' do
+        fake_employee_service = controller.load_vehicle_service(Faker.new(['cat']))
+
+        get :ajax_vehicle_model, {term: 'cat'}
+
+        json = JSON.parse(response.body)
+        json.should == ['cat']
+        fake_employee_service.received_message.should == :get_vehicle_models
+        fake_employee_service.received_params[0].should == current_user
+        fake_employee_service.received_params[1].should == 'cat'
+      end
+    end
+  end
 end
 

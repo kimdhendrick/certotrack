@@ -7,4 +7,11 @@ module ReportHelpers
       end
     end
   end
+
+  def assert_autocomplete(field_name, partial_value, full_value)
+    fill_in field_name, with: partial_value
+    sleep 1.5
+    page.execute_script "$('.ui-menu-item a:contains(\"#{full_value}\")'). trigger(\"mouseenter\").click();"
+    find_field(field_name).value.should eq full_value
+  end
 end

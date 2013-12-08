@@ -46,3 +46,8 @@
 <%= render 'vehicle_list' %>
 
 <%= will_paginate @vehicles %>
+
+<script type="text/javascript">
+  autocomplete_input_field('input#make', '<%=ajax_vehicle_make_path%>');
+  autocomplete_input_field('input#vehicle_model', '<%=ajax_vehicle_model_path%>');
+</script>

@@ -168,4 +168,66 @@ describe VehicleService do
       end
     end
   end
+
+  describe 'get_vehicle_makes' do
+    it "should only return own customer's vehicle models" do
+      my_customer = create(:customer)
+      me = create(:user, customer: my_customer)
+      create(:vehicle, make: 'my_vehicle', customer: my_customer)
+      create(:vehicle, make: 'not_my_vehicle', customer: create(:customer))
+
+      VehicleService.new.get_vehicle_makes(me, 'vehicle').should == ['my_vehicle']
+    end
+
+    it 'should not return duplicate models' do
+      my_customer = create(:customer)
+      me = create(:user, customer: my_customer)
+      create(:vehicle, make: 'my_vehicle', customer: my_customer)
+      create(:vehicle, make: 'my_vehicle', customer: my_customer)
+
+      VehicleService.new.get_vehicle_makes(me, 'vehicle').should == ['my_vehicle']
+    end
+
+    it 'should match term anywhere in model' do
+      my_customer = create(:customer)
+      me = create(:user, customer: my_customer)
+      create(:vehicle, make: 'vehicle_end', customer: my_customer)
+      create(:vehicle, make: 'beginning_vehicle_end', customer: my_customer)
+      create(:vehicle, make: 'beginning_vehicle', customer: my_customer)
+
+      VehicleService.new.get_vehicle_makes(me, 'vehicle').should =~
+        ['vehicle_end', 'beginning_vehicle_end', 'beginning_vehicle']
+    end
+  end
+
+  describe 'get_vehicle_models' do
+    it "should only return own customer's vehicle makes" do
+      my_customer = create(:customer)
+      me = create(:user, customer: my_customer)
+      create(:vehicle, vehicle_model: 'my_vehicle', customer: my_customer)
+      create(:vehicle, vehicle_model: 'not_my_vehicle', customer: create(:customer))
+
+      VehicleService.new.get_vehicle_models(me, 'vehicle').should == ['my_vehicle']
+    end
+
+    it 'should not return duplicate makes' do
+      my_customer = create(:customer)
+      me = create(:user, customer: my_customer)
+      create(:vehicle, vehicle_model: 'my_vehicle', customer: my_customer)
+      create(:vehicle, vehicle_model: 'my_vehicle', customer: my_customer)
+
+      VehicleService.new.get_vehicle_models(me, 'vehicle').should == ['my_vehicle']
+    end
+
+    it 'should match term anywhere in model' do
+      my_customer = create(:customer)
+      me = create(:user, customer: my_customer)
+      create(:vehicle, vehicle_model: 'vehicle_end', customer: my_customer)
+      create(:vehicle, vehicle_model: 'beginning_vehicle_end', customer: my_customer)
+      create(:vehicle, vehicle_model: 'beginning_vehicle', customer: my_customer)
+
+      VehicleService.new.get_vehicle_models(me, 'vehicle').should =~
+        ['vehicle_end', 'beginning_vehicle_end', 'beginning_vehicle']
+    end
+  end
 end
