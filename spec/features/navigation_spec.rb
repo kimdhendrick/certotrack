@@ -557,6 +557,74 @@ describe 'Navigation', slow: true do
     end
   end
 
+  describe 'Vehicle Links' do
+    before do
+      login_as_vehicle_user(customer)
+      create(:vehicle, vehicle_number: 'My Vehicle', customer: customer)
+    end
+
+    it 'should have all the right stuff' do
+      visit root_path
+      click_on 'All Vehicles'
+      page.should have_content 'All Vehicles'
+
+      click_and_test_home_link
+      click_on 'All Vehicles'
+      click_and_test_link_with_title 'Create Vehicle'
+      visit root_path
+      click_on 'All Vehicles'
+
+      click_on 'My Vehicle'
+      page.should have_content 'Show Vehicle'
+      click_and_test_home_link
+      click_on 'All Vehicles'
+      click_on 'My Vehicle'
+
+      click_and_test_link_with_title 'Search Vehicles'
+      visit root_path
+      click_on 'All Vehicles'
+      click_on 'My Vehicle'
+
+      click_and_test_link_with_title 'Create Vehicle'
+      visit root_path
+      click_on 'All Vehicles'
+      click_on 'My Vehicle'
+
+      click_on 'Edit'
+      page.should have_content 'Edit Vehicle'
+      click_and_test_home_link
+
+      visit root_path
+      click_on 'All Vehicles'
+      click_on 'My Vehicle'
+      click_on 'Edit'
+      click_and_test_link_with_title 'Search Vehicles'
+
+      visit root_path
+      click_on 'All Vehicles'
+      click_on 'My Vehicle'
+      click_on 'Edit'
+      click_and_test_link_with_title 'Create Vehicle'
+      
+      visit root_path
+      within '[data-vehicle-search-form]' do
+        click_on 'Search'
+      end
+
+      page.should have_content 'Search Vehicles'
+
+      page.should have_link 'Home'
+      page.should have_link 'Create Vehicle'
+
+      click_and_test_home_link
+      within '[data-vehicle-search-form]' do
+        click_on 'Search'
+      end
+
+      click_and_test_link_with_title 'Create Vehicle'
+    end
+  end
+
   def click_and_test_home_link
     click_link 'Home'
     page.should have_content 'Welcome to CertoTrack'

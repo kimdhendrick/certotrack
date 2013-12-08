@@ -91,7 +91,7 @@ describe 'Vehicles', slow: true do
 
       page.should have_content 'Create Vehicle'
       page.should have_link 'Home'
-      page.should have_link 'All Vehicles'
+      page.should have_link 'Search Vehicles'
 
       fill_in 'Vehicle Number', with: '3921-A'
       fill_in 'VIN', with: '98765432109876543'
@@ -124,7 +124,7 @@ describe 'Vehicles', slow: true do
       page.should have_content 'Show Vehicle'
 
       page.should have_link 'Home'
-      page.should have_link 'All Vehicles'
+      page.should have_link 'Search Vehicles'
       page.should have_link 'Create Vehicle'
 
       page.should have_content '1M8GDM9AXKP042788'
@@ -156,7 +156,7 @@ describe 'Vehicles', slow: true do
 
       page.should have_content 'Edit Vehicle'
       page.should have_link 'Home'
-      page.should have_link 'All Vehicles'
+      page.should have_link 'Search Vehicles'
       page.should have_link 'Create Vehicle'
       page.should have_link 'Delete'
 
@@ -386,7 +386,7 @@ describe 'Vehicles', slow: true do
 
       page.should have_content 'Create Vehicle'
       page.should have_link 'Home'
-      page.should have_link 'All Vehicles'
+      page.should have_link 'Search Vehicles'
 
       fill_in 'Vehicle Number', with: '3921-A'
       fill_in 'VIN', with: '98765432109876543'
