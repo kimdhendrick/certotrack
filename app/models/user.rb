@@ -66,6 +66,10 @@ class User < ActiveRecord::Base
     customer.vehicles
   end
 
+  def service_types
+    customer.service_types
+  end
+
   def sort_key
     last_name + first_name
   end

@@ -31,6 +31,10 @@ module ControllerHelper
     @certification_type_service ||= service
   end
 
+  def load_service_type_service(service = ServiceTypeService.new)
+    @service_type_service ||= service
+  end
+
   private
 
   def _get_model(model_class)

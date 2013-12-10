@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131129170556) do
+ActiveRecord::Schema.define(version: 20131208230840) do
 
   create_table "certification_periods", force: true do |t|
     t.string   "trainer"
@@ -91,6 +91,16 @@ ActiveRecord::Schema.define(version: 20131129170556) do
 
   create_table "locations", force: true do |t|
     t.string   "name"
+    t.integer  "customer_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "service_types", force: true do |t|
+    t.string   "name"
+    t.string   "expiration_type"
+    t.string   "interval_date"
+    t.integer  "interval_mileage"
     t.integer  "customer_id"
     t.datetime "created_at"
     t.datetime "updated_at"

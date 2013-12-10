@@ -53,6 +53,10 @@ describe VehiclePresenter do
     VehiclePresenter.new(vehicle).mileage.should == '200,000'
   end
 
+  it 'should respond to sortable_mileage' do
+    VehiclePresenter.new(vehicle).sortable_mileage.should == 200000
+  end
+
   it 'should respond to location' do
     location = create(:location, name: 'Florida')
     location_assigned_vehicle = create(:vehicle, location: location)

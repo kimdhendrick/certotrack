@@ -1,0 +1,20 @@
+<table class="sortable">
+  <thead>
+  <tr>
+    <th><%= sortable 'name' %></th>
+    <th><%= sortable 'expiration_type' %></th>
+    <th><%= sortable 'interval_date_code', title="Interval Date" %></th>
+    <th><%= sortable 'sortable_interval_mileage', title="Interval Mileage" %></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @service_types.each do |service_type| %>
+    <tr>
+      <td><%= service_type.name %></td>
+      <td><%= service_type.expiration_type %></td>
+      <td><%= service_type.interval_date %></td>
+      <td><%= service_type.interval_mileage %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

@@ -131,9 +131,8 @@ describe CertificationPresenter do
 
   it 'should respond to interval_code' do
     certification_type = create(:certification_type, interval: Interval::THREE_MONTHS.text)
-    certification = create(:certification, certification_type: certification_type)
 
-    CertificationTypePresenter.new(certification).interval_code.should == Interval::THREE_MONTHS.id
+    CertificationTypePresenter.new(certification_type).interval_code.should == Interval::THREE_MONTHS.id
   end
 
   it 'should respond to units_required_sort_key' do

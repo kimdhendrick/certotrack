@@ -1,0 +1,9 @@
+<h1><%=@report_title%></h1>
+
+<div>Total: <%=@service_type_count%></div>
+
+<%= link_to 'Home', root_path %> |
+
+<%= render 'service_types_list'%>
+
+<%= will_paginate @service_types %>

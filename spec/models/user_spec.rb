@@ -57,6 +57,13 @@ describe User do
 
       user.vehicles.should == [vehicle]
     end
+    
+    it 'should respond to service_types' do
+      user = create(:user, username: 'ABC')
+      service_type = create(:service_type, customer: user.customer)
+
+      user.service_types.should == [service_type]
+    end
   end
 
   describe 'when username has mixed case' do
