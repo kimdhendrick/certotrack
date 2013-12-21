@@ -18,7 +18,7 @@ class ServiceType < ActiveRecord::Base
   validates :interval_mileage,
             inclusion:
               {
-                in: [3000, 5000, 10000],
+                in: [3000, 5000, 10000, 12000, 15000, 20000, 50000],
                 message: 'invalid value',
                 allow_nil: true
               }

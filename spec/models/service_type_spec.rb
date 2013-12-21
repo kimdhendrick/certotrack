@@ -26,8 +26,12 @@ describe ServiceType do
     build(:service_type, interval_mileage: 3000).should be_valid
     build(:service_type, interval_mileage: 5000).should be_valid
     build(:service_type, interval_mileage: 10000).should be_valid
+    build(:service_type, interval_mileage: 12000).should be_valid
+    build(:service_type, interval_mileage: 15000).should be_valid
+    build(:service_type, interval_mileage: 20000).should be_valid
+    build(:service_type, interval_mileage: 50000).should be_valid
 
-    build(:service_type, interval_mileage: 50000).should_not be_valid
+    build(:service_type, interval_mileage: 123000).should_not be_valid
   end
 
   it 'should only accept valid expiration types' do
