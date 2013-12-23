@@ -4,6 +4,12 @@ class ServiceType < ActiveRecord::Base
   EXPIRATION_TYPE_BY_MILEAGE = 'By Mileage'
   EXPIRATION_TYPE_BY_DATE_AND_MILEAGE = 'By Date and Mileage'
 
+  EXPIRATION_TYPES = [EXPIRATION_TYPE_BY_DATE,
+                      EXPIRATION_TYPE_BY_MILEAGE,
+                      EXPIRATION_TYPE_BY_DATE_AND_MILEAGE]
+
+  INTERVAL_MILEAGES = [3000, 5000, 10000, 12000, 15000, 20000, 50000]
+
   belongs_to :customer
 
   validates_presence_of :name
@@ -18,7 +24,7 @@ class ServiceType < ActiveRecord::Base
   validates :interval_mileage,
             inclusion:
               {
-                in: [3000, 5000, 10000, 12000, 15000, 20000, 50000],
+                in: INTERVAL_MILEAGES,
                 message: 'invalid value',
                 allow_nil: true
               }
@@ -26,9 +32,7 @@ class ServiceType < ActiveRecord::Base
   validates :expiration_type,
             inclusion:
               {
-                in: [EXPIRATION_TYPE_BY_DATE,
-                     EXPIRATION_TYPE_BY_MILEAGE,
-                     EXPIRATION_TYPE_BY_DATE_AND_MILEAGE],
+                in: EXPIRATION_TYPES,
                 message: 'invalid value'
               }
   validate :_date_or_mileage_required

@@ -49,7 +49,7 @@ describe CertificationTypesController do
       end
 
       describe 'with valid params' do
-        it 'calls CertificationTypeService' do
+        it 'calls certification_type_service' do
           controller.load_certification_type_service(fake_certification_type_service_persisted)
 
           post :create, {:certification_type => certification_type_attributes}, {}
@@ -106,7 +106,7 @@ describe CertificationTypesController do
         sign_in stub_admin(customer)
       end
 
-      it 'calls CertificationTypeService' do
+      it 'calls certification_type_service' do
         controller.load_certification_type_service(fake_certification_type_service_non_persisted)
 
         post :create, {:certification_type => certification_type_attributes}, {}
@@ -460,7 +460,7 @@ describe CertificationTypesController do
         sign_in stub_certification_user(customer)
       end
 
-      it 'calls CertificationTypeService' do
+      it 'calls certification_type_service' do
         controller.load_certification_type_service(fake_certification_type_service_non_persisted)
         certification_type = create(:certification_type, customer: customer)
 
@@ -494,7 +494,7 @@ describe CertificationTypesController do
         sign_in stub_admin(customer)
       end
 
-      it 'calls certification_typeService' do
+      it 'calls certification_type_service' do
         controller.load_certification_type_service(fake_certification_type_service_non_persisted)
         certification_type = create(:certification_type, customer: customer)
 

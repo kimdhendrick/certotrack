@@ -1,0 +1,73 @@
+<%= form_for(@service_type) do |f| %>
+
+  <%= render 'shared/errors', model: @service_type %>
+
+  <div class="field">
+    <%= f.label :name %>
+    <br/>
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :expiration_type, 'Expiration Type' %>
+    <br/>
+    <%= select(:service_type, :expiration_type,
+               options_for_select(@expiration_types, @service_type.expiration_type),
+               {prompt: 'Please choose one...'}) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :interval_date, 'Interval Date' %>
+    <br/>
+    <%= select(:service_type, :interval_date,
+               options_from_collection_for_select(@interval_dates, 'text', 'text',
+                                                  @service_type.interval_date)) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :interval_mileage, 'Interval Mileage' %>
+    <br/>
+    <%= select(:service_type, :interval_mileage,
+               options_for_select(@interval_mileages, @service_type.interval_mileage)) %>
+  </div>
+
+
+  <div class="actions">
+    <%= submit_tag(user_action) %>
+  </div>
+
+<% end %>
+
+<script type="text/javascript">
+  $(function() {
+    selectExpirationIntervals();
+
+    $("#service_type_expiration_type").change(function () {
+      selectExpirationIntervals();
+    });
+  });
+
+  function selectExpirationIntervals() {
+    var intervalDateSelect = $("#service_type_interval_date");
+    var intervalMileageSelect = $("#service_type_interval_mileage");
+
+    _disable(intervalDateSelect);
+    _disable(intervalMileageSelect);
+
+    var expirationType = $("#service_type_expiration_type").val();
+    if (expirationType == 'By Date' || expirationType == 'By Date and Mileage') {
+      _enable(intervalDateSelect);
+    }
+    if (expirationType == 'By Mileage' || expirationType == 'By Date and Mileage') {
+      _enable(intervalMileageSelect);
+    }
+  }
+
+  function _disable(selector) {
+    selector.attr('disabled', 'disabled');
+  }
+
+  function _enable(selector) {
+    selector.removeAttr('disabled');
+  }
+</script>

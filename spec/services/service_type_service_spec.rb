@@ -27,4 +27,24 @@ describe ServiceTypeService do
       end
     end
   end
+
+  describe '#create_service_type' do
+    it 'should create service type' do
+      attributes =
+        {
+          'name' => 'Box Check',
+          'expiration_type' => ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE,
+          'interval_date' => '5 years',
+          'interval_mileage' => '50000'
+        }
+
+      service_type = subject.create_service_type(my_customer, attributes)
+
+      service_type.should be_persisted
+      service_type.name.should == 'Box Check'
+      service_type.interval_date.should == '5 years'
+      service_type.interval_mileage.should == 50000
+      service_type.customer.should == my_customer
+    end
+  end
 end

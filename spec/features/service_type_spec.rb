@@ -92,6 +92,35 @@ describe 'Service Types', slow: true, js: true do
         page.should have_content 'Service'
       end
     end
+
+    it 'should create new service types' do
+      visit '/'
+      click_link 'Create Service Type'
+
+      page.should have_content 'Create Service Type'
+      page.should have_link 'Home'
+      page.should have_link 'All Service Types'
+
+      page.should have_content 'Name'
+      page.should have_content 'Expiration Type'
+      page.should have_content 'Interval Date'
+      page.should have_content 'Interval Mileage'
+
+      fill_in 'Name', with: 'Happiness Check'
+      select 'By Date and Mileage', from: 'Expiration Type'
+      select 'Annually', from: 'Interval Date'
+      select '15000', from: 'Interval Mileage'
+
+      click_on 'Create'
+
+      page.should have_content 'Show Service Type'
+      page.should have_content 'Service Type was successfully created.'
+
+      page.should have_content 'Name Happiness Check'
+      page.should have_content 'Expiration Type By Date and Mileage'
+      page.should have_content 'Interval Date Annually'
+      page.should have_content 'Interval Mileage 15,000'
+    end
   end
 
   context 'when an admin user' do
