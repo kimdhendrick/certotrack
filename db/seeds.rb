@@ -48,3 +48,7 @@ Vehicle.create!(vehicle_number: '34987', vin: '2B8GDM9AXKP042790', license_plate
 
 Vehicle.create!(vehicle_number: '77777', vin: '3C8GDM9AXKP042701', license_plate: '789-XYZ',
                 year: 1970, make: 'Buick', vehicle_model: 'Riviera', mileage: 56000, location: boulder, customer: customer)
+
+ServiceType.create!(name: 'Oil change', expiration_type: ServiceType::EXPIRATION_TYPE_BY_MILEAGE, interval_mileage: 5000, customer: customer)
+ServiceType.create!(name: 'Pump check', expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE, interval_mileage: 10000, interval_date: Interval::ONE_MONTH.text, customer: customer)
+ServiceType.create!(name: 'Tire rotation', expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE, interval_date: Interval::ONE_YEAR.text, customer: customer)

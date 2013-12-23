@@ -80,4 +80,85 @@ describe ServiceTypesController do
       end
     end
   end
+
+  describe 'GET show' do
+    context 'when vehicle user' do
+      before do
+        @my_user = stub_vehicle_user(customer)
+        sign_in @my_user
+      end
+
+      it 'assigns service_type as @service_type' do
+        service_type = create(:service_type, customer: customer)
+
+        get :show, {:id => service_type.to_param}, {}
+
+        assigns(:service_type).should eq(service_type)
+      end
+
+      it 'assigns non_serviced_vehicles' do
+        non_serviced_vehicle = create(:vehicle, customer: customer)
+        service_type = create(:service_type, customer: customer)
+        fake_vehicle_service = Faker.new([non_serviced_vehicle])
+        controller.load_vehicle_service(fake_vehicle_service)
+
+        get :show, {:id => service_type.to_param}, {}
+
+        assigns(:non_serviced_vehicles).map(&:model).should eq([non_serviced_vehicle])
+        fake_vehicle_service.received_message.should == :get_all_non_serviced_vehicles_for
+        fake_vehicle_service.received_params[0].should == service_type
+        fake_vehicle_service.received_params[1].should == @my_user
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'assigns service_type as @service_type' do
+        service_type = create(:service_type, customer: customer)
+
+        get :show, {:id => service_type.to_param}, {}
+
+        assigns(:service_type).should eq(service_type)
+      end
+
+      it 'assigns non_serviced_vehicles' do
+        non_serviced_vehicle = create(:vehicle, customer: customer)
+        service_type = create(:service_type, customer: customer)
+        fake_vehicle_service = Faker.new([non_serviced_vehicle])
+        controller.load_vehicle_service(fake_vehicle_service)
+
+        get :show, {:id => service_type.to_param}, {}
+
+        assigns(:non_serviced_vehicles).map(&:model).should eq([non_serviced_vehicle])
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'does not assign service_type as @service_type' do
+        service_type = create(:service_type, customer: customer)
+
+        get :show, {:id => service_type.to_param}, {}
+
+        assigns(:service_type).should be_nil
+      end
+
+      it 'does not assign non_serviced_vehicles' do
+        non_serviced_vehicle = create(:vehicle, customer: customer)
+        service_type = create(:service_type, customer: customer)
+        fake_vehicle_service = Faker.new([non_serviced_vehicle])
+        controller.load_vehicle_service(fake_vehicle_service)
+
+        get :show, {:id => service_type.to_param}, {}
+
+        assigns(:non_serviced_vehicles).should be_nil
+      end
+    end
+  end
 end

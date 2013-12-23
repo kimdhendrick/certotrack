@@ -10,7 +10,7 @@
   <tbody>
   <% @service_types.each do |service_type| %>
     <tr>
-      <td><%= service_type.name %></td>
+      <td><%= link_to service_type.name, service_type.model %></td></td>
       <td><%= service_type.expiration_type %></td>
       <td><%= service_type.interval_date %></td>
       <td><%= service_type.interval_mileage %></td>

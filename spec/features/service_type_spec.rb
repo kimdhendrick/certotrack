@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Service Types', slow: true, js:true do
+describe 'Service Types', slow: true, js: true do
 
   let(:customer) { create(:customer) }
 
@@ -9,6 +9,9 @@ describe 'Service Types', slow: true, js:true do
       create(:service_type, name: 'Oil change', expiration_type: ServiceType::EXPIRATION_TYPE_BY_MILEAGE, interval_mileage: 5000, customer: customer)
       create(:service_type, name: 'Pump check', expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE, interval_mileage: 10000, interval_date: Interval::ONE_MONTH.text, customer: customer)
       create(:service_type, name: 'Tire rotation', expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE, interval_date: Interval::ONE_YEAR.text, customer: customer)
+      golden = create(:location, name: 'Golden', customer: customer)
+      create(:vehicle, vehicle_number: '34987', vin: '2B8GDM9AXKP042790', license_plate: '123-ABC',
+             year: 1999, make: 'Dodge', vehicle_model: 'Dart', mileage: 20000, location: golden, customer: customer)
 
       login_as_vehicle_user(customer)
     end
@@ -29,20 +32,64 @@ describe 'Service Types', slow: true, js:true do
       end
 
       within 'table tbody tr:nth-of-type(1)' do
-        # TODO
-        #page.should have_link 'Oil change'
-        page.should have_content 'Oil change'
+        page.should have_link 'Oil change'
         page.should have_content 'By Mileage'
         page.should have_content '5,000'
       end
 
       within 'table tbody tr:nth-of-type(2)' do
-        # TODO
-        #page.should have_link 'Pump check'
-        page.should have_content 'Pump check'
+        page.should have_link 'Pump check'
         page.should have_content 'By Date and Mileage'
         page.should have_content '1 month'
         page.should have_content '10,000'
+      end
+    end
+
+    it 'should show service type' do
+      visit root_path
+
+      click_on 'All Service Types'
+
+      click_link 'Pump check'
+
+      page.should have_content 'Show Service Type'
+
+      page.should have_content 'Name'
+      page.should have_content 'Expiration Type'
+      page.should have_content 'Interval Date'
+      page.should have_content 'Interval Mileage'
+
+      page.should have_content 'Pump check'
+      page.should have_content 'By Date and Mileage'
+      page.should have_content '10,000'
+
+      page.should have_content 'Non-Serviced Vehicles'
+
+      within 'table thead tr' do
+        page.should have_content 'Vehicle Number'
+        page.should have_content 'VIN'
+        page.should have_content 'License Plate'
+        page.should have_content 'Year'
+        page.should have_content 'Make'
+        page.should have_content 'Model'
+        page.should have_content 'Mileage'
+        page.should have_content 'Location'
+      end
+
+      page.all('table tr').count.should == 2
+
+      within 'table tbody tr:nth-of-type(1)' do
+        page.should have_link '34987'
+        page.should have_link '2B8GDM9AXKP042790'
+        page.should have_content '123-ABC'
+        page.should have_content '1999'
+        page.should have_content 'Dodge'
+        page.should have_content 'Dart'
+        page.should have_content '20,000'
+        page.should have_content 'Golden'
+        #TODO
+        #page.should have_link 'Service'
+        page.should have_content 'Service'
       end
     end
   end
@@ -55,6 +102,14 @@ describe 'Service Types', slow: true, js:true do
       create(:service_type, name: 'Oil change', expiration_type: ServiceType::EXPIRATION_TYPE_BY_MILEAGE, interval_mileage: 5000, customer: customer1)
       create(:service_type, name: 'Pump check', expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE, interval_mileage: 10000, interval_date: Interval::ONE_MONTH.text, customer: customer2)
 
+      boulder = create(:location, name: 'Boulder', customer: customer1)
+      create(:vehicle, vehicle_number: '77777', vin: '3C8GDM9AXKP042701', license_plate: '789-XYZ',
+             year: 1970, make: 'Buick', vehicle_model: 'Riviera', mileage: 56000, location: boulder, customer: customer1)
+
+      golden = create(:location, name: 'Golden', customer: customer2)
+      create(:vehicle, vehicle_number: '34987', vin: '2B8GDM9AXKP042790', license_plate: '123-ABC',
+      year: 1999, make: 'Dodge', vehicle_model: 'Dart', mileage: 20000, location: golden, customer: customer2)
+
       login_as_admin
     end
 
@@ -63,6 +118,101 @@ describe 'Service Types', slow: true, js:true do
 
       page.should have_content 'Oil change'
       page.should have_content 'Pump check'
+    end
+
+    it 'should show service type' do
+      visit root_path
+
+      click_on 'All Service Types'
+
+      click_link 'Pump check'
+
+      page.should have_content 'Show Service Type'
+
+      page.should have_content 'Name'
+      page.should have_content 'Expiration Type'
+      page.should have_content 'Interval Date'
+      page.should have_content 'Interval Mileage'
+
+      page.should have_content 'Pump check'
+      page.should have_content 'By Date and Mileage'
+      page.should have_content '10,000'
+      page.should have_content '1 month'
+
+      page.should have_content 'Non-Serviced Vehicles'
+
+      within 'table thead tr' do
+        page.should have_content 'Vehicle Number'
+        page.should have_content 'VIN'
+        page.should have_content 'License Plate'
+        page.should have_content 'Year'
+        page.should have_content 'Make'
+        page.should have_content 'Model'
+        page.should have_content 'Mileage'
+        page.should have_content 'Location'
+      end
+
+      page.all('table tr').count.should == 3
+
+      within 'table tbody tr:nth-of-type(1)' do
+        page.should have_link '34987'
+        page.should have_link '2B8GDM9AXKP042790'
+        page.should have_content '123-ABC'
+        page.should have_content '1999'
+        page.should have_content 'Dodge'
+        page.should have_content 'Dart'
+        page.should have_content '20,000'
+        page.should have_content 'Golden'
+        #TODO
+        #page.should have_link 'Service'
+        page.should have_content 'Service'
+      end
+
+      visit root_path
+
+      click_on 'All Service Types'
+
+      click_link 'Oil change'
+
+      page.should have_content 'Show Service Type'
+
+      page.should have_content 'Name'
+      page.should have_content 'Expiration Type'
+      page.should_not have_content 'Interval Date'
+      page.should have_content 'Interval Mileage'
+
+      page.should have_content 'Oil change'
+      page.should have_content 'By Mileage'
+      page.should have_content '5,000'
+
+      page.should have_content 'Non-Serviced Vehicles'
+
+      within 'table thead tr' do
+        page.should have_content 'Vehicle Number'
+        page.should have_content 'VIN'
+        page.should have_content 'License Plate'
+        page.should have_content 'Year'
+        page.should have_content 'Make'
+        page.should have_content 'Model'
+        page.should have_content 'Mileage'
+        page.should have_content 'Location'
+      end
+
+      page.all('table tr').count.should == 3
+
+      within 'table tbody tr:nth-of-type(2)' do
+        page.should have_link '77777'
+        page.should have_link '3C8GDM9AXKP042701'
+        page.should have_content '789-XYZ'
+        page.should have_content '1970'
+        page.should have_content 'Buick'
+        page.should have_content 'Riviera'
+        page.should have_content '56,000'
+        page.should have_content 'Boulder'
+        #TODO
+        #page.should have_link 'Service'
+        page.should have_content 'Service'
+      end
     end
   end
 

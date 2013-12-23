@@ -4,13 +4,13 @@ class Ability
   def initialize(user)
     @user = user || User.new
 
+    can :manage, :all if _admin_user?
+
     _setup_abilities_for([Equipment]) if _equipment_user?
     _setup_abilities_for([Certification, CertificationType]) if _certification_user?
-    _setup_abilities_for([Vehicle]) if _vehicle_user?
+    _setup_abilities_for([Vehicle, ServiceType]) if _vehicle_user?
     _setup_abilities_for([Location]) if _location_user?
     _setup_abilities_for([Employee]) if _employee_user?
-
-    can :manage, :all if _admin_user?
   end
 
   private
@@ -43,7 +43,7 @@ class Ability
 
   def _setup_abilities_for(resource_classes)
     resource_classes.each do |resource_class|
-      resource = resource_class.name.downcase.to_sym
+      resource = resource_class.name.underscore.to_sym
       can :read, resource
       can :create, resource
 

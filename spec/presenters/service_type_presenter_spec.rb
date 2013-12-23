@@ -50,4 +50,24 @@ describe ServiceTypePresenter do
 
     ServiceTypePresenter.new(service_type).interval_date_code.should == Interval::THREE_MONTHS.id
   end
+
+  it 'should respond to expiration_type_of_date?' do
+    date_service_type = ServiceTypePresenter.new(create(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE))
+    date_and_mileage_service_type = ServiceTypePresenter.new(create(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE))
+    mileage_service_type = ServiceTypePresenter.new(create(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_MILEAGE))
+
+    date_service_type.expiration_type_of_date?.should be_true
+    date_and_mileage_service_type.expiration_type_of_date?.should be_true
+    mileage_service_type.expiration_type_of_date?.should be_false
+  end
+
+  it 'should respond to expiration_type_of_mileage?' do
+    mileage_service_type = ServiceTypePresenter.new(create(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_MILEAGE))
+    date_and_mileage_service_type = ServiceTypePresenter.new(create(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE))
+    date_service_type = ServiceTypePresenter.new(create(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE))
+
+    date_and_mileage_service_type.expiration_type_of_mileage?.should be_true
+    mileage_service_type.expiration_type_of_mileage?.should be_true
+    date_service_type.expiration_type_of_mileage?.should be_false
+  end
 end

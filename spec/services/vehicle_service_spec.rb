@@ -169,7 +169,7 @@ describe VehicleService do
     end
   end
 
-  describe 'get_vehicle_makes' do
+  describe '#get_vehicle_makes' do
     it "should only return own customer's vehicle models" do
       my_customer = create(:customer)
       me = create(:user, customer: my_customer)
@@ -200,7 +200,7 @@ describe VehicleService do
     end
   end
 
-  describe 'get_vehicle_models' do
+  describe '#get_vehicle_models' do
     it "should only return own customer's vehicle makes" do
       my_customer = create(:customer)
       me = create(:user, customer: my_customer)
@@ -228,6 +228,34 @@ describe VehicleService do
 
       VehicleService.new.get_vehicle_models(me, 'vehicle').should =~
         ['vehicle_end', 'beginning_vehicle_end', 'beginning_vehicle']
+    end
+  end
+
+  #TODO implement for real when services are implemented
+  describe '#get_all_non_serviced_vehicles_for' do
+    let!(:my_vehicle) { create(:vehicle, customer: my_customer) }
+    let!(:other_vehicle) { create(:vehicle) }
+
+    context 'when admin user' do
+      it 'should return all vehicles' do
+        admin_user = create(:user, roles: ['admin'])
+        service_type = create(:service_type)
+
+        vehicles = VehicleService.new.get_all_non_serviced_vehicles_for(service_type, admin_user)
+
+        vehicles.should =~ [my_vehicle, other_vehicle]
+      end
+    end
+
+    context 'when regular user' do
+      it "should return only customer's vehicles" do
+        user = create(:user, customer: my_customer)
+        service_type = create(:service_type)
+
+        vehicles = VehicleService.new.get_all_non_serviced_vehicles_for(service_type, user)
+
+        vehicles.should == [my_vehicle]
+      end
     end
   end
 end

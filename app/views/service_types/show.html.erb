@@ -1,0 +1,64 @@
+<% presenter_for(@service_type) do |service_type| %>
+  <h1>Show Service Type</h1>
+
+  <%= link_to 'Home', root_path %>
+
+  <p>
+    <b>Name</b>
+    <%= service_type.name %>
+  </p>
+
+  <p>
+    <b>Expiration Type</b>
+    <%= service_type.expiration_type %>
+  </p>
+
+  <% if service_type.expiration_type_of_date? %>
+    <p>
+      <b>Interval Date</b>
+      <%= service_type.interval_date %>
+    </p>
+  <% end %>
+
+  <% if service_type.expiration_type_of_mileage? %>
+    <p>
+      <b>Interval Mileage</b>
+      <%= service_type.interval_mileage %>
+    </p>
+  <% end %>
+
+  <h2>Non-Serviced Vehicles</h2>
+  <table border="1">
+    <thead>
+    <tr>
+      <th>Vehicle Number</th>
+      <th>VIN</th>
+      <th>License Plate</th>
+      <th>Year</th>
+      <th>Make</th>
+      <th>Model</th>
+      <th>Mileage</th>
+      <th>Location</th>
+      <th>&nbsp;</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @non_serviced_vehicles.each do |vehicle| %>
+      <tr>
+        <td><%= link_to vehicle.vehicle_number, vehicle.model %></td>
+        <td><%= link_to vehicle.vin, vehicle.model %></td>
+        <td><%= vehicle.license_plate %></td>
+        <td><%= vehicle.year %></td>
+        <td><%= vehicle.make %></td>
+        <td><%= vehicle.vehicle_model %></td>
+        <td><%= vehicle.mileage %></td>
+        <td><%= vehicle.location %></td>
+        <td>Service</td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+
+
+<% end %>
+

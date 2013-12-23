@@ -44,4 +44,20 @@ describe VehicleListPresenter do
       presenter.present.count.should == 0
     end
   end
+
+  describe '#sort' do
+    it 'should sort' do
+      vehicle = build(:vehicle)
+      fake_sorter = Faker.new([VehiclePresenter.new(vehicle)])
+
+      presenter = VehicleListPresenter.new([vehicle], {sorter: fake_sorter})
+
+      presenter.sort({sort: :field, direction: :asc})
+
+      fake_sorter.received_message.should == :sort
+      fake_sorter.received_params[0][0].model.should == vehicle
+      fake_sorter.received_params[1].should == :field
+      fake_sorter.received_params[2].should == :asc
+    end
+  end
 end
