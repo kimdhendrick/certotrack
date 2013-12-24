@@ -3,6 +3,8 @@ require 'spec_helper'
 describe ServiceTypesController do
   let(:customer) { build(:customer) }
   let(:service_type) { build(:service_type) }
+  let(:fake_service_type_service) { Faker.new(create(:service_type)) }
+  let(:fake_service_type_service_non_persisted) { Faker.new(build(:service_type)) }
 
   describe 'GET index' do
     context 'when vehicle user' do
@@ -164,7 +166,6 @@ describe ServiceTypesController do
 
   describe 'GET new' do
     context 'when vehicle user' do
-      let(:customer) { create(:customer) }
       before do
         sign_in stub_vehicle_user(customer)
       end
@@ -223,8 +224,6 @@ describe ServiceTypesController do
         sign_in stub_vehicle_user(customer)
       end
 
-      let(:fake_service_type_service) { Faker.new(create(:service_type)) }
-
       describe 'with valid params' do
         it 'calls service_type_service' do
 
@@ -253,9 +252,6 @@ describe ServiceTypesController do
       end
 
       describe 'with invalid params' do
-
-        let (:fake_service_type_service_non_persisted) { Faker.new(build(:service_type)) }
-
         it 'assigns a newly created but unsaved service_type as @service_type' do
           controller.load_service_type_service(fake_service_type_service_non_persisted)
 
@@ -337,6 +333,198 @@ describe ServiceTypesController do
         assigns(:interval_dates).should be_nil
         assigns(:interval_mileages).should be_nil
         assigns(:expiration_types).should be_nil
+      end
+    end
+  end
+
+  describe 'GET edit' do
+    context 'when vehicle user' do
+      before do
+        sign_in stub_vehicle_user(customer)
+      end
+
+      it 'assigns the requested service_type as @service_type' do
+        service_type = create(:service_type, customer: customer)
+
+        get :edit, {:id => service_type.to_param}, {}
+
+        assigns(:service_type).should eq(service_type)
+      end
+
+      it 'assigns @interval_dates' do
+        service_type = create(:service_type, customer: customer)
+
+        get :edit, {:id => service_type.to_param}, {}
+
+        assigns(:interval_dates).should include(Interval::FIVE_YEARS)
+        assigns(:interval_dates).should_not include(Interval::NOT_REQUIRED)
+      end
+
+      it 'assigns @interval_mileages' do
+        service_type = create(:service_type, customer: customer)
+
+        get :edit, {:id => service_type.to_param}, {}
+
+        assigns(:interval_mileages).should eq(ServiceType::INTERVAL_MILEAGES)
+      end
+
+      it 'assigns @expiration_types' do
+        service_type = create(:service_type, customer: customer)
+
+        get :edit, {:id => service_type.to_param}, {}
+
+        assigns(:expiration_types).should eq(ServiceType::EXPIRATION_TYPES)
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin(customer)
+      end
+
+      it 'assigns the requested service_type as @service_type' do
+        service_type = create(:service_type, customer: customer)
+
+        get :edit, {:id => service_type.to_param}, {}
+
+        assigns(:service_type).should eq(service_type)
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'does not assign service_type as @service_type' do
+        service_type = create(:service_type, customer: customer)
+
+        get :edit, {:id => service_type.to_param}, {}
+
+        assigns(:service_type).should be_nil
+      end
+    end
+  end
+
+  describe 'PUT update' do
+    context 'when service_type user' do
+      before do
+        sign_in stub_vehicle_user(customer)
+      end
+
+      describe 'with valid params' do
+        it 'updates the requested service_type' do
+          service_type = create(:service_type, customer: customer)
+          controller.load_service_type_service(fake_service_type_service)
+
+          put :update, {:id => service_type.to_param, :service_type => {'name' => 'Box Check'}}, {}
+
+          fake_service_type_service.received_message.should == :update_service_type
+        end
+
+        it 'assigns the requested service_type as @service_type' do
+          controller.load_service_type_service(fake_service_type_service)
+          service_type = create(:service_type, customer: customer)
+
+          put :update, {:id => service_type.to_param, :service_type => service_type_attributes}, {}
+
+          assigns(:service_type).should eq(service_type)
+        end
+
+        it 'redirects to the service_type' do
+          controller.load_service_type_service(fake_service_type_service)
+          service_type = create(:service_type, customer: customer)
+
+          put :update, {:id => service_type.to_param, :service_type => service_type_attributes}, {}
+
+          response.should redirect_to(service_type)
+        end
+      end
+
+      describe 'with invalid params' do
+        it 'assigns the service_type as @service_type' do
+          controller.load_service_type_service(fake_service_type_service)
+          service_type = create(:service_type, customer: customer)
+
+          put :update, {:id => service_type.to_param, :service_type => {'name' => 'invalid value'}}, {}
+
+          assigns(:service_type).should eq(service_type)
+        end
+
+        it "re-renders the 'edit' template" do
+          controller.load_service_type_service(Faker.new(false))
+          service_type = create(:service_type, customer: customer)
+
+          put :update, {:id => service_type.to_param, :service_type => {'name' => 'invalid value'}}, {}
+
+          response.should render_template('edit')
+        end
+
+        it 'assigns @interval_dates' do
+          controller.load_service_type_service(Faker.new(false))
+          service_type = create(:service_type, customer: customer)
+
+          put :update, {:id => service_type.to_param, :service_type => {'name' => 'invalid value'}}, {}
+
+          assigns(:interval_dates).should include(Interval::FIVE_YEARS)
+          assigns(:interval_dates).should_not include(Interval::NOT_REQUIRED)
+        end
+
+        it 'assigns @interval_mileages' do
+          controller.load_service_type_service(Faker.new(false))
+          service_type = create(:service_type, customer: customer)
+
+          put :update, {:id => service_type.to_param, :service_type => {'name' => 'invalid value'}}, {}
+
+          assigns(:interval_mileages).should eq(ServiceType::INTERVAL_MILEAGES)
+        end
+
+        it 'assigns @expiration_types' do
+          controller.load_service_type_service(Faker.new(false))
+          service_type = create(:service_type, customer: customer)
+
+          put :update, {:id => service_type.to_param, :service_type => {'name' => 'invalid value'}}, {}
+
+          assigns(:expiration_types).should eq(ServiceType::EXPIRATION_TYPES)
+        end
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin(customer)
+      end
+
+      it 'updates the requested service_type' do
+        controller.load_service_type_service(fake_service_type_service)
+        service_type = create(:service_type, customer: customer)
+
+        put :update, {:id => service_type.to_param, :service_type => {'name' => 'Box Check'}}, {}
+
+        fake_service_type_service.received_message.should == :update_service_type
+      end
+
+      it 'assigns the requested service_type as @service_type' do
+        controller.load_service_type_service(fake_service_type_service)
+        service_type = create(:service_type, customer: customer)
+
+        put :update, {:id => service_type.to_param, :service_type => service_type_attributes}, {}
+
+        assigns(:service_type).should eq(service_type)
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'does not assign service_type as @service_type' do
+        service_type = create(:service_type, customer: customer)
+
+        put :update, {:id => service_type.to_param, :service_type => service_type_attributes}, {}
+
+        assigns(:service_type).should be_nil
       end
     end
   end

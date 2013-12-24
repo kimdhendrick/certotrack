@@ -10,4 +10,9 @@ class ServiceTypeService
     service_type.save
     service_type
   end
+
+  def update_service_type(service_type, attributes)
+    service_type.update(attributes)
+    service_type.save
+  end
 end

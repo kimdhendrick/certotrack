@@ -5,7 +5,7 @@ class ServiceTypesController < ModelController
   before_filter :load_service_type_service,
                 :load_vehicle_service
 
-  before_action :_set_service_type, only: [:show]
+  before_action :_set_service_type, only: [:show, :edit, :update]
 
   def index
     authorize! :read, :vehicle
@@ -40,6 +40,25 @@ class ServiceTypesController < ModelController
       _assign_interval_mileages
       _assign_expiration_types
       render action: 'new'
+    end
+  end
+
+  def edit
+    _assign_interval_dates
+    _assign_interval_mileages
+    _assign_expiration_types
+  end
+
+  def update
+    success = @service_type_service.update_service_type(@service_type, _service_type_params)
+
+    if success
+      redirect_to @service_type, notice: 'Service Type was successfully updated.'
+    else
+      _assign_interval_dates
+      _assign_interval_mileages
+      _assign_expiration_types
+      render action: 'edit'
     end
   end
 

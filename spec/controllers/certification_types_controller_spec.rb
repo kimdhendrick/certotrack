@@ -6,7 +6,7 @@ describe CertificationTypesController do
   let(:fake_certification_type_service_persisted) { Faker.new(create(:certification_type)) }
   let(:fake_certification_type_service_non_persisted) { Faker.new(CertificationType.new) }
 
-  describe 'GET new' do
+  describe 'GET #new' do
     context 'when certification user' do
       let(:customer) { create(:customer) }
       before do
@@ -42,7 +42,7 @@ describe CertificationTypesController do
     end
   end
 
-  describe 'POST create' do
+  describe 'POST #create' do
     context 'when certification_type user' do
       before do
         sign_in stub_certification_user(customer)
@@ -138,52 +138,7 @@ describe CertificationTypesController do
     end
   end
 
-  describe 'GET edit' do
-    context 'when certification user' do
-      before do
-        sign_in stub_certification_user(customer)
-      end
-
-      it 'assigns the requested certification_type as @certification_type' do
-        certification_type = create(:certification_type, customer: customer)
-        get :edit, {:id => certification_type.to_param}, {}
-        assigns(:certification_type).should eq(certification_type)
-      end
-
-      it 'assigns @intervals' do
-        certification_type = create(:certification_type, customer: customer)
-        get :edit, {:id => certification_type.to_param}, {}
-        assigns(:intervals).should eq(Interval.all.to_a)
-      end
-
-    end
-
-    context 'when admin user' do
-      before do
-        sign_in stub_admin(customer)
-      end
-
-      it 'assigns the requested certification_type as @certification_type' do
-        certification_type = create(:certification_type, customer: customer)
-        get :edit, {:id => certification_type.to_param}, {}
-        assigns(:certification_type).should eq(certification_type)
-      end
-    end
-
-    context 'when guest user' do
-      before do
-        sign_in stub_guest_user
-      end
-
-      it 'does not assign certification_type as @certification_type' do
-        certification_type = create(:certification_type, customer: customer)
-        get :edit, {:id => certification_type.to_param}, {}
-        assigns(:certification_type).should be_nil
-      end
-    end
-  end
-
-  describe 'GET show' do
+  describe 'GET #show' do
     context 'when certification user' do
       before do
         sign_in stub_certification_user(customer)
@@ -338,7 +293,52 @@ describe CertificationTypesController do
     end
   end
 
-  describe 'PUT update' do
+  describe 'GET #edit' do
+    context 'when certification user' do
+      before do
+        sign_in stub_certification_user(customer)
+      end
+
+      it 'assigns the requested certification_type as @certification_type' do
+        certification_type = create(:certification_type, customer: customer)
+        get :edit, {:id => certification_type.to_param}, {}
+        assigns(:certification_type).should eq(certification_type)
+      end
+
+      it 'assigns @intervals' do
+        certification_type = create(:certification_type, customer: customer)
+        get :edit, {:id => certification_type.to_param}, {}
+        assigns(:intervals).should eq(Interval.all.to_a)
+      end
+
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin(customer)
+      end
+
+      it 'assigns the requested certification_type as @certification_type' do
+        certification_type = create(:certification_type, customer: customer)
+        get :edit, {:id => certification_type.to_param}, {}
+        assigns(:certification_type).should eq(certification_type)
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'does not assign certification_type as @certification_type' do
+        certification_type = create(:certification_type, customer: customer)
+        get :edit, {:id => certification_type.to_param}, {}
+        assigns(:certification_type).should be_nil
+      end
+    end
+  end
+
+  describe 'PUT #update' do
     context 'when certification_type user' do
       before do
         sign_in stub_certification_user(customer)
@@ -454,7 +454,7 @@ describe CertificationTypesController do
     end
   end
 
-  describe 'DELETE destroy' do
+  describe 'DELETE #destroy' do
     context 'when certification_type user' do
       before do
         sign_in stub_certification_user(customer)
@@ -505,7 +505,7 @@ describe CertificationTypesController do
     end
   end
 
-  describe 'GET index' do
+  describe 'GET #index' do
     it 'calls get_all_certification_types with current_user and params' do
       my_user = stub_certification_user(customer)
       sign_in my_user
@@ -571,7 +571,7 @@ describe CertificationTypesController do
         sign_in stub_guest_user
       end
 
-      describe 'GET index' do
+      describe 'GET #index' do
         it 'does not assign certification_types as @certification_types' do
           get :index
 
@@ -581,7 +581,7 @@ describe CertificationTypesController do
     end
   end
 
-  describe 'GET search' do
+  describe 'GET #search' do
     it 'calls search_certification_types with current_user and params' do
       my_user = stub_certification_user(customer)
       sign_in my_user
@@ -626,7 +626,7 @@ describe CertificationTypesController do
     end
   end
 
-  describe 'GET ajax_is_units_based' do
+  describe 'GET #ajax_is_units_based' do
     context 'when certification user' do
       before do
         sign_in stub_certification_user(customer)

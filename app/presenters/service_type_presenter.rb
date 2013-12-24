@@ -34,9 +34,12 @@ class ServiceTypePresenter
     .include?(model.expiration_type)
   end
 
-
   def expiration_type_of_mileage?
     [ServiceType::EXPIRATION_TYPE_BY_MILEAGE, ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE]
     .include?(model.expiration_type)
+  end
+
+  def edit_link
+    @template.link_to 'Edit', @template.edit_service_type_path(model)
   end
 end

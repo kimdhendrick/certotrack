@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 describe ServiceTypeService do
-  let(:my_customer) { create(:customer) }
+  let(:customer) { create(:customer) }
 
   describe '#get_all_service_types' do
-    let!(:my_service_type) { create(:service_type, customer: my_customer) }
+    let!(:my_service_type) { create(:service_type, customer: customer) }
     let!(:other_service_type) { create(:service_type) }
 
     context 'when admin user' do
@@ -19,7 +19,7 @@ describe ServiceTypeService do
 
     context 'when regular user' do
       it "should return only customer's service_types" do
-        user = create(:user, customer: my_customer)
+        user = create(:user, customer: customer)
 
         service_types = ServiceTypeService.new.get_all_service_types(user)
 
@@ -38,13 +38,60 @@ describe ServiceTypeService do
           'interval_mileage' => '50000'
         }
 
-      service_type = subject.create_service_type(my_customer, attributes)
+      service_type = subject.create_service_type(customer, attributes)
 
       service_type.should be_persisted
       service_type.name.should == 'Box Check'
       service_type.interval_date.should == '5 years'
       service_type.interval_mileage.should == 50000
-      service_type.customer.should == my_customer
+      service_type.customer.should == customer
+    end
+  end
+
+  describe '#update_service_type' do
+    let!(:service_type) { create(:service_type, customer: customer) }
+    let(:attributes) do
+      {
+        'name' => 'Transmission flush',
+        'expiration_type' => ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE,
+        'interval_date' => '5 years',
+        'interval_mileage' => 20000
+      }
+    end
+
+    it 'should return true' do
+      subject.update_service_type(service_type, attributes).should be_true
+    end
+
+    it 'should update service_types attributes' do
+      subject.update_service_type(service_type, attributes)
+      service_type.reload
+      service_type.name.should == 'Transmission flush'
+      service_type.interval_date.should == '5 years'
+      service_type.interval_mileage.should == 20000
+      service_type.expiration_type.should == ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE
+    end
+
+    xit 'should recalculate expiration date for associated services' do
+      service = create(
+        :service,
+        service_type: service_type,
+        last_service_date: '2012-03-29'.to_date,
+        expiration_date: '2000-01-01'.to_date
+      )
+
+      subject.update_service_type(service_type, attributes)
+
+      service.reload
+      service.expiration_date.should == '2017-03-29'.to_date
+    end
+
+    context 'when errors' do
+      before { service_type.stub(:save).and_return(false) }
+
+      it 'should return false' do
+        subject.update_service_type(service_type, {}).should be_false
+      end
     end
   end
 end

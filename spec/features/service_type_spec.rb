@@ -121,6 +121,31 @@ describe 'Service Types', slow: true, js: true do
       page.should have_content 'Interval Date Annually'
       page.should have_content 'Interval Mileage 15,000'
     end
+
+    it 'should update service types' do
+      visit root_path
+
+      click_on 'All Service Types'
+
+      click_link 'Pump check'
+
+      page.should have_content 'Show Service Type'
+
+      click_link 'Edit'
+
+      fill_in 'Name', with: 'Cheery Check'
+      select 'By Date', from: 'Expiration Type'
+      select '6 months', from: 'Interval Date'
+
+      click_on 'Update'
+
+      page.should have_content 'Show Service Type'
+      page.should have_content 'Service Type was successfully updated.'
+
+      page.should have_content 'Cheery Check'
+      page.should have_content '6 months'
+      page.should have_content 'By Date'
+    end
   end
 
   context 'when an admin user' do
