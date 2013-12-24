@@ -5,7 +5,7 @@ describe CertificationTypeService do
   let(:search_service) { SearchService.new }
   subject { CertificationTypeService.new(search_service: search_service) }
 
-  describe 'create_certification_type' do
+  describe '#create_certification_type' do
     it 'should create certification type' do
       attributes =
         {
@@ -23,7 +23,7 @@ describe CertificationTypeService do
     end
   end
 
-  describe 'update_certification_type' do
+  describe '#update_certification_type' do
     let!(:certification_type) { create(:certification_type, customer: customer) }
     let(:attributes) do
       {
@@ -66,7 +66,7 @@ describe CertificationTypeService do
     end
   end
 
-  describe 'delete_certification_type' do
+  describe '#delete_certification_type' do
     let!(:certification_type) { create(:certification_type, customer: customer) }
 
     it 'destroys the requested certification_type' do
@@ -94,7 +94,7 @@ describe CertificationTypeService do
     end
   end
 
-  describe 'certification_type retrieval' do
+  describe '#certification_type retrieval' do
     let(:admin_user) { create(:user, roles: ['admin']) }
     let(:my_user) { create(:user, customer: customer) }
     let!(:my_certification_type) { create(:certification_type, customer: customer) }

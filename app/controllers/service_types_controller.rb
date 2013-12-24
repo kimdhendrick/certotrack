@@ -5,7 +5,7 @@ class ServiceTypesController < ModelController
   before_filter :load_service_type_service,
                 :load_vehicle_service
 
-  before_action :_set_service_type, only: [:show, :edit, :update]
+  before_action :_set_service_type, only: [:show, :edit, :update, :destroy]
 
   def index
     authorize! :read, :vehicle
@@ -60,6 +60,17 @@ class ServiceTypesController < ModelController
       _assign_expiration_types
       render action: 'edit'
     end
+  end
+
+  def destroy
+    status = @service_type_service.delete_service_type(@service_type)
+
+    #if status == :service_exists
+    #  redirect_to @service_type, notice: 'This Service Type is assigned to existing Vehicle(s).  You must remove the service from the Vehicles(s) before removing it.'
+    #  return
+    #end
+
+    redirect_to service_types_path, notice: 'Service Type was successfully deleted.'
   end
 
   private

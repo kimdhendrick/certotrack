@@ -146,6 +146,47 @@ describe 'Service Types', slow: true, js: true do
       page.should have_content '6 months'
       page.should have_content 'By Date'
     end
+
+    it 'should delete existing service_type' do
+      service_type = create(:service_type, customer: customer, name: 'Manicure')
+
+      visit service_type_path service_type.id
+
+      page.should have_content 'Show Service Type'
+      click_on 'Delete'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete?')
+      alert.dismiss
+
+      page.should have_content 'Show Service Type'
+
+      click_on 'Delete'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete?')
+      alert.accept
+
+      page.should have_content 'All Service Types'
+      page.should have_content 'Service Type was successfully deleted.'
+    end
+
+    xit 'should not allow deletion if services exist' do
+      service_type = create(:service_type, customer: customer, name: 'Manicure')
+      create(:service, service_type: service_type, customer: service_type.customer)
+
+      visit service_type_path service_type.id
+
+      page.should have_content 'Show Service Type'
+      click_on 'Delete'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete?')
+      alert.accept
+
+      page.should have_content 'Show Service Type'
+      page.should have_content 'This Service Type is assigned to existing Vehicle(s).  You must remove the service from the vehicle(s) before removing it.'
+    end
   end
 
   context 'when an admin user' do
@@ -162,7 +203,7 @@ describe 'Service Types', slow: true, js: true do
 
       golden = create(:location, name: 'Golden', customer: customer2)
       create(:vehicle, vehicle_number: '34987', vin: '2B8GDM9AXKP042790', license_plate: '123-ABC',
-      year: 1999, make: 'Dodge', vehicle_model: 'Dart', mileage: 20000, location: golden, customer: customer2)
+             year: 1999, make: 'Dodge', vehicle_model: 'Dart', mileage: 20000, location: golden, customer: customer2)
 
       login_as_admin
     end

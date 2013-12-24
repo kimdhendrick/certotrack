@@ -6,7 +6,7 @@ describe ServiceTypesController do
   let(:fake_service_type_service) { Faker.new(create(:service_type)) }
   let(:fake_service_type_service_non_persisted) { Faker.new(build(:service_type)) }
 
-  describe 'GET index' do
+  describe 'GET #index' do
     context 'when vehicle user' do
       before do
         @my_user = stub_vehicle_user(customer)
@@ -83,7 +83,7 @@ describe ServiceTypesController do
     end
   end
 
-  describe 'GET show' do
+  describe 'GET #show' do
     context 'when vehicle user' do
       before do
         @my_user = stub_vehicle_user(customer)
@@ -164,7 +164,7 @@ describe ServiceTypesController do
     end
   end
 
-  describe 'GET new' do
+  describe 'GET #new' do
     context 'when vehicle user' do
       before do
         sign_in stub_vehicle_user(customer)
@@ -218,7 +218,7 @@ describe ServiceTypesController do
     end
   end
 
-  describe 'POST create' do
+  describe 'POST #create' do
     context 'when vehicle user' do
       before do
         sign_in stub_vehicle_user(customer)
@@ -337,7 +337,7 @@ describe ServiceTypesController do
     end
   end
 
-  describe 'GET edit' do
+  describe 'GET #edit' do
     context 'when vehicle user' do
       before do
         sign_in stub_vehicle_user(customer)
@@ -406,7 +406,7 @@ describe ServiceTypesController do
     end
   end
 
-  describe 'PUT update' do
+  describe 'PUT #update' do
     context 'when service_type user' do
       before do
         sign_in stub_vehicle_user(customer)
@@ -525,6 +525,57 @@ describe ServiceTypesController do
         put :update, {:id => service_type.to_param, :service_type => service_type_attributes}, {}
 
         assigns(:service_type).should be_nil
+      end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    context 'when vehicle user' do
+      before do
+        sign_in stub_vehicle_user(customer)
+      end
+
+      it 'calls service_type_service' do
+        controller.load_service_type_service(fake_service_type_service)
+        service_type = create(:service_type, customer: customer)
+
+        delete :destroy, {:id => service_type.to_param}, {}
+
+        fake_service_type_service.received_message.should == :delete_service_type
+      end
+
+      it 'redirects to the service_type list' do
+        controller.load_service_type_service(fake_service_type_service)
+        service_type = create(:service_type, customer: customer)
+
+        delete :destroy, {:id => service_type.to_param}, {}
+
+        response.should redirect_to(service_types_path)
+      end
+
+      xit 'gives error message when vehicles exists' do
+        service_type = create(:service_type, customer: customer)
+        controller.load_service_type_service(Faker.new(:vehicle_exists))
+
+        delete :destroy, {:id => service_type.to_param}, {}
+
+        response.should redirect_to(service_type_url)
+        flash[:notice].should == 'This Service Type is assigned to existing Vehicle(s).  You must remove the service from the Vehicles(s) before removing it.'
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin(customer)
+      end
+
+      it 'calls service_type_service' do
+        controller.load_service_type_service(fake_service_type_service)
+        service_type = create(:service_type, customer: customer)
+
+        delete :destroy, {:id => service_type.to_param}, {}
+
+        fake_service_type_service.received_message.should == :delete_service_type
       end
     end
   end
