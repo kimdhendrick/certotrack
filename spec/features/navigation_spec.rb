@@ -625,6 +625,46 @@ describe 'Navigation', slow: true do
     end
   end
 
+  describe 'Service Links' do
+    before do
+      login_as_vehicle_user(customer)
+      create(:service_type, name: 'Oil Change', customer: customer)
+    end
+
+    it 'should have all the right stuff' do
+      visit root_path
+      click_on 'All Service Types'
+      page.should have_content 'All Service Types'
+
+      click_and_test_home_link
+      click_on 'All Service Types'
+      click_and_test_link_with_title 'Create Service Type'
+      visit root_path
+      click_on 'All Service Types'
+
+      click_on 'Oil Change'
+      page.should have_content 'Show Service Type'
+      click_and_test_home_link
+      click_on 'All Service Types'
+      click_on 'Oil Change'
+
+      click_and_test_link_with_title 'Create Service Type'
+      visit root_path
+      click_on 'All Service Types'
+      click_on 'Oil Change'
+
+      click_on 'Edit'
+      page.should have_content 'Edit Service Type'
+      click_and_test_home_link
+
+      visit root_path
+      click_on 'All Service Types'
+      click_on 'Oil Change'
+      click_on 'Edit'
+      click_and_test_link_with_title 'Create Service Type'
+    end
+  end
+
   def click_and_test_home_link
     click_link 'Home'
     page.should have_content 'Welcome to CertoTrack'
