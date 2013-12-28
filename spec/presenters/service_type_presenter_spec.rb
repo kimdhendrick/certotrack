@@ -56,9 +56,9 @@ describe ServiceTypePresenter do
     date_and_mileage_service_type = ServiceTypePresenter.new(create(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE))
     mileage_service_type = ServiceTypePresenter.new(create(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_MILEAGE))
 
-    date_service_type.expiration_type_of_date?.should be_true
-    date_and_mileage_service_type.expiration_type_of_date?.should be_true
-    mileage_service_type.expiration_type_of_date?.should be_false
+    date_service_type.date_expiration_type?.should be_true
+    date_and_mileage_service_type.date_expiration_type?.should be_true
+    mileage_service_type.date_expiration_type?.should be_false
   end
 
   it 'should respond to expiration_type_of_mileage?' do
@@ -66,8 +66,8 @@ describe ServiceTypePresenter do
     date_and_mileage_service_type = ServiceTypePresenter.new(create(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE))
     date_service_type = ServiceTypePresenter.new(create(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE))
 
-    date_and_mileage_service_type.expiration_type_of_mileage?.should be_true
-    mileage_service_type.expiration_type_of_mileage?.should be_true
-    date_service_type.expiration_type_of_mileage?.should be_false
+    date_and_mileage_service_type.mileage_expiration_type?.should be_true
+    mileage_service_type.mileage_expiration_type?.should be_true
+    date_service_type.mileage_expiration_type?.should be_false
   end
 end

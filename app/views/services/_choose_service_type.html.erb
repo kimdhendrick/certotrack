@@ -1,0 +1,10 @@
+<div class="field">
+  <%= f.label :service_type_id, 'Service Type' %>
+  <br/>
+  <%= select(:service, :service_type_id,
+             options_from_collection_for_select(@service_types, 'id', 'name',
+                                                @service.service_type_id),
+             {prompt: 'Select Service Type...'}) %>
+</div>
+
+<%= link_to 'Create Service Type', new_service_type_path %>

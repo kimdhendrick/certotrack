@@ -231,30 +231,65 @@ describe VehicleService do
     end
   end
 
-  #TODO implement for real when services are implemented
   describe '#get_all_non_serviced_vehicles_for' do
-    let!(:my_vehicle) { create(:vehicle, customer: my_customer) }
-    let!(:other_vehicle) { create(:vehicle) }
+    context 'when regular user' do
+      it 'should return empty list when no vehicles' do
+        service_type = create(:service_type, customer: my_customer)
+        
+        VehicleService.new.get_all_non_serviced_vehicles_for(service_type).should == []
+      end
 
-    context 'when admin user' do
+      it 'should return empty list when all vehicles certified' do
+        service_type = create(:service_type, customer: my_customer)
+        certified_vehicle1 = create(:vehicle, customer: my_customer)
+        certified_vehicle2 = create(:vehicle, customer: my_customer)
+        create(:service, vehicle: certified_vehicle1, service_type: service_type, customer: my_customer)
+        create(:service, vehicle: certified_vehicle2, service_type: service_type, customer: my_customer)
+
+        VehicleService.new.get_all_non_serviced_vehicles_for(service_type).should == []
+      end
+
+      it "should return only customer's vehicles" do
+        service_type = create(:service_type, customer: my_customer)
+        my_vehicle = create(:vehicle, customer: my_customer)
+        other_vehicle = create(:vehicle)
+
+        VehicleService.new.get_all_non_serviced_vehicles_for(service_type).should == [my_vehicle]
+      end
+
+      it 'only returns uncertified vehicles' do
+        service_type = create(:service_type, customer: my_customer)
+        certified_vehicle = create(:vehicle, vehicle_model: 'certified', customer: my_customer)
+        create(:service, vehicle: certified_vehicle, service_type: service_type, customer: my_customer)
+        uncertified_vehicle = create(:vehicle, vehicle_model: 'UNCERTIFIED', customer: my_customer)
+
+        VehicleService.new.get_all_non_serviced_vehicles_for(service_type).should == [uncertified_vehicle]
+      end
+
       it 'should return all vehicles' do
-        admin_user = create(:user, roles: ['admin'])
-        service_type = create(:service_type)
-
-        vehicles = VehicleService.new.get_all_non_serviced_vehicles_for(service_type, admin_user)
-
-        vehicles.should =~ [my_vehicle, other_vehicle]
+        service_type = create(:service_type, customer: my_customer)
+        uncertified_vehicle1 = create(:vehicle, customer: my_customer)
+        uncertified_vehicle2 = create(:vehicle, customer: my_customer)
+        VehicleService.new.get_all_non_serviced_vehicles_for(service_type).should == [uncertified_vehicle1, uncertified_vehicle2]
       end
     end
 
-    context 'when regular user' do
+    context 'when admin user should still limit to customer' do
       it "should return only customer's vehicles" do
-        user = create(:user, customer: my_customer)
-        service_type = create(:service_type)
+        service_type = create(:service_type, customer: my_customer)
+        my_vehicle = create(:vehicle, customer: my_customer)
+        other_vehicle = create(:vehicle)
 
-        vehicles = VehicleService.new.get_all_non_serviced_vehicles_for(service_type, user)
+        VehicleService.new.get_all_non_serviced_vehicles_for(service_type).should == [my_vehicle]
+      end
 
-        vehicles.should == [my_vehicle]
+      it 'only returns uncertified vehicles' do
+        service_type = create(:service_type, customer: my_customer)
+        certified_vehicle = create(:vehicle, vehicle_model: 'certified', customer: my_customer)
+        create(:service, vehicle: certified_vehicle, service_type: service_type, customer: my_customer)
+        uncertified_vehicle = create(:vehicle, vehicle_model: 'UNCERTIFIED', customer: my_customer)
+
+        VehicleService.new.get_all_non_serviced_vehicles_for(service_type).should == [uncertified_vehicle]
       end
     end
   end

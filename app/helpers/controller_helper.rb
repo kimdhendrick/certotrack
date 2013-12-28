@@ -35,6 +35,10 @@ module ControllerHelper
     @service_type_service ||= service
   end
 
+  def load_vehicle_servicing_service(service = VehicleServicingService.new)
+    @vehicle_servicing_service ||= service
+  end
+
   private
 
   def _get_model(model_class)

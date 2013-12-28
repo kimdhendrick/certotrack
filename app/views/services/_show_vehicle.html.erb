@@ -1,0 +1,4 @@
+<div class="field">
+  Vehicle <%= link_to "#{VehiclePresenter.new(@service.vehicle).name}", @service.vehicle %>
+  <%= hidden_field(:service, :vehicle_id, value: @service.vehicle_id) %>
+</div>

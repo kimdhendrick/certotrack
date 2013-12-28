@@ -1,0 +1,10 @@
+<div class="field">
+  <%= f.label :vehicle_id, 'Vehicle' %>
+  <br/>
+  <%= select(:service, :vehicle_id,
+             options_from_collection_for_select(@vehicles, 'id', 'name',
+                                                @service.vehicle_id),
+             {prompt: 'Select Vehicle...'}) %>
+</div>
+
+<%= link_to 'Create Vehicle', new_vehicle_path %>

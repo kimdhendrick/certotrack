@@ -50,4 +50,6 @@ Certotrack::Application.routes.draw do
   get 'ajax_vehicle_model', action: 'ajax_vehicle_model', controller: 'vehicles'
 
   resources :service_types
+
+  resources :services, only: [:new, :create]
 end

@@ -14,14 +14,14 @@
     <%= service_type.expiration_type %>
   </p>
 
-  <% if service_type.expiration_type_of_date? %>
+  <% if service_type.date_expiration_type? %>
     <p>
       <b>Interval Date</b>
       <%= service_type.interval_date %>
     </p>
   <% end %>
 
-  <% if service_type.expiration_type_of_mileage? %>
+  <% if service_type.mileage_expiration_type? %>
     <p>
       <b>Interval Mileage</b>
       <%= service_type.interval_mileage %>
@@ -57,7 +57,15 @@
         <td><%= vehicle.vehicle_model %></td>
         <td><%= vehicle.mileage %></td>
         <td><%= vehicle.location %></td>
-        <td>Service</td>
+        <td>
+          <%= link_to 'Service',
+                      new_service_path(
+                        service_type_id: service_type.id,
+                        vehicle_id: vehicle.id,
+                        source: :service_type
+                      )
+          %>
+        </td>
       </tr>
     <% end %>
     </tbody>

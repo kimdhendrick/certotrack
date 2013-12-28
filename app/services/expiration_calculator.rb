@@ -19,4 +19,10 @@ class ExpirationCalculator
         return start_date + 5.years
     end
   end
+
+  def calculate_mileage(start_mileage, interval)
+    return if start_mileage.blank? || interval.blank?
+
+    start_mileage + interval
+  end
 end

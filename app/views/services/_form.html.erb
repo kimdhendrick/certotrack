@@ -1,0 +1,52 @@
+<%= form_for(@service) do |f| %>
+
+  <%= render 'shared/errors', model: @service %>
+
+  <% if @service.vehicle.present? && @source != 'service' %>
+    <%= render partial: 'show_vehicle', locals: {f: f} %>
+  <% else %>
+    <%= render partial: 'choose_vehicle', locals: {f: f} %>
+  <% end %>
+
+  <% if (user_action == 'Reservice') %>
+    <%= render partial: 'show_service_type', locals: {f: f} %>
+  <% else %>
+    <%= render partial: 'choose_service_type', locals: {f: f} %>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :last_service_date, 'Last Service Date' %>
+    <br/>
+    <input class="datepicker"
+           id="service_last_service_date"
+           name="service[last_service_date]"
+           type="text"
+           value="<%= DateHelpers.date_to_string(@service.last_service_date || Date.today) %>">
+  </div>
+
+  <div class="field">
+    <%= f.label :last_service_mileage, 'Last Service Mileage' %>
+    <br/>
+    <%= f.text_field :last_service_mileage %>
+  </div>
+
+  <div class="field">
+    <%= f.label :comments %>
+    <br/>
+    <%= f.text_field :comments %>
+  </div>
+
+  <input type="hidden" name="source" value="<%= @source %>">
+
+  <%= submit_tag(user_action) %>
+  <% if user_action == 'Create' %>
+    <%= submit_tag "Save and Create Another" %>
+  <% end %>
+
+<% end %>
+
+<script type="text/javascript">
+  $('[name=commit]').click(function() {
+    return confirm_future_date(new Date(document.getElementById('service_last_service_date').value));
+  });
+</script>

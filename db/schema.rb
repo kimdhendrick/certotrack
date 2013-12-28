@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131208230840) do
+ActiveRecord::Schema.define(version: 20131224221659) do
 
   create_table "certification_periods", force: true do |t|
     t.string   "trainer"
@@ -96,12 +96,32 @@ ActiveRecord::Schema.define(version: 20131208230840) do
     t.datetime "updated_at"
   end
 
+  create_table "service_periods", force: true do |t|
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.integer  "start_mileage"
+    t.integer  "end_mileage"
+    t.string   "comments"
+    t.integer  "service_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "service_types", force: true do |t|
     t.string   "name"
     t.string   "expiration_type"
     t.string   "interval_date"
     t.integer  "interval_mileage"
     t.integer  "customer_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "services", force: true do |t|
+    t.integer  "service_type_id"
+    t.integer  "vehicle_id"
+    t.integer  "customer_id"
+    t.integer  "active_service_period_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

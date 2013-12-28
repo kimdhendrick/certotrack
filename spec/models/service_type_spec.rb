@@ -9,6 +9,7 @@ describe ServiceType do
   it { should validate_uniqueness_of(:name).scoped_to(:customer_id) }
   it { should validate_presence_of :expiration_type }
   it { should belong_to :customer }
+  it { should have_many :services }
 
   it 'should only accept valid interval dates' do
     build(:service_type, interval_date: Interval::ONE_MONTH.text).should be_valid
@@ -48,5 +49,25 @@ describe ServiceType do
     service_type.should_not be_valid
     service_type.errors.full_messages_for(:interval_date).should == ['Interval date or mileage required']
     service_type.errors.full_messages_for(:interval_mileage).should == ['Interval mileage or date required']
+  end
+
+  it 'should answer mileage_expiration_type?' do
+    service_type_date_type = build(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE)
+    service_type_date_or_mileage_type = build(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE)
+    service_type_mileage_type = build(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_MILEAGE)
+
+    service_type_mileage_type.mileage_expiration_type?.should be_true
+    service_type_date_or_mileage_type.mileage_expiration_type?.should be_true
+    service_type_date_type.mileage_expiration_type?.should be_false
+  end
+
+  it 'should answer date_expiration_type?' do
+    service_type_date_type = build(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE)
+    service_type_date_or_mileage_type = build(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE)
+    service_type_mileage_type = build(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_MILEAGE)
+
+    service_type_date_or_mileage_type.date_expiration_type?.should be_true
+    service_type_date_type.date_expiration_type?.should be_true
+    service_type_mileage_type.date_expiration_type?.should be_false
   end
 end

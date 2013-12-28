@@ -18,6 +18,7 @@ describe User do
       it { should be_able_to(:manage, :location) }
       it { should be_able_to(:manage, :vehicle) }
       it { should be_able_to(:manage, :service_type) }
+      it { should be_able_to(:manage, :service) }
     end
 
     context 'when user is a guest' do
@@ -31,6 +32,7 @@ describe User do
       it { should_not be_able_to(:manage, :vehicle) }
       it { should_not be_able_to(:manage, :customer) }
       it { should_not be_able_to(:manage, :service_type) }
+      it { should_not be_able_to(:manage, :service) }
     end
 
     context 'when user is an equipment user' do
@@ -46,6 +48,7 @@ describe User do
       it { should_not be_able_to(:read, :certification) }
       it { should_not be_able_to(:manage, :customer) }
       it { should_not be_able_to(:manage, :service_type) }
+      it { should_not be_able_to(:manage, :service) }
       it { should_not be_able_to(:manage, :all) }
     end
 
@@ -88,6 +91,7 @@ describe User do
       it { should_not be_able_to(:read, :vehicle) }
       it { should_not be_able_to(:manage, :customer) }
       it { should_not be_able_to(:manage, :service_type) }
+      it { should_not be_able_to(:manage, :service) }
       it { should_not be_able_to(:manage, :all) }
 
     end
@@ -136,6 +140,7 @@ describe User do
       it { should be_able_to(:read, :location) }
       it { should be_able_to(:create, :location) }
       it { should be_able_to(:create, :service_type) }
+      it { should be_able_to(:create, :service) }
       it { should_not be_able_to(:read, :equipment) }
       it { should_not be_able_to(:read, :certification) }
       it { should_not be_able_to(:read, :employee) }
@@ -159,6 +164,15 @@ describe User do
 
       it { should be_able_to(:manage, own_service_type) }
       it { should_not be_able_to(:manage, other_customer_service_type) }
+    end
+
+    context 'when user is an vehicle user with service' do
+      let(:user) { build(:user, roles: ['vehicle']) }
+      let(:own_service) { build(:service, customer: user.customer) }
+      let(:other_customer_service) { build(:service) }
+
+      it { should be_able_to(:manage, own_service) }
+      it { should_not be_able_to(:manage, other_customer_service) }
     end
   end
 end

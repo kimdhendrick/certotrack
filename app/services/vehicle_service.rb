@@ -12,9 +12,12 @@ class VehicleService
     current_user.admin? ? Vehicle.all : current_user.vehicles
   end
 
-  def get_all_non_serviced_vehicles_for(service_type, current_user)
-    #TODO
-    get_all_vehicles(current_user)
+  def get_all_non_serviced_vehicles_for(service_type)
+    serviced_vehicles = service_type.services.map(&:vehicle)
+
+    serviced_vehicles.empty? ?
+      Vehicle.where(customer: service_type.customer) :
+      Vehicle.where("id NOT IN (?)", serviced_vehicles)
   end
 
   def create_vehicle(current_user, attributes)

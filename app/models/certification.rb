@@ -15,7 +15,7 @@ class Certification < ActiveRecord::Base
            autosave: true,
            dependent: :destroy
 
-  validates_uniqueness_of :certification_type_id, scope: :employee_id, message: "already assigned to this Employee. Please update existing Certification."
+  validates_uniqueness_of :certification_type_id, scope: :employee_id, message: 'already assigned to this Employee. Please update existing Certification.'
 
   validates_presence_of :active_certification_period,
                         :certification_type,

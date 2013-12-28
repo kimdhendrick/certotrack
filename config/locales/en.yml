@@ -6,3 +6,6 @@ en:
     attributes:
       active_certification_period:
         start_date: 'Last certification date'
+      active_service_period:
+        start_date: 'Last service date'
+        start_mileage: 'Last service mileage'

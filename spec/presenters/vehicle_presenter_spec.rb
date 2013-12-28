@@ -41,7 +41,7 @@ describe VehiclePresenter do
     VehiclePresenter.new(vehicle).make.should == 'Honda'
   end
 
-  it 'should respond to vehicle_vehicle_model' do
+  it 'should respond to vehicle_model' do
     VehiclePresenter.new(vehicle).vehicle_model.should == 'Civic'
   end
 
@@ -72,4 +72,68 @@ describe VehiclePresenter do
   it 'should respond to sort_key' do
     VehiclePresenter.new(vehicle).sort_key.should == '1000'
   end
+
+  it 'should respond to name when all the info populated' do
+    vehicle = create(
+      :vehicle,
+      license_plate: 'GET-REAL',
+      vehicle_number: '123',
+      year: 2013,
+      vehicle_model: 'Endeavor'
+    )
+
+    VehiclePresenter.new(vehicle).name.should == 'GET-REAL/123 2013 Endeavor'
+  end
+
+  it 'should respond to name when missing year' do
+    vehicle = create(
+      :vehicle,
+      license_plate: 'GET-REAL',
+      vehicle_number: '123',
+      vehicle_model: 'Endeavor',
+      year: nil
+    )
+
+    VehiclePresenter.new(vehicle).name.should == 'GET-REAL/123 Endeavor'
+  end
+
+  it 'should respond to name when missing model' do
+    vehicle = create(
+      :vehicle,
+      license_plate: 'GET-REAL',
+      vehicle_number: '123',
+      year: 2013,
+      vehicle_model: nil
+    )
+
+    VehiclePresenter.new(vehicle).name.should == 'GET-REAL/123 2013'
+  end
+
+  it 'should respond to name when missing all optional data' do
+    vehicle = create(
+      :vehicle,
+      license_plate: 'GET-REAL',
+      vehicle_number: '123',
+      year: nil,
+      vehicle_model: nil,
+      make: nil
+    )
+
+    VehiclePresenter.new(vehicle).name.should == 'GET-REAL/123'
+  end
+
+  #String toString() {
+  #  (_getDescription() + ' ' +  year + ' ' + _toText(model)).trim()
+  #}
+  #
+  #private _getDescription() {
+  #  licensePlate && carNumber ?
+  #    licensePlate + '/' + carNumber :
+  #    _toText(licensePlate) + _toText(carNumber)
+  #}
+  #
+  #private _toText(value) {
+  #  value ?: ''
+  #}
+
 end

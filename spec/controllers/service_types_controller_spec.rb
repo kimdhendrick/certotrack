@@ -109,7 +109,6 @@ describe ServiceTypesController do
         assigns(:non_serviced_vehicles).map(&:model).should eq([non_serviced_vehicle])
         fake_vehicle_service.received_message.should == :get_all_non_serviced_vehicles_for
         fake_vehicle_service.received_params[0].should == service_type
-        fake_vehicle_service.received_params[1].should == @my_user
       end
     end
 

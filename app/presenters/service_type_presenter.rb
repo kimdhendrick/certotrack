@@ -7,6 +7,8 @@ class ServiceTypePresenter
   delegate :name, to: :model
   delegate :expiration_type, to: :model
   delegate :interval_date, to: :model
+  delegate :mileage_expiration_type?, to: :model
+  delegate :date_expiration_type?, to: :model
 
   def initialize(model, template = nil)
     @model = model
@@ -27,16 +29,6 @@ class ServiceTypePresenter
 
   def sortable_interval_mileage
     model.interval_mileage
-  end
-
-  def expiration_type_of_date?
-    [ServiceType::EXPIRATION_TYPE_BY_DATE, ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE]
-    .include?(model.expiration_type)
-  end
-
-  def expiration_type_of_mileage?
-    [ServiceType::EXPIRATION_TYPE_BY_MILEAGE, ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE]
-    .include?(model.expiration_type)
   end
 
   def edit_link

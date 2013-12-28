@@ -16,7 +16,7 @@ class ServiceTypesController < ModelController
   end
 
   def show
-    non_serviced_vehicles_list = @vehicle_service.get_all_non_serviced_vehicles_for(@service_type, current_user)
+    non_serviced_vehicles_list = @vehicle_service.get_all_non_serviced_vehicles_for(@service_type)
     @non_serviced_vehicles = VehicleListPresenter.new(non_serviced_vehicles_list).sort
   end
 

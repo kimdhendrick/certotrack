@@ -34,11 +34,20 @@ class VehiclePresenter
     vehicle_number
   end
 
+  def name
+    license_plate + '/' + [vehicle_number, year.try(&:to_s), vehicle_model].compact.join(' ')
+  end
+
   def edit_link
     @template.link_to 'Edit', @template.edit_vehicle_path(model)
   end
 
   def delete_link
     @template.link_to 'Delete', model, method: :delete, data: {confirm: 'Are you sure you want to delete this vehicle?'}
+  end
+
+  def new_service_link
+    @template.link_to 'New Vehicle Service',
+                      @template.new_service_path(vehicle_id: model.id, source: :vehicle)
   end
 end

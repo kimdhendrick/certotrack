@@ -87,9 +87,7 @@ describe 'Service Types', slow: true, js: true do
         page.should have_content 'Dart'
         page.should have_content '20,000'
         page.should have_content 'Golden'
-        #TODO
-        #page.should have_link 'Service'
-        page.should have_content 'Service'
+        page.should have_link 'Service'
       end
     end
 
@@ -247,7 +245,7 @@ describe 'Service Types', slow: true, js: true do
         page.should have_content 'Location'
       end
 
-      page.all('table tr').count.should == 3
+      page.all('table tr').count.should == 2
 
       within 'table tbody tr:nth-of-type(1)' do
         page.should have_link '34987'
@@ -258,9 +256,7 @@ describe 'Service Types', slow: true, js: true do
         page.should have_content 'Dart'
         page.should have_content '20,000'
         page.should have_content 'Golden'
-        #TODO
-        #page.should have_link 'Service'
-        page.should have_content 'Service'
+        page.should have_link 'Service'
       end
 
       visit root_path
@@ -293,9 +289,9 @@ describe 'Service Types', slow: true, js: true do
         page.should have_content 'Location'
       end
 
-      page.all('table tr').count.should == 3
+      page.all('table tr').count.should == 2
 
-      within 'table tbody tr:nth-of-type(2)' do
+      within 'table tbody tr:nth-of-type(1)' do
         page.should have_link '77777'
         page.should have_link '3C8GDM9AXKP042701'
         page.should have_content '789-XYZ'
@@ -304,9 +300,7 @@ describe 'Service Types', slow: true, js: true do
         page.should have_content 'Riviera'
         page.should have_content '56,000'
         page.should have_content 'Boulder'
-        #TODO
-        #page.should have_link 'Service'
-        page.should have_content 'Service'
+        page.should have_link 'Service'
       end
     end
   end

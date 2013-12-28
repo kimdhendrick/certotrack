@@ -11,6 +11,7 @@ class ServiceType < ActiveRecord::Base
   INTERVAL_MILEAGES = [3000, 5000, 10000, 12000, 15000, 20000, 50000]
 
   belongs_to :customer
+  has_many :services
 
   validates_presence_of :name
   validates_uniqueness_of :name, scope: :customer_id, case_sensitive: false
@@ -36,6 +37,15 @@ class ServiceType < ActiveRecord::Base
                 message: 'invalid value'
               }
   validate :_date_or_mileage_required
+
+
+  def mileage_expiration_type?
+    [EXPIRATION_TYPE_BY_MILEAGE, EXPIRATION_TYPE_BY_DATE_AND_MILEAGE].include?(expiration_type)
+  end
+
+  def date_expiration_type?
+    [EXPIRATION_TYPE_BY_DATE, EXPIRATION_TYPE_BY_DATE_AND_MILEAGE].include?(expiration_type)
+  end
 
   private
 
