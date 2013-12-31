@@ -10,7 +10,19 @@ describe CertificationFactory do
       )
 
       certification.should_not be_persisted
+      certification.errors.should be_empty
       certification.customer.should == customer
+    end
+
+    it 'should only have one error on blank start date' do
+      customer = create(:customer)
+      certification = CertificationFactory.new.new_instance(
+        current_user_id: create(:user, customer: customer).id
+      )
+      certification.valid?
+
+      certification.errors.full_messages_for(:"active_certification_period.start_date").first.should == 'Last certification date is not a valid date'
+      certification.errors.full_messages_for(:"certification_periods.start_date").should be_empty
     end
 
     it 'creates a certification when given an employee_id' do
