@@ -284,7 +284,16 @@ describe Service do
   it_behaves_like 'an object that is sortable by status'
 
   describe '#reservice' do
-    subject { create(:service, last_service_date: 1.year.ago, service_type: create(:service_type, interval_date: Interval::ONE_YEAR.text)) }
+    subject do
+      service_type = create(
+        :service_type,
+        expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE,
+        interval_date: Interval::ONE_YEAR.text
+      )
+
+      create(:service, last_service_date: 1.year.ago, service_type: service_type)
+    end
+
     let(:start_date) { 2.days.from_now }
     let(:comments) { 'New Comments' }
     let(:attributes) { {start_date: start_date, comments: comments} }

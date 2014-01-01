@@ -9,7 +9,21 @@ describe VehicleServiceFactory do
       )
 
       service.should_not be_persisted
+      service.errors.should be_empty
       service.customer.should == customer
+    end
+
+    it 'should only have one error on blank start date' do
+      customer = create(:customer)
+      service = VehicleServiceFactory.new.new_instance(
+        current_user_id: create(:user, customer: customer).id
+      )
+
+      service.valid?
+      service.active_service_period.valid?
+
+      service.errors.full_messages_for(:"active_service_period.start_date").first.should == 'Last service date is not a valid date'
+      service.errors.full_messages_for(:"service_periods.start_date").should be_empty
     end
 
     it 'creates a service when given an vehicle_id' do

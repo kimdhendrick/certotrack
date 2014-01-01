@@ -4,15 +4,18 @@ class ServicePeriod < ActiveRecord::Base
 
   validates_date :start_date,
                  :before => lambda { 100.years.from_now }, :after => lambda { 100.years.ago },
-                 presence: true, if: :date_expiration_type?
+                 presence: true,
+                 if: :require_start_date?
 
-  validates :start_mileage, presence: true, if: :mileage_expiration_type?
+  validates :start_mileage,
+            presence: true,
+            if: :require_start_mileage?
 
-  def date_expiration_type?
-    service.try(&:date_expiration_type?)
+  def require_start_date?
+    service.nil? || service.expiration_type.nil? || service.date_expiration_type?
   end
 
-  def mileage_expiration_type?
-    service.try(&:mileage_expiration_type?)
+  def require_start_mileage?
+    service.nil? || service.expiration_type.nil? || service.mileage_expiration_type?
   end
 end

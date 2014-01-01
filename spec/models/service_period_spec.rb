@@ -7,6 +7,17 @@ describe ServicePeriod do
 
   it { should belong_to(:service) }
 
+  it 'should validate presence of start_date and start_mileage if expiration_type is empty' do
+    subject.service.service_type.expiration_type = nil
+    subject.start_date = nil
+    subject.start_mileage = nil
+
+    subject.valid?
+
+    subject.errors[:start_date].should == ['is not a valid date']
+    subject.errors[:start_mileage].should == ["can't be blank"]
+  end
+
   it 'should validate presence of start_date if date based' do
     subject.service.service_type.expiration_type = ServiceType::EXPIRATION_TYPE_BY_DATE
     subject.start_date = nil

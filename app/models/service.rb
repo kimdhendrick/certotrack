@@ -25,18 +25,13 @@ class Service < ActiveRecord::Base
   delegate :comments, to: :active_service_period
   delegate :comments=, to: :active_service_period
 
-  delegate :name, to: :service_type
-  delegate :interval_date, to: :service_type
-  delegate :interval_mileage, to: :service_type
-  delegate :expiration_type, to: :service_type
-
-  def date_expiration_type?
-    service_type.try(&:date_expiration_type?)
-  end
-
-  def mileage_expiration_type?
-    service_type.try(&:mileage_expiration_type?)
-  end
+  delegate :name,
+           :interval_date,
+           :interval_mileage,
+           :expiration_type,
+           :date_expiration_type?,
+           :mileage_expiration_type?,
+           to: :service_type, allow_nil: true
 
   def expiration_date
     active_service_period.end_date
@@ -88,6 +83,7 @@ class Service < ActiveRecord::Base
 
   def reservice(attributes)
     self.active_service_period = ServicePeriod.new(attributes)
+    self.active_service_period.service = self
     expiration_calculator = ExpirationCalculator.new
     self.expiration_date = expiration_calculator.calculate(last_service_date, Interval.find_by_text(interval_date))
     self.expiration_mileage = expiration_calculator.calculate_mileage(last_service_mileage, interval_mileage)
