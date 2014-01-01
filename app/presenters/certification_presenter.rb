@@ -31,6 +31,14 @@ class CertificationPresenter
     DateHelpers.date_to_string model.expiration_date
   end
 
+  def last_certification_date_sort_key
+    model.last_certification_date
+  end
+
+  def expiration_date_sort_key
+    model.expiration_date
+  end
+
   def certification_type_show_link
     @template.link_to model.name, model.certification_type
   end

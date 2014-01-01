@@ -43,12 +43,22 @@ describe EquipmentPresenter do
 
   it 'should respond to last_inspection_date' do
     equipment = EquipmentPresenter.new(create(:equipment, last_inspection_date: Date.new(2013, 5, 12)))
-    equipment.last_inspection_date.should == "05/12/2013"
+    equipment.last_inspection_date.should == '05/12/2013'
+  end
+
+  it 'should respond to last_inspection_date_sort_key' do
+    equipment = EquipmentPresenter.new(create(:equipment, last_inspection_date: Date.new(2013, 5, 12)))
+    equipment.last_inspection_date_sort_key.should == Date.new(2013, 5, 12)
   end
 
   it 'should respond to expiration_date' do
     equipment = EquipmentPresenter.new(create(:equipment, expiration_date: Date.new(2012, 6, 20)))
-    equipment.expiration_date.should == "06/20/2012"
+    equipment.expiration_date.should == '06/20/2012'
+  end
+
+  it 'should respond to expiration' do
+    equipment = EquipmentPresenter.new(create(:equipment, expiration_date: Date.new(2012, 6, 20)))
+    equipment.expiration.should == Date.new(2012, 6, 20)
   end
 
   subject { EquipmentPresenter.new(create(:equipment)) }

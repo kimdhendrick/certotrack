@@ -46,6 +46,10 @@ class EquipmentPresenter
     DateHelpers::date_to_string(model.last_inspection_date)
   end
 
+  def last_inspection_date_sort_key
+    model.last_inspection_date
+  end
+
   def expiration_date
     DateHelpers::date_to_string(model.expiration_date)
   end

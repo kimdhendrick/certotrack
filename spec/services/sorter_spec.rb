@@ -43,28 +43,35 @@ describe Sorter do
     end
 
     it 'should sort dates ascending' do
-      today = Date.today
+      yesterday = Date.parse('2013-12-31')
+      today = Date.parse('2014-01-01')
+      tomorrow = Date.parse('2014-01-02')
       equipment =
         [
           build(:equipment, expiration_date: today),
+          build(:equipment, expiration_date: yesterday),
+          build(:equipment, expiration_date: tomorrow),
           build(:equipment, expiration_date: nil)
         ]
 
       results = Sorter.new.sort(equipment, 'expiration_date', 'asc').map(&:expiration_date)
-      results.should == [today, nil]
+      results.should == [yesterday, today, tomorrow, nil]
     end
 
     it 'should sort dates descending' do
-      today = Date.today
-
+      yesterday = Date.parse('2013-12-31')
+      today = Date.parse('2014-01-01')
+      tomorrow = Date.parse('2014-01-02')
       equipment =
         [
           build(:equipment, expiration_date: today),
+          build(:equipment, expiration_date: yesterday),
+          build(:equipment, expiration_date: tomorrow),
           build(:equipment, expiration_date: nil)
         ]
 
       results = Sorter.new.sort(equipment, 'expiration_date', 'desc').map(&:expiration_date)
-      results.should == [nil, today]
+      results.should == [nil, tomorrow, today, yesterday]
     end
 
     it 'should default to name if no field provided' do

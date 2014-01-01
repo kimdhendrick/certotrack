@@ -75,7 +75,7 @@ describe CertificationPresenter do
     CertificationPresenter.new(certification).sort_key.should == 'Cert type 123'
   end
 
-  it 'should respond to last_inspection_date' do
+  it 'should respond to last_certification_date' do
     certification = create(
       :certification,
       customer: create(:customer),
@@ -93,6 +93,26 @@ describe CertificationPresenter do
     )
 
     CertificationPresenter.new(certification).expiration_date.should == '06/20/2012'
+  end
+
+  it 'should respond to last_certification_date_sort_key' do
+    certification = create(
+      :certification,
+      customer: create(:customer),
+      last_certification_date: Date.new(2013, 5, 12)
+    )
+
+    CertificationPresenter.new(certification).last_certification_date_sort_key.should == Date.new(2013, 5, 12)
+  end
+
+  it 'should respond to expiration_date_sort_key' do
+    certification = create(
+      :certification,
+      customer: create(:customer),
+      expiration_date: Date.new(2012, 6, 20)
+    )
+
+    CertificationPresenter.new(certification).expiration_date_sort_key.should == Date.new(2012, 6, 20)
   end
 
   it 'should respond to location' do

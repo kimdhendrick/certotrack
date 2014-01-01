@@ -504,7 +504,7 @@ describe 'Equipment', slow: true do
                                     name: 'Banana',
                                     serial_number: 'BANA',
                                     inspection_interval: Interval::ONE_MONTH.text,
-                                    last_inspection_date: Date.today,
+                                    last_inspection_date: Date.current,
                                     expiration_date: Date.tomorrow,
                                     location_id: denver_location.id
         )
@@ -675,9 +675,9 @@ describe 'Equipment', slow: true do
       end
 
       it 'should sort by last inspection date' do
-        middle_date = Date.new(2013, 6, 15)
-        latest_date = Date.new(2013, 12, 31)
-        earliest_date = Date.new(2013, 1, 1)
+        earliest_date = Date.new(2013, 12, 1)
+        middle_date = Date.new(2013, 12, 20)
+        latest_date = Date.new(2014, 1, 1)
 
         create(:equipment, last_inspection_date: middle_date, customer: customer)
         create(:equipment, last_inspection_date: latest_date, customer: customer)
@@ -713,9 +713,9 @@ describe 'Equipment', slow: true do
       end
 
       it 'should sort by expiration date' do
-        middle_date = Date.new(2013, 6, 15)
-        latest_date = Date.new(2013, 12, 31)
-        earliest_date = Date.new(2013, 1, 1)
+        earliest_date = Date.new(2013, 12, 1)
+        middle_date = Date.new(2013, 12, 20)
+        latest_date = Date.new(2014, 1, 1)
 
         create(:equipment, expiration_date: middle_date, customer: customer)
         create(:equipment, expiration_date: latest_date, customer: customer)

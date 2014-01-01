@@ -227,7 +227,7 @@ describe 'Certification Reports', slow: true do
       it 'should sort by status' do
         expired = create(:certification, expiration_date: Date.yesterday, customer: customer)
         warning = create(:certification, expiration_date: Date.tomorrow, customer: customer)
-        valid = create(:certification, expiration_date: (Date.today)+120, customer: customer)
+        valid = create(:certification, expiration_date: (Date.current)+120, customer: customer)
 
         visit '/'
         click_link 'All Employee Certifications'
@@ -276,11 +276,11 @@ describe 'Certification Reports', slow: true do
       end
 
       it 'should sort by last certification date' do
-        yesterday = create(:certification, last_certification_date: Date.yesterday, customer: customer).
+        yesterday = create(:certification, last_certification_date: Date.parse('2013-12-31'), customer: customer).
           last_certification_date.strftime("%m/%d/%Y")
-        today = create(:certification, last_certification_date: Date.today, customer: customer).
+        today = create(:certification, last_certification_date: Date.parse('2014-01-01'), customer: customer).
           last_certification_date.strftime("%m/%d/%Y")
-        tomorrow = create(:certification, last_certification_date: Date.tomorrow, customer: customer).
+        tomorrow = create(:certification, last_certification_date: Date.parse('2014-01-02'), customer: customer).
           last_certification_date.strftime("%m/%d/%Y")
 
         visit '/'
@@ -296,11 +296,11 @@ describe 'Certification Reports', slow: true do
       end
 
       it 'should sort by expiration date' do
-        yesterday = create(:certification, expiration_date: Date.yesterday, customer: customer).
+        yesterday = create(:certification, expiration_date: Date.parse('2013-12-31'), customer: customer).
           expiration_date.strftime("%m/%d/%Y")
-        today = create(:certification, expiration_date: Date.today, customer: customer).
+        today = create(:certification, expiration_date: Date.parse('2014-01-01'), customer: customer).
           expiration_date.strftime("%m/%d/%Y")
-        tomorrow = create(:certification, expiration_date: Date.tomorrow, customer: customer).
+        tomorrow = create(:certification, expiration_date: Date.parse('2014-01-02'), customer: customer).
           expiration_date.strftime("%m/%d/%Y")
 
         visit '/'
@@ -532,9 +532,9 @@ describe 'Certification Reports', slow: true do
         zeta = create(:certification_type, name: 'zeta', customer: customer)
         beta = create(:certification_type, name: 'beta', customer: customer)
         alpha = create(:certification_type, name: 'alpha', customer: customer)
-        create(:certification, certification_type: zeta, customer: customer, expiration_date: Date.yesterday)
-        create(:certification, certification_type: beta, customer: customer, expiration_date: Date.yesterday)
-        create(:certification, certification_type: alpha, customer: customer, expiration_date: Date.yesterday)
+        create(:certification, certification_type: zeta, customer: customer, expiration_date: Date.parse('2013-12-31'))
+        create(:certification, certification_type: beta, customer: customer, expiration_date: Date.parse('2013-12-31'))
+        create(:certification, certification_type: alpha, customer: customer, expiration_date: Date.parse('2013-12-31'))
 
         visit '/'
         click_link 'Expired Certifications'
@@ -549,21 +549,21 @@ describe 'Certification Reports', slow: true do
       end
 
       it 'should sort by interval' do
-        create(:certification, expiration_date: Date.yesterday,
+        create(:certification, expiration_date: Date.parse('2013-12-31'),
                certification_type: create(:certification_type, interval: Interval::SIX_MONTHS.text, customer: customer))
-        create(:certification, expiration_date: Date.yesterday,
+        create(:certification, expiration_date: Date.parse('2013-12-31'),
                certification_type: create(:certification_type, interval: Interval::TWO_YEARS.text, customer: customer))
-        create(:certification, expiration_date: Date.yesterday,
+        create(:certification, expiration_date: Date.parse('2013-12-31'),
                certification_type: create(:certification_type, interval: Interval::ONE_YEAR.text, customer: customer))
-        create(:certification, expiration_date: Date.yesterday,
+        create(:certification, expiration_date: Date.parse('2013-12-31'),
                certification_type: create(:certification_type, interval: Interval::FIVE_YEARS.text, customer: customer))
-        create(:certification, expiration_date: Date.yesterday,
+        create(:certification, expiration_date: Date.parse('2013-12-31'),
                certification_type: create(:certification_type, interval: Interval::NOT_REQUIRED.text, customer: customer))
-        create(:certification, expiration_date: Date.yesterday,
+        create(:certification, expiration_date: Date.parse('2013-12-31'),
                certification_type: create(:certification_type, interval: Interval::THREE_YEARS.text, customer: customer))
-        create(:certification, expiration_date: Date.yesterday,
+        create(:certification, expiration_date: Date.parse('2013-12-31'),
                certification_type: create(:certification_type, interval: Interval::ONE_MONTH.text, customer: customer))
-        create(:certification, expiration_date: Date.yesterday,
+        create(:certification, expiration_date: Date.parse('2013-12-31'),
                certification_type: create(:certification_type, interval: Interval::THREE_MONTHS.text, customer: customer))
 
         visit '/'
@@ -597,11 +597,11 @@ describe 'Certification Reports', slow: true do
       end
 
       it 'should sort by employee' do
-        zeta = create(:certification, expiration_date: Date.yesterday,
+        zeta = create(:certification, expiration_date: Date.parse('2013-12-31'),
                       employee: create(:employee, last_name: 'zeta', first_name: 'a'), customer: customer)
-        beta = create(:certification, expiration_date: Date.yesterday,
+        beta = create(:certification, expiration_date: Date.parse('2013-12-31'),
                       employee: create(:employee, last_name: 'beta', first_name: 'a'), customer: customer)
-        alpha = create(:certification, expiration_date: Date.yesterday,
+        alpha = create(:certification, expiration_date: Date.parse('2013-12-31'),
                        employee: create(:employee, last_name: 'alpha', first_name: 'a'), customer: customer)
 
         visit '/'
@@ -617,9 +617,9 @@ describe 'Certification Reports', slow: true do
       end
 
       it 'should sort by trainer' do
-        zeta = create(:certification, trainer: 'zeta', customer: customer, expiration_date: Date.yesterday,)
-        beta = create(:certification, trainer: 'beta', customer: customer, expiration_date: Date.yesterday,)
-        alpha = create(:certification, trainer: 'alpha', customer: customer, expiration_date: Date.yesterday,)
+        zeta = create(:certification, trainer: 'zeta', customer: customer, expiration_date: Date.parse('2013-12-31'),)
+        beta = create(:certification, trainer: 'beta', customer: customer, expiration_date: Date.parse('2013-12-31'),)
+        alpha = create(:certification, trainer: 'alpha', customer: customer, expiration_date: Date.parse('2013-12-31'),)
 
         visit '/'
         click_link 'Expired Certifications'
@@ -634,11 +634,11 @@ describe 'Certification Reports', slow: true do
       end
 
       it 'should sort by last certification date' do
-        yesterday = create(:certification, last_certification_date: Date.yesterday, customer: customer, expiration_date: Date.yesterday).
+        yesterday = create(:certification, last_certification_date: Date.parse('2013-12-31'), customer: customer, expiration_date: Date.parse('2013-12-31')).
           last_certification_date.strftime("%m/%d/%Y")
-        today = create(:certification, last_certification_date: Date.today, customer: customer, expiration_date: Date.yesterday).
+        today = create(:certification, last_certification_date: Date.parse('2014-01-01'), customer: customer, expiration_date: Date.parse('2013-12-31')).
           last_certification_date.strftime("%m/%d/%Y")
-        tomorrow = create(:certification, last_certification_date: Date.tomorrow, customer: customer, expiration_date: Date.yesterday).
+        tomorrow = create(:certification, last_certification_date: Date.parse('2014-01-02'), customer: customer, expiration_date: Date.parse('2013-12-31')).
           last_certification_date.strftime("%m/%d/%Y")
 
         visit '/'
@@ -654,11 +654,11 @@ describe 'Certification Reports', slow: true do
       end
 
       it 'should sort by expiration date' do
-        yesterday = create(:certification, expiration_date: Date.yesterday, customer: customer).
+        yesterday = create(:certification, expiration_date: Date.parse('2012-12-30'), customer: customer).
           expiration_date.strftime("%m/%d/%Y")
-        today = create(:certification, expiration_date: Date.today, customer: customer).
+        today = create(:certification, expiration_date: Date.parse('2013-01-01'), customer: customer).
           expiration_date.strftime("%m/%d/%Y")
-        last_month = create(:certification, expiration_date: Date.yesterday-30, customer: customer).
+        last_month = create(:certification, expiration_date: Date.parse('2012-12-30')-30, customer: customer).
           expiration_date.strftime("%m/%d/%Y")
 
         visit '/'
@@ -770,7 +770,7 @@ describe 'Certification Reports', slow: true do
           employee: employee,
           certification_type: cpr_certification_type,
           last_certification_date: Date.new(2005, 7, 8),
-          expiration_date: Date.today,
+          expiration_date: Date.yesterday,
           trainer: 'Trainer Tim',
           customer: employee.customer)
       end
@@ -890,9 +890,9 @@ describe 'Certification Reports', slow: true do
         zeta = create(:certification_type, name: 'zeta', customer: customer)
         beta = create(:certification_type, name: 'beta', customer: customer)
         alpha = create(:certification_type, name: 'alpha', customer: customer)
-        create(:certification, certification_type: zeta, customer: customer, expiration_date: Date.tomorrow)
-        create(:certification, certification_type: beta, customer: customer, expiration_date: Date.tomorrow)
-        create(:certification, certification_type: alpha, customer: customer, expiration_date: Date.tomorrow)
+        create(:certification, certification_type: zeta, customer: customer, expiration_date: Date.parse('2014-01-02'))
+        create(:certification, certification_type: beta, customer: customer, expiration_date: Date.parse('2014-01-02'))
+        create(:certification, certification_type: alpha, customer: customer, expiration_date: Date.parse('2014-01-02'))
 
         visit '/'
         click_link 'Certifications Expiring Soon '
@@ -907,21 +907,21 @@ describe 'Certification Reports', slow: true do
       end
 
       it 'should sort by interval' do
-        create(:certification, expiration_date: Date.tomorrow,
+        create(:certification, expiration_date: Date.parse('2014-01-02'),
                certification_type: create(:certification_type, interval: Interval::SIX_MONTHS.text, customer: customer))
-        create(:certification, expiration_date: Date.tomorrow,
+        create(:certification, expiration_date: Date.parse('2014-01-02'),
                certification_type: create(:certification_type, interval: Interval::TWO_YEARS.text, customer: customer))
-        create(:certification, expiration_date: Date.tomorrow,
+        create(:certification, expiration_date: Date.parse('2014-01-02'),
                certification_type: create(:certification_type, interval: Interval::ONE_YEAR.text, customer: customer))
-        create(:certification, expiration_date: Date.tomorrow,
+        create(:certification, expiration_date: Date.parse('2014-01-02'),
                certification_type: create(:certification_type, interval: Interval::FIVE_YEARS.text, customer: customer))
-        create(:certification, expiration_date: Date.tomorrow,
+        create(:certification, expiration_date: Date.parse('2014-01-02'),
                certification_type: create(:certification_type, interval: Interval::NOT_REQUIRED.text, customer: customer))
-        create(:certification, expiration_date: Date.tomorrow,
+        create(:certification, expiration_date: Date.parse('2014-01-02'),
                certification_type: create(:certification_type, interval: Interval::THREE_YEARS.text, customer: customer))
-        create(:certification, expiration_date: Date.tomorrow,
+        create(:certification, expiration_date: Date.parse('2014-01-02'),
                certification_type: create(:certification_type, interval: Interval::ONE_MONTH.text, customer: customer))
-        create(:certification, expiration_date: Date.tomorrow,
+        create(:certification, expiration_date: Date.parse('2014-01-02'),
                certification_type: create(:certification_type, interval: Interval::THREE_MONTHS.text, customer: customer))
 
         visit '/'
@@ -955,11 +955,11 @@ describe 'Certification Reports', slow: true do
       end
 
       it 'should sort by employee' do
-        zeta = create(:certification, expiration_date: Date.tomorrow,
+        zeta = create(:certification, expiration_date: Date.parse('2014-01-02'),
                       employee: create(:employee, last_name: 'zeta', first_name: 'a'), customer: customer)
-        beta = create(:certification, expiration_date: Date.tomorrow,
+        beta = create(:certification, expiration_date: Date.parse('2014-01-02'),
                       employee: create(:employee, last_name: 'beta', first_name: 'a'), customer: customer)
-        alpha = create(:certification, expiration_date: Date.tomorrow,
+        alpha = create(:certification, expiration_date: Date.parse('2014-01-02'),
                        employee: create(:employee, last_name: 'alpha', first_name: 'a'), customer: customer)
 
         visit '/'
@@ -975,9 +975,9 @@ describe 'Certification Reports', slow: true do
       end
 
       it 'should sort by trainer' do
-        zeta = create(:certification, trainer: 'zeta', customer: customer, expiration_date: Date.tomorrow,)
-        beta = create(:certification, trainer: 'beta', customer: customer, expiration_date: Date.tomorrow,)
-        alpha = create(:certification, trainer: 'alpha', customer: customer, expiration_date: Date.tomorrow,)
+        zeta = create(:certification, trainer: 'zeta', customer: customer, expiration_date: Date.parse('2014-01-02'),)
+        beta = create(:certification, trainer: 'beta', customer: customer, expiration_date: Date.parse('2014-01-02'),)
+        alpha = create(:certification, trainer: 'alpha', customer: customer, expiration_date: Date.parse('2014-01-02'),)
 
         visit '/'
         click_link 'Certifications Expiring Soon '
@@ -992,11 +992,11 @@ describe 'Certification Reports', slow: true do
       end
 
       it 'should sort by last certification date' do
-        tomorrow = create(:certification, last_certification_date: Date.tomorrow, customer: customer, expiration_date: Date.tomorrow).
+        tomorrow = create(:certification, last_certification_date: Date.parse('2014-01-02'), customer: customer, expiration_date: Date.parse('2014-01-02')).
           last_certification_date.strftime("%m/%d/%Y")
-        today = create(:certification, last_certification_date: Date.today, customer: customer, expiration_date: Date.tomorrow).
+        today = create(:certification, last_certification_date: Date.parse('2014-01-01'), customer: customer, expiration_date: Date.parse('2014-01-02')).
           last_certification_date.strftime("%m/%d/%Y")
-        yesterday = create(:certification, last_certification_date: Date.yesterday, customer: customer, expiration_date: Date.tomorrow).
+        yesterday = create(:certification, last_certification_date: Date.parse('2013-12-31'), customer: customer, expiration_date: Date.parse('2014-01-02')).
           last_certification_date.strftime("%m/%d/%Y")
 
         visit '/'
@@ -1012,11 +1012,11 @@ describe 'Certification Reports', slow: true do
       end
 
       it 'should sort by expiration date' do
-        tomorrow = create(:certification, expiration_date: Date.tomorrow, customer: customer).
+        tomorrow = create(:certification, expiration_date: Date.parse('2014-01-02'), customer: customer).
           expiration_date.strftime("%m/%d/%Y")
-        in_two_days = create(:certification, expiration_date: Date.today+2, customer: customer).
+        in_two_days = create(:certification, expiration_date: Date.parse('2014-01-01')+2, customer: customer).
           expiration_date.strftime("%m/%d/%Y")
-        in_three_days = create(:certification, expiration_date: Date.today+3, customer: customer).
+        in_three_days = create(:certification, expiration_date: Date.parse('2014-01-01')+3, customer: customer).
           expiration_date.strftime("%m/%d/%Y")
 
         visit '/'
