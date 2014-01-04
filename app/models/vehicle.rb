@@ -16,7 +16,8 @@ class Vehicle < ActiveRecord::Base
   before_validation :_upcase_vin
 
   def status
-    Status::NA
+    applicable_services = services.map(&:status).reject { |status| status == Status::NA }
+    return Status.find(applicable_services.map(&:id).max) || Status::NA
   end
 
   private

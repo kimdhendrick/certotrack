@@ -557,21 +557,27 @@ describe 'Vehicles', slow: true do
       column_data_should_be_in_order('Zurich', 'Burbank', 'Alcatraz')
     end
     
-    xit 'should sort by status' do
-      create(:expiring_vehicle, customer: customer)
-      create(:expired_vehicle, customer: customer)
-      create(:valid_vehicle, customer: customer)
+    it 'should sort by status' do
+      service_type = create(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE)
+      valid_vehicle = create(:vehicle, customer: customer)
+      create(:service, expiration_date: Date.yesterday, vehicle: valid_vehicle, service_type: service_type)
+      expiring_vehicle = create(:vehicle, customer: customer)
+      create(:service, expiration_date: Date.tomorrow, vehicle: expiring_vehicle, service_type: service_type)
+      expired_vehicle = create(:vehicle, customer: customer)
+      create(:service, expiration_date: Date.current+120.days, vehicle: expired_vehicle, service_type: service_type)
+      na_vehicle = create(:vehicle, customer: customer)
+      create(:service, expiration_date: nil, vehicle: na_vehicle, service_type: service_type)
 
       visit '/'
       click_link 'All Vehicles'
 
       # Ascending search
       click_link 'Status'
-      column_data_should_be_in_order(Status::VALID.text, Status::EXPIRING.text, Status::EXPIRED.text)
+      column_data_should_be_in_order(Status::VALID.text, Status::EXPIRING.text, Status::EXPIRED.text, Status::NA.text)
 
       # Descending search
       click_link 'Status'
-      column_data_should_be_in_order(Status::EXPIRED.text, Status::EXPIRING.text, Status::VALID.text)
+      column_data_should_be_in_order(Status::NA.text, Status::EXPIRED.text, Status::EXPIRING.text, Status::VALID.text)
     end
   end
 

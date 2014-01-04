@@ -11,7 +11,6 @@ class VehiclePresenter
   delegate :make, to: :model
   delegate :year, to: :model
   delegate :vehicle_model, to: :model
-  delegate :status, to: :model
 
   def initialize(model, template = nil)
     @model = model
@@ -36,6 +35,14 @@ class VehiclePresenter
 
   def name
     license_plate + '/' + [vehicle_number, year.try(&:to_s), vehicle_model].compact.join(' ')
+  end
+
+  def status
+    model.status.text
+  end
+
+  def status_code
+    model.status.sort_order
   end
 
   def edit_link

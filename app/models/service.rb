@@ -106,9 +106,13 @@ class Service < ActiveRecord::Base
 
   def _service_strategy
     @service_strategy ||=
-      (expiration_type == ServiceType::EXPIRATION_TYPE_BY_DATE ?
-        DateBasedServiceStrategy.new(self) :
-        MileageBasedServiceStrategy.new(self))
+      if (expiration_type == ServiceType::EXPIRATION_TYPE_BY_DATE)
+        DateBasedServiceStrategy.new(self)
+      elsif (expiration_type == ServiceType::EXPIRATION_TYPE_BY_MILEAGE)
+        MileageBasedServiceStrategy.new(self)
+      else
+        DateAndMileageBasedServiceStrategy.new(self)
+      end
   end
 
   class ServiceStrategy
@@ -167,6 +171,36 @@ class Service < ActiveRecord::Base
 
     def _expired?
       _expiration_value.present? && _expiration_value <= service.vehicle.mileage
+    end
+  end
+
+  class DateAndMileageBasedServiceStrategy < ServiceStrategy
+
+    def initialize(service)
+      @service = service
+      @date_based_status = DateBasedServiceStrategy.new(service).status
+      @mileage_based_status = MileageBasedServiceStrategy.new(service).status
+    end
+
+    private
+
+    attr_reader :date_based_status, :mileage_based_status
+
+    def _na?
+      date_based_status == Status::NA && mileage_based_status == Status::NA
+    end
+
+    def _expiring?
+      _max_status == Status::EXPIRING
+    end
+
+    def _expired?
+      _max_status == Status::EXPIRED
+    end
+
+    def _max_status
+      applicable_statuses = [date_based_status, mileage_based_status].reject { |status| status == Status::NA }
+      Status.find(applicable_statuses.map(&:id).max)
     end
   end
 end

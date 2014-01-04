@@ -169,7 +169,7 @@ describe 'Services', slow: true do
 
 
       page.should have_content "Vehicle's Services"
-      within '[data-serviced-vehicles] table thead tr' do
+      within '[vehicle-services] table thead tr' do
         page.should have_content 'Service Type'
         page.should have_content 'Service Due Date'
         page.should have_content 'Service Due Mileage'
@@ -178,7 +178,7 @@ describe 'Services', slow: true do
         page.should have_content 'Status'
       end
 
-      within '[data-serviced-vehicles] table tbody tr:nth-of-type(1)' do
+      within '[vehicle-services] table tbody tr:nth-of-type(1)' do
         page.should have_content 'Oil Change'
         #TODO show service
         #page.should have_link 'Oil Change'
@@ -186,10 +186,9 @@ describe 'Services', slow: true do
         page.should have_content '14,000'
         page.should have_content '01/01/2000'
         page.should have_content '9,000'
-        #TODO show status
-        page.should have_content 'TBD'
-        #page.should have_content 'Expired'
+        page.should have_content 'Expired'
 
+        #TODO show service
         #click_link 'Oil Change'
         #page.should have_content 'Show Oil Change'
       end

@@ -31,7 +31,7 @@ describe Service do
     end
 
     it 'should calculate VALID status when expiration date is in the future' do
-      service.expiration_date = Date.today + 61.days
+      service.expiration_date = Date.current + 61.days
 
       service.status.should == Status::VALID
     end
@@ -67,7 +67,7 @@ describe Service do
     end
 
     it 'should answer expiring? when not expiring' do
-      service.expiration_date = Date.today
+      service.expiration_date = Date.current
 
       service.should_not be_expiring
     end
@@ -129,7 +129,66 @@ describe Service do
   end
 
   context 'date and mileage based expiration type' do
+    let (:service_type) { create(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE) }
+    let (:vehicle) { build(:vehicle, mileage: 10000) }
+    let (:service) { build(:service, service_type: service_type, vehicle: vehicle) }
+    let (:service_period) { create(:service_period, service: service) }
 
+    it 'should calculate NA status when no expiration mileage or date' do
+      service.expiration_mileage = nil
+      service.expiration_date = nil
+
+      service.status.should == Status::NA
+    end
+
+    it 'should calculate EXPIRED status when no expiration mileage and date is expired' do
+      service.expiration_mileage = nil
+      service.expiration_date = Date.yesterday
+
+      service.status.should == Status::EXPIRED
+    end
+
+    it 'should calculate EXPIRED status when no expiration date and mileage is expired' do
+      service.expiration_mileage = 10
+      service.expiration_date = nil
+
+      service.status.should == Status::EXPIRED
+    end
+
+    it 'should calculate EXPIRED status when expiration mileage past but expiration date is in the future' do
+      service.expiration_mileage = 5000
+      service.expiration_date = Date.tomorrow
+
+      service.status.should == Status::EXPIRED
+    end
+
+    it 'should calculate EXPIRED status when expiration date is in the past but expiration mileage is in the future' do
+      service.expiration_mileage = 20000
+      service.expiration_date = Date.yesterday
+
+      service.status.should == Status::EXPIRED
+    end
+
+    it 'should calculate VALID status when expiration date is in the future and expiration mileage is in the future' do
+      service.expiration_mileage = 20000
+      service.expiration_date = Date.current + 61.days
+
+      service.status.should == Status::VALID
+    end
+
+    it 'should calculate WARNING status when expiration mileage is within 500 miles' do
+      service.expiration_date = Date.current + 61.days
+      service.expiration_mileage = 10499
+
+      service.status.should == Status::EXPIRING
+    end
+
+    it 'should calculate WARNING status when expiration date is within 60 days in the future' do
+      service.expiration_date = Date.tomorrow
+      service.expiration_mileage = 20000
+
+      service.status.should == Status::EXPIRING
+    end
   end
 
   let (:service_type) { create(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE) }

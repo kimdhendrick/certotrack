@@ -14,47 +14,48 @@ describe VehiclePresenter do
           customer: create(:customer, name: 'myCustomer'))
   end
 
-  subject { VehiclePresenter.new(create(:vehicle)) }
+  subject { VehiclePresenter.new(vehicle) }
+
   it_behaves_like 'an object that is sortable by status'
 
   it 'should respond to model' do
-    VehiclePresenter.new(vehicle).model.should == vehicle
+    subject.model.should == vehicle
   end
 
   it 'should respond to id' do
-    VehiclePresenter.new(vehicle).id.should == vehicle.id
+    subject.id.should == vehicle.id
   end
 
   it 'should respond to vehicle_number' do
-    VehiclePresenter.new(vehicle).vehicle_number.should == '1000'
+    subject.vehicle_number.should == '1000'
   end
 
   it 'should respond to vin' do
-    VehiclePresenter.new(vehicle).vin.should == '12345678901234567'
+    subject.vin.should == '12345678901234567'
   end
 
   it 'should respond to license_plate' do
-    VehiclePresenter.new(vehicle).license_plate.should == 'HAPPYONE'
+    subject.license_plate.should == 'HAPPYONE'
   end
 
   it 'should respond to make' do
-    VehiclePresenter.new(vehicle).make.should == 'Honda'
+    subject.make.should == 'Honda'
   end
 
   it 'should respond to vehicle_model' do
-    VehiclePresenter.new(vehicle).vehicle_model.should == 'Civic'
+    subject.vehicle_model.should == 'Civic'
   end
 
   it 'should respond to year' do
-    VehiclePresenter.new(vehicle).year.should == 2009
+    subject.year.should == 2009
   end
 
   it 'should respond to mileage' do
-    VehiclePresenter.new(vehicle).mileage.should == '200,000'
+    subject.mileage.should == '200,000'
   end
 
   it 'should respond to sortable_mileage' do
-    VehiclePresenter.new(vehicle).sortable_mileage.should == 200000
+    subject.sortable_mileage.should == 200000
   end
 
   it 'should respond to location' do
@@ -70,7 +71,7 @@ describe VehiclePresenter do
   end
 
   it 'should respond to sort_key' do
-    VehiclePresenter.new(vehicle).sort_key.should == '1000'
+    subject.sort_key.should == '1000'
   end
 
   it 'should respond to name when all the info populated' do
@@ -122,18 +123,11 @@ describe VehiclePresenter do
     VehiclePresenter.new(vehicle).name.should == 'GET-REAL/123'
   end
 
-  #String toString() {
-  #  (_getDescription() + ' ' +  year + ' ' + _toText(model)).trim()
-  #}
-  #
-  #private _getDescription() {
-  #  licensePlate && carNumber ?
-  #    licensePlate + '/' + carNumber :
-  #    _toText(licensePlate) + _toText(carNumber)
-  #}
-  #
-  #private _toText(value) {
-  #  value ?: ''
-  #}
+  it 'should respond to status' do
+    subject.status.should == 'N/A'
+  end
 
+  it 'should respond to status_code' do
+    subject.status_code.should == Status::NA.sort_order
+  end
 end

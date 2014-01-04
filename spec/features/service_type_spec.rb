@@ -24,6 +24,8 @@ describe 'Service Types', slow: true, js: true do
       create(
         :service,
         vehicle: serviced_vehicle,
+        expiration_date: Date.yesterday,
+        expiration_mileage: 50000,
         service_type: pump_check,
         customer: customer
       )
@@ -88,6 +90,7 @@ describe 'Service Types', slow: true, js: true do
         page.should have_content 'Model'
         page.should have_content 'Mileage'
         page.should have_content 'Location'
+        page.should have_content 'Status'
         page.should have_content 'Service'
       end
 
@@ -102,7 +105,8 @@ describe 'Service Types', slow: true, js: true do
         page.should have_content 'Edge'
         page.should have_content '60,000'
         page.should have_content 'Golden'
-        #TODO show service
+        page.should have_content 'Expired'
+        # show service
         #page.should have_link 'Edit'
       end
 

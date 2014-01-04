@@ -66,4 +66,8 @@ class ServicePresenter
   def sort_key
     model.name
   end
+
+  def status
+    model.status.text
+  end
 end

@@ -56,7 +56,7 @@
 
   <h2>Vehicle's Services</h2>
 
-  <span data-serviced-vehicles="data-serviced-vehicles">
+  <span vehicle-services="vehicle-services">
     <table border="1">
       <thead>
       <tr>
@@ -76,7 +76,7 @@
           <td><%= service.service_due_mileage %></td>
           <td><%= service.last_service_date %></td>
           <td><%= service.last_service_mileage %></td>
-          <td><%= 'TBD' %></td>
+          <td><%= service.status %></td>
         </tr>
       <% end %>
       </tbody>

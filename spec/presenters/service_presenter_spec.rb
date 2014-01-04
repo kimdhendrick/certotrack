@@ -97,4 +97,7 @@ describe ServicePresenter do
     subject.vehicle_location.should == 'Golden'
   end
 
+  it 'should respond to status' do
+    subject.status.should == 'Expired'
+  end
 end

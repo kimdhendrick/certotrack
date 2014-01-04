@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe Sorter do
   context 'equipment' do
-
     it 'should sort strings ascending' do
       equipment =
         [
