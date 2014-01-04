@@ -48,7 +48,7 @@
 
   <%= form_tag(controller: 'batch_certifications', action: 'create') do %>
     <%= employee.hidden_id_field %>
-    <table class="sortable">
+    <table class="sortable" border="1">
       <thead>
       <tr>
         <th><%= sortable 'name', title = 'Certification Type' %></th>

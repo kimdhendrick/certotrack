@@ -400,7 +400,6 @@ describe CertificationService do
   end
 
   describe '#get_all_certifications_for_certification_type' do
-
     it 'returns all certifications for a given certification_type' do
       certification_type_1 = create(:certification_type)
       certification_type_2 = create(:certification_type)

@@ -7,11 +7,26 @@ describe 'Service Types', slow: true, js: true do
   context 'when an vehicle user' do
     before do
       create(:service_type, name: 'Oil change', expiration_type: ServiceType::EXPIRATION_TYPE_BY_MILEAGE, interval_mileage: 5000, customer: customer)
-      create(:service_type, name: 'Pump check', expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE, interval_mileage: 10000, interval_date: Interval::ONE_MONTH.text, customer: customer)
+      pump_check = create(
+        :service_type,
+        name: 'Pump check',
+        expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE,
+        interval_mileage: 10000,
+        interval_date: Interval::ONE_MONTH.text,
+        customer: customer
+      )
       create(:service_type, name: 'Tire rotation', expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE, interval_date: Interval::ONE_YEAR.text, customer: customer)
       golden = create(:location, name: 'Golden', customer: customer)
-      create(:vehicle, vehicle_number: '34987', vin: '2B8GDM9AXKP042790', license_plate: '123-ABC',
+      unserviced_vehicle = create(:vehicle, vehicle_number: '34987', vin: '2B8GDM9AXKP042790', license_plate: '123-ABC',
              year: 1999, make: 'Dodge', vehicle_model: 'Dart', mileage: 20000, location: golden, customer: customer)
+      serviced_vehicle = create(:vehicle, vehicle_number: '1111', vin: 'ABCGDM9AXK6D9H790', license_plate: '255-GLL',
+             year: 2009, make: 'Ford', vehicle_model: 'Edge', mileage: 60000, location: golden, customer: customer)
+      create(
+        :service,
+        vehicle: serviced_vehicle,
+        service_type: pump_check,
+        customer: customer
+      )
 
       login_as_vehicle_user(customer)
     end
@@ -45,7 +60,7 @@ describe 'Service Types', slow: true, js: true do
       end
     end
 
-    it 'should show service type' do
+    it 'should show service type and serviced vehicles' do
       visit root_path
 
       click_on 'All Service Types'
@@ -63,9 +78,37 @@ describe 'Service Types', slow: true, js: true do
       page.should have_content 'By Date and Mileage'
       page.should have_content '10,000'
 
+      page.should have_content 'Serviced Vehicles'
+      within '[data-serviced-vehicles] table thead tr' do
+        page.should have_content 'Vehicle Number'
+        page.should have_content 'VIN'
+        page.should have_content 'License Plate'
+        page.should have_content 'Year'
+        page.should have_content 'Make'
+        page.should have_content 'Model'
+        page.should have_content 'Mileage'
+        page.should have_content 'Location'
+        page.should have_content 'Service'
+      end
+
+      page.all('[data-serviced-vehicles] table tbody tr').count.should == 1
+
+      within '[data-serviced-vehicles] table tbody tr:nth-of-type(1)' do
+        page.should have_link '1111'
+        page.should have_link 'ABCGDM9AXK6D9H790'
+        page.should have_content '255-GLL'
+        page.should have_content '2009'
+        page.should have_content 'Ford'
+        page.should have_content 'Edge'
+        page.should have_content '60,000'
+        page.should have_content 'Golden'
+        #TODO show service
+        #page.should have_link 'Edit'
+      end
+
       page.should have_content 'Non-Serviced Vehicles'
 
-      within 'table thead tr' do
+      within '[data-unserviced-vehicles] table thead tr' do
         page.should have_content 'Vehicle Number'
         page.should have_content 'VIN'
         page.should have_content 'License Plate'
@@ -76,9 +119,9 @@ describe 'Service Types', slow: true, js: true do
         page.should have_content 'Location'
       end
 
-      page.all('table tr').count.should == 2
+      page.all('[data-unserviced-vehicles] table tbody tr').count.should == 1
 
-      within 'table tbody tr:nth-of-type(1)' do
+      within '[data-unserviced-vehicles] table tbody tr:nth-of-type(1)' do
         page.should have_link '34987'
         page.should have_link '2B8GDM9AXKP042790'
         page.should have_content '123-ABC'
@@ -234,7 +277,7 @@ describe 'Service Types', slow: true, js: true do
 
       page.should have_content 'Non-Serviced Vehicles'
 
-      within 'table thead tr' do
+      within '[data-unserviced-vehicles] table thead tr' do
         page.should have_content 'Vehicle Number'
         page.should have_content 'VIN'
         page.should have_content 'License Plate'
@@ -245,18 +288,10 @@ describe 'Service Types', slow: true, js: true do
         page.should have_content 'Location'
       end
 
-      page.all('table tr').count.should == 2
+      page.all('[data-unserviced-vehicles] table tbody tr').count.should == 1
 
-      within 'table tbody tr:nth-of-type(1)' do
-        page.should have_link '34987'
-        page.should have_link '2B8GDM9AXKP042790'
-        page.should have_content '123-ABC'
-        page.should have_content '1999'
+      within '[data-unserviced-vehicles] table tbody tr:nth-of-type(1)' do
         page.should have_content 'Dodge'
-        page.should have_content 'Dart'
-        page.should have_content '20,000'
-        page.should have_content 'Golden'
-        page.should have_link 'Service'
       end
 
       visit root_path
@@ -278,7 +313,7 @@ describe 'Service Types', slow: true, js: true do
 
       page.should have_content 'Non-Serviced Vehicles'
 
-      within 'table thead tr' do
+      within '[data-unserviced-vehicles] table thead tr' do
         page.should have_content 'Vehicle Number'
         page.should have_content 'VIN'
         page.should have_content 'License Plate'
@@ -289,18 +324,10 @@ describe 'Service Types', slow: true, js: true do
         page.should have_content 'Location'
       end
 
-      page.all('table tr').count.should == 2
+      page.all('[data-unserviced-vehicles] table tbody tr').count.should == 1
 
-      within 'table tbody tr:nth-of-type(1)' do
-        page.should have_link '77777'
-        page.should have_link '3C8GDM9AXKP042701'
-        page.should have_content '789-XYZ'
-        page.should have_content '1970'
+      within '[data-unserviced-vehicles] table tbody tr:nth-of-type(1)' do
         page.should have_content 'Buick'
-        page.should have_content 'Riviera'
-        page.should have_content '56,000'
-        page.should have_content 'Boulder'
-        page.should have_link 'Service'
       end
     end
   end

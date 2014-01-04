@@ -98,6 +98,19 @@ describe ServiceTypesController do
         assigns(:service_type).should eq(service_type)
       end
 
+      it 'assigns services' do
+        service = create(:service)
+        service_type = create(:service_type, customer: customer)
+        fake_vehicle_service = Faker.new([service])
+        controller.load_vehicle_servicing_service(fake_vehicle_service)
+
+        get :show, {:id => service_type.to_param}, {}
+
+        assigns(:services).map(&:model).should eq([service])
+        fake_vehicle_service.received_message.should == :get_all_services_for_service_type
+        fake_vehicle_service.received_params[0].should == service_type
+      end
+
       it 'assigns non_serviced_vehicles' do
         non_serviced_vehicle = create(:vehicle, customer: customer)
         service_type = create(:service_type, customer: customer)
@@ -123,6 +136,19 @@ describe ServiceTypesController do
         get :show, {:id => service_type.to_param}, {}
 
         assigns(:service_type).should eq(service_type)
+      end
+
+      it 'assigns services' do
+        service = create(:service)
+        service_type = create(:service_type, customer: customer)
+        fake_vehicle_service = Faker.new([service])
+        controller.load_vehicle_servicing_service(fake_vehicle_service)
+
+        get :show, {:id => service_type.to_param}, {}
+
+        assigns(:services).map(&:model).should eq([service])
+        fake_vehicle_service.received_message.should == :get_all_services_for_service_type
+        fake_vehicle_service.received_params[0].should == service_type
       end
 
       it 'assigns non_serviced_vehicles' do

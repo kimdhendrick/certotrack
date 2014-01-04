@@ -28,4 +28,8 @@ class VehicleServicingService
   def get_all_services_for_vehicle(vehicle)
     vehicle.services
   end
+
+  def get_all_services_for_service_type(service_type)
+    service_type.services
+  end
 end

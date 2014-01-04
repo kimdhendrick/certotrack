@@ -86,4 +86,18 @@ describe VehicleServicingService do
       subject.get_all_services_for_vehicle(vehicle_2).should == [service_2]
     end
   end
+  
+  describe '#get_all_services_for_service_type' do
+    it 'returns all services for a given service_type' do
+      service_type_1 = create(:service_type)
+      service_type_2 = create(:service_type)
+      service_1 = create(:service, service_type: service_type_1)
+      service_2 = create(:service, service_type: service_type_2)
+
+      subject = VehicleServicingService.new
+
+      subject.get_all_services_for_service_type(service_type_1).should == [service_1]
+      subject.get_all_services_for_service_type(service_type_2).should == [service_2]
+    end
+  end
 end

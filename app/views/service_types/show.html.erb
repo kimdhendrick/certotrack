@@ -31,45 +31,82 @@
   <%= service_type.edit_link %> |
   <%= service_type.delete_link %>
 
-  <h2>Non-Serviced Vehicles</h2>
-  <table border="1">
-    <thead>
-    <tr>
-      <th>Vehicle Number</th>
-      <th>VIN</th>
-      <th>License Plate</th>
-      <th>Year</th>
-      <th>Make</th>
-      <th>Model</th>
-      <th>Mileage</th>
-      <th>Location</th>
-      <th>&nbsp;</th>
-    </tr>
-    </thead>
-    <tbody>
-    <% @non_serviced_vehicles.each do |vehicle| %>
+  <h2>Serviced Vehicles</h2>
+  <span data-serviced-vehicles="data-serviced-vehicles">
+    <table border="1">
+      <thead>
       <tr>
-        <td><%= link_to vehicle.vehicle_number, vehicle.model %></td>
-        <td><%= link_to vehicle.vin, vehicle.model %></td>
-        <td><%= vehicle.license_plate %></td>
-        <td><%= vehicle.year %></td>
-        <td><%= vehicle.make %></td>
-        <td><%= vehicle.vehicle_model %></td>
-        <td><%= vehicle.mileage %></td>
-        <td><%= vehicle.location %></td>
-        <td>
-          <%= link_to 'Service',
-                      new_service_path(
-                        service_type_id: service_type.id,
-                        vehicle_id: vehicle.id,
-                        source: :service_type
-                      )
-          %>
-        </td>
+        <th>Vehicle Number</th>
+        <th>VIN</th>
+        <th>License Plate</th>
+        <th>Year</th>
+        <th>Make</th>
+        <th>Model</th>
+        <th>Mileage</th>
+        <th>Location</th>
+        <th>Service</th>
       </tr>
-    <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+
+      <% @services.each do |service| %>
+        <tr>
+          <td><%= link_to service.vehicle_number, service.vehicle %></td>
+          <td><%= link_to service.vehicle_vin, service.vehicle %></td>
+          <td><%= service.vehicle_license_plate %></td>
+          <td><%= service.vehicle_year %></td>
+          <td><%= service.vehicle_make %></td>
+          <td><%= service.vehicle_model %></td>
+          <td><%= service.vehicle_mileage %></td>
+          <td><%= service.vehicle_location %></td>
+          <td>Edit</td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </span>
+
+  <h2>Non-Serviced Vehicles</h2>
+  <span data-unserviced-vehicles="data-unserviced-vehicles">
+    <table border="1">
+      <thead>
+      <tr>
+        <th>Vehicle Number</th>
+        <th>VIN</th>
+        <th>License Plate</th>
+        <th>Year</th>
+        <th>Make</th>
+        <th>Model</th>
+        <th>Mileage</th>
+        <th>Location</th>
+        <th>&nbsp;</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @non_serviced_vehicles.each do |unserviced_vehicle| %>
+        <tr>
+          <td><%= link_to unserviced_vehicle.vehicle_number, unserviced_vehicle.model %></td>
+          <td><%= link_to unserviced_vehicle.vin, unserviced_vehicle.model %></td>
+          <td><%= unserviced_vehicle.license_plate %></td>
+          <td><%= unserviced_vehicle.year %></td>
+          <td><%= unserviced_vehicle.make %></td>
+          <td><%= unserviced_vehicle.vehicle_model %></td>
+          <td><%= unserviced_vehicle.mileage %></td>
+          <td><%= unserviced_vehicle.location %></td>
+          <td>
+            <%= link_to 'Service',
+                        new_service_path(
+                          service_type_id: service_type.id,
+                          vehicle_id: unserviced_vehicle.id,
+                          source: :service_type
+                        )
+            %>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </span>
 
 
 <% end %>

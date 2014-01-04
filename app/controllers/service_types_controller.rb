@@ -3,7 +3,8 @@ class ServiceTypesController < ModelController
   include ServiceTypesHelper
 
   before_filter :load_service_type_service,
-                :load_vehicle_service
+                :load_vehicle_service,
+                :load_vehicle_servicing_service
 
   before_action :_set_service_type, only: [:show, :edit, :update, :destroy]
 
@@ -18,6 +19,9 @@ class ServiceTypesController < ModelController
   def show
     non_serviced_vehicles_list = @vehicle_service.get_all_non_serviced_vehicles_for(@service_type)
     @non_serviced_vehicles = VehicleListPresenter.new(non_serviced_vehicles_list).sort
+    
+    service_list = @vehicle_servicing_service.get_all_services_for_service_type(@service_type)
+    @services = ServiceListPresenter.new(service_list).sort
   end
 
   def new

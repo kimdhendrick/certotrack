@@ -1,6 +1,22 @@
 require 'spec_helper'
 
 describe ServiceListPresenter do
+  describe '#sort' do
+    it 'should sort' do
+      service = build(:service)
+      fake_sorter = Faker.new([ServicePresenter.new(service)])
+
+      presenter = ServiceListPresenter.new([service], {sorter: fake_sorter})
+
+      presenter.sort({sort: :field, direction: :asc})
+
+      fake_sorter.received_message.should == :sort
+      fake_sorter.received_params[0][0].model.should == service
+      fake_sorter.received_params[1].should == :field
+      fake_sorter.received_params[2].should == :asc
+    end
+  end
+
   describe '#present' do
     it 'should sort' do
       service = build(:service)
