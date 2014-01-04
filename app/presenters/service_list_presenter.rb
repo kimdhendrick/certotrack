@@ -1,0 +1,2 @@
+class ServiceListPresenter < ListPresenter
+end

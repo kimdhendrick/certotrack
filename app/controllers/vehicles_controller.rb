@@ -3,7 +3,8 @@ class VehiclesController < ModelController
   include VehiclesHelper
 
   before_filter :load_vehicle_service,
-                :load_location_service
+                :load_location_service,
+                :load_vehicle_servicing_service
 
   before_action :_set_vehicle, only: [:show, :edit, :update, :destroy]
 
@@ -35,6 +36,8 @@ class VehiclesController < ModelController
   end
 
   def show
+    vehicle_services = @vehicle_servicing_service.get_all_services_for_vehicle(@vehicle)
+    @services = ServiceListPresenter.new(vehicle_services).present(params)
   end
 
   def edit

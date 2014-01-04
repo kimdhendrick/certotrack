@@ -206,7 +206,7 @@ describe VehiclesController do
           response.should render_template('new')
         end
 
-       it 'assigns a sorted list of locations to @locations' do
+        it 'assigns a sorted list of locations to @locations' do
           location = build(:location)
           fake_location_service = Faker.new([location])
           controller.load_location_service(fake_location_service)
@@ -261,17 +261,31 @@ describe VehiclesController do
   end
 
   describe 'GET show' do
+    let(:vehicle) { create(:vehicle, customer: customer) }
+    let(:vehicle_servicing_service) { double('vehicle_servicing_service') }
+    let(:service) { create(:service, vehicle: vehicle, customer: customer) }
+    let(:services) { [service] }
+
+    before do
+      controller.load_vehicle_servicing_service(vehicle_servicing_service)
+      vehicle_servicing_service.stub(:get_all_services_for_vehicle).and_return(services)
+    end
+
     context 'when vehicle user' do
       before do
         sign_in stub_vehicle_user(customer)
       end
 
       it 'assigns vehicle as @vehicle' do
-        vehicle = create(:vehicle, customer: customer)
-
         get :show, {:id => vehicle.to_param}, {}
 
         assigns(:vehicle).should eq(vehicle)
+      end
+
+      it 'assigns services' do
+        get :show, {:id => vehicle.to_param}, {}
+
+        assigns(:services).map(&:model).should == services
       end
     end
 
@@ -281,12 +295,15 @@ describe VehiclesController do
       end
 
       it 'assigns vehicle as @vehicle' do
-
-        vehicle = create(:vehicle, customer: customer)
-
         get :show, {:id => vehicle.to_param}, {}
 
         assigns(:vehicle).should eq(vehicle)
+      end
+
+      it 'assigns services' do
+        get :show, {:id => vehicle.to_param}, {}
+
+        assigns(:services).map(&:model).should == services
       end
     end
 

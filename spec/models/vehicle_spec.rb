@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Vehicle do
-  let(:vehicle) {build(:vehicle)}
+  let(:vehicle) { build(:vehicle) }
 
   subject { vehicle }
 
@@ -14,6 +14,7 @@ describe Vehicle do
   it { should validate_uniqueness_of(:license_plate).scoped_to(:customer_id) }
   it { should belong_to :location }
   it { should belong_to :customer }
+  it { should have_many :services }
 
   describe 'when vin has mixed case' do
     let(:vehicle) { create(:vehicle, vin: '1m8GDM9aXKp042788') }
@@ -38,17 +39,4 @@ describe Vehicle do
   #  }
   #  vehicleServices.any{ it.status == Status.EXPIRED } ? Status.EXPIRED : vehicleServices.max { it.status }.status
   #  }
-
-
-  # VehiclePresenter:
-  #String toString() {
-  #  (_getDescription() + ' ' +  year + ' ' + _toText(model)).trim()
-  #}
-  #private _getDescription() {
-  #  licensePlate && carNumber ?
-  #    licensePlate + '/' + carNumber :
-  #    _toText(licensePlate) + _toText(carNumber)
-  #}
-
-
-    end
+end

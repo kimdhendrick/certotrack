@@ -53,7 +53,36 @@
   <%= vehicle.edit_link %> |
   <%= vehicle.delete_link %>
 
-  <br/>
+
+  <h2>Vehicle's Services</h2>
+
+  <span data-serviced-vehicles="data-serviced-vehicles">
+    <table border="1">
+      <thead>
+      <tr>
+        <th>Service Type</th>
+        <th>Service Due Date</th>
+        <th>Service Due Mileage</th>
+        <th>Last Service Date</th>
+        <th>Last Service Mileage</th>
+        <th>Status</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @services.each do |service| %>
+        <tr>
+          <td><%= service.service_type_name %></td>
+          <td><%= service.service_due_date %></td>
+          <td><%= service.service_due_mileage %></td>
+          <td><%= service.last_service_date %></td>
+          <td><%= service.last_service_mileage %></td>
+          <td><%= 'TBD' %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </span>
+
   <br/>
   <%= vehicle.new_service_link %>
 <% end %>

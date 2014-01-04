@@ -72,4 +72,18 @@ describe VehicleServicingService do
       fake_service_factory.received_params[0][:comments].should == 'Great service!'
     end
   end
+
+  describe '#get_all_services_for_vehicle' do
+    it 'returns all services for a given vehicle' do
+      vehicle_1 = create(:vehicle)
+      vehicle_2 = create(:vehicle)
+      service_1 = create(:service, vehicle: vehicle_1)
+      service_2 = create(:service, vehicle: vehicle_2)
+
+      subject = VehicleServicingService.new
+
+      subject.get_all_services_for_vehicle(vehicle_1).should == [service_1]
+      subject.get_all_services_for_vehicle(vehicle_2).should == [service_2]
+    end
+  end
 end

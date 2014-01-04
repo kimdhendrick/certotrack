@@ -24,4 +24,8 @@ class VehicleServicingService
     service.save
     service
   end
+
+  def get_all_services_for_vehicle(vehicle)
+    vehicle.services
+  end
 end

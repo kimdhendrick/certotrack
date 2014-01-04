@@ -97,6 +97,8 @@ describe 'Services', slow: true do
     let!(:oil_change_service_type) do
       create(:service_type,
              name: 'Oil Change',
+             expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE,
+             interval_mileage: 5000,
              interval_date: Interval::SIX_MONTHS.text,
              customer: customer
       )
@@ -164,7 +166,33 @@ describe 'Services', slow: true do
 
       page.should have_content 'Jeep'
       page.should have_content 'Wrangler'
-      #TODO Show vehicle's services here
+
+
+      page.should have_content "Vehicle's Services"
+      within '[data-serviced-vehicles] table thead tr' do
+        page.should have_content 'Service Type'
+        page.should have_content 'Service Due Date'
+        page.should have_content 'Service Due Mileage'
+        page.should have_content 'Last Service Date'
+        page.should have_content 'Last Service Mileage'
+        page.should have_content 'Status'
+      end
+
+      within '[data-serviced-vehicles] table tbody tr:nth-of-type(1)' do
+        page.should have_content 'Oil Change'
+        #TODO show service
+        #page.should have_link 'Oil Change'
+        page.should have_content '07/01/2000'
+        page.should have_content '14,000'
+        page.should have_content '01/01/2000'
+        page.should have_content '9,000'
+        #TODO show status
+        page.should have_content 'TBD'
+        #page.should have_content 'Expired'
+
+        #click_link 'Oil Change'
+        #page.should have_content 'Show Oil Change'
+      end
     end
 
     it 'should service vehicle and be ready to create another' do

@@ -2,6 +2,7 @@ class Vehicle < ActiveRecord::Base
 
   belongs_to :location
   belongs_to :customer
+  has_many :services
 
   validates_presence_of :vehicle_number
   validates_presence_of :vin
@@ -13,7 +14,6 @@ class Vehicle < ActiveRecord::Base
   validates_length_of :vin, is: 17
 
   before_validation :_upcase_vin
-
 
   def status
     Status::NA
