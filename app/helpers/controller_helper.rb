@@ -41,8 +41,8 @@ module ControllerHelper
 
   private
 
-  def _get_model(model_class)
-    model_pending_authorization = model_class.find(params[:id])
+  def _get_model(model_class, param_name = :id)
+    model_pending_authorization = model_class.find(params[param_name])
     authorize! :manage, model_pending_authorization
     model_pending_authorization
   end

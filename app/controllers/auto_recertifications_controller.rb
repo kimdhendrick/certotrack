@@ -1,11 +1,10 @@
-class AutoRecertificationsController < ApplicationController
+class AutoRecertificationsController < ModelController
+  include ControllerHelper
 
   before_filter :authenticate_user!,
                 :load_certification_service
 
   before_action :_set_certification_type, only: [:new, :create]
-
-  #check_authorization
 
   def new
     @certifications = @certification_type.valid_certifications
@@ -18,7 +17,13 @@ class AutoRecertificationsController < ApplicationController
       return
     end
 
-    result = @certification_service.auto_recertify(params[:certification_ids])
+    certifications = Certification.find(params[:certification_ids])
+
+    certifications.each { |certification|
+      authorize! :manage, certification
+    }
+
+    result = @certification_service.auto_recertify(certifications)
 
     if result == :success
       flash[:notice] = 'Auto Recertify successful.'
@@ -29,19 +34,9 @@ class AutoRecertificationsController < ApplicationController
     end
   end
 
-  def load_certification_service(service = CertificationService.new)
-    @certification_service ||= service
-  end
-
   private
 
   def _set_certification_type
-    certification_type_pending_authorization = CertificationType.find(params[:certification_type_id])
-    authorize! :manage, certification_type_pending_authorization
-    @certification_type = certification_type_pending_authorization
+    @certification_type = _get_model(CertificationType, :certification_type_id)
   end
-
-  #def _success_message(certification)
-  #  "#{EmployeePresenter.new(certification.employee).name} recertified for Certification: #{certification.name}."
-  #end
 end

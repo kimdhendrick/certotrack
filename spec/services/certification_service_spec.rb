@@ -474,7 +474,7 @@ describe CertificationService do
       before { certifications.each { |certification| certification.update_attribute(:expiration_date, Date.current) } }
 
       it 'should create new certification periods' do
-        expect { service.auto_recertify(certifications.map(&:id)) }.to change(CertificationPeriod, :count).by(2)
+        expect { service.auto_recertify(certifications) }.to change(CertificationPeriod, :count).by(2)
       end
 
       it 'should be atomic for multiple certifications' do
@@ -483,7 +483,7 @@ describe CertificationService do
 
         certification2.stub(:save).and_return(false)
 
-        expect { service.auto_recertify(certifications.map(&:id)) }.not_to change(CertificationPeriod, :count)
+        expect { service.auto_recertify(certifications) }.not_to change(CertificationPeriod, :count)
       end
     end
 
@@ -494,9 +494,9 @@ describe CertificationService do
       before { Certification.stub(:find).and_return(certification) }
 
       it 'should return success' do
-        certification_ids = ['1', '2', '3']
+        certifications = [certification]
 
-        result = service.auto_recertify(certification_ids)
+        result = service.auto_recertify(certifications)
 
         result.should == :success
       end
@@ -509,13 +509,13 @@ describe CertificationService do
 
         certification.should_receive(:recertify).with(start_date: previous_expiration_date, trainer: 'trainer')
 
-        service.auto_recertify([certification.id])
+        service.auto_recertify([certification])
       end
 
       it 'should return failure when transaction fails' do
         certification.stub(:save).and_return(false)
 
-        result = service.auto_recertify([certification.id])
+        result = service.auto_recertify([certification])
 
         result.should == :failure
       end

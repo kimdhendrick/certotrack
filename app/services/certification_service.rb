@@ -105,24 +105,18 @@ class CertificationService
     certification.save
   end
 
-  def auto_recertify(certification_ids)
+  def auto_recertify(certifications)
 
-    puts '*' * 100
-    puts 'got here'
-    puts '*' * 100
     success = true
 
     ActiveRecord::Base.transaction do
-      certification_ids.each do |id|
-        certification = Certification.find(id)
+      certifications.each do |certification|
         certification.recertify(trainer: certification.trainer, start_date: certification.expiration_date)
         success = certification.save
-        puts "#{certification.errors.full_messages}" unless success
         raise ActiveRecord::Rollback unless success
       end
     end
 
-    puts "success: #{success}"
     success ? :success : :failure
   end
 end

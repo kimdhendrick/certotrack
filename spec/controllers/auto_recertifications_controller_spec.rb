@@ -104,76 +104,103 @@ describe AutoRecertificationsController do
   end
 
   describe '#create' do
-    let(:certification_service) { double('certification_service') }
-    let(:certification) { create(:units_based_certification) }
 
-    before do
-      sign_in stub_certification_user(customer)
-      controller.load_certification_service(certification_service)
-    end
+    context 'as an certification user' do
+      let(:certification_service) { double('certification_service') }
+      let(:certification) { create(:units_based_certification, customer: customer) }
 
-    context 'when successful' do
       before do
         sign_in stub_certification_user(customer)
-        certification_service.stub(:auto_recertify).and_return(:success)
-      end
-
-      it 'should redirect to the show certification type page' do
-        post :create, {certification_type_id: certification_type.id, certification_ids: [certification.id]}
-
-        response.should redirect_to(certification_type_path(certification_type))
-      end
-
-      it 'should provide a success notification' do
-        post :create, {certification_type_id: certification_type.id, certification_ids: [certification.id]}
-
-        flash[:notice].should == 'Auto Recertify successful.'
-      end
-
-      it 'should call CertificationService#auto_recertify' do
         controller.load_certification_service(certification_service)
+      end
 
-        certification_service.should_receive(:auto_recertify).with([certification.id.to_s]).and_return(:success)
+      context 'when successful' do
+        before do
+          sign_in stub_certification_user(customer)
+          certification_service.stub(:auto_recertify).and_return(:success)
+        end
 
-        post :create, {certification_type_id: certification_type.id, certification_ids: [certification.id]}
+        it 'should redirect to the show certification type page' do
+          post :create, {certification_type_id: certification_type.id, certification_ids: [certification.id]}
+
+          response.should redirect_to(certification_type_path(certification_type))
+        end
+
+        it 'should provide a success notification' do
+          post :create, {certification_type_id: certification_type.id, certification_ids: [certification.id]}
+
+          flash[:notice].should == 'Auto Recertify successful.'
+        end
+
+        it 'should call CertificationService#auto_recertify' do
+          controller.load_certification_service(certification_service)
+
+          certification_service.should_receive(:auto_recertify).with([certification]).and_return(:success)
+
+          post :create, {certification_type_id: certification_type.id, certification_ids: [certification.id]}
+        end
+      end
+
+      context 'when no certifications selected' do
+
+        it 'should report an error when no certification_ids present' do
+          post :create, {certification_type_id: certification_type.id}
+
+          flash[:error].should == 'Please select at least one certification.'
+        end
+
+        it 'should report an error when no certification_ids' do
+          post :create, {certification_type_id: certification_type.id, certification_ids: []}
+
+          flash[:error].should == 'Please select at least one certification.'
+        end
+
+        it 'should render the new view' do
+          post :create, {certification_type_id: certification_type.id}
+
+          response.should redirect_to(new_certification_type_auto_recertification_path(certification_type))
+        end
+      end
+
+      context 'when at least one certification has an error' do
+        before { certification_service.stub(:auto_recertify).and_return(:failure) }
+
+        it 'should report an error' do
+          post :create, {certification_type_id: certification_type.id, certification_ids: [certification.id]}
+
+          flash[:error].should == 'A system error has occurred. Please contact support@certotrack.com.'
+        end
+
+        it 'should redirect_to new' do
+          post :create, {certification_type_id: certification_type.id, certification_ids: [certification.id]}
+
+          response.should redirect_to(new_certification_type_auto_recertification_path(certification_type))
+        end
+      end
+
+      context 'when not authorized for one (or more) certifications' do
+        it 'should redirect_to not authorized' do
+          certification = create(:certification, customer: customer)
+          another_certification = create(:certification)
+
+          post :create, {certification_type_id: certification_type.id, certification_ids: [certification.id, another_certification.id]}
+
+          response.should redirect_to(root_path)
+        end
       end
     end
+  end
 
-    context 'when no certifications selected' do
+  context 'as a guest user' do
+    before { sign_in stub_guest_user }
 
-      it 'should report an error when no certification_ids present' do
-        post :create, {certification_type_id: certification_type.id}
+    let(:certification_type) { create(:units_based_certification_type) }
 
-        flash[:error].should == 'Please select at least one certification.'
-      end
+    it 'does not assign certification_type in @certification_type' do
 
-      it 'should report an error when no certification_ids' do
-        post :create, {certification_type_id: certification_type.id, certification_ids: []}
+      post :create, {certification_type_id: certification_type.id}, {}
 
-        flash[:error].should == 'Please select at least one certification.'
-      end
-
-      it 'should render the new view' do
-        post :create, {certification_type_id: certification_type.id}
-
-        response.should redirect_to(new_certification_type_auto_recertification_path(certification_type))
-      end
-    end
-
-    context 'when at least one certification has an error' do
-      before { certification_service.stub(:auto_recertify).and_return(:failure) }
-
-      it 'should report an error' do
-        post :create, {certification_type_id: certification_type.id, certification_ids: [1]}
-
-        flash[:error].should == 'A system error has occurred. Please contact support@certotrack.com.'
-      end
-
-      it 'should redirect_to new' do
-        post :create, {certification_type_id: certification_type.id, certification_ids: [1]}
-
-        response.should redirect_to(new_certification_type_auto_recertification_path(certification_type))
-      end
+      assigns(:certification_type).should be_nil
     end
   end
 end
