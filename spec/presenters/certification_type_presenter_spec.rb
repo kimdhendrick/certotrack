@@ -85,7 +85,7 @@ describe CertificationTypePresenter do
         before { certification_type.stub(:has_valid_certification?).and_return(true) }
 
         it 'should return the link to Auto Recertify' do
-          subject.auto_recertify_link.should == "<a href=\"/certification_types/1/auto_recertify\">Auto Recertify</a>"
+          subject.auto_recertify_link.should == "| <a href=\"/certification_types/1/auto_recertifications/new\">Auto Recertify</a>"
         end
       end
     end

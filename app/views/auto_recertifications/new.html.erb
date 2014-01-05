@@ -39,7 +39,7 @@
           <% certification_presenter_for(certification) do |certification| %>
               <tr>
                 <td>
-                  <%= check_box_tag(:certification, certification.id, false, id: "certification_#{certification.id}") %>
+                  <%= check_box_tag("certification_ids[]", certification.id, false, id: "certification_#{certification.id}") %>
                 </td>
                 <td class="certification_type">
                   <%= certification.name %>

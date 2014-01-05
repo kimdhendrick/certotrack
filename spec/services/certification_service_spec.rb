@@ -168,7 +168,7 @@ describe CertificationService do
         admin_user = create(:user, roles: ['admin'])
 
         CertificationService.new.get_expired_certifications(admin_user).should =~
-          [certification_one_expired, certification_two_expired]
+            [certification_one_expired, certification_two_expired]
       end
     end
 
@@ -193,7 +193,7 @@ describe CertificationService do
         admin_user = create(:user, roles: ['admin'])
 
         CertificationService.new.get_expiring_certifications(admin_user).should =~
-          [certification_one_expiring, certification_two_expiring]
+            [certification_one_expiring, certification_two_expiring]
       end
     end
 
@@ -220,7 +220,7 @@ describe CertificationService do
         admin_user = create(:user, roles: ['admin'])
 
         CertificationService.new.get_units_based_certifications(admin_user).should =~
-          [@units_based_certification_for_my_customer, @units_based_certification_for_other_customer]
+            [@units_based_certification_for_my_customer, @units_based_certification_for_other_customer]
       end
     end
 
@@ -248,7 +248,7 @@ describe CertificationService do
         admin_user = create(:user, roles: ['admin'])
 
         CertificationService.new.get_recertification_required_certifications(admin_user).should =~
-          [@recertify_certification_for_my_customer, @recertify_certification_for_other_customer]
+            [@recertify_certification_for_my_customer, @recertify_certification_for_other_customer]
       end
     end
 
@@ -289,13 +289,13 @@ describe CertificationService do
       certification_service = CertificationService.new(certification_factory: fake_certification_factory)
 
       certification = certification_service.certify(
-        create(:user),
-        employee.id,
-        certification_type.id,
-        '12/31/2000',
-        'Joe Bob',
-        'Great class!',
-        '15'
+          create(:user),
+          employee.id,
+          certification_type.id,
+          '12/31/2000',
+          'Joe Bob',
+          'Great class!',
+          '15'
       )
 
       fake_certification_factory.received_message.should == :new_instance
@@ -316,13 +316,13 @@ describe CertificationService do
       certification_service = CertificationService.new(certification_factory: fake_certification_factory)
 
       certification = certification_service.certify(
-        create(:user),
-        employee.id,
-        certification_type.id,
-        '999',
-        'Joe Bob',
-        'Great class!',
-        nil
+          create(:user),
+          employee.id,
+          certification_type.id,
+          '999',
+          'Joe Bob',
+          'Great class!',
+          nil
       )
 
       certification.should_not be_valid
@@ -344,12 +344,12 @@ describe CertificationService do
 
       certification = create(:certification)
       attributes = {
-        'employee_id' => employee.id,
-        'certification_type_id' => certification_type.id,
-        'last_certification_date' => '03/05/2013',
-        'trainer' => 'Trainer',
-        'comments' => 'Comments',
-        'units_achieved' => '12'
+          'employee_id' => employee.id,
+          'certification_type_id' => certification_type.id,
+          'last_certification_date' => '03/05/2013',
+          'trainer' => 'Trainer',
+          'comments' => 'Comments',
+          'units_achieved' => '12'
       }
 
       success = CertificationService.new.update_certification(certification, attributes)
@@ -459,6 +459,66 @@ describe CertificationService do
     it 'should delegate recertification to the certification' do
       certification.should_receive(:recertify).with(recertification_attrs)
       subject.recertify(certification, recertification_attrs)
+    end
+  end
+
+  describe '#auto_recertify' do
+    let(:service) { CertificationService.new }
+
+    describe 'transactional behavior' do
+
+      let(:certification1) { create(:certification) }
+      let(:certification2) { create(:certification) }
+      let(:certifications) { [certification1, certification2] }
+
+      before { certifications.each { |certification| certification.update_attribute(:expiration_date, Date.current) } }
+
+      it 'should create new certification periods' do
+        expect { service.auto_recertify(certifications.map(&:id)) }.to change(CertificationPeriod, :count).by(2)
+      end
+
+      it 'should be atomic for multiple certifications' do
+        Certification.stub(:find).with(certification1.id).and_return(certification1)
+        Certification.stub(:find).with(certification2.id).and_return(certification2)
+
+        certification2.stub(:save).and_return(false)
+
+        expect { service.auto_recertify(certifications.map(&:id)) }.not_to change(CertificationPeriod, :count)
+      end
+    end
+
+    describe 'other behavior' do
+
+      let(:certification) { double('certification', id: 1).as_null_object }
+
+      before { Certification.stub(:find).and_return(certification) }
+
+      it 'should return success' do
+        certification_ids = ['1', '2', '3']
+
+        result = service.auto_recertify(certification_ids)
+
+        result.should == :success
+      end
+
+      it 'should create a new certification_period for the certification' do
+        previous_expiration_date = Date.current
+
+        certification.stub(:trainer).and_return('trainer')
+        certification.stub(:expiration_date).and_return(previous_expiration_date)
+
+        certification.should_receive(:recertify).with(start_date: previous_expiration_date, trainer: 'trainer')
+
+        service.auto_recertify([certification.id])
+      end
+
+      it 'should return failure when transaction fails' do
+        certification.stub(:save).and_return(false)
+
+        result = service.auto_recertify([certification.id])
+
+        result.should == :failure
+      end
     end
   end
 

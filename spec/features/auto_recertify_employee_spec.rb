@@ -113,12 +113,12 @@ describe 'Auto Recertify', slow: true do
       page.should have_button('Recertify')
 
       # Submit Form
+      check("certification_#{@certification1.id}")
       click_button('Recertify')
 
       page.should have_content('Show Certification Type')
       page.should have_content('ScrumMaster')
-
-      pending('wip')
+      page.should have_content('Auto Recertify successful.')
     end
   end
 end

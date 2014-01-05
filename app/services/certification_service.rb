@@ -7,14 +7,14 @@ class CertificationService
 
   def get_all_certifications(current_user)
     current_user.admin? ?
-      Certification.all :
-      current_user.certifications
+        Certification.all :
+        current_user.certifications
   end
 
   def count_all_certifications(current_user)
     current_user.admin? ?
-      Certification.count :
-      current_user.certifications.count
+        Certification.count :
+        current_user.certifications.count
   end
 
   def search_certifications(current_user, params)
@@ -63,21 +63,21 @@ class CertificationService
 
   def new_certification(current_user, employee_id, certification_type_id)
     @certification_factory.new_instance(
-      current_user_id: current_user.id,
-      employee_id: employee_id,
-      certification_type_id: certification_type_id
+        current_user_id: current_user.id,
+        employee_id: employee_id,
+        certification_type_id: certification_type_id
     )
   end
 
   def certify(current_user, employee_id, certification_type_id, certification_date, trainer, comments, units_achieved)
     certification = @certification_factory.new_instance(
-      current_user_id: current_user.id,
-      employee_id: employee_id,
-      certification_type_id: certification_type_id,
-      certification_date: certification_date,
-      trainer: trainer,
-      comments: comments,
-      units_achieved: units_achieved
+        current_user_id: current_user.id,
+        employee_id: employee_id,
+        certification_type_id: certification_type_id,
+        certification_date: certification_date,
+        trainer: trainer,
+        comments: comments,
+        units_achieved: units_achieved
     )
     certification.save
     certification
@@ -103,5 +103,26 @@ class CertificationService
   def recertify(certification, attributes)
     certification.recertify(attributes)
     certification.save
+  end
+
+  def auto_recertify(certification_ids)
+
+    puts '*' * 100
+    puts 'got here'
+    puts '*' * 100
+    success = true
+
+    ActiveRecord::Base.transaction do
+      certification_ids.each do |id|
+        certification = Certification.find(id)
+        certification.recertify(trainer: certification.trainer, start_date: certification.expiration_date)
+        success = certification.save
+        puts "#{certification.errors.full_messages}" unless success
+        raise ActiveRecord::Rollback unless success
+      end
+    end
+
+    puts "success: #{success}"
+    success ? :success : :failure
   end
 end
