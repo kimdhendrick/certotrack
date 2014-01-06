@@ -73,7 +73,7 @@ describe 'Auto Recertify', slow: true do
 
       # Links
       page.should have_link('Home', href: root_path)
-      page.should have_link('All Certifications', href: certifications_path)
+      page.should have_link('Search Certifications', href: search_certifications_path)
 
       # Column Headers
       page.should have_selector('th', text: 'Select')
