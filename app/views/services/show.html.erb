@@ -1,0 +1,51 @@
+<% presenter_for(@service) do |service| %>
+  <h1>Show Service</h1>
+
+  <%= link_to 'Home', root_path %> |
+  <%= link_to 'Create Service', new_service_path(source: :service) %> |
+  <%= link_to 'Create Vehicle', new_employee_path %>
+
+  <p>
+    <b>Service Type</b>
+    <%= service.service_type_show_link %>
+  </p>
+
+  <p>
+    <b>Vehicle</b>
+    <%= service.vehicle_show_link_by_name %>
+  </p>
+
+  <p>
+    <b>Status</b>
+    <%= service.status %>
+  </p>
+
+  <% if service.date_expiration_type? %>
+    <p>
+      <b>Service Due Date</b>
+      <%= service.service_due_date %>
+    </p>
+  <% end %>
+
+  <% if service.mileage_expiration_type? %>
+    <p>
+      <b>Service Due Mileage</b>
+      <%= service.service_due_mileage %>
+    </p>
+  <% end %>
+
+  <p>
+    <b>Last Service Date</b>
+    <%= service.last_service_date %>
+  </p>
+
+  <p>
+    <b>Last Service Mileage</b>
+    <%= service.last_service_mileage %>
+  </p>
+
+  <p>
+    <b>Comments</b>
+    <%= service.comments %>
+  </p>
+<% end %>

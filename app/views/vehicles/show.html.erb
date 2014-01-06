@@ -71,7 +71,7 @@
       <tbody>
       <% @services.each do |service| %>
         <tr>
-          <td><%= service.service_type_name %></td>
+          <td><%= link_to service.service_type_name, service.model %></td>
           <td><%= service.service_due_date %></td>
           <td><%= service.service_due_mileage %></td>
           <td><%= service.last_service_date %></td>

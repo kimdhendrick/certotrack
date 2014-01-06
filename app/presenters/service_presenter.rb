@@ -1,10 +1,13 @@
 class ServicePresenter
   include ActionView::Helpers::NumberHelper
+  include PresentableModelHelper
 
   attr_reader :model
 
-  delegate :id, to: :model
-  delegate :vehicle, to: :model
+  delegate :id,
+           :comments,
+           :mileage_expiration_type?,
+           :date_expiration_type?, to: :model
 
   def initialize(model, template = nil)
     @model = model
@@ -32,7 +35,7 @@ class ServicePresenter
   end
 
   def vehicle_location
-    vehicle.location.name
+    vehicle.location
   end
 
   def vehicle_make
@@ -70,4 +73,41 @@ class ServicePresenter
   def status
     model.status.text
   end
+
+  def service_type_show_link
+    @template.link_to model.name, model.service_type
+  end
+
+  def vehicle_show_link_by_name
+    @template.link_to vehicle_name, model.vehicle
+  end
+
+  def vehicle_show_link_by_vehicle_number
+    @template.link_to vehicle_number, model.vehicle
+  end
+
+  def vehicle_show_link_by_vin
+    @template.link_to vehicle_vin, model.vehicle
+  end
+
+  def vehicle
+    presenter_for(model.vehicle)
+  end
+
+  def vehicle_name
+    vehicle.name
+  end
+
+  #def edit_link
+  #  @template.link_to 'Edit',
+  #                    @template.edit_service_path(model),
+  #                    data: {confirm: 'Are you sure you want to edit instead of recertify?'}
+  #end
+  #
+  #def delete_link
+  #  @template.link_to 'Delete',
+  #                    model,
+  #                    method: :delete,
+  #                    data: {confirm: 'Are you sure you want to delete this service?'}
+  #end
 end

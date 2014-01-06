@@ -28,8 +28,10 @@
     </p>
   <% end %>
 
-  <%= service_type.edit_link %> |
-  <%= service_type.delete_link %>
+  <span data-action-links=data-action-links>
+    <%= service_type.edit_link %> |
+    <%= service_type.delete_link %>
+  </span>
 
   <h2>Serviced Vehicles</h2>
   <span data-serviced-vehicles="data-serviced-vehicles">
@@ -52,8 +54,8 @@
 
       <% @services.each do |service| %>
         <tr>
-          <td><%= link_to service.vehicle_number, service.vehicle %></td>
-          <td><%= link_to service.vehicle_vin, service.vehicle %></td>
+          <td><%= link_to service.vehicle_number, service.vehicle.model %></td>
+          <td><%= link_to service.vehicle_vin, service.vehicle.model %></td>
           <td><%= service.vehicle_license_plate %></td>
           <td><%= service.vehicle_year %></td>
           <td><%= service.vehicle_make %></td>
@@ -61,7 +63,7 @@
           <td><%= service.vehicle_mileage %></td>
           <td><%= service.vehicle_location %></td>
           <td><%= service.status %></td>
-          <td>Edit</td>
+          <td><%= link_to 'Edit', service.model %></td>
         </tr>
       <% end %>
       </tbody>

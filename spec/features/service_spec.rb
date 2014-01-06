@@ -26,6 +26,7 @@ describe 'Services', slow: true do
     let!(:vehicle) do
       create(:vehicle,
              license_plate: 'ABC-123',
+             mileage: 100000,
              vehicle_number: 'JB3',
              make: 'Jeep',
              vehicle_model: 'Wrangler',
@@ -42,6 +43,123 @@ describe 'Services', slow: true do
              interval_mileage: 10000,
              customer: customer
       )
+    end
+
+    it 'should show service' do
+      date_service = create(
+        :service,
+        vehicle: vehicle,
+        service_type: oil_change_service_type,
+        last_service_date: Date.new(2013, 1, 1),
+        last_service_mileage: 1000,
+        expiration_date: Date.new(2014, 1, 1),
+        comments: 'Got pretty messy',
+        customer: vehicle.customer
+      )
+      mileage_service = create(
+        :service,
+        vehicle: vehicle,
+        service_type: truck_inspection_service_type,
+        last_service_date: Date.new(2013, 1, 1),
+        expiration_mileage: 1000,
+        last_service_mileage: 500,
+        comments: 'Got pretty messy',
+        customer: vehicle.customer
+      )
+      date_and_mileage_service_type = create(
+        :service_type,
+        name: 'Pump Check',
+        expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE,
+        interval_date: Interval::SIX_MONTHS.text,
+        interval_mileage: 5000,
+        customer: customer
+      )
+      date_and_mileage_service = create(
+        :service,
+        vehicle: vehicle,
+        service_type: date_and_mileage_service_type,
+        last_service_date: Date.new(2013, 1, 1),
+        last_service_mileage: 500,
+        expiration_date: Date.new(2014, 1, 1),
+        expiration_mileage: 1000,
+        comments: 'Got pretty messy',
+        customer: vehicle.customer
+      )
+
+      visit service_path date_and_mileage_service.id
+
+      page.should have_content 'Show Service'
+
+      page.should have_link 'Home'
+      #TODO all service list
+      #page.should have_link 'All Services'
+      page.should have_link 'Create Service'
+      page.should have_link 'Create Vehicle'
+
+      page.should have_content 'Service Type'
+      page.should have_content 'Vehicle'
+      page.should have_content 'Status'
+      page.should have_content 'Service Due Date'
+      page.should have_content 'Service Due Mileage'
+      page.should have_content 'Last Service Date'
+      page.should have_content 'Last Service Mileage'
+      page.should have_content 'Comments'
+
+      page.should have_link 'Pump Check'
+      page.should have_link 'ABC-123/JB3 2010 Wrangler'
+      page.should have_content 'Expired'
+      page.should have_content '01/01/2014'
+      page.should have_content '1,000'
+      page.should have_content '01/01/2013'
+      page.should have_content '500'
+      page.should have_content 'Got pretty messy'
+
+      #TODO edit service
+      #page.should have_link 'Edit'
+      #TODO delete service
+      #page.should have_link 'Delete'
+
+      visit service_path date_service.id
+
+      page.should have_content 'Show Service'
+
+      page.should have_content 'Service Type'
+      page.should have_content 'Vehicle'
+      page.should have_content 'Status'
+      page.should have_content 'Service Due Date'
+      page.should_not have_content 'Service Due Mileage'
+      page.should have_content 'Last Service Date'
+      page.should have_content 'Last Service Mileage'
+      page.should have_content 'Comments'
+
+      page.should have_link 'Oil Change'
+      page.should have_link 'ABC-123/JB3 2010 Wrangler'
+      page.should have_content 'Expired'
+      page.should have_content '01/01/2014'
+      page.should have_content '01/01/2013'
+      page.should have_content '1,000'
+      page.should have_content 'Got pretty messy'
+
+      visit service_path mileage_service.id
+
+      page.should have_content 'Show Service'
+
+      page.should have_content 'Service Type'
+      page.should have_content 'Vehicle'
+      page.should have_content 'Status'
+      page.should_not have_content 'Service Due Date'
+      page.should have_content 'Service Due Mileage'
+      page.should have_content 'Last Service Date'
+      page.should have_content 'Last Service Mileage'
+      page.should have_content 'Comments'
+
+      page.should have_link 'Level III Truck Service'
+      page.should have_link 'ABC-123/JB3 2010 Wrangler'
+      page.should have_content 'Expired'
+      page.should have_content '1,000'
+      page.should have_content '01/01/2013'
+      page.should have_content '500'
+      page.should have_content 'Got pretty messy'
     end
 
     it 'should alert on future dates', js: true do
@@ -179,19 +297,18 @@ describe 'Services', slow: true do
       end
 
       within '[vehicle-services] table tbody tr:nth-of-type(1)' do
-        page.should have_content 'Oil Change'
-        #TODO show service
-        #page.should have_link 'Oil Change'
+        page.should have_link 'Oil Change'
         page.should have_content '07/01/2000'
         page.should have_content '14,000'
         page.should have_content '01/01/2000'
         page.should have_content '9,000'
         page.should have_content 'Expired'
 
-        #TODO show service
-        #click_link 'Oil Change'
-        #page.should have_content 'Show Oil Change'
+        click_link 'Oil Change'
       end
+
+      page.should have_content 'Show Service'
+      page.should have_content 'Oil Change'
     end
 
     it 'should service vehicle and be ready to create another' do

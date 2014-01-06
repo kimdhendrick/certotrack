@@ -442,4 +442,50 @@ describe ServicesController do
       end
     end
   end
+
+  describe 'GET #show' do
+    context 'when vehicle user' do
+      let (:current_user) { stub_vehicle_user(customer) }
+
+      before do
+        sign_in current_user
+      end
+
+      it 'assigns service' do
+        service = create(:service, customer: customer)
+
+        get :show, {:id => service.to_param}, {}
+
+        assigns(:service).should eq(service)
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin(customer)
+      end
+
+      it 'assigns service' do
+        service = create(:service, customer: customer)
+
+        get :show, {:id => service.to_param}, {}
+
+        assigns(:service).should eq(service)
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'does not assign service' do
+        service = create(:service, customer: customer)
+
+        get :show, {:id => service.to_param}, {}
+
+        assigns(:service).should be_nil
+      end
+    end
+  end
 end

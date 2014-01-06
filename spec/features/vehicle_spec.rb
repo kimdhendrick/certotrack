@@ -4,7 +4,7 @@ describe 'Vehicles', slow: true do
 
   let(:customer) { create(:customer) }
 
-  context 'when an vehicle user' do
+  context 'when a vehicle user' do
     before do
       denver = create(:location, name: 'Denver', customer: customer)
       golden = create(:location, name: 'Golden', customer: customer)

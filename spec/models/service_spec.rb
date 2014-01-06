@@ -67,7 +67,7 @@ describe Service do
     end
 
     it 'should answer expiring? when not expiring' do
-      service.expiration_date = Date.current
+      service.expiration_date = Date.yesterday
 
       service.should_not be_expiring
     end

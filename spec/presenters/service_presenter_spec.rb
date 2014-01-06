@@ -28,6 +28,7 @@ describe ServicePresenter do
           last_service_mileage: 7000,
           expiration_date: Date.new(2000, 6, 1),
           expiration_mileage: 10000,
+          comments: 'comments',
           customer: service_type.customer)
   end
 
@@ -99,5 +100,29 @@ describe ServicePresenter do
 
   it 'should respond to status' do
     subject.status.should == 'Expired'
+  end
+
+  it 'should respond to comments' do
+    subject.comments.should == 'comments'
+  end
+
+  it 'should respond to expiration_type_of_date?' do
+    date_service = ServicePresenter.new(create(:service, service_type: create(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE)))
+    date_and_mileage_service = ServicePresenter.new(create(:service, service_type: create(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE)))
+    mileage_service = ServicePresenter.new(create(:service, service_type: create(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_MILEAGE)))
+
+    date_service.date_expiration_type?.should be_true
+    date_and_mileage_service.date_expiration_type?.should be_true
+    mileage_service.date_expiration_type?.should be_false
+  end
+
+  it 'should respond to expiration_type_of_mileage?' do
+    mileage_service = ServicePresenter.new(create(:service, service_type: create(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_MILEAGE)))
+    date_and_mileage_service = ServicePresenter.new(create(:service, service_type: create(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE)))
+    date_service = ServicePresenter.new(create(:service, service_type: create(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE)))
+
+    date_and_mileage_service.mileage_expiration_type?.should be_true
+    mileage_service.mileage_expiration_type?.should be_true
+    date_service.mileage_expiration_type?.should be_false
   end
 end

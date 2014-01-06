@@ -5,6 +5,8 @@ class ServicesController < ModelController
                 :load_service_type_service,
                 :load_vehicle_service
 
+  before_action :_set_service, only: [:show]
+
   def new
     authorize! :create, :service
 
@@ -37,7 +39,14 @@ class ServicesController < ModelController
     end
   end
 
+  def show
+  end
+
   private
+
+  def _set_service
+    @service = _get_model(Service)
+  end
 
   def _set_service_types(current_user)
     service_types = @service_type_service.get_all_service_types(current_user)

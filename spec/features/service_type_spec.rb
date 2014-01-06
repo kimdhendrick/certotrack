@@ -18,9 +18,9 @@ describe 'Service Types', slow: true, js: true do
       create(:service_type, name: 'Tire rotation', expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE, interval_date: Interval::ONE_YEAR.text, customer: customer)
       golden = create(:location, name: 'Golden', customer: customer)
       unserviced_vehicle = create(:vehicle, vehicle_number: '34987', vin: '2B8GDM9AXKP042790', license_plate: '123-ABC',
-             year: 1999, make: 'Dodge', vehicle_model: 'Dart', mileage: 20000, location: golden, customer: customer)
+                                  year: 1999, make: 'Dodge', vehicle_model: 'Dart', mileage: 20000, location: golden, customer: customer)
       serviced_vehicle = create(:vehicle, vehicle_number: '1111', vin: 'ABCGDM9AXK6D9H790', license_plate: '255-GLL',
-             year: 2009, make: 'Ford', vehicle_model: 'Edge', mileage: 60000, location: golden, customer: customer)
+                                year: 2009, make: 'Ford', vehicle_model: 'Edge', mileage: 60000, location: golden, customer: customer)
       create(
         :service,
         vehicle: serviced_vehicle,
@@ -106,8 +106,7 @@ describe 'Service Types', slow: true, js: true do
         page.should have_content '60,000'
         page.should have_content 'Golden'
         page.should have_content 'Expired'
-        # show service
-        #page.should have_link 'Edit'
+        page.should have_link 'Edit'
       end
 
       page.should have_content 'Non-Serviced Vehicles'
@@ -136,6 +135,13 @@ describe 'Service Types', slow: true, js: true do
         page.should have_content 'Golden'
         page.should have_link 'Service'
       end
+
+      within '[data-serviced-vehicles] table tbody tr:nth-of-type(1)' do
+        click_link 'Edit'
+      end
+
+      page.should have_content 'Show Service'
+      page.should have_content 'Pump check'
     end
 
     it 'should create new service types' do
@@ -176,7 +182,9 @@ describe 'Service Types', slow: true, js: true do
 
       page.should have_content 'Show Service Type'
 
-      click_link 'Edit'
+      within '[data-action-links]' do
+        click_link 'Edit'
+      end
 
       fill_in 'Name', with: 'Cheery Check'
       select 'By Date', from: 'Expiration Type'
