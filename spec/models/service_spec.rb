@@ -374,6 +374,7 @@ describe Service do
       subject.reload
       subject.reservice(attributes)
       subject.active_service_period.should_not == @original_service_period
+      subject.active_service_period.service.should == subject
     end
 
     it 'should set new start_date in active_service_period' do
