@@ -329,6 +329,7 @@ describe Certification do
         subject.reload
         subject.recertify(attributes)
         subject.active_certification_period.should_not == @original_certification_period
+        subject.active_certification_period.certification.should == subject
       end
 
       it 'should set new trainer in active_certification_period' do

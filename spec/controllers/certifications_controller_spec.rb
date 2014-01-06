@@ -7,7 +7,7 @@ describe CertificationsController do
   let(:fake_certification_service_that_returns_list) { Faker.new([certification]) }
   let(:faker_that_returns_empty_list ) { Faker.new([]) }
 
-  describe 'GET index' do
+  describe 'GET #index' do
     it 'calls get_all_certifications with current_user and params' do
       my_user = stub_certification_user(customer)
       sign_in my_user
@@ -85,7 +85,7 @@ describe CertificationsController do
     end
   end
 
-  describe 'GET expired' do
+  describe 'GET #expired' do
     it 'calls get_expired with current_user and params' do
       my_user = stub_certification_user(customer)
       sign_in my_user
@@ -163,7 +163,7 @@ describe CertificationsController do
     end
   end
 
-  describe 'GET expiring' do
+  describe 'GET #expiring' do
     it 'calls get_expiring with current_user and params' do
       my_user = stub_certification_user(customer)
       sign_in my_user
@@ -241,7 +241,7 @@ describe CertificationsController do
     end
   end
 
-  describe 'GET units_based' do
+  describe 'GET #units_based' do
     it 'calls get_units_based with current_user and params' do
       my_user = stub_certification_user(customer)
       sign_in my_user
@@ -319,7 +319,7 @@ describe CertificationsController do
     end
   end
 
-  describe 'GET recertification_required' do
+  describe 'GET #recertification_required' do
     it 'calls get_recertification_required with current_user and params' do
       my_user = stub_certification_user(customer)
       sign_in my_user
@@ -397,7 +397,7 @@ describe CertificationsController do
     end
   end
 
-  describe 'GET new' do
+  describe 'GET #new' do
     context 'when certification user' do
       let (:current_user) { stub_certification_user(customer) }
 
@@ -536,7 +536,7 @@ describe CertificationsController do
     end
   end
 
-  describe 'POST create' do
+  describe 'POST #create' do
     context 'when certification user' do
       let (:current_user) { stub_certification_user(customer) }
       before do
@@ -818,7 +818,7 @@ describe CertificationsController do
     end
   end
 
-  describe 'GET edit' do
+  describe 'GET #edit' do
     context 'when certification user' do
       before do
         sign_in stub_certification_user(customer)
@@ -867,7 +867,7 @@ describe CertificationsController do
     end
   end
 
-  describe 'PUT update' do
+  describe 'PUT #update' do
     context 'when certification user' do
       before do
         sign_in stub_certification_user(customer)
@@ -1000,7 +1000,7 @@ describe CertificationsController do
     end
   end
 
-  describe 'GET show' do
+  describe 'GET #show' do
     context 'when certification user' do
       let (:current_user) { stub_certification_user(customer) }
 
@@ -1046,7 +1046,7 @@ describe CertificationsController do
     end
   end
 
-  describe 'DELETE destroy' do
+  describe 'DELETE #destroy' do
     context 'when certification user' do
       before do
         sign_in stub_certification_user(customer)
@@ -1099,7 +1099,7 @@ describe CertificationsController do
     end
   end
 
-  describe 'GET certification_history' do
+  describe 'GET #certification_history' do
     context 'when certification user' do
       let (:current_user) { stub_certification_user(customer) }
 
@@ -1160,7 +1160,7 @@ describe CertificationsController do
     end
   end
 
-  describe 'GET search' do
+  describe 'GET #search' do
     context 'when certification user' do
       before do
         @my_user = stub_certification_user(customer)
