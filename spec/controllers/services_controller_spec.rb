@@ -3,7 +3,7 @@ require 'spec_helper'
 describe ServicesController do
 
   let(:customer) { create(:customer) }
-  let(:service) { build(:service) }
+  let(:service) { build(:service, customer: customer) }
   let(:fake_vehicle_servicing_service_that_returns_list) { Faker.new([service]) }
   let(:faker_that_returns_empty_list) { Faker.new([]) }
 
@@ -483,6 +483,181 @@ describe ServicesController do
         service = create(:service, customer: customer)
 
         get :show, {:id => service.to_param}, {}
+
+        assigns(:service).should be_nil
+      end
+    end
+  end
+
+  describe 'GET #edit' do
+    context 'when vehicle user' do
+      before do
+        sign_in stub_vehicle_user(customer)
+      end
+
+      it 'assigns the requested service as @service' do
+        service = create(:service, customer: customer)
+        get :edit, {:id => service.to_param}, {}
+        assigns(:service).should eq(service)
+      end
+
+      it 'assigns service_types' do
+        service = create(:service, customer: customer)
+        controller.load_vehicle_servicing_service(Faker.new)
+        service_type = create(:service_type)
+        controller.load_service_type_service(Faker.new([service_type]))
+
+        get :edit, {:id => service.to_param}, {}
+
+        assigns(:service_types).map(&:model).should eq([service_type])
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'assigns the requested service as @service' do
+        service = create(:service, customer: customer)
+        get :edit, {:id => service.to_param}, {}
+        assigns(:service).should eq(service)
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'does not assign service as @service' do
+        service = create(:service, customer: customer)
+        get :edit, {:id => service.to_param}, {}
+        assigns(:service).should be_nil
+      end
+    end
+  end
+
+  describe 'PUT #update' do
+    context 'when vehicle user' do
+      before do
+        sign_in stub_vehicle_user(customer)
+      end
+
+      describe 'with valid params' do
+        it 'updates the requested service' do
+          service = create(:service, customer: customer)
+          new_service_type = create(:service_type, customer: customer)
+          fake_service_service = Faker.new(service)
+          controller.load_vehicle_servicing_service(fake_service_service)
+
+          put :update, {:id => service.to_param, :service =>
+            {
+              'service_type_id' => new_service_type.id,
+              'last_service_date' => '01/01/2001',
+              'last_service_mileage' => '10000',
+              'comments' => 'some new notes'
+            }
+          }, {}
+
+          fake_service_service.received_message.should == :update_service
+          fake_service_service.received_params[0].should == service
+          fake_service_service.received_params[1][:service_type_id].should == new_service_type.id.to_s
+          fake_service_service.received_params[1][:last_service_date].should == '01/01/2001'
+          fake_service_service.received_params[1][:last_service_mileage].should == '10000'
+          fake_service_service.received_params[1][:comments].should == 'some new notes'
+        end
+
+        it 'assigns the requested service' do
+          controller.load_vehicle_servicing_service(Faker.new(true))
+          service = create(:service, customer: customer)
+
+          put :update, {:id => service.to_param, :service => {'comments' => 'Test'}}, {}
+
+          assigns(:service).should eq(service)
+        end
+
+        it 'redirects to the show service type page' do
+          controller.load_vehicle_servicing_service(Faker.new(true))
+          service = create(:service, customer: customer)
+
+          put :update, {:id => service.to_param, :service => {'comments' => 'Test'}}, {}
+
+          response.should redirect_to(service.service_type)
+          flash[:notice].should == 'Service was successfully updated.'
+        end
+      end
+
+      describe 'with invalid params' do
+        it 'assigns the service' do
+          controller.load_vehicle_servicing_service(Faker.new(false))
+          service = create(:service, customer: customer)
+
+          put :update, {:id => service.to_param, :service => {'comments' => 'invalid value'}}, {}
+
+          assigns(:service).should eq(service)
+        end
+
+        it "re-renders the 'edit' template" do
+          controller.load_vehicle_servicing_service(Faker.new(false))
+          service = create(:service, customer: customer)
+
+          put :update, {:id => service.to_param, :service => {'comments' => 'invalid value'}}, {}
+
+          response.should render_template('edit')
+        end
+
+        it 'assigns @service_types' do
+          service = create(:service, customer: customer)
+          controller.load_vehicle_servicing_service(Faker.new)
+          service_type = create(:service_type)
+          controller.load_service_type_service(Faker.new([service_type]))
+
+          get :edit, {:id => service.to_param}, {}
+
+          assigns(:service_types).map(&:model).should eq([service_type])
+        end
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'updates the requested service' do
+        fake_service_service = Faker.new(true)
+        controller.load_vehicle_servicing_service(fake_service_service)
+        service = create(:service, customer: customer)
+
+        put :update, {:id => service.to_param, :service =>
+          {
+            'last_service_date' => '01/01/2001'
+          }
+        }, {}
+
+        fake_service_service.received_message.should == :update_service
+      end
+
+      it 'assigns the requested service as @service' do
+        service = create(:service, customer: customer)
+        controller.load_vehicle_servicing_service(Faker.new(service))
+
+        put :update, {:id => service.to_param, :service => {'comments' => 'Test'}}, {}
+
+        assigns(:service).should eq(service)
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'does not assign service' do
+        service = create(:service, customer: customer)
+
+        put :update, {:id => service.to_param, :service => {'comments' => 'Test'}}, {}
 
         assigns(:service).should be_nil
       end

@@ -90,6 +90,10 @@ describe 'Service Types', slow: true, js: true do
         page.should have_content 'Model'
         page.should have_content 'Mileage'
         page.should have_content 'Location'
+        page.should have_content 'Service Due Date'
+        page.should have_content 'Service Due Mileage'
+        page.should have_content 'Last Service Date'
+        page.should have_content 'Last Service Mileage'
         page.should have_content 'Status'
         page.should have_content 'Service'
       end
@@ -105,6 +109,10 @@ describe 'Service Types', slow: true, js: true do
         page.should have_content 'Edge'
         page.should have_content '60,000'
         page.should have_content 'Golden'
+        page.should have_content '01/11/2014'
+        page.should have_content '50,000'
+        page.should have_content '05/15/2013'
+        page.should have_content '10,000'
         page.should have_content 'Expired'
         page.should have_link 'Edit'
       end

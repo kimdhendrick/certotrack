@@ -98,12 +98,12 @@ class ServicePresenter
     vehicle.name
   end
 
-  #def edit_link
-  #  @template.link_to 'Edit',
-  #                    @template.edit_service_path(model),
-  #                    data: {confirm: 'Are you sure you want to edit instead of recertify?'}
-  #end
-  #
+  def edit_link
+    @template.link_to 'Edit',
+                      @template.edit_service_path(model),
+                      data: {confirm: 'Are you sure you want to edit instead of reservice?'}
+  end
+
   #def delete_link
   #  @template.link_to 'Delete',
   #                    model,

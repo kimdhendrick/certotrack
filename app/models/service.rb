@@ -83,9 +83,7 @@ class Service < ActiveRecord::Base
 
   def reservice(attributes)
     self.active_service_period = self.service_periods.build(attributes)
-    expiration_calculator = ExpirationCalculator.new
-    self.expiration_date = expiration_calculator.calculate(last_service_date, Interval.find_by_text(interval_date))
-    self.expiration_mileage = expiration_calculator.calculate_mileage(last_service_mileage, interval_mileage)
+    ExpirationUpdater.update_expiration_date_and_mileage(self)
   end
 
   private

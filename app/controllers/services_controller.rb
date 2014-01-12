@@ -5,7 +5,7 @@ class ServicesController < ModelController
                 :load_service_type_service,
                 :load_vehicle_service
 
-  before_action :_set_service, only: [:show]
+  before_action :_set_service, only: [:show, :edit, :update]
 
   def new
     authorize! :create, :service
@@ -42,7 +42,33 @@ class ServicesController < ModelController
   def show
   end
 
+  def edit
+    authorize! :create, :service
+    _set_service_types(current_user)
+  end
+
+  def update
+    success = @vehicle_servicing_service.update_service(@service, _service_params)
+
+    if success
+      redirect_to @service.service_type, notice: 'Service was successfully updated.'
+    else
+      render action: 'edit'
+    end
+  end
+
   private
+
+  def _service_params
+    service_accessible_parameters = [
+      :service_type_id,
+      :last_service_date,
+      :last_service_mileage,
+      :comments
+    ]
+
+    params.require(:service).permit(service_accessible_parameters)
+  end
 
   def _set_service
     @service = _get_model(Service)

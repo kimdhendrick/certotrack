@@ -53,5 +53,5 @@ Certotrack::Application.routes.draw do
 
   resources :service_types
 
-  resources :services, only: [:new, :create, :show]
+  resources :services, only: [:new, :create, :show, :edit, :update]
 end

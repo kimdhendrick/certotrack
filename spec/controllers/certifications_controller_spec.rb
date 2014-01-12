@@ -903,7 +903,7 @@ describe CertificationsController do
           controller.load_certification_service(Faker.new(true))
           certification = create(:certification, customer: customer)
 
-          put :update, {:id => certification.to_param, :certification => {'name' => 'Test'}}, {}
+          put :update, {:id => certification.to_param, :certification => {'comments' => 'Test'}}, {}
 
           assigns(:certification).should eq(certification)
         end
@@ -912,7 +912,7 @@ describe CertificationsController do
           controller.load_certification_service(Faker.new(true))
           certification = create(:certification, customer: customer)
 
-          put :update, {:id => certification.to_param, :certification => {'name' => 'Test'}}, {}
+          put :update, {:id => certification.to_param, :certification => {'comments' => 'Test'}}, {}
 
           response.should redirect_to(certification.certification_type)
           flash[:notice].should == 'Certification was successfully updated.'
@@ -924,7 +924,7 @@ describe CertificationsController do
           controller.load_certification_service(Faker.new(false))
           certification = create(:certification, customer: customer)
 
-          put :update, {:id => certification.to_param, :certification => {'name' => 'invalid value'}}, {}
+          put :update, {:id => certification.to_param, :certification => {'comments' => 'invalid value'}}, {}
 
           assigns(:certification).should eq(certification)
         end
@@ -933,7 +933,7 @@ describe CertificationsController do
           controller.load_certification_service(Faker.new(false))
           certification = create(:certification, customer: customer)
 
-          put :update, {:id => certification.to_param, :certification => {'name' => 'invalid value'}}, {}
+          put :update, {:id => certification.to_param, :certification => {'comments' => 'invalid value'}}, {}
 
           response.should render_template('edit')
         end
@@ -964,8 +964,6 @@ describe CertificationsController do
 
         put :update, {:id => certification.to_param, :certification =>
           {
-            'name' => 'Test',
-            'serial_number' => 'newSN',
             'inspection_interval' => 'Annually',
             'last_inspection_date' => '01/01/2001',
             'comments' => 'some new notes'
@@ -979,7 +977,7 @@ describe CertificationsController do
         certification = create(:certification, customer: customer)
         controller.load_certification_service(Faker.new(certification))
 
-        put :update, {:id => certification.to_param, :certification => {'name' => 'Test'}}, {}
+        put :update, {:id => certification.to_param, :certification => {'comments' => 'Test'}}, {}
 
         assigns(:certification).should eq(certification)
       end
@@ -993,7 +991,7 @@ describe CertificationsController do
       it 'does not assign certification as @certification' do
         certification = create(:certification, customer: customer)
 
-        put :update, {:id => certification.to_param, :certification => {'name' => 'Test'}}, {}
+        put :update, {:id => certification.to_param, :certification => {'comments' => 'Test'}}, {}
 
         assigns(:certification).should be_nil
       end

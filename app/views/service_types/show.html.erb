@@ -46,6 +46,10 @@
         <th>Model</th>
         <th>Mileage</th>
         <th>Location</th>
+        <th>Service Due Date</th>
+        <th>Service Due Mileage</th>
+        <th>Last Service Date</th>
+        <th>Last Service Mileage</th>
         <th>Status</th>
         <th>Service</th>
       </tr>
@@ -62,6 +66,10 @@
           <td><%= service.vehicle_model %></td>
           <td><%= service.vehicle_mileage %></td>
           <td><%= service.vehicle_location %></td>
+          <td><%= service.service_due_date %></td>
+          <td><%= service.service_due_mileage %></td>
+          <td><%= service.last_service_date %></td>
+          <td><%= service.last_service_mileage %></td>
           <td><%= service.status %></td>
           <td><%= link_to 'Edit', service.model %></td>
         </tr>

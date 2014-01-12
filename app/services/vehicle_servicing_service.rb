@@ -32,4 +32,12 @@ class VehicleServicingService
   def get_all_services_for_service_type(service_type)
     service_type.services
   end
+
+  def update_service(service, attributes)
+    service.update(attributes)
+    if attributes['last_service_mileage']
+      service.last_service_mileage = attributes['last_service_mileage'].gsub(/[^\d\.]/, '')
+    end
+    ExpirationUpdater.update_expiration_date_and_mileage(service)
+  end
 end

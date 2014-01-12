@@ -114,8 +114,7 @@ describe 'Services', slow: true do
       page.should have_content '500'
       page.should have_content 'Got pretty messy'
 
-      #TODO edit service
-      #page.should have_link 'Edit'
+      page.should have_link 'Edit'
       #TODO delete service
       #page.should have_link 'Delete'
 
@@ -160,6 +159,83 @@ describe 'Services', slow: true do
       page.should have_content '01/01/2013'
       page.should have_content '500'
       page.should have_content 'Got pretty messy'
+
+    end
+
+    it 'should edit service', js: true do
+      service_type = create(
+        :service_type,
+        name: 'Tire Rotation',
+        expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE,
+        interval_date: Interval::SIX_MONTHS.text,
+        interval_mileage: 5000,
+        customer: customer
+      )
+      service = create(
+        :service,
+        vehicle: vehicle,
+        service_type: service_type,
+        last_service_date: Date.new(2013, 1, 1),
+        last_service_mileage: 500,
+        expiration_date: Date.new(2014, 1, 1),
+        expiration_mileage: 1000,
+        comments: 'Got pretty messy',
+        customer: vehicle.customer
+      )
+
+      visit service_path service.id
+
+      page.should have_content 'Show Service'
+
+      click_on 'Edit'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to edit instead of reservice?')
+      alert.dismiss
+
+      page.should have_content 'Show Service'
+      click_on 'Edit'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq 'Are you sure you want to edit instead of reservice?'
+      alert.accept
+
+      page.should have_content 'Edit Service'
+
+      page.should have_link 'Home'
+      #page.should have_link 'All Services'
+      #page.should have_link 'Search Services'
+      page.should have_link 'Create Service'
+
+      page.should have_content 'Service Type'
+      page.should have_content 'Vehicle'
+      page.should have_content 'Last Service Date'
+      page.should have_content 'Last Service Mileage'
+      page.should have_content 'Comments'
+
+      page.should have_field 'Service Type', with: service.service_type.id.to_s
+      page.should have_link 'ABC-123/JB3 2010 Wrangler'
+      page.should have_field 'Last Service Date' #, with: '01/01/2013'
+      page.should have_field 'Comments' #, with: 'Got messier'
+
+      page.should have_link 'Delete'
+
+      select 'Oil Change', from: 'Service Type'
+      fill_in 'Last Service Date', with: '01/07/2014'
+      fill_in 'Last Service Mileage', with: '100000'
+
+      click_on 'Update'
+
+      page.should have_content 'Show Service Type'
+      page.should have_content 'Service was successfully updated.'
+      page.should have_content 'Oil Change'
+
+      within '[data-serviced-vehicles] table tbody tr:nth-of-type(1)' do
+        page.should have_link 'JB3'
+        page.should have_content 'ABC-123'
+        page.should have_link 'Edit'
+      end
+
     end
 
     it 'should alert on future dates', js: true do

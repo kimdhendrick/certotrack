@@ -86,7 +86,7 @@ describe VehicleServicingService do
       subject.get_all_services_for_vehicle(vehicle_2).should == [service_2]
     end
   end
-  
+
   describe '#get_all_services_for_service_type' do
     it 'returns all services for a given service_type' do
       service_type_1 = create(:service_type)
@@ -98,6 +98,47 @@ describe VehicleServicingService do
 
       subject.get_all_services_for_service_type(service_type_1).should == [service_1]
       subject.get_all_services_for_service_type(service_type_2).should == [service_2]
+    end
+  end
+
+  describe '#update_service' do
+    it 'should update services attributes' do
+      vehicle = create(:vehicle)
+      service_type = create(
+        :service_type,
+        expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE,
+        interval_date: Interval::ONE_YEAR.text,
+        interval_mileage: 5000
+      )
+
+      service = create(:service)
+      attributes = {
+        'vehicle_id' => vehicle.id,
+        'service_type_id' => service_type.id,
+        'last_service_date' => '03/05/2013',
+        'last_service_mileage' => '10,000',
+        'comments' => 'Comments'
+      }
+
+      success = VehicleServicingService.new.update_service(service, attributes)
+      success.should be_true
+
+      service.reload
+      service.vehicle_id.should == vehicle.id
+      service.service_type_id.should == service_type.id
+      service.last_service_date.should == Date.new(2013, 3, 5)
+      service.last_service_mileage.should == 10000
+      service.expiration_date.should == Date.new(2014, 3, 5)
+      service.expiration_mileage.should == 15000
+      service.comments.should == 'Comments'
+    end
+
+    it 'should return false if errors' do
+      service = create(:service)
+      service.stub(:save).and_return(false)
+
+      success = VehicleServicingService.new.update_service(service, {})
+      success.should be_false
     end
   end
 end
