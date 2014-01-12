@@ -340,7 +340,7 @@ describe ServicesController do
 
           post :create, params, {}
 
-          flash[:notice].should == "Service: certType24 created for Vehicle PLATE/DD123 2011 Dart."
+          flash[:notice].should == 'Service: certType24 created for Vehicle PLATE/DD123 2011 Dart.'
         end
       end
 
@@ -660,6 +660,66 @@ describe ServicesController do
         put :update, {:id => service.to_param, :service => {'comments' => 'Test'}}, {}
 
         assigns(:service).should be_nil
+      end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    context 'when vehicle user' do
+      before do
+        sign_in stub_vehicle_user(customer)
+      end
+
+      it 'calls VehicleServicingService' do
+        fake_service_service = Faker.new
+        controller.load_vehicle_servicing_service(fake_service_service)
+        service = create(:service, customer: customer)
+
+        delete :destroy, {:id => service.to_param}, {}
+
+        fake_service_service.received_message.should == :delete_service
+      end
+
+      it 'redirects to the show service type page' do
+        service = create(:service, customer: customer)
+        controller.load_vehicle_servicing_service(Faker.new)
+
+        delete :destroy, {:id => service.to_param}, {}
+
+        response.should redirect_to(service.service_type)
+      end
+
+      it 'displays the success message' do
+        vehicle = create(
+          :vehicle,
+          license_plate: 'ABC-123',
+          vehicle_number: 'JB3',
+          make: 'Jeep',
+          vehicle_model: 'Wrangler'
+        )
+        service_type = create(:service_type, name: 'AAA Truck Inspection')
+        service = create(:service, service_type: service_type, vehicle: vehicle, customer: customer)
+        controller.load_vehicle_servicing_service(Faker.new)
+
+        delete :destroy, {:id => service.to_param}, {}
+
+        flash[:notice].should == 'Service AAA Truck Inspection for Vehicle ABC-123/JB3 2010 Wrangler deleted.'
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'calls CertificationService' do
+        fake_service_service = Faker.new
+        controller.load_vehicle_servicing_service(fake_service_service)
+        service = create(:service, customer: customer)
+
+        delete :destroy, {:id => service.to_param}, {}
+
+        fake_service_service.received_message.should == :delete_service
       end
     end
   end

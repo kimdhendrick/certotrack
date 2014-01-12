@@ -115,8 +115,7 @@ describe 'Services', slow: true do
       page.should have_content 'Got pretty messy'
 
       page.should have_link 'Edit'
-      #TODO delete service
-      #page.should have_link 'Delete'
+      page.should have_link 'Delete'
 
       visit service_path date_service.id
 
@@ -550,6 +549,77 @@ describe 'Services', slow: true do
 
       page.should have_content 'Show Service Type'
       page.should have_content 'Service: AAA Truck Inspection created for Vehicle ABC-123/JB3 2010 Wrangler.'
+    end
+  end
+
+  describe 'Delete Service' do
+    before do
+      login_as_vehicle_user(customer)
+    end
+
+    let(:service) do
+      vehicle = create(
+        :vehicle,
+        license_plate: 'ABC-123',
+        mileage: 100000,
+        vehicle_number: 'JB3',
+        make: 'Jeep',
+        vehicle_model: 'Wrangler',
+        customer_id: customer.id
+      )
+
+      service_type = create(
+        :service_type,
+        name: 'AAA Truck Inspection',
+        interval_date: Interval::SIX_MONTHS.text,
+        expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE,
+        customer: customer
+      )
+      create(:service, vehicle: vehicle, service_type: service_type, customer: vehicle.customer)
+    end
+
+    it 'should delete existing service from show page', js: true do
+      visit service_path service.id
+
+      page.should have_content 'Show Service'
+      click_on 'Delete'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete this service?')
+      alert.dismiss
+
+      page.should have_content 'Show Service'
+      click_on 'Delete'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete this service?')
+      alert.accept
+
+      page.should have_content 'Show Service Type'
+      page.should have_content 'Service AAA Truck Inspection for Vehicle ABC-123/JB3 2010 Wrangler deleted'
+    end
+
+    it 'should delete existing service from edit page', js: true do
+      visit service_path service.id
+      click_on 'Edit'
+
+      page.driver.browser.switch_to.alert.accept
+
+      click_on 'Delete'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete this service?')
+      alert.dismiss
+
+      page.should have_content 'Edit Service'
+      click_on 'Delete'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete this service?')
+      alert.accept
+
+      page.should have_content 'Show Service Type'
+      page.should have_content 'Service AAA Truck Inspection for Vehicle ABC-123/JB3 2010 Wrangler deleted'
     end
   end
 end

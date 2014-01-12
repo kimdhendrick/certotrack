@@ -141,4 +141,17 @@ describe VehicleServicingService do
       success.should be_false
     end
   end
+
+  describe '#delete_service' do
+    it 'destroys the requested service' do
+      service = create(:service)
+      ServicePeriod.count.should > 0
+
+      expect {
+        VehicleServicingService.new.delete_service(service)
+      }.to change(Service, :count).by(-1)
+
+      ServicePeriod.count.should == 0
+    end
+  end
 end

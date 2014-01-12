@@ -104,10 +104,10 @@ class ServicePresenter
                       data: {confirm: 'Are you sure you want to edit instead of reservice?'}
   end
 
-  #def delete_link
-  #  @template.link_to 'Delete',
-  #                    model,
-  #                    method: :delete,
-  #                    data: {confirm: 'Are you sure you want to delete this service?'}
-  #end
+  def delete_link
+    @template.link_to 'Delete',
+                      model,
+                      method: :delete,
+                      data: {confirm: 'Are you sure you want to delete this service?'}
+  end
 end

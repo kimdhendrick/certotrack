@@ -40,4 +40,8 @@ class VehicleServicingService
     end
     ExpirationUpdater.update_expiration_date_and_mileage(service)
   end
+
+  def delete_service(service)
+    service.destroy
+  end
 end

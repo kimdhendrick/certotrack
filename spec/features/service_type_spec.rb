@@ -24,7 +24,9 @@ describe 'Service Types', slow: true, js: true do
       create(
         :service,
         vehicle: serviced_vehicle,
-        expiration_date: Date.yesterday,
+        last_service_date: Date.new(2014, 1, 1),
+        last_service_mileage: 1000,
+        expiration_date: Date.new(2013, 1, 1),
         expiration_mileage: 50000,
         service_type: pump_check,
         customer: customer
@@ -107,12 +109,12 @@ describe 'Service Types', slow: true, js: true do
         page.should have_content '2009'
         page.should have_content 'Ford'
         page.should have_content 'Edge'
-        page.should have_content '60,000'
+        page.should have_content '1,000'
         page.should have_content 'Golden'
-        page.should have_content '01/11/2014'
-        page.should have_content '50,000'
-        page.should have_content '05/15/2013'
-        page.should have_content '10,000'
+        page.should have_content '01/01/2014'
+        page.should have_content '60,000'
+        page.should have_content '01/01/2013'
+        page.should have_content '60,000'
         page.should have_content 'Expired'
         page.should have_link 'Edit'
       end
