@@ -39,7 +39,8 @@ class VehicleServiceFactory
   def _expires_on_date(service_type_id, service_date)
     return nil if service_date.blank? || service_type_id.blank?
     service_type = ServiceType.find(service_type_id)
-    @expiration_calculator.calculate(service_date, Interval.find_by_text(service_type.interval_date))
+    interval = Interval.find_by_text(service_type.interval_date)
+    interval.from(service_date) if interval.present?
   end
 
   def _expires_on_mileage(service_type_id, service_mileage)

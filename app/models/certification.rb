@@ -79,6 +79,10 @@ class Certification < ActiveRecord::Base
     ExpirationUpdater.update_expiration_date(self)
   end
 
+  def update_expiration_date
+    self.expiration_date = Interval.find_by_text(interval).from(last_certification_date)
+  end
+
   private
 
   def _certification_period_start_dates

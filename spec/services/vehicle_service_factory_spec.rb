@@ -97,10 +97,9 @@ describe VehicleServiceFactory do
     it 'calculates expiration date using calculator' do
       service_type = create(:service_type, interval_date: Interval::ONE_MONTH.text)
       vehicle = create(:vehicle)
-      fake_expiration_date = Date.new(2001, 1, 1)
+      fake_expiration_date = Date.new(2001, 1, 15)
 
-      fake_expiration_calculator = Faker.new(fake_expiration_date)
-      service_factory = VehicleServiceFactory.new(expiration_calculator: fake_expiration_calculator)
+      service_factory = VehicleServiceFactory.new
 
       service = service_factory.new_instance(
         current_user_id: create(:user).id,
@@ -110,9 +109,6 @@ describe VehicleServiceFactory do
         comments: nil
       )
 
-      fake_expiration_calculator.received_message.should == :calculate
-      fake_expiration_calculator.received_params[0].should == Date.new(2000, 12, 15)
-      fake_expiration_calculator.received_params[1].should == Interval::ONE_MONTH
       service.expiration_date.should == fake_expiration_date
     end
 

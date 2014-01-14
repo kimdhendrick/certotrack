@@ -92,10 +92,9 @@ describe CertificationFactory do
     it 'calculates expiration date using calculator' do
       certification_type = create(:certification_type, interval: Interval::ONE_MONTH.text)
       employee = create(:employee)
-      fake_expiration_date = Date.new(2001, 1, 1)
+      fake_expiration_date = Date.new(2001, 1, 15)
 
-      fake_expiration_calculator = Faker.new(fake_expiration_date)
-      certification_factory = CertificationFactory.new(expiration_calculator: fake_expiration_calculator)
+      certification_factory = CertificationFactory.new
 
       certification = certification_factory.new_instance(
         current_user_id: create(:user).id,
@@ -106,9 +105,6 @@ describe CertificationFactory do
         comments: nil
       )
 
-      fake_expiration_calculator.received_message.should == :calculate
-      fake_expiration_calculator.received_params[0].should == Date.new(2000, 12, 15)
-      fake_expiration_calculator.received_params[1].should == Interval::ONE_MONTH
       certification.expiration_date.should == fake_expiration_date
     end
   end

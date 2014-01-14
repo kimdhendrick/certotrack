@@ -74,6 +74,6 @@ class EquipmentService
   end
 
   def _expires_on(equipment)
-    ExpirationCalculator.new.calculate(equipment.last_inspection_date, Interval.find_by_text(equipment.inspection_interval))
+    Interval.find_by_text(equipment.inspection_interval).from(equipment.last_inspection_date)
   end
 end

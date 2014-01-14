@@ -11,4 +11,23 @@ describe Interval do
     Interval::FIVE_YEARS.to_s.should == '5 years'
     Interval::NOT_REQUIRED.to_s.should == 'Not Required'
   end
+
+  describe '#from' do
+    let(:start_date) { Date.new(2010, 1, 1) }
+
+    it 'should calculate the interval from a given start date' do
+      Interval::ONE_MONTH.from(start_date).should == Date.new(2010, 2, 1)
+      Interval::THREE_MONTHS.from(start_date).should == Date.new(2010, 4, 1)
+      Interval::SIX_MONTHS.from(start_date).should == Date.new(2010, 7, 1)
+      Interval::ONE_YEAR.from(start_date).should == Date.new(2011, 1, 1)
+      Interval::TWO_YEARS.from(start_date).should == Date.new(2012, 1, 1)
+      Interval::THREE_YEARS.from(start_date).should == Date.new(2013, 1, 1)
+      Interval::FIVE_YEARS.from(start_date).should == Date.new(2015, 1, 1)
+      Interval::NOT_REQUIRED.from(start_date).should be_nil
+    end
+
+    it 'should be nil when nil start date' do
+      Interval::ONE_MONTH.from(nil).should be_nil
+    end
+  end
 end
