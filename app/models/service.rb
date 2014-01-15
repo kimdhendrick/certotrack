@@ -81,9 +81,11 @@ class Service < ActiveRecord::Base
     _service_strategy.status == Status::EXPIRING
   end
 
-  def reservice(attributes)
-    self.active_service_period = self.service_periods.build(attributes)
-    ExpirationUpdater.update_expiration_date_and_mileage(self)
+  def update_expiration_date_and_mileage(expiration_calculator = ExpirationCalculator.new)
+    interval = Interval.find_by_text(interval_date)
+    self.expiration_date = interval.from(last_service_date) if interval
+
+    self.expiration_mileage = expiration_calculator.calculate_mileage(last_service_mileage, interval_mileage)
   end
 
   private

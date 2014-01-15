@@ -34,11 +34,15 @@ class VehicleServicingService
   end
 
   def update_service(service, attributes)
+    # TODO - Talk to Kim about this - WDM
     service.update(attributes)
+
     if attributes['last_service_mileage']
       service.last_service_mileage = attributes['last_service_mileage'].gsub(/[^\d\.]/, '')
     end
-    ExpirationUpdater.update_expiration_date_and_mileage(service)
+
+    service.update_expiration_date_and_mileage
+    service.save
   end
 
   def delete_service(service)

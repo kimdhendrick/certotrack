@@ -14,8 +14,8 @@ describe Service do
   it 'should validate the uniqueness of service_type_id' do
     service = create(:service)
     service.should validate_uniqueness_of(:service_type_id).
-                     scoped_to(:vehicle_id).
-                     with_message(/already assigned to this Vehicle. Please update existing Service/)
+                       scoped_to(:vehicle_id).
+                       with_message(/already assigned to this Vehicle. Please update existing Service/)
 
   end
 
@@ -332,7 +332,7 @@ describe Service do
         service = create(:service, last_service_date: 1.day.ago)
         service.reload
 
-        service.reservice(start_date: 1.year.ago)
+        service.active_service_period = build(:service_period, start_date: 1.year.ago)
 
         service.should_not be_valid
         service.errors.full_messages_for(:last_service_date).first.should == 'Last service date must be after previous Last service date'
@@ -342,59 +342,44 @@ describe Service do
 
   it_behaves_like 'an object that is sortable by status'
 
-  describe '#reservice' do
-    subject do
-      service_type = create(
-        :service_type,
-        expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE,
-        interval_date: Interval::ONE_YEAR.text
-      )
+  describe '#update_expiration_date_and_mileage' do
+    context 'expiration by mileage' do
+      it 'should only update the expiration_mileage' do
+        service_type = create(:service_type, interval_mileage: 5000, expiration_type: ServiceType::EXPIRATION_TYPE_BY_MILEAGE)
+        service_period = create(:service_period, start_mileage: 0)
+        service = create(:service, service_type: service_type, active_service_period: service_period)
 
-      create(:service, last_service_date: 1.year.ago, service_type: service_type)
+        service.update_expiration_date_and_mileage
+
+        service.expiration_date.should == nil
+        service.expiration_mileage.should == 5000
+      end
     end
 
-    let(:start_date) { 2.days.from_now }
-    let(:comments) { 'New Comments' }
-    let(:attributes) { {start_date: start_date, comments: comments} }
+    context 'expiration by date' do
+      it 'should only update the expiration_date' do
+        service_type = create(:service_type, interval_mileage: nil, interval_date: '1 month', expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE)
+        service_period = create(:service_period, start_date: Date.new(2010, 5, 10))
+        service = create(:service, service_type: service_type, active_service_period: service_period)
 
-    before do
-      @original_service_period = subject.active_service_period
-      Timecop.freeze(Time.local(2013, 10, 20, 18, 16, 00))
+        service.update_expiration_date_and_mileage
+
+        service.expiration_date.should == Date.new(2010, 6, 10)
+        service.expiration_mileage.should == nil
+      end
     end
 
-    after { Timecop.return }
+    context 'expiration by date and mileage' do
+      it 'should only update the expiration_date and the expiration_mileage' do
+        service_type = create(:service_type, interval_mileage: 5000, interval_date: '1 month', expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE)
+        service_period = create(:service_period, start_date: Date.new(2010, 5, 10), start_mileage: 0)
+        service = create(:service, service_type: service_type, active_service_period: service_period)
 
-    it 'should keep the original service period in its history' do
-      subject.reload
-      subject.reservice(attributes)
-      subject.service_periods.should include(@original_service_period)
-    end
+        service.update_expiration_date_and_mileage
 
-    it 'should create a new active_service_period' do
-      subject.reload
-      subject.reservice(attributes)
-      subject.active_service_period.should_not == @original_service_period
-      subject.active_service_period.service.should == subject
-    end
-
-    it 'should set new start_date in active_service_period' do
-      subject.reservice(start_date: start_date)
-      subject.last_service_date.should == start_date
-    end
-
-    it 'should set new comments in active_service_period' do
-      subject.reservice(comments: comments)
-      subject.active_service_period.comments.should == comments
-    end
-
-    it 'should create a valid active_service_period' do
-      subject.reservice(attributes)
-      subject.active_service_period.should be_valid
-    end
-
-    it 'should recalculate expiration_date' do
-      subject.reservice(attributes)
-      subject.expiration_date.should == Time.utc(2014, 10, 23, 0, 16, 0)
+        service.expiration_date.should == Date.new(2010, 6, 10)
+        service.expiration_mileage.should == 5000
+      end
     end
   end
 end
