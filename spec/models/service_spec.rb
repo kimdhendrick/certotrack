@@ -382,4 +382,37 @@ describe Service do
       end
     end
   end
+
+  describe '#calculate_mileage' do
+
+    context 'when start_mileage is 1000' do
+      let(:service_period) { build(:service_period, start_mileage: 10000) }
+      let(:service) { build(:service, active_service_period: service_period) }
+
+      it 'should return 13000 when interval_mileage is 3000' do
+        service_type = build(:service_type, interval_mileage: 3000)
+        service.service_type = service_type
+        service.calculate_mileage.should == 13000
+      end
+
+      it 'should return 13000 when interval_mileage is 3000' do
+        service_type = build(:service_type, interval_mileage: 15000)
+        service.service_type = service_type
+        service.calculate_mileage.should == 25000
+      end
+
+      it 'should return 13000 when interval_mileage is 3000' do
+        service_type = build(:service_type, interval_mileage: 50000)
+        service.service_type = service_type
+        service.calculate_mileage.should == 60000
+      end
+    end
+
+    it 'should return nil for nil start mileage' do
+      service_period = build(:service_period, start_mileage: nil)
+      service_type = build(:service_type, interval_mileage: 3000)
+      service = build(:service, active_service_period: service_period, service_type: service_type)
+      service.calculate_mileage.should be_nil
+    end
+  end
 end

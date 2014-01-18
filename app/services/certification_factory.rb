@@ -1,9 +1,5 @@
 class CertificationFactory
 
-  def initialize(params = {})
-    @expiration_calculator = params[:expiration_calculator] || ExpirationCalculator.new
-  end
-
   def new_instance(attributes)
     employee_id = attributes[:employee_id]
     certification_type_id = attributes[:certification_type_id]

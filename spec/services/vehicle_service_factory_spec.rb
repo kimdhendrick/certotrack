@@ -115,8 +115,7 @@ describe VehicleServiceFactory do
     it 'calculates expiration mileage using calculator' do
       service_type = create(:service_type, interval_mileage: 15000)
       vehicle = create(:vehicle)
-      fake_expiration_calculator = Faker.new(45000)
-      service_factory = VehicleServiceFactory.new(expiration_calculator: fake_expiration_calculator)
+      service_factory = VehicleServiceFactory.new
 
       service = service_factory.new_instance(
         current_user_id: create(:user).id,
@@ -127,10 +126,7 @@ describe VehicleServiceFactory do
         comments: nil
       )
 
-      fake_expiration_calculator.received_messages.should include(:calculate_mileage)
-      fake_expiration_calculator.received_params[0].should == 20000
-      fake_expiration_calculator.received_params[1].should == 15000
-      service.expiration_mileage.should == 45000
+      service.expiration_mileage.should == 35000
     end
   end
 end
