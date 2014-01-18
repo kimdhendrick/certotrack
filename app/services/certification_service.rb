@@ -85,7 +85,8 @@ class CertificationService
 
   def update_certification(certification, attributes)
     certification.update(attributes)
-    ExpirationUpdater.update_expiration_date(certification)
+    certification.update_expiration_date
+    certification.save
   end
 
   def delete_certification(certification)
