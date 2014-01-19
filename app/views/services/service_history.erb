@@ -1,0 +1,64 @@
+<h1>Show Service History</h1>
+
+<%= link_to 'Home', root_path %> |
+
+<% presenter_for(@service) do |service| %>
+  <p>
+    <b>Vehicle</b>
+    <%= service.vehicle_show_link_by_name %>
+  </p>
+
+  <p>
+    <b>Service Type</b>
+    <%= service.service_type_show_link %>
+  </p>
+
+  <p>
+    <b>Expiration Type</b>
+    <%= service.expiration_type %>
+  </p>
+
+  <% if service.date_expiration_type? %>
+    <p>
+      <b>Interval Date</b>
+      <%= service.interval_date %>
+    </p>
+  <% end %>
+
+  <% if service.mileage_expiration_type? %>
+    <p>
+      <b>Interval Mileage</b>
+      <%= service.interval_mileage %>
+    </p>
+  <% end %>
+
+  <h2>Service History (<%= service.service_type_name %>)</h2>
+
+  <span data-historical="data-historical">
+        <table border="1">
+          <thead>
+          <tr>
+            <th>&nbsp;</th>
+            <th>Last Service Date</th>
+            <th>Expiration Date</th>
+            <th>Expiration Mileage</th>
+            <th>Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @service_periods.each do |service_period| %>
+            <tr>
+              <td><%= service_period.active %></td>
+              <td><%= service_period.last_service_date %></td>
+              <td><%= service_period.expiration_date %></td>
+              <td><%= service_period.expiration_mileage %></td>
+              <td><%= service_period.status %></td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </span>
+
+  <br/>
+  <%= service.show_link %>
+<% end %>

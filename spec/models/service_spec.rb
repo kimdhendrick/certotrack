@@ -370,8 +370,8 @@ describe Service do
     end
 
     context 'expiration by date and mileage' do
-      it 'should only update the expiration_date and the expiration_mileage' do
-        service_type = create(:service_type, interval_mileage: 5000, interval_date: '1 month', expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE)
+      it 'should update both expiration_date and expiration_mileage' do
+        service_type = create(:service_type, interval_mileage: 5000, interval_date: '1 month', expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE)
         service_period = create(:service_period, start_date: Date.new(2010, 5, 10), start_mileage: 0)
         service = create(:service, service_type: service_type, active_service_period: service_period)
 
@@ -384,7 +384,6 @@ describe Service do
   end
 
   describe '#calculate_mileage' do
-
     context 'when start_mileage is 1000' do
       let(:service_period) { build(:service_period, start_mileage: 10000) }
       let(:service) { build(:service, active_service_period: service_period) }
@@ -411,6 +410,13 @@ describe Service do
     it 'should return nil for nil start mileage' do
       service_period = build(:service_period, start_mileage: nil)
       service_type = build(:service_type, interval_mileage: 3000)
+      service = build(:service, active_service_period: service_period, service_type: service_type)
+      service.calculate_mileage.should be_nil
+    end
+
+    it 'should return if not mileage_based expiration_type' do
+      service_period = build(:service_period, start_mileage: 0)
+      service_type = build(:service_type, interval_mileage: 3000, expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE)
       service = build(:service, active_service_period: service_period, service_type: service_type)
       service.calculate_mileage.should be_nil
     end

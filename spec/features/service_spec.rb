@@ -622,4 +622,261 @@ describe 'Services', slow: true do
       page.should have_content 'Service AAA Truck Inspection for Vehicle ABC-123/JB3 2010 Wrangler deleted'
     end
   end
+
+  describe 'Service History' do
+    let!(:oil_change_service_type) do
+      create(:service_type,
+             name: 'Oil Change',
+             expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE,
+             interval_date: Interval::SIX_MONTHS.text,
+             interval_mileage: 3000,
+             customer: customer
+      )
+    end
+
+    let!(:tire_rotation_service_type) do
+      create(:service_type,
+             name: 'Tire Rotation',
+             expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE,
+             interval_date: Interval::SIX_MONTHS.text,
+             interval_mileage: 3000,
+             customer: customer
+      )
+    end
+
+    let!(:mirror_cleaning_service_type) do
+      create(:service_type,
+             name: 'Mirror Cleaning',
+             expiration_type: ServiceType::EXPIRATION_TYPE_BY_MILEAGE,
+             interval_date: Interval::SIX_MONTHS.text,
+             interval_mileage: 3000,
+             customer: customer
+      )
+    end
+
+    let!(:vehicle) do
+      create(:vehicle,
+             license_plate: 'ABC-123',
+             vehicle_number: 'Pinto 123',
+             year: 1981,
+             make: 'Pinto',
+             vehicle_model: 'Pinto',
+             customer_id: customer.id
+      )
+    end
+
+    let(:oil_change) do
+      oil_change = create(
+        :service,
+        vehicle: vehicle,
+        service_type: oil_change_service_type,
+        last_service_date: Date.new(2005, 1, 1),
+        expiration_date: Date.new(2006, 1, 1),
+        last_service_mileage: 1010,
+        expiration_mileage: 2000,
+        customer: vehicle.customer)
+      create(:service_period,
+             service: oil_change,
+             start_date: Date.new(2004, 1, 1),
+             end_date: Date.new(2005, 1, 1),
+             start_mileage: 0,
+             end_mileage: 1000
+      )
+      oil_change
+    end
+
+    let(:tire_rotation) do
+      tire_rotation = create(
+        :service,
+        vehicle: vehicle,
+        service_type: tire_rotation_service_type,
+        last_service_date: Date.new(2005, 1, 1),
+        expiration_date: Date.new(2006, 1, 1),
+        last_service_mileage: 1010,
+        expiration_mileage: 2000,
+        customer: vehicle.customer)
+      create(:service_period,
+             service: tire_rotation,
+             start_date: Date.new(2004, 1, 1),
+             end_date: Date.new(2005, 1, 1),
+             start_mileage: 0,
+             end_mileage: 1000
+      )
+      tire_rotation
+    end
+
+    let(:mirror_cleaning) do
+      mirror_cleaning = create(
+        :service,
+        vehicle: vehicle,
+        service_type: mirror_cleaning_service_type,
+        last_service_date: Date.new(2005, 1, 1),
+        expiration_date: Date.new(2006, 1, 1),
+        last_service_mileage: 1010,
+        expiration_mileage: 2000,
+        customer: vehicle.customer)
+      create(:service_period,
+             service: mirror_cleaning,
+             start_date: Date.new(2004, 1, 1),
+             end_date: Date.new(2005, 1, 1),
+             start_mileage: 0,
+             end_mileage: 1000
+      )
+      mirror_cleaning
+    end
+
+    before do
+      login_as_vehicle_user(customer)
+    end
+
+    context 'date based service type', js:true do
+      it 'should list historical services' do
+        visit service_path(tire_rotation)
+
+        page.should have_link 'Service History'
+        click_on 'Service History'
+
+        page.should have_content 'Show Service History'
+
+        page.should have_content 'Vehicle'
+        page.should have_content 'Service Type'
+        page.should have_content 'Expiration Type'
+        page.should have_content 'Interval Date'
+        page.should_not have_content 'Interval Mileage'
+
+        page.should have_link 'ABC-123/Pinto 123 1981 Pinto'
+        page.should have_content 'By Date'
+        page.should have_link 'Tire Rotation'
+        page.should have_content '6 months'
+        page.should_not have_content '3,000'
+
+        page.should have_content 'Service History (Tire Rotation)'
+
+        within '[data-historical] table thead tr' do
+          page.should have_content 'Last Service Date'
+          page.should have_content 'Expiration Date'
+          page.should have_content 'Expiration Mileage'
+          page.should have_content 'Status'
+        end
+
+        within '[data-historical] table tbody tr:nth-of-type(1)' do
+          page.should have_content 'Active'
+          page.should have_content '01/01/2005'
+          page.should have_content '01/01/2006'
+          page.should_not have_content '2,000'
+          page.should have_content 'Expired'
+        end
+
+        within '[data-historical] table tbody tr:nth-of-type(2)' do
+          page.should_not have_content 'Active'
+          page.should have_content '01/01/2004'
+          page.should have_content '01/01/2005'
+          page.should_not have_content '1,000'
+          page.should_not have_content 'Expired'
+        end
+
+        page.should have_link 'Back to service'
+      end
+    end
+
+    context 'mileage based service type' do
+      it 'should list historical services' do
+        visit service_path(mirror_cleaning)
+
+        page.should have_link 'Service History'
+        click_on 'Service History'
+
+        page.should have_content 'Show Service History'
+
+        page.should have_content 'Vehicle'
+        page.should have_content 'Service Type'
+        page.should have_content 'Expiration Type'
+        page.should_not have_content 'Interval Date'
+        page.should have_content 'Interval Mileage'
+
+        page.should have_link 'ABC-123/Pinto 123 1981 Pinto'
+        page.should have_content 'By Mileage'
+        page.should have_link 'Mirror Cleaning'
+        page.should_not have_content '6 months'
+        page.should have_content '3,000'
+
+        page.should have_content 'Service History (Mirror Cleaning)'
+
+        within '[data-historical] table thead tr' do
+          page.should have_content 'Last Service Date'
+          page.should have_content 'Expiration Date'
+          page.should have_content 'Expiration Mileage'
+          page.should have_content 'Status'
+        end
+
+        within '[data-historical] table tbody tr:nth-of-type(1)' do
+          page.should have_content 'Active'
+          page.should have_content '01/01/2005'
+          page.should_not have_content '01/01/2006'
+          page.should have_content '2,000'
+          page.should have_content 'Expired'
+        end
+
+        within '[data-historical] table tbody tr:nth-of-type(2)' do
+          page.should_not have_content 'Active'
+          page.should have_content '01/01/2004'
+          page.should_not have_content '01/01/2005'
+          page.should have_content '1,000'
+          page.should_not have_content 'Expired'
+        end
+
+        page.should have_link 'Back to service'
+      end
+    end
+
+    context 'date and mileage based service type' do
+      it 'should list historical services' do
+        visit service_path(oil_change)
+
+        page.should have_link 'Service History'
+        click_on 'Service History'
+
+        page.should have_content 'Show Service History'
+
+        page.should have_content 'Vehicle'
+        page.should have_content 'Service Type'
+        page.should have_content 'Expiration Type'
+        page.should have_content 'Interval Date'
+        page.should have_content 'Interval Mileage'
+
+        page.should have_link 'ABC-123/Pinto 123 1981 Pinto'
+        page.should have_content 'By Date and Mileage'
+        page.should have_link 'Oil Change'
+        page.should have_content '6 months'
+        page.should have_content '3,000'
+
+        page.should have_content 'Service History (Oil Change)'
+
+        within '[data-historical] table thead tr' do
+          page.should have_content 'Last Service Date'
+          page.should have_content 'Expiration Date'
+          page.should have_content 'Expiration Mileage'
+          page.should have_content 'Status'
+        end
+
+        within '[data-historical] table tbody tr:nth-of-type(1)' do
+          page.should have_content 'Active'
+          page.should have_content '01/01/2005'
+          page.should have_content '01/01/2006'
+          page.should have_content '2,000'
+          page.should have_content 'Expired'
+        end
+
+        within '[data-historical] table tbody tr:nth-of-type(2)' do
+          page.should_not have_content 'Active'
+          page.should have_content '01/01/2004'
+          page.should have_content '01/01/2005'
+          page.should have_content '1,000'
+          page.should_not have_content 'Expired'
+        end
+
+        page.should have_link 'Back to service'
+      end
+    end
+  end
 end

@@ -54,4 +54,5 @@ Certotrack::Application.routes.draw do
   resources :service_types
 
   resources :services, only: [:new, :create, :show, :edit, :update, :destroy]
+  get '/service_history/:id', to: 'services#service_history', as: 'service_history'
 end

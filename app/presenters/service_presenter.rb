@@ -7,7 +7,10 @@ class ServicePresenter
   delegate :id,
            :comments,
            :mileage_expiration_type?,
-           :date_expiration_type?, to: :model
+           :date_expiration_type?,
+           :expiration_type,
+           :interval_date,
+           to: :model
 
   def initialize(model, template = nil)
     @model = model
@@ -32,6 +35,10 @@ class ServicePresenter
 
   def last_service_mileage
     number_with_delimiter(model.last_service_mileage, :delimiter => ",")
+  end
+
+  def interval_mileage
+    number_with_delimiter(model.interval_mileage, :delimiter => ",")
   end
 
   def vehicle_location
@@ -109,5 +116,13 @@ class ServicePresenter
                       model,
                       method: :delete,
                       data: {confirm: 'Are you sure you want to delete this service?'}
+  end
+
+  def show_history_link
+    @template.link_to 'Service History', @template.service_history_path(model)
+  end
+
+  def show_link
+    @template.link_to 'Back to service', @template.service_path(model)
   end
 end

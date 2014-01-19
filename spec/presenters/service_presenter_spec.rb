@@ -125,4 +125,22 @@ describe ServicePresenter do
     mileage_service.mileage_expiration_type?.should be_true
     date_service.mileage_expiration_type?.should be_false
   end
+
+  it 'should respond to expiration_type' do
+    mileage_service = ServicePresenter.new(create(:service, service_type: create(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_MILEAGE)))
+    date_and_mileage_service = ServicePresenter.new(create(:service, service_type: create(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE)))
+    date_service = ServicePresenter.new(create(:service, service_type: create(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE)))
+
+    date_and_mileage_service.expiration_type.should == 'By Date and Mileage'
+    mileage_service.expiration_type.should == 'By Mileage'
+    date_service.expiration_type.should == 'By Date'
+  end
+
+  it 'should respond to interval_date' do
+    subject.interval_date.should == '1 month'
+  end
+
+  it 'should respond to interval_mileage' do
+    subject.interval_mileage.should == '5,000'
+  end
 end

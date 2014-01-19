@@ -5,7 +5,7 @@ class ServicesController < ModelController
                 :load_service_type_service,
                 :load_vehicle_service
 
-  before_action :_set_service, only: [:show, :edit, :update, :destroy]
+  before_action :_set_service, only: [:show, :edit, :update, :destroy, :service_history]
 
   def new
     authorize! :create, :service
@@ -62,6 +62,10 @@ class ServicesController < ModelController
     vehicle = @service.vehicle
     @vehicle_servicing_service.delete_service(@service)
     redirect_to service_type, notice: "Service #{service_type.name} for Vehicle #{VehiclePresenter.new(vehicle).name} deleted."
+  end
+
+  def service_history
+    @service_periods = ServicePeriodListPresenter.new(@service.service_periods).present
   end
 
   private

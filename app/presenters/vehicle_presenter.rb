@@ -18,7 +18,7 @@ class VehiclePresenter
   end
 
   def mileage
-    number_with_delimiter(model.mileage, :delimiter => ",")
+    number_with_delimiter(model.mileage, delimiter: ',')
   end
 
   def sortable_mileage

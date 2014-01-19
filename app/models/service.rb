@@ -89,7 +89,9 @@ class Service < ActiveRecord::Base
   end
 
   def calculate_mileage
-    return if last_service_mileage.blank? || interval_mileage.blank?
+    return unless mileage_expiration_type? &&
+      last_service_mileage.present? &&
+      last_service_date.present?
 
     last_service_mileage + interval_mileage
   end

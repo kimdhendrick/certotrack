@@ -723,4 +723,66 @@ describe ServicesController do
       end
     end
   end
+
+  describe 'GET #service_history' do
+    context 'when vehicle user' do
+      let (:current_user) { stub_vehicle_user(customer) }
+
+      before do
+        sign_in current_user
+      end
+
+      it 'assigns services presenter as @service' do
+        service = create(:service, customer: customer)
+        get :service_history, {:id => service.to_param}, {}
+        assigns(:service).should eq(service)
+      end
+
+      it 'assigns service_periods as @service_periods' do
+        service_period = create(:service_period)
+        service = create(:service, customer: customer, active_service_period: service_period)
+        get :service_history, {:id => service.to_param}, {}
+        assigns(:service_periods).map(&:model).should eq([service_period])
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin(customer)
+      end
+
+      it 'assigns service presenter as @service' do
+        service = create(:service, customer: customer)
+        get :service_history, {:id => service.to_param}, {}
+        assigns(:service).should eq(service)
+      end
+
+      it 'assigns service_periods as @service_periods' do
+        service_period = create(:service_period)
+        service = create(:service, customer: customer, active_service_period: service_period)
+        get :service_history, {:id => service.to_param}, {}
+        assigns(:service_periods).map(&:model).should eq([service_period])
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'does not assign service presenter as @service' do
+        service = create(:service, customer: customer)
+        get :service_history, {:id => service.to_param}, {}
+        assigns(:service).should be_nil
+      end
+
+      it 'does not assign service_periods as @service_periods' do
+        service_period = create(:service_period)
+        service = create(:service, customer: customer, active_service_period: service_period)
+        get :service_history, {:id => service.to_param}, {}
+        assigns(:service_periods).should be_nil
+      end
+    end
+  end
+
 end
