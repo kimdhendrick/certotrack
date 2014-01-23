@@ -9,6 +9,13 @@ describe 'Reservice Vehicle Pages' do
     create(:vehicle, license_plate: '123-ABC', vehicle_number: '34987', year: 1999, vehicle_model: 'Dart')
   end
   let(:service_type) { create(:service_type, name: 'Oil change')}
+  let(:service_period) do
+    build(
+        :service_period,
+        start_mileage: 10001,
+        start_date: Date.new(2013, 5, 16),
+        comments: 'Best oil change evah!')
+  end
   let(:service) { create(:service, customer: customer, vehicle: vehicle, service_type: service_type) }
 
   describe 'Show Service Page' do
@@ -22,9 +29,12 @@ describe 'Reservice Vehicle Pages' do
     end
   end
 
-  describe 'Reservice Page' do
+  describe 'Reservice Vehicle Page' do
 
     before do
+      service.service_periods << service_period
+      service.active_service_period = service_period
+      service.save!
       login_as_vehicle_user(customer)
       visit new_service_reservice_path(service)
     end
@@ -37,6 +47,10 @@ describe 'Reservice Vehicle Pages' do
       it { should have_selector('span.value', text: '123-ABC/34987 1999 Dart')}
       it { should have_selector('span.label', text: 'Service Type') }
       it { should have_selector('span.value', text: 'Oil change') }
+      it { should have_selector('span.value', text: 'Oil change') }
+      specify { find_field('Last Service Mileage').value.should == '10001'}
+      specify { find_field('Last Service Date').value.should == '05/16/2013'}
+      specify { find_field('Comments').value.should == 'Best oil change evah!'}
     end
 
     describe 'with invalid information' do

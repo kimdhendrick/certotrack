@@ -30,15 +30,15 @@
 
     <div class="field">
       <%= label_tag :start_mileage, 'Last Service Mileage' %>
-      <%= text_field_tag :start_mileage %>
+      <%= text_field_tag :start_mileage, @service.last_service_mileage %>
     </div>
     <div class="field">
       <%= label_tag :start_date, 'Last Service Date' %>
-      <%= text_field_tag :start_date %>
+      <%= text_field_tag :start_date, DateHelpers.date_to_string(@service.last_service_date), class: 'datepicker' %>
     </div>
     <div class="field">
       <%= label_tag :comments, 'Comments' %>
-      <%= text_field_tag :comments %>
+      <%= text_field_tag :comments, @service.comments %>
     </div>
     <%= submit_tag('Reservice') %>
 <% end %>
