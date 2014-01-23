@@ -48,4 +48,9 @@ class VehicleServicingService
   def delete_service(service)
     service.destroy
   end
+
+  def reservice(service, attributes)
+    service.reservice(attributes)
+    service.save
+  end
 end

@@ -154,4 +154,21 @@ describe VehicleServicingService do
       ServicePeriod.count.should == 0
     end
   end
+
+  describe '#reservice' do
+    let(:start_date) { Date.current }
+    let(:start_mileage) { 10_000 }
+    let(:comments) { 'some_comments' }
+    let(:attributes) { {start_date: start_date, start_mileage: start_mileage, comments: comments} }
+    let(:service) { double('service') }
+
+    subject { VehicleServicingService.new }
+
+    it 'should create and assign a new active service period' do
+      service.should_receive(:reservice).with(attributes)
+      service.should_receive(:save)
+
+      subject.reservice(service, attributes)
+    end
+  end
 end

@@ -420,5 +420,30 @@ describe Service do
       service = build(:service, active_service_period: service_period, service_type: service_type)
       service.calculate_mileage.should be_nil
     end
+
+    describe '#reservice' do
+      let(:service_type) { create(:service_type, interval_date: Interval::ONE_MONTH.text, interval_mileage: 5000) }
+      let(:service) { create(:service, service_type: service_type) }
+      let(:original_active_service_period) { create(:service_period, service: service) }
+      let(:start_date) { Date.current }
+      let(:start_mileage) { 10_000 }
+      let(:comments) { 'some comments' }
+      let(:attributes) { {start_date: start_date, start_mileage: start_mileage, comments: comments} }
+
+      subject { service }
+
+      before do
+        service.active_service_period = original_active_service_period
+        service.save
+        service.reservice(attributes)
+      end
+
+      its(:active_service_period) { should_not == original_active_service_period }
+      its(:last_service_date) { should == start_date }
+      its(:last_service_mileage) { should == start_mileage }
+      its(:comments) { should == comments }
+      its(:expiration_date) { should == start_date + 1.month }
+      its(:expiration_mileage) { should == 15_000 }
+    end
   end
 end

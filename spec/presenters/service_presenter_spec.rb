@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe ServicePresenter do
+  include ActionView::TestCase::Behavior
 
   let(:service) do
     service_type = create(:service_type,
@@ -142,5 +143,15 @@ describe ServicePresenter do
 
   it 'should respond to interval_mileage' do
     subject.interval_mileage.should == '5,000'
+  end
+
+  describe '#reservice_link' do
+    it 'should return a valid reservice link' do
+      service = create(:service)
+
+      service_presenter = ServicePresenter.new(service, view)
+
+      service_presenter.reservice_link.should =~ /<a.*>Reservice<\/a>/
+    end
   end
 end

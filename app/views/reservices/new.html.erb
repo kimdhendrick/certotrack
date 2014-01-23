@@ -1,0 +1,44 @@
+<h1>Reservice Vehicle</h1>
+
+<ul id="primary-nav">
+  <li><%= link_to 'Home', root_path %></li>
+  <li><%= link_to 'Create Service', new_service_path %></li>
+</ul>
+
+<% vehicle = presenter_for(@service.vehicle) %>
+
+<%= form_tag(service_reservices_path(@service)) do |f| %>
+
+    <%= render 'shared/errors', model: @service %>
+
+    <div class="field">
+        <span class="label">
+        Vehicle
+        </span>
+        <span class="value">
+        <%= vehicle.name %>
+        </span>
+    </div>
+    <div class="field">
+      <span class="label">
+        Service Type
+      </span>
+      <span class="value">
+          <%= @service.name %>
+      </span>
+    </div>
+
+    <div class="field">
+      <%= label_tag :start_mileage, 'Last Service Mileage' %>
+      <%= text_field_tag :start_mileage %>
+    </div>
+    <div class="field">
+      <%= label_tag :start_date, 'Last Service Date' %>
+      <%= text_field_tag :start_date %>
+    </div>
+    <div class="field">
+      <%= label_tag :comments, 'Comments' %>
+      <%= text_field_tag :comments %>
+    </div>
+    <%= submit_tag('Reservice') %>
+<% end %>

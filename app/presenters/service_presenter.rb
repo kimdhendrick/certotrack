@@ -125,4 +125,11 @@ class ServicePresenter
   def show_link
     @template.link_to 'Back to service', @template.service_path(model)
   end
+
+  def reservice_link
+    @template.link_to(
+        'Reservice',
+        @template.new_service_reservice_path(model)
+    )
+  end
 end
