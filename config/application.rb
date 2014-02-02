@@ -11,6 +11,9 @@ end
 
 module Certotrack
   class Application < Rails::Application
+    # to silence deprecated warning
+    config.i18n.enforce_available_locales = true
+
     # for devise on Heroku
     config.assets.initialize_on_precompile = false
 
