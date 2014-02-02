@@ -940,11 +940,11 @@ describe CertificationsController do
 
         it 'assigns @certification_types' do
           certification = create(:certification, customer: customer)
-          controller.load_certification_service(Faker.new)
+          controller.load_certification_service(Faker.new(false))
           certification_type = create(:certification_type)
           controller.load_certification_type_service(Faker.new([certification_type]))
 
-          get :edit, {:id => certification.to_param}, {}
+          put :update, {:id => certification.to_param, :certification => {'comments' => 'invalid value'}}, {}
 
           assigns(:certification_types).map(&:model).should eq([certification_type])
         end

@@ -53,6 +53,7 @@ class ServicesController < ModelController
     if success
       redirect_to @service.service_type, notice: 'Service was successfully updated.'
     else
+      _set_service_types(current_user)
       render action: 'edit'
     end
   end

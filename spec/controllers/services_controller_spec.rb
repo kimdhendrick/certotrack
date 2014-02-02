@@ -609,11 +609,11 @@ describe ServicesController do
 
         it 'assigns @service_types' do
           service = create(:service, customer: customer)
-          controller.load_vehicle_servicing_service(Faker.new)
+          controller.load_vehicle_servicing_service(Faker.new(false))
           service_type = create(:service_type)
           controller.load_service_type_service(Faker.new([service_type]))
 
-          get :edit, {:id => service.to_param}, {}
+          put :update, {:id => service.to_param, :service => {'comments' => 'invalid value'}}, {}
 
           assigns(:service_types).map(&:model).should eq([service_type])
         end

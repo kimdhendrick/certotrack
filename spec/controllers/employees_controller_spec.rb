@@ -395,12 +395,13 @@ describe EmployeesController do
         end
 
         it 'assigns sorted locations' do
+          employee = create(:employee, customer: customer)
           location = build(:location)
           fake_location_list_presenter = Faker.new([location])
           LocationListPresenter.stub(:new).and_return(fake_location_list_presenter)
-          controller.load_location_service(Faker.new([location]))
+          controller.load_employee_service(Faker.new(false))
 
-          get :new
+          put :update, {:id => employee.to_param, :employee => {'name' => 'invalid value'}}, {}
 
           assigns(:locations).should == [location]
           fake_location_list_presenter.received_message.should == :sort

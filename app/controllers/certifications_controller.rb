@@ -93,6 +93,7 @@ class CertificationsController < ModelController
     if success
       redirect_to @certification.certification_type, notice: 'Certification was successfully updated.'
     else
+      _set_certification_types(current_user)
       render action: 'edit'
     end
   end
