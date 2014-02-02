@@ -55,4 +55,36 @@ describe EmployeePresenter do
   it 'should respond false to show_batch_edit_button? when no certifications' do
     EmployeePresenter.new(employee).show_batch_edit_button?([]).should be_false
   end
+
+  describe 'edit_link' do
+    it 'should create a link to the edit page' do
+      employee = build(:employee)
+      subject = EmployeePresenter.new(employee, view)
+      subject.edit_link.should =~ /<a.*>Edit<\/a>/
+    end
+  end
+
+  describe 'delete_link' do
+    it 'should create a link to the delete page' do
+      employee = build(:employee)
+      subject = EmployeePresenter.new(employee, view)
+      subject.delete_link.should =~ /<a.*>Delete<\/a>/
+    end
+  end
+
+  describe 'deactivate_link' do
+    it 'should create a link to the deactivate page' do
+      employee = build(:employee)
+      subject = EmployeePresenter.new(employee, view)
+      subject.deactivate_link.should =~ /<a.*>Deactivate<\/a>/
+    end
+  end
+
+  describe 'new_certification_link' do
+    it 'should create a link to the new certification page' do
+      employee = build(:employee)
+      subject = EmployeePresenter.new(employee, view)
+      subject.new_certification_link.should =~ /<a.*>New Employee Certification<\/a>/
+    end
+  end
 end

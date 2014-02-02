@@ -147,11 +147,43 @@ describe ServicePresenter do
 
   describe '#reservice_link' do
     it 'should return a valid reservice link' do
-      service = create(:service)
+      service = build(:service)
 
       service_presenter = ServicePresenter.new(service, view)
 
       service_presenter.reservice_link.should =~ /<a.*>Reservice<\/a>/
+    end
+  end
+
+  describe '#edit_link' do
+    it 'should return a valid edit link' do
+      service = build(:service)
+      service_presenter = ServicePresenter.new(service, view)
+      service_presenter.edit_link.should =~ /<a.*>Edit<\/a>/
+    end
+  end
+
+  describe '#delete_link' do
+    it 'should return a valid delete link' do
+      service = build(:service)
+      service_presenter = ServicePresenter.new(service, view)
+      service_presenter.delete_link.should =~ /<a.*>Delete<\/a>/
+    end
+  end
+
+  describe '#show_history_link' do
+    it 'should return a valid show_history link' do
+      service = build(:service)
+      service_presenter = ServicePresenter.new(service, view)
+      service_presenter.show_history_link.should =~ /<a.*>Service History<\/a>/
+    end
+  end
+
+  describe '#show_link' do
+    it 'should return a valid show link' do
+      service = build(:service)
+      service_presenter = ServicePresenter.new(service, view)
+      service_presenter.show_link.should =~ /<a.*>Back to service<\/a>/
     end
   end
 end
