@@ -4,10 +4,6 @@ class CertotrackController < ApplicationController
                 :load_certification_service
 
   def home
-    puts "*"*80
-    puts "Hello, welcome to Certotrack. Your environment says: #{ENV['CERTOTRACK_SECRET_KEY']}"
-    puts "*"*80
-
     if can? :read, :equipment
       @total_equipment_count = @equipment_service.count_all_equipment(current_user)
       @expired_equipment_count = @equipment_service.count_expired_equipment(current_user)
