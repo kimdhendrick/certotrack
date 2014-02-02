@@ -130,4 +130,28 @@ describe VehiclePresenter do
   it 'should respond to status_code' do
     subject.status_code.should == Status::NA.sort_order
   end
+
+  describe 'edit_link' do
+    it 'should create a link to the edit page' do
+      vehicle = build(:vehicle)
+      subject = VehiclePresenter.new(vehicle, view)
+      subject.edit_link.should =~ /<a.*>Edit<\/a>/
+    end
+  end
+
+  describe 'delete_link' do
+    it 'should create a link to the delete page' do
+      vehicle = build(:vehicle)
+      subject = VehiclePresenter.new(vehicle, view)
+      subject.delete_link.should =~ /<a.*>Delete<\/a>/
+    end
+  end
+
+  describe 'new_service_link' do
+    it 'should create a link to the new_service page' do
+      vehicle = build(:vehicle)
+      subject = VehiclePresenter.new(vehicle, view)
+      subject.new_service_link.should =~ /<a.*>New Vehicle Service<\/a>/
+    end
+  end
 end

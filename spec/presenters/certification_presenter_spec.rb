@@ -228,9 +228,25 @@ describe CertificationPresenter do
 
   describe 'recertify_link' do
     it 'should create a link to the recertify page' do
-      certification = create(:certification)
+      certification = build(:certification)
       subject = CertificationPresenter.new(certification, view)
       subject.recertify_link.should =~ /<a.*>Recertify<\/a>/
+    end
+  end
+
+  describe 'show_link' do
+    it 'should create a link to the show page' do
+      certification = build(:certification)
+      subject = CertificationPresenter.new(certification, view)
+      subject.show_link.should =~ /<a.*>Back to certification<\/a>/
+    end
+  end
+
+  describe 'show_history_link' do
+    it 'should create a link to the show history page' do
+      certification = build(:certification)
+      subject = CertificationPresenter.new(certification, view)
+      subject.show_history_link.should =~ /<a.*>Certification History<\/a>/
     end
   end
 

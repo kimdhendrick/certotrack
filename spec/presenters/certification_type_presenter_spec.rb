@@ -100,7 +100,6 @@ describe CertificationTypePresenter do
   end
 
   describe 'units_required' do
-
     context 'when Certification is date based' do
       let(:certification_type) do
         create(:date_based_certification_type, customer: customer, interval: interval, name: name)
@@ -136,6 +135,22 @@ describe CertificationTypePresenter do
       it 'should be the value of #units_required_label of #units_required' do
         subject.units_required_label.should == 'Required Units'
       end
+    end
+  end
+
+  describe 'edit_link' do
+    it 'should create a link to the edit page' do
+      certification_type = build(:certification_type)
+      subject = CertificationTypePresenter.new(certification_type, view)
+      subject.edit_link.should =~ /<a.*>Edit<\/a>/
+    end
+  end
+
+  describe 'delete_link' do
+    it 'should create a link to the delete page' do
+      certification_type = build(:certification_type)
+      subject = CertificationTypePresenter.new(certification_type, view)
+      subject.delete_link.should =~ /<a.*>Delete<\/a>/
     end
   end
 end

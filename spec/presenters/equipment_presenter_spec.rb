@@ -61,6 +61,22 @@ describe EquipmentPresenter do
     equipment.expiration.should == Date.new(2012, 6, 20)
   end
 
+  describe 'edit_link' do
+    it 'should create a link to the edit page' do
+      equipment = build(:equipment)
+      subject = EquipmentPresenter.new(equipment, view)
+      subject.edit_link.should =~ /<a.*>Edit<\/a>/
+    end
+  end
+
+  describe 'delete_link' do
+    it 'should create a link to the delete page' do
+      equipment = build(:equipment)
+      subject = EquipmentPresenter.new(equipment, view)
+      subject.delete_link.should =~ /<a.*>Delete<\/a>/
+    end
+  end
+
   subject { EquipmentPresenter.new(create(:equipment)) }
   it_behaves_like 'an object that is sortable by status'
 end

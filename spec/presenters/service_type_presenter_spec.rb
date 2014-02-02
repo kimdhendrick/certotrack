@@ -68,4 +68,20 @@ describe ServiceTypePresenter do
     mileage_service_type.mileage_expiration_type?.should be_true
     date_service_type.mileage_expiration_type?.should be_false
   end
+
+  describe 'edit_link' do
+    it 'should create a link to the edit page' do
+      service_type = build(:service_type)
+      subject = ServiceTypePresenter.new(service_type, view)
+      subject.edit_link.should =~ /<a.*>Edit<\/a>/
+    end
+  end
+
+  describe 'delete_link' do
+    it 'should create a link to the delete page' do
+      service_type = build(:service_type)
+      subject = ServiceTypePresenter.new(service_type, view)
+      subject.delete_link.should =~ /<a.*>Delete<\/a>/
+    end
+  end
 end

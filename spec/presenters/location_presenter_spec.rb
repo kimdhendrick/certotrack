@@ -23,4 +23,20 @@ describe LocationPresenter do
   it 'should respond to sort_key' do
     LocationPresenter.new(location).sort_key.should == 'Denver'
   end
+
+  describe 'edit_link' do
+    it 'should create a link to the edit page' do
+      location = build(:location)
+      subject = LocationPresenter.new(location, view)
+      subject.edit_link.should =~ /<a.*>Edit<\/a>/
+    end
+  end
+
+  describe 'delete_link' do
+    it 'should create a link to the delete page' do
+      location = build(:location)
+      subject = LocationPresenter.new(location, view)
+      subject.delete_link.should =~ /<a.*>Delete<\/a>/
+    end
+  end
 end
