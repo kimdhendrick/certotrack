@@ -19,3 +19,6 @@
 /coverage
 
 *.todo
+
+# Ignore secret key in devise
+config/initializers/devise_secret.rb
