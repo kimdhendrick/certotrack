@@ -17,6 +17,8 @@ class CertotrackController < ApplicationController
       @total_units_based_certification_count = @certification_service.count_units_based_certifications(current_user)
       @total_recertification_required_certification_count = @certification_service.count_recertification_required_certifications(current_user)
     end
+
+    @first_name = current_user.first_name
   end
 
   def load_equipment_service(service = EquipmentService.new)

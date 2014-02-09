@@ -2,6 +2,16 @@ require 'spec_helper'
 
 describe 'Home Page', slow: true do
 
+  context 'welcome text' do
+    before do
+      login_as_equipment_user
+    end
+
+    it 'should welcome the user' do
+      page.should have_content 'Welcome, First!'
+    end
+  end
+
   context 'when an equipment user' do
     before do
       login_as_equipment_user

@@ -5,6 +5,16 @@ describe CertotrackController do
   let(:customer) { create(:customer) }
 
   describe 'GET home' do
+    context 'a user' do
+      it 'assigns first_name' do
+        sign_in stub_equipment_user(customer)
+
+        get :home
+
+        assigns(:first_name).should == 'First'
+      end
+    end
+
     context 'an equipment user' do
       it 'assigns equipment counts' do
         sign_in stub_equipment_user(customer)
