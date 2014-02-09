@@ -52,7 +52,6 @@
 <% end %>
 
 <script type="text/javascript">
-
   $(function() {
       do_if_units_based(
         function() {
@@ -65,7 +64,7 @@
   );
 
   $('[name=commit]').click(function() {
-    return confirm_future_date(new Date(document.getElementById('certification_last_certification_date').value));
+    return confirm_future_date(new Date(document.getElementById('last_certification_date').value));
   });
 
   $('#certification_certification_type_id').change(function() {
@@ -94,7 +93,5 @@
         }
       }
     );
-  }
-  ;
-
+  };
 </script>

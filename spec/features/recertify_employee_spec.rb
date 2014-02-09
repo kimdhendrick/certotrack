@@ -121,6 +121,29 @@ describe 'Recertify Employee' do
           subject.should have_content('Last certification date is not a valid date')
         end
       end
+
+      context 'with future date' do
+        before do
+          fill_in 'Last Certification Date', with: '01/01/2100'
+          click_button 'Recertify'
+        end
+
+        it 'should prompt user', js: true do
+          alert = page.driver.browser.switch_to.alert
+          alert.text.should eq('Are you sure you want to enter a future date?')
+          alert.dismiss
+
+          page.should have_content 'Recertify Employee'
+
+          click_on 'Recertify'
+
+          alert = page.driver.browser.switch_to.alert
+          alert.text.should eq('Are you sure you want to enter a future date?')
+          alert.accept
+
+          page.should have_content 'Show Certification'
+        end
+      end
     end
   end
 end
