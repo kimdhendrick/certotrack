@@ -42,3 +42,9 @@
     </div>
     <%= submit_tag('Reservice') %>
 <% end %>
+
+<script type="text/javascript">
+  $('[name=commit]').click(function() {
+    return confirm_future_date(new Date(document.getElementById('start_date').value));
+  });
+</script>
