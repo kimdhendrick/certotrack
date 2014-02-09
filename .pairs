@@ -1,0 +1,12 @@
+# .pairs - configuration for 'git pair'
+pairs:
+  # <initials>: <Firstname> <Lastname>[; <email-id>]
+  dm: David Madouros
+  bh: Ben Horne
+  kb: Kim Barnes
+  rg: Meeka Gayhart
+email:
+  prefix: pair
+  domain: certotrack
+  # no_solo_prefix: true
+#global: true
