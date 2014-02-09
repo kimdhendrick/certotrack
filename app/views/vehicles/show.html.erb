@@ -7,6 +7,8 @@
     <li><%= link_to 'Create Vehicle', new_vehicle_path %></li>
   </ul>
 
+  <%= render 'shared/errors', model: @vehicle %>
+
   <p>
     <b>Vehicle Number</b>
     <%= vehicle.vehicle_number %>

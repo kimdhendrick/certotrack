@@ -58,4 +58,28 @@ describe Vehicle do
       vehicle.status.should == Status::EXPIRED
     end
   end
+
+  describe '#destroy' do
+    before { vehicle.save }
+
+    context 'when vehicle has no services' do
+      it 'should destroy vehicle' do
+        expect { vehicle.destroy }.to change(Vehicle, :count).by(-1)
+      end
+    end
+
+    context 'when vehicle has one or more services' do
+      before { create(:service, vehicle: vehicle) }
+
+      it 'should not destroy vehicle' do
+        expect { vehicle.destroy }.to_not change(Vehicle, :count).by(-1)
+      end
+
+      it 'should have a base error' do
+        vehicle.destroy
+
+        vehicle.errors[:base].first.should == 'Vehicle has services assigned that you must remove before deleting the vehicle.'
+      end
+    end
+  end
 end

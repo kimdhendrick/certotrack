@@ -36,6 +36,10 @@ class VehiclesController < ModelController
   end
 
   def show
+    _set_services
+  end
+
+  def _set_services
     vehicle_services = @vehicle_servicing_service.get_all_services_for_vehicle(@vehicle)
     @services = ServiceListPresenter.new(vehicle_services).present(params)
   end
@@ -57,9 +61,12 @@ class VehiclesController < ModelController
   
   def destroy
     vehicle_number = @vehicle.vehicle_number
-    @vehicle_service.delete_vehicle(@vehicle)
-
-    redirect_to vehicles_path, notice: "Vehicle number #{vehicle_number} was successfully deleted."
+    if @vehicle_service.delete_vehicle(@vehicle)
+      redirect_to vehicles_path, notice: "Vehicle number #{vehicle_number} was successfully deleted."
+    else
+      _set_services
+      render :show
+    end
   end
 
   def search

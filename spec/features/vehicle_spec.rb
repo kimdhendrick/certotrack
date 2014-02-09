@@ -10,8 +10,8 @@ describe 'Vehicles', slow: true do
       golden = create(:location, name: 'Golden', customer: customer)
       boulder = create(:location, name: 'Boulder', customer: customer)
 
-      create(:vehicle, vehicle_number: '987345', vin: '1M8GDM9AXKP042788', license_plate: 'ABC-123',
-             year: 2013, make: 'Chevrolet', vehicle_model: 'Chevette', mileage: 10000, location: denver, customer: customer)
+      @vehicle1 = create(:vehicle, vehicle_number: '987345', vin: '1M8GDM9AXKP042788', license_plate: 'ABC-123',
+                         year: 2013, make: 'Chevrolet', vehicle_model: 'Chevette', mileage: 10000, location: denver, customer: customer)
 
       create(:vehicle, vehicle_number: '34987', vin: '2B8GDM9AXKP042790', license_plate: '123-ABC',
              year: 1999, make: 'Dodge', vehicle_model: 'Dart', mileage: 20000, location: golden, customer: customer)
@@ -185,22 +185,46 @@ describe 'Vehicles', slow: true do
       page.should have_content 'Golden'
     end
 
-    it 'should be able to delete a vehicle', js: true do
-      visit root_path
-      click_on 'All Vehicles'
-      click_on '1M8GDM9AXKP042788'
-      click_on 'Delete'
-      alert = page.driver.browser.switch_to.alert
-      alert.text.should eq('Are you sure you want to delete this vehicle?')
-      alert.dismiss
+    describe 'deleting a vehicle' do
+      it 'should be able to delete a vehicle', js: true do
+        visit root_path
+        click_on 'All Vehicles'
+        click_on '1M8GDM9AXKP042788'
+        click_on 'Delete'
+        alert = page.driver.browser.switch_to.alert
+        alert.text.should eq('Are you sure you want to delete this vehicle?')
+        alert.dismiss
 
-      click_on 'Delete'
-      alert = page.driver.browser.switch_to.alert
-      alert.text.should eq('Are you sure you want to delete this vehicle?')
-      alert.accept
+        click_on 'Delete'
+        alert = page.driver.browser.switch_to.alert
+        alert.text.should eq('Are you sure you want to delete this vehicle?')
+        alert.accept
 
-      page.should have_content 'Vehicle number 987345 was successfully deleted'
-      page.should have_content 'All Vehicles'
+        page.should have_content 'Vehicle number 987345 was successfully deleted'
+        page.should have_content 'All Vehicles'
+      end
+
+      context 'when vehicle has one or more services', js: true do
+        before do
+          create(:service, vehicle: @vehicle1, customer: customer)
+
+          visit root_path
+          click_on 'All Vehicles'
+          click_on '1M8GDM9AXKP042788'
+          click_on 'Delete'
+          alert = page.driver.browser.switch_to.alert
+          alert.text.should eq('Are you sure you want to delete this vehicle?')
+          alert.accept
+        end
+
+        it 'should prevent the deletion' do
+          page.should have_content 'Vehicle has services assigned that you must remove before deleting the vehicle.'
+        end
+
+        it 'remain on the show page' do
+          page.should have_content 'Show Vehicle'
+        end
+      end
     end
 
     it 'should be able to search vehicles' do
@@ -521,8 +545,8 @@ describe 'Vehicles', slow: true do
 
     it 'should sort by mileage' do
       zeta = create(:vehicle, mileage: 300, customer: customer)
-      beta = create(:vehicle, mileage:  20000, customer: customer)
-      alpha = create(:vehicle, mileage:  1000, customer: customer)
+      beta = create(:vehicle, mileage: 20000, customer: customer)
+      alpha = create(:vehicle, mileage: 1000, customer: customer)
 
       visit '/'
       click_link 'All Vehicles'
@@ -556,7 +580,7 @@ describe 'Vehicles', slow: true do
       click_link 'Location'
       column_data_should_be_in_order('Zurich', 'Burbank', 'Alcatraz')
     end
-    
+
     it 'should sort by status' do
       service_type = create(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE)
       valid_vehicle = create(:vehicle, customer: customer)

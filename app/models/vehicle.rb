@@ -15,12 +15,23 @@ class Vehicle < ActiveRecord::Base
 
   before_validation :_upcase_vin
 
+  before_destroy :_prevent_deletion_when_services
+
   def status
     applicable_services = services.map(&:status).reject { |status| status == Status::NA }
     return Status.find(applicable_services.map(&:id).max) || Status::NA
   end
 
   private
+
+  def _prevent_deletion_when_services
+    if services.present?
+      errors[:base] << 'Vehicle has services assigned that you must remove before deleting the vehicle.'
+      false
+    else
+      true
+    end
+  end
 
   def _upcase_vin
     self.vin.try(&:upcase!)

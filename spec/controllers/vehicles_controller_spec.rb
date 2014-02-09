@@ -532,6 +532,25 @@ describe VehiclesController do
         fake_vehicle_service.received_params[0].should == vehicle
       end
 
+      context 'when destroy call fails' do
+        before do
+          vehicle = create(:vehicle, customer: customer)
+          vehicle_service = double('vehicle_service')
+          vehicle_service.stub(:delete_vehicle).and_return(false)
+          controller.load_vehicle_service(vehicle_service)
+
+          delete :destroy, {id: vehicle.to_param}, {}
+        end
+
+        it 'should render show page' do
+          response.should render_template("show")
+        end
+
+        it 'should assign @service' do
+          expect(assigns(:services)).to eq([])
+        end
+      end
+
       it 'redirects to the vehicle list' do
         vehicle = create(:vehicle, vehicle_number: 'blah123', customer: customer)
         controller.load_vehicle_service(Faker.new(true))
