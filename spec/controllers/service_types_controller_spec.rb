@@ -123,6 +123,66 @@ describe ServiceTypesController do
         fake_vehicle_service.received_message.should == :get_all_non_serviced_vehicles_for
         fake_vehicle_service.received_params[0].should == service_type
       end
+
+      it 'sorts serviced vehicles by status' do
+        service = create(:service)
+        service_type = create(:service_type, customer: customer)
+
+        fake_vehicle_service_list_presenter = Faker.new([service])
+        #noinspection RubyArgCount
+        ServiceListPresenter.stub(:new).and_return(fake_vehicle_service_list_presenter)
+
+        params = {
+          id: service_type.id,
+          sort: 'sort_key',
+          direction: 'desc',
+          options: 'serviced_vehicles'
+        }
+
+        get :show, params, {}
+
+        fake_vehicle_service_list_presenter.received_params[0].should == {sort: 'sort_key', direction: 'desc'}
+      end
+
+      it 'sorts serviced vehicles by vehicle number' do
+        service = create(:service)
+        service_type = create(:service_type, customer: customer)
+
+        fake_vehicle_service_list_presenter = Faker.new([service])
+        #noinspection RubyArgCount
+        ServiceListPresenter.stub(:new).and_return(fake_vehicle_service_list_presenter)
+
+        params = {
+          id: service_type.id,
+          sort: 'sort_key',
+          direction: 'desc',
+          options: 'serviced_vehicles'
+        }
+
+        get :show, params, {}
+
+        fake_vehicle_service_list_presenter.received_params[0].should == {sort: 'sort_key', direction: 'desc'}
+      end
+
+      it 'sorts non-serviced vehicles by vehicle number' do
+        service = create(:service)
+        service_type = create(:service_type, customer: customer)
+
+        fake_vehicle_list_presenter = Faker.new([service])
+        #noinspection RubyArgCount
+        VehicleListPresenter.stub(:new).and_return(fake_vehicle_list_presenter)
+
+        params = {
+          id: service_type.id,
+          sort: 'sort_key',
+          direction: 'desc',
+          options: 'unserviced_vehicles'
+        }
+
+        get :show, params, {}
+
+        fake_vehicle_list_presenter.received_params[0].should == {sort: 'sort_key', direction: 'desc'}
+      end
     end
 
     context 'when admin user' do

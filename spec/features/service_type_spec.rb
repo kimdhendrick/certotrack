@@ -4,6 +4,83 @@ describe 'Service Types', slow: true, js: true do
 
   let(:customer) { create(:customer) }
 
+  context 'show vehicle page' do
+    context 'sorting' do
+      before do
+        login_as_vehicle_user(customer)
+      end
+
+      it 'should sort serviced vehicles by vehicle number' do
+        oil_change = create(:service_type, name: 'Oil change', customer: customer)
+        vehicle1 = create(:vehicle, vehicle_number: 'ABC123', customer: customer)
+        vehicle2 = create(:vehicle, vehicle_number: 'XYZ111', customer: customer)
+        vehicle3 = create(:vehicle, vehicle_number: 'LMNOP', customer: customer)
+        create(:service, vehicle: vehicle1, service_type: oil_change)
+        create(:service, vehicle: vehicle2, service_type: oil_change)
+        create(:service, vehicle: vehicle3, service_type: oil_change)
+
+        visit service_type_path(oil_change)
+
+        within '[data-serviced-vehicles] table thead tr:nth-of-type(1)' do
+          click_link 'Vehicle Number'
+        end
+
+        column_data_should_be_in_order('ABC123', 'LMNOP', 'XYZ111')
+
+        within '[data-serviced-vehicles] table thead tr:nth-of-type(1)' do
+          click_link 'Vehicle Number'
+        end
+
+        column_data_should_be_in_order('XYZ111', 'LMNOP', 'ABC123')
+      end
+
+      it 'should sort serviced vehicles by status' do
+        oil_change = create(:service_type, name: 'Oil change', expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE, customer: customer)
+        vehicle1 = create(:vehicle, customer: customer)
+        vehicle2 = create(:vehicle, customer: customer)
+        vehicle3 = create(:vehicle, customer: customer)
+        create(:service, vehicle: vehicle1, service_type: oil_change, expiration_date: Date.yesterday)
+        create(:service, vehicle: vehicle2, service_type: oil_change, expiration_date: Date.today+120.days)
+        create(:service, vehicle: vehicle3, service_type: oil_change, expiration_date: Date.tomorrow)
+
+        visit service_type_path(oil_change)
+
+        within '[data-serviced-vehicles] table thead tr:nth-of-type(1)' do
+          click_link 'Status'
+        end
+
+        column_data_should_be_in_order('Valid', 'Warning', 'Expired')
+
+        within '[data-serviced-vehicles] table thead tr:nth-of-type(1)' do
+          click_link 'Status'
+        end
+
+        column_data_should_be_in_order('Expired', 'Warning', 'Valid')
+      end
+
+      it 'should sort un-serviced vehicles by vehicle number' do
+        oil_change = create(:service_type, name: 'Oil change', customer: customer)
+        create(:vehicle, vehicle_number: 'ABC123', customer: customer)
+        create(:vehicle, vehicle_number: 'XYZ111', customer: customer)
+        create(:vehicle, vehicle_number: 'LMNOP', customer: customer)
+
+        visit service_type_path(oil_change)
+
+        within '[data-unserviced-vehicles] table thead tr:nth-of-type(1)' do
+          click_link 'Vehicle Number'
+        end
+
+        column_data_should_be_in_order('ABC123', 'LMNOP', 'XYZ111')
+
+        within '[data-unserviced-vehicles] table thead tr:nth-of-type(1)' do
+          click_link 'Vehicle Number'
+        end
+
+        column_data_should_be_in_order('XYZ111', 'LMNOP', 'ABC123')
+      end
+    end
+  end
+
   context 'when an vehicle user' do
     before do
       create(:service_type, name: 'Oil change', expiration_type: ServiceType::EXPIRATION_TYPE_BY_MILEAGE, interval_mileage: 5000, customer: customer)

@@ -18,10 +18,10 @@ class ServiceTypesController < ModelController
 
   def show
     non_serviced_vehicles_list = @vehicle_service.get_all_non_serviced_vehicles_for(@service_type)
-    @non_serviced_vehicles = VehicleListPresenter.new(non_serviced_vehicles_list).sort
-    
+    @non_serviced_vehicles = VehicleListPresenter.new(non_serviced_vehicles_list).sort(_unserviced_params)
+
     service_list = @vehicle_servicing_service.get_all_services_for_service_type(@service_type)
-    @services = ServiceListPresenter.new(service_list).sort
+    @services = ServiceListPresenter.new(service_list).sort(_serviced_params)
   end
 
   def new
@@ -97,5 +97,23 @@ class ServiceTypesController < ModelController
 
   def _service_type_params
     params.require(:service_type).permit(service_type_accessible_parameters)
+  end
+
+  def _serviced_params
+    serviced_params = {}
+    if (params[:options] == 'serviced_vehicles')
+      serviced_params[:sort] = params[:sort]
+      serviced_params[:direction] = params[:direction]
+    end
+    serviced_params
+  end
+
+  def _unserviced_params
+    unserviced_params = {}
+    if (params[:options] == 'unserviced_vehicles')
+      unserviced_params[:sort] = params[:sort]
+      unserviced_params[:direction] = params[:direction]
+    end
+    unserviced_params
   end
 end
