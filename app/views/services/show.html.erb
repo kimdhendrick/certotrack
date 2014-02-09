@@ -1,9 +1,11 @@
 <% presenter_for(@service) do |service| %>
   <h1>Show Service</h1>
 
-  <%= link_to 'Home', root_path %> |
-  <%= link_to 'Create Service', new_service_path(source: :service) %> |
-  <%= link_to 'Create Vehicle', new_employee_path %>
+  <ul id="primary-nav">
+    <li><%= link_to 'Home', root_path %></li>
+    <li><%= link_to 'Create Service', new_service_path(source: :service) %></li>
+    <li><%= link_to 'Create Vehicle', new_employee_path %></li>
+  </ul>
 
   <p>
     <b>Service Type</b>

@@ -2,8 +2,10 @@
 
 <div>Total: <%=@certification_types_count%></div>
 
-<%= link_to 'Home', root_path %> |
-<%= link_to "Create Certification Type", new_certification_type_path %>
+<ul id="primary-nav">
+  <li><%= link_to 'Home', root_path %></li>
+  <li><%= link_to "Create Certification Type", new_certification_type_path %></li>
+</ul>
 
 <%= form_tag search_certification_types_path, :method => 'get' do %>
   <%= hidden_field_tag :direction, params[:direction] %>

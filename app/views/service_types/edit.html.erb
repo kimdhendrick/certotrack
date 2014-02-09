@@ -1,7 +1,9 @@
 <h1>Edit Service Type</h1>
 
-<%= link_to 'Home', root_path %> |
-<%= link_to "Create Service Type", new_service_type_path %>
+<ul id="primary-nav">
+  <li><%= link_to 'Home', root_path %></li>
+  <li><%= link_to "Create Service Type", new_service_type_path %></li>
+</ul>
 
 <%= render 'form', user_action: 'Update' %>
 

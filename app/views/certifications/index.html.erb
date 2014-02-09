@@ -2,9 +2,11 @@
 
 <div>Total: <%=@certification_count%></div>
 
-<%= link_to 'Home', root_path %> |
-<%= link_to 'Create Certification', new_certification_path %> |
-<%= link_to 'Search Certifications', search_certifications_path %>
+<ul id="primary-nav">
+  <li><%= link_to 'Home', root_path %></li>
+  <li><%= link_to 'Create Certification', new_certification_path %></li>
+  <li><%= link_to 'Search Certifications', search_certifications_path %></li>
+</ul>
 
 <%= render 'certification_list'%>
 

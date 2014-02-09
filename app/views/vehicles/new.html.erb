@@ -1,6 +1,8 @@
 <h1>Create Vehicle</h1>
 
-<%= link_to 'Home', root_path %> |
-<%= link_to 'Search Vehicles', search_vehicles_path %>
+<ul id="primary-nav">
+  <li><%= link_to 'Home', root_path %></li>
+  <li><%= link_to 'Search Vehicles', search_vehicles_path %></li>
+</ul>
 
 <%= render 'form', user_action: 'Create' %>

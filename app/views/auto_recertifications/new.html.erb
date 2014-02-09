@@ -1,5 +1,7 @@
-<%= link_to 'Home', root_path %> |
-<%= link_to 'Search Certifications', search_certifications_path %>
+<ul id="primary-nav">
+  <li><%= link_to 'Home', root_path %></li>
+  <li><%= link_to 'Search Certifications', search_certifications_path %></li>
+</ul>
 
 <h1>Valid Certifications</h1>
 <h2><%= @certification_type.name %></h2>

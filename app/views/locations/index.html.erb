@@ -2,8 +2,10 @@
 
 <div>Total: <%=@location_count%></div>
 
-<%= link_to 'Home', root_path %> |
-<%= link_to 'Create Location', new_location_path %>
+<ul id="primary-nav">
+  <li><%= link_to 'Home', root_path %></li>
+  <li><%= link_to 'Create Location', new_location_path %></li>
+</ul>
 
 <%= render 'locations_list'%>
 

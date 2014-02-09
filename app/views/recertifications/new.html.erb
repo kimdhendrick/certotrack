@@ -1,8 +1,10 @@
 <h1>Recertify Employee</h1>
 
-<%= link_to 'Home', root_path %> |
-<%= link_to 'Search Certifications', search_certifications_path %> |
-<%= link_to 'Create Certification', new_certification_path(source: :certification) %>
+<ul id="primary-nav">
+  <li><%= link_to 'Home', root_path %></li>
+  <li><%= link_to 'Search Certifications', search_certifications_path %></li>
+  <li><%= link_to 'Create Certification', new_certification_path(source: :certification) %></li>
+</ul>
 
 <%= form_tag(certification_recertifications_path(@certification)) do |f| %>
 

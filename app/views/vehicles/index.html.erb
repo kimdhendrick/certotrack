@@ -2,8 +2,10 @@
 
 <div>Total: <%=@vehicle_count%></div>
 
-<%= link_to 'Home', root_path %> |
-<%= link_to 'Create Vehicle', new_vehicle_path %>
+<ul id="primary-nav">
+  <li><%= link_to 'Home', root_path %></li>
+  <li><%= link_to 'Create Vehicle', new_vehicle_path %></li>
+</ul>
 
 <%= render 'vehicle_list'%>
 
