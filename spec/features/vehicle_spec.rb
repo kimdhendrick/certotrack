@@ -583,14 +583,14 @@ describe 'Vehicles', slow: true do
 
     it 'should sort by status' do
       service_type = create(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE)
-      valid_vehicle = create(:vehicle, customer: customer)
-      create(:service, expiration_date: Date.yesterday, vehicle: valid_vehicle, service_type: service_type)
-      expiring_vehicle = create(:vehicle, customer: customer)
-      create(:service, expiration_date: Date.tomorrow, vehicle: expiring_vehicle, service_type: service_type)
-      expired_vehicle = create(:vehicle, customer: customer)
-      create(:service, expiration_date: Date.current+120.days, vehicle: expired_vehicle, service_type: service_type)
-      na_vehicle = create(:vehicle, customer: customer)
-      create(:service, expiration_date: nil, vehicle: na_vehicle, service_type: service_type)
+      vehicle_with_expired_service = create(:vehicle, customer: customer)
+      create(:service, expiration_date: Date.yesterday, vehicle: vehicle_with_expired_service, service_type: service_type)
+      vehicle_with_expiring_service = create(:vehicle, customer: customer)
+      create(:service, expiration_date: Date.tomorrow, vehicle: vehicle_with_expiring_service, service_type: service_type)
+      vehicle_with_valid_service = create(:vehicle, customer: customer)
+      create(:service, expiration_date: Date.current+120.days, vehicle: vehicle_with_valid_service, service_type: service_type)
+      vehicle_with_na_service = create(:vehicle, customer: customer)
+      create(:service, expiration_date: nil, vehicle: vehicle_with_na_service, service_type: service_type)
 
       visit '/'
       click_link 'All Vehicles'
