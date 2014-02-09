@@ -35,6 +35,8 @@ describe ServicePresenter do
 
   subject { ServicePresenter.new(service) }
 
+  it_behaves_like 'an object that is sortable by status'
+
   it 'should respond to model' do
     subject.model.should == service
   end
@@ -97,10 +99,6 @@ describe ServicePresenter do
 
   it 'should respond to location' do
     subject.vehicle_location.should == 'Golden'
-  end
-
-  it 'should respond to status' do
-    subject.status.should == 'Expired'
   end
 
   it 'should respond to comments' do

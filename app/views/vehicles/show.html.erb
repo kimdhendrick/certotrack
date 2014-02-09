@@ -60,16 +60,16 @@
 
   <h2>Vehicle's Services</h2>
 
-  <span vehicle-services="vehicle-services">
+  <span data-vehicle-services="data-vehicle-services">
     <table border="1">
       <thead>
       <tr>
-        <th>Service Type</th>
+        <th><%= sortable 'sort_key', title = 'Service Type' %></th>
         <th>Service Due Date</th>
         <th>Service Due Mileage</th>
         <th>Last Service Date</th>
         <th>Last Service Mileage</th>
-        <th>Status</th>
+        <th><%= sortable 'status_code', title = 'Status' %></th>
       </tr>
       </thead>
       <tbody>

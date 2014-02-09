@@ -1,6 +1,7 @@
 class ServicePresenter
   include ActionView::Helpers::NumberHelper
   include PresentableModelHelper
+  include SortableByStatus
 
   attr_reader :model
 
@@ -10,6 +11,7 @@ class ServicePresenter
            :date_expiration_type?,
            :expiration_type,
            :interval_date,
+           :status,
            to: :model
 
   def initialize(model, template = nil)
@@ -75,10 +77,6 @@ class ServicePresenter
 
   def sort_key
     model.name
-  end
-
-  def status
-    model.status.text
   end
 
   def service_type_show_link
