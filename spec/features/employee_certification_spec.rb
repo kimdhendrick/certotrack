@@ -37,10 +37,6 @@ describe 'Employee Certifications', slow: true do
       let(:scrum_master_certification_type) { create(:certification_type, name: 'Scrum Master') }
       let(:scrum_coach_certification_type) { create(:certification_type, name: 'Scrum Coach') }
 
-      before do
-        
-      end
-
       it 'should sort by certification type (name)' do
         create(:certification, employee: employee, certification_type: scrum_master_certification_type, customer: customer)
         create(:certification, employee: employee, certification_type: scrum_coach_certification_type, customer: customer)
