@@ -638,14 +638,14 @@ describe ServiceTypesController do
         response.should redirect_to(service_types_path)
       end
 
-      xit 'gives error message when vehicles exists' do
+      it 'gives error message when services exists' do
         service_type = create(:service_type, customer: customer)
-        controller.load_service_type_service(Faker.new(:vehicle_exists))
+        controller.load_service_type_service(Faker.new(:service_exists))
 
         delete :destroy, {:id => service_type.to_param}, {}
 
         response.should redirect_to(service_type_url)
-        flash[:notice].should == 'This Service Type is assigned to existing Vehicle(s).  You must remove the service from the Vehicles(s) before removing it.'
+        flash[:notice].should == 'This Service Type is assigned to existing Vehicle(s).  You must remove the service from the vehicle(s) before removing it.'
       end
     end
 

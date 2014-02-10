@@ -311,7 +311,7 @@ describe 'Service Types', slow: true, js: true do
       page.should have_content 'Service Type was successfully deleted.'
     end
 
-    xit 'should not allow deletion if services exist' do
+    it 'should not allow deletion if services exist' do
       service_type = create(:service_type, customer: customer, name: 'Manicure')
       create(:service, service_type: service_type, customer: service_type.customer)
 

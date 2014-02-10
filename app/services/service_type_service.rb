@@ -17,9 +17,9 @@ class ServiceTypeService
   end
 
   def delete_service_type(service_type)
-    #if service_type.services.any?
-    #  return :service_exists
-    #end
+    if service_type.services.any?
+      return :service_exists
+    end
 
     service_type.destroy
   end

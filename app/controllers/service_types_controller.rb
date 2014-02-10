@@ -69,10 +69,11 @@ class ServiceTypesController < ModelController
   def destroy
     status = @service_type_service.delete_service_type(@service_type)
 
-    #if status == :service_exists
-    #  redirect_to @service_type, notice: 'This Service Type is assigned to existing Vehicle(s).  You must remove the service from the Vehicles(s) before removing it.'
-    #  return
-    #end
+    if status == :service_exists
+      redirect_to @service_type,
+                  notice: 'This Service Type is assigned to existing Vehicle(s).  You must remove the service from the vehicle(s) before removing it.'
+      return
+    end
 
     redirect_to service_types_path, notice: 'Service Type was successfully deleted.'
   end

@@ -107,16 +107,16 @@ describe ServiceTypeService do
     context 'when service assigned to service_type' do
       let!(:service) { create(:service, service_type: service_type, customer: customer) }
 
-      xit 'returns error' do
+      it 'returns error' do
         subject.delete_service_type(service_type).should == :service_exists
       end
 
-      xit 'does not destroy the service_type' do
+      it 'does not destroy the service_type' do
         subject.delete_service_type(service_type)
         service_type.reload.should_not be_nil
       end
 
-      xit 'does not destroy the service' do
+      it 'does not destroy the service' do
         subject.delete_service_type(service_type)
         service.reload.should_not be_nil
       end
