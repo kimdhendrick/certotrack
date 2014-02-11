@@ -107,14 +107,6 @@ class ServicePresenter
     @template.link_to vehicle_name, model.vehicle
   end
 
-  def vehicle_show_link_by_vehicle_number
-    @template.link_to vehicle_number, model.vehicle
-  end
-
-  def vehicle_show_link_by_vin
-    @template.link_to vehicle_vin, model.vehicle
-  end
-
   def vehicle
     presenter_for(model.vehicle)
   end
