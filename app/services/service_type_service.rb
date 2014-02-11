@@ -13,6 +13,10 @@ class ServiceTypeService
 
   def update_service_type(service_type, attributes)
     service_type.update(attributes)
+    service_type.services.each do |service|
+      service.update_expiration_date_and_mileage
+      service.save
+    end
     service_type.save
   end
 

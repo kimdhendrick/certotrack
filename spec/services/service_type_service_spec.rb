@@ -72,18 +72,21 @@ describe ServiceTypeService do
       service_type.expiration_type.should == ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE
     end
 
-    xit 'should recalculate expiration date for associated services' do
+    it 'should recalculate expiration date for associated services' do
       service = create(
         :service,
         service_type: service_type,
         last_service_date: '2012-03-29'.to_date,
-        expiration_date: '2000-01-01'.to_date
+        expiration_date: '2000-01-01'.to_date,
+        last_service_mileage: 1000,
+        expiration_mileage: 2000
       )
 
       subject.update_service_type(service_type, attributes)
 
       service.reload
       service.expiration_date.should == '2017-03-29'.to_date
+      service.expiration_mileage.should == 21000
     end
 
     context 'when errors' do
