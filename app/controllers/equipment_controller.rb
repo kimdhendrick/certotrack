@@ -12,39 +12,28 @@ class EquipmentController < ModelController
     authorize! :read, :equipment
 
     @report_title = 'All Equipment'
-    equipment_collection = @equipment_service.get_all_equipment(current_user)
-    @equipments = EquipmentListPresenter.new(equipment_collection).present(params)
-    @equipment_count = @equipments.count
+    _render_equipment_list(@equipment_service.get_all_equipment(current_user))
   end
 
   def expired
     authorize! :read, :equipment
 
     @report_title = 'Expired Equipment List'
-    equipment_collection = @equipment_service.get_expired_equipment(current_user)
-    @equipments = EquipmentListPresenter.new(equipment_collection).present(params)
-    @equipment_count = @equipments.count
-    render 'equipment/index'
+    _render_equipment_list(@equipment_service.get_expired_equipment(current_user))
   end
 
   def expiring
     authorize! :read, :equipment
 
     @report_title = 'Expiring Equipment List'
-    equipment_collection = @equipment_service.get_expiring_equipment(current_user)
-    @equipments = EquipmentListPresenter.new(equipment_collection).present(params)
-    @equipment_count = @equipments.count
-    render 'equipment/index'
+    _render_equipment_list(@equipment_service.get_expiring_equipment(current_user))
   end
 
   def noninspectable
     authorize! :read, :equipment
 
     @report_title = 'Non-Inspectable Equipment List'
-    equipment_collection = @equipment_service.get_noninspectable_equipment(current_user)
-    @equipments = EquipmentListPresenter.new(equipment_collection).present(params)
-    @equipment_count = @equipments.count
-    render 'equipment/index'
+    _render_equipment_list(@equipment_service.get_noninspectable_equipment(current_user))
   end
 
   def show
@@ -95,7 +84,7 @@ class EquipmentController < ModelController
     @report_title = 'Search Equipment'
     equipment_collection = @equipment_service.search_equipment(current_user, params)
     @equipments = EquipmentListPresenter.new(equipment_collection).present(params)
-    @equipment_count = @equipments.count
+    @equipment_count = equipment_collection.count
     @locations = LocationListPresenter.new(@location_service.get_all_locations(current_user)).sort
 
     employees_collection = @employee_service.get_all_employees(current_user)
@@ -122,6 +111,12 @@ class EquipmentController < ModelController
   end
 
   private
+
+  def _render_equipment_list(equipment_collection)
+    @equipments = EquipmentListPresenter.new(equipment_collection).present(params)
+    @equipment_count = equipment_collection.count
+    render 'equipment/index'
+  end
 
   def _set_equipment
     @equipment = _get_model(Equipment)

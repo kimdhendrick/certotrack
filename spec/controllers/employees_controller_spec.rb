@@ -157,6 +157,14 @@ describe EmployeesController do
   end
   
   describe 'GET index' do
+    let(:big_list_of_employees) do
+      big_list_of_employees = []
+      30.times do
+        big_list_of_employees << create(:employee)
+      end
+      big_list_of_employees
+    end
+
     it 'calls get_all_employees with current_user' do
       my_user = stub_certification_user(customer)
       sign_in my_user
@@ -179,14 +187,21 @@ describe EmployeesController do
         sign_in stub_certification_user(customer)
       end
 
-      it 'assigns @employees and @employee_count' do
+      it 'assigns @employees' do
         employee = build(:employee)
         controller.load_employee_service(Faker.new([employee]))
 
         get :index
 
         assigns(:employees).map(&:model).should eq([employee])
-        assigns(:employee_count).should eq(1)
+      end
+
+      it 'assigns @employee_count' do
+        controller.load_employee_service(Faker.new(big_list_of_employees))
+
+        get :index, {per_page: 25, page: 1}
+
+        assigns(:employee_count).should eq(30)
       end
     end
 
@@ -195,14 +210,21 @@ describe EmployeesController do
         sign_in stub_admin(customer)
       end
 
-      it 'assigns employee as @employee' do
+      it 'assigns employee' do
         employee = build(:employee)
         controller.load_employee_service(Faker.new([employee]))
 
         get :index
 
         assigns(:employees).map(&:model).should eq([employee])
-        assigns(:employee_count).should eq(1)
+      end
+
+      it 'assigns employee_count' do
+        controller.load_employee_service(Faker.new(big_list_of_employees))
+
+        get :index, {per_page: 25, page: 1}
+
+        assigns(:employee_count).should eq(30)
       end
     end
 

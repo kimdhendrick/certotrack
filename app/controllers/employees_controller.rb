@@ -13,7 +13,7 @@ class EmployeesController < ModelController
 
     employees_collection = @employee_service.get_all_employees(current_user)
     @employees = EmployeeListPresenter.new(employees_collection).present(params)
-    @employee_count = @employees.count
+    @employee_count = employees_collection.count
   end
 
   def show

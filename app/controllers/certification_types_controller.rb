@@ -13,7 +13,7 @@ class CertificationTypesController < ModelController
 
     certification_types_collection = @certification_type_service.get_all_certification_types(current_user)
     @certification_types = CertificationTypeListPresenter.new(certification_types_collection).present(params)
-    @certification_types_count = @certification_types.count
+    @certification_types_count = certification_types_collection.count
   end
 
   def show
@@ -70,7 +70,7 @@ class CertificationTypesController < ModelController
     authorize! :read, :certification
     certification_types_collection = @certification_type_service.search_certification_types(current_user, params)
     @certification_types = CertificationTypeListPresenter.new(certification_types_collection).present(params)
-    @certification_types_count = @certification_types.count
+    @certification_types_count = certification_types_collection.count
   end
 
   def ajax_is_units_based

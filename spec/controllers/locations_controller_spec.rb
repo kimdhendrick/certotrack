@@ -9,7 +9,6 @@ describe LocationsController do
       before do
         @my_user = stub_equipment_user(customer)
         sign_in @my_user
-        controller.load_location_service(Faker.new([location]))
       end
 
       it 'calls get_all_locations with current_user and params' do
@@ -35,15 +34,24 @@ describe LocationsController do
       end
 
       it 'assigns locations as @locations' do
+        controller.load_location_service(Faker.new([location]))
+
         get :index
 
         assigns(:locations).map(&:model).should eq([location])
       end
 
       it 'assigns location_count' do
-        get :index
+        big_list_of_locations = []
+        30.times do
+          big_list_of_locations << create(:location)
+        end
 
-        assigns(:location_count).should eq(1)
+        controller.load_location_service(Faker.new(big_list_of_locations))
+
+        get :index, {per_page: 25, page: 1}
+
+        assigns(:location_count).should eq(30)
       end
 
       it 'assigns report_title' do

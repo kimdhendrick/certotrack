@@ -4,6 +4,13 @@ describe EquipmentController do
   let(:customer) { build(:customer) }
   let(:equipment) { build(:equipment) }
   let(:fake_equipment_service_that_returns_list) { Faker.new([equipment]) }
+  let(:big_list_of_equipment) do
+    big_list_of_equipment = []
+    30.times do
+      big_list_of_equipment << create(:equipment)
+    end
+    big_list_of_equipment
+  end
 
   describe 'GET index' do
     it 'calls get_all_equipment with current_user and params' do
@@ -27,22 +34,27 @@ describe EquipmentController do
     context 'when equipment user' do
       before do
         sign_in stub_equipment_user(customer)
-        controller.load_equipment_service(fake_equipment_service_that_returns_list)
       end
 
       it 'assigns equipment as @equipment' do
+        controller.load_equipment_service(fake_equipment_service_that_returns_list)
+
         get :index
 
         assigns(:equipments).map(&:model).should eq([equipment])
       end
 
       it 'assigns equipment_count' do
-        get :index
+        controller.load_equipment_service(Faker.new(big_list_of_equipment))
 
-        assigns(:equipment_count).should eq(1)
+        get :index, {per_page: 25, page: 1}
+
+        assigns(:equipment_count).should eq(30)
       end
 
       it 'assigns report_title' do
+        controller.load_equipment_service(fake_equipment_service_that_returns_list)
+
         get :index
 
         assigns(:report_title).should eq('All Equipment')
@@ -102,19 +114,22 @@ describe EquipmentController do
     context 'when equipment user' do
       before do
         sign_in stub_equipment_user(customer)
-        controller.load_equipment_service(Faker.new([expired_equipment]))
       end
 
       it 'assigns equipment as @equipment' do
+        controller.load_equipment_service(Faker.new([expired_equipment]))
+
         get :expired
 
         assigns(:equipments).map(&:model).should eq([expired_equipment])
       end
 
       it 'assigns equipment_count' do
-        get :expired
+        controller.load_equipment_service(Faker.new(big_list_of_equipment))
 
-        assigns(:equipment_count).should eq(1)
+        get :expired, {per_page: 25, page: 1}
+
+        assigns(:equipment_count).should eq(30)
       end
 
       it 'assigns report_title' do
@@ -178,19 +193,22 @@ describe EquipmentController do
     context 'when equipment user' do
       before do
         sign_in stub_equipment_user(customer)
-        controller.load_equipment_service(Faker.new([expiring_equipment]))
       end
 
       it 'assigns equipment as @equipment' do
+        controller.load_equipment_service(Faker.new([expiring_equipment]))
+
         get :expiring
 
         assigns(:equipments).map(&:model).should eq([expiring_equipment])
       end
 
       it 'assigns equipment_count' do
-        get :expiring
+        controller.load_equipment_service(Faker.new(big_list_of_equipment))
 
-        assigns(:equipment_count).should eq(1)
+        get :expiring, {per_page: 25, page: 1}
+
+        assigns(:equipment_count).should eq(30)
       end
 
       it 'assigns report_title' do
@@ -252,19 +270,22 @@ describe EquipmentController do
     context 'when equipment user' do
       before do
         sign_in stub_equipment_user(customer)
-        controller.load_equipment_service(Faker.new([noninspectable_equipment]))
       end
 
       it 'assigns equipment as @equipment' do
+        controller.load_equipment_service(Faker.new([noninspectable_equipment]))
+
         get :noninspectable
 
         assigns(:equipments).map(&:model).should eq([noninspectable_equipment])
       end
 
       it 'assigns equipment_count' do
-        get :noninspectable
+        controller.load_equipment_service(Faker.new(big_list_of_equipment))
 
-        assigns(:equipment_count).should eq(1)
+        get :noninspectable, {per_page: 25, page: 1}
+
+        assigns(:equipment_count).should eq(30)
       end
 
       it 'assigns report_title' do
@@ -757,11 +778,11 @@ describe EquipmentController do
       end
 
       it 'assigns equipment_count' do
-        controller.load_equipment_service(Faker.new([build(:equipment)]))
+        controller.load_equipment_service(Faker.new(big_list_of_equipment))
 
-        get :search
+        get :search, {per_page: 25, page: 1}
 
-        assigns(:equipment_count).should eq(1)
+        assigns(:equipment_count).should eq(30)
       end
 
       it 'assigns report_title' do

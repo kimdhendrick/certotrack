@@ -6,6 +6,13 @@ describe CertificationsController do
   let(:certification) { build(:certification) }
   let(:fake_certification_service_that_returns_list) { Faker.new([certification]) }
   let(:faker_that_returns_empty_list ) { Faker.new([]) }
+  let(:big_list_of_certifications) do
+    big_list_of_certifications = []
+    30.times do
+      big_list_of_certifications << create(:service)
+    end
+    big_list_of_certifications
+  end
 
   describe 'GET #index' do
     it 'calls get_all_certifications with current_user and params' do
@@ -31,7 +38,7 @@ describe CertificationsController do
         sign_in stub_certification_user(customer)
       end
 
-      it 'assigns certifications as @certifications' do
+      it 'assigns certifications' do
         controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :index
@@ -40,11 +47,11 @@ describe CertificationsController do
       end
 
       it 'assigns certifications_count' do
-        controller.load_certification_service(fake_certification_service_that_returns_list)
+        controller.load_certification_service(Faker.new(big_list_of_certifications))
 
-        get :index
+        get :index, {per_page: 25, page: 1}
 
-        assigns(:certification_count).should eq(1)
+        assigns(:certification_count).should eq(30)
       end
 
       it 'assigns report_title' do
@@ -61,7 +68,7 @@ describe CertificationsController do
         sign_in stub_admin
       end
 
-      it 'assigns certifications as @certifications' do
+      it 'assigns certifications' do
         controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :index
@@ -76,7 +83,7 @@ describe CertificationsController do
       end
 
       describe 'GET index' do
-        it 'does not assign certification as @certification' do
+        it 'does not assign certifications' do
           get :index
 
           assigns(:certifications).should be_nil
@@ -109,7 +116,7 @@ describe CertificationsController do
         sign_in stub_certification_user(customer)
       end
 
-      it 'assigns certifications as @certifications' do
+      it 'assigns certifications' do
         controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :expired
@@ -118,11 +125,11 @@ describe CertificationsController do
       end
 
       it 'assigns certifications_count' do
-        controller.load_certification_service(fake_certification_service_that_returns_list)
+        controller.load_certification_service(Faker.new(big_list_of_certifications))
 
-        get :expired
+        get :expired, {per_page: 25, page: 1}
 
-        assigns(:certification_count).should eq(1)
+        assigns(:certification_count).should eq(30)
       end
 
       it 'assigns report_title' do
@@ -139,7 +146,7 @@ describe CertificationsController do
         sign_in stub_admin
       end
 
-      it 'assigns certifications as @certifications' do
+      it 'assigns certifications' do
         controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :expired
@@ -154,7 +161,7 @@ describe CertificationsController do
       end
 
       describe 'GET expired' do
-        it 'does not assign certification as @certification' do
+        it 'does not assign certifications' do
           get :expired
 
           assigns(:certifications).should be_nil
@@ -187,7 +194,7 @@ describe CertificationsController do
         sign_in stub_certification_user(customer)
       end
 
-      it 'assigns certifications as @certifications' do
+      it 'assigns certifications' do
         controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :expiring
@@ -196,11 +203,11 @@ describe CertificationsController do
       end
 
       it 'assigns certifications_count' do
-        controller.load_certification_service(fake_certification_service_that_returns_list)
+        controller.load_certification_service(Faker.new(big_list_of_certifications))
 
-        get :expiring
+        get :expiring, {per_page: 25, page: 1}
 
-        assigns(:certification_count).should eq(1)
+        assigns(:certification_count).should eq(30)
       end
 
       it 'assigns report_title' do
@@ -217,7 +224,7 @@ describe CertificationsController do
         sign_in stub_admin
       end
 
-      it 'assigns certifications as @certifications' do
+      it 'assigns certifications' do
         controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :expiring
@@ -232,7 +239,7 @@ describe CertificationsController do
       end
 
       describe 'GET expiring' do
-        it 'does not assign certification as @certification' do
+        it 'does not assign certifications' do
           get :expiring
 
           assigns(:certifications).should be_nil
@@ -265,7 +272,7 @@ describe CertificationsController do
         sign_in stub_certification_user(customer)
       end
 
-      it 'assigns certifications as @certifications' do
+      it 'assigns certifications' do
         controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :units_based
@@ -274,11 +281,11 @@ describe CertificationsController do
       end
 
       it 'assigns certifications_count' do
-        controller.load_certification_service(fake_certification_service_that_returns_list)
+        controller.load_certification_service(Faker.new(big_list_of_certifications))
 
-        get :units_based
+        get :units_based, {per_page: 25, page: 1}
 
-        assigns(:certification_count).should eq(1)
+        assigns(:certification_count).should eq(30)
       end
 
       it 'assigns report_title' do
@@ -295,7 +302,7 @@ describe CertificationsController do
         sign_in stub_admin
       end
 
-      it 'assigns certifications as @certifications' do
+      it 'assigns certifications' do
         controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :units_based
@@ -310,7 +317,7 @@ describe CertificationsController do
       end
 
       describe 'GET units_based' do
-        it 'does not assign certification as @certification' do
+        it 'does not assign certifications' do
           get :units_based
 
           assigns(:certifications).should be_nil
@@ -343,7 +350,7 @@ describe CertificationsController do
         sign_in stub_certification_user(customer)
       end
 
-      it 'assigns certifications as @certifications' do
+      it 'assigns certifications' do
         controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :recertification_required
@@ -352,11 +359,11 @@ describe CertificationsController do
       end
 
       it 'assigns certifications_count' do
-        controller.load_certification_service(fake_certification_service_that_returns_list)
+        controller.load_certification_service(Faker.new(big_list_of_certifications))
 
-        get :recertification_required
+        get :recertification_required, {per_page: 25, page: 1}
 
-        assigns(:certification_count).should eq(1)
+        assigns(:certification_count).should eq(30)
       end
 
       it 'assigns report_title' do
@@ -373,7 +380,7 @@ describe CertificationsController do
         sign_in stub_admin
       end
 
-      it 'assigns certifications as @certifications' do
+      it 'assigns certifications' do
         controller.load_certification_service(fake_certification_service_that_returns_list)
 
         get :recertification_required
@@ -387,8 +394,8 @@ describe CertificationsController do
         sign_in stub_guest_user
       end
 
-      describe 'GET recertification_required' do
-        it 'does not assign certification as @certification' do
+      describe 'GET #recertification_required' do
+        it 'does not assign certifications' do
           get :recertification_required
 
           assigns(:certifications).should be_nil
@@ -524,7 +531,7 @@ describe CertificationsController do
         sign_in stub_guest_user
       end
 
-      it 'does not assign certification_types' do
+      it 'does not assign certifications_types' do
         get :new, {}, {}
         assigns(:certification_types).should be_nil
       end
@@ -859,7 +866,7 @@ describe CertificationsController do
         sign_in stub_guest_user
       end
 
-      it 'does not assign certification as @certification' do
+      it 'does not assign certifications' do
         certification = create(:certification, customer: customer)
         get :edit, {:id => certification.to_param}, {}
         assigns(:certification).should be_nil
@@ -988,7 +995,7 @@ describe CertificationsController do
         sign_in stub_guest_user
       end
 
-      it 'does not assign certification as @certification' do
+      it 'does not assign certifications' do
         certification = create(:certification, customer: customer)
 
         put :update, {:id => certification.to_param, :certification => {'comments' => 'Test'}}, {}
@@ -1034,7 +1041,7 @@ describe CertificationsController do
         sign_in stub_guest_user
       end
 
-      it 'does not assign certification as @certification' do
+      it 'does not assign certifications' do
         certification = create(:certification, customer: customer)
 
         get :show, {:id => certification.to_param}, {}
@@ -1143,13 +1150,13 @@ describe CertificationsController do
         sign_in stub_guest_user
       end
 
-      it 'does not assign certification presenter as @certification' do
+      it 'does not assign certifications presenter as @certification' do
         certification = create(:certification, customer: customer)
         get :certification_history, {:id => certification.to_param}, {}
         assigns(:certification).should be_nil
       end
 
-      it 'does not assign certification_periods as @certification_periods' do
+      it 'does not assign certifications_periods as @certification_periods' do
         certification_period = create(:certification_period)
         certification = create(:certification, customer: customer, active_certification_period: certification_period)
         get :certification_history, {:id => certification.to_param}, {}
@@ -1182,7 +1189,7 @@ describe CertificationsController do
         fake_certification_list_presenter.received_params[0]['direction'].should == 'asc'
       end
 
-      it 'assigns certifications as @certifications' do
+      it 'assigns certifications' do
         certification = build(:certification, customer: customer)
         CertificationListPresenter.stub(:new).and_return(Faker.new([CertificationPresenter.new(certification)]))
 
@@ -1192,11 +1199,11 @@ describe CertificationsController do
       end
 
       it 'assigns certifications_count' do
-        controller.load_certification_service(fake_certification_service_that_returns_list)
+        controller.load_certification_service(Faker.new(big_list_of_certifications))
 
-        get :search
+        get :search, {per_page: 25, page: 1}
 
-        assigns(:certification_count).should eq(1)
+        assigns(:certification_count).should eq(30)
       end
 
       it 'assigns report_title' do

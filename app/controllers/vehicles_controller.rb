@@ -11,9 +11,10 @@ class VehiclesController < ModelController
   def index
     authorize! :read, :vehicle
 
-    @vehicles = VehicleListPresenter.new(@vehicle_service.get_all_vehicles(current_user)).present(params)
-    @vehicle_count = @vehicles.count
     @report_title = 'All Vehicles'
+    vehicle_collection = @vehicle_service.get_all_vehicles(current_user)
+    @vehicles = VehicleListPresenter.new(vehicle_collection).present(params)
+    @vehicle_count = vehicle_collection.count
   end
 
   def new
@@ -72,10 +73,10 @@ class VehiclesController < ModelController
   def search
     authorize! :read, :vehicle
 
-    vehicles = @vehicle_service.search_vehicles(current_user, params)
-    @vehicles = VehicleListPresenter.new(vehicles).present(params)
-    @vehicle_count = @vehicles.count
     @report_title = "Search Vehicles"
+    vehicle_collection = @vehicle_service.search_vehicles(current_user, params)
+    @vehicles = VehicleListPresenter.new(vehicle_collection).present(params)
+    @vehicle_count = vehicle_collection.count
     @locations = LocationListPresenter.new(@location_service.get_all_locations(current_user)).sort
   end
 

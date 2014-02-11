@@ -114,7 +114,7 @@ class CertificationsController < ModelController
     @report_title = 'Search Certifications'
     certification_collection = @certification_service.search_certifications(current_user, params)
     @certifications = CertificationListPresenter.new(certification_collection).present(params)
-    @certification_count = @certifications.count
+    @certification_count = certification_collection.count
     @locations = LocationListPresenter.new(@location_service.get_all_locations(current_user)).sort
     @certification_types = get_certification_type_types
   end
@@ -123,7 +123,7 @@ class CertificationsController < ModelController
 
   def _render_certifications(certifications_collection)
     @certifications = CertificationListPresenter.new(certifications_collection).present(params)
-    @certification_count = @certifications.count
+    @certification_count = certifications_collection.count
     render 'certifications/index'
   end
 

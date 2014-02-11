@@ -506,6 +506,14 @@ describe CertificationTypesController do
   end
 
   describe 'GET #index' do
+    let(:big_list_of_certification_types) do
+      big_list_of_certification_types = []
+      30.times do
+        big_list_of_certification_types << create(:certification_type)
+      end
+      big_list_of_certification_types
+    end
+
     it 'calls get_all_certification_types with current_user and params' do
       my_user = stub_certification_user(customer)
       sign_in my_user
@@ -543,11 +551,11 @@ describe CertificationTypesController do
       end
 
       it 'assigns certification_types_count' do
-        controller.load_certification_type_service(Faker.new([build(:certification_type)]))
+        controller.load_certification_type_service(Faker.new(big_list_of_certification_types))
 
-        get :index
+        get :index, {per_page: 25, page: 1}
 
-        assigns(:certification_types_count).should eq(1)
+        assigns(:certification_types_count).should eq(30)
       end
     end
 
@@ -582,6 +590,14 @@ describe CertificationTypesController do
   end
 
   describe 'GET #search' do
+    let(:big_list_of_certification_types) do
+      big_list_of_certification_types = []
+      30.times do
+        big_list_of_certification_types << create(:certification_type)
+      end
+      big_list_of_certification_types
+    end
+
     it 'calls search_certification_types with current_user and params' do
       my_user = stub_certification_user(customer)
       sign_in my_user
@@ -617,11 +633,11 @@ describe CertificationTypesController do
       end
 
       it 'assigns certification_types_count' do
-        controller.load_certification_type_service(Faker.new([build(:certification_type, customer: customer)]))
+        controller.load_certification_type_service(Faker.new(big_list_of_certification_types))
 
-        get :search
+        get :search, {per_page: 25, page: 1}
 
-        assigns(:certification_types_count).should eq(1)
+        assigns(:certification_types_count).should eq(30)
       end
     end
   end

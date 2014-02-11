@@ -820,7 +820,7 @@ describe ServicesController do
       it 'assigns service_count' do
         big_list_of_services = []
         30.times do
-          big_list_of_services << create(:service, customer: customer)
+          big_list_of_services << create(:service)
         end
         controller.load_vehicle_servicing_service(Faker.new(big_list_of_services))
         params = {per_page: 25, page: 1}

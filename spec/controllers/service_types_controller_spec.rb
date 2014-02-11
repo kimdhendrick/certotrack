@@ -11,7 +11,6 @@ describe ServiceTypesController do
       before do
         @my_user = stub_vehicle_user(customer)
         sign_in @my_user
-        controller.load_service_type_service(Faker.new([service_type]))
       end
 
       it 'calls get_all_service_types with current_user and params' do
@@ -37,15 +36,25 @@ describe ServiceTypesController do
       end
 
       it 'assigns service_types as @service_types' do
+        controller.load_service_type_service(Faker.new([service_type]))
+
         get :index
 
         assigns(:service_types).map(&:model).should eq([service_type])
       end
 
       it 'assigns service_type_count' do
-        get :index
+        big_list_of_service_types = []
+        30.times do
+          big_list_of_service_types << create(:service_type)
+        end
+        big_list_of_service_types
 
-        assigns(:service_type_count).should eq(1)
+        controller.load_service_type_service(Faker.new(big_list_of_service_types))
+
+        get :index, {per_page: 25, page: 1}
+
+        assigns(:service_type_count).should eq(30)
       end
 
       it 'assigns report_title' do

@@ -9,7 +9,6 @@ describe VehiclesController do
       before do
         @my_user = stub_vehicle_user(customer)
         sign_in @my_user
-        controller.load_vehicle_service(Faker.new([vehicle]))
       end
 
       it 'calls get_all_vehicles with current_user and params' do
@@ -35,15 +34,24 @@ describe VehiclesController do
       end
 
       it 'assigns vehicles as @vehicles' do
+        controller.load_vehicle_service(Faker.new([vehicle]))
+
         get :index
 
         assigns(:vehicles).map(&:model).should eq([vehicle])
       end
 
       it 'assigns vehicle_count' do
-        get :index
+        big_list_of_vehicles = []
+        30.times do
+          big_list_of_vehicles << create(:vehicle)
+        end
 
-        assigns(:vehicle_count).should eq(1)
+        controller.load_vehicle_service(Faker.new(big_list_of_vehicles))
+
+        get :index, {per_page: 25, page: 1}
+
+        assigns(:vehicle_count).should eq(30)
       end
 
       it 'assigns report_title' do
@@ -616,11 +624,16 @@ describe VehiclesController do
       end
 
       it 'assigns vehicle_count' do
-        controller.load_vehicle_service(Faker.new([build(:vehicle)]))
+        big_list_of_vehicles = []
+        30.times do
+          big_list_of_vehicles << create(:vehicle)
+        end
 
-        get :search
+        controller.load_vehicle_service(Faker.new(big_list_of_vehicles))
 
-        assigns(:vehicle_count).should eq(1)
+        get :search, {per_page: 25, page: 1}
+
+        assigns(:vehicle_count).should eq(30)
       end
 
       it 'assigns report_title' do

@@ -10,9 +10,10 @@ class LocationsController < ModelController
   def index
     authorize! :read, :location
 
-    @locations = LocationListPresenter.new(@location_service.get_all_locations(current_user)).present(params)
-    @location_count = @locations.count
     @report_title = 'All Locations'
+    location_collection = @location_service.get_all_locations(current_user)
+    @locations = LocationListPresenter.new(location_collection).present(params)
+    @location_count = location_collection.count
   end
 
   def new
