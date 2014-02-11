@@ -53,4 +53,12 @@ class VehicleServicingService
     service.reservice(attributes)
     service.save
   end
+
+  def count_all_services(user)
+    get_all_services(user).count
+  end
+
+  def get_all_services(user)
+    user.admin? ? Service.all : user.services
+  end
 end

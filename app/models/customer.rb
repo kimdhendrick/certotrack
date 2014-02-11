@@ -8,6 +8,7 @@ class Customer < ActiveRecord::Base
   has_many :locations
   has_many :vehicles
   has_many :service_types
+  has_many :services
 
   def sort_key
     name

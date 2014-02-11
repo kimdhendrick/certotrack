@@ -10,6 +10,7 @@ describe Customer do
   it { should have_many :locations }
   it { should have_many :vehicles }
   it { should have_many :service_types }
+  it { should have_many :services }
 
   it 'should respond to its sort_key' do
     customer = build(:customer, name: 'MyCustomer')

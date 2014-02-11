@@ -39,6 +39,22 @@ class ServicePresenter
     number_with_delimiter(model.last_service_mileage, :delimiter => ",")
   end
 
+  def sortable_service_due_date
+    model.expiration_date
+  end
+
+  def sortable_service_due_mileage
+    model.expiration_mileage
+  end
+
+  def sortable_last_service_date
+    model.last_service_date
+  end
+
+  def sortable_last_service_mileage
+    model.last_service_mileage
+  end
+
   def interval_mileage
     number_with_delimiter(model.interval_mileage, :delimiter => ",")
   end
@@ -73,6 +89,10 @@ class ServicePresenter
 
   def vehicle_mileage
     number_with_delimiter(vehicle.mileage, :delimiter => ",")
+  end
+
+  def sortable_vehicle_mileage
+    model.vehicle.mileage
   end
 
   def sort_key

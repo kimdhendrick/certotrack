@@ -1,0 +1,28 @@
+<table border="1" class="sortable">
+  <thead>
+  <tr>
+    <th><%= sortable 'sort_key', title = 'Service Type' %></th>
+    <th><%= sortable 'status_code', title = 'Status' %></th>
+    <th><%= sortable 'vehicle_name', title = 'Vehicle' %></th>
+    <th><%= sortable 'sortable_vehicle_mileage', title = 'Vehicle Mileage' %></th>
+    <th><%= sortable 'sortable_service_due_date', title = 'Service Due Date' %></th>
+    <th><%= sortable 'sortable_service_due_mileage', title = 'Service Due Mileage' %></th>
+    <th><%= sortable 'sortable_last_service_date', title = 'Last Service Date' %></th>
+    <th><%= sortable 'sortable_last_service_mileage', title = 'Last Service Mileage' %></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @services.each do |service| %>
+    <tr>
+      <td><%= link_to service.service_type_name, service.model.service_type %></td>
+      <td><%= service.status %></td>
+      <td><%= link_to service.vehicle_name, service.model.vehicle %></td>
+      <td><%= service.vehicle_mileage %></td>
+      <td><%= service.service_due_date %></td>
+      <td><%= service.service_due_mileage %></td>
+      <td><%= service.last_service_date %></td>
+      <td><%= service.last_service_mileage %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

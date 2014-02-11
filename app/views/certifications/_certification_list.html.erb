@@ -14,7 +14,7 @@
   <tbody>
   <% @certifications.each do |certification| %>
     <tr>
-      <TD><%= link_to certification.name, certification.model.certification_type %></td>
+      <td><%= link_to certification.name, certification.model.certification_type %></td>
       <td><%= certification.interval %></td>
       <td><%= certification.units_achieved_of_required %></td>
       <td><%= certification.status %></td>

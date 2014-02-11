@@ -7,6 +7,16 @@ class ServicesController < ModelController
 
   before_action :_set_service, only: [:show, :edit, :update, :destroy, :service_history]
 
+  def index
+    authorize! :read, :vehicle
+
+    @report_title = 'All Vehicle Services'
+
+    services_collection = @vehicle_servicing_service.get_all_services(current_user)
+    @services = ServiceListPresenter.new(services_collection).present(params)
+    @service_count = services_collection.count
+  end
+
   def new
     authorize! :create, :service
 

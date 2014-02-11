@@ -1,0 +1,12 @@
+<h1><%=@report_title%></h1>
+
+<div>Total: <%=@service_count%></div>
+
+<ul id="primary-nav">
+  <li><%= link_to 'Home', root_path %></li>
+  <li><%= link_to 'Create Service', new_service_path %></li>
+</ul>
+
+<%= render 'service_list'%>
+
+<%= will_paginate @services %>

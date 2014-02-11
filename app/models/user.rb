@@ -70,6 +70,10 @@ class User < ActiveRecord::Base
     customer.service_types
   end
 
+  def services
+    customer.services
+  end
+
   def sort_key
     last_name + first_name
   end

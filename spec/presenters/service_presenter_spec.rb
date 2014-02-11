@@ -65,6 +65,22 @@ describe ServicePresenter do
     subject.last_service_mileage.should == '7,000'
   end
 
+  it 'should respond to sortable_service_due_date' do
+    subject.sortable_service_due_date.should == Date.new(2000, 6, 1)
+  end
+
+  it 'should respond to sortable_service_due_mileage' do
+    subject.sortable_service_due_mileage.should == 10000
+  end
+
+  it 'should respond to sortable_last_service_date' do
+    subject.sortable_last_service_date.should == Date.new(2000, 1, 1)
+  end
+
+  it 'should respond to sortable_last_service_mileage' do
+    subject.sortable_last_service_mileage.should == 7000
+  end
+
   it 'should respond to sort_key' do
     subject.sort_key.should == 'Oil Change'
   end
@@ -93,8 +109,12 @@ describe ServicePresenter do
     subject.vehicle_model.should == 'Edge'
   end
 
-  it 'should respond to mileage' do
+  it 'should respond to vehicle mileage' do
     subject.vehicle_mileage.should == '10,000'
+  end
+
+  it 'should respond to sortable_vehicle_mileage' do
+    subject.sortable_vehicle_mileage.should == 10000
   end
 
   it 'should respond to location' do

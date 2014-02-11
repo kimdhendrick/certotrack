@@ -76,5 +76,28 @@ describe CertotrackController do
         assigns(:total_certification_count).should be_nil
       end
     end
+
+    context 'a vehicle user' do
+      it 'assigns service counts' do
+        sign_in stub_vehicle_user(customer)
+        vehicle_servicing_service = VehicleServicingService.new
+        vehicle_servicing_service.stub(:count_all_services).and_return(10)
+        controller.load_vehicle_servicing_service(vehicle_servicing_service)
+
+        get :home
+
+        assigns(:total_service_count).should == 10
+      end
+    end
+
+    context 'a non-vehicle user' do
+      it 'assigns service counts' do
+        sign_in stub_guest_user
+
+        get :home
+
+        assigns(:total_service_count).should be_nil
+      end
+    end
   end
 end

@@ -171,4 +171,52 @@ describe VehicleServicingService do
       subject.reservice(service, attributes)
     end
   end
+
+  describe '#count_all_services' do
+    let(:customer) { create(:customer) }
+
+    before do
+      create(:service, customer: customer)
+      create(:service, customer: create(:customer))
+    end
+
+    context 'vehicle user' do
+      it 'returns count of services for customer' do
+        my_user = create(:user, customer: customer)
+
+        VehicleServicingService.new.count_all_services(my_user).should == 1
+      end
+    end
+
+    context 'admin user' do
+      it 'returns count of all services' do
+        admin_user = create(:user, roles: ['admin'])
+
+        VehicleServicingService.new.count_all_services(admin_user).should == 2
+      end
+    end
+  end
+
+  describe '#get_all_services' do
+    let(:customer) { create(:customer) }
+
+    let(:my_service) { create(:service, customer: customer) }
+    let(:other_service) { create(:service, customer: create(:customer)) }
+
+    context 'vehicle user' do
+      it 'returns count of services for customer' do
+        my_user = create(:user, customer: customer)
+
+        VehicleServicingService.new.get_all_services(my_user).should == [my_service]
+      end
+    end
+
+    context 'admin user' do
+      it 'returns count of all services' do
+        admin_user = create(:user, roles: ['admin'])
+
+        VehicleServicingService.new.get_all_services(admin_user).should =~ [my_service, other_service]
+      end
+    end
+  end
 end

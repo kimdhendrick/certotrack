@@ -1,7 +1,9 @@
 class CertotrackController < ApplicationController
+  include ControllerHelper
 
   before_filter :load_equipment_service,
-                :load_certification_service
+                :load_certification_service,
+                :load_vehicle_servicing_service
 
   def home
     if can? :read, :equipment
@@ -18,14 +20,10 @@ class CertotrackController < ApplicationController
       @total_recertification_required_certification_count = @certification_service.count_recertification_required_certifications(current_user)
     end
 
+    if can? :read, :vehicle
+      @total_service_count = @vehicle_servicing_service.count_all_services(current_user)
+    end
+
     @first_name = current_user.first_name
-  end
-
-  def load_equipment_service(service = EquipmentService.new)
-    @equipment_service ||= service
-  end
-
-  def load_certification_service(service = CertificationService.new)
-    @certification_service ||= service
   end
 end
