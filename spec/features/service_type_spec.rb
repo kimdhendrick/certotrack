@@ -325,7 +325,7 @@ describe 'Service Types', slow: true, js: true do
       alert.accept
 
       page.should have_content 'Show Service Type'
-      page.should have_content 'This Service Type is assigned to existing Vehicle(s).  You must remove the service from the vehicle(s) before removing it.'
+      page.should have_content 'Service type has services assigned that you must remove before deleting the service type.'
     end
   end
 

@@ -647,14 +647,27 @@ describe ServiceTypesController do
         response.should redirect_to(service_types_path)
       end
 
-      it 'gives error message when services exists' do
-        service_type = create(:service_type, customer: customer)
-        controller.load_service_type_service(Faker.new(:service_exists))
+      context 'when destroy call fails' do
+        before do
+          service_type = create(:service_type, customer: customer)
+          service_type_service = double('service_type_service')
+          service_type_service.stub(:delete_service_type).and_return(false)
+          controller.load_service_type_service(service_type_service)
 
-        delete :destroy, {:id => service_type.to_param}, {}
+          delete :destroy, {id: service_type.to_param}, {}
+        end
 
-        response.should redirect_to(service_type_url)
-        flash[:notice].should == 'This Service Type is assigned to existing Vehicle(s).  You must remove the service from the vehicle(s) before removing it.'
+        it 'should render show page' do
+          response.should render_template('show')
+        end
+
+        it 'should assign @services' do
+          expect(assigns(:services)).to eq([])
+        end
+
+        it 'should assign @non_serviced_vehicles' do
+          expect(assigns(:non_serviced_vehicles)).to eq([])
+        end
       end
     end
 

@@ -18,11 +18,8 @@ class ServiceTypesController < ModelController
   end
 
   def show
-    non_serviced_vehicles_list = @vehicle_service.get_all_non_serviced_vehicles_for(@service_type)
-    @non_serviced_vehicles = VehicleListPresenter.new(non_serviced_vehicles_list).sort(_unserviced_params)
-
-    service_list = @vehicle_servicing_service.get_all_services_for_service_type(@service_type)
-    @services = ServiceListPresenter.new(service_list).sort(_serviced_params)
+    _set_non_serviced_vehicles
+    _set_serviced_vehicles
   end
 
   def new
@@ -68,18 +65,26 @@ class ServiceTypesController < ModelController
   end
 
   def destroy
-    status = @service_type_service.delete_service_type(@service_type)
-
-    if status == :service_exists
-      redirect_to @service_type,
-                  notice: 'This Service Type is assigned to existing Vehicle(s).  You must remove the service from the vehicle(s) before removing it.'
-      return
+    if @service_type_service.delete_service_type(@service_type)
+      redirect_to service_types_path, notice: 'Service Type was successfully deleted.'
+    else
+      _set_non_serviced_vehicles
+      _set_serviced_vehicles
+      render :show
     end
-
-    redirect_to service_types_path, notice: 'Service Type was successfully deleted.'
   end
 
   private
+
+  def _set_serviced_vehicles
+    service_list = @vehicle_servicing_service.get_all_services_for_service_type(@service_type)
+    @services = ServiceListPresenter.new(service_list).sort(_serviced_params)
+  end
+
+  def _set_non_serviced_vehicles
+    non_serviced_vehicles_list = @vehicle_service.get_all_non_serviced_vehicles_for(@service_type)
+    @non_serviced_vehicles = VehicleListPresenter.new(non_serviced_vehicles_list).sort(_unserviced_params)
+  end
 
   def _set_service_type
     @service_type = _get_model(ServiceType)

@@ -554,7 +554,7 @@ describe VehiclesController do
           response.should render_template("show")
         end
 
-        it 'should assign @service' do
+        it 'should assign @services' do
           expect(assigns(:services)).to eq([])
         end
       end

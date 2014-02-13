@@ -70,4 +70,28 @@ describe ServiceType do
     service_type_date_type.date_expiration_type?.should be_true
     service_type_mileage_type.date_expiration_type?.should be_false
   end
+
+  describe '#destroy' do
+    before { service_type.save }
+
+    context 'when service type has no services' do
+      it 'should destroy service type' do
+        expect { service_type.destroy }.to change(ServiceType, :count).by(-1)
+      end
+    end
+
+    context 'when service type has one or more services' do
+      before { create(:service, service_type: service_type) }
+
+      it 'should not destroy service_type' do
+        expect { service_type.destroy }.to_not change(ServiceType, :count).by(-1)
+      end
+
+      it 'should have a base error' do
+        service_type.destroy
+
+        service_type.errors[:base].first.should == 'Service type has services assigned that you must remove before deleting the service type.'
+      end
+    end
+  end
 end

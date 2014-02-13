@@ -1,4 +1,5 @@
 class ServiceType < ActiveRecord::Base
+  include DeletionPrevention
 
   EXPIRATION_TYPE_BY_DATE = 'By Date'
   EXPIRATION_TYPE_BY_MILEAGE = 'By Mileage'
@@ -38,6 +39,7 @@ class ServiceType < ActiveRecord::Base
               }
   validate :_date_or_mileage_required
 
+  before_destroy :prevent_deletion_when_services
 
   def mileage_expiration_type?
     [EXPIRATION_TYPE_BY_MILEAGE, EXPIRATION_TYPE_BY_DATE_AND_MILEAGE].include?(expiration_type)

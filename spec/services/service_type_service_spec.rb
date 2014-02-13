@@ -100,29 +100,10 @@ describe ServiceTypeService do
 
   describe '#delete_service_type' do
     let!(:service_type) { create(:service_type, customer: customer) }
-
     it 'destroys the requested service_type' do
       expect {
         subject.delete_service_type(service_type)
       }.to change(ServiceType, :count).by(-1)
-    end
-
-    context 'when service assigned to service_type' do
-      let!(:service) { create(:service, service_type: service_type, customer: customer) }
-
-      it 'returns error' do
-        subject.delete_service_type(service_type).should == :service_exists
-      end
-
-      it 'does not destroy the service_type' do
-        subject.delete_service_type(service_type)
-        service_type.reload.should_not be_nil
-      end
-
-      it 'does not destroy the service' do
-        subject.delete_service_type(service_type)
-        service.reload.should_not be_nil
-      end
     end
   end
 end
