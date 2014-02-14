@@ -113,4 +113,28 @@ describe CertificationType do
       end
     end
   end
+
+  describe '#destroy' do
+    before { certification_type.save }
+
+    context 'when certification type has no certifications' do
+      it 'should destroy certification type' do
+        expect { certification_type.destroy }.to change(CertificationType, :count).by(-1)
+      end
+    end
+
+    context 'when certification type has one or more certifications' do
+      before { create(:certification, certification_type: certification_type) }
+
+      it 'should not destroy certification type' do
+        expect { certification_type.destroy }.to_not change(CertificationType, :count).by(-1)
+      end
+
+      it 'should have a base error' do
+        certification_type.destroy
+
+        certification_type.errors[:base].first.should == 'This Certification Type is assigned to existing Employee(s). You must uncertify the employee(s) before removing it.'
+      end
+    end
+  end
 end

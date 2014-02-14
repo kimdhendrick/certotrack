@@ -56,14 +56,13 @@ class CertificationTypesController < ModelController
   end
 
   def destroy
-    status = @certification_type_service.delete_certification_type(@certification_type)
-
-    if status == :certification_exists
-      redirect_to @certification_type, notice: 'This Certification Type is assigned to existing Employee(s).  You must uncertify the employee(s) before removing it.'
-      return
+    if @certification_type_service.delete_certification_type(@certification_type)
+      redirect_to certification_types_path, notice: 'Certification Type was successfully deleted.'
+    else
+      assign_certifications_by_certification_type(_certified_params(params))
+      assign_non_certified_employees_by_certification_type(_noncertified_params(params))
+      render :show
     end
-
-    redirect_to certification_types_path, notice: 'Certification Type was successfully deleted.'
   end
 
   def search

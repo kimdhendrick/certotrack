@@ -460,32 +460,67 @@ describe CertificationTypesController do
         sign_in stub_certification_user(customer)
       end
 
-      it 'calls certification_type_service' do
-        controller.load_certification_type_service(fake_certification_type_service_non_persisted)
-        certification_type = create(:certification_type, customer: customer)
+      context 'when destroy call succeeds' do
+        let(:certification_type) { create(:certification_type, customer: customer) }
+        let(:fake_certification_type_service) { Faker.new(true) }
 
-        delete :destroy, {:id => certification_type.to_param}, {}
+        it 'calls certification_type_service' do
+          controller.load_certification_type_service(fake_certification_type_service)
+          certification_type = create(:certification_type, customer: customer)
 
-        fake_certification_type_service_non_persisted.received_message.should == :delete_certification_type
+          delete :destroy, {:id => certification_type.to_param}, {}
+
+          fake_certification_type_service.received_message.should == :delete_certification_type
+        end
+
+        it 'redirects to the certification_type list' do
+          controller.load_certification_type_service(fake_certification_type_service)
+          certification_type = create(:certification_type, customer: customer)
+
+          delete :destroy, {:id => certification_type.to_param}, {}
+
+          response.should redirect_to(certification_types_path)
+        end
       end
 
-      it 'redirects to the certification_type list' do
-        controller.load_certification_type_service(fake_certification_type_service_non_persisted)
-        certification_type = create(:certification_type, customer: customer)
+      context 'when destroy call fails' do
+        before do
+          certification_type = create(:certification_type, customer: customer)
+          certification_type_service = double('certification_type_service')
+          certification_type_service.stub(:delete_certification_type).and_return(false)
 
-        delete :destroy, {:id => certification_type.to_param}, {}
+          certification_service = double('certification_service')
+          certification_service.stub(:get_all_certifications_for_certification_type).and_return([])
 
-        response.should redirect_to(certification_types_path)
-      end
+          employee_service = double('employee_service')
+          employee_service.stub(:get_employees_not_certified_for).and_return([])
 
-      it 'gives error message when certifications exists' do
-        certification_type = create(:certification_type, customer: customer)
-        controller.load_certification_type_service(Faker.new(:certification_exists))
+          controller.load_certification_type_service(certification_type_service)
+          controller.load_certification_type_service(certification_service)
+          controller.load_certification_type_service(employee_service)
 
-        delete :destroy, {:id => certification_type.to_param}, {}
+          delete :destroy, {id: certification_type.to_param}, {}
+        end
 
-        response.should redirect_to(certification_type_url)
-        flash[:notice].should == 'This Certification Type is assigned to existing Employee(s).  You must uncertify the employee(s) before removing it.'
+        it 'should render show page' do
+          response.should render_template('show')
+        end
+
+        it 'should assign @certifications' do
+          expect(assigns(:certifications)).to eq([])
+        end
+
+        it 'should assign @certifications_count' do
+          expect(assigns(:certifications_count)).to eq(0)
+        end
+
+        it 'should assign @non_certified_employees' do
+          expect(assigns(:non_certified_employees)).to eq([])
+        end
+
+        it 'should assign @non_certified_employees_count' do
+          expect(assigns(:non_certified_employee_count)).to eq(0)
+        end
       end
     end
 

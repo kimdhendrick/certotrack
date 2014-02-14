@@ -74,24 +74,6 @@ describe CertificationTypeService do
         subject.delete_certification_type(certification_type)
       }.to change(CertificationType, :count).by(-1)
     end
-
-    context 'when certification assigned to certification_type' do
-      let!(:certification) { create(:certification, certification_type: certification_type, customer: customer) }
-
-      it 'returns error' do
-        subject.delete_certification_type(certification_type).should == :certification_exists
-      end
-
-      it 'does not destroy the certification_type' do
-        subject.delete_certification_type(certification_type)
-        certification_type.reload.should_not be_nil
-      end
-
-      it 'does not destroy the certification' do
-        subject.delete_certification_type(certification_type)
-        certification.reload.should_not be_nil
-      end
-    end
   end
 
   describe '#certification_type retrieval' do

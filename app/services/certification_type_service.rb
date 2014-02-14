@@ -37,10 +37,6 @@ class CertificationTypeService
   end
 
   def delete_certification_type(certification_type)
-    if certification_type.certifications.any?
-      return :certification_exists
-    end
-
     certification_type.destroy
   end
 end

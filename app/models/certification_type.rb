@@ -1,4 +1,5 @@
 class CertificationType < ActiveRecord::Base
+  include DeletionPrevention
 
   belongs_to :customer
   has_many :certifications
@@ -14,6 +15,8 @@ class CertificationType < ActiveRecord::Base
   validates :interval, inclusion: {in: Interval.all.map(&:text),
                                               message: 'invalid value'}
 
+  before_destroy :_prevent_deletion_when_certifications
+
   def units_based?
     units_required > 0
   end
@@ -26,7 +29,12 @@ class CertificationType < ActiveRecord::Base
     self.certifications.select { |certification| certification.current? }
   end
 
-private
+  private
+
+  def _prevent_deletion_when_certifications
+    _prevent_deletion_of(certifications,
+                         'This Certification Type is assigned to existing Employee(s). You must uncertify the employee(s) before removing it.')
+  end
 
   def _default_values
     self.units_required ||= 0
