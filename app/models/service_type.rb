@@ -39,7 +39,7 @@ class ServiceType < ActiveRecord::Base
               }
   validate :_date_or_mileage_required
 
-  before_destroy :prevent_deletion_when_services
+  before_destroy :_prevent_deletion_when_services
 
   def mileage_expiration_type?
     [EXPIRATION_TYPE_BY_MILEAGE, EXPIRATION_TYPE_BY_DATE_AND_MILEAGE].include?(expiration_type)
@@ -50,6 +50,13 @@ class ServiceType < ActiveRecord::Base
   end
 
   private
+
+  def _prevent_deletion_when_services
+    prevent_deletion_of(
+      services,
+      'This Service Type is assigned to existing Vehicle(s). You must remove the vehicle assignment(s) before removing it.'
+    )
+  end
 
   def _date_or_mileage_required
     return if interval_date.present? || interval_mileage.present?

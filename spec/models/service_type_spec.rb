@@ -90,7 +90,7 @@ describe ServiceType do
       it 'should have a base error' do
         service_type.destroy
 
-        service_type.errors[:base].first.should == 'Service type has services assigned that you must remove before deleting the service type.'
+        service_type.errors[:base].first.should == 'This Service Type is assigned to existing Vehicle(s). You must remove the vehicle assignment(s) before removing it.'
       end
     end
   end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Recertify Employee' do
+describe 'Recertify Employee', slow: true do
 
   let(:customer) { create(:customer) }
   let(:certification_period) { create(:units_based_certification_period) }

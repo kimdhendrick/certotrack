@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Reservice Vehicle Pages' do
+describe 'Reservice Vehicle Pages', slow: true do
 
   subject { page }
 

@@ -32,7 +32,7 @@ class CertificationType < ActiveRecord::Base
   private
 
   def _prevent_deletion_when_certifications
-    _prevent_deletion_of(certifications,
+    prevent_deletion_of(certifications,
                          'This Certification Type is assigned to existing Employee(s). You must uncertify the employee(s) before removing it.')
   end
 
