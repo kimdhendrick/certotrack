@@ -8,6 +8,7 @@ describe Location do
   it { should belong_to(:customer) }
   it { should have_many(:equipments) }
   it { should have_many(:employees) }
+  it { should have_many(:vehicles) }
   it { should validate_presence_of :customer }
   it { should validate_presence_of :name }
   it { should validate_uniqueness_of(:name).scoped_to(:customer_id) }
@@ -69,6 +70,20 @@ describe Location do
         location.destroy
 
         location.errors[:base].first.should == 'Location has equipment assigned, you must reassign them before deleting the location.'
+      end
+    end
+
+    context 'when location has one or more vehicles' do
+      before { create(:vehicle, location: location) }
+
+      it 'should not destroy location' do
+        expect { location.destroy }.to_not change(Location, :count).by(-1)
+      end
+
+      it 'should have a base error' do
+        location.destroy
+
+        location.errors[:base].first.should == 'Location has vehicles assigned, you must reassign them before deleting the location.'
       end
     end
 

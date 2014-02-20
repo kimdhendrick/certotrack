@@ -4,6 +4,7 @@ class Location < ActiveRecord::Base
   belongs_to :customer
   has_many :equipments
   has_many :employees
+  has_many :vehicles
 
   before_validation :_strip_whitespace
 
@@ -28,9 +29,14 @@ class Location < ActiveRecord::Base
       equipments,
       'Location has equipment assigned, you must reassign them before deleting the location.'
     )
-    valid & prevent_deletion_of(
+    valid = valid & prevent_deletion_of(
       employees,
       'Location has employees assigned, you must reassign them before deleting the location.'
+    )
+
+    valid & prevent_deletion_of(
+      vehicles,
+      'Location has vehicles assigned, you must reassign them before deleting the location.'
     )
   end
 
