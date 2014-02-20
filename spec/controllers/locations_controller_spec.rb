@@ -4,7 +4,7 @@ describe LocationsController do
   let(:customer) { build(:customer) }
   let(:location) { build(:location) }
 
-  describe 'GET index' do
+  describe 'GET #index' do
     context 'when equipment user' do
       before do
         @my_user = stub_equipment_user(customer)
@@ -89,7 +89,7 @@ describe LocationsController do
     end
   end
 
-  describe 'GET new' do
+  describe 'GET #new' do
     context 'when equipment user' do
       before do
         sign_in stub_equipment_user(customer)
@@ -147,7 +147,7 @@ describe LocationsController do
     end
   end
 
-  describe 'POST create' do
+  describe 'POST #create' do
     context 'when equipment user' do
       before do
         sign_in stub_equipment_user(customer)
@@ -266,7 +266,7 @@ describe LocationsController do
     end
   end
 
-  describe 'GET show' do
+  describe 'GET #show' do
     context 'when equipment user' do
       before do
         sign_in stub_equipment_user(customer)
@@ -311,7 +311,7 @@ describe LocationsController do
     end
   end
 
-  describe 'GET edit' do
+  describe 'GET #edit' do
     context 'when equipment user' do
       before do
         sign_in stub_equipment_user(customer)
@@ -376,7 +376,7 @@ describe LocationsController do
     end
   end
 
-  describe 'PUT update' do
+  describe 'PUT #update' do
     context 'when equipment user' do
       before do
         sign_in stub_equipment_user(customer)
@@ -507,51 +507,48 @@ describe LocationsController do
     end
   end
 
-  describe 'DELETE destroy' do
+  describe 'DELETE #destroy' do
     context 'when equipment user' do
       before do
         sign_in stub_equipment_user(customer)
       end
 
-      it 'calls LocationService' do
-        location = create(:location, customer: customer)
-        fake_location_service = Faker.new(true)
-        controller.load_location_service(fake_location_service)
+      context 'when destroy call succeeds' do
+        it 'calls LocationService' do
+          location = create(:location, customer: customer)
+          fake_location_service = Faker.new(true)
+          controller.load_location_service(fake_location_service)
 
-        delete :destroy, {:id => location.to_param}, {}
+          delete :destroy, {:id => location.to_param}, {}
 
-        fake_location_service.received_message.should == :delete_location
-        fake_location_service.received_params[0].should == location
+          fake_location_service.received_message.should == :delete_location
+          fake_location_service.received_params[0].should == location
+        end
+
+        it 'redirects to the location list' do
+          location = create(:location, name: 'Outside', customer: customer)
+          controller.load_location_service(Faker.new(true))
+
+          delete :destroy, {:id => location.to_param}, {}
+
+          response.should redirect_to(locations_path)
+          flash[:notice].should == 'Location Outside was successfully deleted.'
+        end
       end
 
-      it 'redirects to the location list' do
-        location = create(:location, name: 'Outside', customer: customer)
-        controller.load_location_service(Faker.new(true))
+      context 'when destroy call fails' do
+        before do
+          location = create(:location, customer: customer)
+          location_service = double('location_service')
+          location_service.stub(:delete_location).and_return(false)
+          controller.load_location_service(location_service)
 
-        delete :destroy, {:id => location.to_param}, {}
+          delete :destroy, {id: location.to_param}, {}
+        end
 
-        response.should redirect_to(locations_path)
-        flash[:notice].should == 'Location Outside was successfully deleted.'
-      end
-
-      it 'gives error message when equipment exists' do
-        location = create(:location, customer: customer)
-        controller.load_location_service(Faker.new(:equipment_exists))
-
-        delete :destroy, {:id => location.to_param}, {}
-
-        response.should redirect_to(location_path)
-        flash[:notice].should == 'Location has equipment assigned, you must reassign them before deleting the location.'
-      end
-
-      it 'gives error message when employee exists' do
-        location = create(:location, customer: customer)
-        controller.load_location_service(Faker.new(:employee_exists))
-
-        delete :destroy, {:id => location.to_param}, {}
-
-        response.should redirect_to(location_path)
-        flash[:notice].should == 'Location has employees assigned, you must reassign them before deleting the location.'
+        it 'should render show page' do
+          response.should render_template('show')
+        end
       end
     end
 

@@ -7,6 +7,8 @@
     <li><%= link_to 'Create Location', new_location_path %></li>
   </ul>
 
+  <%= render 'shared/errors', model: @location %>
+
   <p>
     <b>Name</b>
     <%= location.name %>

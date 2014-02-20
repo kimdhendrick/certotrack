@@ -22,8 +22,6 @@ class LocationService
   end
 
   def delete_location(location)
-    return :equipment_exists if location.equipments.any?
-    return :employee_exists if location.employees.any?
     location.destroy
   end
 end

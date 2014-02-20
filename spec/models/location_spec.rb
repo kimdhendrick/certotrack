@@ -34,4 +34,60 @@ describe Location do
     location.name = 'My Location'
     location.sort_key.should == 'My Location'
   end
+
+  describe '#destroy' do
+    before { location.save }
+
+    context 'when location has no employees or equipment assigned' do
+      it 'should destroy location' do
+        expect { location.destroy }.to change(Location, :count).by(-1)
+      end
+    end
+
+    context 'when location has one or more employees' do
+      before { create(:employee, location: location) }
+
+      it 'should not destroy location' do
+        expect { location.destroy }.to_not change(Location, :count).by(-1)
+      end
+
+      it 'should have a base error' do
+        location.destroy
+
+        location.errors[:base].first.should == 'Location has employees assigned, you must reassign them before deleting the location.'
+      end
+    end
+
+    context 'when location has one or more pieces of equipment' do
+      before { create(:equipment, location: location) }
+
+      it 'should not destroy location' do
+        expect { location.destroy }.to_not change(Location, :count).by(-1)
+      end
+
+      it 'should have a base error' do
+        location.destroy
+
+        location.errors[:base].first.should == 'Location has equipment assigned, you must reassign them before deleting the location.'
+      end
+    end
+
+    context 'when location has one or more employees and pieces of equipment' do
+      before do
+        create(:equipment, location: location)
+        create(:employee, location: location)
+      end
+
+      it 'should not destroy location' do
+        expect { location.destroy }.to_not change(Location, :count).by(-1)
+      end
+
+      it 'should have base errors' do
+        location.destroy
+
+        location.errors[:base].should include 'Location has employees assigned, you must reassign them before deleting the location.'
+        location.errors[:base].should include 'Location has equipment assigned, you must reassign them before deleting the location.'
+      end
+    end
+  end
 end

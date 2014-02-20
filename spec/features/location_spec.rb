@@ -101,6 +101,48 @@ describe 'Locations', slow: true do
       page.should have_content 'Location Alaska was successfully deleted'
       page.should have_content 'All Location'
     end
+
+    it 'should not delete location with equipment assigned', js: true do
+      location = create(:location,
+                        name: 'San Antonio',
+                        customer: customer
+      )
+
+      create(:equipment, location: location)
+
+      visit '/'
+      click_link 'All Locations'
+      click_link 'San Antonio'
+
+      page.should have_content 'Show Location'
+      click_on 'Delete'
+
+      page.driver.browser.switch_to.alert.accept
+
+      page.should have_content 'Show Location'
+      page.should have_content 'Location has equipment assigned, you must reassign them before deleting the location.'
+    end
+
+    it 'should not delete location with employee assigned', js: true do
+      location = create(:location,
+                        name: 'San Antonio',
+                        customer: customer
+      )
+
+      create(:employee, location: location)
+
+      visit '/'
+      click_link 'All Locations'
+      click_link 'San Antonio'
+
+      page.should have_content 'Show Location'
+      click_on 'Delete'
+
+      page.driver.browser.switch_to.alert.accept
+
+      page.should have_content 'Show Location'
+      page.should have_content 'Location has employees assigned, you must reassign them before deleting the location.'
+    end
   end
 
   context 'when an admin user' do

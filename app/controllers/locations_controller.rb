@@ -55,19 +55,12 @@ class LocationsController < ModelController
 
   def destroy
     location_name = @location.name
-    status = @location_service.delete_location(@location)
 
-    if status == :equipment_exists
-      redirect_to @location, notice: 'Location has equipment assigned, you must reassign them before deleting the location.'
-      return
+    if (@location_service.delete_location(@location))
+      redirect_to locations_path, notice: "Location #{location_name} was successfully deleted."
+    else
+      render :show
     end
-
-    if status == :employee_exists
-      redirect_to @location, notice: 'Location has employees assigned, you must reassign them before deleting the location.'
-      return
-    end
-
-    redirect_to locations_path, notice: "Location #{location_name} was successfully deleted."
   end
 
   private
