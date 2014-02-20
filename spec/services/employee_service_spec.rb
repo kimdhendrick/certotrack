@@ -52,7 +52,7 @@ describe EmployeeService do
     end
   end
 
-  describe 'create_employee' do
+  describe '#create_employee' do
     it 'should create employee' do
       attributes =
         {
@@ -74,7 +74,7 @@ describe EmployeeService do
     end
   end
 
-  describe 'update_employee' do
+  describe '#update_employee' do
     it 'should update employees attributes' do
       employee = create(:employee, customer: my_customer)
       attributes =
@@ -108,7 +108,7 @@ describe EmployeeService do
     end
   end
 
-  describe 'delete_employee' do
+  describe '#delete_employee' do
     it 'destroys the requested employee' do
       employee = create(:employee, customer: my_customer)
 
@@ -116,39 +116,9 @@ describe EmployeeService do
         EmployeeService.new.delete_employee(employee)
       }.to change(Employee, :count).by(-1)
     end
-
-    it 'returns error when equipment assigned to employee' do
-      employee = create(:employee, customer: my_customer)
-      equipment = create(:equipment, employee: employee, customer: my_customer)
-
-      status = EmployeeService.new.delete_employee(employee)
-
-      employee.reload
-      employee.should_not be_nil
-
-      equipment.reload
-      equipment.should_not be_nil
-
-      status.should == :equipment_exists
-    end
-
-    it 'returns error when certifications assigned to employee' do
-      employee = create(:employee, customer: my_customer)
-      certification = create(:certification, employee: employee, customer: my_customer)
-
-      status = EmployeeService.new.delete_employee(employee)
-
-      employee.reload
-      employee.should_not be_nil
-
-      certification.reload
-      certification.should_not be_nil
-
-      status.should == :certification_exists
-    end
   end
 
-  describe 'get_employees_not_certified_for' do
+  describe '#get_employees_not_certified_for' do
     context 'when regular user' do
       it 'should return empty list when no employees' do
         certification_type = create(:certification_type, customer: my_customer)

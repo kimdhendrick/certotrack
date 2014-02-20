@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe EmployeesController do
-  let(:customer) {create(:customer)}
+  let(:customer) { create(:customer) }
 
   describe 'GET new' do
     context 'when certification user' do
@@ -155,7 +155,7 @@ describe EmployeesController do
       end
     end
   end
-  
+
   describe 'GET index' do
     let(:big_list_of_employees) do
       big_list_of_employees = []
@@ -257,7 +257,7 @@ describe EmployeesController do
       controller.load_certification_service(certification_service)
       certification_service.stub(:get_all_certifications_for_employee).and_return(certifications)
     end
-    
+
     context 'when certification user' do
       before do
         sign_in stub_certification_user(customer)
@@ -269,7 +269,7 @@ describe EmployeesController do
       end
 
       it 'assigns certifications as @certifications' do
-        get :show, { id: employee.to_param }, {}
+        get :show, {id: employee.to_param}, {}
         assigns(:certifications).map(&:model).should == certifications
       end
     end
@@ -285,7 +285,7 @@ describe EmployeesController do
       end
 
       it 'assigns certifications as @certifications' do
-        get :show, { id: employee.to_param }, {}
+        get :show, {id: employee.to_param}, {}
         assigns(:certifications).map(&:model).should == certifications
       end
     end
@@ -483,43 +483,52 @@ describe EmployeesController do
         sign_in stub_certification_user(customer)
       end
 
-      it 'calls EmployeesService' do
-        employee = create(:employee, customer: customer)
-        fake_employee_service = controller.load_employee_service(Faker.new(true))
+      context 'when destroy call succeeds' do
+        it 'calls EmployeesService' do
+          employee = create(:employee, customer: customer)
+          fake_employee_service = controller.load_employee_service(Faker.new(true))
 
-        delete :destroy, {:id => employee.to_param}, {}
+          delete :destroy, {:id => employee.to_param}, {}
 
-        fake_employee_service.received_message.should == :delete_employee
+          fake_employee_service.received_message.should == :delete_employee
+        end
+
+        it 'redirects to the employee list' do
+          employee = create(:employee, customer: customer)
+          controller.load_employee_service(Faker.new(true))
+
+          delete :destroy, {:id => employee.to_param}, {}
+
+          response.should redirect_to(employees_url)
+          flash[:notice].should == 'Employee was successfully deleted.'
+        end
       end
 
-      it 'redirects to the employee list' do
-        employee = create(:employee, customer: customer)
-        controller.load_employee_service(Faker.new(true))
+      context 'when destroy call fails' do
+        context 'when destroy call fails' do
+          before do
+            employee = create(:employee, customer: customer)
 
-        delete :destroy, {:id => employee.to_param}, {}
+            employee_service = double('employee_service')
+            employee_service.stub(:delete_employee).and_return(false)
 
-        response.should redirect_to(employees_url)
-        flash[:notice].should == 'Employee was successfully deleted.'
-      end
+            certification_service = double('certification_service')
+            certification_service.stub(:get_all_certifications_for_employee).and_return([])
 
-      it 'gives error message when equipment exists' do
-        employee = create(:employee, customer: customer)
-        controller.load_employee_service(Faker.new(:equipment_exists))
+            controller.load_employee_service(employee_service)
+            controller.load_certification_service(certification_service)
 
-        delete :destroy, {:id => employee.to_param}, {}
+            delete :destroy, {id: employee.to_param}, {}
+          end
 
-        response.should redirect_to(employee_url)
-        flash[:notice].should == 'Employee has equipment assigned, you must remove them before deleting the employee. Or Deactivate the employee instead.'
-      end
+          it 'should render show page' do
+            response.should render_template('show')
+          end
 
-      it 'gives error message when certifications exists' do
-        employee = create(:employee, customer: customer)
-        controller.load_employee_service(Faker.new(:certification_exists))
-
-        delete :destroy, {:id => employee.to_param}, {}
-
-        response.should redirect_to(employee_url)
-        flash[:notice].should == 'Employee has certifications, you must remove them before deleting the employee. Or Deactivate the employee instead.'
+          it 'should assign @certifications' do
+            expect(assigns(:certifications)).to eq([])
+          end
+        end
       end
     end
 

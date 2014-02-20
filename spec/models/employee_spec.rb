@@ -34,4 +34,60 @@ describe Employee do
     employee = Employee.new
     employee.active.should be_true
   end
+
+  describe '#destroy' do
+    before { employee.save }
+
+    context 'when employee has no certifications and no equipment' do
+      it 'should destroy employee' do
+        expect { employee.destroy }.to change(Employee, :count).by(-1)
+      end
+    end
+
+    context 'when employee has one or more certifications' do
+      before { create(:certification, employee: employee) }
+
+      it 'should not destroy employee' do
+        expect { employee.destroy }.to_not change(Employee, :count)
+      end
+
+      it 'should have a base error' do
+        employee.destroy
+
+        employee.errors[:base].first.should == 'Employee has certifications, you must remove them before deleting the employee. Or Deactivate the employee instead.'
+      end
+    end
+
+    context 'when employee has one or more pieces of equipment' do
+      before { create(:equipment, employee: employee) }
+
+      it 'should not destroy employee' do
+        expect { employee.destroy }.to_not change(Employee, :count)
+      end
+
+      it 'should have a base error' do
+        employee.destroy
+
+        employee.errors[:base].first.should == 'Employee has equipment assigned, you must remove them before deleting the employee. Or Deactivate the employee instead.'
+      end
+    end
+
+    context 'when employee has one or more pieces of equipment and certifications' do
+      before do
+        create(:equipment, employee: employee)
+        create(:certification, employee: employee)
+      end
+
+      it 'should not destroy employee' do
+        expect { employee.destroy }.to_not change(Employee, :count)
+      end
+
+      it 'should have base errors' do
+        employee.destroy
+
+        employee.errors[:base].should include 'Employee has equipment assigned, you must remove them before deleting the employee. Or Deactivate the employee instead.'
+        employee.errors[:base].should include 'Employee has certifications, you must remove them before deleting the employee. Or Deactivate the employee instead.'
+      end
+    end
+  end
 end

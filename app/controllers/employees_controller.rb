@@ -55,19 +55,12 @@ class EmployeesController < ModelController
   end
 
   def destroy
-    status = @employee_service.delete_employee(@employee)
-
-    if status == :equipment_exists
-      redirect_to @employee, notice: 'Employee has equipment assigned, you must remove them before deleting the employee. Or Deactivate the employee instead.'
-      return
+    if @employee_service.delete_employee(@employee)
+      redirect_to employees_url, notice: 'Employee was successfully deleted.'
+    else
+      assign_certifications_by_employee(params)
+      render :show
     end
-
-    if status == :certification_exists
-      redirect_to @employee, notice: 'Employee has certifications, you must remove them before deleting the employee. Or Deactivate the employee instead.'
-      return
-    end
-
-    redirect_to employees_url, notice: 'Employee was successfully deleted.'
   end
 
   private
