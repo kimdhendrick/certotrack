@@ -57,4 +57,5 @@ Certotrack::Application.routes.draw do
   resources :services, only: [:index, :new, :create, :show, :edit, :update, :destroy] do
     resources :reservices, only: [:new, :create]
   end
+  get 'expired_services', action: 'expired', controller: 'services'
 end

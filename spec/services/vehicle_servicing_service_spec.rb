@@ -219,4 +219,53 @@ describe VehicleServicingService do
       end
     end
   end
+
+  describe '#count_expired_services' do
+    let(:customer) { create(:customer) }
+
+    before do
+      service_type = create(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE)
+      create(:service, customer: customer, expiration_date: Date.yesterday, service_type: service_type)
+      create(:service, customer: create(:customer), expiration_date: Date.yesterday, service_type: service_type)
+    end
+
+    context 'vehicle user' do
+      it 'returns count of services for customer' do
+        my_user = create(:user, customer: customer)
+
+        VehicleServicingService.new.count_expired_services(my_user).should == 1
+      end
+    end
+
+    context 'admin user' do
+      it 'returns count of expired services' do
+        admin_user = create(:user, roles: ['admin'])
+
+        VehicleServicingService.new.count_expired_services(admin_user).should == 2
+      end
+    end
+  end
+
+  describe '#get_expired_services' do
+    let(:customer) { create(:customer) }
+    let(:service_type) { create(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE) }
+    let!(:expired_service_for_customer) { create(:service, customer: customer, expiration_date: Date.yesterday, service_type: service_type) }
+    let!(:expired_service_for_other_customer) { create(:service, customer: create(:customer), expiration_date: Date.yesterday, service_type: service_type) }
+
+    context 'vehicle user' do
+      it 'returns expired services for customer' do
+        my_user = create(:user, customer: customer)
+
+        VehicleServicingService.new.get_expired_services(my_user).should == [expired_service_for_customer]
+      end
+    end
+
+    context 'admin user' do
+      it 'returns expired services' do
+        admin_user = create(:user, roles: ['admin'])
+
+        VehicleServicingService.new.get_expired_services(admin_user).should =~ [expired_service_for_customer, expired_service_for_other_customer]
+      end
+    end
+  end
 end

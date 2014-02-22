@@ -82,11 +82,13 @@ describe CertotrackController do
         sign_in stub_vehicle_user(customer)
         vehicle_servicing_service = VehicleServicingService.new
         vehicle_servicing_service.stub(:count_all_services).and_return(10)
+        vehicle_servicing_service.stub(:count_expired_services).and_return(9)
         controller.load_vehicle_servicing_service(vehicle_servicing_service)
 
         get :home
 
         assigns(:total_service_count).should == 10
+        assigns(:total_expired_service_count).should == 9
       end
     end
 

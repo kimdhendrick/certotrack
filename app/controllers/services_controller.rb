@@ -12,9 +12,15 @@ class ServicesController < ModelController
 
     @report_title = 'All Vehicle Services'
 
-    services_collection = @vehicle_servicing_service.get_all_services(current_user)
-    @services = ServiceListPresenter.new(services_collection).present(params)
-    @service_count = services_collection.count
+    _render_services(@vehicle_servicing_service.get_all_services(current_user))
+  end
+
+  def expired
+    authorize! :read, :vehicle
+
+    @report_title = 'Expired Vehicle Services'
+
+    _render_services(@vehicle_servicing_service.get_expired_services(current_user))
   end
 
   def new
@@ -80,6 +86,12 @@ class ServicesController < ModelController
   end
 
   private
+
+  def _render_services(services_collection)
+    @services = ServiceListPresenter.new(services_collection).present(params)
+    @service_count = services_collection.count
+    render 'services/index'
+  end
 
   def _service_params
     service_accessible_parameters = [

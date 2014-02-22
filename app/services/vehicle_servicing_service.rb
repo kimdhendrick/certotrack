@@ -59,4 +59,12 @@ class VehicleServicingService
   def get_all_services(user)
     user.admin? ? Service.all : user.services
   end
+
+  def get_expired_services(user)
+    get_all_services(user).select { |service| service.expired? }
+  end
+
+  def count_expired_services(user)
+    get_expired_services(user).count
+  end
 end
