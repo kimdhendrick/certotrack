@@ -23,6 +23,7 @@ class CertotrackController < ApplicationController
     if can? :read, :vehicle
       @total_service_count = @vehicle_servicing_service.count_all_services(current_user)
       @total_expired_service_count = @vehicle_servicing_service.count_expired_services(current_user)
+      @total_expiring_service_count = @vehicle_servicing_service.count_expiring_services(current_user)
     end
 
     @first_name = current_user.first_name

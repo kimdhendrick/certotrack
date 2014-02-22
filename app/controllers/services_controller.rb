@@ -23,6 +23,14 @@ class ServicesController < ModelController
     _render_services(@vehicle_servicing_service.get_expired_services(current_user))
   end
 
+  def expiring
+    authorize! :read, :vehicle
+
+    @report_title = 'Expiring Vehicle Services'
+
+    _render_services(@vehicle_servicing_service.get_expiring_services(current_user))
+  end
+
   def new
     authorize! :create, :service
 

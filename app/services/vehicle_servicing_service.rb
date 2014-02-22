@@ -67,4 +67,12 @@ class VehicleServicingService
   def count_expired_services(user)
     get_expired_services(user).count
   end
+
+  def get_expiring_services(user)
+    get_all_services(user).select { |service| service.expiring? }
+  end
+
+  def count_expiring_services(user)
+    get_expiring_services(user).count
+  end
 end

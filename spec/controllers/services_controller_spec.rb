@@ -954,4 +954,91 @@ describe ServicesController do
       end
     end
   end
+  
+  describe 'GET #expiring' do
+    it 'calls get_expiring with current_user and params' do
+      my_user = stub_vehicle_user(customer)
+      sign_in my_user
+      fake_vehicle_servicing_service = controller.load_vehicle_servicing_service(Faker.new([]))
+      fake_service_list_presenter = Faker.new([])
+      ServiceListPresenter.stub(:new).and_return(fake_service_list_presenter)
+      params = {sort: 'name', direction: 'asc'}
+
+      get :expiring, params
+
+      fake_vehicle_servicing_service.received_messages.should == [:get_expiring_services]
+      fake_vehicle_servicing_service.received_params[0].should == my_user
+
+      fake_service_list_presenter.received_message.should == :present
+      fake_service_list_presenter.received_params[0]['sort'].should == 'name'
+      fake_service_list_presenter.received_params[0]['direction'].should == 'asc'
+    end
+
+    context 'when certification user' do
+      before do
+        sign_in stub_vehicle_user(customer)
+      end
+
+      it 'assigns services' do
+        service = create(:service, customer: customer)
+
+        controller.load_vehicle_servicing_service(Faker.new([service]))
+
+        get :expiring
+
+        assigns(:services).map(&:model).should eq([service])
+      end
+
+      it 'assigns services_count' do
+        big_list_of_services = []
+        30.times do
+          big_list_of_services << create(:service)
+        end
+
+        controller.load_vehicle_servicing_service(Faker.new(big_list_of_services))
+
+        get :expiring, {per_page: 25, page: 1}
+
+        assigns(:service_count).should eq(30)
+      end
+
+      it 'assigns report_title' do
+        controller.load_vehicle_servicing_service(Faker.new([]))
+
+        get :expiring
+
+        assigns(:report_title).should eq('Expiring Vehicle Services')
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'assigns services' do
+        service = create(:service, customer: customer)
+
+        controller.load_vehicle_servicing_service(Faker.new([service]))
+
+        get :expiring
+
+        assigns(:services).map(&:model).should eq([service])
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      describe 'GET expiring' do
+        it 'does not assign services' do
+          get :expiring
+
+          assigns(:services).should be_nil
+        end
+      end
+    end
+  end
 end
