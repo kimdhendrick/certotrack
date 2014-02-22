@@ -652,7 +652,11 @@ describe 'Navigation', slow: true do
       visit root_path
       click_on 'All Service Types'
       click_on 'Oil Change'
+      click_and_test_link_with_title 'All Service Types'
 
+      visit root_path
+      click_on 'All Service Types'
+      click_on 'Oil Change'
       click_on 'Edit'
       page.should have_content 'Edit Service Type'
       click_and_test_home_link
@@ -662,6 +666,24 @@ describe 'Navigation', slow: true do
       click_on 'Oil Change'
       click_on 'Edit'
       click_and_test_link_with_title 'Create Service Type'
+
+      visit root_path
+      click_on 'All Service Types'
+      click_on 'Oil Change'
+      page.should have_content 'Show Service Type'
+      click_on 'Edit'
+      page.should have_content 'Edit Service Type'
+      click_and_test_link_with_title 'All Vehicle Services'
+
+      visit root_path
+      click_on 'All Service Types'
+      click_on 'Create Service'
+      click_and_test_link_with_title 'Home'
+
+      visit root_path
+      click_on 'All Service Types'
+      click_on 'Create Service'
+      click_and_test_link_with_title 'All Service Types'
     end
   end
 
