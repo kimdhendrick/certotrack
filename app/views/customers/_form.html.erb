@@ -1,0 +1,88 @@
+<%= form_for(@customer, data: { customer_form: "data-customer-form" }) do |f| %>
+
+  <%= render 'shared/errors', model: @customer %>
+
+  <div class="field">
+    <%= f.label :name %>
+    <br/>
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :account_number %>
+    <br/>
+    <%= f.text_field :account_number %>
+  </div>
+
+  <div class="field">
+    <%= f.label :equipment_access %>
+    <br/>
+    <%= f.check_box :equipment_access %>
+  </div>
+
+  <div class="field">
+    <%= f.label :certification_access %>
+    <br/>
+    <%= f.check_box :certification_access %>
+  </div>
+
+  <div class="field">
+    <%= f.label :vehicle_access %>
+    <br/>
+    <%= f.check_box :vehicle_access %>
+  </div>
+
+  <div class="field">
+    <%= f.label :contact_person_name %>
+    <br/>
+    <%= f.text_field :contact_person_name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :contact_phone_number %>
+    <br/>
+    <%= f.text_field :contact_phone_number %>
+  </div>
+
+  <div class="field">
+    <%= f.label :contact_email %>
+    <br/>
+    <%= f.text_field :contact_email %>
+  </div>
+
+  <div class="field">
+    <%= f.label :address1 %>
+    <br/>
+    <%= f.text_field :address1 %>
+  </div>
+
+  <div class="field">
+    <%= f.label :address2 %>
+    <br/>
+    <%= f.text_field :address2 %>
+  </div>
+
+  <div class="field">
+    <%= f.label :city %>
+    <br/>
+    <%= f.text_field :city %>
+  </div>
+
+  <div class="field">
+    <%= f.label :state %>
+    <br/>
+    <%= select(:customer, :state,
+               options_for_select(@states),
+               {prompt: 'Select State...'}) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :zip %>
+    <br/>
+    <%= f.text_field :zip %>
+  </div>
+
+  <div class="actions">
+    <%= submit_tag(user_action) %>
+  </div>
+<% end %>

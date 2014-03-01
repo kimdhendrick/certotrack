@@ -4,4 +4,10 @@ class CustomerService
 
     Customer.all
   end
+
+  def create_customer(attributes)
+    customer = Customer.new(attributes)
+    customer.save
+    customer
+  end
 end

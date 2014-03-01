@@ -1,0 +1,72 @@
+<% presenter_for(@customer) do |customer| %>
+  <h1>Show Customer</h1>
+
+  <ul id="primary-nav">
+    <li><%= link_to 'Home', root_path %></li>
+  </ul>
+
+  <p>
+    <b>Name</b>
+    <%= customer.name %>
+  </p>
+
+  <p>
+    <b>Account Number</b>
+    <%= customer.account_number %>
+  </p>
+
+  <p>
+    <b>Contact Person Name</b>
+    <%= customer.contact_person_name %>
+  </p>
+
+  <p>
+    <b>Contact Phone Number</b>
+    <%= customer.contact_phone_number %>
+  </p>
+
+  <p>
+    <b>Contact Email</b>
+    <%= customer.contact_email %>
+  </p>
+
+  <p>
+    <b>Address 1</b>
+    <%= customer.address1 %>
+  </p>
+
+  <p>
+    <b>Address 2</b>
+    <%= customer.address2 %>
+  </p>
+
+  <p>
+    <b>City</b>
+    <%= customer.city %>
+  </p>
+
+  <p>
+    <b>State</b>
+    <%= customer.state %>
+  </p>
+
+  <p>
+    <b>Zip</b>
+    <%= customer.zip %>
+  </p>
+
+  <p>
+    <b>Equipment Access</b>
+    <%= customer.equipment_access %>
+  </p>
+
+  <p>
+    <b>Certification Access</b>
+    <%= customer.certification_access %>
+  </p>
+
+  <p>
+    <b>Vehicle Access</b>
+    <%= customer.vehicle_access %>
+  </p>
+<% end %>

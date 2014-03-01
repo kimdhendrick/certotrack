@@ -2,7 +2,24 @@ require 'spec_helper'
 
 describe CustomerPresenter do
 
-  let(:customer) { build(:customer, name: 'Jefferson County') }
+  let(:customer) do
+    build(
+      :customer,
+      name: 'Jefferson County',
+      account_number: 'ABC123',
+      contact_person_name: 'Joe Blow', 
+      contact_phone_number: '(303) 222-1234',
+      contact_email: 'joe@example.com', 
+      address1: '123 Main St', 
+      address2: 'Suite 100',
+      city: 'Denver', 
+      state: 'CO',
+      zip: '80222',
+      equipment_access: true,
+      certification_access: true,
+      vehicle_access: true
+    )
+  end
 
   it 'should respond to model' do
     CustomerPresenter.new(customer).model.should == customer
@@ -18,5 +35,53 @@ describe CustomerPresenter do
 
   it 'should respond to sort_key' do
     CustomerPresenter.new(customer).sort_key.should == 'Jefferson County'
+  end
+
+  it 'should respond to account_number' do
+    CustomerPresenter.new(customer).account_number.should == 'ABC123'
+  end
+
+  it 'should respond to contact_person_name' do
+    CustomerPresenter.new(customer).contact_person_name.should == 'Joe Blow'
+  end
+
+  it 'should respond to contact_phone_number' do
+    CustomerPresenter.new(customer).contact_phone_number.should == '(303) 222-1234'
+  end
+
+  it 'should respond to contact_email' do
+    CustomerPresenter.new(customer).contact_email.should == 'joe@example.com'
+  end
+
+  it 'should respond to address1' do
+    CustomerPresenter.new(customer).address1.should == '123 Main St'
+  end
+
+  it 'should respond to address2' do
+    CustomerPresenter.new(customer).address2.should == 'Suite 100'
+  end
+
+  it 'should respond to city' do
+    CustomerPresenter.new(customer).city.should == 'Denver'
+  end
+
+  it 'should respond to state' do
+    CustomerPresenter.new(customer).state.should == 'CO'
+  end
+
+  it 'should respond to zip' do
+    CustomerPresenter.new(customer).zip.should == '80222'
+  end
+
+  it 'should respond to equipment_access' do
+    CustomerPresenter.new(customer).equipment_access.should == 'Yes'
+  end
+
+  it 'should respond to certification_access' do
+    CustomerPresenter.new(customer).certification_access.should == 'Yes'
+  end
+
+  it 'should respond to vehicle_access' do
+    CustomerPresenter.new(customer).vehicle_access.should == 'Yes'
   end
 end
