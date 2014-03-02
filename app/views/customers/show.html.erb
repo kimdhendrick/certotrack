@@ -53,4 +53,14 @@
     <b>Vehicle Access</b>
     <%= customer.vehicle_access %>
   </p>
+
+  <p>
+    <b>Locations</b>
+  <ul>
+    <% customer.locations.each do |location| %>
+      <li><%= location.name %></li>
+    <% end %>
+  </ul>
+  </p>
+
 <% end %>

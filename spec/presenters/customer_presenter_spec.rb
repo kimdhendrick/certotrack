@@ -84,4 +84,15 @@ describe CustomerPresenter do
   it 'should respond to vehicle_access' do
     CustomerPresenter.new(customer).vehicle_access.should == 'Yes'
   end
+
+  it 'should return sorted locations' do
+    customer.locations << build(:location, name: 'Denver', customer: customer)
+    customer.locations << build(:location, name: 'Boulder', customer: customer)
+    customer.locations << build(:location, name: 'Golden', customer: customer)
+
+    locations = CustomerPresenter.new(customer).locations
+
+    locations.first.should be_a(LocationPresenter)
+    locations.map(&:name).should == ['Boulder', 'Denver', 'Golden']
+  end
 end

@@ -36,6 +36,10 @@ class CustomerPresenter
     _yes_no(model.vehicle_access?)
   end
 
+  def locations
+    LocationListPresenter.new(model.locations).sort
+  end
+
   private
 
   def _yes_no(truthy)
