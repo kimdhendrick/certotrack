@@ -95,4 +95,15 @@ describe CustomerPresenter do
     locations.first.should be_a(LocationPresenter)
     locations.map(&:name).should == ['Boulder', 'Denver', 'Golden']
   end
+
+  it 'should return sorted users' do
+    customer.users << build(:user, username: 'ZZZ', customer: customer)
+    customer.users << build(:user, username: 'AAA', customer: customer)
+    customer.users << build(:user, username: 'GGG', customer: customer)
+
+    users = CustomerPresenter.new(customer).users
+
+    users.first.should be_a(UserPresenter)
+    users.map(&:username).should == ['AAA', 'GGG', 'ZZZ']
+  end
 end

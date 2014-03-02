@@ -66,6 +66,8 @@ describe 'Customers', slow: true do
         create(:location, name: 'Highlands Ranch', customer: government_customer)
         create(:location, name: 'Golden', customer: government_customer)
         create(:location, name: 'Denver', customer: government_customer)
+        create(:user, username: 'JS123', first_name: 'Joe', last_name: 'Schmoe', customer: government_customer)
+        create(:user, username: 'KG999', first_name: 'Kim', last_name: 'Glow', customer: government_customer)
       end
 
       let(:government_customer) do
@@ -113,6 +115,25 @@ describe 'Customers', slow: true do
         page.should have_content 'Denver'
         page.should have_content 'Golden'
         page.should have_content 'Highlands Ranch'
+
+        page.should have_content "Customer's Users"
+        within 'table thead tr' do
+         page.should have_content 'Username'
+          page.should have_content 'First Name'
+          page.should have_content 'Last Name'
+        end
+
+        within 'table tbody tr:nth-of-type(1)' do
+          page.should have_content 'js123'
+          page.should have_content 'Joe'
+          page.should have_content 'Schmoe'
+        end
+
+        within 'table tbody tr:nth-of-type(2)' do
+          page.should have_content 'kg999'
+          page.should have_content 'Kim'
+          page.should have_content 'Glow'
+        end
       end
     end
   end

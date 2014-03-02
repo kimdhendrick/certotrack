@@ -40,6 +40,10 @@ class CustomerPresenter
     LocationListPresenter.new(model.locations).sort
   end
 
+  def users
+    UserListPresenter.new(model.users).sort
+  end
+
   private
 
   def _yes_no(truthy)
