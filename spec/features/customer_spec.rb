@@ -5,7 +5,7 @@ describe 'Customers', slow: true do
     login_as_admin
   end
 
-  describe 'Create Equipment' do
+  describe 'Create and Show Customer' do
     it 'should create new customer' do
       visit '/'
       click_link 'Create Customer'
@@ -43,8 +43,12 @@ describe 'Customers', slow: true do
 
       click_on 'Create'
 
+      # Show Customer
       page.should have_content 'Show Customer'
       page.should have_content "Customer 'Government' was successfully created."
+
+      page.should have_link 'Home'
+      page.should have_link 'Create Customer'
 
       page.should have_content 'Government'
       page.should have_content '123ABC'

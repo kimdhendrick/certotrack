@@ -3,6 +3,7 @@
 
   <ul id="primary-nav">
     <li><%= link_to 'Home', root_path %></li>
+    <li><%= link_to 'Create Customer', new_customer_path %></li>
   </ul>
 
   <p>
@@ -18,6 +19,7 @@
   <p>
     <b>Contact Person Name</b>
     <%= customer.contact_person_name %>
+    (<%= mail_to customer.contact_email, customer.contact_email %>)
   </p>
 
   <p>
@@ -27,31 +29,13 @@
 
   <p>
     <b>Contact Email</b>
-    <%= customer.contact_email %>
   </p>
 
   <p>
-    <b>Address 1</b>
+    <b>Address</b>
     <%= customer.address1 %>
-  </p>
-
-  <p>
-    <b>Address 2</b>
-    <%= customer.address2 %>
-  </p>
-
-  <p>
-    <b>City</b>
-    <%= customer.city %>
-  </p>
-
-  <p>
-    <b>State</b>
-    <%= customer.state %>
-  </p>
-
-  <p>
-    <b>Zip</b>
+    <%= customer.address2 %>,
+    <%= customer.city %>, <%= customer.state %>
     <%= customer.zip %>
   </p>
 
