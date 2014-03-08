@@ -12,6 +12,15 @@ describe Interval do
     Interval::NOT_REQUIRED.to_s.should == 'Not Required'
   end
 
+  describe '#lookup' do
+    it 'should lookup by text' do
+      Interval.lookup('1 month').should == Interval::ONE_MONTH.id
+    end
+
+    it 'should handle null' do
+      Interval.lookup(nil).should be_nil
+    end
+  end
   describe '#from' do
     let(:start_date) { Date.new(2010, 1, 1) }
 

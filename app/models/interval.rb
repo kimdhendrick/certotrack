@@ -23,7 +23,7 @@ class Interval < ActiveHash::Base
   NOT_REQUIRED = Interval.find(8)
 
   def self.lookup(interval_text)
-    Interval.find_by_text(interval_text).id
+    Interval.find_by_text(interval_text).try(&:id)
   end
 
   def from(start_date)

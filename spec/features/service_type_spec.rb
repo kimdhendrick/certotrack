@@ -471,6 +471,7 @@ describe 'Service Types', slow: true, js: true do
     end
 
     it 'should sort by interval date' do
+      no_date_interval = create(:service_type, interval_date: nil, customer: customer)
       zeta = create(:service_type, interval_date: Interval::FIVE_YEARS.text, customer: customer)
       beta = create(:service_type, interval_date: Interval::ONE_YEAR.text, customer: customer)
       alpha = create(:service_type, interval_date: Interval::ONE_MONTH.text, customer: customer)
@@ -480,11 +481,11 @@ describe 'Service Types', slow: true, js: true do
 
       # Ascending sort
       click_link 'Interval Date'
-      column_data_should_be_in_order('1 month', 'Annually', '5 years')
+      column_data_should_be_in_order('1 month', 'Annually', '5 years', '')
 
       # Descending sort
       click_link 'Interval Date'
-      column_data_should_be_in_order('5 years', 'Annually', '1 month')
+      column_data_should_be_in_order('', '5 years', 'Annually', '1 month')
     end
 
     it 'should sort by interval mileage' do
