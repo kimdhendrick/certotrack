@@ -14,6 +14,10 @@ class LocationPresenter
     name
   end
 
+  def customer
+    model.customer
+  end
+
   def customer_name
     model.customer.name
   end

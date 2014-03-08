@@ -2,7 +2,8 @@ require 'spec_helper'
 
 describe LocationPresenter do
 
-  let(:location) { build(:location, name: 'Denver', customer: create(:customer, name: 'myCustomer')) }
+  let(:customer) { create(:customer, name: 'myCustomer') }
+  let(:location) { build(:location, name: 'Denver', customer: customer) }
 
   it 'should respond to model' do
     LocationPresenter.new(location).model.should == location
@@ -18,6 +19,10 @@ describe LocationPresenter do
 
   it 'should respond to customer name' do
     LocationPresenter.new(location).customer_name.should == 'myCustomer'
+  end
+
+  it 'should respond to customer' do
+    LocationPresenter.new(location).customer.should == customer
   end
 
   it 'should respond to sort_key' do

@@ -107,6 +107,12 @@ describe LocationsController do
 
         assigns(:customers).should == []
       end
+
+      it 'assigns customer_id when passed in' do
+        get :new, {customer_id: 99}, {}
+
+        assigns(:location).customer_id.should == 99
+      end
     end
 
     context 'when admin user' do

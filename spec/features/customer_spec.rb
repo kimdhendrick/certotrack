@@ -68,6 +68,8 @@ describe 'Customers', slow: true do
         create(:location, name: 'Denver', customer: government_customer)
         create(:user, username: 'JS123', first_name: 'Joe', last_name: 'Schmoe', customer: government_customer)
         create(:user, username: 'KG999', first_name: 'Kim', last_name: 'Glow', customer: government_customer)
+
+        create(:customer, name: 'Adams County')
       end
 
       let(:government_customer) do
@@ -134,6 +136,29 @@ describe 'Customers', slow: true do
           page.should have_content 'Kim'
           page.should have_content 'Glow'
         end
+
+        page.should have_link 'Create New Location'
+        click_on 'Create New Location'
+
+        page.should have_content 'Create Location'
+        page.should have_content 'Location'
+        page.should have_content 'Customer'
+
+        page.should have_select 'location_customer_id'
+        page.should have_select 'location_customer_id', options: ['Adams County', 'Jefferson County', 'My Customer']
+        page.should have_select 'location_customer_id', selected: 'Jefferson County'
+
+        fill_in 'Location', with: 'Mars'
+
+        click_on 'Create'
+
+        page.should have_content 'Show Location'
+        page.should have_content 'Mars'
+        page.should have_link 'Jefferson County'
+
+        click_on 'Jefferson County'
+        page.should have_content 'Show Customer'
+        page.should have_content 'Mars'
       end
     end
   end

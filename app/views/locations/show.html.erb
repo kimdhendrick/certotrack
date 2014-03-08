@@ -17,7 +17,7 @@
   <% if can? :manage, :customer %>
     <p>
       <b>Customer</b>
-      <%= location.customer_name %>
+      <%= link_to location.customer_name, location.customer %>
     </p>
   <% end %>
 

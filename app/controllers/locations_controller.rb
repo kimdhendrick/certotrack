@@ -18,7 +18,7 @@ class LocationsController < ModelController
 
   def new
     authorize! :create, :location
-    @location = Location.new
+    @location = Location.new(customer_id: params[:customer_id])
     _set_customers
   end
 
