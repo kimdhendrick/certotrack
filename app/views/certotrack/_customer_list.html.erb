@@ -1,0 +1,6 @@
+<h3>Manage Customers</h3>
+<ul>
+  <% @customers.each do |customer| %>
+    <li><%= link_to customer.name, customer.model %></li>
+  <% end %>
+</ul>

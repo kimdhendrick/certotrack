@@ -105,5 +105,17 @@ describe CertotrackController do
         assigns(:total_expiring_service_count).should be_nil
       end
     end
+
+    context 'an admin user' do
+      it 'assigns customer_list' do
+        my_admin_user = stub_admin
+        sign_in my_admin_user
+
+        get :home
+
+        assigns(:customers).first.should be_a CustomerPresenter
+        assigns(:customers).map(&:model).should == [my_admin_user.customer]
+      end
+    end
   end
 end

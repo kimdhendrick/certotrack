@@ -373,4 +373,20 @@ describe 'Customers', slow: true do
       end
     end
   end
+
+  describe 'Manage Customers' do
+    before do
+      login_as_user_with_role('admin', create(:customer, name: 'Jefferson County'))
+    end
+
+    it 'should list customers on home page' do
+      visit '/'
+
+      page.should have_link 'Jefferson County'
+      click_on 'Jefferson County'
+
+      page.should have_content 'Show Customer'
+      page.should have_content 'Jefferson County'
+    end
+  end
 end
