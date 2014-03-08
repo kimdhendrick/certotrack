@@ -1,7 +1,10 @@
 class CustomersController < ModelController
+  include ControllerHelper
   include CustomerHelper
 
   before_filter :load_customer_service
+
+  before_action :_set_customer, only: [:show, :edit, :update]
 
   def new
     authorize! :manage, :customer
@@ -23,7 +26,6 @@ class CustomersController < ModelController
 
   def show
     authorize! :manage, :customer
-    @customer = Customer.find(params[:id])
   end
 
   def index
@@ -35,11 +37,34 @@ class CustomersController < ModelController
     @customers = CustomerListPresenter.new(customer_collection).present(params)
   end
 
+  def edit
+    authorize! :manage, :customer
+
+    _set_states
+  end
+
+  def update
+    authorize! :manage, :customer
+
+    success = @customer_service.update_customer(@customer, _customer_params)
+
+    if success
+      redirect_to @customer, notice: 'Customer was successfully updated.'
+    else
+      _set_states
+      render action: 'edit'
+    end
+  end
+
   def load_customer_service(customer_service = CustomerService.new)
     @customer_service ||= customer_service
   end
 
   private
+
+  def _set_customer
+    @customer = _get_model(Customer)
+  end
 
   def _customer_params
     params.require(:customer).permit(customer_accessible_parameters)

@@ -44,6 +44,10 @@ class CustomerPresenter
     UserListPresenter.new(model.users).sort
   end
 
+  def edit_link
+    @template.link_to 'Edit', @template.edit_customer_path(model)
+  end
+
   private
 
   def _yes_no(truthy)

@@ -389,4 +389,79 @@ describe 'Customers', slow: true do
       page.should have_content 'Jefferson County'
     end
   end
+
+  describe 'Edit Customer' do
+    before do
+      login_as_admin
+
+      create(
+        :customer,
+        name: 'My Customer Name',
+        account_number: 'ABC123',
+        contact_person_name: 'Joe Blow',
+        contact_phone_number: '(303) 222-1234',
+        contact_email: 'joe@example.com',
+        address1: '123 Main St',
+        address2: 'Suite 100',
+        city: 'Denver',
+        state: 'CO',
+        zip: '80222',
+        equipment_access: false,
+        certification_access: true,
+        vehicle_access: false
+      )
+    end
+
+    it 'should allow user to update customer attributes' do
+      visit '/'
+
+      click_on 'My Customer Name'
+
+      click_on 'Edit'
+      page.should have_content 'Edit Customer'
+      page.should have_link 'Home'
+
+      page.should have_content 'Name'
+      page.should have_content 'Account number'
+      page.should have_content 'Equipment access'
+      page.should have_content 'Certification access'
+      page.should have_content 'Vehicle access'
+      page.should have_content 'Contact person'
+      page.should have_content 'Contact phone number'
+      page.should have_content 'Contact email'
+      page.should have_content 'Address1'
+      page.should have_content 'Address2'
+      page.should have_content 'City'
+      page.should have_content 'State'
+      page.should have_content 'Zip'
+
+      fill_in 'Name', with: 'My Modified Customer'
+      fill_in 'Account number', with: 'ACCT987'
+      fill_in 'Contact person name', with: 'Henrietta'
+      fill_in 'Contact phone number', with: '(720) 777-2222'
+      fill_in 'Contact email', with: 'henrietta@ejemplo.com'
+      fill_in 'Address1', with: '111 First Avenue'
+      fill_in 'Address2', with: 'Apt 100'
+      fill_in 'City', with: 'Las Vegas'
+      select 'Nevada', from: 'State'
+      check 'Equipment access'
+      uncheck 'Certification access'
+      check 'Vehicle access'
+
+      click_on 'Update'
+
+      page.should have_content 'Show Customer'
+      page.should have_content 'My Modified Customer'
+
+      page.should have_content 'ACCT987'
+      page.should have_content 'Henrietta'
+      page.should have_content '(720) 777-2222'
+      page.should have_content 'henrietta@ejemplo.com'
+      page.should have_content '111 First Avenue'
+      page.should have_content 'Apt 100'
+      page.should have_content 'Las Vegas'
+      page.should have_content 'NV'
+      page.should have_content /.*Equipment Access.*Yes.*Certification Access.*No.*Vehicle Access.*Yes/
+    end
+  end
 end

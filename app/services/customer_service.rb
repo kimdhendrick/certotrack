@@ -10,4 +10,9 @@ class CustomerService
     customer.save
     customer
   end
+
+  def update_customer(customer, attributes)
+    customer.update(attributes)
+    customer.save
+  end
 end

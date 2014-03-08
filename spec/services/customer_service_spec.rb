@@ -63,4 +63,76 @@ describe CustomerService do
       customer.zip.should == '80222'
     end
   end
+
+  describe 'update_customer' do
+
+    let(:customer) do
+      create(
+        :customer,
+        name: 'My Customer Name',
+        account_number: 'ABC123',
+        contact_person_name: 'Joe Blow',
+        contact_phone_number: '(303) 222-1234',
+        contact_email: 'joe@example.com',
+        address1: '123 Main St',
+        address2: 'Suite 100',
+        city: 'Denver',
+        state: 'CO',
+        zip: '80222',
+        equipment_access: false,
+        certification_access: false,
+        vehicle_access: false
+      )
+    end
+
+    let(:attributes) do
+      {
+        'id' => customer.id,
+        'name' => 'CustomerName',
+        'account_number' => 'newAN',
+        'contact_person_name' => 'Joey',
+        'contact_phone_number' => '123123123',
+        'contact_email' => 'blah@boo.com',
+        'address1' => '111 One Street',
+        'address2' => '222 Two Avenue',
+        'city' => 'Tampa',
+        'state' => 'FL',
+        'zip' => '98980',
+        'equipment_access' => 'true',
+        'certification_access' => 'true',
+        'vehicle_access' => 'true'
+      }
+    end
+
+    it "should update customer's attributes" do
+      success = CustomerService.new.update_customer(customer, attributes)
+      success.should be_true
+
+      customer.reload
+      customer.name.should == 'CustomerName'
+      customer.account_number.should == 'newAN'
+      customer.contact_person_name.should == 'Joey'
+      customer.contact_phone_number.should == '123123123'
+      customer.contact_email.should == 'blah@boo.com'
+      customer.address1.should == '111 One Street'
+      customer.address2.should == '222 Two Avenue'
+      customer.city.should == 'Tampa'
+      customer.state.should == 'FL'
+      customer.zip.should == '98980'
+      customer.equipment_access.should be_true
+      customer.certification_access.should be_true
+      customer.vehicle_access.should be_true
+    end
+
+    it 'should return false if errors' do
+      customer = create(:customer)
+      customer.stub(:save).and_return(false)
+
+      success = CustomerService.new.update_customer(customer, attributes)
+      success.should be_false
+
+      customer.reload
+      customer.name.should_not == 'CustomerName'
+    end
+  end
 end

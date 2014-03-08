@@ -205,4 +205,149 @@ describe CustomersController do
       end
     end
   end
+
+  describe 'GET #edit' do
+    context 'when an admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'assigns the requested customer' do
+        customer = create(:customer)
+
+        get :edit, {:id => customer.to_param}, {}
+
+        assigns(:customer).should eq(customer)
+      end
+
+      it 'assigns @states' do
+        customer = create(:customer)
+
+        get :edit, {:id => customer.to_param}, {}
+
+        assigns(:states).should_not be_nil
+      end
+    end
+
+    context 'when not an admin user' do
+      it 'does not assign customer' do
+        customer = create(:customer)
+
+        get :edit, {:id => customer.to_param}, {}
+
+        assigns(:customer).should be_nil
+      end
+
+      it 'does not assign states' do
+        customer = create(:customer)
+
+        get :edit, {:id => customer.to_param}, {}
+
+        assigns(:states).should be_nil
+      end
+    end
+  end
+
+  describe 'PUT #update' do
+    context 'when an admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      describe 'with valid params' do
+        let(:customer_attributes) do
+          {
+            name: 'Government',
+            account_number: 'ABC123',
+            equipment_access: 'true',
+            certification_access: 'true',
+            vehicle_access: 'true',
+            contact_person_name: 'Joe Blow',
+            contact_phone_number: '(303) 222-3333',
+            contact_email: 'joe@example.com',
+            address1: '123 Main St',
+            address2: 'Suite 100',
+            city: 'Denver',
+            state: 'CO',
+            zip: '80222'
+          }
+        end
+
+        it 'updates the requested customer' do
+          customer = create(:customer)
+          fake_customer_service = Faker.new(true)
+          controller.load_customer_service(fake_customer_service)
+
+          put :update, {:id => customer.to_param, :customer => customer_attributes}, {}
+
+          fake_customer_service.received_message.should == :update_customer
+          fake_customer_service.received_params[0].should == customer
+        end
+
+        it 'assigns the requested customer' do
+          controller.load_customer_service(Faker.new(true))
+          customer = create(:customer)
+
+          put :update, {:id => customer.to_param, :customer => customer_attributes}, {}
+
+          assigns(:customer).should eq(customer)
+        end
+
+        it 'redirects to the customer' do
+          controller.load_customer_service(Faker.new(true))
+          customer = create(:customer)
+
+          put :update, {:id => customer.to_param, :customer => customer_attributes}, {}
+
+          response.should redirect_to(customer)
+          flash[:notice].should == 'Customer was successfully updated.'
+        end
+      end
+
+      describe 'with invalid params' do
+        it 'assigns the customer' do
+          controller.load_customer_service(Faker.new(false))
+          customer = create(:customer)
+
+          put :update, {:id => customer.to_param, :customer => {'name' => 'invalid value'}}, {}
+
+          assigns(:customer).should eq(customer)
+        end
+
+        it "re-renders the 'edit' template" do
+          customer = create(:customer)
+          controller.load_customer_service(Faker.new(false))
+
+          put :update, {:id => customer.to_param, :customer => {'name' => 'invalid value'}}, {}
+
+          response.should render_template('edit')
+        end
+
+        it 'assigns @states' do
+          customer = create(:customer)
+          controller.load_customer_service(Faker.new(false))
+
+          put :update, {:id => customer.to_param, :customer => {'name' => 'invalid value'}}, {}
+
+          assigns(:states).should_not be_nil
+        end
+      end
+    end
+
+    context 'when not an admin user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'does not assign customer or states' do
+        customer = create(:customer)
+        controller.load_customer_service(Faker.new(false))
+
+        put :update, {:id => customer.to_param, :customer => customer.to_param}, {}
+
+        assigns(:customer).should be_nil
+        assigns(:states).should be_nil
+      end
+    end
+  end
 end
