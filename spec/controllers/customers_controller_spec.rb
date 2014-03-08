@@ -103,7 +103,7 @@ describe CustomersController do
     end
   end
 
-  describe 'GET show' do
+  describe 'GET #show' do
     context 'when admin user' do
       before do
         sign_in stub_admin
@@ -129,6 +129,79 @@ describe CustomersController do
         get :show, {:id => customer.to_param}, {}
 
         assigns(:customer).should be_nil
+      end
+    end
+  end
+
+  describe 'GET #index' do
+    context 'when admin user' do
+      let(:customer) { build(:customer) }
+      let(:fake_customer_service_that_returns_list) { Faker.new([customer]) }
+      let(:big_list_of_customers) do
+        big_list_of_customers = []
+        30.times do
+          big_list_of_customers << create(:customer)
+        end
+        big_list_of_customers
+      end
+      let(:admin_user) { stub_admin }
+
+      before do
+        sign_in admin_user
+      end
+
+      it 'calls get_all_customers with current_user and params' do
+        fake_customers_service = controller.load_customer_service(Faker.new([]))
+        fake_customers_list_presenter = Faker.new([])
+        CustomerListPresenter.stub(:new).and_return(fake_customers_list_presenter)
+        params = {sort: 'name', direction: 'asc'}
+
+        get :index, params
+
+        fake_customers_service.received_messages.should == [:get_all_customers]
+        fake_customers_service.received_params[0].should == admin_user
+
+        fake_customers_list_presenter.received_message.should == :present
+        fake_customers_list_presenter.received_params[0]['sort'].should == 'name'
+        fake_customers_list_presenter.received_params[0]['direction'].should == 'asc'
+      end
+
+      it 'assigns customers' do
+        controller.load_customer_service(Faker.new([customer]))
+
+        get :index, {}
+
+        assigns(:customers).map(&:model).should eq([customer])
+      end
+
+      it 'assigns customer_count' do
+        controller.load_customer_service(Faker.new(big_list_of_customers))
+
+        get :index, {per_page: 25, page: 1}
+
+        assigns(:customer_count).should eq(30)
+      end
+
+      it 'assigns report_title' do
+        controller.load_customer_service(Faker.new([customer]))
+
+        get :index
+
+        assigns(:report_title).should eq('All Customers')
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      describe 'GET index' do
+        it 'does not assign customers as @customers' do
+          get :index
+
+          assigns(:customers).should be_nil
+        end
       end
     end
   end

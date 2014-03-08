@@ -1,0 +1,26 @@
+<table class="sortable" border="1">
+  <thead>
+  <tr>
+    <th><%= sortable 'name' %></th>
+    <th><%= sortable 'account_number' %></th>
+    <th><%= sortable 'contact_person_name' %></th>
+    <th><%= sortable 'contact_email' %></th>
+    <th>Equipment Access</th>
+    <th>Certification Access</th>
+    <th>Vehicle Access</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @customers.each do |customer| %>
+    <tr>
+      <td><%= link_to customer.name, customer.model %></td>
+      <td><%= customer.account_number %></td>
+      <td><%= customer.contact_person_name %></td>
+      <td><%= customer.contact_email %></td>
+      <td><%= customer.equipment_access %></td>
+      <td><%= customer.certification_access %></td>
+      <td><%= customer.vehicle_access %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

@@ -26,6 +26,15 @@ class CustomersController < ModelController
     @customer = Customer.find(params[:id])
   end
 
+  def index
+    authorize! :read, :customer
+
+    @report_title = 'All Customers'
+    customer_collection = @customer_service.get_all_customers(current_user)
+    @customer_count = customer_collection.count
+    @customers = CustomerListPresenter.new(customer_collection).present(params)
+  end
+
   def load_customer_service(customer_service = CustomerService.new)
     @customer_service ||= customer_service
   end
