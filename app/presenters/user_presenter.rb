@@ -7,6 +7,7 @@ class UserPresenter
            :username,
            :first_name,
            :last_name,
+           :email,
            to: :model
 
   def initialize(model, template = nil)
@@ -36,5 +37,9 @@ class UserPresenter
 
   def customer
     model.customer
+  end
+
+  def name
+    "#{last_name}, #{first_name}"
   end
 end

@@ -3,6 +3,8 @@ class UsersController < ModelController
 
   before_filter :load_user_service
 
+  before_action :_set_user, only: [:show]
+
   def index
     authorize! :read, :user
 
@@ -12,7 +14,19 @@ class UsersController < ModelController
     @users = UserListPresenter.new(user_collection).present(params)
   end
 
+  def show
+    authorize! :read, :user
+
+    _set_user
+  end
+
   def load_user_service(user_service = UserService.new)
     @user_service ||= user_service
+  end
+
+  private
+
+  def _set_user
+    @user = _get_model(User)
   end
 end

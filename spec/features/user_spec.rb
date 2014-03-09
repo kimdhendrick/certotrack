@@ -12,6 +12,7 @@ describe 'Users', slow: true do
 
     login_as(admin_user)
   end
+
   describe 'All User List' do
     it 'should show All Users report' do
       jeffco = create(
@@ -214,6 +215,53 @@ describe 'Users', slow: true do
           page.should have_link 'Next'
         end
       end
+    end
+  end
+
+  describe 'Show User' do
+    it 'should show user details' do
+      jeffco = create(
+        :customer,
+        name: 'Jefferson County',
+        equipment_access: true,
+        certification_access: false,
+        vehicle_access: true
+      )
+
+      create(
+        :user,
+        first_name: 'Judith',
+        last_name: 'Jones',
+        username: 'judyjones',
+        customer: jeffco,
+        roles: jeffco.roles
+      )
+
+      visit '/'
+      page.should have_content 'All Users'
+      click_link 'All Users'
+
+      page.should have_content 'All Users'
+
+      click_on 'judyjones'
+
+      page.should have_content 'Show User'
+
+      page.should have_link 'Home'
+      page.should have_link 'All Users'
+
+      page.should have_content 'Name'
+      page.should have_content 'Username'
+      page.should have_content 'Customer'
+      page.should have_content 'Email Address'
+      page.should have_content 'Equipment Access'
+      page.should have_content 'Certification Access'
+      page.should have_content 'Vehicle Access'
+
+      page.should have_content 'Jones, Judith'
+      page.should have_content 'judyjones'
+      page.should have_link 'Jefferson County'
+      page.should have_content /.*Equipment Access.*Yes.*Certification Access.*No.*Vehicle Access.*Yes/
     end
   end
 end

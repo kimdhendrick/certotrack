@@ -73,4 +73,34 @@ describe UsersController do
       end
     end
   end
+
+  describe 'GET #show' do
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'assigns user' do
+        user = create(:user)
+
+        get :show, {:id => user.to_param}, {}
+
+        assigns(:user).should eq(user)
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'does not assign @user' do
+        user = create(:user)
+
+        get :show, {:id => user.to_param}, {}
+
+        assigns(:user).should be_nil
+      end
+    end
+  end
 end

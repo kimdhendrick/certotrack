@@ -29,10 +29,6 @@
   </p>
 
   <p>
-    <b>Contact Email</b>
-  </p>
-
-  <p>
     <b>Address</b>
     <%= customer.address1 %>
     <%= customer.address2 %>,
@@ -78,7 +74,7 @@
     <tbody>
     <% customer.users.each do |user| %>
       <tr>
-        <td><%= user.username %></td>
+        <td><%= link_to user.username, user.model %></td>
         <td><%= user.first_name %></td>
         <td><%= user.last_name %></td>
       </tr>

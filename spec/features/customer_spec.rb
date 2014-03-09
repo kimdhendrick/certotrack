@@ -126,13 +126,13 @@ describe 'Customers', slow: true do
         end
 
         within 'table tbody tr:nth-of-type(1)' do
-          page.should have_content 'js123'
+          page.should have_link 'js123'
           page.should have_content 'Joe'
           page.should have_content 'Schmoe'
         end
 
         within 'table tbody tr:nth-of-type(2)' do
-          page.should have_content 'kg999'
+          page.should have_link 'kg999'
           page.should have_content 'Kim'
           page.should have_content 'Glow'
         end

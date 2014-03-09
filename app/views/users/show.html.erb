@@ -1,0 +1,44 @@
+<% presenter_for(@user) do |user| %>
+  <h1>Show User</h1>
+
+  <ul id="primary-nav">
+    <li><%= link_to 'Home', root_path %></li>
+    <li><%= link_to 'All Users', users_path %></li>
+  </ul>
+
+  <p>
+    <b>Name</b>
+    <%= user.name %>
+  </p>
+
+  <p>
+    <b>Username</b>
+    <%= user.username %>
+  </p>
+
+  <p>
+    <b>Customer</b>
+    <%= link_to user.customer_name, user.customer %>
+  </p>
+
+  <p>
+    <b>Email Address</b>
+    <%= user.email %>
+  </p>
+
+  <p>
+    <b>Equipment Access</b>
+    <%= user.equipment_access %>
+  </p>
+
+  <p>
+    <b>Certification Access</b>
+    <%= user.certification_access %>
+  </p>
+
+  <p>
+    <b>Vehicle Access</b>
+    <%= user.vehicle_access %>
+  </p>
+
+<% end %>

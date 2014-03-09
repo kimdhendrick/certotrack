@@ -18,6 +18,7 @@ describe UserPresenter do
       username: 'user1',
       first_name: 'Bob',
       last_name: 'Smith',
+      email: 'bob@smith.com',
       customer: customer,
       roles: customer.roles
     )
@@ -65,5 +66,15 @@ describe UserPresenter do
 
   it 'should respond to customer' do
     UserPresenter.new(user).customer.should == customer
+  end
+
+  it 'should respond to name' do
+    user.first_name = 'John'
+    user.last_name = 'Doe'
+    UserPresenter.new(user).name.should == 'Doe, John'
+  end
+
+  it 'should respond to email' do
+    UserPresenter.new(user).email.should == 'bob@smith.com'
   end
 end
