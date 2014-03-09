@@ -13,9 +13,10 @@ class User < ActiveRecord::Base
   validates :password,
             format: {
               with: VALID_PASSWORD_REGEX,
-              message: "must be at least 8 characters long and must contain at least one digit and combination of upper and lower case"
-            }
-  validates_confirmation_of :password
+              message: 'must be at least 8 characters long and must contain at least one digit and combination of upper and lower case'
+            },
+            on: :create
+  validates_confirmation_of :password, on: :create
 
   validates :email,
             presence: true,

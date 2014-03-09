@@ -134,5 +134,80 @@ describe CustomerService do
       customer.reload
       customer.name.should_not == 'CustomerName'
     end
+
+    it "should update customer's users' vehicle access" do
+      customer = create(:customer, vehicle_access: false)
+      my_user = create(:user, customer: customer)
+      other_user = create(:user)
+      my_user.role?('vehicle').should be_false
+      other_user.role?('vehicle').should be_false
+
+      success = CustomerService.new.update_customer(customer, {'vehicle_access' => true})
+
+      success.should be_true
+
+      my_user.reload
+      my_user.role?('vehicle').should be_true
+      other_user.reload
+      other_user.role?('vehicle').should be_false
+    end
+
+    it "should update customer's users' equipment access" do
+      customer = create(:customer, equipment_access: false)
+      my_user = create(:user, customer: customer)
+      other_user = create(:user)
+      my_user.role?('equipment').should be_false
+      other_user.role?('equipment').should be_false
+
+      success = CustomerService.new.update_customer(customer, {'equipment_access' => true})
+
+      success.should be_true
+
+      my_user.reload
+      my_user.role?('equipment').should be_true
+      other_user.reload
+      other_user.role?('equipment').should be_false
+    end
+
+    it "should update customer's users' certification access" do
+      customer = create(:customer, certification_access: false)
+      my_user = create(:user, customer: customer)
+      other_user = create(:user)
+      my_user.role?('certification').should be_false
+      other_user.role?('certification').should be_false
+
+      success = CustomerService.new.update_customer(customer, {'certification_access' => true})
+
+      success.should be_true
+
+      my_user.reload
+      my_user.role?('certification').should be_true
+      other_user.reload
+      other_user.role?('certification').should be_false
+    end
+
+    it 'should return false if user save fails' do
+      customer = create(:customer)
+      my_user = create(:user, customer: customer)
+      my_user.stub(:save).and_return(false)
+      customer.stub(:users).and_return([my_user])
+
+      success = CustomerService.new.update_customer(customer, {})
+
+      success.should be_false
+    end
+
+    it 'only gets the vehicle role once' do
+      customer = create(:customer, vehicle_access: true)
+      my_user = create(:user, customer: customer)
+      my_user.roles = ['vehicle']
+      my_user.save
+
+      success = CustomerService.new.update_customer(customer, {})
+
+      success.should be_true
+      my_user.reload
+      my_user.roles.should == ['vehicle']
+    end
   end
 end

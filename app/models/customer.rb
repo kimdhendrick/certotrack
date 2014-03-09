@@ -13,4 +13,10 @@ class Customer < ActiveRecord::Base
   def sort_key
     name
   end
+
+  def roles
+    [:vehicle, :certification, :equipment].map do |access|
+      access.to_s if public_send("#{access.to_s}_access?")
+    end.compact
+  end
 end
