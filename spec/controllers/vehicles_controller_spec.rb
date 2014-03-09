@@ -33,7 +33,7 @@ describe VehiclesController do
         fake_vehicle_list_presenter.received_params[0]['direction'].should == 'asc'
       end
 
-      it 'assigns vehicles as @vehicles' do
+      it 'assigns vehicles' do
         controller.load_vehicle_service(Faker.new([vehicle]))
 
         get :index
@@ -67,7 +67,7 @@ describe VehiclesController do
         controller.load_vehicle_service(Faker.new([vehicle]))
       end
 
-      it 'assigns vehicles as @vehicles' do
+      it 'assigns vehicles' do
         get :index
 
         assigns(:vehicles).map(&:model).should eq([vehicle])
@@ -95,7 +95,7 @@ describe VehiclesController do
         sign_in stub_vehicle_user(customer)
       end
 
-      it 'assigns a new vehicle as @vehicle' do
+      it 'assigns a new vehicle' do
 
         get :new, {}, {}
 
@@ -121,7 +121,7 @@ describe VehiclesController do
         sign_in stub_admin
       end
 
-      it 'assigns a new vehicle as @vehicle' do
+      it 'assigns a new vehicle' do
         get :new, {}, {}
 
         assigns(:vehicle).should be_a_new(Vehicle)
@@ -146,7 +146,7 @@ describe VehiclesController do
         sign_in stub_guest_user
       end
 
-      it 'does not assign vehicle as @vehicle' do
+      it 'does not assign vehicle' do
         get :new, {}, {}
 
         assigns(:vehicle).should be_nil
@@ -176,7 +176,7 @@ describe VehiclesController do
           fake_vehicle_service.received_message.should == :create_vehicle
         end
 
-        it 'assigns a newly created vehicle as @vehicle' do
+        it 'assigns a newly created vehicle' do
           controller.load_vehicle_service(Faker.new(build(:vehicle)))
 
           post :create, {:vehicle => {vin: '98765432109876543'}}, {}
@@ -196,7 +196,7 @@ describe VehiclesController do
       end
 
       describe 'with invalid params' do
-        it 'assigns a newly created but unsaved vehicle as @vehicle' do
+        it 'assigns a newly created but unsaved vehicle' do
           fake_vehicle_service = Faker.new(build(:vehicle))
           controller.load_vehicle_service(fake_vehicle_service)
 
@@ -245,7 +245,7 @@ describe VehiclesController do
         fake_vehicle_service.received_message.should == :create_vehicle
       end
 
-      it 'assigns a newly created vehicle as @vehicle' do
+      it 'assigns a newly created vehicle' do
         controller.load_vehicle_service(Faker.new(build(:vehicle)))
 
         post :create, {:vehicle => {vin: '123'}}, {}
@@ -259,7 +259,7 @@ describe VehiclesController do
         sign_in stub_guest_user
       end
 
-      it 'does not assign vehicle as @vehicle' do
+      it 'does not assign vehicle' do
         expect {
           post :create, {:vehicle => {vin: '123'}}, {}
         }.not_to change(Vehicle, :count)
@@ -284,7 +284,7 @@ describe VehiclesController do
         sign_in stub_vehicle_user(customer)
       end
 
-      it 'assigns vehicle as @vehicle' do
+      it 'assigns vehicle' do
         get :show, {:id => vehicle.to_param}, {}
 
         assigns(:vehicle).should eq(vehicle)
@@ -302,7 +302,7 @@ describe VehiclesController do
         sign_in stub_admin
       end
 
-      it 'assigns vehicle as @vehicle' do
+      it 'assigns vehicle' do
         get :show, {:id => vehicle.to_param}, {}
 
         assigns(:vehicle).should eq(vehicle)
@@ -320,7 +320,7 @@ describe VehiclesController do
         sign_in stub_guest_user
       end
 
-      it 'does not assign vehicle as @vehicle' do
+      it 'does not assign vehicle' do
         vehicle = create(:vehicle, customer: customer)
 
         get :show, {:id => vehicle.to_param}, {}
@@ -336,7 +336,7 @@ describe VehiclesController do
         sign_in stub_vehicle_user(customer)
       end
 
-      it 'assigns the requested vehicle as @vehicle' do
+      it 'assigns the requested vehicle' do
         vehicle = create(:vehicle, customer: customer)
 
         get :edit, {:id => vehicle.to_param}, {}
@@ -368,7 +368,7 @@ describe VehiclesController do
         sign_in stub_admin
       end
 
-      it 'assigns the requested vehicle as @vehicle' do
+      it 'assigns the requested vehicle' do
         get :edit, {:id => vehicle.to_param}, {}
 
         assigns(:vehicle).should eq(vehicle)
@@ -395,7 +395,7 @@ describe VehiclesController do
         sign_in stub_guest_user
       end
 
-      it 'does not assign vehicle as @vehicle' do
+      it 'does not assign vehicle' do
         vehicle = create(:vehicle, customer: customer)
 
         get :edit, {:id => vehicle.to_param}, {}
@@ -424,7 +424,7 @@ describe VehiclesController do
           fake_vehicle_service.received_params[1].should == {'vehicle_number' => '123'}
         end
 
-        it 'assigns the requested vehicle as @vehicle' do
+        it 'assigns the requested vehicle' do
           controller.load_vehicle_service(Faker.new(true))
           vehicle = create(:vehicle, customer: customer)
 
@@ -445,7 +445,7 @@ describe VehiclesController do
       end
 
       describe 'with invalid params' do
-        it 'assigns the vehicle as @vehicle' do
+        it 'assigns the vehicle' do
           controller.load_vehicle_service(Faker.new(false))
           vehicle = create(:vehicle, customer: customer)
 
@@ -499,7 +499,7 @@ describe VehiclesController do
         fake_vehicle_service.received_params[1].should == {'vehicle_number' => 'J123'}
       end
 
-      it 'assigns the requested vehicle as @vehicle' do
+      it 'assigns the requested vehicle' do
         controller.load_vehicle_service(Faker.new(vehicle))
 
         put :update, {:id => vehicle.id, :vehicle => {'vehicle_number' => '123'}}, {}
@@ -513,7 +513,7 @@ describe VehiclesController do
         sign_in stub_guest_user
       end
 
-      it 'does not assign vehicle as @vehicle' do
+      it 'does not assign vehicle' do
         vehicle = create(:vehicle, customer: customer)
 
         put :update, {:id => vehicle.to_param, :vehicle => {'vehicle_number' => '123'}}, {}
@@ -611,7 +611,7 @@ describe VehiclesController do
         fake_vehicle_list_presenter.received_params[0]['direction'].should == 'asc'
       end
 
-      it 'assigns vehicles as @vehicles' do
+      it 'assigns vehicles' do
         vehicle = build(:vehicle, customer: customer)
         fake_vehicle_service = Faker.new([vehicle])
         controller.load_vehicle_service(fake_vehicle_service)

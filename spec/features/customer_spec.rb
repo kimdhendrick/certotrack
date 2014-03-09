@@ -178,7 +178,8 @@ describe 'Customers', slow: true do
     end
 
     before do
-      login_as_user_with_role('admin', admin_customer)
+      admin_user = create(:user, admin: true, customer: admin_customer)
+      login_as(admin_user)
     end
 
     it 'should show All Customers report' do
@@ -376,7 +377,8 @@ describe 'Customers', slow: true do
 
   describe 'Manage Customers' do
     before do
-      login_as_user_with_role('admin', create(:customer, name: 'Jefferson County'))
+      admin_user = create(:user, admin: true, customer: create(:customer, name: 'Jefferson County'))
+      login_as(admin_user)
     end
 
     it 'should list customers on home page' do

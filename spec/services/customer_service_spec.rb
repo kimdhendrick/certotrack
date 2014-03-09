@@ -7,7 +7,7 @@ describe CustomerService do
 
     context 'when admin user' do
       it 'should return all customers' do
-        admin_user = create(:user, roles: ['admin'], customer: other_customer)
+        admin_user = create(:user, admin: true, customer: other_customer)
 
         customers = subject.get_all_customers(admin_user)
 

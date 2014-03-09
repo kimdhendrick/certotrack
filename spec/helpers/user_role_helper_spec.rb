@@ -14,12 +14,12 @@ describe UserRoleHelper do
 
   describe 'remove_role' do
     it 'should remove the old role' do
-      equipment_user = create(:user, roles: ['admin'])
-      equipment_user.role?('admin').should be_true
+      equipment_user = create(:user, roles: ['equipment'])
+      equipment_user.role?('equipment').should be_true
 
-      UserRoleHelper::remove_role(equipment_user, 'admin')
+      UserRoleHelper::remove_role(equipment_user, 'equipment')
 
-      equipment_user.role?('admin').should be_false
+      equipment_user.role?('equipment').should be_false
     end
   end
 end

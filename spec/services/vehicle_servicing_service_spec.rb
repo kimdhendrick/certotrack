@@ -190,7 +190,7 @@ describe VehicleServicingService do
 
     context 'admin user' do
       it 'returns count of all services' do
-        admin_user = create(:user, roles: ['admin'])
+        admin_user = create(:user, admin: true)
 
         VehicleServicingService.new.count_all_services(admin_user).should == 2
       end
@@ -213,7 +213,7 @@ describe VehicleServicingService do
 
     context 'admin user' do
       it 'returns count of all services' do
-        admin_user = create(:user, roles: ['admin'])
+        admin_user = create(:user, admin: true)
 
         VehicleServicingService.new.get_all_services(admin_user).should =~ [my_service, other_service]
       end
@@ -239,7 +239,7 @@ describe VehicleServicingService do
 
     context 'admin user' do
       it 'returns count of expired services' do
-        admin_user = create(:user, roles: ['admin'])
+        admin_user = create(:user, admin: true)
 
         VehicleServicingService.new.count_expired_services(admin_user).should == 2
       end
@@ -262,7 +262,7 @@ describe VehicleServicingService do
 
     context 'admin user' do
       it 'returns expired services' do
-        admin_user = create(:user, roles: ['admin'])
+        admin_user = create(:user, admin: true)
 
         VehicleServicingService.new.get_expired_services(admin_user).should =~ [expired_service_for_customer, expired_service_for_other_customer]
       end
@@ -288,7 +288,7 @@ describe VehicleServicingService do
 
     context 'admin user' do
       it 'returns count of expiring services' do
-        admin_user = create(:user, roles: ['admin'])
+        admin_user = create(:user, admin: true)
 
         VehicleServicingService.new.count_expiring_services(admin_user).should == 2
       end
@@ -311,7 +311,7 @@ describe VehicleServicingService do
 
     context 'admin user' do
       it 'returns expiring services' do
-        admin_user = create(:user, roles: ['admin'])
+        admin_user = create(:user, admin: true)
 
         VehicleServicingService.new.get_expiring_services(admin_user).should =~ [expiring_service_for_customer, expiring_service_for_other_customer]
       end

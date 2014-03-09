@@ -4,7 +4,7 @@ class Ability
   def initialize(user)
     @user = user || User.new
 
-    can :manage, :all if _admin_user?
+    _setup_abilities_for_all if user.admin?
 
     _setup_abilities_for([Equipment]) if _equipment_user?
     _setup_abilities_for([Certification, CertificationType]) if _certification_user?
@@ -16,10 +16,6 @@ class Ability
   private
 
   attr_reader :user
-
-  def _admin_user?
-    user.role?(UserRoleHelper::ROLE_ADMIN)
-  end
 
   def _certification_user?
     user.role?(UserRoleHelper::ROLE_CERTIFICATION)
@@ -51,5 +47,21 @@ class Ability
         resource_instance.try(:customer) == user.customer
       end
     end
+  end
+
+  def _setup_abilities_for_all
+    [
+      :equipment,
+      :certification,
+      :certification_type,
+      :employee,
+      :location,
+      :vehicle,
+      :service_type,
+      :service,
+      :customer,
+      :user,
+      :administration
+    ].each { |resource| can :manage, resource }
   end
 end

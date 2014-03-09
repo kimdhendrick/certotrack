@@ -5,15 +5,15 @@ module CurrentUserHelpers
   end
 
   def stub_equipment_user(customer = nil)
-    stub_current_user_with(_create_stub_user_with_roles(['equipment'], customer))
+    stub_current_user_with(_create_stub_user_with_roles(['equipment'], {customer: customer}))
   end
 
   def stub_certification_user(customer = nil)
-    stub_current_user_with(_create_stub_user_with_roles(['certification'], customer))
+    stub_current_user_with(_create_stub_user_with_roles(['certification'], {customer: customer}))
   end
 
   def stub_vehicle_user(customer = nil)
-    stub_current_user_with(_create_stub_user_with_roles(['vehicle'], customer))
+    stub_current_user_with(_create_stub_user_with_roles(['vehicle'], {customer: customer}))
   end
 
   def stub_guest_user
@@ -21,11 +21,13 @@ module CurrentUserHelpers
   end
 
   def stub_admin(customer = nil)
-    stub_current_user_with(_create_stub_user_with_roles(['admin'], customer))
+    stub_current_user_with(_create_stub_user_with_roles([], {customer: customer, admin: true}))
   end
 
-  def _create_stub_user_with_roles(roles, customer = nil)
-    customer ||= create(:customer)
-    stub_current_user_with(create(:user, roles: roles, customer: customer))
+  def _create_stub_user_with_roles(roles, params = {})
+    customer = params[:customer] || create(:customer)
+    admin = params[:admin] || false
+
+    stub_current_user_with(create(:user, roles: roles, admin: admin, customer: customer))
   end
 end

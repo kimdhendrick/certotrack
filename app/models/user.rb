@@ -27,10 +27,6 @@ class User < ActiveRecord::Base
 
   scope :with_role, ->(role) { where(UserRoleHelper::role_where_clause(role)) }
 
-  def admin?
-    UserRoleHelper::admin?(self)
-  end
-
   def role?(role)
     UserRoleHelper::role?(self, role)
   end
@@ -44,7 +40,7 @@ class User < ActiveRecord::Base
   end
 
   def equipment_access?
-    role? UserRoleHelper::ROLE_VEHICLE
+    role? UserRoleHelper::ROLE_EQUIPMENT
   end
 
   def certification_access?

@@ -8,7 +8,7 @@ describe LocationService do
   describe '#get_all_locations' do
     context 'when admin user' do
       it 'should return all locations' do
-        admin_user = create(:user, roles: ['admin'])
+        admin_user = create(:user, admin: true)
 
         locations = LocationService.new.get_all_locations(admin_user)
 
@@ -50,7 +50,7 @@ describe LocationService do
     context 'as an admin user' do
       it 'should create location' do
         other_customer = create(:customer)
-        admin_user = create(:user, roles: ['admin'])
+        admin_user = create(:user, admin: true)
         attributes =
           {
             'name' => 'Alaska',
@@ -69,7 +69,7 @@ describe LocationService do
   describe '#update_location' do
     context 'admin user' do
       it 'should update locations attributes' do
-        admin_user = create(:user, roles: ['admin'])
+        admin_user = create(:user, admin: true)
         other_customer = create(:customer)
         location = create(:location, customer: my_customer)
         attributes =

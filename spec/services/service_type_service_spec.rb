@@ -9,7 +9,7 @@ describe ServiceTypeService do
 
     context 'when admin user' do
       it 'should return all service_types' do
-        admin_user = create(:user, roles: ['admin'])
+        admin_user = create(:user, admin: true)
 
         service_types = ServiceTypeService.new.get_all_service_types(admin_user)
 

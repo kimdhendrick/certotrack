@@ -21,7 +21,7 @@ CertoTrack - Home
   <%= render 'vehicle_links' %>
 <% end %>
 
-<% if (can? :manage, :all) %>
+<% if (can? :manage, :administration) %>
   <hr/>
   Administration Links:
   <%= render 'administration_links' %>

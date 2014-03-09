@@ -77,7 +77,7 @@ describe CertificationTypeService do
   end
 
   describe '#certification_type retrieval' do
-    let(:admin_user) { create(:user, roles: ['admin']) }
+    let(:admin_user) { create(:user, admin: true) }
     let(:my_user) { create(:user, customer: customer) }
     let!(:my_certification_type) { create(:certification_type, customer: customer) }
     let!(:other_certification_type) { create(:certification_type) }

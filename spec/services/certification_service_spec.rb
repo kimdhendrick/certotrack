@@ -10,7 +10,7 @@ describe CertificationService do
 
     context 'an admin user' do
       it 'should return count that includes all certifications' do
-        admin_user = create(:user, roles: ['admin'])
+        admin_user = create(:user, admin: true)
 
         CertificationService.new.count_all_certifications(admin_user).should == 2
       end
@@ -36,7 +36,7 @@ describe CertificationService do
 
     context 'an admin user' do
       it 'should return count that includes all expired certifications' do
-        admin_user = create(:user, roles: ['admin'])
+        admin_user = create(:user, admin: true)
 
         CertificationService.new.count_expired_certifications(admin_user).should == 2
       end
@@ -62,7 +62,7 @@ describe CertificationService do
 
     context 'an admin user' do
       it 'should return count that includes all expiring certifications' do
-        admin_user = create(:user, roles: ['admin'])
+        admin_user = create(:user, admin: true)
 
         CertificationService.new.count_expiring_certifications(admin_user).should == 2
       end
@@ -88,7 +88,7 @@ describe CertificationService do
 
     context 'an admin user' do
       it 'should return count that includes all units based certifications' do
-        admin_user = create(:user, roles: ['admin'])
+        admin_user = create(:user, admin: true)
 
         CertificationService.new.count_units_based_certifications(admin_user).should == 2
       end
@@ -115,7 +115,7 @@ describe CertificationService do
 
     context 'an admin user' do
       it 'should return count that includes all units based certifications' do
-        admin_user = create(:user, roles: ['admin'])
+        admin_user = create(:user, admin: true)
 
         CertificationService.new.count_recertification_required_certifications(admin_user).should == 2
       end
@@ -135,7 +135,7 @@ describe CertificationService do
 
     context 'an admin user' do
       it 'should return all certifications' do
-        admin_user = create(:user, roles: ['admin'])
+        admin_user = create(:user, admin: true)
 
         my_certification = create(:certification, customer: my_customer)
         other_certification = create(:certification)
@@ -165,7 +165,7 @@ describe CertificationService do
 
     context 'an admin user' do
       it 'should return count that includes all expired certifications' do
-        admin_user = create(:user, roles: ['admin'])
+        admin_user = create(:user, admin: true)
 
         CertificationService.new.get_expired_certifications(admin_user).should =~
             [certification_one_expired, certification_two_expired]
@@ -190,7 +190,7 @@ describe CertificationService do
 
     context 'an admin user' do
       it 'should return count that includes all expiring certifications' do
-        admin_user = create(:user, roles: ['admin'])
+        admin_user = create(:user, admin: true)
 
         CertificationService.new.get_expiring_certifications(admin_user).should =~
             [certification_one_expiring, certification_two_expiring]
@@ -217,7 +217,7 @@ describe CertificationService do
 
     context 'an admin user' do
       it 'should return count that includes all units based certifications' do
-        admin_user = create(:user, roles: ['admin'])
+        admin_user = create(:user, admin: true)
 
         CertificationService.new.get_units_based_certifications(admin_user).should =~
             [@units_based_certification_for_my_customer, @units_based_certification_for_other_customer]
@@ -245,7 +245,7 @@ describe CertificationService do
 
     context 'an admin user' do
       it 'should return count that includes all units based certifications' do
-        admin_user = create(:user, roles: ['admin'])
+        admin_user = create(:user, admin: true)
 
         CertificationService.new.get_recertification_required_certifications(admin_user).should =~
             [@recertify_certification_for_my_customer, @recertify_certification_for_other_customer]
@@ -541,7 +541,7 @@ describe CertificationService do
 
     context 'an admin user' do
       it 'should return all certifications' do
-        admin_user = create(:user, roles: ['admin'])
+        admin_user = create(:user, admin: true)
         my_certifications = create(:certification, customer: my_customer)
         other_certifications = create(:certification)
 

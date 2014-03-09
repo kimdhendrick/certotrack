@@ -1,14 +1,9 @@
 module UserRoleHelper
   ROLES = [
-    ROLE_ADMIN = 'admin',
     ROLE_VEHICLE = 'vehicle',
     ROLE_EQUIPMENT = 'equipment',
     ROLE_CERTIFICATION = 'certification'
   ]
-
-  def self.admin?(user)
-    role?(user, ROLE_ADMIN)
-  end
 
   def self.role?(user, role)
     user.roles.include?(role)

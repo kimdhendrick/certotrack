@@ -9,7 +9,7 @@ describe VehicleService do
 
     context 'when admin user' do
       it 'should return all vehicles' do
-        admin_user = create(:user, roles: ['admin'])
+        admin_user = create(:user, admin: true)
 
         vehicles = VehicleService.new.get_all_vehicles(admin_user)
 
@@ -151,7 +151,7 @@ describe VehicleService do
 
     context 'an admin user' do
       it 'should return all vehicles' do
-        admin_user = create(:user, roles: ['admin'])
+        admin_user = create(:user, admin: true)
         my_vehicle = create(:vehicle, customer: my_customer)
         other_vehicle = create(:vehicle)
 

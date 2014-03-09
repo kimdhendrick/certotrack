@@ -7,7 +7,7 @@ describe 'Users', slow: true do
       username: 'admin',
       first_name: 'Adam',
       last_name: 'Admin',
-      roles: ['admin']
+      admin: true
     )
 
     login_as(admin_user)

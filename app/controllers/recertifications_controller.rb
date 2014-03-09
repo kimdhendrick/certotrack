@@ -1,4 +1,5 @@
 class RecertificationsController < ModelController
+  include ControllerHelper
 
   before_filter :load_certification_service
 
@@ -29,9 +30,7 @@ class RecertificationsController < ModelController
   private
 
   def _set_certification
-    certification_pending_authorization = Certification.find(params[:certification_id])
-    authorize! :manage, certification_pending_authorization
-    @certification = certification_pending_authorization
+    @certification = _get_model(Certification, :certification_id)
   end
 
   def _success_message(certification)

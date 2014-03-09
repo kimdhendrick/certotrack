@@ -171,8 +171,8 @@ describe User do
   describe 'roles' do
     describe 'roles' do
       it 'should assign and return the roles assigned to the user' do
-        user.roles = ['equipment', 'admin']
-        user.roles.should =~ ['equipment', 'admin']
+        user.roles = ['equipment', 'certification']
+        user.roles.should =~ ['equipment', 'certification']
       end
     end
 
@@ -182,42 +182,33 @@ describe User do
         equipment_user.role?('equipment').should be_true
         equipment_user.role?('certification').should be_false
         equipment_user.role?('vehicle').should be_false
-        equipment_user.role?('admin').should be_false
 
         certification_user = create(:user, roles: ['certification'])
         certification_user.role?('equipment').should be_false
         certification_user.role?('certification').should be_true
         certification_user.role?('vehicle').should be_false
-        certification_user.role?('admin').should be_false
 
         vehicle_user = create(:user, roles: ['vehicle'])
         vehicle_user.role?('equipment').should be_false
         vehicle_user.role?('certification').should be_false
         vehicle_user.role?('vehicle').should be_true
-        vehicle_user.role?('admin').should be_false
-
-        admin_user = create(:user, roles: ['admin'])
-        admin_user.role?('equipment').should be_false
-        admin_user.role?('certification').should be_false
-        admin_user.role?('vehicle').should be_false
-        admin_user.role?('admin').should be_true
       end
     end
 
     describe 'admin?' do
-      it 'should be admin with the admin role' do
-        admin_user = create(:user, roles: ['admin'])
+      it 'should be admin with the admin flag' do
+        admin_user = create(:user, admin: true, roles: [])
         admin_user.should be_admin
       end
     end
 
     describe 'with_role' do
       it 'should return users with given role' do
-        equipment_user_1 = create(:user, roles: ['admin'])
-        equipment_user_2 = create(:user, roles: ['admin'])
+        equipment_user_1 = create(:user, roles: ['equipment'])
+        equipment_user_2 = create(:user, roles: ['equipment'])
         certification_user = create(:user, roles: ['certification'])
 
-        User.with_role('admin').should =~ [equipment_user_1, equipment_user_2]
+        User.with_role('equipment').should =~ [equipment_user_1, equipment_user_2]
       end
     end
 

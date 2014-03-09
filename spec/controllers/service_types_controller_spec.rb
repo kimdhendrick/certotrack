@@ -35,7 +35,7 @@ describe ServiceTypesController do
         fake_service_type_list_presenter.received_params[0]['direction'].should == 'asc'
       end
 
-      it 'assigns service_types as @service_types' do
+      it 'assigns service_types' do
         controller.load_service_type_service(Faker.new([service_type]))
 
         get :index
@@ -70,7 +70,7 @@ describe ServiceTypesController do
         controller.load_service_type_service(Faker.new([service_type]))
       end
 
-      it 'assigns service_types as @service_types' do
+      it 'assigns service_types' do
         get :index
 
         assigns(:service_types).map(&:model).should eq([service_type])
@@ -99,7 +99,7 @@ describe ServiceTypesController do
         sign_in @my_user
       end
 
-      it 'assigns service_type as @service_type' do
+      it 'assigns service_type' do
         service_type = create(:service_type, customer: customer)
 
         get :show, {:id => service_type.to_param}, {}
@@ -199,7 +199,7 @@ describe ServiceTypesController do
         sign_in stub_admin
       end
 
-      it 'assigns service_type as @service_type' do
+      it 'assigns service_type' do
         service_type = create(:service_type, customer: customer)
 
         get :show, {:id => service_type.to_param}, {}
@@ -237,7 +237,7 @@ describe ServiceTypesController do
         sign_in stub_guest_user
       end
 
-      it 'does not assign service_type as @service_type' do
+      it 'does not assign service_type' do
         service_type = create(:service_type, customer: customer)
 
         get :show, {:id => service_type.to_param}, {}
@@ -294,7 +294,7 @@ describe ServiceTypesController do
         sign_in stub_admin(customer)
       end
 
-      it 'assigns a new service_type as @service_type' do
+      it 'assigns a new service_type' do
         get :new, {}, {}
         assigns(:service_type).should be_a_new(ServiceType)
       end
@@ -328,7 +328,7 @@ describe ServiceTypesController do
           fake_service_type_service.received_message.should == :create_service_type
         end
 
-        it 'assigns a newly created service_type as @service_type' do
+        it 'assigns a newly created service_type' do
           controller.load_service_type_service(fake_service_type_service)
 
           post :create, {:service_type => service_type_attributes}, {}
@@ -346,7 +346,7 @@ describe ServiceTypesController do
       end
 
       describe 'with invalid params' do
-        it 'assigns a newly created but unsaved service_type as @service_type' do
+        it 'assigns a newly created but unsaved service_type' do
           controller.load_service_type_service(fake_service_type_service_non_persisted)
 
           post :create, {:service_type => {'name' => 'invalid value'}}, {}
@@ -404,7 +404,7 @@ describe ServiceTypesController do
         fake_service_type_service_non_persisted.received_message.should == :create_service_type
       end
 
-      it 'assigns a newly created service_type as @service_type' do
+      it 'assigns a newly created service_type' do
         controller.load_service_type_service(fake_service_type_service_non_persisted)
 
         post :create, {:service_type => service_type_attributes}, {}
@@ -418,7 +418,7 @@ describe ServiceTypesController do
         sign_in stub_guest_user
       end
 
-      it 'does not assign service_type as @service_type' do
+      it 'does not assign service_type' do
         expect {
           post :create, {:service_type => service_type_attributes}, {}
         }.not_to change(ServiceType, :count)
@@ -437,7 +437,7 @@ describe ServiceTypesController do
         sign_in stub_vehicle_user(customer)
       end
 
-      it 'assigns the requested service_type as @service_type' do
+      it 'assigns the requested service_type' do
         service_type = create(:service_type, customer: customer)
 
         get :edit, {:id => service_type.to_param}, {}
@@ -476,7 +476,7 @@ describe ServiceTypesController do
         sign_in stub_admin(customer)
       end
 
-      it 'assigns the requested service_type as @service_type' do
+      it 'assigns the requested service_type' do
         service_type = create(:service_type, customer: customer)
 
         get :edit, {:id => service_type.to_param}, {}
@@ -490,7 +490,7 @@ describe ServiceTypesController do
         sign_in stub_guest_user
       end
 
-      it 'does not assign service_type as @service_type' do
+      it 'does not assign service_type' do
         service_type = create(:service_type, customer: customer)
 
         get :edit, {:id => service_type.to_param}, {}
@@ -516,7 +516,7 @@ describe ServiceTypesController do
           fake_service_type_service.received_message.should == :update_service_type
         end
 
-        it 'assigns the requested service_type as @service_type' do
+        it 'assigns the requested service_type' do
           controller.load_service_type_service(fake_service_type_service)
           service_type = create(:service_type, customer: customer)
 
@@ -536,7 +536,7 @@ describe ServiceTypesController do
       end
 
       describe 'with invalid params' do
-        it 'assigns the service_type as @service_type' do
+        it 'assigns the service_type' do
           controller.load_service_type_service(fake_service_type_service)
           service_type = create(:service_type, customer: customer)
 
@@ -598,7 +598,7 @@ describe ServiceTypesController do
         fake_service_type_service.received_message.should == :update_service_type
       end
 
-      it 'assigns the requested service_type as @service_type' do
+      it 'assigns the requested service_type' do
         controller.load_service_type_service(fake_service_type_service)
         service_type = create(:service_type, customer: customer)
 
@@ -613,7 +613,7 @@ describe ServiceTypesController do
         sign_in stub_guest_user
       end
 
-      it 'does not assign service_type as @service_type' do
+      it 'does not assign service_type' do
         service_type = create(:service_type, customer: customer)
 
         put :update, {:id => service_type.to_param, :service_type => service_type_attributes}, {}

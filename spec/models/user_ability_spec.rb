@@ -8,17 +8,19 @@ describe User do
     let(:user) { nil }
 
     context 'when user is an admin' do
-      let(:user) { build(:user, roles: ['admin']) }
+      let(:user) { build(:user, admin: true) }
 
-      it { should be_able_to(:manage, :all) }
       it { should be_able_to(:manage, :customer) }
+      it { should be_able_to(:manage, :user) }
       it { should be_able_to(:manage, :equipment) }
       it { should be_able_to(:manage, :certification) }
+      it { should be_able_to(:manage, :certification_type) }
       it { should be_able_to(:manage, :employee) }
       it { should be_able_to(:manage, :location) }
       it { should be_able_to(:manage, :vehicle) }
       it { should be_able_to(:manage, :service_type) }
       it { should be_able_to(:manage, :service) }
+      it { should be_able_to(:manage, :administration) }
     end
 
     context 'when user is a guest' do
@@ -27,10 +29,12 @@ describe User do
       it { should_not be_able_to(:manage, :all) }
       it { should_not be_able_to(:manage, :equipment) }
       it { should_not be_able_to(:manage, :certification) }
+      it { should_not be_able_to(:manage, :certification_type) }
       it { should_not be_able_to(:manage, :employee) }
       it { should_not be_able_to(:manage, :location) }
       it { should_not be_able_to(:manage, :vehicle) }
       it { should_not be_able_to(:manage, :customer) }
+      it { should_not be_able_to(:manage, :user) }
       it { should_not be_able_to(:manage, :service_type) }
       it { should_not be_able_to(:manage, :service) }
     end
@@ -46,10 +50,11 @@ describe User do
       it { should be_able_to(:create, :employee) }
       it { should_not be_able_to(:read, :vehicle) }
       it { should_not be_able_to(:read, :certification) }
+      it { should_not be_able_to(:read, :certification_type) }
       it { should_not be_able_to(:manage, :customer) }
+      it { should_not be_able_to(:manage, :user) }
       it { should_not be_able_to(:manage, :service_type) }
       it { should_not be_able_to(:manage, :service) }
-      it { should_not be_able_to(:manage, :all) }
     end
 
     context 'when user is an equipment user with equipment' do
@@ -84,15 +89,17 @@ describe User do
 
       it { should be_able_to(:read, :certification) }
       it { should be_able_to(:create, :certification) }
+      it { should be_able_to(:read, :certification_type) }
+      it { should be_able_to(:create, :certification_type) }
       it { should be_able_to(:read, :location) }
       it { should be_able_to(:create, :location) }
       it { should be_able_to(:read, :employee) }
       it { should_not be_able_to(:manage, :equipment) }
       it { should_not be_able_to(:read, :vehicle) }
       it { should_not be_able_to(:manage, :customer) }
+      it { should_not be_able_to(:manage, :user) }
       it { should_not be_able_to(:manage, :service_type) }
       it { should_not be_able_to(:manage, :service) }
-      it { should_not be_able_to(:manage, :all) }
 
     end
 
@@ -143,9 +150,10 @@ describe User do
       it { should be_able_to(:create, :service) }
       it { should_not be_able_to(:read, :equipment) }
       it { should_not be_able_to(:read, :certification) }
+      it { should_not be_able_to(:read, :certification_type) }
       it { should_not be_able_to(:read, :employee) }
       it { should_not be_able_to(:manage, :customer) }
-      it { should_not be_able_to(:manage, :all) }
+      it { should_not be_able_to(:manage, :user) }
     end
 
     context 'when user is an vehicle user with vehicle' do

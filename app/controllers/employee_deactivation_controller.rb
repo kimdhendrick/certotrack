@@ -1,4 +1,5 @@
 class EmployeeDeactivationController < ModelController
+  include ControllerHelper
 
   before_filter :load_equipment_service,
                 :load_employee_deactivation_service,
@@ -40,8 +41,6 @@ class EmployeeDeactivationController < ModelController
   private
 
   def _set_employee
-    employee_pending_authorization = Employee.find(params[:id])
-    authorize! :manage, employee_pending_authorization
-    @employee = employee_pending_authorization
+    @employee = _get_model(Employee)
   end
 end

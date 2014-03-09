@@ -3,7 +3,7 @@ require 'spec_helper'
 describe EmployeeService do
   let(:my_customer) { create(:customer) }
   let(:my_user) { create(:user, customer: my_customer)}
-  let(:admin_user) { create(:user, roles: ['admin'])}
+  let(:admin_user) { create(:user, admin: true)}
 
   describe 'get_all_employees' do
     context 'when admin user' do

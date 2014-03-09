@@ -47,7 +47,14 @@ module ControllerHelper
 
   def _get_model(model_class, param_name = :id)
     model_pending_authorization = model_class.find(params[param_name])
-    authorize! :manage, model_pending_authorization
+    resource = model_class.name.underscore.to_sym
+
+    if can? :manage, resource
+      authorize! :manage, resource
+    else
+      authorize! :manage, model_pending_authorization
+    end
+
     model_pending_authorization
   end
 end

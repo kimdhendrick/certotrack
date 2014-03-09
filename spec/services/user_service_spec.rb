@@ -7,7 +7,7 @@ describe UserService do
 
     context 'when admin user' do
       it 'should return all users' do
-        admin_user = create(:user, roles: ['admin'])
+        admin_user = create(:user, admin: true)
 
         users = subject.get_all_users(admin_user)
 

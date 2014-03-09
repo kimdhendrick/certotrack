@@ -1,4 +1,6 @@
 class ReservicesController < ModelController
+  include ControllerHelper
+
   before_action :load_vehicle_servicing_service
   before_action :_set_service, only: [:new, :create]
 
@@ -19,9 +21,7 @@ class ReservicesController < ModelController
   private
 
   def _set_service
-    service_pending_authorization = Service.find(params[:service_id])
-    authorize! :manage, service_pending_authorization
-    @service = service_pending_authorization
+    @service = _get_model(Service, :service_id)
   end
 
   def reservice_attributes

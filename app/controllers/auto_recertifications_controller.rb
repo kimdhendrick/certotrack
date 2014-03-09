@@ -20,7 +20,11 @@ class AutoRecertificationsController < ModelController
     certifications = Certification.find(params[:certification_ids])
 
     certifications.each { |certification|
-      authorize! :manage, certification
+      if can? :manage, :certification
+        authorize! :manage, :certification
+      else
+        authorize! :manage, certification
+      end
     }
 
     result = @certification_service.auto_recertify(certifications)
