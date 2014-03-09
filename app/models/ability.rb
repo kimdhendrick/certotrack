@@ -18,19 +18,19 @@ class Ability
   attr_reader :user
 
   def _admin_user?
-    user.role?('admin')
+    user.role?(UserRoleHelper::ROLE_ADMIN)
   end
 
   def _certification_user?
-    user.role?('certification')
+    user.role?(UserRoleHelper::ROLE_CERTIFICATION)
   end
 
   def _equipment_user?
-    user.role?('equipment')
+    user.role?(UserRoleHelper::ROLE_EQUIPMENT)
   end
 
   def _vehicle_user?
-    user.role?('vehicle')
+    user.role?(UserRoleHelper::ROLE_VEHICLE)
   end
 
   def _employee_user?

@@ -1,4 +1,5 @@
 class CustomerPresenter
+  include TruthHelper
 
   attr_reader :model
 
@@ -25,15 +26,15 @@ class CustomerPresenter
   end
 
   def equipment_access
-    _yes_no(model.equipment_access?)
+    yes_no(model.equipment_access?)
   end
 
   def certification_access
-    _yes_no(model.certification_access?)
+    yes_no(model.certification_access?)
   end
 
   def vehicle_access
-    _yes_no(model.vehicle_access?)
+    yes_no(model.vehicle_access?)
   end
 
   def locations
@@ -46,11 +47,5 @@ class CustomerPresenter
 
   def edit_link
     @template.link_to 'Edit', @template.edit_customer_path(model)
-  end
-
-  private
-
-  def _yes_no(truthy)
-    truthy ? 'Yes' : 'No'
   end
 end

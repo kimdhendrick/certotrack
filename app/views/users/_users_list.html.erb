@@ -1,0 +1,26 @@
+<table class="sortable" border="1">
+  <thead>
+  <tr>
+    <th><%= sortable 'username' %></th>
+    <th><%= sortable 'first_name' %></th>
+    <th><%= sortable 'last_name' %></th>
+    <th><%= sortable 'customer_name', title = 'Customer' %></th>
+    <th>Equipment Access</th>
+    <th>Certification Access</th>
+    <th>Vehicle Access</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @users.each do |user| %>
+    <tr>
+      <td><%= link_to user.username, user.model %></td>
+      <td><%= user.first_name %></td>
+      <td><%= user.last_name %></td>
+      <td><%= link_to user.customer_name, user.customer %></td>
+      <td><%= user.equipment_access %></td>
+      <td><%= user.certification_access %></td>
+      <td><%= user.vehicle_access %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

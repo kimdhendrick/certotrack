@@ -1,8 +1,13 @@
 module UserRoleHelper
-  ROLES = %w[admin equipment certification vehicle]
+  ROLES = [
+    ROLE_ADMIN = 'admin',
+    ROLE_VEHICLE = 'vehicle',
+    ROLE_EQUIPMENT = 'equipment',
+    ROLE_CERTIFICATION = 'certification'
+  ]
 
   def self.admin?(user)
-    role?(user, 'admin')
+    role?(user, ROLE_ADMIN)
   end
 
   def self.role?(user, role)

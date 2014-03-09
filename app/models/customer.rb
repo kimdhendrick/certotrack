@@ -15,8 +15,10 @@ class Customer < ActiveRecord::Base
   end
 
   def roles
-    [:vehicle, :certification, :equipment].map do |access|
-      access.to_s if public_send("#{access.to_s}_access?")
-    end.compact
+    [
+      UserRoleHelper::ROLE_VEHICLE,
+      UserRoleHelper::ROLE_CERTIFICATION,
+      UserRoleHelper::ROLE_EQUIPMENT
+    ].map { |access| access if public_send("#{access}_access?") }.compact
   end
 end

@@ -43,6 +43,18 @@ class User < ActiveRecord::Base
     UserRoleHelper::roles(self)
   end
 
+  def equipment_access?
+    role? UserRoleHelper::ROLE_VEHICLE
+  end
+
+  def certification_access?
+    role? UserRoleHelper::ROLE_CERTIFICATION
+  end
+
+  def vehicle_access?
+    role? UserRoleHelper::ROLE_VEHICLE
+  end
+
   def certification_types
     customer.certification_types
   end

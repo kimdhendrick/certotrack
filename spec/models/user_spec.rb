@@ -220,6 +220,36 @@ describe User do
         User.with_role('admin').should =~ [equipment_user_1, equipment_user_2]
       end
     end
+
+    describe 'equipment_access?' do
+      it 'should return true when user has equipment role' do
+        create(:user, roles: ['equipment']).should be_equipment_access
+      end
+
+      it 'should return false when user does not have equipment role' do
+        create(:user).should_not be_equipment_access
+      end
+    end
+
+    describe 'certification_access?' do
+      it 'should return true when user has certification role' do
+        create(:user, roles: ['certification']).should be_certification_access
+      end
+
+      it 'should return false when user does not have certification role' do
+        create(:user).should_not be_certification_access
+      end
+    end
+
+    describe 'vehicle_access?' do
+      it 'should return true when user has vehicle role' do
+        create(:user, roles: ['vehicle']).should be_vehicle_access
+      end
+
+      it 'should return false when user does not have vehicle role' do
+        create(:user).should_not be_vehicle_access
+      end
+    end
   end
 
   it 'should respond to its sort_key' do

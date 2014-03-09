@@ -15,6 +15,10 @@ module ControllerHelper
     @customer_service ||= service
   end
 
+  def load_user_service(service = UserService.new)
+    @user_service ||= service
+  end
+
   def load_equipment_service(service = EquipmentService.new)
     @equipment_service ||= service
   end
