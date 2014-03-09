@@ -19,6 +19,7 @@ describe UserPresenter do
       first_name: 'Bob',
       last_name: 'Smith',
       email: 'bob@smith.com',
+      expiration_notification_interval: 'Daily',
       customer: customer,
       roles: customer.roles
     )
@@ -76,5 +77,9 @@ describe UserPresenter do
 
   it 'should respond to email' do
     UserPresenter.new(user).email.should == 'bob@smith.com'
+  end
+
+  it 'should respond to expiration_notification_interval' do
+    UserPresenter.new(user).expiration_notification_interval.should == 'Daily'
   end
 end

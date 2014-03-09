@@ -3,7 +3,7 @@
 
   <ul id="primary-nav">
     <li><%= link_to 'Home', root_path %></li>
-    <li><%= link_to 'All Users', users_path %></li>
+    <li><%= link_to 'All Users', customer_users_path %></li>
   </ul>
 
   <p>
@@ -24,6 +24,11 @@
   <p>
     <b>Email Address</b>
     <%= user.email %>
+  </p>
+
+  <p>
+    <b>Expiration Notification Interval</b>
+    <%= user.expiration_notification_interval %>
   </p>
 
   <p>

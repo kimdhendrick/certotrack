@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe UserService do
-  describe 'get_all_users' do
+  describe '#get_all_users' do
     let(:user1) { create(:user) }
     let!(:user2) { create(:user) }
 
@@ -22,6 +22,71 @@ describe UserService do
         users = subject.get_all_users(user)
 
         users.should be_nil
+      end
+    end
+  end
+
+  describe '#create_user' do
+    context 'as an admin user' do
+      it 'should create user' do
+        customer = create(:customer)
+        admin_user = create(:user, admin: true)
+        attributes =
+          {
+            'first_name' => 'Adam',
+            'last_name' => 'Ant',
+            'email' => 'adam@example.com',
+            'username' => 'adam',
+            'password' => 'Password123',
+            'customer_id' => customer.id
+          }
+
+        user = UserService.new.create_user(admin_user, attributes)
+
+        user.should be_persisted
+        user.first_name.should == 'Adam'
+        user.customer.should == customer
+      end
+
+      it 'should create user with correct roles' do
+        customer = create(
+          :customer,
+          equipment_access: true,
+          certification_access: true,
+          vehicle_access: false
+        )
+        admin_user = create(:user, admin: true)
+        attributes =
+          {
+            'first_name' => 'Adam',
+            'last_name' => 'Ant',
+            'email' => 'adam@example.com',
+            'username' => 'adam',
+            'password' => 'Password123',
+            'customer_id' => customer.id
+          }
+
+        user = UserService.new.create_user(admin_user, attributes)
+
+        user.equipment_access?.should be_true
+        user.certification_access?.should be_true
+        user.vehicle_access?.should be_false
+      end
+
+      it 'should return user with errors if user is invalid' do
+        customer = create(:customer)
+        admin_user = create(:user, admin: true)
+        attributes =
+          {
+            'first_name' => 'Adam',
+            'customer_id' => customer.id
+          }
+
+        user = UserService.new.create_user(admin_user, attributes)
+
+        user.should_not be_persisted
+        user.errors['last_name'].should == ["can't be blank"]
+        user.customer.should == customer
       end
     end
   end

@@ -247,4 +247,12 @@ describe User do
     user = build(:user, first_name: 'John', last_name: 'Doe')
     user.sort_key.should == 'DoeJohn'
   end
+
+  it 'should only accept valid expiration notification intervals' do
+    build(:user, expiration_notification_interval: 'Never').should be_valid
+    build(:user, expiration_notification_interval: 'Daily').should be_valid
+    build(:user, expiration_notification_interval: 'Weekly').should be_valid
+
+    build(:user, expiration_notification_interval: 'Every springtime').should_not be_valid
+  end
 end

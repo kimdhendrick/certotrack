@@ -25,6 +25,14 @@ class User < ActiveRecord::Base
 
   validates :username, presence: true, uniqueness: {case_sensitive: false}
 
+  validates :expiration_notification_interval,
+            inclusion:
+              {
+                in: %w(Never Daily Weekly),
+                message: 'invalid value',
+                allow_nil: false
+              }
+
   scope :with_role, ->(role) { where(UserRoleHelper::role_where_clause(role)) }
 
   def role?(role)

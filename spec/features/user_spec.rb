@@ -254,6 +254,7 @@ describe 'Users', slow: true do
       page.should have_content 'Username'
       page.should have_content 'Customer'
       page.should have_content 'Email Address'
+      page.should have_content 'Expiration Notification Interval'
       page.should have_content 'Equipment Access'
       page.should have_content 'Certification Access'
       page.should have_content 'Vehicle Access'
@@ -261,7 +262,58 @@ describe 'Users', slow: true do
       page.should have_content 'Jones, Judith'
       page.should have_content 'judyjones'
       page.should have_link 'Jefferson County'
+      page.should have_content 'Never'
       page.should have_content /.*Equipment Access.*Yes.*Certification Access.*No.*Vehicle Access.*Yes/
+    end
+  end
+
+  describe 'Create User' do
+    it 'should create new user for specified customer' do
+      jeffco = create(
+        :customer,
+        name: 'Jefferson County',
+        equipment_access: true,
+        certification_access: false,
+        vehicle_access: true
+      )
+
+      visit '/'
+      click_on 'Jefferson County'
+
+      page.should have_link 'Create New User'
+      click_on 'Create New User'
+
+      page.should have_content 'Create User'
+
+      page.should have_link 'Home'
+      page.should have_link 'All Users'
+
+      page.should have_content 'Jefferson County'
+
+      page.should have_content 'First name'
+      page.should have_content 'Last name'
+      page.should have_content 'Username'
+      page.should have_content 'Password'
+      page.should have_content 'Email address'
+      page.should have_content 'Expiration notification interval'
+
+      fill_in 'First name', with: 'Karen'
+      fill_in 'Last name', with: 'Sandy'
+      fill_in 'Username', with: 'sandylynn'
+      fill_in 'Password', with: 'Password123'
+      fill_in 'Email address', with: 'sandeelynn@faker.com'
+      select 'Daily', from: 'Expiration notification interval'
+
+      click_on 'Create'
+
+      page.should have_content 'Show User'
+      page.should have_content 'User was successfully created.'
+
+      page.should have_content 'Sandy, Karen'
+      page.should have_content 'sandylynn'
+      page.should have_link 'Jefferson County'
+      page.should have_content 'Daily'
+      page.should have_content /.*Equipment Access.*Yes.*Certification Access.*No.*Vehicle Access.*Yes.*/
     end
   end
 end

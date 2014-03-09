@@ -103,4 +103,108 @@ describe UsersController do
       end
     end
   end
+
+  describe 'GET #new' do
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'assigns a new user' do
+        get :new, {customer_id: 1}, {}
+
+        assigns(:user).should be_a_new(User)
+      end
+
+      it 'assigns a new user to the correct customer' do
+        customer = create(:customer)
+
+        get :new, {customer_id: customer.id}, {}
+
+        assigns(:user).customer.should == customer
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'does not assign user' do
+        get :new, {}, {}
+
+        assigns(:user).should be_nil
+      end
+    end
+  end
+
+  describe 'POST #create' do
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      describe 'with valid params' do
+        it 'creates a new user' do
+          fake_user_service = Faker.new(build(:user))
+          controller.load_user_service(fake_user_service)
+
+          post :create, {:user => {first_name: 'Heather', last_name: 'Jones'}}, {}
+
+          fake_user_service.received_message.should == :create_user
+        end
+
+        it 'assigns a newly created user' do
+          controller.load_user_service(Faker.new(build(:user)))
+
+          post :create, {:user => {first_name: 'Heather', last_name: 'Jones'}}, {}
+
+          assigns(:user).should be_a(User)
+        end
+
+        it 'redirects to the created user' do
+          user = create(:user)
+          controller.load_user_service(Faker.new(user))
+
+          post :create, {:user => {first_name: 'Heather', last_name: 'Jones'}}, {}
+
+          response.should redirect_to(customer_user_path(User.last))
+          flash[:notice].should == 'User was successfully created.'
+        end
+      end
+
+      describe 'with invalid params' do
+        it 'assigns a newly created but unsaved user' do
+          fake_user_service = Faker.new(build(:user))
+          controller.load_user_service(fake_user_service)
+
+          post :create, {:user => {first_name: 'invalid value'}}, {}
+
+          assigns(:user).should be_a_new(User)
+          fake_user_service.received_message.should == :create_user
+        end
+
+        it "re-renders the 'new' template" do
+          controller.load_user_service(Faker.new(build(:user)))
+
+          post :create, {:user => {first_name: 'invalid value'}}, {}
+
+          response.should render_template('new')
+        end
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'does not assign user' do
+        expect {
+          post :create, {:user => {first_name: 'Heather'}}, {}
+        }.not_to change(User, :count)
+        assigns(:user).should be_nil
+      end
+    end
+  end
 end

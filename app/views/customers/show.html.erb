@@ -74,13 +74,17 @@
     <tbody>
     <% customer.users.each do |user| %>
       <tr>
-        <td><%= link_to user.username, user.model %></td>
+        <td><%= link_to user.username, customer_user_path(user.model) %></td>
         <td><%= user.first_name %></td>
         <td><%= user.last_name %></td>
       </tr>
     <% end %>
     </tbody>
   </table>
+
+  <br/>
+  <%= link_to 'Create New User', new_customer_user_path(customer_id: customer.id) %>
+  <br/>
 
   <br/>
   <%= customer.edit_link %>

@@ -1,0 +1,53 @@
+<%= form_for(@user, :url => customer_user_path(@user), data: {user_form: "data-user-form"}) do |f| %>
+  <%= hidden_field :user, :customer_id %>
+
+  <%= render 'shared/errors', model: @user %>
+
+  <p>
+    <b>Customer</b>
+    <%= UserPresenter.new(@user).customer_name %>
+  </p>
+
+  <div class="field">
+    <%= f.label :first_name %>
+    <br/>
+    <%= f.text_field :first_name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :last_name %>
+    <br/>
+    <%= f.text_field :last_name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :username %>
+    <br/>
+    <%= f.text_field :username %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password %>
+    <br/>
+    <%= f.text_field :password %>
+  </div>
+
+  <div class="field">
+    <%= f.label :email, 'Email address' %>
+    <br/>
+    <%= f.text_field :email %>
+  </div>
+
+  <div class="field">
+    <%= f.label :expiration_notification_interval %>
+    <br/>
+    <%= select(:user, :expiration_notification_interval,
+               options_for_select(['Never', 'Daily', 'Weekly'],
+                                  @user.expiration_notification_interval)) %>
+
+  </div>
+
+  <div class="actions">
+    <%= submit_tag(user_action) %>
+  </div>
+<% end %>

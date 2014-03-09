@@ -1,5 +1,6 @@
 class UsersController < ModelController
   include ControllerHelper
+  include UsersHelper
 
   before_filter :load_user_service
 
@@ -20,6 +21,24 @@ class UsersController < ModelController
     _set_user
   end
 
+  def new
+    authorize! :create, :user
+
+    @user = User.new(customer: Customer.find(params[:customer_id]))
+  end
+
+  def create
+    authorize! :create, :user
+
+    @user = @user_service.create_user(current_user, _user_params)
+
+    if @user.persisted?
+      redirect_to customer_user_path(@user), notice: 'User was successfully created.'
+    else
+      render action: 'new'
+    end
+  end
+
   def load_user_service(user_service = UserService.new)
     @user_service ||= user_service
   end
@@ -28,5 +47,9 @@ class UsersController < ModelController
 
   def _set_user
     @user = _get_model(User)
+  end
+
+  def _user_params
+    params.require(:user).permit(user_accessible_parameters)
   end
 end

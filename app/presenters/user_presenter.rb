@@ -8,6 +8,7 @@ class UserPresenter
            :first_name,
            :last_name,
            :email,
+           :expiration_notification_interval,
            to: :model
 
   def initialize(model, template = nil)

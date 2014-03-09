@@ -76,5 +76,4 @@ class LocationsController < ModelController
   def _location_params
     params.require(:location).permit(location_accessible_parameters)
   end
-
 end
