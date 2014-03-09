@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'Navigation', slow: true do
-  let(:customer) { create(:customer) }
+  let(:customer) { create(:customer, name: 'My Customer') }
 
   describe 'Equipment Links' do
     before do
@@ -605,7 +605,7 @@ describe 'Navigation', slow: true do
       click_on 'My Vehicle'
       click_on 'Edit'
       click_and_test_link_with_title 'Create Vehicle'
-      
+
       visit root_path
       within '[data-vehicle-search-form]' do
         click_on 'Search'
@@ -684,6 +684,57 @@ describe 'Navigation', slow: true do
       click_on 'All Service Types'
       click_on 'Create Service'
       click_and_test_link_with_title 'All Service Types'
+    end
+  end
+
+  describe 'Customer Links' do
+    before do
+      login_as_admin
+    end
+
+    it 'should have all the right links' do
+      visit root_path
+      click_on 'All Customers'
+      click_and_test_home_link
+
+      visit root_path
+      click_on 'All Customers'
+      click_and_test_link_with_title 'Create Customer'
+
+      visit root_path
+      click_on 'My Customer'
+      click_and_test_home_link
+
+      visit root_path
+      click_on 'My Customer'
+      click_and_test_link_with_title 'Create Customer'
+
+      visit root_path
+      click_on 'My Customer'
+      click_and_test_link_with_title 'All Customers'
+
+      visit root_path
+      click_on 'My Customer'
+      click_on 'Edit'
+      click_and_test_home_link
+
+      visit root_path
+      click_on 'My Customer'
+      click_on 'Edit'
+      click_and_test_link_with_title 'All Customers'
+
+      visit root_path
+      click_on 'My Customer'
+      click_on 'Edit'
+      click_and_test_link_with_title 'Create'
+
+      visit root_path
+      click_on 'Create Customer'
+      click_and_test_home_link
+
+      visit root_path
+      click_on 'Create Customer'
+      click_and_test_link_with_title 'All Customers'
     end
   end
 
