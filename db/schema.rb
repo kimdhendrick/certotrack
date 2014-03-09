@@ -11,10 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131224221659) do
-
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+ActiveRecord::Schema.define(version: 20140309040557) do
 
   create_table "certification_periods", force: true do |t|
     t.string   "trainer"
@@ -59,7 +56,6 @@ ActiveRecord::Schema.define(version: 20131224221659) do
     t.string   "state"
     t.string   "zip"
     t.boolean  "active"
-    t.boolean  "notification"
     t.boolean  "equipment_access"
     t.boolean  "certification_access"
     t.boolean  "vehicle_access"
