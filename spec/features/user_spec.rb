@@ -316,4 +316,81 @@ describe 'Users', slow: true do
       page.should have_content /.*Equipment Access.*Yes.*Certification Access.*No.*Vehicle Access.*Yes.*/
     end
   end
+
+  describe 'Update User' do
+      it 'should edit user details' do
+        jeffco = create(
+          :customer,
+          name: 'Jefferson County',
+          equipment_access: true,
+          certification_access: true,
+          vehicle_access: true
+        )
+
+        create(
+          :customer,
+          name: 'Denver County',
+          equipment_access: false,
+          certification_access: false,
+          vehicle_access: false
+        )
+
+        create(
+          :user,
+          first_name: 'Kathy',
+          last_name: 'Kramer',
+          username: 'kkramer',
+          email: 'kkramer@ejemplo.com',
+          expiration_notification_interval: 'Weekly',
+          customer: jeffco,
+          roles: jeffco.roles
+        )
+
+        visit '/'
+        page.should have_content 'All Users'
+        click_link 'All Users'
+
+        page.should have_content 'All Users'
+
+        click_on 'kkramer'
+
+        page.should have_content 'Show User'
+
+        page.should have_link 'Home'
+        page.should have_link 'All Users'
+
+        click_on 'Edit'
+
+        page.should have_content 'Edit User'
+
+        page.should have_content 'Home'
+        page.should have_content 'All Users'
+
+        page.should have_content 'First name'
+        page.should have_content 'Last name'
+        page.should have_content 'Username'
+        page.should have_content 'Password'
+        page.should have_content 'Email address'
+        page.should have_content 'Customer'
+        page.should have_content 'Expiration notification interval'
+
+        fill_in 'First name', with: 'Judith'
+        fill_in 'Last name', with: 'Jones'
+        fill_in 'Username', with: 'judyjones'
+        fill_in 'Email address', with: 'jjones@example.com'
+        select 'Denver County', from: 'Customer'
+        select 'Weekly', from: 'Expiration notification interval'
+
+        click_on 'Update'
+
+        page.should have_content 'Show User'
+
+        page.should have_content 'Denver County'
+        page.should have_content 'Jones, Judith'
+        page.should have_content 'judyjones'
+        page.should have_content 'jjones@example.com'
+        page.should have_content 'Weekly'
+        page.should have_content /.*Equipment Access.*No.*Certification Access.*No.*Vehicle Access.*No/
+      end
+  end
 end

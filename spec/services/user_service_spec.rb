@@ -90,4 +90,59 @@ describe UserService do
       end
     end
   end
+
+  describe '#update_user' do
+    context 'admin user' do
+      let(:admin_user) { create(:user, admin: true) }
+
+      it 'should update users attributes' do
+        my_customer = create(:customer)
+        user = create(:user, customer: my_customer)
+        attributes =
+          {
+            'id' => user.id,
+            'first_name' => 'Albert'
+          }
+
+        success = UserService.new.update_user(admin_user, user, attributes)
+        success.should be_true
+
+        user.reload
+        user.first_name.should == 'Albert'
+      end
+
+      it 'should return false if errors' do
+        user = create(:user, first_name: 'Joe')
+        user.stub(:save).and_return(false)
+
+        success = UserService.new.update_user(admin_user, user, {first_name: 'Bob'})
+        success.should be_false
+
+        user.reload
+        user.first_name.should_not == 'Bob'
+      end
+
+      it 'should update user with correct roles' do
+        user = create(:user)
+
+        another_customer = create(
+          :customer,
+          equipment_access: true,
+          certification_access: true,
+          vehicle_access: false
+        )
+
+        UserService.new.update_user(admin_user, user, {customer_id: another_customer.id})
+
+        user.reload
+        user.equipment_access?.should be_true
+        user.certification_access?.should be_true
+        user.vehicle_access?.should be_false
+      end
+    end
+
+    it 'should return if not admin' do
+      UserService.new.update_user(create(:user), create(:user), {}).should be_nil
+    end
+  end
 end

@@ -2,9 +2,10 @@ class UsersController < ModelController
   include ControllerHelper
   include UsersHelper
 
-  before_filter :load_user_service
+  before_filter :load_user_service,
+                :load_customer_service
 
-  before_action :_set_user, only: [:show]
+  before_action :_set_user, only: [:show, :edit, :update]
 
   def index
     authorize! :read, :user
@@ -39,11 +40,30 @@ class UsersController < ModelController
     end
   end
 
+  def edit
+    _set_customers
+  end
+
+  def update
+    success = @user_service.update_user(current_user, @user, _user_params)
+
+    if success
+      redirect_to customer_user_path(@user), notice: 'User was successfully updated.'
+    else
+      _set_customers
+      render action: 'edit'
+    end
+  end
+
   def load_user_service(user_service = UserService.new)
     @user_service ||= user_service
   end
 
   private
+
+  def _set_customers
+    @customers = CustomerListPresenter.new(@customer_service.get_all_customers(current_user)).sort
+  end
 
   def _set_user
     @user = _get_model(User)

@@ -43,4 +43,8 @@ class UserPresenter
   def name
     "#{last_name}, #{first_name}"
   end
+
+  def edit_link
+    @template.link_to 'Edit', @template.edit_customer_user_path(model)
+  end
 end

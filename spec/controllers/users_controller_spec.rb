@@ -207,4 +207,126 @@ describe UsersController do
       end
     end
   end
+
+  describe 'GET #edit' do
+    context 'when an admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'assigns the user' do
+        user = create(:user)
+
+        get :edit, {:id => user.to_param}, {}
+
+        assigns(:user).should eq(user)
+      end
+
+      it 'assigns a sorted list of customers to @customers' do
+        user = create(:user)
+        customer = create(:customer)
+        fake_customer_service = Faker.new([customer])
+        controller.load_customer_service(fake_customer_service)
+        fake_customer_list_presenter = Faker.new([customer])
+        CustomerListPresenter.stub(:new).and_return(fake_customer_list_presenter)
+
+        get :edit, {:id => user.to_param}, {}
+
+        assigns(:customers).should == [customer]
+        fake_customer_list_presenter.received_message.should == :sort
+      end
+    end
+
+    context 'when not an admin user' do
+      it 'does not assign user' do
+        user = create(:user)
+
+        get :edit, {:id => user.to_param}, {}
+
+        assigns(:user).should be_nil
+      end
+    end
+  end
+
+  describe 'PUT #update' do
+    context 'when an admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      describe 'with valid params' do
+        let(:user_attributes) do
+          {
+            first_name: 'Gary',
+            last_name: 'Snail'
+          }
+        end
+
+        it 'updates the requested user' do
+          user = create(:user)
+          fake_user_service = Faker.new(true)
+          controller.load_user_service(fake_user_service)
+
+          put :update, {:id => user.to_param, :user => user_attributes}, {}
+
+          fake_user_service.received_message.should == :update_user
+          fake_user_service.received_params[1].should == user
+        end
+
+        it 'assigns the requested user' do
+          controller.load_user_service(Faker.new(true))
+          user = create(:user)
+
+          put :update, {:id => user.to_param, :user => user_attributes}, {}
+
+          assigns(:user).should eq(user)
+        end
+
+        it 'redirects to the user' do
+          controller.load_user_service(Faker.new(true))
+          user = create(:user)
+
+          put :update, {:id => user.to_param, :user => user_attributes}, {}
+
+          response.should redirect_to(customer_user_path(user))
+          flash[:notice].should == 'User was successfully updated.'
+        end
+      end
+
+      describe 'with invalid params' do
+        it 'assigns the user' do
+          controller.load_user_service(Faker.new(false))
+          user = create(:user)
+
+          put :update, {:id => user.to_param, :user => {first_name: 'invalid value'}}, {}
+
+          assigns(:user).should eq(user)
+        end
+
+        it "re-renders the 'edit' template" do
+          user = create(:user)
+          controller.load_user_service(Faker.new(false))
+
+          put :update, {:id => user.to_param, :user => {first_name: 'invalid value'}}, {}
+
+          response.should render_template('edit')
+        end
+      end
+    end
+
+    context 'when not an admin user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'does not assign user' do
+        user = create(:user)
+        controller.load_user_service(Faker.new(false))
+
+        put :update, {:id => user.to_param, :user => user.to_param}, {}
+
+        assigns(:user).should be_nil
+      end
+    end
+  end
 end

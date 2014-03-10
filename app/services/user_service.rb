@@ -11,4 +11,12 @@ class UserService
     user.save
     user
   end
+
+  def update_user(current_user, user, attributes)
+    return unless current_user.admin?
+
+    user.update(attributes)
+    user.roles = user.customer.roles
+    user.save
+  end
 end
