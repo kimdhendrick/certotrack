@@ -35,9 +35,6 @@ class EmployeeService
 
   def get_employees_not_certified_for(certification_type)
     certified_employees = certification_type.certifications.map(&:employee)
-
-    certified_employees.empty? ?
-      Employee.where(customer: certification_type.customer) :
-      Employee.where("id NOT IN (?)", certified_employees)
+    certification_type.customer.employees.where.not(id: certified_employees)
   end
 end

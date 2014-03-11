@@ -143,6 +143,16 @@ describe EmployeeService do
         EmployeeService.new.get_employees_not_certified_for(certification_type).should == [my_employee]
       end
 
+      it "should return only customer's employees when some are assigned" do
+        certification_type = create(:certification_type, customer: my_customer)
+        my_employee = create(:employee, customer: my_customer)
+        another_certified_employee = create(:employee, customer: my_customer)
+        create(:certification, employee: another_certified_employee, certification_type: certification_type, customer: my_customer)
+        other_employee = create(:employee)
+
+        EmployeeService.new.get_employees_not_certified_for(certification_type).should == [my_employee]
+      end
+
       it 'only returns uncertified employees' do
         certification_type = create(:certification_type, customer: my_customer)
         certified_employee = create(:employee, last_name: 'certified', customer: my_customer)
