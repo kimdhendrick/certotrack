@@ -72,6 +72,13 @@ describe ServiceTypeService do
       service_type.expiration_type.should == ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE
     end
 
+    it 'should return false if one of the serve updates fails' do
+      create(:service, service_type: service_type)
+      Service.any_instance.stub(:save).and_return(false)
+
+      subject.update_service_type(service_type, attributes).should be_false
+    end
+
     it 'should recalculate expiration date for associated services' do
       service = create(
         :service,

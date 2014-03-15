@@ -2,7 +2,7 @@ class CertificationType < ActiveRecord::Base
   include DeletionPrevention
 
   belongs_to :customer
-  has_many :certifications
+  has_many :certifications, autosave: true
 
   after_initialize :_default_values
   before_validation :_strip_whitespace

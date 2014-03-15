@@ -188,9 +188,8 @@ describe CustomerService do
 
     it 'should return false if user save fails' do
       customer = create(:customer)
-      my_user = create(:user, customer: customer)
-      my_user.stub(:save).and_return(false)
-      customer.stub(:users).and_return([my_user])
+      create(:user, customer: customer)
+      User.any_instance.stub(:save).and_return(false)
 
       success = CustomerService.new.update_customer(customer, {})
 

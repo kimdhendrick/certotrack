@@ -31,7 +31,6 @@ class CertificationTypeService
     certification_type.update(attributes)
     certification_type.certifications.each do |certification|
       certification.update_expiration_date
-      certification.save
     end
     certification_type.save
   end

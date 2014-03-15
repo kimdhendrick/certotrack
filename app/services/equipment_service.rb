@@ -63,7 +63,7 @@ class EquipmentService
 
   def get_equipment_names(current_user, search_term)
     equipment = _get_equipment_for_user(current_user)
-    equipment = equipment.where("name ILIKE :name", {name: "%#{search_term}%"})
+    equipment = equipment.where('name ILIKE :name', {name: "%#{search_term}%"})
     equipment.map(&:name).uniq
   end
 

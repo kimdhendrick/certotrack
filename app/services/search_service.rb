@@ -52,8 +52,8 @@ class SearchService
     return query unless params[:certification_type].present?
 
     params[:certification_type] == 'units_based' ?
-      _build_query(query, "units_required > 0") :
-      _build_query(query, "units_required = 0")
+      _build_query(query, 'units_required > 0') :
+      _build_query(query, 'units_required = 0')
   end
 
   def _build_vehicle_query(params, query, query_params)

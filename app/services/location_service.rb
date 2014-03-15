@@ -6,22 +6,26 @@ class LocationService
 
   def create_location(current_user, attributes)
     location = Location.new(attributes)
-    unless current_user.admin?
-      location.customer_id = current_user.customer_id
-    end
+    _set_customer(current_user, location)
     location.save
     location
   end
 
   def update_location(current_user, location, attributes)
     location.update(attributes)
-    unless current_user.admin?
-      location.customer_id = current_user.customer_id
-    end
+    _set_customer(current_user, location)
     location.save
   end
 
   def delete_location(location)
     location.destroy
+  end
+
+  private
+
+  def _set_customer(current_user, location)
+    return if current_user.admin?
+
+    location.customer_id = current_user.customer_id
   end
 end

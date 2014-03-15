@@ -1,7 +1,7 @@
 class Customer < ActiveRecord::Base
   include EmailFormatHelper
 
-  has_many :users
+  has_many :users, autosave: true
   has_many :equipments
   has_many :certification_types
   has_many :certifications

@@ -12,7 +12,7 @@ class ServiceType < ActiveRecord::Base
   INTERVAL_MILEAGES = [3000, 5000, 10000, 12000, 15000, 20000, 50000]
 
   belongs_to :customer
-  has_many :services
+  has_many :services, autosave: true
 
   validates_presence_of :name
   validates_uniqueness_of :name, scope: :customer_id, case_sensitive: false

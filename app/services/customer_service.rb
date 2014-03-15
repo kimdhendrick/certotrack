@@ -11,11 +11,7 @@ class CustomerService
 
   def update_customer(customer, attributes)
     customer.update(attributes)
-
-    customer.users.each do |user|
-      user.roles = customer.roles
-    end
-
-    customer.users.all?(&:save) & customer.save
+    customer.users.each { |user| user.roles = customer.roles }
+    customer.save
   end
 end

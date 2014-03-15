@@ -36,6 +36,13 @@ describe CertificationTypeService do
       subject.update_certification_type(certification_type, attributes).should be_true
     end
 
+    it 'should return false if saving a certification fails' do
+      create(:certification, certification_type: certification_type)
+      Certification.any_instance.stub(:save).and_return false
+
+      subject.update_certification_type(certification_type, attributes).should be_false
+    end
+
     it 'should update certification_types attributes' do
       subject.update_certification_type(certification_type, attributes)
       certification_type.reload
