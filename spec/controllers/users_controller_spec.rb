@@ -27,7 +27,6 @@ describe UsersController do
         get :index, params
 
         fake_user_service.received_messages.should == [:get_all_users]
-        fake_user_service.received_params[0].should == admin_user
 
         fake_user_list_presenter.received_message.should == :present
         fake_user_list_presenter.received_params[0]['sort'].should == 'name'
@@ -270,7 +269,7 @@ describe UsersController do
           put :update, {:id => user.to_param, :user => user_attributes}, {}
 
           fake_user_service.received_message.should == :update_user
-          fake_user_service.received_params[1].should == user
+          fake_user_service.received_params[0].should == user
         end
 
         it 'assigns the requested user' do

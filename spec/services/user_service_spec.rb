@@ -9,19 +9,9 @@ describe UserService do
       it 'should return all users' do
         admin_user = create(:user, admin: true)
 
-        users = subject.get_all_users(admin_user)
+        users = subject.get_all_users
 
         users.should =~ [user1, user2, admin_user]
-      end
-    end
-
-    context 'when regular user' do
-      it 'should return nada' do
-        user = create(:user)
-
-        users = subject.get_all_users(user)
-
-        users.should be_nil
       end
     end
   end
@@ -41,7 +31,7 @@ describe UserService do
             'customer_id' => customer.id
           }
 
-        user = UserService.new.create_user(admin_user, attributes)
+        user = UserService.new.create_user(attributes)
 
         user.should be_persisted
         user.first_name.should == 'Adam'
@@ -66,7 +56,7 @@ describe UserService do
             'customer_id' => customer.id
           }
 
-        user = UserService.new.create_user(admin_user, attributes)
+        user = UserService.new.create_user(attributes)
 
         user.equipment_access?.should be_true
         user.certification_access?.should be_true
@@ -82,7 +72,7 @@ describe UserService do
             'customer_id' => customer.id
           }
 
-        user = UserService.new.create_user(admin_user, attributes)
+        user = UserService.new.create_user(attributes)
 
         user.should_not be_persisted
         user.errors['last_name'].should == ["can't be blank"]
@@ -104,7 +94,7 @@ describe UserService do
             'first_name' => 'Albert'
           }
 
-        success = UserService.new.update_user(admin_user, user, attributes)
+        success = UserService.new.update_user(user, attributes)
         success.should be_true
 
         user.reload
@@ -115,7 +105,7 @@ describe UserService do
         user = create(:user, first_name: 'Joe')
         user.stub(:save).and_return(false)
 
-        success = UserService.new.update_user(admin_user, user, {first_name: 'Bob'})
+        success = UserService.new.update_user(user, {first_name: 'Bob'})
         success.should be_false
 
         user.reload
@@ -132,17 +122,13 @@ describe UserService do
           vehicle_access: false
         )
 
-        UserService.new.update_user(admin_user, user, {customer_id: another_customer.id})
+        UserService.new.update_user(user, {customer_id: another_customer.id})
 
         user.reload
         user.equipment_access?.should be_true
         user.certification_access?.should be_true
         user.vehicle_access?.should be_false
       end
-    end
-
-    it 'should return if not admin' do
-      UserService.new.update_user(create(:user), create(:user), {}).should be_nil
     end
   end
 

@@ -1,20 +1,16 @@
 class UserService
-  def get_all_users(current_user)
-    User.all if current_user.admin?
+  def get_all_users
+    User.all
   end
 
-  def create_user(current_user, attributes)
-    return unless current_user.admin?
-
+  def create_user(attributes)
     user = User.new(attributes)
     user.roles = user.customer.roles
     user.save
     user
   end
 
-  def update_user(current_user, user, attributes)
-    return unless current_user.admin?
-
+  def update_user(user, attributes)
     user.update(attributes)
     user.roles = user.customer.roles
     user.save

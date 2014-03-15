@@ -11,7 +11,7 @@ class UsersController < ModelController
     authorize! :read, :user
 
     @report_title = 'All Users'
-    user_collection = @user_service.get_all_users(current_user)
+    user_collection = @user_service.get_all_users
     @user_count = user_collection.count
     @users = UserListPresenter.new(user_collection).present(params)
   end
@@ -29,7 +29,7 @@ class UsersController < ModelController
   def create
     authorize! :create, :user
 
-    @user = @user_service.create_user(current_user, _user_params)
+    @user = @user_service.create_user(_user_params)
 
     if @user.persisted?
       redirect_to customer_user_path(@user), notice: 'User was successfully created.'
@@ -43,7 +43,7 @@ class UsersController < ModelController
   end
 
   def update
-    success = @user_service.update_user(current_user, @user, _user_params)
+    success = @user_service.update_user(@user, _user_params)
 
     if success
       redirect_to customer_user_path(@user), notice: 'User was successfully updated.'
