@@ -5,8 +5,8 @@ class Employee < ActiveRecord::Base
 
   belongs_to :customer
   belongs_to :location
-  has_many :certifications
-  has_many :equipments
+  has_many :certifications, autosave: true
+  has_many :equipments, autosave: true
 
   before_validation :_strip_whitespace
 

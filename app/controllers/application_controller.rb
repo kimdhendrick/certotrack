@@ -1,6 +1,4 @@
 class ApplicationController < ActionController::Base
-  include SessionsHelper
-
   before_filter :authenticate_user!
 
   protect_from_forgery with: :exception
