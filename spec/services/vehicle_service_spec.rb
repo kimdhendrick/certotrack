@@ -235,42 +235,57 @@ describe VehicleService do
     context 'when regular user' do
       it 'should return empty list when no vehicles' do
         service_type = create(:service_type, customer: my_customer)
-        
-        VehicleService.new.get_all_non_serviced_vehicles_for(service_type).should == []
-      end
-
-      it 'should return empty list when all vehicles certified' do
-        service_type = create(:service_type, customer: my_customer)
-        certified_vehicle1 = create(:vehicle, customer: my_customer)
-        certified_vehicle2 = create(:vehicle, customer: my_customer)
-        create(:service, vehicle: certified_vehicle1, service_type: service_type, customer: my_customer)
-        create(:service, vehicle: certified_vehicle2, service_type: service_type, customer: my_customer)
 
         VehicleService.new.get_all_non_serviced_vehicles_for(service_type).should == []
       end
 
-      it "should return only customer's vehicles" do
+      it 'should return empty list when all vehicles serviced' do
         service_type = create(:service_type, customer: my_customer)
-        my_vehicle = create(:vehicle, customer: my_customer)
-        other_vehicle = create(:vehicle)
+        serviced_vehicle1 = create(:vehicle, customer: my_customer)
+        serviced_vehicle2 = create(:vehicle, customer: my_customer)
+        create(:service, vehicle: serviced_vehicle1, service_type: service_type, customer: my_customer)
+        create(:service, vehicle: serviced_vehicle2, service_type: service_type, customer: my_customer)
 
-        VehicleService.new.get_all_non_serviced_vehicles_for(service_type).should == [my_vehicle]
+        VehicleService.new.get_all_non_serviced_vehicles_for(service_type).should == []
       end
 
-      it 'only returns uncertified vehicles' do
-        service_type = create(:service_type, customer: my_customer)
-        certified_vehicle = create(:vehicle, vehicle_model: 'certified', customer: my_customer)
-        create(:service, vehicle: certified_vehicle, service_type: service_type, customer: my_customer)
-        uncertified_vehicle = create(:vehicle, vehicle_model: 'UNCERTIFIED', customer: my_customer)
+      context 'when a service for customer exists' do
+        it "should return only customer's vehicles" do
+          service_type = create(:service_type, customer: my_customer)
+          my_vehicle = create(:vehicle, customer: my_customer)
+          other_vehicle = create(:vehicle)
 
-        VehicleService.new.get_all_non_serviced_vehicles_for(service_type).should == [uncertified_vehicle]
+          my_serviced_vehicle = create(:vehicle, customer: my_customer)
+          create(:service, vehicle: my_serviced_vehicle, service_type: service_type, customer: my_customer)
+
+          VehicleService.new.get_all_non_serviced_vehicles_for(service_type).should == [my_vehicle]
+        end
+      end
+
+      context 'when no services for customer exists' do
+        it "should return only customer's vehicles" do
+          service_type = create(:service_type, customer: my_customer)
+          my_vehicle = create(:vehicle, customer: my_customer)
+          other_vehicle = create(:vehicle)
+
+          VehicleService.new.get_all_non_serviced_vehicles_for(service_type).should == [my_vehicle]
+        end
+      end
+
+      it 'only returns unserviced vehicles' do
+        service_type = create(:service_type, customer: my_customer)
+        serviced_vehicle = create(:vehicle, vehicle_model: 'SERVICED', customer: my_customer)
+        create(:service, vehicle: serviced_vehicle, service_type: service_type, customer: my_customer)
+        unserviced_vehicle = create(:vehicle, vehicle_model: 'UNSERVICED', customer: my_customer)
+
+        VehicleService.new.get_all_non_serviced_vehicles_for(service_type).should == [unserviced_vehicle]
       end
 
       it 'should return all vehicles' do
         service_type = create(:service_type, customer: my_customer)
-        uncertified_vehicle1 = create(:vehicle, customer: my_customer)
-        uncertified_vehicle2 = create(:vehicle, customer: my_customer)
-        VehicleService.new.get_all_non_serviced_vehicles_for(service_type).should == [uncertified_vehicle1, uncertified_vehicle2]
+        unserviced_vehicle1 = create(:vehicle, customer: my_customer)
+        unserviced_vehicle2 = create(:vehicle, customer: my_customer)
+        VehicleService.new.get_all_non_serviced_vehicles_for(service_type).should == [unserviced_vehicle1, unserviced_vehicle2]
       end
     end
 
@@ -283,13 +298,13 @@ describe VehicleService do
         VehicleService.new.get_all_non_serviced_vehicles_for(service_type).should == [my_vehicle]
       end
 
-      it 'only returns uncertified vehicles' do
+      it 'only returns unserviced vehicles' do
         service_type = create(:service_type, customer: my_customer)
-        certified_vehicle = create(:vehicle, vehicle_model: 'certified', customer: my_customer)
-        create(:service, vehicle: certified_vehicle, service_type: service_type, customer: my_customer)
-        uncertified_vehicle = create(:vehicle, vehicle_model: 'UNCERTIFIED', customer: my_customer)
+        serviced_vehicle = create(:vehicle, vehicle_model: 'SERVICED', customer: my_customer)
+        create(:service, vehicle: serviced_vehicle, service_type: service_type, customer: my_customer)
+        unserviced_vehicle = create(:vehicle, vehicle_model: 'UNSERVICED', customer: my_customer)
 
-        VehicleService.new.get_all_non_serviced_vehicles_for(service_type).should == [uncertified_vehicle]
+        VehicleService.new.get_all_non_serviced_vehicles_for(service_type).should == [unserviced_vehicle]
       end
     end
   end

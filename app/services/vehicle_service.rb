@@ -14,10 +14,7 @@ class VehicleService
 
   def get_all_non_serviced_vehicles_for(service_type)
     serviced_vehicles = service_type.services.map(&:vehicle)
-
-    serviced_vehicles.empty? ?
-      Vehicle.where(customer: service_type.customer) :
-      Vehicle.where("id NOT IN (?)", serviced_vehicles)
+    service_type.customer.vehicles.where.not(id: serviced_vehicles)
   end
 
   def create_vehicle(current_user, attributes)
