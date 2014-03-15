@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  include EmailFormatHelper
   VALID_PASSWORD_REGEX = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,99}/
 
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable

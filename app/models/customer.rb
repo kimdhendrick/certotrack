@@ -1,4 +1,5 @@
 class Customer < ActiveRecord::Base
+  include EmailFormatHelper
 
   has_many :users
   has_many :equipments
@@ -10,6 +11,16 @@ class Customer < ActiveRecord::Base
   has_many :service_types
   has_many :services
 
+  validates_presence_of :name,
+                        :contact_person_name
+
+  validates_uniqueness_of :account_number
+
+  validates :contact_email,
+            presence: true,
+            format: {with: VALID_EMAIL_REGEX}
+  before_validation :_downcase_contact_email
+
   def sort_key
     name
   end
@@ -20,5 +31,11 @@ class Customer < ActiveRecord::Base
       UserRoleHelper::ROLE_CERTIFICATION,
       UserRoleHelper::ROLE_EQUIPMENT
     ].map { |access| access if public_send("#{access}_access?") }.compact
+  end
+
+  private
+
+  def _downcase_contact_email
+    self.contact_email.try(:downcase!)
   end
 end

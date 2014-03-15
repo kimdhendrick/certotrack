@@ -302,20 +302,20 @@ describe 'Customers', slow: true do
       end
 
       it 'should sort by contact_email' do
-        create(:customer, contact_email: 'zeta')
-        create(:customer, contact_email: 'beta')
-        create(:customer, contact_email: 'alpha')
+        create(:customer, contact_email: 'zeta@example.com')
+        create(:customer, contact_email: 'beta@example.com')
+        create(:customer, contact_email: 'alpha@example.com')
 
         visit '/'
         click_link 'All Customers'
 
         # Ascending search
         click_link 'Contact Email'
-        column_data_should_be_in_order('alpha', 'beta', 'joe@example.com', 'zeta')
+        column_data_should_be_in_order('alpha@example.com', 'beta@example.com', 'joe@example.com', 'zeta@example.com')
 
         # Descending search
         click_link 'Contact Email'
-        column_data_should_be_in_order('zeta', 'joe@example.com', 'beta', 'alpha')
+        column_data_should_be_in_order('zeta@example.com', 'joe@example.com', 'beta@example.com', 'alpha@example.com')
       end
     end
 
