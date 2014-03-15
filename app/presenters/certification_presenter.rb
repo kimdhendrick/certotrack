@@ -5,15 +5,15 @@ class CertificationPresenter
 
   attr_reader :model
 
-  delegate :id, to: :model
-  delegate :units_required, to: :model
-
-  delegate :units_based?, to: :model
-  delegate :interval, to: :model
-  delegate :trainer, to: :model
-  delegate :status, to: :model
-  delegate :comments, to: :model
-  delegate :name, to: :model
+  delegate :id,
+           :units_required,
+           :units_based?,
+           :interval,
+           :trainer,
+           :status,
+           :comments,
+           :name,
+           to: :model
 
   def initialize(model, template = nil)
     @model = model
@@ -78,7 +78,7 @@ class CertificationPresenter
 
   def units_achieved_label
     return '' unless model.units_based?
-    "Units Achieved"
+    'Units Achieved'
   end
 
   def units_achieved_of_required

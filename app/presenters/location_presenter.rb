@@ -3,8 +3,9 @@ class LocationPresenter
 
   attr_reader :model
 
-  delegate :id, to: :model
-  delegate :name, to: :model
+  delegate :id,
+           :name,
+           to: :model
 
   def initialize(model, template = nil)
     @model = model

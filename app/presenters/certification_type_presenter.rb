@@ -3,10 +3,11 @@ class CertificationTypePresenter
 
   attr_reader :model
 
-  delegate :id, to: :model
-  delegate :name, to: :model
-  delegate :interval, to: :model
-  delegate :units_based?, to: :model
+  delegate :id,
+           :name,
+           :interval,
+           :units_based?,
+           to: :model
 
   def initialize(model, template = nil)
     @model = model
@@ -23,7 +24,7 @@ class CertificationTypePresenter
 
   def units_required_label
     return '' unless model.units_based?
-    "Required Units"
+    'Required Units'
   end
 
   def units_required

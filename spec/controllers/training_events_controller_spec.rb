@@ -97,8 +97,8 @@ describe TrainingEventsController do
       assigns(:certification_types).should == [my_certification_type]
 
       fake_certification_type_service.received_message.should == :find
-      fake_certification_type_service.received_params[0].should == [my_certification_type.id]
-      fake_certification_type_service.received_params[1].should == current_user
+      fake_certification_type_service.received_params[0].should == current_user
+      fake_certification_type_service.received_params[1].should == [my_certification_type.id]
     end
 
     it 'redirects if no certification types selected' do
@@ -145,8 +145,8 @@ describe TrainingEventsController do
 
       assigns(:certification_types).should == [my_certification_type]
       fake_certification_type_service.received_message.should == :find
-      fake_certification_type_service.received_params[0].should == [my_certification_type.id]
-      fake_certification_type_service.received_params[1].should == current_user
+      fake_certification_type_service.received_params[0].should == current_user
+      fake_certification_type_service.received_params[1].should == [my_certification_type.id]
     end
 
     it 'does not assign unauthorized certification_types' do

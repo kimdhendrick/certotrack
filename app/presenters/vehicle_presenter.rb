@@ -5,13 +5,14 @@ class VehiclePresenter
 
   attr_reader :model
 
-  delegate :id, to: :model
-  delegate :vehicle_number, to: :model
-  delegate :vin, to: :model
-  delegate :license_plate, to: :model
-  delegate :make, to: :model
-  delegate :year, to: :model
-  delegate :vehicle_model, to: :model
+  delegate :id,
+           :vehicle_number,
+           :vin,
+           :license_plate,
+           :make,
+           :year,
+           :vehicle_model,
+           to: :model
 
   def initialize(model, template = nil)
     @model = model

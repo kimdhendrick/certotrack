@@ -8,12 +8,12 @@ class CertificationTypeService
     user.admin? ? CertificationType.all : user.certification_types
   end
 
-  def find(certification_type_ids, user)
+  def find(current_user, certification_type_ids)
     certification_types = CertificationType.find(certification_type_ids)
 
-    return certification_types if user.admin?
+    return certification_types if current_user.admin?
 
-    certification_types.select { |certification_type| certification_type.customer == user.customer }
+    certification_types.select { |certification_type| certification_type.customer == current_user.customer }
   end
 
   def search_certification_types(user, params = {})
@@ -29,9 +29,7 @@ class CertificationTypeService
 
   def update_certification_type(certification_type, attributes)
     certification_type.update(attributes)
-    certification_type.certifications.each do |certification|
-      certification.update_expiration_date
-    end
+    certification_type.certifications.each { |certification| certification.update_expiration_date }
     certification_type.save
   end
 

@@ -4,12 +4,13 @@ class EquipmentPresenter
 
   attr_reader :model
 
-  delegate :name, to: :model
-  delegate :serial_number, to: :model
-  delegate :status, to: :model
-  delegate :inspection_interval, to: :model
-  delegate :inspection_type, to: :model
-  delegate :comments, to: :model
+  delegate :name,
+           :serial_number,
+           :status,
+           :inspection_interval,
+           :inspection_type,
+           :comments,
+           to: :model
 
   def initialize(model, template = nil)
     @model = model

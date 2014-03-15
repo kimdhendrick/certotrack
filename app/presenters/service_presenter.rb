@@ -57,7 +57,7 @@ class ServicePresenter
   end
 
   def interval_mileage
-    number_with_delimiter(model.interval_mileage, :delimiter => ",")
+    number_with_delimiter(model.interval_mileage, :delimiter => ',')
   end
 
   def vehicle_location
@@ -89,7 +89,7 @@ class ServicePresenter
   end
 
   def vehicle_mileage
-    number_with_delimiter(vehicle.mileage, :delimiter => ",")
+    number_with_delimiter(vehicle.mileage, :delimiter => ',')
   end
 
   def sortable_vehicle_mileage

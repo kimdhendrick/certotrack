@@ -34,7 +34,7 @@ class TrainingEventsController < ModelController
     certification_type_ids = params[:certification_type_ids].map(&:to_i)
 
     @employees = @employee_service.find(employee_ids, current_user)
-    @certification_types = @certification_type_service.find(certification_type_ids, current_user)
+    @certification_types = @certification_type_service.find(current_user, certification_type_ids)
   end
 
   def create
@@ -42,7 +42,7 @@ class TrainingEventsController < ModelController
     certification_type_ids = params[:certification_type_ids].map(&:to_i)
 
     employees_pending_authorization = @employee_service.find(employee_ids, current_user)
-    certification_types_pending_authorization = @certification_type_service.find(certification_type_ids, current_user)
+    certification_types_pending_authorization = @certification_type_service.find(current_user, certification_type_ids)
 
     authorize_all(employees_pending_authorization, :manage)
     authorize_all(certification_types_pending_authorization, :manage)

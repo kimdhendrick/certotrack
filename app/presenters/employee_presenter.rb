@@ -3,10 +3,11 @@ class EmployeePresenter
 
   attr_reader :model
 
-  delegate :id, to: :model
-  delegate :first_name, to: :model
-  delegate :last_name, to: :model
-  delegate :employee_number, to: :model
+  delegate :id,
+           :first_name,
+           :last_name,
+           :employee_number,
+           to: :model
 
   def initialize(model, template = nil)
     @model = model
@@ -18,7 +19,7 @@ class EmployeePresenter
   end
 
   def location_name
-    model.location.try(:name) || "Unassigned"
+    model.location.try(:name) || 'Unassigned'
   end
 
   def sort_key

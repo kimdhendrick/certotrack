@@ -131,13 +131,13 @@ describe CertificationTypeService do
     describe '#find' do
       context 'when an admin user' do
         it 'should return all certification_types' do
-          subject.find([my_certification_type.id, other_certification_type.id], admin_user).should =~ [my_certification_type, other_certification_type]
+          subject.find(admin_user, [my_certification_type.id, other_certification_type.id]).should =~ [my_certification_type, other_certification_type]
         end
       end
 
       context 'when a regular user' do
         it "should return only that user's certification_types" do
-          subject.find([my_certification_type.id, other_certification_type.id], my_user).should == [my_certification_type]
+          subject.find(my_user, [my_certification_type.id, other_certification_type.id]).should == [my_certification_type]
         end
       end
     end

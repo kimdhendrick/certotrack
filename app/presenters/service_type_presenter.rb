@@ -4,12 +4,13 @@ class ServiceTypePresenter
 
   attr_reader :model
 
-  delegate :id, to: :model
-  delegate :name, to: :model
-  delegate :expiration_type, to: :model
-  delegate :interval_date, to: :model
-  delegate :mileage_expiration_type?, to: :model
-  delegate :date_expiration_type?, to: :model
+  delegate :id,
+           :name,
+           :expiration_type,
+           :interval_date,
+           :mileage_expiration_type?,
+           :date_expiration_type?,
+           to: :model
 
   def initialize(model, template = nil)
     @model = model

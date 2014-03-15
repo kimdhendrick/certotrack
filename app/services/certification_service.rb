@@ -7,25 +7,23 @@ class CertificationService
 
   def get_all_certifications(current_user)
     current_user.admin? ?
-        Certification.all :
-        current_user.certifications
+      Certification.all :
+      current_user.certifications
   end
 
   def count_all_certifications(current_user)
     current_user.admin? ?
-        Certification.count :
-        current_user.certifications.count
+      Certification.count :
+      current_user.certifications.count
   end
 
   def search_certifications(current_user, params)
-    certifications = []
+    all_certifications =
+      current_user.admin? ?
+        Certification.all :
+        current_user.certifications
 
-    if current_user.admin?
-      certifications = Certification.all.joins(:certification_type).joins(:employee)
-    else
-      certifications = current_user.certifications.joins(:certification_type).joins(:employee)
-    end
-
+    certifications = all_certifications.joins(:certification_type).joins(:employee)
     @search_service.search(certifications, params)
   end
 
@@ -63,21 +61,21 @@ class CertificationService
 
   def new_certification(current_user, employee_id, certification_type_id)
     @certification_factory.new_instance(
-        current_user_id: current_user.id,
-        employee_id: employee_id,
-        certification_type_id: certification_type_id
+      current_user_id: current_user.id,
+      employee_id: employee_id,
+      certification_type_id: certification_type_id
     )
   end
 
   def certify(current_user, employee_id, certification_type_id, certification_date, trainer, comments, units_achieved)
     certification = @certification_factory.new_instance(
-        current_user_id: current_user.id,
-        employee_id: employee_id,
-        certification_type_id: certification_type_id,
-        certification_date: certification_date,
-        trainer: trainer,
-        comments: comments,
-        units_achieved: units_achieved
+      current_user_id: current_user.id,
+      employee_id: employee_id,
+      certification_type_id: certification_type_id,
+      certification_date: certification_date,
+      trainer: trainer,
+      comments: comments,
+      units_achieved: units_achieved
     )
     certification.save
     certification
@@ -107,7 +105,6 @@ class CertificationService
   end
 
   def auto_recertify(certifications)
-
     success = true
 
     ActiveRecord::Base.transaction do
