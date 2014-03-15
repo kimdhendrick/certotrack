@@ -56,7 +56,7 @@ class LocationsController < ModelController
   def destroy
     location_name = @location.name
 
-    if (@location_service.delete_location(@location))
+    if @location_service.delete_location(@location)
       redirect_to locations_path, notice: "Location #{location_name} was successfully deleted."
     else
       render :show
