@@ -8,4 +8,4 @@
 
 <%= render 'form', user_action: 'Update' %>
 
-<%= link_to 'Delete', @certification, method: :delete, data: {confirm: 'Are you sure you want to delete this certification?'} %>
+<%= CertificationPresenter.new(@certification, self).delete_link %>

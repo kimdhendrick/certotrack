@@ -8,4 +8,4 @@
 
 <%= render 'form', user_action: 'Update' %>
 
-<%= link_to 'Delete', @equipment, method: :delete, data: {confirm: 'Are you sure you want to delete?'} %>
+<%= EquipmentPresenter.new(@equipment, self).delete_link %>

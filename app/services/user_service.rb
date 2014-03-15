@@ -19,4 +19,8 @@ class UserService
     user.roles = user.customer.roles
     user.save
   end
+
+  def delete_user(user)
+    user.destroy
+  end
 end

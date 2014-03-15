@@ -145,4 +145,14 @@ describe UserService do
       UserService.new.update_user(create(:user), create(:user), {}).should be_nil
     end
   end
+
+  describe '#delete_user' do
+    it 'destroys the requested user' do
+      user = create(:user)
+
+      expect {
+        UserService.new.delete_user(user)
+      }.to change(User, :count).by(-1)
+    end
+  end
 end

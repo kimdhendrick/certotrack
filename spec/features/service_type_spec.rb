@@ -296,7 +296,7 @@ describe 'Service Types', slow: true, js: true do
       click_on 'Delete'
 
       alert = page.driver.browser.switch_to.alert
-      alert.text.should eq('Are you sure you want to delete?')
+      alert.text.should eq('Are you sure you want to delete this service type?')
       alert.dismiss
 
       page.should have_content 'Show Service Type'
@@ -304,7 +304,7 @@ describe 'Service Types', slow: true, js: true do
       click_on 'Delete'
 
       alert = page.driver.browser.switch_to.alert
-      alert.text.should eq('Are you sure you want to delete?')
+      alert.text.should eq('Are you sure you want to delete this service type?')
       alert.accept
 
       page.should have_content 'All Service Types'
@@ -321,7 +321,7 @@ describe 'Service Types', slow: true, js: true do
       click_on 'Delete'
 
       alert = page.driver.browser.switch_to.alert
-      alert.text.should eq('Are you sure you want to delete?')
+      alert.text.should eq('Are you sure you want to delete this service type?')
       alert.accept
 
       page.should have_content 'Show Service Type'

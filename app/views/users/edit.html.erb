@@ -6,3 +6,5 @@
 </ul>
 
 <%= render 'form', user_action: 'Update' %>
+
+<%= UserPresenter.new(@user, self).delete_link %>

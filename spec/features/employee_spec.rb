@@ -374,7 +374,7 @@ describe 'Employee', slow: true do
       click_on 'Delete'
 
       alert = page.driver.browser.switch_to.alert
-      alert.text.should eq('Are you sure you want to delete?')
+      alert.text.should eq('Are you sure you want to delete this employee?')
       alert.dismiss
 
       page.should have_content 'Show Employee'
@@ -382,7 +382,7 @@ describe 'Employee', slow: true do
       click_on 'Delete'
 
       alert = page.driver.browser.switch_to.alert
-      alert.text.should eq('Are you sure you want to delete?')
+      alert.text.should eq('Are you sure you want to delete this employee?')
       alert.accept
 
       page.should have_content 'All Employees'
@@ -408,7 +408,7 @@ describe 'Employee', slow: true do
       click_on 'Delete'
 
       alert = page.driver.browser.switch_to.alert
-      alert.text.should eq('Are you sure you want to delete?')
+      alert.text.should eq('Are you sure you want to delete this employee?')
       alert.dismiss
 
       page.should have_content 'Show Employee'
@@ -416,7 +416,7 @@ describe 'Employee', slow: true do
       click_on 'Delete'
 
       alert = page.driver.browser.switch_to.alert
-      alert.text.should eq('Are you sure you want to delete?')
+      alert.text.should eq('Are you sure you want to delete this employee?')
       alert.accept
 
       page.should have_content 'Show Employee'
@@ -442,7 +442,7 @@ describe 'Employee', slow: true do
       click_on 'Delete'
 
       alert = page.driver.browser.switch_to.alert
-      alert.text.should eq('Are you sure you want to delete?')
+      alert.text.should eq('Are you sure you want to delete this employee?')
       alert.dismiss
 
       page.should have_content 'Show Employee'
@@ -450,7 +450,7 @@ describe 'Employee', slow: true do
       click_on 'Delete'
 
       alert = page.driver.browser.switch_to.alert
-      alert.text.should eq('Are you sure you want to delete?')
+      alert.text.should eq('Are you sure you want to delete this employee?')
       alert.accept
 
       page.should have_content 'Show Employee'

@@ -8,4 +8,4 @@
 
 <%= render 'form', user_action: 'Update' %>
 
-<%= link_to 'Delete', @location, method: :delete, data: {confirm: 'Are you sure you want to delete this location?'} %>
+<%= LocationPresenter.new(@location, self).delete_link %>

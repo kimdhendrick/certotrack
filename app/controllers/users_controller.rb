@@ -5,7 +5,7 @@ class UsersController < ModelController
   before_filter :load_user_service,
                 :load_customer_service
 
-  before_action :_set_user, only: [:show, :edit, :update]
+  before_action :_set_user, only: [:show, :edit, :update, :destroy]
 
   def index
     authorize! :read, :user
@@ -18,8 +18,6 @@ class UsersController < ModelController
 
   def show
     authorize! :read, :user
-
-    _set_user
   end
 
   def new
@@ -52,6 +50,16 @@ class UsersController < ModelController
     else
       _set_customers
       render action: 'edit'
+    end
+  end
+
+  def destroy
+    authorize! :manage, :user
+    user_name = "#{@user.last_name}, #{@user.first_name}"
+    if @user_service.delete_user(@user)
+      redirect_to customer_users_path, notice: "User '#{user_name}' was successfully deleted."
+    else
+      render :show
     end
   end
 

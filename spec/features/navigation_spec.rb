@@ -131,7 +131,7 @@ describe 'Navigation', slow: true do
       visit equipment_path equipment.id
       click_link 'Delete'
       alert = page.driver.browser.switch_to.alert
-      alert.text.should eq('Are you sure you want to delete?')
+      alert.text.should eq('Are you sure you want to delete this equipment?')
       alert.dismiss
     end
 
@@ -163,7 +163,7 @@ describe 'Navigation', slow: true do
       click_on 'Edit'
       click_link 'Delete'
       alert = page.driver.browser.switch_to.alert
-      alert.text.should eq('Are you sure you want to delete?')
+      alert.text.should eq('Are you sure you want to delete this equipment?')
       alert.dismiss
     end
 
@@ -253,7 +253,7 @@ describe 'Navigation', slow: true do
       visit certification_type_path certification_type.id
       click_link 'Delete'
       alert = page.driver.browser.switch_to.alert
-      alert.text.should eq('Are you sure you want to delete?')
+      alert.text.should eq('Are you sure you want to delete this certification type?')
       alert.dismiss
     end
 
@@ -281,7 +281,7 @@ describe 'Navigation', slow: true do
       click_on 'Edit'
       click_link 'Delete'
       alert = page.driver.browser.switch_to.alert
-      alert.text.should eq('Are you sure you want to delete?')
+      alert.text.should eq('Are you sure you want to delete this certification type?')
       alert.dismiss
     end
 
@@ -443,7 +443,7 @@ describe 'Navigation', slow: true do
       visit employee_path employee.id
       click_link 'Delete'
       alert = page.driver.browser.switch_to.alert
-      alert.text.should eq('Are you sure you want to delete?')
+      alert.text.should eq('Are you sure you want to delete this employee?')
       alert.dismiss
     end
 
@@ -475,7 +475,7 @@ describe 'Navigation', slow: true do
       click_on 'Edit'
       click_link 'Delete'
       alert = page.driver.browser.switch_to.alert
-      alert.text.should eq('Are you sure you want to delete?')
+      alert.text.should eq('Are you sure you want to delete this employee?')
       alert.dismiss
     end
   end

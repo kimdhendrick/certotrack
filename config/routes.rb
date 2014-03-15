@@ -62,5 +62,5 @@ Certotrack::Application.routes.draw do
 
   resources :customers, only: [:new, :create, :show, :edit, :update, :index]
 
-  resources :customer_users, controller: 'users', only: [:index, :show, :new, :create, :edit, :update]
+  resources :customer_users, controller: 'users', only: [:index, :show, :new, :create, :edit, :update, :destroy]
 end

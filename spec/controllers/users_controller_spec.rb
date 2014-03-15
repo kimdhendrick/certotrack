@@ -329,4 +329,48 @@ describe UsersController do
       end
     end
   end
+  
+  describe 'DELETE #destroy' do
+    context 'when admin user' do
+      before do
+        sign_in stub_admin
+      end
+
+      it 'calls user_service' do
+        user = create(:user)
+        fake_user_service = Faker.new(true)
+        controller.load_user_service(fake_user_service)
+
+        delete :destroy, {:id => user.to_param}, {}
+
+        fake_user_service.received_message.should == :delete_user
+        fake_user_service.received_params[0].should == user
+      end
+
+      context 'when destroy call fails' do
+        before do
+          user = create(:user)
+          user_service = double('user_service')
+          user_service.stub(:delete_user).and_return(false)
+          controller.load_user_service(user_service)
+
+          delete :destroy, {id: user.to_param}, {}
+        end
+
+        it 'should render show page' do
+          response.should render_template('show')
+        end
+      end
+
+      it 'redirects to the user list' do
+        user = create(:user, first_name: 'Julie', last_name: 'Doe')
+        controller.load_user_service(Faker.new(true))
+
+        delete :destroy, {:id => user.to_param}, {}
+
+        response.should redirect_to(customer_users_path)
+        flash[:notice].should == "User 'Doe, Julie' was successfully deleted."
+      end
+    end
+  end
 end

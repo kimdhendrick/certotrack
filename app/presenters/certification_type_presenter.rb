@@ -1,4 +1,6 @@
 class CertificationTypePresenter
+  include LinkHelper
+
   attr_reader :model
 
   delegate :id, to: :model
@@ -42,7 +44,7 @@ class CertificationTypePresenter
   end
 
   def delete_link
-    @template.link_to 'Delete', model, method: :delete, data: {confirm: 'Are you sure you want to delete?'}
+    confirm_delete_link 'Are you sure you want to delete this certification type?'
   end
 
   def auto_recertify_link

@@ -1,5 +1,6 @@
 class ServiceTypePresenter
   include ActionView::Helpers::NumberHelper
+  include LinkHelper
 
   attr_reader :model
 
@@ -36,6 +37,6 @@ class ServiceTypePresenter
   end
 
   def delete_link
-    @template.link_to 'Delete', model, method: :delete, data: {confirm: 'Are you sure you want to delete?'}
+    confirm_delete_link 'Are you sure you want to delete this service type?'
   end
 end

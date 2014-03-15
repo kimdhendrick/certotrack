@@ -1,6 +1,7 @@
 class CertificationPresenter
   include SortableByStatus
   include EmployeesHelper
+  include LinkHelper
 
   attr_reader :model
 
@@ -96,10 +97,7 @@ class CertificationPresenter
   end
 
   def delete_link
-    @template.link_to 'Delete',
-                      model,
-                      method: :delete,
-                      data: {confirm: 'Are you sure you want to delete this certification?'}
+    confirm_delete_link 'Are you sure you want to delete this certification?'
   end
 
   def recertify_link

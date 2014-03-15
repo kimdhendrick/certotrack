@@ -8,4 +8,4 @@
 
 <%= render 'form', user_action: 'Update' %>
 
-<%= link_to 'Delete', @service, method: :delete, data: {confirm: 'Are you sure you want to delete this service?'} %>
+<%= ServicePresenter.new(@service, self).delete_link %>

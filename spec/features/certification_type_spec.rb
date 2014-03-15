@@ -258,7 +258,7 @@ describe 'Certification Type', slow: true do
       click_on 'Delete'
 
       alert = page.driver.browser.switch_to.alert
-      alert.text.should eq('Are you sure you want to delete?')
+      alert.text.should eq('Are you sure you want to delete this certification type?')
       alert.dismiss
 
       page.should have_content 'Show Certification Type'
@@ -266,7 +266,7 @@ describe 'Certification Type', slow: true do
       click_on 'Delete'
 
       alert = page.driver.browser.switch_to.alert
-      alert.text.should eq('Are you sure you want to delete?')
+      alert.text.should eq('Are you sure you want to delete this certification type?')
       alert.accept
 
       page.should have_content 'All Certification Type'
@@ -286,7 +286,7 @@ describe 'Certification Type', slow: true do
       click_on 'Delete'
 
       alert = page.driver.browser.switch_to.alert
-      alert.text.should eq('Are you sure you want to delete?')
+      alert.text.should eq('Are you sure you want to delete this certification type?')
       alert.accept
 
       page.should have_content 'Show Certification Type'

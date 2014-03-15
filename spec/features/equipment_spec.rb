@@ -383,7 +383,7 @@ describe 'Equipment', slow: true do
       click_on 'Delete'
 
       alert = page.driver.browser.switch_to.alert
-      alert.text.should eq('Are you sure you want to delete?')
+      alert.text.should eq('Are you sure you want to delete this equipment?')
       alert.dismiss
 
       page.should have_content 'Show Equipment'
@@ -391,7 +391,7 @@ describe 'Equipment', slow: true do
       click_on 'Delete'
 
       alert = page.driver.browser.switch_to.alert
-      alert.text.should eq('Are you sure you want to delete?')
+      alert.text.should eq('Are you sure you want to delete this equipment?')
       alert.accept
 
       page.should have_content 'All Equipment'

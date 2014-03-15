@@ -2,6 +2,7 @@ class ServicePresenter
   include ActionView::Helpers::NumberHelper
   include PresentableModelHelper
   include SortableByStatus
+  include LinkHelper
 
   attr_reader :model
 
@@ -122,10 +123,7 @@ class ServicePresenter
   end
 
   def delete_link
-    @template.link_to 'Delete',
-                      model,
-                      method: :delete,
-                      data: {confirm: 'Are you sure you want to delete this service?'}
+    confirm_delete_link 'Are you sure you want to delete this service?'
   end
 
   def show_history_link

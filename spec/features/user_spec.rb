@@ -393,4 +393,100 @@ describe 'Users', slow: true do
         page.should have_content /.*Equipment Access.*No.*Certification Access.*No.*Vehicle Access.*No/
       end
   end
+
+  describe 'Delete User' do
+    it 'should delete user from edit page', js: true do
+      jeffco = create(
+        :customer,
+        name: 'Jefferson County',
+        equipment_access: true,
+        certification_access: true,
+        vehicle_access: true
+      )
+
+      create(
+        :user,
+        first_name: 'Kathy',
+        last_name: 'Kramer',
+        username: 'kkramer',
+        email: 'kkramer@ejemplo.com',
+        expiration_notification_interval: 'Weekly',
+        customer: jeffco,
+        roles: jeffco.roles
+      )
+
+      visit '/'
+      page.should have_content 'All Users'
+      click_link 'All Users'
+
+      page.should have_content 'All Users'
+
+      click_on 'kkramer'
+
+      page.should have_content 'Show User'
+
+      click_on 'Edit'
+      click_on 'Delete'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq('Are you sure you want to delete this user?')
+      alert.dismiss
+
+      page.should have_content 'Edit User'
+
+      click_on 'Delete'
+
+      page.driver.browser.switch_to.alert.accept
+
+      page.should have_content 'All Users'
+      page.should have_content "User 'Kramer, Kathy' was successfully deleted."
+    end
+
+    it 'should delete user from show page', js: true do
+      jeffco = create(
+        :customer,
+        name: 'Jefferson County',
+        equipment_access: true,
+        certification_access: true,
+        vehicle_access: true
+      )
+
+      create(
+        :user,
+        first_name: 'Kathy',
+        last_name: 'Kramer',
+        username: 'kkramer',
+        email: 'kkramer@ejemplo.com',
+        expiration_notification_interval: 'Weekly',
+        customer: jeffco,
+        roles: jeffco.roles
+      )
+
+      visit '/'
+      page.should have_content 'All Users'
+      click_link 'All Users'
+
+      page.should have_content 'All Users'
+
+      click_on 'kkramer'
+
+      page.should have_content 'Show User'
+
+      click_on 'Delete'
+
+      alert = page.driver.browser.switch_to.alert
+      alert.text.should eq 'Are you sure you want to delete this user?'
+      alert.dismiss
+
+      page.should have_content 'Show User'
+      page.should have_content 'kkramer'
+
+      click_on 'Delete'
+
+      page.driver.browser.switch_to.alert.accept
+
+      page.should have_content 'All Users'
+      page.should have_content "User 'Kramer, Kathy' was successfully deleted."
+    end
+  end
 end
