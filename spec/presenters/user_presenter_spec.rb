@@ -82,4 +82,20 @@ describe UserPresenter do
   it 'should respond to expiration_notification_interval' do
     UserPresenter.new(user).expiration_notification_interval.should == 'Daily'
   end
+
+  describe 'edit_link' do
+    it 'should create a link to the edit page' do
+      user = build(:user)
+      subject = UserPresenter.new(user, view)
+      subject.edit_link.should =~ /<a.*>Edit<\/a>/
+    end
+  end
+
+  describe 'delete_link' do
+    it 'should create a link to the delete page' do
+      user = build(:user)
+      subject = UserPresenter.new(user, view)
+      subject.delete_link.should =~ /<a.*>Delete<\/a>/
+    end
+  end
 end

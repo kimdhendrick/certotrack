@@ -252,4 +252,20 @@ describe CertificationPresenter do
 
   subject { CertificationPresenter.new(build(:units_based_certification)) }
   it_behaves_like 'an object that is sortable by status'
+
+  describe 'edit_link' do
+    it 'should create a link to the edit page' do
+      certification = build(:certification)
+      subject = CertificationPresenter.new(certification, view)
+      subject.edit_link.should =~ /<a.*>Edit<\/a>/
+    end
+  end
+
+  describe 'delete_link' do
+    it 'should create a link to the delete page' do
+      certification = build(:certification)
+      subject = CertificationPresenter.new(certification, view)
+      subject.delete_link.should =~ /<a.*>Delete<\/a>/
+    end
+  end
 end

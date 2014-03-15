@@ -106,4 +106,12 @@ describe CustomerPresenter do
     users.first.should be_a(UserPresenter)
     users.map(&:username).should == ['AAA', 'GGG', 'ZZZ']
   end
+
+  describe 'edit_link' do
+    it 'should create a link to the edit page' do
+      customer = build(:customer)
+      subject = CustomerPresenter.new(customer, view)
+      subject.edit_link.should =~ /<a.*>Edit<\/a>/
+    end
+  end
 end
