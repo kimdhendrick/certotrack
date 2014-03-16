@@ -258,11 +258,9 @@ describe 'Customers', slow: true do
         visit '/'
         click_link 'All Customers'
 
-        # Ascending search
         click_link 'Name'
         column_data_should_be_in_order('alpha', 'beta', 'Jefferson County', 'zeta')
 
-        # Descending search
         click_link 'Name'
         column_data_should_be_in_order('zeta', 'Jefferson County', 'beta', 'alpha')
       end
@@ -275,11 +273,9 @@ describe 'Customers', slow: true do
         visit '/'
         click_link 'All Customers'
 
-        # Ascending search
         click_link 'Account Number'
         column_data_should_be_in_order('111', '222', '333', 'ABC123')
 
-        # Descending search
         click_link 'Account Number'
         column_data_should_be_in_order('ABC123', '333', '222', '111')
       end
@@ -292,11 +288,9 @@ describe 'Customers', slow: true do
         visit '/'
         click_link 'All Customers'
 
-        # Ascending search
         click_link 'Contact Person Name'
         column_data_should_be_in_order('alpha', 'beta', 'Joe', 'zeta')
 
-        # Descending search
         click_link 'Contact Person Name'
         column_data_should_be_in_order('zeta', 'Joe', 'beta', 'alpha')
       end
@@ -309,11 +303,9 @@ describe 'Customers', slow: true do
         visit '/'
         click_link 'All Customers'
 
-        # Ascending search
         click_link 'Contact Email'
         column_data_should_be_in_order('alpha@example.com', 'beta@example.com', 'joe@example.com', 'zeta@example.com')
 
-        # Descending search
         click_link 'Contact Email'
         column_data_should_be_in_order('zeta@example.com', 'joe@example.com', 'beta@example.com', 'alpha@example.com')
       end

@@ -572,11 +572,9 @@ describe 'Vehicles', slow: true do
       visit '/'
       click_link 'All Vehicles'
 
-      # Ascending search
       click_link 'Location'
       column_data_should_be_in_order('Alcatraz', 'Burbank', 'Zurich')
 
-      # Descending search
       click_link 'Location'
       column_data_should_be_in_order('Zurich', 'Burbank', 'Alcatraz')
     end
@@ -595,11 +593,9 @@ describe 'Vehicles', slow: true do
       visit '/'
       click_link 'All Vehicles'
 
-      # Ascending search
       click_link 'Status'
       column_data_should_be_in_order(Status::VALID.text, Status::EXPIRING.text, Status::EXPIRED.text, Status::NA.text)
 
-      # Descending search
       click_link 'Status'
       column_data_should_be_in_order(Status::NA.text, Status::EXPIRED.text, Status::EXPIRING.text, Status::VALID.text)
     end

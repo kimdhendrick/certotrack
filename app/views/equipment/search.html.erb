@@ -54,11 +54,15 @@
     <tr>
       <td></td>
       <td>
-        <%= submit_tag "Search", :name => nil %>
+        <%= submit_tag "Search" %>
       </td>
     </tr>
   </table>
 <% end %>
+
+<ul id="export-nav">
+  <li><%= link_to 'Export to CSV', search_equipment_path(format: 'csv', params: params) %></li>
+</ul>
 
 <%= render 'equipment_list' %>
 

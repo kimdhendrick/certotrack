@@ -36,28 +36,63 @@ describe EquipmentController do
         sign_in stub_equipment_user(customer)
       end
 
-      it 'assigns equipment as @equipment' do
-        controller.load_equipment_service(fake_equipment_service_that_returns_list)
+      context 'HTML format' do
+        it 'assigns equipment as @equipment' do
+          controller.load_equipment_service(fake_equipment_service_that_returns_list)
 
-        get :index
+          get :index
 
-        assigns(:equipments).map(&:model).should eq([equipment])
+          assigns(:equipments).map(&:model).should eq([equipment])
+        end
+
+        it 'assigns equipment_count' do
+          controller.load_equipment_service(Faker.new(big_list_of_equipment))
+
+          get :index, {per_page: 25, page: 1}
+
+          assigns(:equipment_count).should eq(30)
+        end
+
+        it 'assigns report_title' do
+          controller.load_equipment_service(fake_equipment_service_that_returns_list)
+
+          get :index
+
+          assigns(:report_title).should eq('All Equipment')
+        end
+
+        it 'sets export_template' do
+          get :index
+
+          assigns(:export_template).should == 'all_equipment_export'
+        end
       end
 
-      it 'assigns equipment_count' do
-        controller.load_equipment_service(Faker.new(big_list_of_equipment))
+      context 'CSV export' do
+        it 'responds to csv format' do
+          controller.load_equipment_service(fake_equipment_service_that_returns_list)
 
-        get :index, {per_page: 25, page: 1}
+          get :index, format: 'csv'
 
-        assigns(:equipment_count).should eq(30)
-      end
+          response.headers['Content-Type'].should == 'text/csv; charset=utf-8'
+          response.body.split("\n").count.should == 2
+        end
 
-      it 'assigns report_title' do
-        controller.load_equipment_service(fake_equipment_service_that_returns_list)
+        it 'calls CsvPresenter#present with equipment' do
+          my_user = stub_equipment_user(customer)
+          sign_in my_user
+          equipment = build(:equipment)
+          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
+          fake_csv_presenter = Faker.new
+          CsvPresenter.should_receive(:new).with([equipment]).and_return(fake_csv_presenter)
 
-        get :index
+          get :index, format: 'csv'
 
-        assigns(:report_title).should eq('All Equipment')
+          fake_equipment_service.received_messages.should == [:get_all_equipment]
+          fake_equipment_service.received_params[0].should == my_user
+
+          fake_csv_presenter.received_message.should == :present
+        end
       end
     end
 
@@ -116,26 +151,61 @@ describe EquipmentController do
         sign_in stub_equipment_user(customer)
       end
 
-      it 'assigns equipment as @equipment' do
-        controller.load_equipment_service(Faker.new([expired_equipment]))
+      context 'HTML format' do
+        it 'assigns equipment as @equipment' do
+          controller.load_equipment_service(Faker.new([expired_equipment]))
 
-        get :expired
+          get :expired
 
-        assigns(:equipments).map(&:model).should eq([expired_equipment])
+          assigns(:equipments).map(&:model).should eq([expired_equipment])
+        end
+
+        it 'assigns equipment_count' do
+          controller.load_equipment_service(Faker.new(big_list_of_equipment))
+
+          get :expired, {per_page: 25, page: 1}
+
+          assigns(:equipment_count).should eq(30)
+        end
+
+        it 'assigns report_title' do
+          get :expired
+
+          assigns(:report_title).should eq('Expired Equipment List')
+        end
+
+        it 'sets export_template' do
+          get :expired
+
+          assigns(:export_template).should == 'expired_equipment_export'
+        end
       end
 
-      it 'assigns equipment_count' do
-        controller.load_equipment_service(Faker.new(big_list_of_equipment))
+      context 'CSV export' do
+        it 'responds to csv format' do
+          controller.load_equipment_service(fake_equipment_service_that_returns_list)
 
-        get :expired, {per_page: 25, page: 1}
+          get :expired, format: 'csv'
 
-        assigns(:equipment_count).should eq(30)
-      end
+          response.headers['Content-Type'].should == 'text/csv; charset=utf-8'
+          response.body.split("\n").count.should == 2
+        end
 
-      it 'assigns report_title' do
-        get :expired
+        it 'calls CsvPresenter#present with equipment' do
+          my_user = stub_equipment_user(customer)
+          sign_in my_user
+          equipment = build(:equipment)
+          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
+          fake_csv_presenter = Faker.new
+          CsvPresenter.should_receive(:new).with([equipment]).and_return(fake_csv_presenter)
 
-        assigns(:report_title).should eq('Expired Equipment List')
+          get :expired, format: 'csv'
+
+          fake_equipment_service.received_messages.should == [:get_expired_equipment]
+          fake_equipment_service.received_params[0].should == my_user
+
+          fake_csv_presenter.received_message.should == :present
+        end
       end
     end
 
@@ -195,26 +265,61 @@ describe EquipmentController do
         sign_in stub_equipment_user(customer)
       end
 
-      it 'assigns equipment as @equipment' do
-        controller.load_equipment_service(Faker.new([expiring_equipment]))
+      context 'HTML format' do
+        it 'assigns equipment as @equipment' do
+          controller.load_equipment_service(Faker.new([expiring_equipment]))
 
-        get :expiring
+          get :expiring
 
-        assigns(:equipments).map(&:model).should eq([expiring_equipment])
+          assigns(:equipments).map(&:model).should eq([expiring_equipment])
+        end
+
+        it 'assigns equipment_count' do
+          controller.load_equipment_service(Faker.new(big_list_of_equipment))
+
+          get :expiring, {per_page: 25, page: 1}
+
+          assigns(:equipment_count).should eq(30)
+        end
+
+        it 'assigns report_title' do
+          get :expiring
+
+          assigns(:report_title).should eq('Expiring Equipment List')
+        end
+
+        it 'sets export_template' do
+          get :expiring
+
+          assigns(:export_template).should == 'expiring_equipment_export'
+        end
       end
 
-      it 'assigns equipment_count' do
-        controller.load_equipment_service(Faker.new(big_list_of_equipment))
+      context 'CSV export' do
+        it 'responds to csv format' do
+          controller.load_equipment_service(fake_equipment_service_that_returns_list)
 
-        get :expiring, {per_page: 25, page: 1}
+          get :expiring, format: 'csv'
 
-        assigns(:equipment_count).should eq(30)
-      end
+          response.headers['Content-Type'].should == 'text/csv; charset=utf-8'
+          response.body.split("\n").count.should == 2
+        end
 
-      it 'assigns report_title' do
-        get :expiring
+        it 'calls CsvPresenter#present with equipment' do
+          my_user = stub_equipment_user(customer)
+          sign_in my_user
+          equipment = build(:equipment)
+          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
+          fake_csv_presenter = Faker.new
+          CsvPresenter.should_receive(:new).with([equipment]).and_return(fake_csv_presenter)
 
-        assigns(:report_title).should eq('Expiring Equipment List')
+          get :expiring, format: 'csv'
+
+          fake_equipment_service.received_messages.should == [:get_expiring_equipment]
+          fake_equipment_service.received_params[0].should == my_user
+
+          fake_csv_presenter.received_message.should == :present
+        end
       end
     end
 
@@ -272,26 +377,61 @@ describe EquipmentController do
         sign_in stub_equipment_user(customer)
       end
 
-      it 'assigns equipment as @equipment' do
-        controller.load_equipment_service(Faker.new([noninspectable_equipment]))
+      context 'HTML format' do
+        it 'assigns equipment as @equipment' do
+          controller.load_equipment_service(Faker.new([noninspectable_equipment]))
 
-        get :noninspectable
+          get :noninspectable
 
-        assigns(:equipments).map(&:model).should eq([noninspectable_equipment])
+          assigns(:equipments).map(&:model).should eq([noninspectable_equipment])
+        end
+
+        it 'assigns equipment_count' do
+          controller.load_equipment_service(Faker.new(big_list_of_equipment))
+
+          get :noninspectable, {per_page: 25, page: 1}
+
+          assigns(:equipment_count).should eq(30)
+        end
+
+        it 'assigns report_title' do
+          get :noninspectable
+
+          assigns(:report_title).should eq('Non-Inspectable Equipment List')
+        end
+
+        it 'sets export_template' do
+          get :noninspectable
+
+          assigns(:export_template).should == 'noninspectable_equipment_export'
+        end
       end
 
-      it 'assigns equipment_count' do
-        controller.load_equipment_service(Faker.new(big_list_of_equipment))
+      context 'CSV export' do
+        it 'responds to csv format' do
+          controller.load_equipment_service(fake_equipment_service_that_returns_list)
 
-        get :noninspectable, {per_page: 25, page: 1}
+          get :noninspectable, format: 'csv'
 
-        assigns(:equipment_count).should eq(30)
-      end
+          response.headers['Content-Type'].should == 'text/csv; charset=utf-8'
+          response.body.split("\n").count.should == 2
+        end
 
-      it 'assigns report_title' do
-        get :noninspectable
+        it 'calls CsvPresenter#present with equipment' do
+          my_user = stub_equipment_user(customer)
+          sign_in my_user
+          equipment = build(:equipment)
+          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
+          fake_csv_presenter = Faker.new
+          CsvPresenter.should_receive(:new).with([equipment]).and_return(fake_csv_presenter)
 
-        assigns(:report_title).should eq('Non-Inspectable Equipment List')
+          get :noninspectable, format: 'csv'
+
+          fake_equipment_service.received_messages.should == [:get_noninspectable_equipment]
+          fake_equipment_service.received_params[0].should == my_user
+
+          fake_csv_presenter.received_message.should == :present
+        end
       end
     end
 
@@ -746,77 +886,106 @@ describe EquipmentController do
         sign_in stub_equipment_user(customer)
       end
 
-      it 'calls get_all_equipment with current_user and params' do
-        my_user = stub_equipment_user(customer)
-        sign_in my_user
-        fake_equipment_service = controller.load_equipment_service(Faker.new([]))
-        params = {sort: 'name', direction: 'asc'}
-        EmployeeListPresenter.stub(:new).and_return(Faker.new([]))
-        fake_equipment_list_presenter = Faker.new([])
-        EquipmentListPresenter.stub(:new).and_return(fake_equipment_list_presenter)
+      context 'HTML format' do
+        it 'calls get_all_equipment with current_user and params' do
+          my_user = stub_equipment_user(customer)
+          sign_in my_user
+          fake_equipment_service = controller.load_equipment_service(Faker.new([]))
+          params = {sort: 'name', direction: 'asc'}
+          EmployeeListPresenter.stub(:new).and_return(Faker.new([]))
+          fake_equipment_list_presenter = Faker.new([])
+          EquipmentListPresenter.stub(:new).and_return(fake_equipment_list_presenter)
 
-        get :search, params
+          get :search, params
 
-        fake_equipment_service.received_message.should == :search_equipment
-        fake_equipment_service.received_params[0].should == my_user
+          fake_equipment_service.received_message.should == :search_equipment
+          fake_equipment_service.received_params[0].should == my_user
 
-        fake_equipment_list_presenter.received_message.should == :present
-        fake_equipment_list_presenter.received_params[0]['sort'].should == 'name'
-        fake_equipment_list_presenter.received_params[0]['direction'].should == 'asc'
+          fake_equipment_list_presenter.received_message.should == :present
+          fake_equipment_list_presenter.received_params[0]['sort'].should == 'name'
+          fake_equipment_list_presenter.received_params[0]['direction'].should == 'asc'
+        end
+
+        it 'assigns equipment as @equipment' do
+          equipment = build(:equipment, customer: customer)
+          fake_equipment_service = Faker.new([equipment])
+          controller.load_equipment_service(fake_equipment_service)
+          EmployeeListPresenter.stub(:new).and_return(Faker.new([EquipmentPresenter.new(equipment)]))
+
+          get :search
+
+          assigns(:equipments).map(&:model).should eq([equipment])
+          fake_equipment_service.received_message.should == :search_equipment
+        end
+
+        it 'assigns equipment_count' do
+          controller.load_equipment_service(Faker.new(big_list_of_equipment))
+
+          get :search, {per_page: 25, page: 1}
+
+          assigns(:equipment_count).should eq(30)
+        end
+
+        it 'assigns report_title' do
+          controller.load_equipment_service(Faker.new([]))
+
+          get :search
+
+          assigns(:report_title).should eq('Search Equipment')
+        end
+
+        it 'assigns sorted locations' do
+          location = build(:location)
+          fake_location_list_presenter = Faker.new([location])
+          LocationListPresenter.stub(:new).and_return(fake_location_list_presenter)
+          controller.load_location_service(Faker.new([location]))
+          EmployeeListPresenter.stub(:new).and_return(Faker.new([]))
+
+          get :search
+
+          assigns(:locations).should == [location]
+          fake_location_list_presenter.received_message.should == :sort
+        end
+
+        it 'assigns employees' do
+          employee = build(:employee)
+          controller.load_employee_service(Faker.new([employee]))
+          fake_equipment_list_presenter = Faker.new([EmployeePresenter.new(employee)])
+          EmployeeListPresenter.stub(:new).and_return(fake_equipment_list_presenter)
+
+          get :search
+
+          assigns(:employees).map(&:model).should == [employee]
+          fake_equipment_list_presenter.received_message.should == :present
+          fake_equipment_list_presenter.received_params[0].should == {sort: :sort_key}
+        end
       end
 
-      it 'assigns equipment as @equipment' do
-        equipment = build(:equipment, customer: customer)
-        fake_equipment_service = Faker.new([equipment])
-        controller.load_equipment_service(fake_equipment_service)
-        EmployeeListPresenter.stub(:new).and_return(Faker.new([EquipmentPresenter.new(equipment)]))
+      context 'CSV export' do
+        it 'responds to csv format' do
+          controller.load_equipment_service(fake_equipment_service_that_returns_list)
 
-        get :search
+          get :search, format: 'csv'
 
-        assigns(:equipments).map(&:model).should eq([equipment])
-        fake_equipment_service.received_message.should == :search_equipment
-      end
+          response.headers['Content-Type'].should == 'text/csv; charset=utf-8'
+          response.body.split("\n").count.should == 2
+        end
 
-      it 'assigns equipment_count' do
-        controller.load_equipment_service(Faker.new(big_list_of_equipment))
+        it 'calls CsvPresenter#present with equipment' do
+          my_user = stub_equipment_user(customer)
+          sign_in my_user
+          equipment = build(:equipment)
+          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
+          fake_csv_presenter = Faker.new
+          CsvPresenter.should_receive(:new).with([equipment]).and_return(fake_csv_presenter)
 
-        get :search, {per_page: 25, page: 1}
+          get :search, format: 'csv'
 
-        assigns(:equipment_count).should eq(30)
-      end
+          fake_equipment_service.received_messages.should == [:search_equipment]
+          fake_equipment_service.received_params[0].should == my_user
 
-      it 'assigns report_title' do
-        controller.load_equipment_service(Faker.new([]))
-
-        get :search
-
-        assigns(:report_title).should eq('Search Equipment')
-      end
-
-      it 'assigns sorted locations' do
-        location = build(:location)
-        fake_location_list_presenter = Faker.new([location])
-        LocationListPresenter.stub(:new).and_return(fake_location_list_presenter)
-        controller.load_location_service(Faker.new([location]))
-        EmployeeListPresenter.stub(:new).and_return(Faker.new([]))
-
-        get :search
-
-        assigns(:locations).should == [location]
-        fake_location_list_presenter.received_message.should == :sort
-      end
-
-      it 'assigns employees' do
-        employee = build(:employee)
-        controller.load_employee_service(Faker.new([employee]))
-        fake_equipment_list_presenter = Faker.new([EmployeePresenter.new(employee)])
-        EmployeeListPresenter.stub(:new).and_return(fake_equipment_list_presenter)
-
-        get :search
-
-        assigns(:employees).map(&:model).should == [employee]
-        fake_equipment_list_presenter.received_message.should == :present
-        fake_equipment_list_presenter.received_params[0].should == {sort: :sort_key}
+          fake_csv_presenter.received_message.should == :present
+        end
       end
     end
   end

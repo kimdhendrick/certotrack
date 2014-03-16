@@ -462,6 +462,12 @@ describe 'Equipment', slow: true do
           page.should have_content '02/03/2024'
           page.should have_content 'Employee, Special'
         end
+
+        click_on 'Export to CSV'
+
+        page.response_headers['Content-Type'].should include 'text/csv'
+        header_row = "Name, Serial Number, Status, Inspection Interval, Last Inspection Date, Inspection Type, Expiration Date, Assignee, Created Date"
+        page.text.should == "#{header_row} Meter,ABC123,Valid,Annually,01/01/2013,Inspectable,02/03/2024,\"Employee, Special\",03/16/2014 Box,BBB999,Expired,Annually,01/01/2012,Inspectable,01/01/2013,Denver,03/16/2014"
       end
 
       it 'should show Expired Equipment report' do
@@ -496,6 +502,12 @@ describe 'Equipment', slow: true do
           page.should have_content '07/11/2012'
           page.should have_content 'Littleton'
         end
+
+        click_on 'Export to CSV'
+
+        page.response_headers['Content-Type'].should include 'text/csv'
+        header_row = "Name, Serial Number, Status, Inspection Interval, Last Inspection Date, Inspection Type, Expiration Date, Assignee, Created Date"
+        page.text.should == "#{header_row} Gauge,XYZ987,Expired,1 month,12/05/2011,Inspectable,07/11/2012,Littleton,03/16/2014"
       end
 
       it 'should show Expiring Equipment report' do
@@ -528,6 +540,12 @@ describe 'Equipment', slow: true do
           page.should have_content 'Inspectable'
           page.should have_content 'Denver'
         end
+
+        click_on 'Export to CSV'
+
+        page.response_headers['Content-Type'].should include 'text/csv'
+        header_row = "Name, Serial Number, Status, Inspection Interval, Last Inspection Date, Inspection Type, Expiration Date, Assignee, Created Date"
+        page.text.should == "#{header_row} Banana,BANA,Warning,1 month,03/16/2014,Inspectable,03/17/2014,Denver,03/16/2014"
       end
 
       it 'should show Non-Inspectable Equipment report' do
@@ -557,6 +575,12 @@ describe 'Equipment', slow: true do
           page.should have_content 'Inspectable'
           page.should have_content 'Denver'
         end
+
+        click_on 'Export to CSV'
+
+        page.response_headers['Content-Type'].should include 'text/csv'
+        header_row = "Name, Serial Number, Status, Inspection Interval, Last Inspection Date, Inspection Type, Expiration Date, Assignee, Created Date"
+        page.text.should == "#{header_row} MDC,mdc1,N/A,Not Required,01/01/2000,Non-Inspectable,\"\",Denver,03/16/2014"
       end
     end
 
@@ -591,11 +615,11 @@ describe 'Equipment', slow: true do
         visit '/'
         click_link 'All Equipment'
 
-        # Ascending search
+        # Ascending sort
         click_link 'Name'
         column_data_should_be_in_order('alpha', 'beta', 'zeta')
 
-        # Descending search
+        # Descending sort
         click_link 'Name'
         column_data_should_be_in_order('zeta', 'beta', 'alpha')
       end
@@ -608,11 +632,9 @@ describe 'Equipment', slow: true do
         visit '/'
         click_link 'All Equipment'
 
-        # Ascending search
         click_link 'Serial Number'
         column_data_should_be_in_order('111', '222', '333')
 
-        # Descending search
         click_link 'Serial Number'
         column_data_should_be_in_order('333', '222', '111')
       end
@@ -625,11 +647,9 @@ describe 'Equipment', slow: true do
         visit '/'
         click_link 'All Equipment'
 
-        # Ascending search
         click_link 'Status'
         column_data_should_be_in_order(Status::VALID.text, Status::EXPIRING.text, Status::EXPIRED.text)
 
-        # Descending search
         click_link 'Status'
         column_data_should_be_in_order(Status::EXPIRED.text, Status::EXPIRING.text, Status::VALID.text)
       end
@@ -647,7 +667,6 @@ describe 'Equipment', slow: true do
         visit '/'
         click_link 'All Equipment'
 
-        # Ascending search
         click_link 'Inspection Interval'
         column_data_should_be_in_order(
           Interval::ONE_MONTH.text,
@@ -660,7 +679,6 @@ describe 'Equipment', slow: true do
           Interval::NOT_REQUIRED.text
         )
 
-        # Descending search
         click_link 'Inspection Interval'
         column_data_should_be_in_order(
           Interval::NOT_REQUIRED.text,
@@ -686,11 +704,9 @@ describe 'Equipment', slow: true do
         visit '/'
         click_link 'All Equipment'
 
-        # Ascending search
         click_link 'Last Inspection Date'
         column_data_should_be_in_order(DateHelpers.date_to_string(earliest_date), DateHelpers.date_to_string(middle_date), DateHelpers.date_to_string(latest_date))
 
-        # Descending search
         click_link 'Last Inspection Date'
         column_data_should_be_in_order(DateHelpers.date_to_string(latest_date), DateHelpers.date_to_string(middle_date), DateHelpers.date_to_string(earliest_date))
       end
@@ -703,11 +719,9 @@ describe 'Equipment', slow: true do
         visit '/'
         click_link 'All Equipment'
 
-        # Ascending search
         click_link 'Inspection Type'
         column_data_should_be_in_order("Inspectable", "Inspectable", "Non-Inspectable")
 
-        # Descending search
         click_link 'Inspection Type'
         column_data_should_be_in_order("Non-Inspectable", "Inspectable", "Inspectable")
       end
@@ -725,11 +739,9 @@ describe 'Equipment', slow: true do
         visit '/'
         click_link 'All Equipment'
 
-        # Ascending search
         click_link 'Expiration Date'
         column_data_should_be_in_order(DateHelpers.date_to_string(earliest_date), DateHelpers.date_to_string(middle_date), DateHelpers.date_to_string(latest_date), '')
 
-        # Descending search
         click_link 'Expiration Date'
         column_data_should_be_in_order('', DateHelpers.date_to_string(latest_date), DateHelpers.date_to_string(middle_date), DateHelpers.date_to_string(earliest_date))
       end
@@ -753,11 +765,9 @@ describe 'Equipment', slow: true do
         visit '/'
         click_link 'All Equipment'
 
-        # Ascending search
         click_link 'Assignee'
         column_data_should_be_in_order('Alcatraz', 'Alfonso, Albert', 'Baker, Bob', 'Burbank', 'Zephyr, Zoe', 'Zurich')
 
-        # Descending search
         click_link 'Assignee'
         column_data_should_be_in_order('Zurich', 'Zephyr, Zoe', 'Burbank', 'Baker, Bob', 'Alfonso, Albert', 'Alcatraz')
       end
@@ -832,12 +842,14 @@ describe 'Equipment', slow: true do
       it 'should show Search Equipment page' do
         create(:equipment,
                customer: customer,
-               name: 'Unique Name'
+               name: 'Unique Name',
+               serial_number: 'UniqueSN'
         )
 
         create(:equipment,
                customer: customer,
-               name: 'Box'
+               name: 'Box',
+               serial_number: 'BoxSN'
         )
 
         visit '/'
@@ -862,6 +874,12 @@ describe 'Equipment', slow: true do
 
         page.should have_link 'Unique Name'
         page.should_not have_link 'Box'
+
+        click_on 'Export to CSV'
+
+        page.response_headers['Content-Type'].should include 'text/csv'
+        header_row = "Name, Serial Number, Status, Inspection Interval, Last Inspection Date, Inspection Type, Expiration Date, Assignee, Created Date"
+        page.text.should == "#{header_row} Unique Name,UniqueSN,N/A,Annually,01/01/2000,Inspectable,\"\",Unassigned,03/16/2014"
       end
 
       it 'should show Search Equipment box', js: true do

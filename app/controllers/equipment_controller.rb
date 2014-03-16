@@ -9,31 +9,19 @@ class EquipmentController < ModelController
   before_action :_set_equipment, only: [:show, :edit, :update, :destroy]
 
   def index
-    authorize! :read, :equipment
-
-    @report_title = 'All Equipment'
-    _render_equipment_list(@equipment_service.get_all_equipment(current_user))
+    _render_equipment_list(:all, 'All Equipment')
   end
 
   def expired
-    authorize! :read, :equipment
-
-    @report_title = 'Expired Equipment List'
-    _render_equipment_list(@equipment_service.get_expired_equipment(current_user))
+    _render_equipment_list(:expired, 'Expired Equipment List')
   end
 
   def expiring
-    authorize! :read, :equipment
-
-    @report_title = 'Expiring Equipment List'
-    _render_equipment_list(@equipment_service.get_expiring_equipment(current_user))
+    _render_equipment_list(:expiring, 'Expiring Equipment List')
   end
 
   def noninspectable
-    authorize! :read, :equipment
-
-    @report_title = 'Non-Inspectable Equipment List'
-    _render_equipment_list(@equipment_service.get_noninspectable_equipment(current_user))
+    _render_equipment_list(:noninspectable, 'Non-Inspectable Equipment List')
   end
 
   def show
@@ -81,14 +69,12 @@ class EquipmentController < ModelController
   def search
     authorize! :read, :equipment
 
-    @report_title = 'Search Equipment'
     equipment_collection = @equipment_service.search_equipment(current_user, params)
-    @equipments = EquipmentListPresenter.new(equipment_collection).present(params)
-    @equipment_count = equipment_collection.count
-    @locations = LocationListPresenter.new(@location_service.get_all_locations(current_user)).sort
 
-    employees_collection = @employee_service.get_all_employees(current_user)
-    @employees = EmployeeListPresenter.new(employees_collection).present({sort: :sort_key})
+    respond_to do |format|
+      format.html { _render_search_equipment_as_html(equipment_collection) }
+      format.csv { _render_equipment_list_as_csv(equipment_collection) }
+    end
   end
 
   def ajax_assignee
@@ -112,10 +98,38 @@ class EquipmentController < ModelController
 
   private
 
-  def _render_equipment_list(equipment_collection)
+  def _render_equipment_list(equipment_type, report_title)
+    authorize! :read, :equipment
+
+    equipment_collection = @equipment_service.public_send("get_#{equipment_type}_equipment", current_user)
+
+    @export_template = "#{equipment_type.to_s}_equipment_export"
+
+    respond_to do |format|
+      format.html { _render_equipment_list_as_html(report_title, equipment_collection) }
+      format.csv { _render_equipment_list_as_csv(equipment_collection) }
+    end
+  end
+
+  def _render_equipment_list_as_csv(equipment_collection)
+    render text: CsvPresenter.new(equipment_collection).present
+  end
+
+  def _render_equipment_list_as_html(report_title, equipment_collection)
+    @report_title = report_title
     @equipments = EquipmentListPresenter.new(equipment_collection).present(params)
     @equipment_count = equipment_collection.count
     render 'equipment/index'
+  end
+
+  def _render_search_equipment_as_html(equipment_collection)
+    @report_title = 'Search Equipment'
+    @equipments = EquipmentListPresenter.new(equipment_collection).present(params)
+    @equipment_count = equipment_collection.count
+    @locations = LocationListPresenter.new(@location_service.get_all_locations(current_user)).sort
+
+    employees_collection = @employee_service.get_all_employees(current_user)
+    @employees = EmployeeListPresenter.new(employees_collection).present({sort: :sort_key})
   end
 
   def _set_equipment

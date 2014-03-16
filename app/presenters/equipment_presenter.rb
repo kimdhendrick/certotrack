@@ -60,6 +60,10 @@ class EquipmentPresenter
     model.expiration_date
   end
 
+  def created_at
+    DateHelpers::date_to_string(model.created_at)
+  end
+
   def edit_link
     @template.link_to 'Edit', @template.edit_equipment_path(model)
   end

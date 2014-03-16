@@ -97,11 +97,9 @@ describe 'Users', slow: true do
         visit '/'
         click_link 'All Users'
 
-        # Ascending search
         click_link 'First Name'
         column_data_should_be_in_order('admin', 'alpha', 'beta', 'zeta')
 
-        # Descending search
         click_link 'First Name'
         column_data_should_be_in_order('zeta', 'beta', 'alpha', 'admin')
       end
@@ -114,11 +112,9 @@ describe 'Users', slow: true do
         visit '/'
         click_link 'All Users'
 
-        # Ascending search
         click_link 'First Name'
         column_data_should_be_in_order('Adam', 'alpha', 'beta', 'zeta')
 
-        # Descending search
         click_link 'First Name'
         column_data_should_be_in_order('zeta', 'beta', 'alpha', 'Adam')
       end
@@ -131,11 +127,9 @@ describe 'Users', slow: true do
         visit '/'
         click_link 'All Users'
 
-        # Ascending search
         click_link 'Last Name'
         column_data_should_be_in_order('Admin', 'alpha', 'beta', 'zeta')
 
-        # Descending search
         click_link 'Last Name'
         column_data_should_be_in_order('zeta', 'beta', 'alpha', 'Admin')
       end
@@ -152,11 +146,9 @@ describe 'Users', slow: true do
         visit '/'
         click_link 'All Users'
 
-        # Ascending search
         click_link 'Customer'
         column_data_should_be_in_order('alpha', 'beta', 'My Customer', 'zeta')
 
-        # Descending search
         click_link 'Customer'
         column_data_should_be_in_order('zeta', 'My Customer', 'beta', 'alpha')
       end

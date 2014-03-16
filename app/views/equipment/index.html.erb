@@ -1,6 +1,6 @@
-<h1><%=@report_title%></h1>
+<h1><%= @report_title %></h1>
 
-<div>Total: <%=@equipment_count%></div>
+<div>Total: <%= @equipment_count %></div>
 
 <ul id="primary-nav">
   <li><%= link_to 'Home', root_path %></li>
@@ -8,6 +8,12 @@
   <li><%= link_to 'Search Equipment', search_equipment_path %></li>
 </ul>
 
-<%= render 'equipment_list'%>
+<ul id="export-nav">
+  <li>
+    <%= render @export_template %>
+  </li>
+</ul>
+
+<%= render 'equipment_list' %>
 
 <%= will_paginate @equipments %>

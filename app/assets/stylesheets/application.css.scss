@@ -46,6 +46,22 @@
   }
 }
 
+#export-nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    display: inline;
+    margin: 0;
+    padding: 0 10px 0 5px;
+    border-right: 1px solid black;
+  }
+  li:last-child {
+    border: none;
+  }
+}
+
 /* miscellaneous */
 
 .debug_dump {

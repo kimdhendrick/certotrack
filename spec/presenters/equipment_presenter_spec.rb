@@ -61,6 +61,11 @@ describe EquipmentPresenter do
     equipment.expiration.should == Date.new(2012, 6, 20)
   end
 
+  it 'should respond to created_at' do
+    equipment = EquipmentPresenter.new(create(:equipment, created_at: Date.new(2010, 1, 1)))
+    equipment.created_at.should == '01/01/2010'
+  end
+
   describe 'edit_link' do
     it 'should create a link to the edit page' do
       equipment = build(:equipment)
