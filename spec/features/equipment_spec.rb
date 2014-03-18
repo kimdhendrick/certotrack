@@ -409,178 +409,249 @@ describe 'Equipment', slow: true do
         login_as_equipment_user(customer)
       end
 
-      it 'should show All Equipment report' do
-        create(:equipment,
-               customer: customer,
-               name: 'Meter',
-               serial_number: 'ABC123',
-               inspection_interval: 'Annually',
-               last_inspection_date: Date.new(2013, 1, 1),
-               expiration_date: Date.new(2024, 2, 3),
-               employee_id: special_employee.id
-        )
+      context 'All Equipment report' do
+        before do
+          create(:equipment,
+                 customer: customer,
+                 name: 'Meter',
+                 serial_number: 'ABC123',
+                 inspection_interval: 'Annually',
+                 last_inspection_date: Date.new(2013, 1, 1),
+                 expiration_date: Date.new(2024, 2, 3),
+                 employee_id: special_employee.id
+          )
 
-        create(:equipment,
-               customer: customer,
-               name: 'Box',
-               serial_number: 'BBB999',
-               inspection_interval: 'Annually',
-               last_inspection_date: Date.new(2012, 1, 1),
-               expiration_date: Date.new(2013, 1, 1),
-               location_id: denver_location.id
-        )
-
-        visit '/'
-        page.should have_content 'All Equipment'
-        click_link 'All Equipment'
-
-        page.should have_content 'All Equipment'
-        page.should have_content 'Total: 2'
-        page.should have_link 'Home'
-        page.should have_link 'Create Equipment'
-
-        _assert_report_headers_are_correct
-
-        within 'table tbody tr:nth-of-type(1)' do
-          page.should have_link 'Box'
-          page.should have_content 'BBB999'
-          page.should have_content 'Expired'
-          page.should have_content 'Annually'
-          page.should have_content '01/01/2012'
-          page.should have_content 'Inspectable'
-          page.should have_content '01/01/2013'
-          page.should have_content 'Denver'
+          create(:equipment,
+                 customer: customer,
+                 name: 'Box',
+                 serial_number: 'BBB999',
+                 inspection_interval: 'Annually',
+                 last_inspection_date: Date.new(2012, 1, 1),
+                 expiration_date: Date.new(2013, 1, 1),
+                 location_id: denver_location.id
+          )
         end
 
-        within 'table tbody tr:nth-of-type(2)' do
-          page.should have_link 'Meter'
-          page.should have_content 'ABC123'
-          page.should have_content 'Valid'
-          page.should have_content 'Annually'
-          page.should have_content '01/01/2013'
-          page.should have_content 'Inspectable'
-          page.should have_content '02/03/2024'
-          page.should have_content 'Employee, Special'
+        it 'should show All Equipment report' do
+          visit '/'
+          page.should have_content 'All Equipment'
+          click_link 'All Equipment'
+
+          page.should have_content 'All Equipment'
+          page.should have_content 'Total: 2'
+          page.should have_link 'Home'
+          page.should have_link 'Create Equipment'
+
+          _assert_report_headers_are_correct
+
+          within 'table tbody tr:nth-of-type(1)' do
+            page.should have_link 'Box'
+            page.should have_content 'BBB999'
+            page.should have_content 'Expired'
+            page.should have_content 'Annually'
+            page.should have_content '01/01/2012'
+            page.should have_content 'Inspectable'
+            page.should have_content '01/01/2013'
+            page.should have_content 'Denver'
+          end
+
+          within 'table tbody tr:nth-of-type(2)' do
+            page.should have_link 'Meter'
+            page.should have_content 'ABC123'
+            page.should have_content 'Valid'
+            page.should have_content 'Annually'
+            page.should have_content '01/01/2013'
+            page.should have_content 'Inspectable'
+            page.should have_content '02/03/2024'
+            page.should have_content 'Employee, Special'
+          end
         end
 
-        click_on 'Export to CSV'
+        it 'should export to CSV' do
+          visit '/'
+          click_link 'All Equipment'
 
-        page.response_headers['Content-Type'].should include 'text/csv'
-        header_row = "Name, Serial Number, Status, Inspection Interval, Last Inspection Date, Inspection Type, Expiration Date, Assignee, Created Date"
-        page.text.should == "#{header_row} Meter,ABC123,Valid,Annually,01/01/2013,Inspectable,02/03/2024,\"Employee, Special\",03/16/2014 Box,BBB999,Expired,Annually,01/01/2012,Inspectable,01/01/2013,Denver,03/16/2014"
+          click_on 'Export to CSV'
+
+          page.response_headers['Content-Type'].should include 'text/csv'
+          header_row = "Name, Serial Number, Status, Inspection Interval, Last Inspection Date, Inspection Type, Expiration Date, Assignee, Created Date"
+          page.text.should == "#{header_row} Meter,ABC123,Valid,Annually,01/01/2013,Inspectable,02/03/2024,\"Employee, Special\",#{Date.current.strftime("%m/%d/%Y")} Box,BBB999,Expired,Annually,01/01/2012,Inspectable,01/01/2013,Denver,#{Date.current.strftime("%m/%d/%Y")}"
+        end
+
+        it 'should export to Excel' do
+          visit '/'
+          click_link 'All Equipment'
+
+          click_on 'Export to Excel'
+
+          page.response_headers['Content-Type'].should include 'excel'
+        end
       end
 
-      it 'should show Expired Equipment report' do
-        expired_equipment = create(:equipment,
-                                   customer: customer,
-                                   name: 'Gauge',
-                                   serial_number: 'XYZ987',
-                                   inspection_interval: Interval::ONE_MONTH.text,
-                                   last_inspection_date: Date.new(2011, 12, 5),
-                                   expiration_date: Date.new(2012, 7, 11),
-                                   location_id: littleton_location.id
-        )
-
-        visit '/'
-        page.should have_content 'Expired Equipment'
-        click_link 'Expired Equipment'
-
-        page.should have_content 'Expired Equipment List'
-        page.should have_content 'Total: 1'
-        page.should have_link 'Home'
-        page.should have_link 'Create Equipment'
-
-        _assert_report_headers_are_correct
-
-        within 'tbody tr', text: 'Gauge' do
-          page.should have_link 'Gauge'
-          page.should have_content 'XYZ987'
-          page.should have_content 'Expired'
-          page.should have_content '1 month'
-          page.should have_content '12/05/2011'
-          page.should have_content 'Inspectable'
-          page.should have_content '07/11/2012'
-          page.should have_content 'Littleton'
+      context 'Expired Equipment report' do
+        before do
+          expired_equipment = create(:equipment,
+                                     customer: customer,
+                                     name: 'Gauge',
+                                     serial_number: 'XYZ987',
+                                     inspection_interval: Interval::ONE_MONTH.text,
+                                     last_inspection_date: Date.new(2011, 12, 5),
+                                     expiration_date: Date.new(2012, 7, 11),
+                                     location_id: littleton_location.id
+          )
         end
 
-        click_on 'Export to CSV'
+        it 'should show Expired Equipment report' do
+          visit '/'
+          page.should have_content 'Expired Equipment'
+          click_link 'Expired Equipment'
 
-        page.response_headers['Content-Type'].should include 'text/csv'
-        header_row = "Name, Serial Number, Status, Inspection Interval, Last Inspection Date, Inspection Type, Expiration Date, Assignee, Created Date"
-        page.text.should == "#{header_row} Gauge,XYZ987,Expired,1 month,12/05/2011,Inspectable,07/11/2012,Littleton,03/16/2014"
+          page.should have_content 'Expired Equipment List'
+          page.should have_content 'Total: 1'
+          page.should have_link 'Home'
+          page.should have_link 'Create Equipment'
+
+          _assert_report_headers_are_correct
+
+          within 'tbody tr', text: 'Gauge' do
+            page.should have_link 'Gauge'
+            page.should have_content 'XYZ987'
+            page.should have_content 'Expired'
+            page.should have_content '1 month'
+            page.should have_content '12/05/2011'
+            page.should have_content 'Inspectable'
+            page.should have_content '07/11/2012'
+            page.should have_content 'Littleton'
+          end
+        end
+
+        it 'should export to CSV' do
+          visit '/'
+          click_link 'Expired Equipment'
+
+          click_on 'Export to CSV'
+
+          page.response_headers['Content-Type'].should include 'text/csv'
+          header_row = "Name, Serial Number, Status, Inspection Interval, Last Inspection Date, Inspection Type, Expiration Date, Assignee, Created Date"
+          page.text.should == "#{header_row} Gauge,XYZ987,Expired,1 month,12/05/2011,Inspectable,07/11/2012,Littleton,#{Date.current.strftime("%m/%d/%Y")}"
+        end
+
+        it 'should export to Excel' do
+          visit '/'
+          click_link 'Expired Equipment'
+
+          click_on 'Export to Excel'
+
+          page.response_headers['Content-Type'].should include 'excel'
+        end
       end
 
-      it 'should show Expiring Equipment report' do
-        expiring_equipment = create(:equipment,
-                                    customer: customer,
-                                    name: 'Banana',
-                                    serial_number: 'BANA',
-                                    inspection_interval: Interval::ONE_MONTH.text,
-                                    last_inspection_date: Date.current,
-                                    expiration_date: Date.tomorrow,
-                                    location_id: denver_location.id
-        )
-
-        visit '/'
-        page.should have_content 'Equipment Expiring Soon'
-        click_link 'Equipment Expiring Soon'
-
-        page.should have_content 'Expiring Equipment List'
-        page.should have_content 'Total: 1'
-        page.should have_link 'Home'
-        page.should have_link 'Create Equipment'
-
-        _assert_report_headers_are_correct
-
-        within 'tbody tr', text: 'Banana' do
-          page.should have_link 'Banana'
-          page.should have_content 'BANA'
-          page.should have_content 'Warning'
-          page.should have_content '1 month'
-          page.should have_content 'Inspectable'
-          page.should have_content 'Denver'
+      context 'Expiring Equipment report' do
+        before do
+          expiring_equipment = create(:equipment,
+                                      customer: customer,
+                                      name: 'Banana',
+                                      serial_number: 'BANA',
+                                      inspection_interval: Interval::ONE_MONTH.text,
+                                      last_inspection_date: Date.new(2014, 3, 15),
+                                      expiration_date: Date.tomorrow,
+                                      location_id: denver_location.id
+          )
         end
 
-        click_on 'Export to CSV'
+        it 'should show Expiring Equipment report' do
+          visit '/'
+          page.should have_content 'Equipment Expiring Soon'
+          click_link 'Equipment Expiring Soon'
 
-        page.response_headers['Content-Type'].should include 'text/csv'
-        header_row = "Name, Serial Number, Status, Inspection Interval, Last Inspection Date, Inspection Type, Expiration Date, Assignee, Created Date"
-        page.text.should == "#{header_row} Banana,BANA,Warning,1 month,03/16/2014,Inspectable,03/17/2014,Denver,03/16/2014"
+          page.should have_content 'Expiring Equipment List'
+          page.should have_content 'Total: 1'
+          page.should have_link 'Home'
+          page.should have_link 'Create Equipment'
+
+          _assert_report_headers_are_correct
+
+          within 'tbody tr', text: 'Banana' do
+            page.should have_link 'Banana'
+            page.should have_content 'BANA'
+            page.should have_content 'Warning'
+            page.should have_content '1 month'
+            page.should have_content 'Inspectable'
+            page.should have_content 'Denver'
+          end
+        end
+
+        it 'should export to CSV' do
+          visit '/'
+          click_link 'Equipment Expiring Soon'
+
+          click_on 'Export to CSV'
+
+          page.response_headers['Content-Type'].should include 'text/csv'
+          header_row = "Name, Serial Number, Status, Inspection Interval, Last Inspection Date, Inspection Type, Expiration Date, Assignee, Created Date"
+          page.text.should == "#{header_row} Banana,BANA,Warning,1 month,03/15/2014,Inspectable,#{Date.tomorrow.strftime("%m/%d/%Y")},Denver,#{Date.current.strftime("%m/%d/%Y")}"
+        end
+
+        it 'should export to Excel' do
+          visit '/'
+          click_link 'Equipment Expiring Soon'
+
+          click_on 'Export to Excel'
+
+          page.response_headers['Content-Type'].should include 'excel'
+        end
       end
 
-      it 'should show Non-Inspectable Equipment report' do
-        non_inspectable_equipment = create(:equipment,
-                                           customer: customer,
-                                           name: 'MDC',
-                                           serial_number: 'mdc1',
-                                           inspection_interval: Interval::NOT_REQUIRED.text,
-                                           location_id: denver_location.id
-        )
+      context 'Non-Inspectable Equipment report' do
+        before do
+          non_inspectable_equipment = create(:equipment,
+                                             customer: customer,
+                                             name: 'MDC',
+                                             serial_number: 'mdc1',
+                                             inspection_interval: Interval::NOT_REQUIRED.text,
+                                             location_id: denver_location.id
+          )
+        end
+        it 'should show Non-Inspectable Equipment report' do
+          visit '/'
+          page.should have_content 'Non-Inspectable Equipment'
+          click_link 'Non-Inspectable Equipment'
 
-        visit '/'
-        page.should have_content 'Non-Inspectable Equipment'
-        click_link 'Non-Inspectable Equipment'
+          page.should have_content 'Non-Inspectable Equipment List'
+          page.should have_content 'Total: 1'
+          page.should have_link 'Home'
+          page.should have_link 'Create Equipment'
 
-        page.should have_content 'Non-Inspectable Equipment List'
-        page.should have_content 'Total: 1'
-        page.should have_link 'Home'
-        page.should have_link 'Create Equipment'
+          _assert_report_headers_are_correct
 
-        _assert_report_headers_are_correct
-
-        within 'tbody tr', text: 'MDC' do
-          page.should have_link 'MDC'
-          page.should have_content 'mdc1'
-          page.should have_content 'Not Required'
-          page.should have_content 'Inspectable'
-          page.should have_content 'Denver'
+          within 'tbody tr', text: 'MDC' do
+            page.should have_link 'MDC'
+            page.should have_content 'mdc1'
+            page.should have_content 'Not Required'
+            page.should have_content 'Inspectable'
+            page.should have_content 'Denver'
+          end
         end
 
-        click_on 'Export to CSV'
+        it 'should export to CSV' do
+          visit '/'
+          click_link 'Non-Inspectable Equipment'
 
-        page.response_headers['Content-Type'].should include 'text/csv'
-        header_row = "Name, Serial Number, Status, Inspection Interval, Last Inspection Date, Inspection Type, Expiration Date, Assignee, Created Date"
-        page.text.should == "#{header_row} MDC,mdc1,N/A,Not Required,01/01/2000,Non-Inspectable,\"\",Denver,03/16/2014"
+          click_on 'Export to CSV'
+
+          page.response_headers['Content-Type'].should include 'text/csv'
+          header_row = "Name, Serial Number, Status, Inspection Interval, Last Inspection Date, Inspection Type, Expiration Date, Assignee, Created Date"
+          page.text.should == "#{header_row} MDC,mdc1,N/A,Not Required,01/01/2000,Non-Inspectable,\"\",Denver,#{Date.current.strftime("%m/%d/%Y")}"
+        end
+
+        it 'should export to Excel' do
+          visit '/'
+          click_link 'Non-Inspectable Equipment'
+
+          click_on 'Export to Excel'
+
+          page.response_headers['Content-Type'].should include 'excel'
+        end
       end
     end
 
@@ -839,47 +910,74 @@ describe 'Equipment', slow: true do
         login_as_equipment_user(customer)
       end
 
-      it 'should show Search Equipment page' do
-        create(:equipment,
-               customer: customer,
-               name: 'Unique Name',
-               serial_number: 'UniqueSN'
-        )
+      context 'Search Equipment page' do
+        before do
+          create(:equipment,
+                 customer: customer,
+                 name: 'Unique Name',
+                 serial_number: 'UniqueSN'
+          )
 
-        create(:equipment,
-               customer: customer,
-               name: 'Box',
-               serial_number: 'BoxSN'
-        )
-
-        visit '/'
-
-        within '[data-equipment-search-form]' do
-          click_on 'Search'
+          create(:equipment,
+                 customer: customer,
+                 name: 'Box',
+                 serial_number: 'BoxSN'
+          )
         end
 
-        page.should have_content 'Search Equipment'
-        page.should have_link 'Home'
-        page.should have_link 'Create Equipment'
+        it 'should show Search Equipment page' do
+          visit '/'
 
-        fill_in 'Name contains:', with: 'Unique'
+          within '[data-equipment-search-form]' do
+            click_on 'Search'
+          end
 
-        click_on 'Search'
+          page.should have_content 'Search Equipment'
+          page.should have_link 'Home'
+          page.should have_link 'Create Equipment'
 
-        page.should have_content 'Search Equipment'
+          fill_in 'Name contains:', with: 'Unique'
 
-        _assert_report_headers_are_correct
+          click_on 'Search'
 
-        find 'table.sortable'
+          page.should have_content 'Search Equipment'
 
-        page.should have_link 'Unique Name'
-        page.should_not have_link 'Box'
+          _assert_report_headers_are_correct
 
-        click_on 'Export to CSV'
+          find 'table.sortable'
 
-        page.response_headers['Content-Type'].should include 'text/csv'
-        header_row = "Name, Serial Number, Status, Inspection Interval, Last Inspection Date, Inspection Type, Expiration Date, Assignee, Created Date"
-        page.text.should == "#{header_row} Unique Name,UniqueSN,N/A,Annually,01/01/2000,Inspectable,\"\",Unassigned,03/16/2014"
+          page.should have_link 'Unique Name'
+          page.should_not have_link 'Box'
+        end
+
+        it 'should export to CSV' do
+          visit '/'
+
+          within '[data-equipment-search-form]' do
+            click_on 'Search'
+          end
+
+          fill_in 'Name contains:', with: 'Unique'
+          click_on 'Search'
+
+          click_on 'Export to CSV'
+
+          page.response_headers['Content-Type'].should include 'text/csv'
+          header_row = "Name, Serial Number, Status, Inspection Interval, Last Inspection Date, Inspection Type, Expiration Date, Assignee, Created Date"
+          page.text.should == "#{header_row} Unique Name,UniqueSN,N/A,Annually,01/01/2000,Inspectable,\"\",Unassigned,#{Date.current.strftime("%m/%d/%Y")}"
+        end
+
+        it 'should export to Excel' do
+          visit '/'
+
+          within '[data-equipment-search-form]' do
+            click_on 'Search'
+          end
+
+          click_on 'Export to Excel'
+
+          page.response_headers['Content-Type'].should include 'excel'
+        end
       end
 
       it 'should show Search Equipment box', js: true do

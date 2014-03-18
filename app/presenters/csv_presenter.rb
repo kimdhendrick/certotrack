@@ -13,10 +13,7 @@ class CsvPresenter
 
   def present
     CSV.generate do |csv|
-      equipment_header_names = 'Name, Serial Number, Status, Inspection Interval, Last Inspection Date, Inspection Type, Expiration Date, Assignee, Created Date'.split(',')
-      equipment_column_names = 'name,serial_number,status_text,inspection_interval,last_inspection_date,inspection_type,expiration_date,assignee,created_at'.split(',')
-
-      csv << equipment_header_names
+      csv << EquipmentPresenterHelper::HEADERS
 
       collection.each do |equipment|
         values = equipment_column_names.map do |column_name|
@@ -26,5 +23,9 @@ class CsvPresenter
       end
     end
 
+  end
+
+  def equipment_column_names
+    EquipmentPresenterHelper::COLUMNS.map(&:to_s)
   end
 end

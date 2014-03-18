@@ -74,6 +74,7 @@ class EquipmentController < ModelController
     respond_to do |format|
       format.html { _render_search_equipment_as_html(equipment_collection) }
       format.csv { _render_equipment_list_as_csv(equipment_collection) }
+      format.xls { _render_equipment_list_as_xls(:search, equipment_collection) }
     end
   end
 
@@ -108,7 +109,13 @@ class EquipmentController < ModelController
     respond_to do |format|
       format.html { _render_equipment_list_as_html(report_title, equipment_collection) }
       format.csv { _render_equipment_list_as_csv(equipment_collection) }
+      format.xls { _render_equipment_list_as_xls(equipment_type, equipment_collection) }
     end
+  end
+
+  def _render_equipment_list_as_xls(equipment_type, equipment_collection)
+    filename = equipment_type == :all ? 'equipment.xls' : "#{equipment_type}_equipment.xls"
+    send_data ExcelPresenter.new(equipment_collection).present, filename: filename
   end
 
   def _render_equipment_list_as_csv(equipment_collection)

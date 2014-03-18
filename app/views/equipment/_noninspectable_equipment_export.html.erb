@@ -1,1 +1,6 @@
-<%= link_to 'Export to CSV', noninspectable_equipment_path(format: 'csv', params: params) %>
+<li>
+  <%= link_to 'Export to CSV', noninspectable_equipment_path(format: 'csv', params: params) %>
+</li>
+<li>
+  <%= link_to 'Export to Excel', noninspectable_equipment_path(format: 'xls', params: params) %>
+</li>

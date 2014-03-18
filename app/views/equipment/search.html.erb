@@ -62,6 +62,7 @@
 
 <ul id="export-nav">
   <li><%= link_to 'Export to CSV', search_equipment_path(format: 'csv', params: params) %></li>
+  <li><%= link_to 'Export to Excel', search_equipment_path(format: 'xls', params: params) %></li>
 </ul>
 
 <%= render 'equipment_list' %>

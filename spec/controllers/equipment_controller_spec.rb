@@ -94,6 +94,32 @@ describe EquipmentController do
           fake_csv_presenter.received_message.should == :present
         end
       end
+
+      context 'XLS export' do
+        it 'responds to xls format' do
+          controller.load_equipment_service(fake_equipment_service_that_returns_list)
+
+          get :index, format: 'xls'
+
+          response.headers['Content-Type'].should == 'application/vnd.ms-excel'
+        end
+
+        it 'calls ExcelPresenter#present with equipment' do
+          my_user = stub_equipment_user(customer)
+          sign_in my_user
+          equipment = build(:equipment)
+          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
+          fake_xls_presenter = Faker.new
+          ExcelPresenter.should_receive(:new).with([equipment]).and_return(fake_xls_presenter)
+
+          get :index, format: 'xls'
+
+          fake_equipment_service.received_messages.should == [:get_all_equipment]
+          fake_equipment_service.received_params[0].should == my_user
+
+          fake_xls_presenter.received_message.should == :present
+        end
+      end
     end
 
     context 'when admin user' do
@@ -205,6 +231,32 @@ describe EquipmentController do
           fake_equipment_service.received_params[0].should == my_user
 
           fake_csv_presenter.received_message.should == :present
+        end
+      end
+
+      context 'XLS export' do
+        it 'responds to xls format' do
+          controller.load_equipment_service(fake_equipment_service_that_returns_list)
+
+          get :expired, format: 'xls'
+
+          response.headers['Content-Type'].should == 'application/vnd.ms-excel'
+        end
+
+        it 'calls ExcelPresenter#present with equipment' do
+          my_user = stub_equipment_user(customer)
+          sign_in my_user
+          equipment = build(:equipment)
+          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
+          fake_xls_presenter = Faker.new
+          ExcelPresenter.should_receive(:new).with([equipment]).and_return(fake_xls_presenter)
+
+          get :expired, format: 'xls'
+
+          fake_equipment_service.received_messages.should == [:get_expired_equipment]
+          fake_equipment_service.received_params[0].should == my_user
+
+          fake_xls_presenter.received_message.should == :present
         end
       end
     end
@@ -321,6 +373,32 @@ describe EquipmentController do
           fake_csv_presenter.received_message.should == :present
         end
       end
+
+      context 'XLS export' do
+        it 'responds to xls format' do
+          controller.load_equipment_service(fake_equipment_service_that_returns_list)
+
+          get :expiring, format: 'xls'
+
+          response.headers['Content-Type'].should == 'application/vnd.ms-excel'
+        end
+
+        it 'calls ExcelPresenter#present with equipment' do
+          my_user = stub_equipment_user(customer)
+          sign_in my_user
+          equipment = build(:equipment)
+          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
+          fake_xls_presenter = Faker.new
+          ExcelPresenter.should_receive(:new).with([equipment]).and_return(fake_xls_presenter)
+
+          get :expiring, format: 'xls'
+
+          fake_equipment_service.received_messages.should == [:get_expiring_equipment]
+          fake_equipment_service.received_params[0].should == my_user
+
+          fake_xls_presenter.received_message.should == :present
+        end
+      end
     end
 
     context 'when admin user' do
@@ -431,6 +509,32 @@ describe EquipmentController do
           fake_equipment_service.received_params[0].should == my_user
 
           fake_csv_presenter.received_message.should == :present
+        end
+      end
+
+      context 'XLS export' do
+        it 'responds to xls format' do
+          controller.load_equipment_service(fake_equipment_service_that_returns_list)
+
+          get :noninspectable, format: 'xls'
+
+          response.headers['Content-Type'].should == 'application/vnd.ms-excel'
+        end
+
+        it 'calls ExcelPresenter#present with equipment' do
+          my_user = stub_equipment_user(customer)
+          sign_in my_user
+          equipment = build(:equipment)
+          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
+          fake_xls_presenter = Faker.new
+          ExcelPresenter.should_receive(:new).with([equipment]).and_return(fake_xls_presenter)
+
+          get :noninspectable, format: 'xls'
+
+          fake_equipment_service.received_messages.should == [:get_noninspectable_equipment]
+          fake_equipment_service.received_params[0].should == my_user
+
+          fake_xls_presenter.received_message.should == :present
         end
       end
     end
@@ -985,6 +1089,32 @@ describe EquipmentController do
           fake_equipment_service.received_params[0].should == my_user
 
           fake_csv_presenter.received_message.should == :present
+        end
+      end
+
+      context 'XLS export' do
+        it 'responds to xls format' do
+          controller.load_equipment_service(fake_equipment_service_that_returns_list)
+
+          get :search, format: 'xls'
+
+          response.headers['Content-Type'].should == 'application/vnd.ms-excel'
+        end
+
+        it 'calls ExcelPresenter#present with equipment' do
+          my_user = stub_equipment_user(customer)
+          sign_in my_user
+          equipment = build(:equipment)
+          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
+          fake_xls_presenter = Faker.new
+          ExcelPresenter.should_receive(:new).with([equipment]).and_return(fake_xls_presenter)
+
+          get :search, format: 'xls'
+
+          fake_equipment_service.received_messages.should == [:search_equipment]
+          fake_equipment_service.received_params[0].should == my_user
+
+          fake_xls_presenter.received_message.should == :present
         end
       end
     end
