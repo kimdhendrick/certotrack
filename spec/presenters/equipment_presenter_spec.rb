@@ -31,6 +31,11 @@ describe EquipmentPresenter do
     employee_assigned_equipment.assignee.should == 'Schmoe, Joe'
   end
 
+  it 'should respond to status_text' do
+    equipment = EquipmentPresenter.new(create(:equipment))
+    equipment.status_text.should == 'N/A'
+  end
+
   it 'should respond to sort_key' do
     equipment = EquipmentPresenter.new(create(:equipment, name: 'Equipment Name'))
     equipment.sort_key.should == 'Equipment Name'

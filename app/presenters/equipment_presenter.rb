@@ -36,6 +36,10 @@ class EquipmentPresenter
     assigned_to.try(:name) || 'Unassigned'
   end
 
+  def status_text
+    status.text
+  end
+
   def sort_key
     name
   end

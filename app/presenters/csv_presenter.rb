@@ -14,7 +14,7 @@ class CsvPresenter
   def present
     CSV.generate do |csv|
       equipment_header_names = 'Name, Serial Number, Status, Inspection Interval, Last Inspection Date, Inspection Type, Expiration Date, Assignee, Created Date'.split(',')
-      equipment_column_names = 'name,serial_number,status,inspection_interval,last_inspection_date,inspection_type,expiration_date,assignee,created_at'.split(',')
+      equipment_column_names = 'name,serial_number,status_text,inspection_interval,last_inspection_date,inspection_type,expiration_date,assignee,created_at'.split(',')
 
       csv << equipment_header_names
 
