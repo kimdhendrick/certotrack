@@ -17,7 +17,6 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
 gem 'will_paginate', '~> 3.0'
 gem 'validates_timeliness', '~> 3.0'
-gem 'timecop'
 
 group :test do
   gem "shoulda-matchers"
@@ -26,6 +25,7 @@ group :test do
   gem 'database_cleaner'
   gem 'simplecov', :require => false
   gem 'fuubar'
+  gem 'timecop'
 end
 
 group :development, :test do
