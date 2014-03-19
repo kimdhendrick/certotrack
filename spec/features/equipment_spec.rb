@@ -474,8 +474,17 @@ describe 'Equipment', slow: true do
           click_on 'Export to CSV'
 
           page.response_headers['Content-Type'].should include 'text/csv'
-          header_row = "Name, Serial Number, Status, Inspection Interval, Last Inspection Date, Inspection Type, Expiration Date, Assignee, Created Date"
+          header_row = 'Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created Date'
           page.text.should == "#{header_row} Meter,ABC123,Valid,Annually,01/01/2013,Inspectable,02/03/2024,\"Employee, Special\",#{Date.current.strftime("%m/%d/%Y")} Box,BBB999,Expired,Annually,01/01/2012,Inspectable,01/01/2013,Denver,#{Date.current.strftime("%m/%d/%Y")}"
+        end
+
+        it 'should export to PDF' do
+          visit '/'
+          click_link 'All Equipment'
+
+          click_on 'Export to PDF'
+
+          page.response_headers['Content-Type'].should include 'pdf'
         end
 
         it 'should export to Excel' do
@@ -532,7 +541,7 @@ describe 'Equipment', slow: true do
           click_on 'Export to CSV'
 
           page.response_headers['Content-Type'].should include 'text/csv'
-          header_row = "Name, Serial Number, Status, Inspection Interval, Last Inspection Date, Inspection Type, Expiration Date, Assignee, Created Date"
+          header_row = 'Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created Date'
           page.text.should == "#{header_row} Gauge,XYZ987,Expired,1 month,12/05/2011,Inspectable,07/11/2012,Littleton,#{Date.current.strftime("%m/%d/%Y")}"
         end
 
@@ -543,6 +552,15 @@ describe 'Equipment', slow: true do
           click_on 'Export to Excel'
 
           page.response_headers['Content-Type'].should include 'excel'
+        end
+
+        it 'should export to PDF' do
+          visit '/'
+          click_link 'Expired Equipment'
+
+          click_on 'Export to PDF'
+
+          page.response_headers['Content-Type'].should include 'pdf'
         end
       end
 
@@ -588,7 +606,7 @@ describe 'Equipment', slow: true do
           click_on 'Export to CSV'
 
           page.response_headers['Content-Type'].should include 'text/csv'
-          header_row = "Name, Serial Number, Status, Inspection Interval, Last Inspection Date, Inspection Type, Expiration Date, Assignee, Created Date"
+          header_row = 'Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created Date'
           page.text.should == "#{header_row} Banana,BANA,Warning,1 month,03/15/2014,Inspectable,#{Date.tomorrow.strftime("%m/%d/%Y")},Denver,#{Date.current.strftime("%m/%d/%Y")}"
         end
 
@@ -599,6 +617,15 @@ describe 'Equipment', slow: true do
           click_on 'Export to Excel'
 
           page.response_headers['Content-Type'].should include 'excel'
+        end
+
+        it 'should export to PDF' do
+          visit '/'
+          click_link 'Equipment Expiring Soon'
+
+          click_on 'Export to PDF'
+
+          page.response_headers['Content-Type'].should include 'pdf'
         end
       end
 
@@ -640,7 +667,7 @@ describe 'Equipment', slow: true do
           click_on 'Export to CSV'
 
           page.response_headers['Content-Type'].should include 'text/csv'
-          header_row = "Name, Serial Number, Status, Inspection Interval, Last Inspection Date, Inspection Type, Expiration Date, Assignee, Created Date"
+          header_row = 'Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created Date'
           page.text.should == "#{header_row} MDC,mdc1,N/A,Not Required,01/01/2000,Non-Inspectable,\"\",Denver,#{Date.current.strftime("%m/%d/%Y")}"
         end
 
@@ -651,6 +678,15 @@ describe 'Equipment', slow: true do
           click_on 'Export to Excel'
 
           page.response_headers['Content-Type'].should include 'excel'
+        end
+
+        it 'should export to PDF' do
+          visit '/'
+          click_link 'Non-Inspectable Equipment'
+
+          click_on 'Export to PDF'
+
+          page.response_headers['Content-Type'].should include 'pdf'
         end
       end
     end
@@ -963,7 +999,7 @@ describe 'Equipment', slow: true do
           click_on 'Export to CSV'
 
           page.response_headers['Content-Type'].should include 'text/csv'
-          header_row = "Name, Serial Number, Status, Inspection Interval, Last Inspection Date, Inspection Type, Expiration Date, Assignee, Created Date"
+          header_row = 'Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created Date'
           page.text.should == "#{header_row} Unique Name,UniqueSN,N/A,Annually,01/01/2000,Inspectable,\"\",Unassigned,#{Date.current.strftime("%m/%d/%Y")}"
         end
 
@@ -977,6 +1013,18 @@ describe 'Equipment', slow: true do
           click_on 'Export to Excel'
 
           page.response_headers['Content-Type'].should include 'excel'
+        end
+
+        it 'should export to PDF' do
+          visit '/'
+
+          within '[data-equipment-search-form]' do
+            click_on 'Search'
+          end
+
+          click_on 'Export to PDF'
+
+          page.response_headers['Content-Type'].should include 'pdf'
         end
       end
 

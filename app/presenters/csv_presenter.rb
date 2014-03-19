@@ -1,14 +1,10 @@
 class CsvPresenter
+  include PresenterHelper
 
   attr_reader :collection
 
   def initialize(collection)
-    @collection = collection || []
-
-    unless collection.empty?
-      klass = "#{@collection.first.class}Presenter".constantize
-      @collection = @collection.map { |model| klass.new(model) }
-    end
+    @collection = collection_wrapped_in_presenters(collection)
   end
 
   def present
@@ -22,7 +18,6 @@ class CsvPresenter
         csv << values
       end
     end
-
   end
 
   def equipment_column_names

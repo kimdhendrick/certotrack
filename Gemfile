@@ -18,6 +18,7 @@ gem 'jbuilder', '~> 1.2'
 gem 'will_paginate', '~> 3.0'
 gem 'validates_timeliness', '~> 3.0'
 gem 'to_xls'
+gem 'prawn'
 
 group :test do
   gem "shoulda-matchers"

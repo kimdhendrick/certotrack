@@ -1,17 +1,12 @@
 class ListPresenter
+  include PresenterHelper
 
   attr_reader :collection
 
   def initialize(collection, params = {})
-    @collection = collection || []
+    @collection = collection_wrapped_in_presenters(collection)
     @sorter = params[:sorter] || Sorter.new
     @paginator = params[:paginator] || Paginator.new
-
-    return if @collection.empty?
-
-    klass = "#{@collection.first.class}Presenter".constantize
-
-    @collection = @collection.map { |model| klass.new(model) }
   end
 
   def present(params = {})

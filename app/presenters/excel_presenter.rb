@@ -1,18 +1,15 @@
 class ExcelPresenter
+  include PresenterHelper
 
-  attr_reader :collection
+  attr_reader :collection, :title
 
-  def initialize(collection)
-    @collection = collection || []
-
-    unless collection.empty?
-      klass = "#{@collection.first.class}Presenter".constantize
-      @collection = @collection.map { |model| klass.new(model) }
-    end
+  def initialize(collection, title)
+    @collection = collection_wrapped_in_presenters(collection)
+    @title = title
   end
 
   def present
-    collection.to_xls(headers: equipment_headers, columns: equipment_columns, name: 'Equipment')
+    collection.to_xls(headers: equipment_headers, columns: equipment_columns, name: title)
   end
 
   def equipment_columns

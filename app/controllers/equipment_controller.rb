@@ -74,7 +74,8 @@ class EquipmentController < ModelController
     respond_to do |format|
       format.html { _render_search_equipment_as_html(equipment_collection) }
       format.csv { _render_equipment_list_as_csv(equipment_collection) }
-      format.xls { _render_equipment_list_as_xls(:search, equipment_collection) }
+      format.xls { _render_equipment_list_as_xls('Search Equipment', :search, equipment_collection) }
+      format.pdf { _render_equipment_list_as_pdf('Search Equipment', :search, equipment_collection) }
     end
   end
 
@@ -109,13 +110,17 @@ class EquipmentController < ModelController
     respond_to do |format|
       format.html { _render_equipment_list_as_html(report_title, equipment_collection) }
       format.csv { _render_equipment_list_as_csv(equipment_collection) }
-      format.xls { _render_equipment_list_as_xls(equipment_type, equipment_collection) }
+      format.xls { _render_equipment_list_as_xls(report_title, equipment_type, equipment_collection) }
+      format.pdf { _render_equipment_list_as_pdf(report_title, equipment_type, equipment_collection) }
     end
   end
 
-  def _render_equipment_list_as_xls(equipment_type, equipment_collection)
-    filename = equipment_type == :all ? 'equipment.xls' : "#{equipment_type}_equipment.xls"
-    send_data ExcelPresenter.new(equipment_collection).present, filename: filename
+  def _render_equipment_list_as_pdf(report_title, equipment_type, equipment_collection)
+    send_data PdfPresenter.new(equipment_collection, report_title).present, :filename => filename(equipment_type, 'pdf')
+  end
+
+  def _render_equipment_list_as_xls(report_title, equipment_type, equipment_collection)
+    send_data ExcelPresenter.new(equipment_collection, report_title).present, filename: filename(equipment_type, 'xls')
   end
 
   def _render_equipment_list_as_csv(equipment_collection)
@@ -127,6 +132,10 @@ class EquipmentController < ModelController
     @equipments = EquipmentListPresenter.new(equipment_collection).present(params)
     @equipment_count = equipment_collection.count
     render 'equipment/index'
+  end
+
+  def filename(equipment_type, extension)
+    equipment_type == :all ? "equipment.#{extension}" : "#{equipment_type}_equipment.#{extension}"
   end
 
   def _render_search_equipment_as_html(equipment_collection)

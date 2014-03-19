@@ -1,5 +1,5 @@
 class Faker
-  attr_accessor :received_messages, :received_params
+  attr_accessor :received_messages, :received_params, :all_received_params
 
   def initialize(fake_return_value = nil)
     @fake_return_value = fake_return_value
@@ -22,5 +22,8 @@ class Faker
     @received_messages ||= []
     @received_messages << message
     @received_params = params
+
+    @all_received_params ||= []
+    @all_received_params << params
   end
 end

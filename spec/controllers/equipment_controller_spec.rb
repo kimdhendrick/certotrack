@@ -110,7 +110,7 @@ describe EquipmentController do
           equipment = build(:equipment)
           fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
           fake_xls_presenter = Faker.new
-          ExcelPresenter.should_receive(:new).with([equipment]).and_return(fake_xls_presenter)
+          ExcelPresenter.should_receive(:new).with([equipment], 'All Equipment').and_return(fake_xls_presenter)
 
           get :index, format: 'xls'
 
@@ -118,6 +118,32 @@ describe EquipmentController do
           fake_equipment_service.received_params[0].should == my_user
 
           fake_xls_presenter.received_message.should == :present
+        end
+      end
+
+      context 'PDF export' do
+        it 'responds to pdf format' do
+          controller.load_equipment_service(fake_equipment_service_that_returns_list)
+
+          get :index, format: 'pdf'
+
+          response.headers['Content-Type'].should == 'application/pdf'
+        end
+
+        it 'calls PdfPresenter#present with equipment' do
+          my_user = stub_equipment_user(customer)
+          sign_in my_user
+          equipment = build(:equipment)
+          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
+          fake_pdf_presenter = Faker.new
+          PdfPresenter.should_receive(:new).with([equipment], 'All Equipment').and_return(fake_pdf_presenter)
+
+          get :index, format: 'pdf'
+
+          fake_equipment_service.received_messages.should == [:get_all_equipment]
+          fake_equipment_service.received_params[0].should == my_user
+
+          fake_pdf_presenter.received_message.should == :present
         end
       end
     end
@@ -249,7 +275,7 @@ describe EquipmentController do
           equipment = build(:equipment)
           fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
           fake_xls_presenter = Faker.new
-          ExcelPresenter.should_receive(:new).with([equipment]).and_return(fake_xls_presenter)
+          ExcelPresenter.should_receive(:new).with([equipment], 'Expired Equipment List').and_return(fake_xls_presenter)
 
           get :expired, format: 'xls'
 
@@ -257,6 +283,32 @@ describe EquipmentController do
           fake_equipment_service.received_params[0].should == my_user
 
           fake_xls_presenter.received_message.should == :present
+        end
+      end
+
+      context 'PDF export' do
+        it 'responds to pdf format' do
+          controller.load_equipment_service(fake_equipment_service_that_returns_list)
+
+          get :expired, format: 'pdf'
+
+          response.headers['Content-Type'].should == 'application/pdf'
+        end
+
+        it 'calls PdfPresenter#present with equipment' do
+          my_user = stub_equipment_user(customer)
+          sign_in my_user
+          equipment = build(:equipment)
+          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
+          fake_pdf_presenter = Faker.new
+          PdfPresenter.should_receive(:new).with([equipment], 'Expired Equipment List').and_return(fake_pdf_presenter)
+
+          get :expired, format: 'pdf'
+
+          fake_equipment_service.received_messages.should == [:get_expired_equipment]
+          fake_equipment_service.received_params[0].should == my_user
+
+          fake_pdf_presenter.received_message.should == :present
         end
       end
     end
@@ -389,7 +441,7 @@ describe EquipmentController do
           equipment = build(:equipment)
           fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
           fake_xls_presenter = Faker.new
-          ExcelPresenter.should_receive(:new).with([equipment]).and_return(fake_xls_presenter)
+          ExcelPresenter.should_receive(:new).with([equipment], 'Expiring Equipment List').and_return(fake_xls_presenter)
 
           get :expiring, format: 'xls'
 
@@ -397,6 +449,32 @@ describe EquipmentController do
           fake_equipment_service.received_params[0].should == my_user
 
           fake_xls_presenter.received_message.should == :present
+        end
+      end
+
+      context 'PDF export' do
+        it 'responds to pdf format' do
+          controller.load_equipment_service(fake_equipment_service_that_returns_list)
+
+          get :expiring, format: 'pdf'
+
+          response.headers['Content-Type'].should == 'application/pdf'
+        end
+
+        it 'calls PdfPresenter#present with equipment' do
+          my_user = stub_equipment_user(customer)
+          sign_in my_user
+          equipment = build(:equipment)
+          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
+          fake_pdf_presenter = Faker.new
+          PdfPresenter.should_receive(:new).with([equipment], 'Expiring Equipment List').and_return(fake_pdf_presenter)
+
+          get :expiring, format: 'pdf'
+
+          fake_equipment_service.received_messages.should == [:get_expiring_equipment]
+          fake_equipment_service.received_params[0].should == my_user
+
+          fake_pdf_presenter.received_message.should == :present
         end
       end
     end
@@ -527,7 +605,7 @@ describe EquipmentController do
           equipment = build(:equipment)
           fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
           fake_xls_presenter = Faker.new
-          ExcelPresenter.should_receive(:new).with([equipment]).and_return(fake_xls_presenter)
+          ExcelPresenter.should_receive(:new).with([equipment], 'Non-Inspectable Equipment List').and_return(fake_xls_presenter)
 
           get :noninspectable, format: 'xls'
 
@@ -535,6 +613,32 @@ describe EquipmentController do
           fake_equipment_service.received_params[0].should == my_user
 
           fake_xls_presenter.received_message.should == :present
+        end
+      end
+
+      context 'PDF export' do
+        it 'responds to pdf format' do
+          controller.load_equipment_service(fake_equipment_service_that_returns_list)
+
+          get :noninspectable, format: 'pdf'
+
+          response.headers['Content-Type'].should == 'application/pdf'
+        end
+
+        it 'calls PdfPresenter#present with equipment' do
+          my_user = stub_equipment_user(customer)
+          sign_in my_user
+          equipment = build(:equipment)
+          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
+          fake_pdf_presenter = Faker.new
+          PdfPresenter.should_receive(:new).with([equipment], 'Non-Inspectable Equipment List').and_return(fake_pdf_presenter)
+
+          get :noninspectable, format: 'pdf'
+
+          fake_equipment_service.received_messages.should == [:get_noninspectable_equipment]
+          fake_equipment_service.received_params[0].should == my_user
+
+          fake_pdf_presenter.received_message.should == :present
         end
       end
     end
@@ -1107,7 +1211,7 @@ describe EquipmentController do
           equipment = build(:equipment)
           fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
           fake_xls_presenter = Faker.new
-          ExcelPresenter.should_receive(:new).with([equipment]).and_return(fake_xls_presenter)
+          ExcelPresenter.should_receive(:new).with([equipment], 'Search Equipment').and_return(fake_xls_presenter)
 
           get :search, format: 'xls'
 
@@ -1115,6 +1219,32 @@ describe EquipmentController do
           fake_equipment_service.received_params[0].should == my_user
 
           fake_xls_presenter.received_message.should == :present
+        end
+      end
+
+      context 'PDF export' do
+        it 'responds to pdf format' do
+          controller.load_equipment_service(fake_equipment_service_that_returns_list)
+
+          get :search, format: 'pdf'
+
+          response.headers['Content-Type'].should == 'application/pdf'
+        end
+
+        it 'calls PdfPresenter#present with equipment' do
+          my_user = stub_equipment_user(customer)
+          sign_in my_user
+          equipment = build(:equipment)
+          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
+          fake_pdf_presenter = Faker.new
+          PdfPresenter.should_receive(:new).with([equipment], 'Search Equipment').and_return(fake_pdf_presenter)
+
+          get :search, format: 'pdf'
+
+          fake_equipment_service.received_messages.should == [:search_equipment]
+          fake_equipment_service.received_params[0].should == my_user
+
+          fake_pdf_presenter.received_message.should == :present
         end
       end
     end

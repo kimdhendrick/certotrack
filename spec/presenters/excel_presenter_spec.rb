@@ -4,7 +4,7 @@ describe ExcelPresenter do
   describe '#present' do
     context 'exporting equipment' do
       before do
-        ExcelPresenter.new(equipment_collection).present
+        ExcelPresenter.new(equipment_collection, 'Equipment Sheet Title').present
       end
 
       let(:equipment_collection) { Faker.new([create(:equipment)]) }
@@ -15,7 +15,7 @@ describe ExcelPresenter do
       end
 
       it 'should call to_xls with the right headers' do
-        headers = 'Name, Serial Number, Status, Inspection Interval, Last Inspection Date, Inspection Type, Expiration Date, Assignee, Created Date'.split(',')
+        headers = 'Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created Date'.split(',')
         equipment_collection.received_params[0][:headers].should == headers
       end
 
@@ -25,7 +25,7 @@ describe ExcelPresenter do
       end
 
       it 'should call to_xls with the sheet name' do
-        equipment_collection.received_params[0][:name].should == 'Equipment'
+        equipment_collection.received_params[0][:name].should == 'Equipment Sheet Title'
       end
     end
   end

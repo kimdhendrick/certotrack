@@ -15,13 +15,13 @@ describe CsvPresenter do
       end
 
       it 'can present an empty collection' do
-        CsvPresenter.new([]).present.should == "Name, Serial Number, Status, Inspection Interval, Last Inspection Date, Inspection Type, Expiration Date, Assignee, Created Date\n"
+        CsvPresenter.new([]).present.should == "Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created Date\n"
       end
 
       it 'should have the right equipment headers' do
         results = CsvPresenter.new(Equipment.all).present
 
-        results.split("\n")[0].should == 'Name, Serial Number, Status, Inspection Interval, Last Inspection Date, Inspection Type, Expiration Date, Assignee, Created Date'
+        results.split("\n")[0].should == 'Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created Date'
       end
 
       it 'should have the right data' do
