@@ -116,7 +116,7 @@ class EquipmentController < ModelController
   end
 
   def _render_equipment_list_as_pdf(report_title, equipment_type, equipment_collection)
-    send_data PdfPresenter.new(equipment_collection, report_title).present, :filename => filename(equipment_type, 'pdf')
+    send_data PdfPresenter.new(equipment_collection, report_title, _sort_params).present, :filename => filename(equipment_type, 'pdf')
   end
 
   def _render_equipment_list_as_xls(report_title, equipment_type, equipment_collection)
@@ -154,5 +154,9 @@ class EquipmentController < ModelController
 
   def _equipment_params
     params.require(:equipment).permit(equipment_accessible_parameters)
+  end
+
+  def _sort_params
+    params.slice('sort', 'direction')
   end
 end

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe PdfPresenter do
   describe '#present' do
     context 'exporting equipment' do
-      let(:equipment_collection) { Faker.new([create(:equipment)]) }
+      let(:equipment_collection) { [create(:equipment)] }
 
       it 'should instantiate Prawn Document' do
         fake_prawn_document = Faker.new
@@ -85,6 +85,17 @@ describe PdfPresenter do
         formatting_options = table_params[1]
         formatting_options.should ==
           {:header => true, :row_colors => ['F0F0F0', 'FFFFCC'], :cell_style => {:size => 10}}
+      end
+
+      it 'should sort the collection' do
+        fake_list_presenter = Faker.new([])
+        EquipmentListPresenter.stub(:new).and_return(fake_list_presenter)
+
+        PdfPresenter.new([], '', {sort: 'name', direction: 'asc'}).present
+
+        fake_list_presenter.received_message.should == :sort
+        fake_list_presenter.received_params[0][:sort].should == 'name'
+        fake_list_presenter.received_params[0][:direction].should == 'asc'
       end
     end
   end

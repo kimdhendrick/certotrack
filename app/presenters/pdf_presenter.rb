@@ -4,8 +4,8 @@ class PdfPresenter
 
   attr_reader :collection, :title
 
-  def initialize(collection, title)
-    @collection = collection_wrapped_in_presenters(collection)
+  def initialize(collection, title, params = {})
+    @collection = EquipmentListPresenter.new(collection).sort(params)
     @title = title
   end
 

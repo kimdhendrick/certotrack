@@ -19,7 +19,7 @@ describe EquipmentController do
       fake_equipment_service = controller.load_equipment_service(Faker.new([]))
       fake_equipment_list_presenter = Faker.new([])
       EquipmentListPresenter.stub(:new).and_return(fake_equipment_list_presenter)
-      params = {sort: 'name', direction: 'asc'}
+      params = {'sort' => 'name', 'direction' => 'asc'}
 
       get :index, params
 
@@ -136,9 +136,10 @@ describe EquipmentController do
           equipment = build(:equipment)
           fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
           fake_pdf_presenter = Faker.new
-          PdfPresenter.should_receive(:new).with([equipment], 'All Equipment').and_return(fake_pdf_presenter)
+          sort_params = {'sort' => 'name', 'direction' => 'asc'}
+          PdfPresenter.should_receive(:new).with([equipment], 'All Equipment', sort_params).and_return(fake_pdf_presenter)
 
-          get :index, format: 'pdf'
+          get :index, {format: 'pdf'}.merge(sort_params)
 
           fake_equipment_service.received_messages.should == [:get_all_equipment]
           fake_equipment_service.received_params[0].should == my_user
@@ -186,7 +187,7 @@ describe EquipmentController do
       fake_equipment_service = controller.load_equipment_service(Faker.new([]))
       fake_equipment_list_presenter = Faker.new([])
       EquipmentListPresenter.stub(:new).and_return(fake_equipment_list_presenter)
-      params = {sort: 'name', direction: 'asc'}
+      params = {'sort' => 'name', 'direction' => 'asc'}
 
       get :expired, params
 
@@ -301,9 +302,10 @@ describe EquipmentController do
           equipment = build(:equipment)
           fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
           fake_pdf_presenter = Faker.new
-          PdfPresenter.should_receive(:new).with([equipment], 'Expired Equipment List').and_return(fake_pdf_presenter)
+          sort_params = {'sort' => 'name', 'direction' => 'asc'}
+          PdfPresenter.should_receive(:new).with([equipment], 'Expired Equipment List', sort_params).and_return(fake_pdf_presenter)
 
-          get :expired, format: 'pdf'
+          get :expired, {format: 'pdf'}.merge(sort_params)
 
           fake_equipment_service.received_messages.should == [:get_expired_equipment]
           fake_equipment_service.received_params[0].should == my_user
@@ -352,7 +354,7 @@ describe EquipmentController do
       fake_equipment_list_presenter = Faker.new([])
       EquipmentListPresenter.stub(:new).and_return(fake_equipment_list_presenter)
 
-      params = {sort: 'name', direction: 'asc'}
+      params = {'sort' => 'name', 'direction' => 'asc'}
 
       get :expiring, params
 
@@ -467,9 +469,10 @@ describe EquipmentController do
           equipment = build(:equipment)
           fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
           fake_pdf_presenter = Faker.new
-          PdfPresenter.should_receive(:new).with([equipment], 'Expiring Equipment List').and_return(fake_pdf_presenter)
+          sort_params = {'sort' => 'name', 'direction' => 'asc'}
+          PdfPresenter.should_receive(:new).with([equipment], 'Expiring Equipment List', sort_params).and_return(fake_pdf_presenter)
 
-          get :expiring, format: 'pdf'
+          get :expiring, {format: 'pdf'}.merge(sort_params)
 
           fake_equipment_service.received_messages.should == [:get_expiring_equipment]
           fake_equipment_service.received_params[0].should == my_user
@@ -516,7 +519,7 @@ describe EquipmentController do
       fake_equipment_service = controller.load_equipment_service(Faker.new([]))
       fake_equipment_list_presenter = Faker.new([])
       EquipmentListPresenter.stub(:new).and_return(fake_equipment_list_presenter)
-      params = {sort: 'name', direction: 'asc'}
+      params = {'sort' => 'name', 'direction' => 'asc'}
 
       get :noninspectable, params
 
@@ -631,9 +634,10 @@ describe EquipmentController do
           equipment = build(:equipment)
           fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
           fake_pdf_presenter = Faker.new
-          PdfPresenter.should_receive(:new).with([equipment], 'Non-Inspectable Equipment List').and_return(fake_pdf_presenter)
+          sort_params = {'sort' => 'name', 'direction' => 'asc'}
+          PdfPresenter.should_receive(:new).with([equipment], 'Non-Inspectable Equipment List', sort_params).and_return(fake_pdf_presenter)
 
-          get :noninspectable, format: 'pdf'
+          get :noninspectable, {format: 'pdf'}.merge(sort_params)
 
           fake_equipment_service.received_messages.should == [:get_noninspectable_equipment]
           fake_equipment_service.received_params[0].should == my_user
@@ -1099,7 +1103,7 @@ describe EquipmentController do
           my_user = stub_equipment_user(customer)
           sign_in my_user
           fake_equipment_service = controller.load_equipment_service(Faker.new([]))
-          params = {sort: 'name', direction: 'asc'}
+          params = {'sort' => 'name', 'direction' => 'asc'}
           EmployeeListPresenter.stub(:new).and_return(Faker.new([]))
           fake_equipment_list_presenter = Faker.new([])
           EquipmentListPresenter.stub(:new).and_return(fake_equipment_list_presenter)
@@ -1237,9 +1241,10 @@ describe EquipmentController do
           equipment = build(:equipment)
           fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
           fake_pdf_presenter = Faker.new
-          PdfPresenter.should_receive(:new).with([equipment], 'Search Equipment').and_return(fake_pdf_presenter)
+          sort_params = {'sort' => 'name', 'direction' => 'asc'}
+          PdfPresenter.should_receive(:new).with([equipment], 'Search Equipment', sort_params).and_return(fake_pdf_presenter)
 
-          get :search, format: 'pdf'
+          get :search, {format: 'pdf'}.merge(sort_params)
 
           fake_equipment_service.received_messages.should == [:search_equipment]
           fake_equipment_service.received_params[0].should == my_user
