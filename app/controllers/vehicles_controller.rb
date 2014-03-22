@@ -26,7 +26,7 @@ class VehiclesController < ModelController
   def create
     authorize! :create, :vehicle
 
-    @vehicle = @vehicle_service.create_vehicle(current_user, _vehicle_params)
+    @vehicle = @vehicle_service.create_vehicle(current_user, _vehicle_params_for_create)
 
     if @vehicle.persisted?
       redirect_to @vehicle, notice: 'Vehicle was successfully created.'
@@ -98,6 +98,10 @@ class VehiclesController < ModelController
 
   def _set_locations
     @locations = LocationListPresenter.new(@location_service.get_all_locations(current_user)).sort
+  end
+
+  def _vehicle_params_for_create
+    merge_created_by(_vehicle_params)
   end
 
   def _vehicle_params

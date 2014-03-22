@@ -563,7 +563,7 @@ describe CertificationsController do
             units_achieved: '15'
           },
           source: :employee,
-          commit: "Create"
+          commit: 'Create'
         }
 
         post :create, params, {}

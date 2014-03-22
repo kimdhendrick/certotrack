@@ -320,7 +320,6 @@ describe ServiceTypesController do
 
       describe 'with valid params' do
         it 'calls service_type_service' do
-
           controller.load_service_type_service(fake_service_type_service)
 
           post :create, {:service_type => service_type_attributes}, {}
@@ -342,6 +341,14 @@ describe ServiceTypesController do
           post :create, {:service_type => service_type_attributes}, {}
 
           response.should redirect_to(ServiceType.last)
+        end
+
+        it 'sets the current_user as the creator' do
+          controller.load_service_type_service(fake_service_type_service)
+
+          post :create, {:service_type => service_type_attributes}, {}
+
+          fake_service_type_service.received_params[1]['created_by'].should =~ /username/
         end
       end
 

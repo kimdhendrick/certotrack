@@ -33,7 +33,7 @@ class ServiceTypesController < ModelController
   def create
     authorize! :create, :service_type
 
-    @service_type = @service_type_service.create_service_type(current_user.customer, _service_type_params)
+    @service_type = @service_type_service.create_service_type(current_user.customer, _service_type_params_for_create)
 
     if @service_type.persisted?
       redirect_to @service_type, notice: 'Service Type was successfully created.'
@@ -100,6 +100,10 @@ class ServiceTypesController < ModelController
 
   def _assign_expiration_types
     @expiration_types = ServiceType::EXPIRATION_TYPES
+  end
+
+  def _service_type_params_for_create
+    merge_created_by(_service_type_params)
   end
 
   def _service_type_params

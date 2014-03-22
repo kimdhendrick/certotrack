@@ -49,6 +49,20 @@ describe VehicleServiceFactory do
       service.last_service_mileage.should == 4200
     end
 
+    it 'sets the current_user as the creator' do
+      service_type = create(:service_type)
+      customer = create(:customer)
+      vehicle = create(:vehicle)
+
+      service = VehicleServiceFactory.new.new_instance(
+        current_user_id: create(:user, username: 'current_user_username', customer: customer).id,
+        vehicle_id: vehicle.id,
+        service_type_id: service_type.id
+      )
+
+      service.created_by.should == 'current_user_username'
+    end
+
     it 'creates a service when given a service_type_id' do
       customer = create(:customer)
       service_type = create(:service_type)

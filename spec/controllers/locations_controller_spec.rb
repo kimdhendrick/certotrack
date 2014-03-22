@@ -186,6 +186,15 @@ describe LocationsController do
           response.should redirect_to(Location.last)
           flash[:notice].should == 'Location was successfully created.'
         end
+
+        it 'sets the current_user as the creator' do
+          fake_location_service = Faker.new(build(:location))
+          controller.load_location_service(fake_location_service)
+
+          post :create, {:location => {name: 'Hawaii'}}, {}
+
+          fake_location_service.received_params[1]['created_by'].should =~ /username/
+        end
       end
 
       describe 'with invalid params' do

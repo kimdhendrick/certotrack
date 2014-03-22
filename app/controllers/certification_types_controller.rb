@@ -45,7 +45,7 @@ class CertificationTypesController < ModelController
   def create
     authorize! :create, :certification
 
-    @certification_type = @certification_type_service.create_certification_type(current_user.customer, _certification_type_params)
+    @certification_type = @certification_type_service.create_certification_type(current_user.customer, _certification_type_params_for_create)
 
     if @certification_type.persisted?
       redirect_to @certification_type, notice: 'Certification Type was successfully created.'
@@ -82,6 +82,10 @@ class CertificationTypesController < ModelController
 
   def _set_certification_type
     @certification_type = _get_model(CertificationType)
+  end
+
+  def _certification_type_params_for_create
+    merge_created_by(_certification_type_params)
   end
 
   def _certification_type_params

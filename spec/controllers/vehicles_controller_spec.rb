@@ -193,6 +193,15 @@ describe VehiclesController do
           response.should redirect_to(Vehicle.last)
           flash[:notice].should == 'Vehicle was successfully created.'
         end
+
+        it 'sets the current_user as the creator' do
+          fake_vehicle_service = Faker.new(build(:vehicle))
+          controller.load_vehicle_service(fake_vehicle_service)
+
+          post :create, {:vehicle => {vin: '98765432109876543'}}, {}
+
+          fake_vehicle_service.received_params[1]['created_by'].should =~ /username/
+        end
       end
 
       describe 'with invalid params' do

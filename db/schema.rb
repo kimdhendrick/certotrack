@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140309220832) do
+ActiveRecord::Schema.define(version: 20140322144548) do
 
   create_table "certification_periods", force: true do |t|
     t.string   "trainer"
@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 20140309220832) do
     t.integer  "customer_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "created_by"
   end
 
   create_table "certifications", force: true do |t|
@@ -42,6 +43,7 @@ ActiveRecord::Schema.define(version: 20140309220832) do
     t.datetime "updated_at"
     t.string   "type"
     t.integer  "active_certification_period_id",                null: false
+    t.string   "created_by"
   end
 
   create_table "customers", force: true do |t|
@@ -73,6 +75,7 @@ ActiveRecord::Schema.define(version: 20140309220832) do
     t.date     "deactivation_date"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "created_by"
   end
 
   create_table "equipment", force: true do |t|
@@ -87,6 +90,7 @@ ActiveRecord::Schema.define(version: 20140309220832) do
     t.integer  "customer_id"
     t.integer  "location_id"
     t.integer  "employee_id"
+    t.string   "created_by"
   end
 
   create_table "locations", force: true do |t|
@@ -94,6 +98,7 @@ ActiveRecord::Schema.define(version: 20140309220832) do
     t.integer  "customer_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "created_by"
   end
 
   create_table "service_periods", force: true do |t|
@@ -115,6 +120,7 @@ ActiveRecord::Schema.define(version: 20140309220832) do
     t.integer  "customer_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "created_by"
   end
 
   create_table "services", force: true do |t|
@@ -124,6 +130,7 @@ ActiveRecord::Schema.define(version: 20140309220832) do
     t.integer  "active_service_period_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "created_by"
   end
 
   create_table "users", force: true do |t|
@@ -164,6 +171,7 @@ ActiveRecord::Schema.define(version: 20140309220832) do
     t.integer  "customer_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "created_by"
   end
 
 end

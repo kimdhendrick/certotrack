@@ -3,11 +3,12 @@ class VehicleServiceFactory
   def new_instance(attributes)
     vehicle_id = attributes[:vehicle_id]
     service_type_id = attributes[:service_type_id]
-    customer = User.find(attributes[:current_user_id]).customer
+    current_user = User.find(attributes[:current_user_id])
+    customer = current_user.customer
 
     service_type = ServiceType.find_by_id(service_type_id)
 
-    service = Service.new(vehicle_id: vehicle_id, service_type: service_type, customer: customer)
+    service = Service.new(vehicle_id: vehicle_id, service_type: service_type, customer: customer, created_by: current_user.username)
     service = _build_active_service_period(service, attributes)
     service.expiration_date = _expires_on_date(service_type_id, service.last_service_date)
     service.expiration_mileage = service.calculate_mileage

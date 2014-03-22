@@ -3,9 +3,13 @@ class CertificationFactory
   def new_instance(attributes)
     employee_id = attributes[:employee_id]
     certification_type_id = attributes[:certification_type_id]
-    customer = User.find(attributes[:current_user_id]).customer
+    current_user = User.find(attributes[:current_user_id])
 
-    certification = Certification.new(employee_id: employee_id, certification_type_id: certification_type_id, customer: customer)
+    customer = current_user.customer
+    certification = Certification.new(employee_id: employee_id,
+                                      certification_type_id: certification_type_id,
+                                      customer: customer,
+                                      created_by: current_user.username)
     certification = _build_certification_period(certification, attributes)
     certification.expiration_date = _expires_on(certification_type_id, certification.last_certification_date)
     certification

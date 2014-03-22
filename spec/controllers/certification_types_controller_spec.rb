@@ -72,6 +72,14 @@ describe CertificationTypesController do
 
           response.should redirect_to(CertificationType.last)
         end
+
+        it 'sets the current user as the creator' do
+          controller.load_certification_type_service(fake_certification_type_service_persisted)
+
+          post :create, {:certification_type => certification_type_attributes}, {}
+
+          fake_certification_type_service_persisted.received_params[1]['created_by'].should =~ /username/
+        end
       end
 
       describe 'with invalid params' do

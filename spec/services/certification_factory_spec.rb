@@ -107,5 +107,19 @@ describe CertificationFactory do
 
       certification.expiration_date.should == fake_expiration_date
     end
+
+    it 'sets the current_user as the creator' do
+      certification_type = create(:certification_type)
+      customer = create(:customer)
+      employee = create(:employee)
+
+      certification = CertificationFactory.new.new_instance(
+        current_user_id: create(:user, username: 'creator_username', customer: customer).id,
+        employee_id: employee.id,
+        certification_type_id: certification_type.id
+      )
+
+      certification.created_by.should == 'creator_username'
+    end
   end
 end

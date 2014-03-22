@@ -12,7 +12,7 @@ describe EquipmentController do
     big_list_of_equipment
   end
 
-  describe 'GET index' do
+  describe 'GET #index' do
     it 'calls get_all_equipment with current_user and params' do
       my_user = stub_equipment_user(customer)
       sign_in my_user
@@ -177,7 +177,7 @@ describe EquipmentController do
     end
   end
 
-  describe 'GET expired' do
+  describe 'GET #expired' do
 
     let(:expired_equipment) { build(:expired_equipment, customer: customer) }
 
@@ -343,7 +343,7 @@ describe EquipmentController do
     end
   end
 
-  describe 'GET expiring' do
+  describe 'GET #expiring' do
 
     let(:expiring_equipment) { build(:expiring_equipment, customer: customer) }
 
@@ -510,7 +510,7 @@ describe EquipmentController do
     end
   end
 
-  describe 'GET noninspectable' do
+  describe 'GET #noninspectable' do
     let(:noninspectable_equipment) { build(:noninspectable_equipment, customer: customer) }
 
     it 'calls get_noninspectable_equipment with current_user and params' do
@@ -675,7 +675,7 @@ describe EquipmentController do
     end
   end
 
-  describe 'GET show' do
+  describe 'GET #show' do
     context 'when equipment user' do
       before do
         sign_in stub_equipment_user(customer)
@@ -720,7 +720,7 @@ describe EquipmentController do
     end
   end
 
-  describe 'GET new' do
+  describe 'GET #new' do
     context 'when equipment user' do
       before do
         sign_in stub_equipment_user(customer)
@@ -767,7 +767,7 @@ describe EquipmentController do
     end
   end
 
-  describe 'GET edit' do
+  describe 'GET #edit' do
     context 'when equipment user' do
       before do
         sign_in stub_equipment_user(customer)
@@ -819,7 +819,7 @@ describe EquipmentController do
     end
   end
 
-  describe 'POST create' do
+  describe 'POST #create' do
     context 'when equipment user' do
       before do
         sign_in stub_equipment_user(customer)
@@ -851,6 +851,15 @@ describe EquipmentController do
 
           response.should redirect_to(Equipment.last)
           flash[:notice].should == 'Equipment was successfully created.'
+        end
+
+        it 'sets the current_user as the creator' do
+          fake_equipment_service = Faker.new(build(:equipment))
+          controller.load_equipment_service(fake_equipment_service)
+
+          post :create, {:equipment => equipment_attributes}, {}
+
+          fake_equipment_service.received_params[1]['created_by'].should =~ /username/
         end
       end
 
@@ -920,7 +929,7 @@ describe EquipmentController do
     end
   end
 
-  describe 'PUT update' do
+  describe 'PUT #update' do
     context 'when equipment user' do
       before do
         sign_in stub_equipment_user(customer)
@@ -1046,7 +1055,7 @@ describe EquipmentController do
     end
   end
 
-  describe 'DELETE destroy' do
+  describe 'DELETE #destroy' do
     context 'when equipment user' do
       before do
         sign_in stub_equipment_user(customer)
@@ -1092,7 +1101,7 @@ describe EquipmentController do
     end
   end
 
-  describe 'GET search' do
+  describe 'GET #search' do
     context 'when equipment user' do
       before do
         sign_in stub_equipment_user(customer)
@@ -1255,7 +1264,7 @@ describe EquipmentController do
     end
   end
 
-  describe 'GET ajax_assignee' do
+  describe 'GET #ajax_assignee' do
     context 'when equipment user' do
       before do
         sign_in stub_equipment_user(customer)
@@ -1326,7 +1335,7 @@ describe EquipmentController do
     end
   end
 
-  describe 'GET ajax_equipment_name' do
+  describe 'GET #ajax_equipment_name' do
     context 'when equipment user' do
       let (:current_user) { stub_equipment_user(customer) }
       before do

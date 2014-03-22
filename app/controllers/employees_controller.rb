@@ -29,7 +29,7 @@ class EmployeesController < ModelController
   def create
     authorize! :create, :certification
 
-    @employee = @employee_service.create_employee(current_user.customer, _employees_params)
+    @employee = @employee_service.create_employee(current_user.customer, _employees_params_for_create)
 
     if @employee.persisted?
       redirect_to @employee, notice: 'Employee was successfully created.'
@@ -73,7 +73,13 @@ class EmployeesController < ModelController
     @employee = _get_model(Employee)
   end
 
+  def _employees_params_for_create
+    merge_created_by(_employees_params)
+  end
+
   def _employees_params
-    params.require(:employee).permit(employees_accessible_parameters)
+    merge_created_by(
+      params.require(:employee).
+        permit(employees_accessible_parameters))
   end
 end

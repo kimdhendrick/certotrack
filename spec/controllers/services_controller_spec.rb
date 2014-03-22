@@ -153,7 +153,7 @@ describe ServicesController do
         sign_in current_user
       end
 
-      it 'calls creates service using vehicle_servicing_service' do
+      it 'creates service using vehicle_servicing_service' do
         fake_vehicle_servicing_service = controller.load_vehicle_servicing_service(Faker.new(build(:service)))
 
         params = {

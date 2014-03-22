@@ -1,4 +1,8 @@
 module ControllerHelper
+  def merge_created_by(params)
+    params.merge(created_by: current_user.username)
+  end
+
   def assign_intervals
     @intervals = Interval.all.to_a
   end

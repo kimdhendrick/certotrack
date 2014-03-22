@@ -3,7 +3,7 @@ require 'spec_helper'
 describe EmployeesController do
   let(:customer) { create(:customer) }
 
-  describe 'GET new' do
+  describe 'GET #new' do
     context 'when certification user' do
       before do
         sign_in stub_certification_user(customer)
@@ -51,7 +51,7 @@ describe EmployeesController do
     end
   end
 
-  describe 'POST create' do
+  describe 'POST #create' do
     context 'when certification user' do
       before do
         sign_in stub_certification_user(customer)
@@ -82,6 +82,15 @@ describe EmployeesController do
 
           response.should redirect_to(Employee.last)
           flash[:notice].should == 'Employee was successfully created.'
+        end
+
+        it 'sets the current_user as the creator' do
+          fake_employee_service = Faker.new(build(:employee))
+          controller.load_employee_service(fake_employee_service)
+
+          post :create, {:employee => employee_attributes}, {}
+
+          fake_employee_service.received_params[1]['created_by'].should =~ /username/
         end
       end
 
@@ -156,7 +165,7 @@ describe EmployeesController do
     end
   end
 
-  describe 'GET index' do
+  describe 'GET #index' do
     let(:big_list_of_employees) do
       big_list_of_employees = []
       30.times do
@@ -247,7 +256,7 @@ describe EmployeesController do
     end
   end
 
-  describe 'GET show' do
+  describe 'GET #show' do
     let(:employee) { create(:employee, customer: customer) }
     let(:certification_service) { double('certification_service') }
     let(:certification) { create(:certification, employee: employee, customer: employee.customer) }
@@ -303,7 +312,7 @@ describe EmployeesController do
     end
   end
 
-  describe 'GET edit' do
+  describe 'GET #edit' do
     context 'when certification user' do
       before do
         sign_in stub_certification_user(customer)
@@ -353,7 +362,7 @@ describe EmployeesController do
     end
   end
 
-  describe 'PUT update' do
+  describe 'PUT #update' do
     context 'when certification user' do
       before do
         sign_in stub_certification_user(customer)
@@ -477,7 +486,7 @@ describe EmployeesController do
     end
   end
 
-  describe 'DELETE destroy' do
+  describe 'DELETE #destroy' do
     context 'when certification user' do
       before do
         sign_in stub_certification_user(customer)

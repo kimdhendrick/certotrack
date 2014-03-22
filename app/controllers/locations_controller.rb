@@ -25,7 +25,7 @@ class LocationsController < ModelController
   def create
     authorize! :create, :location
 
-    @location = @location_service.create_location(current_user, _location_params)
+    @location = @location_service.create_location(current_user, _location_params_for_create)
 
     if @location.persisted?
       redirect_to @location, notice: 'Location was successfully created.'
@@ -71,6 +71,10 @@ class LocationsController < ModelController
 
   def _set_location
     @location = _get_model(Location)
+  end
+
+  def _location_params_for_create
+    merge_created_by(_location_params)
   end
 
   def _location_params

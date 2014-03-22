@@ -40,7 +40,7 @@ class EquipmentController < ModelController
   def create
     authorize! :create, :equipment
 
-    @equipment = @equipment_service.create_equipment(current_user.customer, _equipment_params)
+    @equipment = @equipment_service.create_equipment(current_user.customer, _equipment_params_for_create)
 
     if @equipment.persisted?
       redirect_to @equipment, notice: 'Equipment was successfully created.'
@@ -152,8 +152,13 @@ class EquipmentController < ModelController
     @equipment = _get_model(Equipment)
   end
 
+  def _equipment_params_for_create
+    merge_created_by(_equipment_params)
+  end
+
   def _equipment_params
-    params.require(:equipment).permit(equipment_accessible_parameters)
+    params.require(:equipment).
+      permit(equipment_accessible_parameters)
   end
 
   def _sort_params
