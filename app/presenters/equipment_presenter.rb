@@ -10,6 +10,7 @@ class EquipmentPresenter
            :inspection_interval,
            :inspection_type,
            :comments,
+           :created_by,
            to: :model
 
   def initialize(model, template = nil)

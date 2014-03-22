@@ -37,5 +37,6 @@ module LoginHelpers
     user = create(:user, customer: customer, roles: roles)
 
     login_as(user)
+    user
   end
 end

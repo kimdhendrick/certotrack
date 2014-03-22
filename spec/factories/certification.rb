@@ -3,6 +3,7 @@ FactoryGirl.define do
     employee
     certification_type
     customer { certification_type.customer || employee.customer }
+    created_by 'username'
     association :active_certification_period, factory: :certification_period
     factory :units_based_certification do
       association :certification_type, factory: :units_based_certification_type

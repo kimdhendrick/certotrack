@@ -11,6 +11,7 @@ describe Equipment do
   it { should validate_presence_of :name }
   it { should validate_presence_of :serial_number }
   it { should validate_presence_of :customer }
+  it { should validate_presence_of :created_by }
   it { should validate_uniqueness_of(:serial_number).scoped_to(:customer_id) }
   it_should_behave_like 'a stripped model', 'serial_number'
   it_should_behave_like 'a stripped model', 'name'

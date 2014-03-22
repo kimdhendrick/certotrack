@@ -10,6 +10,7 @@ FactoryGirl.define do
     inspection_interval Interval::ONE_YEAR.text
     serial_number
     customer
+    created_by 'username'
 
     factory :location_assigned_equipment do
       location

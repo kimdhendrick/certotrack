@@ -18,7 +18,8 @@ class Service < ActiveRecord::Base
   validates_presence_of :active_service_period,
                         :service_type,
                         :vehicle,
-                        :customer
+                        :customer,
+                        :created_by
 
   validate :_service_period_start_dates
 

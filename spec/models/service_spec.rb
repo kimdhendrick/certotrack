@@ -10,6 +10,7 @@ describe Service do
   it { should validate_presence_of :service_type }
   it { should validate_presence_of :vehicle }
   it { should validate_presence_of :customer }
+  it { should validate_presence_of :created_by }
 
   it 'should validate the uniqueness of service_type_id' do
     service = create(:service)

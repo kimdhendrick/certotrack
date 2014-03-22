@@ -6,9 +6,7 @@ describe 'Equipment', slow: true do
   describe 'Show Equipment' do
     let!(:denver_location) { create(:location, name: 'Denver', customer_id: customer.id) }
 
-    before do
-      login_as_equipment_user(customer)
-    end
+    let!(:current_user) { login_as_equipment_user(customer) }
 
     it 'should render equipment show page' do
       valid_equipment = create(:equipment,
@@ -405,9 +403,7 @@ describe 'Equipment', slow: true do
       let!(:littleton_location) { create(:location, name: 'Littleton', customer_id: customer.id) }
       let!(:special_employee) { create(:employee, first_name: 'Special', last_name: 'Employee', customer_id: customer.id) }
 
-      before do
-        login_as_equipment_user(customer)
-      end
+      let!(:current_user) { login_as_equipment_user(customer) }
 
       context 'All Equipment report' do
         before do
@@ -474,8 +470,8 @@ describe 'Equipment', slow: true do
           click_on 'Export to CSV'
 
           page.response_headers['Content-Type'].should include 'text/csv'
-          header_row = 'Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created Date'
-          page.text.should == "#{header_row} Meter,ABC123,Valid,Annually,01/01/2013,Inspectable,02/03/2024,\"Employee, Special\",#{Date.current.strftime("%m/%d/%Y")} Box,BBB999,Expired,Annually,01/01/2012,Inspectable,01/01/2013,Denver,#{Date.current.strftime("%m/%d/%Y")}"
+          header_row = 'Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created Date,Created By User'
+          page.text.should == "#{header_row} Meter,ABC123,Valid,Annually,01/01/2013,Inspectable,02/03/2024,\"Employee, Special\",#{Date.current.strftime("%m/%d/%Y")},username Box,BBB999,Expired,Annually,01/01/2012,Inspectable,01/01/2013,Denver,#{Date.current.strftime("%m/%d/%Y")},username"
         end
 
         it 'should export to PDF' do
@@ -541,8 +537,8 @@ describe 'Equipment', slow: true do
           click_on 'Export to CSV'
 
           page.response_headers['Content-Type'].should include 'text/csv'
-          header_row = 'Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created Date'
-          page.text.should == "#{header_row} Gauge,XYZ987,Expired,1 month,12/05/2011,Inspectable,07/11/2012,Littleton,#{Date.current.strftime("%m/%d/%Y")}"
+          header_row = 'Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created Date,Created By User'
+          page.text.should == "#{header_row} Gauge,XYZ987,Expired,1 month,12/05/2011,Inspectable,07/11/2012,Littleton,#{Date.current.strftime("%m/%d/%Y")},username"
         end
 
         it 'should export to Excel' do
@@ -606,8 +602,8 @@ describe 'Equipment', slow: true do
           click_on 'Export to CSV'
 
           page.response_headers['Content-Type'].should include 'text/csv'
-          header_row = 'Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created Date'
-          page.text.should == "#{header_row} Banana,BANA,Warning,1 month,03/15/2014,Inspectable,#{Date.tomorrow.strftime("%m/%d/%Y")},Denver,#{Date.current.strftime("%m/%d/%Y")}"
+          header_row = 'Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created Date,Created By User'
+          page.text.should == "#{header_row} Banana,BANA,Warning,1 month,03/15/2014,Inspectable,#{Date.tomorrow.strftime("%m/%d/%Y")},Denver,#{Date.current.strftime("%m/%d/%Y")},username"
         end
 
         it 'should export to Excel' do
@@ -667,8 +663,8 @@ describe 'Equipment', slow: true do
           click_on 'Export to CSV'
 
           page.response_headers['Content-Type'].should include 'text/csv'
-          header_row = 'Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created Date'
-          page.text.should == "#{header_row} MDC,mdc1,N/A,Not Required,01/01/2000,Non-Inspectable,\"\",Denver,#{Date.current.strftime("%m/%d/%Y")}"
+          header_row = 'Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created Date,Created By User'
+          page.text.should == "#{header_row} MDC,mdc1,N/A,Not Required,01/01/2000,Non-Inspectable,\"\",Denver,#{Date.current.strftime("%m/%d/%Y")},username"
         end
 
         it 'should export to Excel' do
@@ -942,9 +938,7 @@ describe 'Equipment', slow: true do
 
   describe 'Search' do
     context 'when an equipment user' do
-      before do
-        login_as_equipment_user(customer)
-      end
+      let!(:current_user) { login_as_equipment_user(customer) }
 
       context 'Search Equipment page' do
         before do
@@ -999,8 +993,8 @@ describe 'Equipment', slow: true do
           click_on 'Export to CSV'
 
           page.response_headers['Content-Type'].should include 'text/csv'
-          header_row = 'Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created Date'
-          page.text.should == "#{header_row} Unique Name,UniqueSN,N/A,Annually,01/01/2000,Inspectable,\"\",Unassigned,#{Date.current.strftime("%m/%d/%Y")}"
+          header_row = 'Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created Date,Created By User'
+          page.text.should == "#{header_row} Unique Name,UniqueSN,N/A,Annually,01/01/2000,Inspectable,\"\",Unassigned,#{Date.current.strftime("%m/%d/%Y")},username"
         end
 
         it 'should export to Excel' do

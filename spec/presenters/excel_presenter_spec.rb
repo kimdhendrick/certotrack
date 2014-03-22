@@ -15,12 +15,12 @@ describe ExcelPresenter do
       end
 
       it 'should call to_xls with the right headers' do
-        headers = 'Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created Date'.split(',')
+        headers = 'Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created Date,Created By User'.split(',')
         equipment_collection.received_params[0][:headers].should == headers
       end
 
       it 'should call to_xls with the right columns' do
-        columns = [:name, :serial_number, :status_text, :inspection_interval, :last_inspection_date, :inspection_type, :expiration_date, :assignee, :created_at]
+        columns = [:name, :serial_number, :status_text, :inspection_interval, :last_inspection_date, :inspection_type, :expiration_date, :assignee, :created_at, :created_by]
         equipment_collection.received_params[0][:columns].should == columns
       end
 

@@ -44,7 +44,8 @@ describe PdfPresenter do
           create(
             :equipment,
             name: 'Meter',
-            serial_number: 'MySerialNum'
+            serial_number: 'MySerialNum',
+            created_by: 'username'
           )
         ]
 
@@ -55,7 +56,7 @@ describe PdfPresenter do
         table_header_and_data = table_params[0]
         table_data = table_header_and_data[1]
         table_data.should ==
-          ['Meter', 'MySerialNum', 'N/A', 'Annually', '01/01/2000', 'Inspectable', '', 'Unassigned', "#{Date.current.strftime("%m/%d/%Y")}"]
+          ['Meter', 'MySerialNum', 'N/A', 'Annually', '01/01/2000', 'Inspectable', '', 'Unassigned', "#{Date.current.strftime('%m/%d/%Y')}", 'username']
       end
 
       it 'should render the proper header row' do
@@ -70,7 +71,7 @@ describe PdfPresenter do
         header_row = table_header_and_data[0]
 
         header_row.should ==
-          ['Name', 'Serial Number', 'Status', 'Inspection Interval', 'Last Inspection Date', 'Inspection Type', 'Expiration Date', 'Assignee', 'Created Date']
+          ['Name', 'Serial Number', 'Status', 'Inspection Interval', 'Last Inspection Date', 'Inspection Type', 'Expiration Date', 'Assignee', 'Created Date', 'Created By User']
       end
 
       it 'should render the proper table formatting' do

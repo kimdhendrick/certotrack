@@ -71,6 +71,11 @@ describe EquipmentPresenter do
     equipment.created_at.should == '01/01/2010'
   end
 
+  it 'should respond to created_by' do
+    equipment = EquipmentPresenter.new(create(:equipment, created_by: 'username'))
+    equipment.created_by.should == 'username'
+  end
+
   describe 'edit_link' do
     it 'should create a link to the edit page' do
       equipment = build(:equipment)

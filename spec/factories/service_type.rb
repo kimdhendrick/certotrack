@@ -9,5 +9,6 @@ FactoryGirl.define do
     interval_mileage 5000
     expiration_type 'By Mileage'
     customer
+    created_by 'username'
   end
 end

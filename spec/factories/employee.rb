@@ -8,5 +8,6 @@ FactoryGirl.define do
     last_name 'Smith'
     employee_number
     customer
+    created_by 'username'
   end
 end

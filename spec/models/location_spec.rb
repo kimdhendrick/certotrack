@@ -9,8 +9,9 @@ describe Location do
   it { should have_many(:equipments) }
   it { should have_many(:employees) }
   it { should have_many(:vehicles) }
-  it { should validate_presence_of :customer }
   it { should validate_presence_of :name }
+  it { should validate_presence_of :customer }
+  it { should validate_presence_of :created_by }
   it { should validate_uniqueness_of(:name).scoped_to(:customer_id) }
   it_should_behave_like 'a stripped model', 'name'
 

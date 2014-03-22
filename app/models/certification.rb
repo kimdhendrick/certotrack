@@ -20,7 +20,8 @@ class Certification < ActiveRecord::Base
   validates_presence_of :active_certification_period,
                         :certification_type,
                         :employee,
-                        :customer
+                        :customer,
+                        :created_by
 
   validate :_certification_period_start_dates
 

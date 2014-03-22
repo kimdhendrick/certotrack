@@ -6,5 +6,6 @@ FactoryGirl.define do
   factory :location do
     name
     customer
+    created_by 'username'
   end
 end

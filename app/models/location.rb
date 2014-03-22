@@ -8,8 +8,9 @@ class Location < ActiveRecord::Base
 
   before_validation :_strip_whitespace
 
-  validates_presence_of :customer
-  validates_presence_of :name
+  validates_presence_of :name,
+                        :customer,
+                        :created_by
   validates_uniqueness_of :name, scope: :customer_id, case_sensitive: false
 
   before_destroy :_prevent_deletion_when_equipment_or_employees

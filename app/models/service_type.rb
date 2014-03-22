@@ -14,7 +14,10 @@ class ServiceType < ActiveRecord::Base
   belongs_to :customer
   has_many :services, autosave: true
 
-  validates_presence_of :name
+  validates_presence_of :name,
+                        :customer,
+                        :created_by
+
   validates_uniqueness_of :name, scope: :customer_id, case_sensitive: false
   validates :interval_date,
             inclusion:

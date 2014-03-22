@@ -10,18 +10,19 @@ describe CsvPresenter do
           serial_number: 'MySerialNumber',
           last_inspection_date: Date.new(2013, 12, 15),
           expiration_date: Date.new(2016, 12, 20),
-          inspection_interval: 'Annually'
+          inspection_interval: 'Annually',
+          created_by: 'username'
         )
       end
 
       it 'can present an empty collection' do
-        CsvPresenter.new([]).present.should == "Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created Date\n"
+        CsvPresenter.new([]).present.should == "Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created Date,Created By User\n"
       end
 
       it 'should have the right equipment headers' do
         results = CsvPresenter.new(Equipment.all).present
 
-        results.split("\n")[0].should == 'Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created Date'
+        results.split("\n")[0].should == 'Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created Date,Created By User'
       end
 
       it 'should have the right data' do
@@ -40,6 +41,7 @@ describe CsvPresenter do
         data_results[6].should == '12/20/2016'
         data_results[7].should == 'Unassigned'
         data_results[8].should == "#{Date.current.strftime("%m/%d/%Y")}"
+        data_results[9].should == 'username'
       end
     end
   end

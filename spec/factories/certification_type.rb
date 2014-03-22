@@ -6,6 +6,7 @@ FactoryGirl.define do
 
     interval Interval::ONE_YEAR.text
     customer
+    created_by 'username'
 
     factory :units_based_certification_type do
       units_required 1

@@ -13,7 +13,8 @@ class Employee < ActiveRecord::Base
   validates_presence_of :employee_number,
                         :first_name,
                         :last_name,
-                        :customer
+                        :customer,
+                        :created_by
 
   validates_uniqueness_of :employee_number, scope: :customer_id, case_sensitive: false
 

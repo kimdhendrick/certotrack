@@ -14,6 +14,7 @@ describe Certification do
     it { should validate_presence_of :certification_type }
     it { should validate_presence_of :employee }
     it { should validate_presence_of :customer }
+    it { should validate_presence_of :created_by }
 
     it 'should validate the uniqueness of certification_type_id' do
       certification = create(:certification)

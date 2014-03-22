@@ -7,6 +7,7 @@ describe CertificationType do
 
   it { should validate_presence_of :name }
   it { should validate_presence_of :customer }
+  it { should validate_presence_of :created_by }
   it { should belong_to(:customer) }
   it { should validate_uniqueness_of(:name).scoped_to(:customer_id) }
   it { should have_many :certifications }

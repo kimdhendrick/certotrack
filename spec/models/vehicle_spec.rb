@@ -15,6 +15,8 @@ describe Vehicle do
   it { should belong_to :location }
   it { should belong_to :customer }
   it { should have_many :services }
+  it { should validate_presence_of :created_by }
+  it { should validate_presence_of :customer }
 
   describe 'when vin has mixed case' do
     let(:vehicle) { create(:vehicle, vin: '1m8GDM9aXKp042788') }

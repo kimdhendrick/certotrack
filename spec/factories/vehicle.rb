@@ -22,5 +22,6 @@ FactoryGirl.define do
     mileage 6000
     location
     customer
+    created_by 'username'
   end
 end

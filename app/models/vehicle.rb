@@ -5,9 +5,11 @@ class Vehicle < ActiveRecord::Base
   belongs_to :customer
   has_many :services
 
-  validates_presence_of :vehicle_number
-  validates_presence_of :vin
-  validates_presence_of :license_plate
+  validates_presence_of :vehicle_number,
+                        :vin,
+                        :license_plate,
+                        :created_by,
+                        :customer
 
   validates_uniqueness_of :vehicle_number, scope: :customer_id, case_sensitive: false
   validates_uniqueness_of :license_plate, scope: :customer_id, case_sensitive: false
