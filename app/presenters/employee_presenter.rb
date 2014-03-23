@@ -57,4 +57,19 @@ class EmployeePresenter
     default_units = batch_certification.present? ? batch_certification.units(certification.id) : certification.units
     @template.text_field_tag "certification_ids[#{certification.id}]", default_units, size: 2
   end
+
+  def export_to_csv_link
+    @template.link_to 'Export to CSV',
+                      @template.employee_path(format: 'csv', id: model.id)
+  end
+
+  def export_to_xls_link
+    @template.link_to 'Export to Excel',
+                      @template.employee_path(format: 'xls', id: model.id)
+  end
+
+  def export_to_pdf_link(params)
+    @template.link_to 'Export to PDF',
+                      @template.employee_path(model, format: 'pdf', sort: params[:sort], direction: params[:direction])
+  end
 end
