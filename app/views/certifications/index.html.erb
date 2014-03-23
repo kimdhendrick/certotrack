@@ -8,6 +8,10 @@
   <li><%= link_to 'Search Certifications', search_certifications_path %></li>
 </ul>
 
+<ul id="export-nav">
+  <%= render @export_template %>
+</ul>
+
 <%= render 'certification_list'%>
 
 <%= will_paginate @certifications %>

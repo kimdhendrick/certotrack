@@ -2,6 +2,10 @@ require 'spec_helper'
 
 describe CsvPresenter do
   describe '#present' do
+    it 'can present an empty collection' do
+      CsvPresenter.new([]).present.should == "No results found\n"
+    end
+
     context 'exporting equipment' do
       before do
         create(
@@ -13,10 +17,6 @@ describe CsvPresenter do
           inspection_interval: 'Annually',
           created_by: 'username'
         )
-      end
-
-      it 'can present an empty collection' do
-        CsvPresenter.new([]).present.should == "Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created Date,Created By User\n"
       end
 
       it 'should have the right equipment headers' do
@@ -42,6 +42,45 @@ describe CsvPresenter do
         data_results[7].should == 'Unassigned'
         data_results[8].should == "#{Date.current.strftime("%m/%d/%Y")}"
         data_results[9].should == 'username'
+      end
+    end
+
+    context 'exporting certifications' do
+      before do
+        employee = create(
+          :employee,
+          first_name: 'Joe',
+          last_name: 'Brown'
+        )
+        certification_type = create(:certification_type, units_required: 10, name: 'CPR')
+        create(
+          :certification,
+          employee: employee,
+          certification_type: certification_type,
+          units_achieved: 12,
+          last_certification_date: Date.new(2013, 1, 2),
+          expiration_date: Date.new(2014, 1, 2),
+          trainer: 'Trainer Tom',
+          created_by: 'username',
+          comments: 'Well done'
+        )
+      end
+
+      it 'should have the right headers' do
+        results = CsvPresenter.new(Certification.all).present
+
+        results.split("\n")[0].should == 'Employee,Certification Type,Status,Units Achieved,Last Certification Date,Expiration Date,Trainer,Created By User,Created Date,Comments'
+      end
+
+      it 'should have the right data' do
+        Certification.count.should == 1
+
+        results = CsvPresenter.new(Certification.all).present
+
+        data_results = results.split("\n")[1].split(',')
+
+        data_results.should ==
+          ["\"Brown", " Joe\"", 'CPR', 'Valid', '12', '01/02/2013', '01/02/2014', 'Trainer Tom', 'username', "#{Date.current.strftime('%m/%d/%Y')}", 'Well done']
       end
     end
   end

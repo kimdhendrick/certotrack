@@ -50,6 +50,12 @@
   </table>
 <% end %>
 
+<ul id="export-nav">
+  <li><%= link_to 'Export to CSV', search_certifications_path(format: 'csv', params: params) %></li>
+  <li><%= link_to 'Export to Excel', search_certifications_path(format: 'xls', params: params) %></li>
+  <li><%= link_to 'Export to PDF', search_certifications_path(format: 'pdf', params: params) %></li>
+</ul>
+
 <%= render 'certification_list' %>
 
 <%= will_paginate @certifications %>

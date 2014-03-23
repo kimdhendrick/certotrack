@@ -71,12 +71,7 @@ class EquipmentController < ModelController
 
     equipment_collection = @equipment_service.search_equipment(current_user, params)
 
-    respond_to do |format|
-      format.html { _render_search_equipment_as_html(equipment_collection) }
-      format.csv { _render_equipment_list_as_csv(equipment_collection) }
-      format.xls { _render_equipment_list_as_xls('Search Equipment', :search, equipment_collection) }
-      format.pdf { _render_equipment_list_as_pdf('Search Equipment', :search, equipment_collection) }
-    end
+    _render_search('Search Equipment', equipment_collection)
   end
 
   def ajax_assignee
@@ -109,22 +104,10 @@ class EquipmentController < ModelController
 
     respond_to do |format|
       format.html { _render_equipment_list_as_html(report_title, equipment_collection) }
-      format.csv { _render_equipment_list_as_csv(equipment_collection) }
-      format.xls { _render_equipment_list_as_xls(report_title, equipment_type, equipment_collection) }
-      format.pdf { _render_equipment_list_as_pdf(report_title, equipment_type, equipment_collection) }
+      format.csv { _render_collection_as_csv(equipment_collection) }
+      format.xls { _render_collection_as_xls(report_title, equipment_type, equipment_collection) }
+      format.pdf { _render_collection_as_pdf(report_title, equipment_type, equipment_collection) }
     end
-  end
-
-  def _render_equipment_list_as_pdf(report_title, equipment_type, equipment_collection)
-    send_data PdfPresenter.new(equipment_collection, report_title, _sort_params).present, :filename => filename(equipment_type, 'pdf')
-  end
-
-  def _render_equipment_list_as_xls(report_title, equipment_type, equipment_collection)
-    send_data ExcelPresenter.new(equipment_collection, report_title).present, filename: filename(equipment_type, 'xls')
-  end
-
-  def _render_equipment_list_as_csv(equipment_collection)
-    render text: CsvPresenter.new(equipment_collection).present
   end
 
   def _render_equipment_list_as_html(report_title, equipment_collection)
@@ -134,11 +117,11 @@ class EquipmentController < ModelController
     render 'equipment/index'
   end
 
-  def filename(equipment_type, extension)
+  def _filename(equipment_type, extension)
     equipment_type == :all ? "equipment.#{extension}" : "#{equipment_type}_equipment.#{extension}"
   end
 
-  def _render_search_equipment_as_html(equipment_collection)
+  def _render_search_collection_as_html(equipment_collection)
     @report_title = 'Search Equipment'
     @equipments = EquipmentListPresenter.new(equipment_collection).present(params)
     @equipment_count = equipment_collection.count
@@ -159,9 +142,5 @@ class EquipmentController < ModelController
   def _equipment_params
     params.require(:equipment).
       permit(equipment_accessible_parameters)
-  end
-
-  def _sort_params
-    params.slice('sort', 'direction')
   end
 end

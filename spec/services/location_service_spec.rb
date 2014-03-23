@@ -36,7 +36,8 @@ describe LocationService do
         attributes =
           {
             'name' => 'Alaska',
-            'customer_id' => other_customer.id
+            'customer_id' => other_customer.id,
+            'created_by' => 'username'
           }
 
         location = LocationService.new.create_location(current_user, attributes)
@@ -54,7 +55,8 @@ describe LocationService do
         attributes =
           {
             'name' => 'Alaska',
-            'customer_id' => other_customer.id
+            'customer_id' => other_customer.id,
+            'created_by' => 'username'
           }
 
         location = LocationService.new.create_location(admin_user, attributes)

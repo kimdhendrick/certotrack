@@ -13,6 +13,7 @@ class CertificationPresenter
            :status,
            :comments,
            :name,
+           :created_by,
            to: :model
 
   def initialize(model, template = nil)
@@ -88,6 +89,14 @@ class CertificationPresenter
 
   def units
     model.units_achieved.to_s if model.units_based?
+  end
+
+  def status_text
+    status.text
+  end
+
+  def created_at
+    DateHelpers::date_to_string(model.created_at)
   end
 
   def edit_link

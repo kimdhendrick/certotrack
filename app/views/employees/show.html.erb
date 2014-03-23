@@ -17,6 +17,12 @@
 
   <%= render 'shared/errors', model: @employee %>
 
+  <ul id="export-nav">
+    <li><%= link_to 'Export to CSV', employee_path(format: 'csv', id: @employee.id) %></li>
+    <li><%= link_to 'Export to Excel', employee_path(format: 'xls', id: @employee.id) %></li>
+    <li><%= link_to 'Export to PDF', employee_path(format: 'pdf', id: @employee.id) %></li>
+  </ul>
+
   <p>
     <b>Employee Number</b>
     <%= employee.employee_number %>

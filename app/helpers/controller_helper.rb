@@ -49,6 +49,10 @@ module ControllerHelper
 
   private
 
+  def _sort_params
+    params.slice('sort', 'direction')
+  end
+
   def _get_model(model_class, param_name = :id)
     model_pending_authorization = model_class.find(params[param_name])
     resource = model_class.name.underscore.to_sym
@@ -60,5 +64,30 @@ module ControllerHelper
     end
 
     model_pending_authorization
+  end
+
+  def _render_search(report_title, collection)
+    respond_to do |format|
+      format.html { _render_search_collection_as_html(collection) }
+      format.csv { _render_collection_as_csv(collection) }
+      format.xls { _render_collection_as_xls(report_title, :search, collection) }
+      format.pdf { _render_collection_as_pdf(report_title, :search, collection) }
+    end
+  end
+
+  def _render_collection_as_pdf(report_title, report_type, collection)
+    send_data PdfPresenter.new(collection, report_title, _sort_params).present, filename: _filename(report_type, 'pdf')
+  end
+
+  def _render_collection_as_xls(report_title, report_type, collection)
+    send_data ExcelPresenter.new(collection, report_title).present, filename: _filename(report_type, 'xls')
+  end
+
+  def _render_collection_as_csv(collection, filename = nil)
+    if filename.present?
+      response.headers['Content-Disposition'] = 'attachment; filename="' + filename + '.csv"'
+    end
+
+    render text: CsvPresenter.new(collection).present
   end
 end

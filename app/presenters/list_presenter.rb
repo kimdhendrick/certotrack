@@ -15,6 +15,10 @@ class ListPresenter
     @collection
   end
 
+  def sort(params = {})
+    _sort(params)
+  end
+
   private
 
   def _paginate(params)

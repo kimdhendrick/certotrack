@@ -35,7 +35,8 @@ describe ServiceTypeService do
           'name' => 'Box Check',
           'expiration_type' => ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE,
           'interval_date' => '5 years',
-          'interval_mileage' => '50000'
+          'interval_mileage' => '50000',
+          'created_by' => 'username'
         }
 
       service_type = subject.create_service_type(customer, attributes)

@@ -258,7 +258,8 @@ describe EquipmentService do
           'serial_number' => 'newSN',
           'inspection_interval' => '5 years',
           'last_inspection_date' => '12/31/2001',
-          'comments' => 'some new notes'
+          'comments' => 'some new notes',
+          'created_by' => 'username'
         }
       customer = build(:customer)
 

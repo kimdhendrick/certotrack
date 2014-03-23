@@ -44,7 +44,8 @@ describe VehicleService do
             make: 'Audi',
             vehicle_model: 'A3',
             mileage: '15',
-            location_id: golden.id
+            location_id: golden.id,
+            created_by: 'username'
           }
 
         vehicle = VehicleService.new.create_vehicle(current_user, attributes)

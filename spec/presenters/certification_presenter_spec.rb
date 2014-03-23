@@ -253,6 +253,21 @@ describe CertificationPresenter do
   subject { CertificationPresenter.new(build(:units_based_certification)) }
   it_behaves_like 'an object that is sortable by status'
 
+  it 'should respond to status_text' do
+    certification = CertificationPresenter.new(create(:certification))
+    certification.status_text.should == 'N/A'
+  end
+
+  it 'should respond to created_by' do
+    certification = CertificationPresenter.new(create(:certification, created_by: 'username'))
+    certification.created_by.should == 'username'
+  end
+
+  it 'should respond to created_at' do
+    certification = CertificationPresenter.new(create(:certification, created_at: Date.new(2010, 1, 1)))
+    certification.created_at.should == '01/01/2010'
+  end
+
   describe 'edit_link' do
     it 'should create a link to the edit page' do
       certification = build(:certification)

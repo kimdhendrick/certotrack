@@ -1,0 +1,9 @@
+<li>
+  <%= link_to 'Export to CSV', expiring_certifications_path(format: 'csv', params: params) %>
+</li>
+<li>
+  <%= link_to 'Export to Excel', expiring_certifications_path(format: 'xls', params: params) %>
+</li>
+<li>
+  <%= link_to 'Export to PDF', expiring_certifications_path(format: 'pdf', params: params) %>
+</li>

@@ -9,27 +9,64 @@ describe 'Employee Certifications', slow: true do
       login_as_certification_user(customer)
     end
 
-    it 'should show certifications' do
-      certification = create(:certification, employee: employee, customer: customer)
-
-      visit employee_path(employee)
-      page.should have_content 'Show Employee'
-
-      within 'table thead tr:nth-of-type(1)' do
-        page.should have_link 'Certification Type'
-        page.should have_content 'Trainer'
-        page.should have_content 'Expiration Date'
-        page.should have_content 'Last Certification Date'
-        page.should have_content 'Units'
-        page.should have_link 'Status'
+    context 'Show employee page' do
+      let!(:certification) do
+        create(
+          :certification,
+          employee: employee,
+          certification_type: create(:certification_type, name: 'Scrum Master'),
+          expiration_date: Date.new(2013, 1, 4),
+          last_certification_date: Date.new(2012, 5, 2),
+          customer: customer
+        )
       end
 
-      within 'table tbody tr:nth-of-type(1)' do
-        #page.should have_link 'Scrum Master', href: certification_path(certification.certification_type)
-        page.should have_content 'Scrum Master'
-        page.should have_content DateHelpers.date_to_string(certification.last_certification_date)
-        page.should have_content '0'
-        page.should have_content 'N/A'
+      it 'should show certifications' do
+        visit employee_path(employee)
+        page.should have_content 'Show Employee'
+
+        within 'table thead tr:nth-of-type(1)' do
+          page.should have_link 'Certification Type'
+          page.should have_content 'Trainer'
+          page.should have_content 'Expiration Date'
+          page.should have_content 'Last Certification Date'
+          page.should have_content 'Units'
+          page.should have_link 'Status'
+        end
+
+        within 'table tbody tr:nth-of-type(1)' do
+          page.should have_link 'Scrum Master', href: certification_path(certification.certification_type)
+          page.should have_content 'Scrum Master'
+          page.should have_content DateHelpers.date_to_string(certification.last_certification_date)
+          page.should have_content '0'
+          page.should have_content 'Expired'
+        end
+      end
+
+      it 'should export to CSV' do
+        visit employee_path(employee)
+
+        click_on 'Export to CSV'
+
+        page.response_headers['Content-Type'].should include 'text/csv'
+        header_row = 'Employee,Certification Type,Status,Units Achieved,Last Certification Date,Expiration Date,Trainer,Created By User,Created Date,Comments'
+        page.text.should == "#{header_row} \"Smith, John\",Scrum Master,Expired,,05/02/2012,01/04/2013,Trainer,username,#{Date.current.strftime("%m/%d/%Y")},Comments"
+      end
+
+      it 'should export to Excel' do
+        visit employee_path(employee)
+
+        click_on 'Export to Excel'
+
+        page.response_headers['Content-Type'].should include 'excel'
+      end
+
+      it 'should export to PDF' do
+        visit employee_path(employee)
+
+        click_on 'Export to PDF'
+
+        page.response_headers['Content-Type'].should include 'pdf'
       end
     end
 

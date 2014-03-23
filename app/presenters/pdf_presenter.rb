@@ -5,7 +5,10 @@ class PdfPresenter
   attr_reader :collection, :title
 
   def initialize(collection, title, params = {})
-    @collection = EquipmentListPresenter.new(collection).sort(params)
+    @model_class = collection.first.try(&:class).try(&:to_s)
+    listPresenterClass = "#{model_class || ''}ListPresenter"
+
+    @collection = listPresenterClass.constantize.new(collection).sort(params)
     @title = title
   end
 
@@ -13,18 +16,14 @@ class PdfPresenter
     pdf = Prawn::Document.new(page_layout: :landscape)
     pdf.text title, {size: 22, style: :bold}
 
-    output = [EquipmentPresenterHelper::HEADERS]
+    output = [_headers]
     collection.each do |equipment|
-      output << equipment_column_names.map do |column_name|
+      output << _column_names.map do |column_name|
         equipment.public_send(column_name)
       end
     end
 
     pdf.table output, header: true, row_colors: ['F0F0F0', 'FFFFCC'], cell_style: {size: 10}
     pdf.render
-  end
-
-  def equipment_column_names
-    EquipmentPresenterHelper::COLUMNS.map(&:to_s)
   end
 end

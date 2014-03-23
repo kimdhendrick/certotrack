@@ -59,7 +59,8 @@ describe EmployeeService do
           'first_name' => 'Kim',
           'last_name' => 'Ba',
           'employee_number' => 'KIMBA123',
-          'location_id' => 99
+          'location_id' => 99,
+          'created_by' => 'kimba'
         }
       customer = build(:customer)
 

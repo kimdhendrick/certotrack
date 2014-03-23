@@ -272,14 +272,69 @@ describe EmployeesController do
         sign_in stub_certification_user(customer)
       end
 
-      it 'assigns employee as @employee' do
-        get :show, {:id => employee.to_param}, {}
-        assigns(:employee).should eq(employee)
+      context 'HTML format' do
+        it 'assigns employee as @employee' do
+          get :show, {:id => employee.to_param}, {}
+          assigns(:employee).should eq(employee)
+        end
+
+        it 'assigns certifications as @certifications' do
+          get :show, {id: employee.to_param}, {}
+          assigns(:certifications).map(&:model).should == certifications
+        end
       end
 
-      it 'assigns certifications as @certifications' do
-        get :show, {id: employee.to_param}, {}
-        assigns(:certifications).map(&:model).should == certifications
+      context 'CSV export' do
+        it 'responds to csv format' do
+          get :show, {format: 'csv', :id => employee.to_param}, {}
+
+          response.headers['Content-Type'].should == 'text/csv; charset=utf-8'
+          response.body.split("\n").count.should == 2
+        end
+
+        it 'calls CsvPresenter#present with certifications' do
+          fake_csv_presenter = Faker.new
+          CsvPresenter.should_receive(:new).with(certifications).and_return(fake_csv_presenter)
+
+          get :show, {format: 'csv', :id => employee.to_param}, {}
+
+          fake_csv_presenter.received_message.should == :present
+        end
+      end
+
+      context 'XLS export' do
+        it 'responds to xls format' do
+          get :show, {format: 'xls', :id => employee.to_param}, {}
+
+          response.headers['Content-Type'].should == 'application/vnd.ms-excel'
+        end
+
+        it 'calls ExcelPresenter#present with certifications' do
+          fake_xls_presenter = Faker.new
+          ExcelPresenter.should_receive(:new).with(certifications, 'Employee Certifications').and_return(fake_xls_presenter)
+
+          get :show, {format: 'xls', :id => employee.to_param}, {}
+
+          fake_xls_presenter.received_message.should == :present
+        end
+      end
+
+      context 'PDF export' do
+        it 'responds to pdf format' do
+          get :show, {format: 'pdf', :id => employee.to_param}, {}
+
+          response.headers['Content-Type'].should == 'application/pdf'
+        end
+
+        it 'calls PdfPresenter#present with certifications' do
+          fake_pdf_presenter = Faker.new
+          sort_params = {'sort' => 'name', 'direction' => 'asc'}
+          PdfPresenter.should_receive(:new).with(certifications, 'Employee Certifications', sort_params).and_return(fake_pdf_presenter)
+
+          get :show, {format: 'pdf', :id => employee.to_param}.merge(sort_params), {}
+
+          fake_pdf_presenter.received_message.should == :present
+        end
       end
     end
 

@@ -12,38 +12,23 @@ class CertificationsController < ModelController
                 only: [:show, :edit, :update, :destroy, :certification_history]
 
   def index
-    authorize! :read, :certification
-
-    @report_title = 'All Employee Certifications'
-    _render_certifications(@certification_service.get_all_certifications(current_user))
+    _render_certification_list(:all, 'All Employee Certifications')
   end
-
+  
   def expired
-    authorize! :read, :certification
-
-    @report_title = 'Expired Certifications'
-    _render_certifications(@certification_service.get_expired_certifications(current_user))
+    _render_certification_list(:expired, 'Expired Certifications')
   end
 
   def expiring
-    authorize! :read, :certification
-
-    @report_title = 'Certifications Expiring Soon'
-    _render_certifications(@certification_service.get_expiring_certifications(current_user))
+    _render_certification_list(:expiring, 'Certifications Expiring Soon')
   end
 
   def units_based
-    authorize! :read, :certification
-
-    @report_title = 'Units Based Certifications'
-    _render_certifications(@certification_service.get_units_based_certifications(current_user))
+    _render_certification_list(:units_based, 'Units Based Certifications')
   end
 
   def recertification_required
-    authorize! :read, :certification
-
-    @report_title = 'Recertification Required Certifications'
-    _render_certifications(@certification_service.get_recertification_required_certifications(current_user))
+    _render_certification_list(:recertification_required, 'Recertification Required Certifications')
   end
 
   def new
@@ -111,20 +96,49 @@ class CertificationsController < ModelController
 
   def search
     authorize! :read, :certification
-    @report_title = 'Search Certifications'
+
     certification_collection = @certification_service.search_certifications(current_user, params)
-    @certifications = CertificationListPresenter.new(certification_collection).present(params)
-    @certification_count = certification_collection.count
-    @locations = LocationListPresenter.new(@location_service.get_all_locations(current_user)).sort
-    @certification_types = get_certification_type_types
+
+    _render_search('Search Certifications', certification_collection)
   end
 
   private
 
-  def _render_certifications(certifications_collection)
-    @certifications = CertificationListPresenter.new(certifications_collection).present(params)
-    @certification_count = certifications_collection.count
+  def _render_certification_list(certification_type, report_title)
+    authorize! :read, :certification
+
+    certification_collection = @certification_service.public_send("get_#{certification_type}_certifications", current_user)
+
+    @export_template = "#{certification_type.to_s}_certification_export"
+
+    respond_to do |format|
+      format.html { _render_certification_list_as_html(report_title, certification_collection) }
+      format.csv { _render_collection_as_csv(certification_collection) }
+      format.xls { _render_collection_as_xls(report_title, certification_type, certification_collection) }
+      format.pdf { _render_collection_as_pdf(report_title, certification_type, certification_collection) }
+    end
+  end
+
+  def _render_certification_list_as_html(report_title, certification_collection)
+    @report_title = report_title
+    @certifications = CertificationListPresenter.new(certification_collection).present(params)
+    @certification_count = certification_collection.count
     render 'certifications/index'
+  end
+
+  def _filename(report_type, extension)
+    report_type == :all ? "certifications.#{extension}" : "#{report_type}_certifications.#{extension}"
+  end
+
+  def _render_search_collection_as_html(certification_collection)
+    @export_template = 'search_certification_export'
+    @report_title = 'Search Certifications'
+    @certifications = CertificationListPresenter.new(certification_collection).present(params)
+    @certification_count = certification_collection.count
+    @locations = LocationListPresenter.new(@location_service.get_all_locations(current_user)).sort
+    @certification_types = get_certification_type_types
+    employees_collection = @employee_service.get_all_employees(current_user)
+    @employees = EmployeeListPresenter.new(employees_collection).present({sort: :sort_key})
   end
 
   def _set_certification

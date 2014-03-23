@@ -11,7 +11,8 @@ describe CertificationTypeService do
         {
           'name' => 'Box',
           'units_required' => '15',
-          'interval' => '5 years'
+          'interval' => '5 years',
+          'created_by' => 'username'
         }
       certification_type = subject.create_certification_type(customer, attributes)
 
