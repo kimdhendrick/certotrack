@@ -6,6 +6,12 @@
   <li><%= link_to 'Home', root_path %></li>
 </ul>
 
+<ul id="export-nav">
+  <li><%= link_to 'Export to CSV', deactivated_employees_path(format: 'csv') %></li>
+  <li><%= link_to 'Export to Excel', deactivated_employees_path(format: 'xls') %></li>
+  <li><%= link_to 'Export to PDF', deactivated_employees_path(format: 'pdf') %></li>
+</ul>
+
 <%= render 'deactivated_employee_list'%>
 
 <%= will_paginate @employees %>

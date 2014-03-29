@@ -172,10 +172,6 @@ describe 'Employee Deactivation', slow: true do
       let(:denver_location) { create(:location, name: 'Denver', customer_id: customer.id) }
 
       before do
-        login_as_certification_user(customer)
-      end
-
-      it 'should show Deactivated Employees list' do
         create(:employee,
                active: false,
                deactivation_date: Date.new(2000, 1, 1),
@@ -204,6 +200,10 @@ describe 'Employee Deactivation', slow: true do
                last_name: 'Barnes',
         )
 
+        login_as_certification_user(customer)
+      end
+
+      it 'should show Deactivated Employees list' do
         visit '/'
         page.should have_content 'Deactivated Employees'
         click_link 'Deactivated Employees'
@@ -235,6 +235,36 @@ describe 'Employee Deactivation', slow: true do
           page.should have_content 'Littleton'
           page.should have_content '12/31/2001'
         end
+      end
+
+      it 'should export Deactivated employees list to CSV' do
+        visit '/'
+        click_link 'Deactivated Employees'
+
+        click_on 'Export to CSV'
+
+        page.response_headers['Content-Type'].should include 'text/csv'
+        header_row = 'Employee Number,First Name,Last Name,Location,Created By User,Created Date'
+        page.text.should ==
+          "#{header_row} JB3,Joe,Brown,Denver,username,#{Date.current.strftime("%m/%d/%Y")} SG99,Sue,Green,Littleton,username,#{Date.current.strftime("%m/%d/%Y")}"
+      end
+
+      it 'should export Deactivated employees list to PDF' do
+        visit '/'
+        click_link 'Deactivated Employees'
+
+        click_on 'Export to PDF'
+
+        page.response_headers['Content-Type'].should include 'pdf'
+      end
+
+      it 'should export Deactivated employees list to Excel' do
+        visit '/'
+        click_link 'Deactivated Employees'
+
+        click_on 'Export to Excel'
+
+        page.response_headers['Content-Type'].should include 'excel'
       end
     end
 

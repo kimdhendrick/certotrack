@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe EmployeePresenter do
 
-  let(:employee) { build(:employee) }
+  let(:employee) { build(:employee, created_by: 'username') }
 
   it 'should respond to model' do
     EmployeePresenter.new(employee).model.should == employee
@@ -54,6 +54,20 @@ describe EmployeePresenter do
 
   it 'should respond false to show_batch_edit_button? when no certifications' do
     EmployeePresenter.new(employee).show_batch_edit_button?([]).should be_false
+  end
+
+  it 'should respond to created_by' do
+    EmployeePresenter.new(employee).created_by.should == 'username'
+  end
+
+  it 'should respond to created_at' do
+    employee = EmployeePresenter.new(create(:employee, created_at: Date.new(2010, 1, 1)))
+    employee.created_at.should == '01/01/2010'
+  end
+
+  it 'should respond to deactivation_date' do
+    employee = EmployeePresenter.new(create(:employee, deactivation_date: Date.new(2010, 1, 1)))
+    employee.deactivation_date.should == '01/01/2010'
   end
 
   describe 'edit_link' do

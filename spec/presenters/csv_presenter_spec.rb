@@ -83,5 +83,35 @@ describe CsvPresenter do
           ["\"Brown", " Joe\"", 'CPR', 'Valid', '12', '01/02/2013', '01/02/2014', 'Trainer Tom', 'username', "#{Date.current.strftime('%m/%d/%Y')}", 'Well done']
       end
     end
+
+    context 'exporting employees' do
+      before do
+        create(
+          :employee,
+          employee_number: 'JB888',
+          first_name: 'Joe',
+          last_name: 'Brown',
+          location: create(:location, name: 'Denver'),
+          created_by: 'Me'
+        )
+      end
+
+      it 'should have the right headers' do
+        results = CsvPresenter.new(Employee.all).present
+
+        results.split("\n")[0].should == 'Employee Number,First Name,Last Name,Location,Created By User,Created Date'
+      end
+
+      it 'should have the right data' do
+        Employee.count.should == 1
+
+        results = CsvPresenter.new(Employee.all).present
+
+        data_results = results.split("\n")[1].split(',')
+
+        data_results.should ==
+          ['JB888', 'Joe', 'Brown', 'Denver', 'Me', "#{Date.current.strftime('%m/%d/%Y')}"]
+      end
+    end
   end
 end

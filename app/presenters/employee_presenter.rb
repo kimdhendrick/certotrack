@@ -7,6 +7,7 @@ class EmployeePresenter
            :first_name,
            :last_name,
            :employee_number,
+           :created_by,
            to: :model
 
   def initialize(model, template = nil)
@@ -28,6 +29,14 @@ class EmployeePresenter
 
   def show_batch_edit_button?(certifications)
     certifications.any?(&:units_based?)
+  end
+
+  def deactivation_date
+    DateHelpers::date_to_string(model.deactivation_date)
+  end
+
+  def created_at
+    DateHelpers::date_to_string(model.created_at)
   end
 
   def edit_link

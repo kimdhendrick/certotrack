@@ -22,8 +22,14 @@ class EmployeeDeactivationController < ModelController
   def deactivated_employees
     authorize! :read, :certification
 
-    @employees = @employee_deactivation_service.get_deactivated_employees(current_user, params)
-    @employee_count = @employees.count
+    employee_collection = @employee_deactivation_service.get_deactivated_employees(current_user)
+
+    respond_to do |format|
+      format.html { _render_collection_as_html(employee_collection) }
+      format.csv { _render_collection_as_csv(employee_collection, nil) }
+      format.xls { _render_collection_as_xls('Deactivated Employee List', nil, employee_collection) }
+      format.pdf { _render_collection_as_pdf('Deactivated Employee List', nil, employee_collection) }
+    end
   end
 
   def load_employee_deactivation_service(service = EmployeeDeactivationService.new)
@@ -39,6 +45,19 @@ class EmployeeDeactivationController < ModelController
   end
 
   private
+
+  def _render_collection_as_html(employee_collection)
+    @employees = EmployeeListPresenter.new(employee_collection).present(params)
+    @employee_count = employee_collection.count
+  end
+
+  def _sort_params
+    {}
+  end
+
+  def _filename(_, extension)
+    "deactivated_employees.#{extension}"
+  end
 
   def _set_employee
     @employee = _get_model(Employee)

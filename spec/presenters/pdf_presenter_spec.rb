@@ -192,5 +192,48 @@ describe PdfPresenter do
         fake_list_presenter.received_params[0][:direction].should == 'asc'
       end
     end
+
+    context 'exporting employees' do
+      let(:employee_collection) { [create(:employee)] }
+
+      it 'should render the proper header row' do
+        fake_prawn_document = Faker.new
+        Prawn::Document.stub(:new).and_return(fake_prawn_document)
+
+        PdfPresenter.new(employee_collection, 'title').present
+
+        fake_prawn_document.received_messages[1].should == :table
+        table_params = fake_prawn_document.all_received_params[1]
+        table_header_and_data = table_params[0]
+        header_row = table_header_and_data[0]
+
+        header_row.should ==
+          ['Employee Number' ,'First Name' ,'Last Name' ,'Location', 'Created By User', 'Created Date']
+      end
+
+      it 'should render the proper data' do
+        fake_prawn_document = Faker.new
+        Prawn::Document.stub(:new).and_return(fake_prawn_document)
+        employee_collection = [
+          create(
+            :employee,
+            employee_number: 'JB888',
+            first_name: 'Joe',
+            last_name: 'Brown',
+            location: create(:location, name: 'Denver'),
+            created_by: 'Me'
+          )
+        ]
+
+        PdfPresenter.new(employee_collection, 'title').present
+
+        fake_prawn_document.received_messages[1].should == :table
+        table_params = fake_prawn_document.all_received_params[1]
+        table_header_and_data = table_params[0]
+        table_data = table_header_and_data[1]
+        table_data.should ==
+          ['JB888', 'Joe', 'Brown', 'Denver', 'Me', "#{Date.current.strftime('%m/%d/%Y')}"]
+      end
+    end
   end
 end

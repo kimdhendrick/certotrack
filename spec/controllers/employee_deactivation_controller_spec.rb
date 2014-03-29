@@ -143,8 +143,87 @@ describe EmployeeDeactivationController do
 
         get :deactivated_employees
 
-        assigns(:employees).should eq([employee])
+        assigns(:employees).map(&:model).should eq([employee])
         assigns(:employee_count).should eq(1)
+      end
+
+      context 'CSV export' do
+        it 'responds to csv format' do
+          controller.load_employee_deactivation_service(Faker.new([build(:employee)]))
+
+          get :deactivated_employees, format: 'csv'
+
+          response.headers['Content-Type'].should == 'text/csv; charset=utf-8'
+          response.body.split("\n").count.should == 2
+        end
+
+        it 'calls CsvPresenter#present with certifications' do
+          my_user = stub_certification_user(customer)
+          sign_in my_user
+          employee = build(:employee)
+          fake_deactivation_service = controller.load_employee_deactivation_service(Faker.new([employee]))
+          fake_csv_presenter = Faker.new
+          CsvPresenter.should_receive(:new).with([employee]).and_return(fake_csv_presenter)
+
+          get :deactivated_employees, format: 'csv'
+
+          fake_deactivation_service.received_messages.should == [:get_deactivated_employees]
+          fake_deactivation_service.received_params[0].should == my_user
+
+          fake_csv_presenter.received_message.should == :present
+        end
+      end
+
+      context 'PDF export' do
+        it 'responds to pdf format' do
+          controller.load_employee_deactivation_service(Faker.new([build(:employee)]))
+
+          get :deactivated_employees, format: 'pdf'
+
+          response.headers['Content-Type'].should == 'application/pdf'
+        end
+
+        it 'calls PdfPresenter#present with certifications' do
+          my_user = stub_certification_user(customer)
+          sign_in my_user
+          employee = build(:employee)
+          fake_deactivation_service = controller.load_employee_deactivation_service(Faker.new([employee]))
+          fake_pdf_presenter = Faker.new
+          PdfPresenter.should_receive(:new).with([employee], 'Deactivated Employee List', {}).and_return(fake_pdf_presenter)
+
+          get :deactivated_employees, format: 'pdf'
+
+          fake_deactivation_service.received_messages.should == [:get_deactivated_employees]
+          fake_deactivation_service.received_params[0].should == my_user
+
+          fake_pdf_presenter.received_message.should == :present
+        end
+      end
+
+      context 'Excel export' do
+        it 'responds to excel format' do
+          controller.load_employee_deactivation_service(Faker.new([build(:employee)]))
+
+          get :deactivated_employees, format: 'xls'
+
+          response.headers['Content-Type'].should == 'application/vnd.ms-excel'
+        end
+
+        it 'calls ExcelPresenter#present with certifications' do
+          my_user = stub_certification_user(customer)
+          sign_in my_user
+          employee = build(:employee)
+          fake_deactivation_service = controller.load_employee_deactivation_service(Faker.new([employee]))
+          fake_xls_presenter = Faker.new
+          ExcelPresenter.should_receive(:new).with([employee], 'Deactivated Employee List').and_return(fake_xls_presenter)
+
+          get :deactivated_employees, format: 'xls'
+
+          fake_deactivation_service.received_messages.should == [:get_deactivated_employees]
+          fake_deactivation_service.received_params[0].should == my_user
+
+          fake_xls_presenter.received_message.should == :present
+        end
       end
     end
 
@@ -159,7 +238,7 @@ describe EmployeeDeactivationController do
 
         get :deactivated_employees
 
-        assigns(:employees).should eq([employee])
+        assigns(:employees).map(&:model).should eq([employee])
         assigns(:employee_count).should eq(1)
       end
     end

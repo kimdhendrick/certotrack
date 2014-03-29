@@ -16,7 +16,7 @@ describe EmployeeDeactivationService do
       EmployeeDeactivationService.new.deactivate_employee(employee)
 
       employee.reload
-      employee.deactivation_date.should == Date.today
+      employee.deactivation_date.should == Date.current
     end
 
     it 'unassigns equipment' do
@@ -86,17 +86,6 @@ describe EmployeeDeactivationService do
       results = EmployeeDeactivationService.new.get_deactivated_employees(my_user)
 
       results.should == [my_inactive_employee]
-    end
-
-    context 'pagination' do
-      it 'should call Paginator to paginate results' do
-        fake_paginator = Faker.new
-        employee_deactivation_service = EmployeeDeactivationService.new(paginator: fake_paginator)
-
-        employee_deactivation_service.get_deactivated_employees(my_user)
-
-        fake_paginator.received_message.should == :paginate
-      end
     end
   end
 end

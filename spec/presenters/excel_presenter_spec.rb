@@ -54,5 +54,25 @@ describe ExcelPresenter do
         collection.received_params[0][:name].should == 'Certification Sheet Title'
       end
     end
+
+    context 'exporting employees' do
+      before do
+        ExcelPresenter.new([create(:employee)], 'Employee Sheet Title').present
+      end
+
+      it 'should call to_xls with the right headers' do
+        headers = 'Employee Number,First Name,Last Name,Location,Created By User,Created Date'.split(',')
+        collection.received_params[0][:headers].should == headers
+      end
+
+      it 'should call to_xls with the right columns' do
+        columns = [:employee_number, :first_name, :last_name, :location_name, :created_by, :created_at]
+        collection.received_params[0][:columns].should == columns
+      end
+
+      it 'should call to_xls with the sheet name' do
+        collection.received_params[0][:name].should == 'Employee Sheet Title'
+      end
+    end
   end
 end
