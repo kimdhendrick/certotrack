@@ -189,6 +189,40 @@ describe AutoRecertificationsController do
         end
       end
     end
+
+    context 'as admin user' do
+      let(:certification_service) { double('certification_service') }
+      let(:certification) { create(:units_based_certification) }
+
+      context 'when successful' do
+        before do
+          sign_in stub_admin
+          certification_service.stub(:auto_recertify).and_return(:success)
+          controller.load_certification_service(certification_service)
+        end
+
+        it 'should redirect to the show certification type page' do
+          post :create, {certification_type_id: certification_type.id, certification_ids: [certification.id]}
+
+          response.should redirect_to(certification_type_path(certification_type))
+        end
+
+        it 'should provide a success notification' do
+          post :create, {certification_type_id: certification_type.id, certification_ids: [certification.id]}
+
+          flash[:notice].should == 'Auto Recertify successful.'
+        end
+
+        it 'should call CertificationService#auto_recertify' do
+          controller.load_certification_service(certification_service)
+
+          certification_service.should_receive(:auto_recertify).with([certification]).and_return(:success)
+
+          post :create, {certification_type_id: certification_type.id, certification_ids: [certification.id]}
+        end
+      end
+
+    end
   end
 
   context 'as a guest user' do
