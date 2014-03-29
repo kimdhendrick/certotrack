@@ -12,15 +12,23 @@ module PresenterHelper
 
   attr_reader :model_class
 
+  def _set_model_class(collection)
+    @model_class = collection.first.try(&:class).try(&:to_s)
+  end
+
   def _headers
     return ['No results found'] if model_class.nil?
 
-    "#{model_class}PresenterHelper".constantize::HEADERS
+    _header_column_mapping::HEADERS
   end
 
   def _column_names
     return [] if model_class.nil?
 
-    "#{model_class}PresenterHelper".constantize::COLUMNS
+    _header_column_mapping::COLUMNS
+  end
+
+  def _header_column_mapping
+    "#{model_class}HeaderColumnMapping".constantize
   end
 end

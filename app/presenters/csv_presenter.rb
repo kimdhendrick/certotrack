@@ -4,8 +4,8 @@ class CsvPresenter
   attr_reader :collection
 
   def initialize(collection)
+    _set_model_class(collection)
     @collection = collection_wrapped_in_presenters(collection)
-    @model_class = collection.first.try(&:class).try(&:to_s)
   end
 
   def present

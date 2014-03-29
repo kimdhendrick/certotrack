@@ -5,7 +5,7 @@ class PdfPresenter
   attr_reader :collection, :title
 
   def initialize(collection, title, params = {})
-    @model_class = collection.first.try(&:class).try(&:to_s)
+    _set_model_class(collection)
     listPresenterClass = "#{model_class || ''}ListPresenter"
 
     @collection = listPresenterClass.constantize.new(collection).sort(params)

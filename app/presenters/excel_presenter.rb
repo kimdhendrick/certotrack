@@ -4,7 +4,7 @@ class ExcelPresenter
   attr_reader :collection, :title
 
   def initialize(collection, title)
-    @model_class = collection.first.try(&:class).try(&:to_s)
+    _set_model_class(collection)
     @collection = collection_wrapped_in_presenters(collection)
     @title = title
   end
