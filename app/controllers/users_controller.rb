@@ -63,10 +63,6 @@ class UsersController < ModelController
     end
   end
 
-  def load_user_service(user_service = UserService.new)
-    @user_service ||= user_service
-  end
-
   private
 
   def _set_customers
