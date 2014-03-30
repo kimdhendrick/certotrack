@@ -85,6 +85,16 @@ describe CustomerPresenter do
     CustomerPresenter.new(customer).vehicle_access.should == 'Yes'
   end
 
+  it 'should respond to created_at' do
+    customer = CustomerPresenter.new(create(:customer, created_at: Date.new(2010, 1, 1)))
+    customer.created_at.should == '01/01/2010'
+  end
+
+  it 'should respond to active' do
+    customer = CustomerPresenter.new(create(:customer))
+    customer.active.should == 'Yes'
+  end
+
   it 'should return sorted locations' do
     customer.locations << build(:location, name: 'Denver', customer: customer)
     customer.locations << build(:location, name: 'Boulder', customer: customer)

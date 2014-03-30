@@ -7,6 +7,12 @@
   <li><%= link_to 'Create Customer', new_customer_path %></li>
 </ul>
 
+<ul id="export-nav">
+  <li><%= link_to 'Export to CSV', customers_path(format: 'csv') %></li>
+  <li><%= link_to 'Export to Excel', customers_path(format: 'xls') %></li>
+  <li><%= link_to 'Export to PDF', customers_path(format: 'pdf', params: params) %></li>
+</ul>
+
 <%= render 'customers_list'%>
 
 <%= will_paginate @customers %>

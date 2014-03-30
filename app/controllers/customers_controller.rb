@@ -33,8 +33,13 @@ class CustomersController < ModelController
 
     @report_title = 'All Customers'
     customer_collection = @customer_service.get_all_customers(current_user)
-    @customer_count = customer_collection.count
-    @customers = CustomerListPresenter.new(customer_collection).present(params)
+
+    respond_to do |format|
+      format.html { _render_collection_as_html(customer_collection) }
+      format.csv { _render_collection_as_csv(customer_collection, 'customers') }
+      format.xls { _render_collection_as_xls(@report_title, 'customers', customer_collection) }
+      format.pdf { _render_collection_as_pdf(@report_title, 'customers', customer_collection) }
+    end
   end
 
   def edit
@@ -56,11 +61,12 @@ class CustomersController < ModelController
     end
   end
 
-  def load_customer_service(customer_service = CustomerService.new)
-    @customer_service ||= customer_service
-  end
-
   private
+
+  def _render_collection_as_html(customer_collection)
+    @customer_count = customer_collection.count
+    @customers = CustomerListPresenter.new(customer_collection).present(params)
+  end
 
   def _set_customer
     @customer = _get_model(Customer)

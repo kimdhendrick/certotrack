@@ -37,12 +37,20 @@ class CustomerPresenter
     yes_no(model.vehicle_access?)
   end
 
+  def active
+    yes_no(model.active?)
+  end
+
   def locations
     LocationListPresenter.new(model.locations).sort
   end
 
   def users
     UserListPresenter.new(model.users).sort
+  end
+
+  def created_at
+    DateHelpers::date_to_string(model.created_at)
   end
 
   def edit_link

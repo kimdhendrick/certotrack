@@ -113,5 +113,45 @@ describe CsvPresenter do
           ['JB888', 'Joe', 'Brown', 'Denver', 'Me', "#{Date.current.strftime('%m/%d/%Y')}"]
       end
     end
+
+    context 'exporting customers' do
+      before do
+        create(
+          :customer,
+          name: 'City Of Something',
+          contact_person_name: 'Someone Special',
+          contact_phone_number: '303-222-4232',
+          contact_email: 'email@address.com',
+          account_number: 'ACTNUM111',
+          address1: '100 Main St',
+          address2: 'Suite 100',
+          city: 'Boston',
+          state: 'MA',
+          zip: '12333',
+          active: true,
+          equipment_access: true,
+          certification_access: true,
+          vehicle_access: true
+        )
+      end
+
+      it 'should have the right headers' do
+        results = CsvPresenter.new(Customer.all).present
+
+        results.split("\n")[0].should == 'Name,Account Number,Contact Person Name,Contact Email,Contact Phone Number,Address 1,Address 2,City,State,Zip,Active,Equipment Access,Certification Access,Vehicle Access,Created Date'
+      end
+
+      it 'should have the right data' do
+        Customer.count.should == 1
+
+        results = CsvPresenter.new(Customer.all).present
+
+        data_results = results.split("\n")[1].split(',')
+
+        data_results.should ==
+          ['City Of Something', 'ACTNUM111', 'Someone Special', 'email@address.com', '303-222-4232',
+           '100 Main St', 'Suite 100', 'Boston', 'MA', '12333', 'Yes', 'Yes', 'Yes', 'Yes', "#{Date.current.strftime('%m/%d/%Y')}"]
+      end
+    end
   end
 end

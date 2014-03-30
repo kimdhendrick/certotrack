@@ -182,70 +182,104 @@ describe 'Customers', slow: true do
       login_as(admin_user)
     end
 
-    it 'should show All Customers report' do
-      create(
-        :customer,
-        name: 'Adams County',
-        account_number: 'AACC',
-        contact_person_name: 'Jane',
-        contact_email: 'jane@example.com',
-        equipment_access: false,
-        certification_access: false,
-        vehicle_access: false
-      )
-      create(
-        :customer,
-        name: 'Douglas County',
-        account_number: 'DDD',
-        contact_person_name: 'Donna',
-        contact_email: 'donna@example.com',
-        equipment_access: true,
-        certification_access: true,
-        vehicle_access: false
-      )
-
-      visit '/'
-      page.should have_content 'All Customers'
-      click_link 'All Customers'
-
-      page.should have_content 'All Customers'
-      page.should have_content 'Total: 3'
-      page.should have_link 'Home'
-      page.should have_link 'Create Customer'
-
-      within 'table thead tr' do
-        page.should have_link 'Name'
-        page.should have_link 'Account Number'
-        page.should have_link 'Contact Person Name'
-        page.should have_link 'Contact Email'
-        page.should have_content 'Equipment Access'
-        page.should have_content 'Certification Access'
-        page.should have_content 'Vehicle Access'
+    context 'All Customers report' do
+      before do
+        create(
+          :customer,
+          name: 'Adams County',
+          account_number: 'AACC',
+          contact_person_name: 'Jane',
+          contact_email: 'jane@example.com',
+          equipment_access: false,
+          certification_access: false,
+          vehicle_access: false
+        )
+        create(
+          :customer,
+          name: 'Douglas County',
+          account_number: 'DDD',
+          contact_person_name: 'Donna',
+          contact_email: 'donna@example.com',
+          equipment_access: true,
+          certification_access: true,
+          vehicle_access: false
+        )
       end
 
-      within 'table tbody tr:nth-of-type(1)' do
-        page.should have_link 'Adams County'
-        page.should have_content 'AACC'
-        page.should have_content 'Jane'
-        page.should have_content 'jane@example.com'
-        page.should have_content 'No'
+      it 'should show All Customers report' do
+        visit '/'
+        page.should have_content 'All Customers'
+        click_link 'All Customers'
+
+        page.should have_content 'All Customers'
+        page.should have_content 'Total: 3'
+        page.should have_link 'Home'
+        page.should have_link 'Create Customer'
+
+        within 'table thead tr' do
+          page.should have_link 'Name'
+          page.should have_link 'Account Number'
+          page.should have_link 'Contact Person Name'
+          page.should have_link 'Contact Email'
+          page.should have_content 'Equipment Access'
+          page.should have_content 'Certification Access'
+          page.should have_content 'Vehicle Access'
+        end
+
+        within 'table tbody tr:nth-of-type(1)' do
+          page.should have_link 'Adams County'
+          page.should have_content 'AACC'
+          page.should have_content 'Jane'
+          page.should have_content 'jane@example.com'
+          page.should have_content 'No'
+        end
+
+        within 'table tbody tr:nth-of-type(2)' do
+          page.should have_link 'Douglas County'
+          page.should have_content 'DDD'
+          page.should have_content 'Donna'
+          page.should have_content 'donna@example.com'
+          page.should have_content 'Yes'
+          page.should have_content 'No'
+        end
+
+        within 'table tbody tr:nth-of-type(3)' do
+          page.should have_link 'Jefferson County'
+          page.should have_content 'ABC123'
+          page.should have_content 'Joe'
+          page.should have_content 'joe@example.com'
+          page.should have_content 'Yes'
+        end
       end
 
-      within 'table tbody tr:nth-of-type(2)' do
-        page.should have_link 'Douglas County'
-        page.should have_content 'DDD'
-        page.should have_content 'Donna'
-        page.should have_content 'donna@example.com'
-        page.should have_content 'Yes'
-        page.should have_content 'No'
+      it 'should export Deactivated employees list to CSV' do
+        visit '/'
+        click_link 'All Customers'
+
+        click_on 'Export to CSV'
+
+        page.response_headers['Content-Type'].should include 'text/csv'
+        header_row = 'Name,Account Number,Contact Person Name,Contact Email,Contact Phone Number,Address 1,Address 2,City,State,Zip,Active,Equipment Access,Certification Access,Vehicle Access,Created Date'
+        page.text.should ==
+          "#{header_row} Jefferson County,ABC123,Joe,joe@example.com,,,,,,,Yes,Yes,Yes,Yes,#{Date.current.strftime("%m/%d/%Y")} Adams County,AACC,Jane,jane@example.com,,,,,,,Yes,No,No,No,#{Date.current.strftime("%m/%d/%Y")} Douglas County,DDD,Donna,donna@example.com,,,,,,,Yes,Yes,Yes,No,#{Date.current.strftime("%m/%d/%Y")}"
       end
 
-      within 'table tbody tr:nth-of-type(3)' do
-        page.should have_link 'Jefferson County'
-        page.should have_content 'ABC123'
-        page.should have_content 'Joe'
-        page.should have_content 'joe@example.com'
-        page.should have_content 'Yes'
+      it 'should export Deactivated employees list to PDF' do
+        visit '/'
+        click_link 'All Customers'
+
+        click_on 'Export to PDF'
+
+        page.response_headers['Content-Type'].should include 'pdf'
+      end
+
+      it 'should export Deactivated employees list to Excel' do
+        visit '/'
+        click_link 'All Customers'
+
+        click_on 'Export to Excel'
+
+        page.response_headers['Content-Type'].should include 'excel'
       end
     end
 

@@ -9,5 +9,6 @@ FactoryGirl.define do
     account_number
     contact_person_name 'Contact Person'
     contact_email 'customer_contact@example.com'
+    active 'true'
   end
 end

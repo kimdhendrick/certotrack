@@ -208,7 +208,7 @@ describe PdfPresenter do
         header_row = table_header_and_data[0]
 
         header_row.should ==
-          ['Employee Number' ,'First Name' ,'Last Name' ,'Location', 'Created By User', 'Created Date']
+          ['Employee Number', 'First Name', 'Last Name', 'Location', 'Created By User', 'Created Date']
       end
 
       it 'should render the proper data' do
@@ -233,6 +233,59 @@ describe PdfPresenter do
         table_data = table_header_and_data[1]
         table_data.should ==
           ['JB888', 'Joe', 'Brown', 'Denver', 'Me', "#{Date.current.strftime('%m/%d/%Y')}"]
+      end
+    end
+
+    context 'exporting customers' do
+      let(:customer_collection) { [create(:customer)] }
+
+      it 'should render the proper header row' do
+        fake_prawn_document = Faker.new
+        Prawn::Document.stub(:new).and_return(fake_prawn_document)
+
+        PdfPresenter.new(customer_collection, 'title').present
+
+        fake_prawn_document.received_messages[1].should == :table
+        table_params = fake_prawn_document.all_received_params[1]
+        table_header_and_data = table_params[0]
+        header_row = table_header_and_data[0]
+
+        header_row.should ==
+          ['Name', 'Account Number', 'Contact Person Name', 'Contact Email', 'Contact Phone Number', 'Address 1', 'Address 2', 'City', 'State', 'Zip', 'Active', 'Equipment Access', 'Certification Access', 'Vehicle Access', 'Created Date']
+      end
+
+      it 'should render the proper data' do
+        fake_prawn_document = Faker.new
+        Prawn::Document.stub(:new).and_return(fake_prawn_document)
+        customer_collection = [
+          create(
+            :customer,
+            name: 'City Of Something',
+            contact_person_name: 'Someone Special',
+            contact_phone_number: '303-222-4232',
+            contact_email: 'email@address.com',
+            account_number: 'ACTNUM111',
+            address1: '100 Main St',
+            address2: 'Suite 100',
+            city: 'Boston',
+            state: 'MA',
+            zip: '12333',
+            active: true,
+            equipment_access: true,
+            certification_access: true,
+            vehicle_access: true
+          )
+        ]
+
+        PdfPresenter.new(customer_collection, 'title').present
+
+        fake_prawn_document.received_messages[1].should == :table
+        table_params = fake_prawn_document.all_received_params[1]
+        table_header_and_data = table_params[0]
+        table_data = table_header_and_data[1]
+        table_data.should ==
+          ['City Of Something', 'ACTNUM111', 'Someone Special', 'email@address.com', '303-222-4232',
+           '100 Main St', 'Suite 100', 'Boston', 'MA', '12333', 'Yes', 'Yes', 'Yes', 'Yes', "#{Date.current.strftime('%m/%d/%Y')}"]
       end
     end
   end

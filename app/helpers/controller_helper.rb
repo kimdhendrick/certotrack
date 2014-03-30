@@ -90,4 +90,8 @@ module ControllerHelper
 
     render text: CsvPresenter.new(collection).present
   end
+
+  def _filename(filename, extension)
+    "#{filename}.#{extension}"
+  end
 end

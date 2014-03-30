@@ -74,5 +74,25 @@ describe ExcelPresenter do
         collection.received_params[0][:name].should == 'Employee Sheet Title'
       end
     end
+
+    context 'exporting customers' do
+      before do
+        ExcelPresenter.new([create(:customer)], 'Customer Sheet Title').present
+      end
+
+      it 'should call to_xls with the right headers' do
+        headers = 'Name,Account Number,Contact Person Name,Contact Email,Contact Phone Number,Address 1,Address 2,City,State,Zip,Active,Equipment Access,Certification Access,Vehicle Access,Created Date'.split(',')
+        collection.received_params[0][:headers].should == headers
+      end
+
+      it 'should call to_xls with the right columns' do
+        columns = [:name, :account_number, :contact_person_name, :contact_email, :contact_phone_number, :address1, :address2, :city, :state, :zip, :active, :equipment_access, :certification_access, :vehicle_access, :created_at]
+        collection.received_params[0][:columns].should == columns
+      end
+
+      it 'should call to_xls with the sheet name' do
+        collection.received_params[0][:name].should == 'Customer Sheet Title'
+      end
+    end
   end
 end
