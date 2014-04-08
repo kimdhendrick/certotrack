@@ -34,6 +34,12 @@ In this case, 1.9.3 is the version of ruby you want to use and certotrack is the
 
 Answer 'yes' when prompted. Copy & paste command to ignore rvm warnings.
 
+## Setup Devise
+
+### CERTOTRACK_SECRET_KEY 
+
+    export CERTOTRACK_SECRET_KEY=blahblahblah
+
 ## Setup Database
 
 ### Create development, test, and production Databases
@@ -54,6 +60,12 @@ Answer 'yes' when prompted. Copy & paste command to ignore rvm warnings.
     grant all privileges on database certotrack_development to certouser;
     grant all privileges on database certotrack_test to certouser;
     grant all privileges on database certotrack_production to certouser;
+
+#### Note that in one case, I had to do this:
+
+    alter database certotrack_development owner to certouser;
+    alter database certotrack_test owner to certouser;
+    alter database certotrack_production owner to certouser;
 
 #### Add CreateDB Attribute to certouser Role
 
