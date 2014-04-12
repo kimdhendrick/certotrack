@@ -532,7 +532,6 @@ describe 'Service Types', slow: true, js: true do
         click_link 'Next'
       end
 
-
       page.all('table tr').count.should == 25 + 1
       within 'div.pagination' do
         page.should have_link 'Previous'
@@ -543,7 +542,6 @@ describe 'Service Types', slow: true, js: true do
 
         click_link 'Next'
       end
-
 
       page.all('table tr').count.should == 5 + 1
       within 'div.pagination' do
