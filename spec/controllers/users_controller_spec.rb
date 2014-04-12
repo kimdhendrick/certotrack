@@ -56,6 +56,18 @@ describe UsersController do
 
         assigns(:report_title).should eq('All Users')
       end
+
+      context 'export' do
+        subject { controller }
+        it_behaves_like 'a controller that exports to csv, xls, and pdf',
+                        resource: :user,
+                        load_method: :load_user_service,
+                        get_method: :get_all_users,
+                        action: :index,
+                        report_title: 'All Users',
+                        filename: 'users',
+                        skip_user_assertion: true
+      end
     end
 
     context 'when guest user' do
@@ -328,7 +340,7 @@ describe UsersController do
       end
     end
   end
-  
+
   describe 'DELETE #destroy' do
     context 'when admin user' do
       before do

@@ -6,6 +6,12 @@
   <li><%= link_to 'Home', root_path %></li>
 </ul>
 
+<ul id="export-nav">
+  <li><%= link_to 'Export to CSV', customer_users_path(format: 'csv') %></li>
+  <li><%= link_to 'Export to Excel', customer_users_path(format: 'xls') %></li>
+  <li><%= link_to 'Export to PDF', customer_users_path(format: 'pdf', params: params) %></li>
+</ul>
+
 <%= render 'users_list'%>
 
 <%= will_paginate @users %>

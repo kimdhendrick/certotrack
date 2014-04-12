@@ -21,7 +21,7 @@ shared_examples_for 'a controller that exports to csv' do |args|
     get args[:action], format: 'csv'
 
     fake_service.received_messages.should == [args[:get_method]]
-    fake_service.received_params[0].should == my_user
+    fake_service.received_params[0].should == my_user unless args[:skip_user_assertion]
 
     fake_csv_presenter.received_message.should == :present
   end

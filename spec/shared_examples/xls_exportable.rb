@@ -19,7 +19,7 @@ shared_examples_for 'a controller that exports to xls' do |args|
     get args[:action], format: 'xls'
 
     fake_service.received_messages.should == [args[:get_method]]
-    fake_service.received_params[0].should == my_user
+    fake_service.received_params[0].should == my_user unless args[:skip_user_assertion]
 
     fake_xls_presenter.received_message.should == :present
   end

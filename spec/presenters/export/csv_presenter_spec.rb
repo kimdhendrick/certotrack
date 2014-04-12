@@ -155,66 +155,36 @@ module Export
         end
       end
 
-      #context 'exporting users' do
-      #  before do
-      #    create(
-      #      :user,
-      #      name: 'City Of Something',
-      #      contact_person_name: 'Someone Special',
-      #      contact_phone_number: '303-222-4232',
-      #      contact_email: 'email@address.com',
-      #      account_number: 'ACTNUM111',
-      #      address1: '100 Main St',
-      #      address2: 'Suite 100',
-      #      city: 'Boston',
-      #      state: 'MA',
-      #      zip: '12333',
-      #      active: true,
-      #      equipment_access: true,
-      #      certification_access: true,
-      #      vehicle_access: true
-      #
-      #    t.string   "first_name"
-      #    t.string   "last_name"
-      #    t.string   "email"
-      #    t.datetime "created_at"
-      #    t.datetime "updated_at"
-      #    t.string   "username"
-      #    t.string   "encrypted_password",               default: "",      null: false
-      #    t.string   "reset_password_token"
-      #    t.datetime "reset_password_sent_at"
-      #    t.datetime "remember_created_at"
-      #    t.integer  "sign_in_count",                    default: 0
-      #    t.datetime "current_sign_in_at"
-      #    t.datetime "last_sign_in_at"
-      #    t.string   "current_sign_in_ip"
-      #    t.string   "last_sign_in_ip"
-      #    t.integer  "roles_mask"
-      #    t.integer  "customer_id"
-      #    t.boolean  "admin",                            default: false
-      #    t.string   "expiration_notification_interval", default: "Never"
-      #
-      #    )
-      #  end
-      #
-      #  it 'should have the right headers' do
-      #    results = CsvPresenter.new(Customer.all).present
-      #
-      #    results.split("\n")[0].should == 'Name,Account Number,Contact Person Name,Contact Email,Contact Phone Number,Address 1,Address 2,City,State,Zip,Active,Equipment Access,Certification Access,Vehicle Access,Created Date'
-      #  end
-      #
-      #  it 'should have the right data' do
-      #    Customer.count.should == 1
-      #
-      #    results = CsvPresenter.new(Customer.all).present
-      #
-      #    data_results = results.split("\n")[1].split(',')
-      #
-      #    data_results.should ==
-      #      ['City Of Something', 'ACTNUM111', 'Someone Special', 'email@address.com', '303-222-4232',
-      #       '100 Main St', 'Suite 100', 'Boston', 'MA', '12333', 'Yes', 'Yes', 'Yes', 'Yes', "#{Date.current.strftime('%m/%d/%Y')}"]
-      #  end
-      #end
+      context 'exporting users' do
+        before do
+          create(
+            :user,
+            username: 'username123',
+            first_name: 'Joe',
+            last_name: 'Smith',
+            email: 'jsmith@example.com',
+            customer: create(:customer, name: 'My Customer'),
+            expiration_notification_interval: 'Never'
+          )
+        end
+
+        it 'should have the right headers' do
+          results = CsvPresenter.new(User.all).present
+
+          results.split("\n")[0].should == 'Username,First Name,Last Name,Email Address,Notification Interval,Customer,Created Date'
+        end
+
+        it 'should have the right data' do
+          User.count.should == 1
+
+          results = CsvPresenter.new(User.all).present
+
+          data_results = results.split("\n")[1].split(',')
+
+          data_results.should ==
+            ['username123', 'Joe', 'Smith', 'jsmith@example.com', 'Never', 'My Customer', "#{Date.current.strftime('%m/%d/%Y')}"]
+        end
+      end
     end
   end
 end

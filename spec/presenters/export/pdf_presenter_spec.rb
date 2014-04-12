@@ -289,6 +289,50 @@ module Export
              '100 Main St', 'Suite 100', 'Boston', 'MA', '12333', 'Yes', 'Yes', 'Yes', 'Yes', "#{Date.current.strftime('%m/%d/%Y')}"]
         end
       end
+
+      context 'exporting users' do
+        let(:user_collection) { [create(:user)] }
+
+        it 'should render the proper header row' do
+          fake_prawn_document = Faker.new
+          Prawn::Document.stub(:new).and_return(fake_prawn_document)
+
+          PdfPresenter.new(user_collection, 'title').present
+
+          fake_prawn_document.received_messages[1].should == :table
+          table_params = fake_prawn_document.all_received_params[1]
+          table_header_and_data = table_params[0]
+          header_row = table_header_and_data[0]
+
+          header_row.should ==
+            ['Username', 'First Name', 'Last Name', 'Email Address', 'Notification Interval', 'Customer', 'Created Date']
+        end
+
+        it 'should render the proper data' do
+          fake_prawn_document = Faker.new
+          Prawn::Document.stub(:new).and_return(fake_prawn_document)
+          user_collection = [
+            create(
+              :user,
+              username: 'username123',
+              first_name: 'Joe',
+              last_name: 'Smith',
+              email: 'jsmith@example.com',
+              customer: create(:customer, name: 'My Customer'),
+              expiration_notification_interval: 'Never'
+            )
+          ]
+
+          PdfPresenter.new(user_collection, 'title').present
+
+          fake_prawn_document.received_messages[1].should == :table
+          table_params = fake_prawn_document.all_received_params[1]
+          table_header_and_data = table_params[0]
+          table_data = table_header_and_data[1]
+          table_data.should ==
+            ['username123', 'Joe', 'Smith', 'jsmith@example.com', 'Never', 'My Customer', "#{Date.current.strftime('%m/%d/%Y')}"]
+        end
+      end
     end
   end
 end

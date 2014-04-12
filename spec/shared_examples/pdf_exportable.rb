@@ -20,7 +20,7 @@ shared_examples_for 'a controller that exports to pdf' do |args|
     get args[:action], {format: 'pdf'}.merge(sort_params)
 
     fake_service.received_messages.should == [args[:get_method]]
-    fake_service.received_params[0].should == my_user
+    fake_service.received_params[0].should == my_user unless args[:skip_user_assertion]
 
     fake_pdf_presenter.received_message.should == :present
   end

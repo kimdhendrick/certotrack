@@ -95,6 +95,26 @@ module Export
           collection.received_params[0][:name].should == 'Customer Sheet Title'
         end
       end
+
+      context 'exporting users' do
+        before do
+          ExcelPresenter.new([create(:user)], 'User Sheet Title').present
+        end
+
+        it 'should call to_xls with the right headers' do
+          headers = 'Username,First Name,Last Name,Email Address,Notification Interval,Customer,Created Date'.split(',')
+          collection.received_params[0][:headers].should == headers
+        end
+
+        it 'should call to_xls with the right columns' do
+          columns = [:username, :first_name, :last_name, :email, :expiration_notification_interval, :customer_name, :created_at]
+          collection.received_params[0][:columns].should == columns
+        end
+
+        it 'should call to_xls with the sheet name' do
+          collection.received_params[0][:name].should == 'User Sheet Title'
+        end
+      end
     end
   end
 end

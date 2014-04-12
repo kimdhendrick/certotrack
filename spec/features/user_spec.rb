@@ -5,6 +5,7 @@ describe 'Users', slow: true do
     admin_user = create(
       :user,
       username: 'admin',
+      email: 'adam@admin.com',
       first_name: 'Adam',
       last_name: 'Admin',
       admin: true
@@ -14,77 +15,113 @@ describe 'Users', slow: true do
   end
 
   describe 'All User List' do
-    it 'should show All Users report' do
-      jeffco = create(
-        :customer,
-        name: 'Jefferson County',
-        equipment_access: true,
-        certification_access: false,
-        vehicle_access: true
-      )
+    context 'all user list' do
+      before do
+        jeffco = create(
+          :customer,
+          name: 'Jefferson County',
+          equipment_access: true,
+          certification_access: false,
+          vehicle_access: true
+        )
 
-      create(
-        :user,
-        first_name: 'Judith',
-        last_name: 'Jones',
-        username: 'judyjones',
-        customer: jeffco,
-        roles: jeffco.roles
-      )
+        create(
+          :user,
+          first_name: 'Judith',
+          last_name: 'Jones',
+          username: 'judyjones',
+          email: 'judy@jones.com',
+          customer: jeffco,
+          roles: jeffco.roles
+        )
 
-      denver = create(
-        :customer,
-        name: 'Denver',
-        equipment_access: false,
-        certification_access: true,
-        vehicle_access: false
-      )
+        denver = create(
+          :customer,
+          name: 'Denver',
+          equipment_access: false,
+          certification_access: true,
+          vehicle_access: false
+        )
 
-      create(
-        :user,
-        first_name: 'Charles',
-        last_name: 'Smith',
-        username: 'charliesmith',
-        customer: denver,
-        roles: denver.roles
-      )
-
-      visit '/'
-      page.should have_content 'All Users'
-      click_link 'All Users'
-
-      page.should have_content 'All Users'
-      page.should have_content 'Total: 3'
-      page.should have_link 'Home'
-
-      within 'table thead tr' do
-        page.should have_link 'Username'
-        page.should have_link 'First Name'
-        page.should have_link 'Last Name'
-        page.should have_link 'Customer'
-        page.should have_content 'Equipment Access'
-        page.should have_content 'Certification Access'
-        page.should have_content 'Vehicle Access'
+        create(
+          :user,
+          first_name: 'Charles',
+          last_name: 'Smith',
+          username: 'charliesmith',
+          email: 'charlie@smith.com',
+          customer: denver,
+          roles: denver.roles
+        )
       end
 
-      within 'table tbody tr:nth-of-type(1)' do
-        page.should have_link 'admin'
+      it 'should show All Users report' do
+        visit '/'
+        page.should have_content 'All Users'
+        click_link 'All Users'
+
+        page.should have_content 'All Users'
+        page.should have_content 'Total: 3'
+        page.should have_link 'Home'
+
+        within 'table thead tr' do
+          page.should have_link 'Username'
+          page.should have_link 'First Name'
+          page.should have_link 'Last Name'
+          page.should have_link 'Customer'
+          page.should have_content 'Equipment Access'
+          page.should have_content 'Certification Access'
+          page.should have_content 'Vehicle Access'
+        end
+
+        within 'table tbody tr:nth-of-type(1)' do
+          page.should have_link 'admin'
+        end
+
+        within 'table tbody tr:nth-of-type(2)' do
+          page.should have_link 'charliesmith'
+          page.should have_content 'Charles'
+          page.should have_content 'Smith'
+          page.should have_link 'Denver'
+          page.should have_content /.*No.*Yes.*No.*/
+        end
+
+        within 'table tbody tr:nth-of-type(3)' do
+          page.should have_link 'judyjones'
+          page.should have_content 'Judith'
+          page.should have_content 'Jones'
+          page.should have_link 'Jefferson County'
+          page.should have_content /.*Yes.*No.*Yes.*/
+        end
       end
 
-      within 'table tbody tr:nth-of-type(2)' do
-        page.should have_link 'charliesmith'
-        page.should have_content 'Charles'
-        page.should have_content 'Smith'
-        page.should have_link 'Denver'
-        page.should have_content /.*No.*Yes.*No.*/
+      it 'should export all users list to CSV' do
+        visit '/'
+        click_link 'All Users'
+
+        click_on 'Export to CSV'
+
+        page.response_headers['Content-Type'].should include 'text/csv'
+        header_row = 'Username,First Name,Last Name,Email Address,Notification Interval,Customer,Created Date'
+        page.text.should ==
+          "#{header_row} admin,Adam,Admin,adam@admin.com,Never,My Customer,#{Date.current.strftime("%m/%d/%Y")} judyjones,Judith,Jones,judy@jones.com,Never,Jefferson County,#{Date.current.strftime("%m/%d/%Y")} charliesmith,Charles,Smith,charlie@smith.com,Never,Denver,#{Date.current.strftime("%m/%d/%Y")}"
       end
 
-      within 'table tbody tr:nth-of-type(3)' do
-        page.should have_link 'judyjones'
-        page.should have_content 'Judith'
-        page.should have_content 'Jones'
-        page.should have_link 'Jefferson County'
-        page.should have_content /.*Yes.*No.*Yes.*/
+      it 'should export all users list to PDF' do
+        visit '/'
+        click_link 'All Users'
+
+        click_on 'Export to PDF'
+
+        page.response_headers['Content-Type'].should include 'pdf'
+      end
+
+      it 'should export all users list to Excel' do
+        visit '/'
+        click_link 'All Users'
+
+        click_on 'Export to Excel'
+
+        page.response_headers['Content-Type'].should include 'excel'
       end
     end
 
@@ -310,80 +347,80 @@ describe 'Users', slow: true do
   end
 
   describe 'Update User' do
-      it 'should edit user details' do
-        jeffco = create(
-          :customer,
-          name: 'Jefferson County',
-          equipment_access: true,
-          certification_access: true,
-          vehicle_access: true
-        )
+    it 'should edit user details' do
+      jeffco = create(
+        :customer,
+        name: 'Jefferson County',
+        equipment_access: true,
+        certification_access: true,
+        vehicle_access: true
+      )
 
-        create(
-          :customer,
-          name: 'Denver County',
-          equipment_access: false,
-          certification_access: false,
-          vehicle_access: false
-        )
+      create(
+        :customer,
+        name: 'Denver County',
+        equipment_access: false,
+        certification_access: false,
+        vehicle_access: false
+      )
 
-        create(
-          :user,
-          first_name: 'Kathy',
-          last_name: 'Kramer',
-          username: 'kkramer',
-          email: 'kkramer@ejemplo.com',
-          expiration_notification_interval: 'Weekly',
-          customer: jeffco,
-          roles: jeffco.roles
-        )
+      create(
+        :user,
+        first_name: 'Kathy',
+        last_name: 'Kramer',
+        username: 'kkramer',
+        email: 'kkramer@ejemplo.com',
+        expiration_notification_interval: 'Weekly',
+        customer: jeffco,
+        roles: jeffco.roles
+      )
 
-        visit '/'
-        page.should have_content 'All Users'
-        click_link 'All Users'
+      visit '/'
+      page.should have_content 'All Users'
+      click_link 'All Users'
 
-        page.should have_content 'All Users'
+      page.should have_content 'All Users'
 
-        click_on 'kkramer'
+      click_on 'kkramer'
 
-        page.should have_content 'Show User'
+      page.should have_content 'Show User'
 
-        page.should have_link 'Home'
-        page.should have_link 'All Users'
+      page.should have_link 'Home'
+      page.should have_link 'All Users'
 
-        click_on 'Edit'
+      click_on 'Edit'
 
-        page.should have_content 'Edit User'
+      page.should have_content 'Edit User'
 
-        page.should have_content 'Home'
-        page.should have_content 'All Users'
+      page.should have_content 'Home'
+      page.should have_content 'All Users'
 
-        page.should have_content 'First name'
-        page.should have_content 'Last name'
-        page.should have_content 'Username'
-        page.should have_content 'Password'
-        page.should have_content 'Email address'
-        page.should have_content 'Customer'
-        page.should have_content 'Expiration notification interval'
+      page.should have_content 'First name'
+      page.should have_content 'Last name'
+      page.should have_content 'Username'
+      page.should have_content 'Password'
+      page.should have_content 'Email address'
+      page.should have_content 'Customer'
+      page.should have_content 'Expiration notification interval'
 
-        fill_in 'First name', with: 'Judith'
-        fill_in 'Last name', with: 'Jones'
-        fill_in 'Username', with: 'judyjones'
-        fill_in 'Email address', with: 'jjones@example.com'
-        select 'Denver County', from: 'Customer'
-        select 'Weekly', from: 'Expiration notification interval'
+      fill_in 'First name', with: 'Judith'
+      fill_in 'Last name', with: 'Jones'
+      fill_in 'Username', with: 'judyjones'
+      fill_in 'Email address', with: 'jjones@example.com'
+      select 'Denver County', from: 'Customer'
+      select 'Weekly', from: 'Expiration notification interval'
 
-        click_on 'Update'
+      click_on 'Update'
 
-        page.should have_content 'Show User'
+      page.should have_content 'Show User'
 
-        page.should have_content 'Denver County'
-        page.should have_content 'Jones, Judith'
-        page.should have_content 'judyjones'
-        page.should have_content 'jjones@example.com'
-        page.should have_content 'Weekly'
-        page.should have_content /.*Equipment Access.*No.*Certification Access.*No.*Vehicle Access.*No/
-      end
+      page.should have_content 'Denver County'
+      page.should have_content 'Jones, Judith'
+      page.should have_content 'judyjones'
+      page.should have_content 'jjones@example.com'
+      page.should have_content 'Weekly'
+      page.should have_content /.*Equipment Access.*No.*Certification Access.*No.*Vehicle Access.*No/
+    end
   end
 
   describe 'Delete User' do

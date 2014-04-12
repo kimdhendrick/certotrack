@@ -12,8 +12,14 @@ class UsersController < ModelController
 
     @report_title = 'All Users'
     user_collection = @user_service.get_all_users
-    @user_count = user_collection.count
-    @users = UserListPresenter.new(user_collection).present(params)
+    report_type = 'users'
+
+    respond_to do |format|
+      format.html { _render_collection_as_html(user_collection) }
+      format.csv { _render_collection_as_csv(report_type, user_collection) }
+      format.xls { _render_collection_as_xls(@report_title, report_type, user_collection) }
+      format.pdf { _render_collection_as_pdf(@report_title, report_type, user_collection) }
+    end
   end
 
   def show
@@ -64,6 +70,11 @@ class UsersController < ModelController
   end
 
   private
+
+  def _render_collection_as_html(user_collection)
+    @user_count = user_collection.count
+    @users = UserListPresenter.new(user_collection).present(params)
+  end
 
   def _set_customers
     @customers = CustomerListPresenter.new(@customer_service.get_all_customers(current_user)).sort

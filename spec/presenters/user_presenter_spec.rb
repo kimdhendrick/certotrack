@@ -83,6 +83,11 @@ describe UserPresenter do
     UserPresenter.new(user).expiration_notification_interval.should == 'Daily'
   end
 
+  it 'should respond to created_at' do
+    user = UserPresenter.new(create(:customer, created_at: Date.new(2010, 1, 1)))
+    user.created_at.should == '01/01/2010'
+  end
+
   describe 'edit_link' do
     it 'should create a link to the edit page' do
       user = build(:user)
