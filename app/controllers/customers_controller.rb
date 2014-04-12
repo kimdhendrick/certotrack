@@ -33,12 +33,13 @@ class CustomersController < ModelController
 
     @report_title = 'All Customers'
     customer_collection = @customer_service.get_all_customers(current_user)
+    report_type = 'customers'
 
     respond_to do |format|
       format.html { _render_collection_as_html(customer_collection) }
-      format.csv { _render_collection_as_csv(customer_collection, 'customers') }
-      format.xls { _render_collection_as_xls(@report_title, 'customers', customer_collection) }
-      format.pdf { _render_collection_as_pdf(@report_title, 'customers', customer_collection) }
+      format.csv { _render_collection_as_csv(report_type, customer_collection) }
+      format.xls { _render_collection_as_xls(@report_title, report_type, customer_collection) }
+      format.pdf { _render_collection_as_pdf(@report_title, report_type, customer_collection) }
     end
   end
 

@@ -68,84 +68,15 @@ describe EquipmentController do
         end
       end
 
-      context 'CSV export' do
-        it 'responds to csv format' do
-          controller.load_equipment_service(fake_equipment_service_that_returns_list)
-
-          get :index, format: 'csv'
-
-          response.headers['Content-Type'].should == 'text/csv; charset=utf-8'
-          response.body.split("\n").count.should == 2
-        end
-
-        it 'calls CsvPresenter#present with equipment' do
-          my_user = stub_equipment_user(customer)
-          sign_in my_user
-          equipment = build(:equipment)
-          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
-          fake_csv_presenter = Faker.new
-          CsvPresenter.should_receive(:new).with([equipment]).and_return(fake_csv_presenter)
-
-          get :index, format: 'csv'
-
-          fake_equipment_service.received_messages.should == [:get_all_equipment]
-          fake_equipment_service.received_params[0].should == my_user
-
-          fake_csv_presenter.received_message.should == :present
-        end
-      end
-
-      context 'XLS export' do
-        it 'responds to xls format' do
-          controller.load_equipment_service(fake_equipment_service_that_returns_list)
-
-          get :index, format: 'xls'
-
-          response.headers['Content-Type'].should == 'application/vnd.ms-excel'
-        end
-
-        it 'calls ExcelPresenter#present with equipment' do
-          my_user = stub_equipment_user(customer)
-          sign_in my_user
-          equipment = build(:equipment)
-          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
-          fake_xls_presenter = Faker.new
-          ExcelPresenter.should_receive(:new).with([equipment], 'All Equipment').and_return(fake_xls_presenter)
-
-          get :index, format: 'xls'
-
-          fake_equipment_service.received_messages.should == [:get_all_equipment]
-          fake_equipment_service.received_params[0].should == my_user
-
-          fake_xls_presenter.received_message.should == :present
-        end
-      end
-
-      context 'PDF export' do
-        it 'responds to pdf format' do
-          controller.load_equipment_service(fake_equipment_service_that_returns_list)
-
-          get :index, format: 'pdf'
-
-          response.headers['Content-Type'].should == 'application/pdf'
-        end
-
-        it 'calls PdfPresenter#present with equipment' do
-          my_user = stub_equipment_user(customer)
-          sign_in my_user
-          equipment = build(:equipment)
-          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
-          fake_pdf_presenter = Faker.new
-          sort_params = {'sort' => 'name', 'direction' => 'asc'}
-          PdfPresenter.should_receive(:new).with([equipment], 'All Equipment', sort_params).and_return(fake_pdf_presenter)
-
-          get :index, {format: 'pdf'}.merge(sort_params)
-
-          fake_equipment_service.received_messages.should == [:get_all_equipment]
-          fake_equipment_service.received_params[0].should == my_user
-
-          fake_pdf_presenter.received_message.should == :present
-        end
+      context 'export' do
+        subject { controller }
+        it_behaves_like 'a controller that exports to csv, xls, and pdf',
+                        resource: :equipment,
+                        load_method: :load_equipment_service,
+                        action: :index,
+                        get_method: :get_all_equipment,
+                        report_title: 'All Equipment',
+                        filename: 'equipment'
       end
     end
 
@@ -234,84 +165,15 @@ describe EquipmentController do
         end
       end
 
-      context 'CSV export' do
-        it 'responds to csv format' do
-          controller.load_equipment_service(fake_equipment_service_that_returns_list)
-
-          get :expired, format: 'csv'
-
-          response.headers['Content-Type'].should == 'text/csv; charset=utf-8'
-          response.body.split("\n").count.should == 2
-        end
-
-        it 'calls CsvPresenter#present with equipment' do
-          my_user = stub_equipment_user(customer)
-          sign_in my_user
-          equipment = build(:equipment)
-          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
-          fake_csv_presenter = Faker.new
-          CsvPresenter.should_receive(:new).with([equipment]).and_return(fake_csv_presenter)
-
-          get :expired, format: 'csv'
-
-          fake_equipment_service.received_messages.should == [:get_expired_equipment]
-          fake_equipment_service.received_params[0].should == my_user
-
-          fake_csv_presenter.received_message.should == :present
-        end
-      end
-
-      context 'XLS export' do
-        it 'responds to xls format' do
-          controller.load_equipment_service(fake_equipment_service_that_returns_list)
-
-          get :expired, format: 'xls'
-
-          response.headers['Content-Type'].should == 'application/vnd.ms-excel'
-        end
-
-        it 'calls ExcelPresenter#present with equipment' do
-          my_user = stub_equipment_user(customer)
-          sign_in my_user
-          equipment = build(:equipment)
-          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
-          fake_xls_presenter = Faker.new
-          ExcelPresenter.should_receive(:new).with([equipment], 'Expired Equipment List').and_return(fake_xls_presenter)
-
-          get :expired, format: 'xls'
-
-          fake_equipment_service.received_messages.should == [:get_expired_equipment]
-          fake_equipment_service.received_params[0].should == my_user
-
-          fake_xls_presenter.received_message.should == :present
-        end
-      end
-
-      context 'PDF export' do
-        it 'responds to pdf format' do
-          controller.load_equipment_service(fake_equipment_service_that_returns_list)
-
-          get :expired, format: 'pdf'
-
-          response.headers['Content-Type'].should == 'application/pdf'
-        end
-
-        it 'calls PdfPresenter#present with equipment' do
-          my_user = stub_equipment_user(customer)
-          sign_in my_user
-          equipment = build(:equipment)
-          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
-          fake_pdf_presenter = Faker.new
-          sort_params = {'sort' => 'name', 'direction' => 'asc'}
-          PdfPresenter.should_receive(:new).with([equipment], 'Expired Equipment List', sort_params).and_return(fake_pdf_presenter)
-
-          get :expired, {format: 'pdf'}.merge(sort_params)
-
-          fake_equipment_service.received_messages.should == [:get_expired_equipment]
-          fake_equipment_service.received_params[0].should == my_user
-
-          fake_pdf_presenter.received_message.should == :present
-        end
+      context 'export' do
+        subject { controller }
+        it_behaves_like 'a controller that exports to csv, xls, and pdf',
+                        resource: :equipment,
+                        load_method: :load_equipment_service,
+                        get_method: :get_expired_equipment,
+                        action: :expired,
+                        report_title: 'Expired Equipment List',
+                        filename: 'expired_equipment'
       end
     end
 
@@ -401,84 +263,15 @@ describe EquipmentController do
         end
       end
 
-      context 'CSV export' do
-        it 'responds to csv format' do
-          controller.load_equipment_service(fake_equipment_service_that_returns_list)
-
-          get :expiring, format: 'csv'
-
-          response.headers['Content-Type'].should == 'text/csv; charset=utf-8'
-          response.body.split("\n").count.should == 2
-        end
-
-        it 'calls CsvPresenter#present with equipment' do
-          my_user = stub_equipment_user(customer)
-          sign_in my_user
-          equipment = build(:equipment)
-          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
-          fake_csv_presenter = Faker.new
-          CsvPresenter.should_receive(:new).with([equipment]).and_return(fake_csv_presenter)
-
-          get :expiring, format: 'csv'
-
-          fake_equipment_service.received_messages.should == [:get_expiring_equipment]
-          fake_equipment_service.received_params[0].should == my_user
-
-          fake_csv_presenter.received_message.should == :present
-        end
-      end
-
-      context 'XLS export' do
-        it 'responds to xls format' do
-          controller.load_equipment_service(fake_equipment_service_that_returns_list)
-
-          get :expiring, format: 'xls'
-
-          response.headers['Content-Type'].should == 'application/vnd.ms-excel'
-        end
-
-        it 'calls ExcelPresenter#present with equipment' do
-          my_user = stub_equipment_user(customer)
-          sign_in my_user
-          equipment = build(:equipment)
-          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
-          fake_xls_presenter = Faker.new
-          ExcelPresenter.should_receive(:new).with([equipment], 'Expiring Equipment List').and_return(fake_xls_presenter)
-
-          get :expiring, format: 'xls'
-
-          fake_equipment_service.received_messages.should == [:get_expiring_equipment]
-          fake_equipment_service.received_params[0].should == my_user
-
-          fake_xls_presenter.received_message.should == :present
-        end
-      end
-
-      context 'PDF export' do
-        it 'responds to pdf format' do
-          controller.load_equipment_service(fake_equipment_service_that_returns_list)
-
-          get :expiring, format: 'pdf'
-
-          response.headers['Content-Type'].should == 'application/pdf'
-        end
-
-        it 'calls PdfPresenter#present with equipment' do
-          my_user = stub_equipment_user(customer)
-          sign_in my_user
-          equipment = build(:equipment)
-          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
-          fake_pdf_presenter = Faker.new
-          sort_params = {'sort' => 'name', 'direction' => 'asc'}
-          PdfPresenter.should_receive(:new).with([equipment], 'Expiring Equipment List', sort_params).and_return(fake_pdf_presenter)
-
-          get :expiring, {format: 'pdf'}.merge(sort_params)
-
-          fake_equipment_service.received_messages.should == [:get_expiring_equipment]
-          fake_equipment_service.received_params[0].should == my_user
-
-          fake_pdf_presenter.received_message.should == :present
-        end
+      context 'export' do
+        subject { controller }
+        it_behaves_like 'a controller that exports to csv, xls, and pdf',
+                        resource: :equipment,
+                        load_method: :load_equipment_service,
+                        get_method: :get_expiring_equipment,
+                        action: :expiring,
+                        report_title: 'Expiring Equipment List',
+                        filename: 'expiring_equipment'
       end
     end
 
@@ -566,84 +359,15 @@ describe EquipmentController do
         end
       end
 
-      context 'CSV export' do
-        it 'responds to csv format' do
-          controller.load_equipment_service(fake_equipment_service_that_returns_list)
-
-          get :noninspectable, format: 'csv'
-
-          response.headers['Content-Type'].should == 'text/csv; charset=utf-8'
-          response.body.split("\n").count.should == 2
-        end
-
-        it 'calls CsvPresenter#present with equipment' do
-          my_user = stub_equipment_user(customer)
-          sign_in my_user
-          equipment = build(:equipment)
-          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
-          fake_csv_presenter = Faker.new
-          CsvPresenter.should_receive(:new).with([equipment]).and_return(fake_csv_presenter)
-
-          get :noninspectable, format: 'csv'
-
-          fake_equipment_service.received_messages.should == [:get_noninspectable_equipment]
-          fake_equipment_service.received_params[0].should == my_user
-
-          fake_csv_presenter.received_message.should == :present
-        end
-      end
-
-      context 'XLS export' do
-        it 'responds to xls format' do
-          controller.load_equipment_service(fake_equipment_service_that_returns_list)
-
-          get :noninspectable, format: 'xls'
-
-          response.headers['Content-Type'].should == 'application/vnd.ms-excel'
-        end
-
-        it 'calls ExcelPresenter#present with equipment' do
-          my_user = stub_equipment_user(customer)
-          sign_in my_user
-          equipment = build(:equipment)
-          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
-          fake_xls_presenter = Faker.new
-          ExcelPresenter.should_receive(:new).with([equipment], 'Non-Inspectable Equipment List').and_return(fake_xls_presenter)
-
-          get :noninspectable, format: 'xls'
-
-          fake_equipment_service.received_messages.should == [:get_noninspectable_equipment]
-          fake_equipment_service.received_params[0].should == my_user
-
-          fake_xls_presenter.received_message.should == :present
-        end
-      end
-
-      context 'PDF export' do
-        it 'responds to pdf format' do
-          controller.load_equipment_service(fake_equipment_service_that_returns_list)
-
-          get :noninspectable, format: 'pdf'
-
-          response.headers['Content-Type'].should == 'application/pdf'
-        end
-
-        it 'calls PdfPresenter#present with equipment' do
-          my_user = stub_equipment_user(customer)
-          sign_in my_user
-          equipment = build(:equipment)
-          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
-          fake_pdf_presenter = Faker.new
-          sort_params = {'sort' => 'name', 'direction' => 'asc'}
-          PdfPresenter.should_receive(:new).with([equipment], 'Non-Inspectable Equipment List', sort_params).and_return(fake_pdf_presenter)
-
-          get :noninspectable, {format: 'pdf'}.merge(sort_params)
-
-          fake_equipment_service.received_messages.should == [:get_noninspectable_equipment]
-          fake_equipment_service.received_params[0].should == my_user
-
-          fake_pdf_presenter.received_message.should == :present
-        end
+      context 'export' do
+        subject { controller }
+        it_behaves_like 'a controller that exports to csv, xls, and pdf',
+                        resource: :equipment,
+                        load_method: :load_equipment_service,
+                        get_method: :get_noninspectable_equipment,
+                        action: :noninspectable,
+                        report_title: 'Non-Inspectable Equipment List',
+                        filename: 'noninspectable_equipment'
       end
     end
 
@@ -1182,84 +906,15 @@ describe EquipmentController do
         end
       end
 
-      context 'CSV export' do
-        it 'responds to csv format' do
-          controller.load_equipment_service(fake_equipment_service_that_returns_list)
-
-          get :search, format: 'csv'
-
-          response.headers['Content-Type'].should == 'text/csv; charset=utf-8'
-          response.body.split("\n").count.should == 2
-        end
-
-        it 'calls CsvPresenter#present with equipment' do
-          my_user = stub_equipment_user(customer)
-          sign_in my_user
-          equipment = build(:equipment)
-          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
-          fake_csv_presenter = Faker.new
-          CsvPresenter.should_receive(:new).with([equipment]).and_return(fake_csv_presenter)
-
-          get :search, format: 'csv'
-
-          fake_equipment_service.received_messages.should == [:search_equipment]
-          fake_equipment_service.received_params[0].should == my_user
-
-          fake_csv_presenter.received_message.should == :present
-        end
-      end
-
-      context 'XLS export' do
-        it 'responds to xls format' do
-          controller.load_equipment_service(fake_equipment_service_that_returns_list)
-
-          get :search, format: 'xls'
-
-          response.headers['Content-Type'].should == 'application/vnd.ms-excel'
-        end
-
-        it 'calls ExcelPresenter#present with equipment' do
-          my_user = stub_equipment_user(customer)
-          sign_in my_user
-          equipment = build(:equipment)
-          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
-          fake_xls_presenter = Faker.new
-          ExcelPresenter.should_receive(:new).with([equipment], 'Search Equipment').and_return(fake_xls_presenter)
-
-          get :search, format: 'xls'
-
-          fake_equipment_service.received_messages.should == [:search_equipment]
-          fake_equipment_service.received_params[0].should == my_user
-
-          fake_xls_presenter.received_message.should == :present
-        end
-      end
-
-      context 'PDF export' do
-        it 'responds to pdf format' do
-          controller.load_equipment_service(fake_equipment_service_that_returns_list)
-
-          get :search, format: 'pdf'
-
-          response.headers['Content-Type'].should == 'application/pdf'
-        end
-
-        it 'calls PdfPresenter#present with equipment' do
-          my_user = stub_equipment_user(customer)
-          sign_in my_user
-          equipment = build(:equipment)
-          fake_equipment_service = controller.load_equipment_service(Faker.new([equipment]))
-          fake_pdf_presenter = Faker.new
-          sort_params = {'sort' => 'name', 'direction' => 'asc'}
-          PdfPresenter.should_receive(:new).with([equipment], 'Search Equipment', sort_params).and_return(fake_pdf_presenter)
-
-          get :search, {format: 'pdf'}.merge(sort_params)
-
-          fake_equipment_service.received_messages.should == [:search_equipment]
-          fake_equipment_service.received_params[0].should == my_user
-
-          fake_pdf_presenter.received_message.should == :present
-        end
+      context 'export' do
+        subject { controller }
+        it_behaves_like 'a controller that exports to csv, xls, and pdf',
+                        resource: :equipment,
+                        load_method: :load_equipment_service,
+                        get_method: :search_equipment,
+                        action: :search,
+                        report_title: 'Search Equipment',
+                        filename: 'search_equipment'
       end
     end
   end

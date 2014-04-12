@@ -104,7 +104,7 @@ class EquipmentController < ModelController
 
     respond_to do |format|
       format.html { _render_equipment_list_as_html(report_title, equipment_collection) }
-      format.csv { _render_collection_as_csv(equipment_collection) }
+      format.csv { _render_collection_as_csv(equipment_type, equipment_collection) }
       format.xls { _render_collection_as_xls(report_title, equipment_type, equipment_collection) }
       format.pdf { _render_collection_as_pdf(report_title, equipment_type, equipment_collection) }
     end

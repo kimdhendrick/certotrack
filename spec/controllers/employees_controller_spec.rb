@@ -300,6 +300,12 @@ describe EmployeesController do
 
           fake_csv_presenter.received_message.should == :present
         end
+
+        it 'exports to file' do
+          get :show, {format: 'csv', :id => employee.to_param}, {}
+
+          response.headers['Content-Disposition'].should == 'attachment; filename="employee_certifications.csv"'
+        end
       end
 
       context 'XLS export' do
@@ -316,6 +322,12 @@ describe EmployeesController do
           get :show, {format: 'xls', :id => employee.to_param}, {}
 
           fake_xls_presenter.received_message.should == :present
+        end
+
+        it 'exports to file' do
+          get :show, {format: 'xls', :id => employee.to_param}, {}
+
+          response.headers['Content-Disposition'].should == 'attachment; filename="employee_certifications.xls"'
         end
       end
 
@@ -334,6 +346,12 @@ describe EmployeesController do
           get :show, {format: 'pdf', :id => employee.to_param}.merge(sort_params), {}
 
           fake_pdf_presenter.received_message.should == :present
+        end
+
+        it 'exports to file' do
+          get :show, {format: 'pdf', :id => employee.to_param}, {}
+
+          response.headers['Content-Disposition'].should == 'attachment; filename="employee_certifications.pdf"'
         end
       end
     end

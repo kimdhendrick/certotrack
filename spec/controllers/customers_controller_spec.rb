@@ -192,84 +192,15 @@ describe CustomersController do
         end
       end
 
-      context 'CSV export' do
-        it 'responds to csv format' do
-          controller.load_customer_service(Faker.new([create(:customer)]))
-
-          get :index, format: 'csv'
-
-          response.headers['Content-Type'].should == 'text/csv; charset=utf-8'
-          response.body.split("\n").count.should == 2
-        end
-
-        it 'calls CsvPresenter#present with customers' do
-          my_user = stub_admin
-          sign_in my_user
-          customer = build(:customer)
-          fake_customer_service = controller.load_customer_service(Faker.new([customer]))
-          fake_csv_presenter = Faker.new
-          CsvPresenter.should_receive(:new).with([customer]).and_return(fake_csv_presenter)
-
-          get :index, format: 'csv'
-
-          fake_customer_service.received_messages.should == [:get_all_customers]
-          fake_customer_service.received_params[0].should == my_user
-
-          fake_csv_presenter.received_message.should == :present
-        end
-      end
-
-      context 'XLS export' do
-        it 'responds to xls format' do
-          controller.load_customer_service(Faker.new([create(:customer)]))
-
-          get :index, format: 'xls'
-
-          response.headers['Content-Type'].should == 'application/vnd.ms-excel'
-        end
-
-        it 'calls ExcelPresenter#present with customers' do
-          my_user = stub_admin
-          sign_in my_user
-          customer = build(:customer)
-          fake_customer_service = controller.load_customer_service(Faker.new([customer]))
-          fake_xls_presenter = Faker.new
-          ExcelPresenter.should_receive(:new).with([customer], 'All Customers').and_return(fake_xls_presenter)
-
-          get :index, format: 'xls'
-
-          fake_customer_service.received_messages.should == [:get_all_customers]
-          fake_customer_service.received_params[0].should == my_user
-
-          fake_xls_presenter.received_message.should == :present
-        end
-      end
-
-      context 'PDF export' do
-        it 'responds to pdf format' do
-          controller.load_customer_service(Faker.new([create(:customer)]))
-
-          get :index, format: 'pdf'
-
-          response.headers['Content-Type'].should == 'application/pdf'
-        end
-
-        it 'calls PdfPresenter#present with customers' do
-          my_user = stub_admin
-          sign_in my_user
-          customer = build(:customer)
-          fake_customer_service = controller.load_customer_service(Faker.new([customer]))
-          fake_pdf_presenter = Faker.new
-          sort_params = {'sort' => 'name', 'direction' => 'asc'}
-          PdfPresenter.should_receive(:new).with([customer], 'All Customers', sort_params).and_return(fake_pdf_presenter)
-
-          get :index, {format: 'pdf'}.merge(sort_params)
-
-          fake_customer_service.received_messages.should == [:get_all_customers]
-          fake_customer_service.received_params[0].should == my_user
-
-          fake_pdf_presenter.received_message.should == :present
-        end
+      context 'export' do
+        subject { controller }
+        it_behaves_like 'a controller that exports to csv, xls, and pdf',
+                        resource: :customer,
+                        load_method: :load_customer_service,
+                        get_method: :get_all_customers,
+                        action: :index,
+                        report_title: 'All Customers',
+                        filename: 'customers'
       end
     end
 

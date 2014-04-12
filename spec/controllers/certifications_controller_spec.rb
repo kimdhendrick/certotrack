@@ -38,118 +38,47 @@ describe CertificationsController do
         sign_in stub_certification_user(customer)
       end
 
-      context 'HTML format' do
-        it 'assigns certifications' do
-          controller.load_certification_service(fake_certification_service_that_returns_list)
+      it 'assigns certifications' do
+        controller.load_certification_service(fake_certification_service_that_returns_list)
 
-          get :index
+        get :index
 
-          assigns(:certifications).map(&:model).should eq([certification])
-        end
-
-        it 'assigns certifications_count' do
-          controller.load_certification_service(Faker.new(big_list_of_certifications))
-
-          get :index, {per_page: 25, page: 1}
-
-          assigns(:certification_count).should eq(30)
-        end
-
-        it 'assigns report_title' do
-          controller.load_certification_service(fake_certification_service_that_returns_list)
-
-          get :index
-
-          assigns(:report_title).should eq('All Employee Certifications')
-        end
-
-        it 'sets export_template' do
-          controller.load_certification_service(fake_certification_service_that_returns_list)
-
-          get :index
-
-          assigns(:export_template).should == 'all_certification_export'
-        end
+        assigns(:certifications).map(&:model).should eq([certification])
       end
 
-      context 'CSV export' do
-        it 'responds to csv format' do
-          controller.load_certification_service(fake_certification_service_that_returns_list)
+      it 'assigns certifications_count' do
+        controller.load_certification_service(Faker.new(big_list_of_certifications))
 
-          get :index, format: 'csv'
+        get :index, {per_page: 25, page: 1}
 
-          response.headers['Content-Type'].should == 'text/csv; charset=utf-8'
-          response.body.split("\n").count.should == 2
-        end
-
-        it 'calls CsvPresenter#present with certifications' do
-          my_user = stub_certification_user(customer)
-          sign_in my_user
-          certification = build(:certification)
-          fake_certification_service = controller.load_certification_service(Faker.new([certification]))
-          fake_csv_presenter = Faker.new
-          CsvPresenter.should_receive(:new).with([certification]).and_return(fake_csv_presenter)
-
-          get :index, format: 'csv'
-
-          fake_certification_service.received_messages.should == [:get_all_certifications]
-          fake_certification_service.received_params[0].should == my_user
-
-          fake_csv_presenter.received_message.should == :present
-        end
+        assigns(:certification_count).should eq(30)
       end
 
-      context 'XLS export' do
-        it 'responds to xls format' do
-          controller.load_certification_service(fake_certification_service_that_returns_list)
+      it 'assigns report_title' do
+        controller.load_certification_service(fake_certification_service_that_returns_list)
 
-          get :index, format: 'xls'
+        get :index
 
-          response.headers['Content-Type'].should == 'application/vnd.ms-excel'
-        end
-
-        it 'calls ExcelPresenter#present with certifications' do
-          my_user = stub_certification_user(customer)
-          sign_in my_user
-          certification = build(:certification)
-          fake_certification_service = controller.load_certification_service(Faker.new([certification]))
-          fake_xls_presenter = Faker.new
-          ExcelPresenter.should_receive(:new).with([certification], 'All Employee Certifications').and_return(fake_xls_presenter)
-
-          get :index, format: 'xls'
-
-          fake_certification_service.received_messages.should == [:get_all_certifications]
-          fake_certification_service.received_params[0].should == my_user
-
-          fake_xls_presenter.received_message.should == :present
-        end
+        assigns(:report_title).should eq('All Employee Certifications')
       end
 
-      context 'PDF export' do
-        it 'responds to pdf format' do
-          controller.load_certification_service(fake_certification_service_that_returns_list)
+      it 'sets export_template' do
+        controller.load_certification_service(fake_certification_service_that_returns_list)
 
-          get :index, format: 'pdf'
+        get :index
 
-          response.headers['Content-Type'].should == 'application/pdf'
-        end
+        assigns(:export_template).should == 'all_certification_export'
+      end
 
-        it 'calls PdfPresenter#present with certifications' do
-          my_user = stub_certification_user(customer)
-          sign_in my_user
-          certification = build(:certification)
-          fake_certification_service = controller.load_certification_service(Faker.new([certification]))
-          fake_pdf_presenter = Faker.new
-          sort_params = {'sort' => 'name', 'direction' => 'asc'}
-          PdfPresenter.should_receive(:new).with([certification], 'All Employee Certifications', sort_params).and_return(fake_pdf_presenter)
-
-          get :index, {format: 'pdf'}.merge(sort_params)
-
-          fake_certification_service.received_messages.should == [:get_all_certifications]
-          fake_certification_service.received_params[0].should == my_user
-
-          fake_pdf_presenter.received_message.should == :present
-        end
+      context 'export' do
+        subject { controller }
+        it_behaves_like 'a controller that exports to csv, xls, and pdf',
+                        resource: :certification,
+                        load_method: :load_certification_service,
+                        get_method: :get_all_certifications,
+                        action: :index,
+                        report_title: 'All Employee Certifications',
+                        filename: 'certifications'
       end
     end
 
@@ -240,84 +169,15 @@ describe CertificationsController do
         end
       end
 
-      context 'CSV export' do
-        it 'responds to csv format' do
-          controller.load_certification_service(fake_certification_service_that_returns_list)
-
-          get :expired, format: 'csv'
-
-          response.headers['Content-Type'].should == 'text/csv; charset=utf-8'
-          response.body.split("\n").count.should == 2
-        end
-
-        it 'calls CsvPresenter#present with certifications' do
-          my_user = stub_certification_user(customer)
-          sign_in my_user
-          certification = build(:certification)
-          fake_certification_service = controller.load_certification_service(Faker.new([certification]))
-          fake_csv_presenter = Faker.new
-          CsvPresenter.should_receive(:new).with([certification]).and_return(fake_csv_presenter)
-
-          get :expired, format: 'csv'
-
-          fake_certification_service.received_messages.should == [:get_expired_certifications]
-          fake_certification_service.received_params[0].should == my_user
-
-          fake_csv_presenter.received_message.should == :present
-        end
-      end
-
-      context 'XLS export' do
-        it 'responds to xls format' do
-          controller.load_certification_service(fake_certification_service_that_returns_list)
-
-          get :expired, format: 'xls'
-
-          response.headers['Content-Type'].should == 'application/vnd.ms-excel'
-        end
-
-        it 'calls ExcelPresenter#present with certifications' do
-          my_user = stub_certification_user(customer)
-          sign_in my_user
-          certification = build(:certification)
-          fake_certification_service = controller.load_certification_service(Faker.new([certification]))
-          fake_xls_presenter = Faker.new
-          ExcelPresenter.should_receive(:new).with([certification], 'Expired Certifications').and_return(fake_xls_presenter)
-
-          get :expired, format: 'xls'
-
-          fake_certification_service.received_messages.should == [:get_expired_certifications]
-          fake_certification_service.received_params[0].should == my_user
-
-          fake_xls_presenter.received_message.should == :present
-        end
-      end
-
-      context 'PDF export' do
-        it 'responds to pdf format' do
-          controller.load_certification_service(fake_certification_service_that_returns_list)
-
-          get :expired, format: 'pdf'
-
-          response.headers['Content-Type'].should == 'application/pdf'
-        end
-
-        it 'calls PdfPresenter#present with certifications' do
-          my_user = stub_certification_user(customer)
-          sign_in my_user
-          certification = build(:certification)
-          fake_certification_service = controller.load_certification_service(Faker.new([certification]))
-          fake_pdf_presenter = Faker.new
-          sort_params = {'sort' => 'name', 'direction' => 'asc'}
-          PdfPresenter.should_receive(:new).with([certification], 'Expired Certifications', sort_params).and_return(fake_pdf_presenter)
-
-          get :expired, {format: 'pdf'}.merge(sort_params)
-
-          fake_certification_service.received_messages.should == [:get_expired_certifications]
-          fake_certification_service.received_params[0].should == my_user
-
-          fake_pdf_presenter.received_message.should == :present
-        end
+      context 'export' do
+        subject { controller }
+        it_behaves_like 'a controller that exports to csv, xls, and pdf',
+                        resource: :certification,
+                        load_method: :load_certification_service,
+                        get_method: :get_expired_certifications,
+                        action: :expired,
+                        report_title: 'Expired Certifications',
+                        filename: 'expired_certifications'
       end
     end
 
@@ -408,84 +268,15 @@ describe CertificationsController do
         end
       end
 
-      context 'CSV export' do
-        it 'responds to csv format' do
-          controller.load_certification_service(fake_certification_service_that_returns_list)
-
-          get :expiring, format: 'csv'
-
-          response.headers['Content-Type'].should == 'text/csv; charset=utf-8'
-          response.body.split("\n").count.should == 2
-        end
-
-        it 'calls CsvPresenter#present with certifications' do
-          my_user = stub_certification_user(customer)
-          sign_in my_user
-          certification = build(:certification)
-          fake_certification_service = controller.load_certification_service(Faker.new([certification]))
-          fake_csv_presenter = Faker.new
-          CsvPresenter.should_receive(:new).with([certification]).and_return(fake_csv_presenter)
-
-          get :expiring, format: 'csv'
-
-          fake_certification_service.received_messages.should == [:get_expiring_certifications]
-          fake_certification_service.received_params[0].should == my_user
-
-          fake_csv_presenter.received_message.should == :present
-        end
-      end
-
-      context 'XLS export' do
-        it 'responds to xls format' do
-          controller.load_certification_service(fake_certification_service_that_returns_list)
-
-          get :expiring, format: 'xls'
-
-          response.headers['Content-Type'].should == 'application/vnd.ms-excel'
-        end
-
-        it 'calls ExcelPresenter#present with certifications' do
-          my_user = stub_certification_user(customer)
-          sign_in my_user
-          certification = build(:certification)
-          fake_certification_service = controller.load_certification_service(Faker.new([certification]))
-          fake_xls_presenter = Faker.new
-          ExcelPresenter.should_receive(:new).with([certification], 'Certifications Expiring Soon').and_return(fake_xls_presenter)
-
-          get :expiring, format: 'xls'
-
-          fake_certification_service.received_messages.should == [:get_expiring_certifications]
-          fake_certification_service.received_params[0].should == my_user
-
-          fake_xls_presenter.received_message.should == :present
-        end
-      end
-
-      context 'PDF export' do
-        it 'responds to pdf format' do
-          controller.load_certification_service(fake_certification_service_that_returns_list)
-
-          get :expiring, format: 'pdf'
-
-          response.headers['Content-Type'].should == 'application/pdf'
-        end
-
-        it 'calls PdfPresenter#present with certifications' do
-          my_user = stub_certification_user(customer)
-          sign_in my_user
-          certification = build(:certification)
-          fake_certification_service = controller.load_certification_service(Faker.new([certification]))
-          fake_pdf_presenter = Faker.new
-          sort_params = {'sort' => 'name', 'direction' => 'asc'}
-          PdfPresenter.should_receive(:new).with([certification], 'Certifications Expiring Soon', sort_params).and_return(fake_pdf_presenter)
-
-          get :expiring, {format: 'pdf'}.merge(sort_params)
-
-          fake_certification_service.received_messages.should == [:get_expiring_certifications]
-          fake_certification_service.received_params[0].should == my_user
-
-          fake_pdf_presenter.received_message.should == :present
-        end
+      context 'export' do
+        subject { controller }
+        it_behaves_like 'a controller that exports to csv, xls, and pdf',
+                        resource: :certification,
+                        load_method: :load_certification_service,
+                        get_method: :get_expiring_certifications,
+                        action: :expiring,
+                        report_title: 'Certifications Expiring Soon',
+                        filename: 'expiring_certifications'
       end
     end
 
@@ -576,84 +367,15 @@ describe CertificationsController do
         end
       end
 
-      context 'CSV export' do
-        it 'responds to csv format' do
-          controller.load_certification_service(fake_certification_service_that_returns_list)
-
-          get :units_based, format: 'csv'
-
-          response.headers['Content-Type'].should == 'text/csv; charset=utf-8'
-          response.body.split("\n").count.should == 2
-        end
-
-        it 'calls CsvPresenter#present with certifications' do
-          my_user = stub_certification_user(customer)
-          sign_in my_user
-          certification = build(:certification)
-          fake_certification_service = controller.load_certification_service(Faker.new([certification]))
-          fake_csv_presenter = Faker.new
-          CsvPresenter.should_receive(:new).with([certification]).and_return(fake_csv_presenter)
-
-          get :units_based, format: 'csv'
-
-          fake_certification_service.received_messages.should == [:get_units_based_certifications]
-          fake_certification_service.received_params[0].should == my_user
-
-          fake_csv_presenter.received_message.should == :present
-        end
-      end
-
-      context 'XLS export' do
-        it 'responds to xls format' do
-          controller.load_certification_service(fake_certification_service_that_returns_list)
-
-          get :units_based, format: 'xls'
-
-          response.headers['Content-Type'].should == 'application/vnd.ms-excel'
-        end
-
-        it 'calls ExcelPresenter#present with certifications' do
-          my_user = stub_certification_user(customer)
-          sign_in my_user
-          certification = build(:certification)
-          fake_certification_service = controller.load_certification_service(Faker.new([certification]))
-          fake_xls_presenter = Faker.new
-          ExcelPresenter.should_receive(:new).with([certification], 'Units Based Certifications').and_return(fake_xls_presenter)
-
-          get :units_based, format: 'xls'
-
-          fake_certification_service.received_messages.should == [:get_units_based_certifications]
-          fake_certification_service.received_params[0].should == my_user
-
-          fake_xls_presenter.received_message.should == :present
-        end
-      end
-
-      context 'PDF export' do
-        it 'responds to pdf format' do
-          controller.load_certification_service(fake_certification_service_that_returns_list)
-
-          get :units_based, format: 'pdf'
-
-          response.headers['Content-Type'].should == 'application/pdf'
-        end
-
-        it 'calls PdfPresenter#present with certifications' do
-          my_user = stub_certification_user(customer)
-          sign_in my_user
-          certification = build(:certification)
-          fake_certification_service = controller.load_certification_service(Faker.new([certification]))
-          fake_pdf_presenter = Faker.new
-          sort_params = {'sort' => 'name', 'direction' => 'asc'}
-          PdfPresenter.should_receive(:new).with([certification], 'Units Based Certifications', sort_params).and_return(fake_pdf_presenter)
-
-          get :units_based, {format: 'pdf'}.merge(sort_params)
-
-          fake_certification_service.received_messages.should == [:get_units_based_certifications]
-          fake_certification_service.received_params[0].should == my_user
-
-          fake_pdf_presenter.received_message.should == :present
-        end
+      context 'export' do
+        subject { controller }
+        it_behaves_like 'a controller that exports to csv, xls, and pdf',
+                        resource: :certification,
+                        load_method: :load_certification_service,
+                        get_method: :get_units_based_certifications,
+                        action: :units_based,
+                        report_title: 'Units Based Certifications',
+                        filename: 'units_based_certifications'
       end
     end
 
@@ -744,84 +466,15 @@ describe CertificationsController do
         end
       end
 
-      context 'CSV export' do
-        it 'responds to csv format' do
-          controller.load_certification_service(fake_certification_service_that_returns_list)
-
-          get :recertification_required, format: 'csv'
-
-          response.headers['Content-Type'].should == 'text/csv; charset=utf-8'
-          response.body.split("\n").count.should == 2
-        end
-
-        it 'calls CsvPresenter#present with certifications' do
-          my_user = stub_certification_user(customer)
-          sign_in my_user
-          certification = build(:certification)
-          fake_certification_service = controller.load_certification_service(Faker.new([certification]))
-          fake_csv_presenter = Faker.new
-          CsvPresenter.should_receive(:new).with([certification]).and_return(fake_csv_presenter)
-
-          get :recertification_required, format: 'csv'
-
-          fake_certification_service.received_messages.should == [:get_recertification_required_certifications]
-          fake_certification_service.received_params[0].should == my_user
-
-          fake_csv_presenter.received_message.should == :present
-        end
-      end
-
-      context 'XLS export' do
-        it 'responds to xls format' do
-          controller.load_certification_service(fake_certification_service_that_returns_list)
-
-          get :recertification_required, format: 'xls'
-
-          response.headers['Content-Type'].should == 'application/vnd.ms-excel'
-        end
-
-        it 'calls ExcelPresenter#present with certifications' do
-          my_user = stub_certification_user(customer)
-          sign_in my_user
-          certification = build(:certification)
-          fake_certification_service = controller.load_certification_service(Faker.new([certification]))
-          fake_xls_presenter = Faker.new
-          ExcelPresenter.should_receive(:new).with([certification], 'Recertification Required Certifications').and_return(fake_xls_presenter)
-
-          get :recertification_required, format: 'xls'
-
-          fake_certification_service.received_messages.should == [:get_recertification_required_certifications]
-          fake_certification_service.received_params[0].should == my_user
-
-          fake_xls_presenter.received_message.should == :present
-        end
-      end
-
-      context 'PDF export' do
-        it 'responds to pdf format' do
-          controller.load_certification_service(fake_certification_service_that_returns_list)
-
-          get :recertification_required, format: 'pdf'
-
-          response.headers['Content-Type'].should == 'application/pdf'
-        end
-
-        it 'calls PdfPresenter#present with certifications' do
-          my_user = stub_certification_user(customer)
-          sign_in my_user
-          certification = build(:certification)
-          fake_certification_service = controller.load_certification_service(Faker.new([certification]))
-          fake_pdf_presenter = Faker.new
-          sort_params = {'sort' => 'name', 'direction' => 'asc'}
-          PdfPresenter.should_receive(:new).with([certification], 'Recertification Required Certifications', sort_params).and_return(fake_pdf_presenter)
-
-          get :recertification_required, {format: 'pdf'}.merge(sort_params)
-
-          fake_certification_service.received_messages.should == [:get_recertification_required_certifications]
-          fake_certification_service.received_params[0].should == my_user
-
-          fake_pdf_presenter.received_message.should == :present
-        end
+      context 'export' do
+        subject { controller }
+        it_behaves_like 'a controller that exports to csv, xls, and pdf',
+                        resource: :certification,
+                        load_method: :load_certification_service,
+                        get_method: :get_recertification_required_certifications,
+                        action: :recertification_required,
+                        report_title: 'Recertification Required Certifications',
+                        filename: 'recertification_required_certifications'
       end
     end
 
@@ -1677,7 +1330,7 @@ describe CertificationsController do
           assigns(:locations).should == [location]
         end
 
-        it 'assigns certification type types' do
+        it 'assigns certification types' do
           get :search
 
           assigns(:certification_types).size.should == 2
@@ -1696,84 +1349,15 @@ describe CertificationsController do
         end
       end
 
-      context 'CSV export' do
-        it 'responds to csv format' do
-          CertificationListPresenter.stub(:new).and_return(faker_that_returns_empty_list)
-
-          get :search, format: 'csv'
-
-          response.headers['Content-Type'].should == 'text/csv; charset=utf-8'
-          response.body.split("\n").count.should == 1
-        end
-
-        it 'calls CsvPresenter#present with certifications' do
-          my_user = stub_certification_user(customer)
-          sign_in my_user
-          certification = build(:certification)
-          fake_certification_service = controller.load_certification_service(Faker.new([certification]))
-          fake_csv_presenter = Faker.new
-          CsvPresenter.should_receive(:new).with([certification]).and_return(fake_csv_presenter)
-
-          get :search, format: 'csv'
-
-          fake_certification_service.received_messages.should == [:search_certifications]
-          fake_certification_service.received_params[0].should == my_user
-
-          fake_csv_presenter.received_message.should == :present
-        end
-      end
-
-      context 'XLS export' do
-        it 'responds to xls format' do
-          CertificationListPresenter.stub(:new).and_return(faker_that_returns_empty_list)
-
-          get :search, format: 'xls'
-
-          response.headers['Content-Type'].should == 'application/vnd.ms-excel'
-        end
-
-        it 'calls ExcelPresenter#present with certifications' do
-          my_user = stub_certification_user(customer)
-          sign_in my_user
-          certification = build(:certification)
-          fake_certification_service = controller.load_certification_service(Faker.new([certification]))
-          fake_xls_presenter = Faker.new
-          ExcelPresenter.should_receive(:new).with([certification], 'Search Certifications').and_return(fake_xls_presenter)
-
-          get :search, format: 'xls'
-
-          fake_certification_service.received_messages.should == [:search_certifications]
-          fake_certification_service.received_params[0].should == my_user
-
-          fake_xls_presenter.received_message.should == :present
-        end
-      end
-
-      context 'PDF export' do
-        it 'responds to pdf format' do
-          CertificationListPresenter.stub(:new).and_return(faker_that_returns_empty_list)
-
-          get :search, format: 'pdf'
-
-          response.headers['Content-Type'].should == 'application/pdf'
-        end
-
-        it 'calls PdfPresenter#present with certifications' do
-          my_user = stub_certification_user(customer)
-          sign_in my_user
-          certification = build(:certification)
-          fake_certification_service = controller.load_certification_service(Faker.new([certification]))
-          fake_pdf_presenter = Faker.new
-          sort_params = {'sort' => 'name', 'direction' => 'asc'}
-          PdfPresenter.should_receive(:new).with([certification], 'Search Certifications', sort_params).and_return(fake_pdf_presenter)
-
-          get :search, {format: 'pdf'}.merge(sort_params)
-
-          fake_certification_service.received_messages.should == [:search_certifications]
-          fake_certification_service.received_params[0].should == my_user
-
-          fake_pdf_presenter.received_message.should == :present
-        end
+      context 'export' do
+        subject { controller }
+        it_behaves_like 'a controller that exports to csv, xls, and pdf',
+                        resource: :certification,
+                        load_method: :load_certification_service,
+                        get_method: :search_certifications,
+                        action: :search,
+                        report_title: 'Search Certifications',
+                        filename: 'search_certifications'
       end
     end
   end

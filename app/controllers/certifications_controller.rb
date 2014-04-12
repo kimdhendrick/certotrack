@@ -113,7 +113,7 @@ class CertificationsController < ModelController
 
     respond_to do |format|
       format.html { _render_certification_list_as_html(report_title, certification_collection) }
-      format.csv { _render_collection_as_csv(certification_collection) }
+      format.csv { _render_collection_as_csv(certification_type, certification_collection) }
       format.xls { _render_collection_as_xls(report_title, certification_type, certification_collection) }
       format.pdf { _render_collection_as_pdf(report_title, certification_type, certification_collection) }
     end

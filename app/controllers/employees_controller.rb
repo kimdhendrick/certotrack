@@ -21,7 +21,7 @@ class EmployeesController < ModelController
 
     respond_to do |format|
       format.html { @certifications = CertificationListPresenter.new(certifications_for_employee).present(params) }
-      format.csv { _render_collection_as_csv(certifications_for_employee, 'employee_certifications') }
+      format.csv { _render_collection_as_csv('employee_certifications', certifications_for_employee) }
       format.xls { _render_collection_as_xls('Employee Certifications', :employee_certifications, certifications_for_employee) }
       format.pdf { _render_collection_as_pdf('Employee Certifications', :employee_certifications, certifications_for_employee) }
     end
@@ -71,10 +71,6 @@ class EmployeesController < ModelController
   end
 
   private
-
-  def _filename(_, extension)
-    "employee_certifications.#{extension}"
-  end
 
   def _set_locations
     @locations = LocationListPresenter.new(@location_service.get_all_locations(current_user)).sort
