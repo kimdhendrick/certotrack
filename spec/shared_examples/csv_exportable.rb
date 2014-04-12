@@ -16,7 +16,7 @@ shared_examples_for 'a controller that exports to csv' do |args|
     fake_service = subject.public_send(args[:load_method], Faker.new([resource]))
 
     fake_csv_presenter = Faker.new
-    CsvPresenter.should_receive(:new).with([resource]).and_return(fake_csv_presenter)
+    Export::CsvPresenter.should_receive(:new).with([resource]).and_return(fake_csv_presenter)
 
     get args[:action], format: 'csv'
 

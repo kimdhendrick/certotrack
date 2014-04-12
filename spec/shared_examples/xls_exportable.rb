@@ -14,7 +14,7 @@ shared_examples_for 'a controller that exports to xls' do |args|
     resource = args[:resource]
     fake_service = subject.public_send(args[:load_method], Faker.new([resource]))
     fake_xls_presenter = Faker.new
-    ExcelPresenter.should_receive(:new).with([resource], args[:report_title]).and_return(fake_xls_presenter)
+    Export::ExcelPresenter.should_receive(:new).with([resource], args[:report_title]).and_return(fake_xls_presenter)
 
     get args[:action], format: 'xls'
 

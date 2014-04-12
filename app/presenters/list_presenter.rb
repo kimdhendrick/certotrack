@@ -1,5 +1,5 @@
 class ListPresenter
-  include PresenterHelper
+  include ListPresenterHelper
 
   attr_reader :collection
 

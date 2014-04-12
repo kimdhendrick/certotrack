@@ -15,7 +15,7 @@ shared_examples_for 'a controller that exports to pdf' do |args|
     fake_service = subject.public_send(args[:load_method], Faker.new([resource]))
     fake_pdf_presenter = Faker.new
     sort_params = {'sort' => 'name', 'direction' => 'asc'}
-    PdfPresenter.should_receive(:new).with([resource], args[:report_title], sort_params).and_return(fake_pdf_presenter)
+    Export::PdfPresenter.should_receive(:new).with([resource], args[:report_title], sort_params).and_return(fake_pdf_presenter)
 
     get args[:action], {format: 'pdf'}.merge(sort_params)
 

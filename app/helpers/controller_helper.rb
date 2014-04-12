@@ -76,16 +76,16 @@ module ControllerHelper
   end
 
   def _render_collection_as_pdf(report_title, report_type, collection)
-    send_data PdfPresenter.new(collection, report_title, _sort_params).present, filename: _filename(report_type, 'pdf')
+    send_data Export::PdfPresenter.new(collection, report_title, _sort_params).present, filename: _filename(report_type, 'pdf')
   end
 
   def _render_collection_as_xls(report_title, report_type, collection)
-    send_data ExcelPresenter.new(collection, report_title).present, filename: _filename(report_type, 'xls')
+    send_data Export::ExcelPresenter.new(collection, report_title).present, filename: _filename(report_type, 'xls')
   end
 
   def _render_collection_as_csv(report_type, collection)
     response.headers['Content-Disposition'] = "attachment; filename=\"#{_filename(report_type, 'csv')}\""
-    render text: CsvPresenter.new(collection).present
+    render text: Export::CsvPresenter.new(collection).present
   end
 
   def _filename(report_type, extension)

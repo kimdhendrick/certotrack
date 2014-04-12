@@ -294,7 +294,7 @@ describe EmployeesController do
 
         it 'calls CsvPresenter#present with certifications' do
           fake_csv_presenter = Faker.new
-          CsvPresenter.should_receive(:new).with(certifications).and_return(fake_csv_presenter)
+          Export::CsvPresenter.should_receive(:new).with(certifications).and_return(fake_csv_presenter)
 
           get :show, {format: 'csv', :id => employee.to_param}, {}
 
@@ -317,7 +317,7 @@ describe EmployeesController do
 
         it 'calls ExcelPresenter#present with certifications' do
           fake_xls_presenter = Faker.new
-          ExcelPresenter.should_receive(:new).with(certifications, 'Employee Certifications').and_return(fake_xls_presenter)
+          Export::ExcelPresenter.should_receive(:new).with(certifications, 'Employee Certifications').and_return(fake_xls_presenter)
 
           get :show, {format: 'xls', :id => employee.to_param}, {}
 
@@ -341,7 +341,7 @@ describe EmployeesController do
         it 'calls PdfPresenter#present with certifications' do
           fake_pdf_presenter = Faker.new
           sort_params = {'sort' => 'name', 'direction' => 'asc'}
-          PdfPresenter.should_receive(:new).with(certifications, 'Employee Certifications', sort_params).and_return(fake_pdf_presenter)
+          Export::PdfPresenter.should_receive(:new).with(certifications, 'Employee Certifications', sort_params).and_return(fake_pdf_presenter)
 
           get :show, {format: 'pdf', :id => employee.to_param}.merge(sort_params), {}
 
