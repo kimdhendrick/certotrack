@@ -22,12 +22,12 @@ module Export
         end
 
         it 'should call to_xls with the right headers' do
-          headers = 'Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created Date,Created By User'.split(',')
+          headers = 'Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created By User,Created Date'.split(',')
           collection.received_params[0][:headers].should == headers
         end
 
         it 'should call to_xls with the right columns' do
-          columns = [:name, :serial_number, :status_text, :inspection_interval, :last_inspection_date, :inspection_type, :expiration_date, :assignee, :created_at, :created_by]
+          columns = [:name, :serial_number, :status_text, :inspection_interval, :last_inspection_date, :inspection_type, :expiration_date, :assignee, :created_by, :created_at]
           collection.received_params[0][:columns].should == columns
         end
 

@@ -23,7 +23,7 @@ module Export
         it 'should have the right equipment headers' do
           results = CsvPresenter.new(Equipment.all).present
 
-          results.split("\n")[0].should == 'Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created Date,Created By User'
+          results.split("\n")[0].should == 'Name,Serial Number,Status,Inspection Interval,Last Inspection Date,Inspection Type,Expiration Date,Assignee,Created By User,Created Date'
         end
 
         it 'should have the right data' do
@@ -41,8 +41,8 @@ module Export
           data_results[5].should == 'Inspectable'
           data_results[6].should == '12/20/2016'
           data_results[7].should == 'Unassigned'
-          data_results[8].should == "#{Date.current.strftime("%m/%d/%Y")}"
-          data_results[9].should == 'username'
+          data_results[8].should == 'username'
+          data_results[9].should == "#{Date.current.strftime("%m/%d/%Y")}"
         end
       end
 
