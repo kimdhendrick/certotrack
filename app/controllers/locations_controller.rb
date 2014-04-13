@@ -28,7 +28,7 @@ class LocationsController < ModelController
     @location = @location_service.create_location(current_user, _location_params_for_create)
 
     if @location.persisted?
-      redirect_to @location, notice: 'Location was successfully created.'
+      redirect_to @location, notice: _success_message(@location.name, 'created')
     else
       _set_customers
       render action: 'new'
@@ -43,7 +43,7 @@ class LocationsController < ModelController
     success = @location_service.update_location(current_user, @location, _location_params)
 
     if success
-      redirect_to @location, notice: 'Location was successfully updated.'
+      redirect_to @location, notice: _success_message(@location.name, 'updated')
     else
       _set_customers
       render action: 'edit'
@@ -57,13 +57,17 @@ class LocationsController < ModelController
     location_name = @location.name
 
     if @location_service.delete_location(@location)
-      redirect_to locations_path, notice: "Location #{location_name} was successfully deleted."
+      redirect_to locations_path, notice: _success_message(location_name, 'deleted')
     else
       render :show
     end
   end
 
   private
+
+  def _success_message(location_name, verb)
+    "Location '#{location_name}' was successfully #{verb}."
+  end
 
   def _set_customers
     @customers = CustomerListPresenter.new(@customer_service.get_all_customers(current_user)).sort

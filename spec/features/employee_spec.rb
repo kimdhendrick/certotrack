@@ -29,7 +29,7 @@ describe 'Employee', slow: true do
       click_on 'Create'
 
       page.should have_content 'Show Employee'
-      page.should have_content 'Employee was successfully created.'
+      page.should have_content "Employee Schmoe, Joe was successfully created."
 
       page.should have_content 'First Name Joe'
       page.should have_content 'Last Name Schmoe'
@@ -333,7 +333,7 @@ describe 'Employee', slow: true do
       click_on 'Update'
 
       page.should have_content 'Show Employee'
-      page.should have_content 'Employee was successfully updated.'
+      page.should have_content "Employee Sampson, Susie was successfully updated."
 
       page.should have_content 'Susie'
       page.should have_content 'Sampson'
@@ -378,7 +378,7 @@ describe 'Employee', slow: true do
       alert.accept
 
       page.should have_content 'All Employees'
-      page.should have_content 'Employee was successfully deleted.'
+      page.should have_content "Employee Walker, Sandee was successfully deleted."
     end
 
     it 'should not delete employee with equipment assigned' do

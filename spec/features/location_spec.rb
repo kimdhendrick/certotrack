@@ -54,7 +54,7 @@ describe 'Locations', slow: true do
       click_on 'Update'
 
       page.should have_content 'Show Location'
-      page.should have_content 'Location was successfully updated.'
+      page.should have_content "Location 'China' was successfully updated."
       page.should have_content 'China'
       page.should_not have_content 'Customer'
     end
@@ -79,7 +79,7 @@ describe 'Locations', slow: true do
       click_on 'Create'
 
       page.should have_content 'Show Location'
-      page.should have_content 'Location was successfully created'
+      page.should have_content "Location 'Siberia' was successfully created"
       page.should have_content 'Siberia'
       page.should_not have_content 'Customer'
     end
@@ -98,7 +98,7 @@ describe 'Locations', slow: true do
       alert.text.should eq('Are you sure you want to delete this location?')
       alert.accept
 
-      page.should have_content 'Location Alaska was successfully deleted'
+      page.should have_content "Location 'Alaska' was successfully deleted"
       page.should have_content 'All Location'
     end
 
@@ -206,7 +206,7 @@ describe 'Locations', slow: true do
       click_on 'Update'
 
       page.should have_content 'Show Location'
-      page.should have_content 'Location was successfully updated.'
+      page.should have_content "Location 'China' was successfully updated."
       page.should have_content 'China'
       page.should have_content 'Husky League'
     end
@@ -231,7 +231,7 @@ describe 'Locations', slow: true do
       click_on 'Create'
 
       page.should have_content 'Show Location'
-      page.should have_content 'Location was successfully created'
+      page.should have_content "Location 'Siberia' was successfully created"
       page.should have_content 'Siberia'
       page.should have_content 'Husky League'
     end
@@ -250,7 +250,7 @@ describe 'Locations', slow: true do
       alert.text.should eq('Are you sure you want to delete this location?')
       alert.accept
 
-      page.should have_content 'Location Florida was successfully deleted'
+      page.should have_content "Location 'Florida' was successfully deleted"
       page.should have_content 'All Locations'
     end
   end

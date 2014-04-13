@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Service Types', slow: true, js: true do
+describe 'Service Types', slow: true do
 
   let(:customer) { create(:customer) }
 
@@ -81,7 +81,7 @@ describe 'Service Types', slow: true, js: true do
     end
   end
 
-  context 'when an vehicle user' do
+  context 'when an vehicle user', js:true do
     before do
       create(:service_type, name: 'Oil change', expiration_type: ServiceType::EXPIRATION_TYPE_BY_MILEAGE, interval_mileage: 5000, customer: customer)
       pump_check = create(
@@ -252,7 +252,7 @@ describe 'Service Types', slow: true, js: true do
       click_on 'Create'
 
       page.should have_content 'Show Service Type'
-      page.should have_content 'Service Type was successfully created.'
+      page.should have_content "Service Type 'Happiness Check' was successfully created."
 
       page.should have_content 'Name Happiness Check'
       page.should have_content 'Expiration Type By Date and Mileage'
@@ -280,7 +280,7 @@ describe 'Service Types', slow: true, js: true do
       click_on 'Update'
 
       page.should have_content 'Show Service Type'
-      page.should have_content 'Service Type was successfully updated.'
+      page.should have_content "Service Type 'Cheery Check' was successfully updated."
 
       page.should have_content 'Cheery Check'
       page.should have_content '6 months'
@@ -308,10 +308,10 @@ describe 'Service Types', slow: true, js: true do
       alert.accept
 
       page.should have_content 'All Service Types'
-      page.should have_content 'Service Type was successfully deleted.'
+      page.should have_content "Service Type 'Manicure' was successfully deleted."
     end
 
-    it 'should not allow deletion if services exist' do
+    it 'should not allow deletion if services exist', js: true do
       service_type = create(:service_type, customer: customer, name: 'Manicure')
       create(:service, service_type: service_type, customer: service_type.customer)
 
@@ -521,7 +521,7 @@ describe 'Service Types', slow: true, js: true do
 
       find 'table.sortable'
 
-      page.all('table tr').count.should == 25 + 1
+      page.all('table tbody tr').count.should == 25
       within 'div.pagination' do
         page.should_not have_link 'Previous'
         page.should_not have_link '1'
@@ -532,7 +532,7 @@ describe 'Service Types', slow: true, js: true do
         click_link 'Next'
       end
 
-      page.all('table tr').count.should == 25 + 1
+      page.all('table tbody tr').count.should == 25
       within 'div.pagination' do
         page.should have_link 'Previous'
         page.should have_link '1'
@@ -543,7 +543,7 @@ describe 'Service Types', slow: true, js: true do
         click_link 'Next'
       end
 
-      page.all('table tr').count.should == 5 + 1
+      page.all('table tbody tr').count.should == 5
       within 'div.pagination' do
         page.should have_link 'Previous'
         page.should have_link '1'

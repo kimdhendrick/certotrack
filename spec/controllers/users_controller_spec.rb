@@ -174,13 +174,13 @@ describe UsersController do
         end
 
         it 'redirects to the created user' do
-          user = create(:user)
+          user = create(:user, first_name: 'Heather', last_name: 'Jones')
           controller.load_user_service(Faker.new(user))
 
-          post :create, {:user => {first_name: 'Heather', last_name: 'Jones'}}, {}
+          post :create, {:user => {username: 'new_username'}}, {}
 
           response.should redirect_to(customer_user_path(User.last))
-          flash[:notice].should == 'User was successfully created.'
+          flash[:notice].should == "User 'Jones, Heather' was successfully created."
         end
       end
 
@@ -295,12 +295,12 @@ describe UsersController do
 
         it 'redirects to the user' do
           controller.load_user_service(Faker.new(true))
-          user = create(:user)
+          user = create(:user, first_name: 'Heather', last_name: 'Jones')
 
           put :update, {:id => user.to_param, :user => user_attributes}, {}
 
           response.should redirect_to(customer_user_path(user))
-          flash[:notice].should == 'User was successfully updated.'
+          flash[:notice].should == "User 'Jones, Heather' was successfully updated."
         end
       end
 

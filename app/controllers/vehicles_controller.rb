@@ -29,7 +29,7 @@ class VehiclesController < ModelController
     @vehicle = @vehicle_service.create_vehicle(current_user, _vehicle_params_for_create)
 
     if @vehicle.persisted?
-      redirect_to @vehicle, notice: 'Vehicle was successfully created.'
+      redirect_to @vehicle, notice: _success_message(@vehicle.vehicle_number, 'created')
     else
       _set_locations
       render action: 'new'
@@ -53,7 +53,7 @@ class VehiclesController < ModelController
     success = @vehicle_service.update_vehicle(@vehicle, _vehicle_params)
 
     if success
-      redirect_to @vehicle, notice: "Vehicle number #{@vehicle.vehicle_number} was successfully updated."
+      redirect_to @vehicle, notice: _success_message(@vehicle.vehicle_number, 'updated')
     else
       _set_locations
       render action: 'edit'
@@ -62,8 +62,9 @@ class VehiclesController < ModelController
   
   def destroy
     vehicle_number = @vehicle.vehicle_number
+
     if @vehicle_service.delete_vehicle(@vehicle)
-      redirect_to vehicles_path, notice: "Vehicle number #{vehicle_number} was successfully deleted."
+      redirect_to vehicles_path, notice: _success_message(vehicle_number, 'deleted')
     else
       _set_services
       render :show
@@ -73,7 +74,7 @@ class VehiclesController < ModelController
   def search
     authorize! :read, :vehicle
 
-    @report_title = "Search Vehicles"
+    @report_title = 'Search Vehicles'
     vehicle_collection = @vehicle_service.search_vehicles(current_user, params)
     @vehicles = VehicleListPresenter.new(vehicle_collection).present(params)
     @vehicle_count = vehicle_collection.count
@@ -91,6 +92,10 @@ class VehiclesController < ModelController
   end
 
   private
+
+  def _success_message(vehicle_number, verb)
+    "Vehicle number '#{vehicle_number}' was successfully #{verb}."
+  end
 
   def _set_vehicle
     @vehicle = _get_model(Vehicle)

@@ -308,12 +308,12 @@ describe CustomersController do
 
         it 'redirects to the customer' do
           controller.load_customer_service(Faker.new(true))
-          customer = create(:customer)
+          customer = create(:customer, name: 'Mine')
 
           put :update, {:id => customer.to_param, :customer => customer_attributes}, {}
 
           response.should redirect_to(customer)
-          flash[:notice].should == 'Customer was successfully updated.'
+          flash[:notice].should == "Customer 'Mine' was successfully updated."
         end
       end
 

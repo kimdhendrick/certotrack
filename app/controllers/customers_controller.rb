@@ -17,7 +17,7 @@ class CustomersController < ModelController
     @customer = @customer_service.create_customer(_customer_params)
 
     if @customer.persisted?
-      redirect_to @customer, notice: "Customer '#{@customer.name}' was successfully created."
+      redirect_to @customer, notice: _success_message('created')
     else
       _set_states
       render action: 'new'
@@ -55,7 +55,7 @@ class CustomersController < ModelController
     success = @customer_service.update_customer(@customer, _customer_params)
 
     if success
-      redirect_to @customer, notice: 'Customer was successfully updated.'
+      redirect_to @customer, notice: _success_message('updated')
     else
       _set_states
       render action: 'edit'
@@ -63,6 +63,10 @@ class CustomersController < ModelController
   end
 
   private
+
+  def _success_message(verb)
+    "Customer '#{@customer.name}' was successfully #{verb}."
+  end
 
   def _render_collection_as_html(customer_collection)
     @customer_count = customer_collection.count

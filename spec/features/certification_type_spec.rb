@@ -16,7 +16,6 @@ describe 'Certification Type', slow: true do
       page.should have_content 'Create Certification Type'
       page.should have_link 'Home'
 
-      #Different from CToG, but more consistent, usable:
       page.should have_link 'Search Certification Types'
 
       page.should have_content 'Name'
@@ -30,7 +29,7 @@ describe 'Certification Type', slow: true do
       click_on 'Create'
 
       page.should have_content 'Show Certification Type'
-      page.should have_content 'Certification Type was successfully created.'
+      page.should have_content "Certification Type 'Periodic Inspection' was successfully created."
 
       page.should have_content 'Name Periodic Inspection'
       page.should have_content 'Required Units 32'
@@ -234,7 +233,7 @@ describe 'Certification Type', slow: true do
       click_on 'Update'
 
       page.should have_content 'Show Certification Type'
-      page.should have_content 'Certification Type was successfully updated.'
+      page.should have_content "Certification Type 'Emergency Responder' was successfully updated."
       page.should have_content 'Name Emergency Responder'
       page.should have_content 'Interval Annually'
       page.should have_content 'Required Units 13'
@@ -270,7 +269,7 @@ describe 'Certification Type', slow: true do
       alert.accept
 
       page.should have_content 'All Certification Type'
-      page.should have_content 'Certification Type was successfully deleted.'
+      page.should have_content "Certification Type 'CPR' was successfully deleted."
     end
 
     it 'should not allow deletion if certifications exist' do

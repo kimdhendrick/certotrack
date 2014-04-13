@@ -336,7 +336,7 @@ describe 'Users', slow: true do
       click_on 'Create'
 
       page.should have_content 'Show User'
-      page.should have_content 'User was successfully created.'
+      page.should have_content "User 'Sandy, Karen' was successfully created."
 
       page.should have_content 'Sandy, Karen'
       page.should have_content 'sandylynn'

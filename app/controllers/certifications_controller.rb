@@ -14,7 +14,7 @@ class CertificationsController < ModelController
   def index
     _render_certification_list(:all, 'All Employee Certifications')
   end
-  
+
   def expired
     _render_certification_list(:expired, 'Expired Certifications')
   end
@@ -53,14 +53,16 @@ class CertificationsController < ModelController
       params[:certification][:units_achieved]
     )
 
-    if !@certification.valid?
-      return _render_new
-    elsif _redirect_to_employee?
-      redirect_to @certification.employee, notice: _success_message(@certification)
+    return _render_new unless @certification.valid?
+
+    success_message = _success_message(@certification.certification_type, @certification.employee, 'created')
+
+    if _redirect_to_employee?
+      redirect_to @certification.employee, notice: success_message
     elsif _redirect_to_certification_type?
-      redirect_to @certification.certification_type, notice: _success_message(@certification)
+      redirect_to @certification.certification_type, notice: success_message
     else
-      return _render_new_with_message _success_message(@certification)
+      _render_new_with_message success_message
     end
   end
 
@@ -76,7 +78,8 @@ class CertificationsController < ModelController
     success = @certification_service.update_certification(@certification, _certification_params)
 
     if success
-      redirect_to @certification.certification_type, notice: 'Certification was successfully updated.'
+      redirect_to @certification.certification_type,
+                  notice: _success_message(@certification.certification_type, @certification.employee, 'updated')
     else
       _set_certification_types(current_user)
       render action: 'edit'
@@ -86,8 +89,10 @@ class CertificationsController < ModelController
   def destroy
     certification_type = @certification.certification_type
     employee = @certification.employee
+
     @certification_service.delete_certification(@certification)
-    redirect_to certification_type, notice: "Certification for #{employee.last_name}, #{employee.first_name} deleted."
+
+    redirect_to certification_type, notice: _success_message(certification_type, employee, 'deleted')
   end
 
   def certification_history
@@ -155,8 +160,8 @@ class CertificationsController < ModelController
     @employees = EmployeeListPresenter.new(employees).sort
   end
 
-  def _success_message(certification)
-    "Certification: #{certification.name} created for #{EmployeePresenter.new(certification.employee).name}."
+  def _success_message(certification_type, employee, verb)
+    "Certification '#{certification_type.name}' was successfully #{verb} for #{EmployeePresenter.new(employee).name}."
   end
 
   def _set_new_certification(current_user, employee_id, certification_type_id)

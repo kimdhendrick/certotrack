@@ -832,7 +832,7 @@ describe CertificationsController do
 
           post :create, params, {}
 
-          flash[:notice].should == "Certification: certType24 created for Barnes, Dutch."
+          flash[:notice].should == "Certification 'certType24' was successfully created for Barnes, Dutch."
         end
       end
 
@@ -908,7 +908,7 @@ describe CertificationsController do
 
           post :create, params, {}
 
-          flash[:notice].should == "Certification: certType24 created for Barnes, Dutch."
+          flash[:notice].should == "Certification 'certType24' was successfully created for Barnes, Dutch."
         end
       end
     end
@@ -1020,12 +1020,14 @@ describe CertificationsController do
 
         it 'redirects to the show certification type page' do
           controller.load_certification_service(Faker.new(true))
-          certification = create(:certification, customer: customer)
+          certification_type = create(:certification_type, name: 'CPR')
+          employee = create(:employee, first_name: 'John', last_name: 'Smith')
+          certification = create(:certification, certification_type: certification_type, employee: employee, customer: customer)
 
           put :update, {:id => certification.to_param, :certification => {'comments' => 'Test'}}, {}
 
           response.should redirect_to(certification.certification_type)
-          flash[:notice].should == 'Certification was successfully updated.'
+          flash[:notice].should == "Certification 'CPR' was successfully updated for Smith, John."
         end
       end
 
@@ -1181,12 +1183,13 @@ describe CertificationsController do
 
       it 'displays the success message' do
         employee = create(:employee, first_name: 'first', last_name: 'last')
-        certification = create(:certification, employee: employee, customer: customer)
+        certification_type = create(:certification_type, name: 'CPR')
+        certification = create(:certification, employee: employee, certification_type: certification_type, customer: customer)
         controller.load_certification_service(Faker.new)
 
         delete :destroy, {:id => certification.to_param}, {}
 
-        flash[:notice].should == "Certification for last, first deleted."
+        flash[:notice].should == "Certification 'CPR' was successfully deleted for last, first."
       end
     end
 

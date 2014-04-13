@@ -36,7 +36,7 @@ class ServiceTypesController < ModelController
     @service_type = @service_type_service.create_service_type(current_user.customer, _service_type_params_for_create)
 
     if @service_type.persisted?
-      redirect_to @service_type, notice: 'Service Type was successfully created.'
+      redirect_to @service_type, notice: _success_message(@service_type.name, 'created')
     else
       _assign_interval_dates
       _assign_interval_mileages
@@ -55,7 +55,7 @@ class ServiceTypesController < ModelController
     success = @service_type_service.update_service_type(@service_type, _service_type_params)
 
     if success
-      redirect_to @service_type, notice: 'Service Type was successfully updated.'
+      redirect_to @service_type, notice: _success_message(@service_type.name, 'updated')
     else
       _assign_interval_dates
       _assign_interval_mileages
@@ -65,8 +65,10 @@ class ServiceTypesController < ModelController
   end
 
   def destroy
+    service_type_name = @service_type.name
+
     if @service_type_service.delete_service_type(@service_type)
-      redirect_to service_types_path, notice: 'Service Type was successfully deleted.'
+      redirect_to service_types_path, notice: _success_message(service_type_name, 'deleted')
     else
       _set_non_serviced_vehicles
       _set_serviced_vehicles
@@ -75,6 +77,10 @@ class ServiceTypesController < ModelController
   end
 
   private
+
+  def _success_message(service_type_name, verb)
+    "Service Type '#{service_type_name}' was successfully #{verb}."
+  end
 
   def _set_serviced_vehicles
     service_list = @vehicle_servicing_service.get_all_services_for_service_type(@service_type)

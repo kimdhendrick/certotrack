@@ -105,7 +105,7 @@ describe 'Vehicles', slow: true do
       click_on 'Create'
 
       page.should have_content 'Show Vehicle'
-      page.should have_content 'Vehicle was successfully created'
+      page.should have_content "Vehicle number '3921-A' was successfully created"
       page.should have_content '3921-A'
       page.should have_content '98765432109876543'
       page.should have_content 'CTIsCool'
@@ -172,7 +172,7 @@ describe 'Vehicles', slow: true do
       click_on 'Update'
 
       page.should have_content 'Show Vehicle'
-      page.should have_content 'Vehicle number 3921-A was successfully updated.'
+      page.should have_content "Vehicle number '3921-A' was successfully updated."
       page.should have_content '3921-A'
 
       page.should have_content '3921-A'
@@ -200,7 +200,7 @@ describe 'Vehicles', slow: true do
         alert.text.should eq('Are you sure you want to delete this vehicle?')
         alert.accept
 
-        page.should have_content 'Vehicle number 987345 was successfully deleted'
+        page.should have_content "Vehicle number '987345' was successfully deleted."
         page.should have_content 'All Vehicles'
       end
 
@@ -424,7 +424,7 @@ describe 'Vehicles', slow: true do
       click_on 'Create'
 
       page.should have_content 'Show Vehicle'
-      page.should have_content 'Vehicle was successfully created'
+      page.should have_content "Vehicle number '3921-A' was successfully created."
       page.should have_content '3921-A'
       page.should have_content '98765432109876543'
       page.should have_content 'CTIsCool'

@@ -340,7 +340,7 @@ describe ServicesController do
 
           post :create, params, {}
 
-          flash[:notice].should == 'Service: certType24 created for Vehicle PLATE/DD123 2011 Dart.'
+          flash[:notice].should == "Service 'certType24' was successfully created for Vehicle 'PLATE/DD123 2011 Dart'."
         end
       end
 
@@ -407,7 +407,7 @@ describe ServicesController do
             vehicle_number: 'DD123'
           )
 
-          service_type = create(:service_type, name: 'certType24')
+          service_type = create(:service_type, name: 'Oil Change')
           service = create(:service, vehicle: vehicle, service_type: service_type, customer: vehicle.customer)
 
           controller.load_vehicle_servicing_service(Faker.new(service))
@@ -423,7 +423,7 @@ describe ServicesController do
 
           post :create, params, {}
 
-          flash[:notice].should == "Service: certType24 created for Vehicle PLATE/DD123 2011 Dart."
+          flash[:notice].should == "Service 'Oil Change' was successfully created for Vehicle 'PLATE/DD123 2011 Dart'."
         end
       end
     end
@@ -579,12 +579,20 @@ describe ServicesController do
 
         it 'redirects to the show service type page' do
           controller.load_vehicle_servicing_service(Faker.new(true))
-          service = create(:service, customer: customer)
+          service_type = create(:service_type, name: 'AAA Truck Inspection')
+          vehicle = create(
+            :vehicle,
+            license_plate: 'PLATE',
+            year: 2011,
+            vehicle_model: 'Dart',
+            vehicle_number: 'DD123'
+          )
+          service = create(:service, service_type: service_type, vehicle: vehicle, customer: customer)
 
           put :update, {:id => service.to_param, :service => {'comments' => 'Test'}}, {}
 
           response.should redirect_to(service.service_type)
-          flash[:notice].should == 'Service was successfully updated.'
+          flash[:notice].should == "Service 'AAA Truck Inspection' was successfully updated for Vehicle 'PLATE/DD123 2011 Dart'."
         end
       end
 
@@ -703,7 +711,7 @@ describe ServicesController do
 
         delete :destroy, {:id => service.to_param}, {}
 
-        flash[:notice].should == 'Service AAA Truck Inspection for Vehicle ABC-123/JB3 2010 Wrangler deleted.'
+        flash[:notice].should == "Service 'AAA Truck Inspection' was successfully deleted for Vehicle 'ABC-123/JB3 2010 Wrangler'."
       end
     end
 

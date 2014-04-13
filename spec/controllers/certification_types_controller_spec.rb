@@ -3,7 +3,7 @@ require 'spec_helper'
 describe CertificationTypesController do
 
   let(:customer) { create(:customer) }
-  let(:fake_certification_type_service_persisted) { Faker.new(create(:certification_type)) }
+  let(:fake_certification_type_service_persisted) { Faker.new(create(:certification_type, name: 'CPR')) }
   let(:fake_certification_type_service_non_persisted) { Faker.new(CertificationType.new) }
 
   describe 'GET #new' do
@@ -71,6 +71,7 @@ describe CertificationTypesController do
           post :create, {:certification_type => certification_type_attributes}, {}
 
           response.should redirect_to(CertificationType.last)
+          flash[:notice].should == "Certification Type 'CPR' was successfully created."
         end
 
         it 'sets the current user as the creator' do
@@ -379,11 +380,12 @@ describe CertificationTypesController do
 
         it 'redirects to the certification_type' do
           controller.load_certification_type_service(fake_certification_type_service_non_persisted)
-          certification_type = create(:certification_type, customer: customer)
+          certification_type = create(:certification_type, name: 'CPR', customer: customer)
 
           put :update, {:id => certification_type.to_param, :certification_type => certification_type_attributes}, {}
 
           response.should redirect_to(certification_type)
+          flash[:notice].should == "Certification Type 'CPR' was successfully updated."
         end
       end
 
@@ -469,25 +471,24 @@ describe CertificationTypesController do
       end
 
       context 'when destroy call succeeds' do
-        let(:certification_type) { create(:certification_type, customer: customer) }
+        let(:certification_type) { create(:certification_type, name: 'CPR', customer: customer) }
         let(:fake_certification_type_service) { Faker.new(true) }
 
-        it 'calls certification_type_service' do
+        before do
           controller.load_certification_type_service(fake_certification_type_service)
-          certification_type = create(:certification_type, customer: customer)
+        end
 
+        it 'calls certification_type_service' do
           delete :destroy, {:id => certification_type.to_param}, {}
 
           fake_certification_type_service.received_message.should == :delete_certification_type
         end
 
         it 'redirects to the certification_type list' do
-          controller.load_certification_type_service(fake_certification_type_service)
-          certification_type = create(:certification_type, customer: customer)
-
           delete :destroy, {:id => certification_type.to_param}, {}
 
           response.should redirect_to(certification_types_path)
+          flash[:notice].should == "Certification Type 'CPR' was successfully deleted."
         end
       end
 

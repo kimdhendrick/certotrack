@@ -38,7 +38,7 @@ class UsersController < ModelController
     @user = @user_service.create_user(_user_params)
 
     if @user.persisted?
-      redirect_to customer_user_path(@user), notice: 'User was successfully created.'
+      redirect_to customer_user_path(@user), notice: _success_message(@user, 'created')
     else
       render action: 'new'
     end
@@ -52,7 +52,7 @@ class UsersController < ModelController
     success = @user_service.update_user(@user, _user_params)
 
     if success
-      redirect_to customer_user_path(@user), notice: 'User was successfully updated.'
+      redirect_to customer_user_path(@user), notice: _success_message(@user, 'updated')
     else
       _set_customers
       render action: 'edit'
@@ -70,6 +70,10 @@ class UsersController < ModelController
   end
 
   private
+
+  def _success_message(user, verb)
+    "User '#{UserPresenter.new(user).name}' was successfully #{verb}."
+  end
 
   def _render_collection_as_html(user_collection)
     @user_count = user_collection.count

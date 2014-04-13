@@ -4,7 +4,14 @@ describe 'Recertify Employee', slow: true do
 
   let(:customer) { create(:customer) }
   let(:certification_period) { create(:units_based_certification_period) }
-  let(:certification) { create(:units_based_certification, customer: customer, active_certification_period: certification_period, last_certification_date: Date.new(1999, 1, 1)) }
+  let(:certification) do
+    certification_type = create(:certification_type, name: 'Scrum Master')
+    create(:units_based_certification,
+           customer: customer,
+           certification_type: certification_type,
+           active_certification_period: certification_period,
+           last_certification_date: Date.new(1999, 1, 1))
+  end
   subject { page }
 
   before do
@@ -98,7 +105,7 @@ describe 'Recertify Employee', slow: true do
         end
 
         it 'should display success message' do
-          subject.should have_content 'Smith, John recertified for Certification: Scrum Master'
+          subject.should have_content "Smith, John was successfully recertified for Certification 'Scrum Master'"
         end
 
         it 'should recertify employee' do

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe ServiceTypesController do
   let(:customer) { build(:customer) }
   let(:service_type) { build(:service_type) }
-  let(:fake_service_type_service) { Faker.new(create(:service_type)) }
+  let(:fake_service_type_service) { Faker.new(create(:service_type, name: 'Routine Inspection')) }
   let(:fake_service_type_service_non_persisted) { Faker.new(build(:service_type)) }
 
   describe 'GET #index' do
@@ -341,6 +341,7 @@ describe ServiceTypesController do
           post :create, {:service_type => service_type_attributes}, {}
 
           response.should redirect_to(ServiceType.last)
+          flash[:notice].should == "Service Type 'Routine Inspection' was successfully created."
         end
 
         it 'sets the current_user as the creator' do
@@ -534,11 +535,12 @@ describe ServiceTypesController do
 
         it 'redirects to the service_type' do
           controller.load_service_type_service(fake_service_type_service)
-          service_type = create(:service_type, customer: customer)
+          service_type = create(:service_type, name: 'Routine Inspection', customer: customer)
 
           put :update, {:id => service_type.to_param, :service_type => service_type_attributes}, {}
 
           response.should redirect_to(service_type)
+          flash[:notice].should == "Service Type 'Routine Inspection' was successfully updated."
         end
       end
 
@@ -647,11 +649,12 @@ describe ServiceTypesController do
 
       it 'redirects to the service_type list' do
         controller.load_service_type_service(fake_service_type_service)
-        service_type = create(:service_type, customer: customer)
+        service_type = create(:service_type, name: 'Routine Inspection', customer: customer)
 
         delete :destroy, {:id => service_type.to_param}, {}
 
         response.should redirect_to(service_types_path)
+        flash[:notice].should == "Service Type 'Routine Inspection' was successfully deleted."
       end
 
       context 'when destroy call fails' do

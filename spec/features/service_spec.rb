@@ -226,7 +226,7 @@ describe 'Services', slow: true do
       click_on 'Update'
 
       page.should have_content 'Show Service Type'
-      page.should have_content 'Service was successfully updated.'
+      page.should have_content "Service 'Oil Change' was successfully updated for Vehicle 'ABC-123/JB3 2010 Wrangler'."
       page.should have_content 'Oil Change'
 
       within '[data-serviced-vehicles] table tbody tr:nth-of-type(1)' do
@@ -234,7 +234,6 @@ describe 'Services', slow: true do
         page.should have_content 'ABC-123'
         page.should have_link 'Edit'
       end
-
     end
 
     it 'should alert on future dates', js: true do
@@ -263,7 +262,7 @@ describe 'Services', slow: true do
       alert.accept
 
       page.should have_content 'Create Service'
-      page.should have_content 'Service: Oil Change created for Vehicle ABC-123/JB3 2010 Wrangler.'
+      page.should have_content "Service 'Oil Change' was successfully created for Vehicle 'ABC-123/JB3 2010 Wrangler'."
     end
 
     it 'should give error if already certified' do
@@ -355,7 +354,7 @@ describe 'Services', slow: true do
       click_on 'Create'
 
       page.should have_content 'Show Vehicle'
-      page.should have_content 'Service: Oil Change created for Vehicle 123/JB3 2010 Wrangler.'
+      page.should have_content "Service 'Oil Change' was successfully created for Vehicle '123/JB3 2010 Wrangler'."
 
       page.should have_content 'Jeep'
       page.should have_content 'Wrangler'
@@ -416,7 +415,7 @@ describe 'Services', slow: true do
       click_on 'Save and Create Another'
 
       page.should have_content 'Create Service'
-      page.should have_content 'Service: Oil Change created for Vehicle 123/JB3 2010 Wrangler.'
+      page.should have_content "Service 'Oil Change' was successfully created for Vehicle '123/JB3 2010 Wrangler'."
 
       page.should have_content 'Vehicle'
       page.should have_link '123/JB3 2010 Wrangler'
@@ -435,7 +434,7 @@ describe 'Services', slow: true do
       click_on 'Create'
 
       page.should have_content 'Show Vehicle'
-      page.should have_content 'Service: Level III Truck Service created for Vehicle 123/JB3 2010 Wrangler.'
+      page.should have_content "Service 'Level III Truck Service' was successfully created for Vehicle '123/JB3 2010 Wrangler'."
     end
   end
 
@@ -508,7 +507,7 @@ describe 'Services', slow: true do
       click_on 'Create'
 
       page.should have_content 'Show Service Type'
-      page.should have_content 'Service: Oil Change created for Vehicle ABC-123/JB3 2010 Wrangler.'
+      page.should have_content "Service 'Oil Change' was successfully created for Vehicle 'ABC-123/JB3 2010 Wrangler'."
     end
 
     it 'should service vehicle and be ready to create another' do
@@ -527,7 +526,7 @@ describe 'Services', slow: true do
       click_on 'Save and Create Another'
 
       page.should have_content 'Create Service'
-      page.should have_content 'Service: Oil Change created for Vehicle ABC-123/JB3 2010 Wrangler.'
+      page.should have_content "Service 'Oil Change' was successfully created for Vehicle 'ABC-123/JB3 2010 Wrangler'."
 
       page.should have_content 'Vehicle'
       page.should have_link 'ABC-123/JB3 2010 Wrangler'
@@ -548,7 +547,7 @@ describe 'Services', slow: true do
       click_on 'Create'
 
       page.should have_content 'Show Service Type'
-      page.should have_content 'Service: AAA Truck Inspection created for Vehicle ABC-123/JB3 2010 Wrangler.'
+      page.should have_content "Service 'AAA Truck Inspection' was successfully created for Vehicle 'ABC-123/JB3 2010 Wrangler'."
     end
   end
 
@@ -596,7 +595,7 @@ describe 'Services', slow: true do
       alert.accept
 
       page.should have_content 'Show Service Type'
-      page.should have_content 'Service AAA Truck Inspection for Vehicle ABC-123/JB3 2010 Wrangler deleted'
+      page.should have_content "Service 'AAA Truck Inspection' was successfully deleted for Vehicle 'ABC-123/JB3 2010 Wrangler'."
     end
 
     it 'should delete existing service from edit page', js: true do
@@ -619,7 +618,7 @@ describe 'Services', slow: true do
       alert.accept
 
       page.should have_content 'Show Service Type'
-      page.should have_content 'Service AAA Truck Inspection for Vehicle ABC-123/JB3 2010 Wrangler deleted'
+      page.should have_content "Service 'AAA Truck Inspection' was successfully deleted for Vehicle 'ABC-123/JB3 2010 Wrangler'."
     end
   end
 

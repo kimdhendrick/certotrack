@@ -17,7 +17,7 @@ class RecertificationsController < ModelController
     success = @certification_service.recertify(@certification, certification_period_params)                                  
 
     if success
-      redirect_to @certification, notice: _success_message(@certification)
+      redirect_to @certification, notice: _success_message
     else
       render action: :new
     end
@@ -33,7 +33,7 @@ class RecertificationsController < ModelController
     @certification = _get_model(Certification, :certification_id)
   end
 
-  def _success_message(certification)
-    "#{EmployeePresenter.new(certification.employee).name} recertified for Certification: #{certification.name}."
+  def _success_message
+    "#{EmployeePresenter.new(@certification.employee).name} was successfully recertified for Certification '#{@certification.name}'."
   end
 end

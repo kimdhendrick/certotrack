@@ -178,13 +178,13 @@ describe LocationsController do
         end
 
         it 'redirects to the created location' do
-          location = create(:location)
+          location = create(:location, name: 'Hawaii')
           controller.load_location_service(Faker.new(location))
 
           post :create, {:location => {name: 'Hawaii'}}, {}
 
           response.should redirect_to(Location.last)
-          flash[:notice].should == 'Location was successfully created.'
+          flash[:notice].should == "Location 'Hawaii' was successfully created."
         end
 
         it 'sets the current_user as the creator' do
@@ -421,12 +421,12 @@ describe LocationsController do
 
         it 'redirects to the location' do
           controller.load_location_service(Faker.new(true))
-          location = create(:location, customer: customer)
+          location = create(:location, name: 'Georgia', customer: customer)
 
           put :update, {:id => location.to_param, :location => {'name' => 'Georgia'}}, {}
 
           response.should redirect_to(location)
-          flash[:notice].should == 'Location was successfully updated.'
+          flash[:notice].should == "Location 'Georgia' was successfully updated."
         end
       end
 
@@ -547,7 +547,7 @@ describe LocationsController do
           delete :destroy, {:id => location.to_param}, {}
 
           response.should redirect_to(locations_path)
-          flash[:notice].should == 'Location Outside was successfully deleted.'
+          flash[:notice].should == "Location 'Outside' was successfully deleted."
         end
       end
 

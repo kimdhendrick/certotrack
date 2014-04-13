@@ -185,13 +185,13 @@ describe VehiclesController do
         end
 
         it 'redirects to the created vehicle' do
-          vehicle = create(:vehicle)
+          vehicle = create(:vehicle, vehicle_number: 'vehicle_number')
           controller.load_vehicle_service(Faker.new(vehicle))
 
           post :create, {:vehicle => {vin: '98765432109876543'}}, {}
 
           response.should redirect_to(Vehicle.last)
-          flash[:notice].should == 'Vehicle was successfully created.'
+          flash[:notice].should == "Vehicle number 'vehicle_number' was successfully created."
         end
 
         it 'sets the current_user as the creator' do
@@ -444,12 +444,12 @@ describe VehiclesController do
 
         it 'redirects to the vehicle' do
           controller.load_vehicle_service(Faker.new(true))
-          vehicle = create(:vehicle, customer: customer)
+          vehicle = create(:vehicle, vehicle_number: 'vehicle_number', customer: customer)
 
           put :update, {:id => vehicle.to_param, :vehicle => {'vehicle_number' => '123'}}, {}
 
           response.should redirect_to(vehicle)
-          flash[:notice].should == "Vehicle number #{vehicle.vehicle_number} was successfully updated."
+          flash[:notice].should == "Vehicle number 'vehicle_number' was successfully updated."
         end
       end
 
@@ -549,6 +549,27 @@ describe VehiclesController do
         fake_vehicle_service.received_params[0].should == vehicle
       end
 
+      context 'when destroy call succeeds' do
+        before do
+          vehicle = create(:vehicle, customer: customer)
+          vehicle_service = double('vehicle_service')
+          vehicle_service.stub(:delete_vehicle).and_return(true)
+          controller.load_vehicle_service(vehicle_service)
+
+          delete :destroy, {id: vehicle.to_param}, {}
+        end
+
+        it 'redirects to the vehicle list' do
+          vehicle = create(:vehicle, vehicle_number: 'blah123', customer: customer)
+          controller.load_vehicle_service(Faker.new(true))
+
+          delete :destroy, {:id => vehicle.to_param}, {}
+
+          response.should redirect_to(vehicles_path)
+          flash[:notice].should == "Vehicle number 'blah123' was successfully deleted."
+        end
+      end
+
       context 'when destroy call fails' do
         before do
           vehicle = create(:vehicle, customer: customer)
@@ -560,22 +581,12 @@ describe VehiclesController do
         end
 
         it 'should render show page' do
-          response.should render_template("show")
+          response.should render_template('show')
         end
 
-        it 'should assign @services' do
+        it 'should assign services' do
           expect(assigns(:services)).to eq([])
         end
-      end
-
-      it 'redirects to the vehicle list' do
-        vehicle = create(:vehicle, vehicle_number: 'blah123', customer: customer)
-        controller.load_vehicle_service(Faker.new(true))
-
-        delete :destroy, {:id => vehicle.to_param}, {}
-
-        response.should redirect_to(vehicles_path)
-        flash[:notice].should == 'Vehicle number blah123 was successfully deleted.'
       end
     end
 

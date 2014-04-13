@@ -568,13 +568,13 @@ describe EquipmentController do
         end
 
         it 'redirects to the created equipment' do
-          equipment = create(:equipment)
+          equipment = create(:equipment, name: 'Box')
           controller.load_equipment_service(Faker.new(equipment))
 
           post :create, {:equipment => equipment_attributes}, {}
 
           response.should redirect_to(Equipment.last)
-          flash[:notice].should == 'Equipment was successfully created.'
+          flash[:notice].should == "Equipment 'Box' was successfully created."
         end
 
         it 'sets the current_user as the creator' do
@@ -690,12 +690,12 @@ describe EquipmentController do
 
         it 'redirects to the equipment' do
           controller.load_equipment_service(Faker.new(true))
-          equipment = create(:equipment, customer: customer)
+          equipment = create(:equipment, name: 'Box', customer: customer)
 
           put :update, {:id => equipment.to_param, :equipment => equipment_attributes}, {}
 
           response.should redirect_to(equipment)
-          flash[:notice].should == 'Equipment was successfully updated.'
+          flash[:notice].should == "Equipment 'Box' was successfully updated."
         end
       end
 
@@ -797,13 +797,13 @@ describe EquipmentController do
       end
 
       it 'redirects to the equipment list' do
-        equipment = create(:equipment, customer: customer)
+        equipment = create(:equipment, name: 'Box', customer: customer)
         controller.load_equipment_service(Faker.new(true))
 
         delete :destroy, {:id => equipment.to_param}, {}
 
         response.should redirect_to(equipment_index_url)
-        flash[:notice].should == 'Equipment was successfully deleted.'
+        flash[:notice].should == "Equipment 'Box' was successfully deleted."
       end
     end
 

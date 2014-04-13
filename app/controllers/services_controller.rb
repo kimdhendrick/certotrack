@@ -1,5 +1,6 @@
 class ServicesController < ModelController
   include ControllerHelper
+  include ServicesHelper
 
   before_filter :load_vehicle_servicing_service,
                 :load_service_type_service,
@@ -52,14 +53,16 @@ class ServicesController < ModelController
       params[:service][:comments]
     )
 
-    if !@service.valid?
-      return _render_new
-    elsif _redirect_to_vehicle?
-      redirect_to @service.vehicle, notice: _success_message(@service)
+    return _render_new unless @service.valid?
+
+    success_message = _success_message(@service.name, @service.vehicle, 'created')
+
+    if _redirect_to_vehicle?
+      redirect_to @service.vehicle, notice: success_message
     elsif _redirect_to_service_type?
-      redirect_to @service.service_type, notice: _success_message(@service)
+      redirect_to @service.service_type, notice: success_message
     else
-      return _render_new_with_message _success_message(@service)
+      _render_new_with_message success_message
     end
   end
 
@@ -75,7 +78,7 @@ class ServicesController < ModelController
     success = @vehicle_servicing_service.update_service(@service, _service_params)
 
     if success
-      redirect_to @service.service_type, notice: 'Service was successfully updated.'
+      redirect_to @service.service_type, notice: _success_message(@service.name, @service.vehicle, 'updated')
     else
       _set_service_types(current_user)
       render action: 'edit'
@@ -85,8 +88,9 @@ class ServicesController < ModelController
   def destroy
     service_type = @service.service_type
     vehicle = @service.vehicle
+
     @vehicle_servicing_service.delete_service(@service)
-    redirect_to service_type, notice: "Service #{service_type.name} for Vehicle #{VehiclePresenter.new(vehicle).name} deleted."
+    redirect_to service_type, notice: _success_message(service_type.name, vehicle, 'deleted')
   end
 
   def service_history
@@ -102,13 +106,6 @@ class ServicesController < ModelController
   end
 
   def _service_params
-    service_accessible_parameters = [
-      :service_type_id,
-      :last_service_date,
-      :last_service_mileage,
-      :comments
-    ]
-
     params.require(:service).permit(service_accessible_parameters)
   end
 
@@ -126,8 +123,8 @@ class ServicesController < ModelController
     @vehicles = VehicleListPresenter.new(vehicles).sort
   end
 
-  def _success_message(service)
-    "Service: #{service.name} created for Vehicle #{VehiclePresenter.new(service.vehicle).name}."
+  def _success_message(service_name, vehicle, verb)
+    "Service '#{service_name}' was successfully #{verb} for Vehicle '#{VehiclePresenter.new(vehicle).name}'."
   end
 
   def _set_new_service(current_user, vehicle_id, service_type_id)

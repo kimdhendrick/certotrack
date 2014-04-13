@@ -81,7 +81,7 @@ describe EmployeesController do
           post :create, {:employee => employee_attributes}, {}
 
           response.should redirect_to(Employee.last)
-          flash[:notice].should == 'Employee was successfully created.'
+          flash[:notice].should == "Employee Smith, John was successfully created."
         end
 
         it 'sets the current_user as the creator' do
@@ -475,7 +475,7 @@ describe EmployeesController do
           put :update, {:id => employee.to_param, :employee => employee_attributes}, {}
 
           response.should redirect_to(employee)
-          flash[:notice].should == 'Employee was successfully updated.'
+          flash[:notice].should == 'Employee Smith, John was successfully updated.'
         end
       end
 
@@ -582,7 +582,7 @@ describe EmployeesController do
           delete :destroy, {:id => employee.to_param}, {}
 
           response.should redirect_to(employees_url)
-          flash[:notice].should == 'Employee was successfully deleted.'
+          flash[:notice].should == 'Employee Smith, John was successfully deleted.'
         end
       end
 

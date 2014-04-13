@@ -93,7 +93,7 @@ describe 'Certifications', slow: true do
       alert.accept
 
       page.should have_content 'Create Certification'
-      page.should have_content 'Certification: Inspections created for Brown, Joe.'
+      page.should have_content "Certification 'Inspections' was successfully created for Brown, Joe."
     end
 
     it 'should give error if already certified' do
@@ -350,7 +350,7 @@ describe 'Certifications', slow: true do
       click_on 'Create'
 
       page.should have_content 'Show Employee'
-      page.should have_content 'Certification: CPR created for Brown, Joe.'
+      page.should have_content "Certification 'CPR' was successfully created for Brown, Joe."
 
       page.should have_content 'Joe'
       page.should have_content 'Brown'
@@ -385,7 +385,7 @@ describe 'Certifications', slow: true do
       click_on 'Create'
 
       page.should have_content 'Show Employee'
-      page.should have_content 'Certification: Level III Truck Inspection created for Brown, Joe.'
+      page.should have_content "Certification 'Level III Truck Inspection' was successfully created for Brown, Joe."
       page.should have_content '15 of 30'
     end
 
@@ -421,7 +421,7 @@ describe 'Certifications', slow: true do
       click_on 'Save and Create Another'
 
       page.should have_content 'Create Certification'
-      page.should have_content 'Certification: CPR created for Brown, Joe.'
+      page.should have_content "Certification 'CPR' was successfully created for Brown, Joe."
 
       page.should have_content 'Employee'
       page.should have_link 'Joe Brown'
@@ -442,7 +442,7 @@ describe 'Certifications', slow: true do
       click_on 'Create'
 
       page.should have_content 'Show Employee'
-      page.should have_content 'Certification: Level III Truck Inspection created for Brown, Joe.'
+      page.should have_content "Certification 'Level III Truck Inspection' was successfully created for Brown, Joe."
     end
   end
 
@@ -523,7 +523,7 @@ describe 'Certifications', slow: true do
       click_on 'Create'
 
       page.should have_content 'Show Certification Type'
-      page.should have_content 'Certification: Inspections created for Brown, Joe.'
+      page.should have_content "Certification 'Inspections' was successfully created for Brown, Joe."
 
       page.should have_content 'Joe'
       page.should have_content 'Brown'
@@ -561,7 +561,7 @@ describe 'Certifications', slow: true do
       click_on 'Create'
 
       page.should have_content 'Show Certification Type'
-      page.should have_content 'Certification: Level III Truck Inspection created for Brown, Joe.'
+      page.should have_content "Certification 'Level III Truck Inspection' was successfully created for Brown, Joe."
       page.should have_content '15 of 30'
     end
 
@@ -596,7 +596,7 @@ describe 'Certifications', slow: true do
       click_on 'Save and Create Another'
 
       page.should have_content 'Create Certification'
-      page.should have_content 'Certification: Inspections created for Brown, Joe.'
+      page.should have_content "Certification 'Inspections' was successfully created for Brown, Joe."
 
       page.should have_content 'Employee'
       page.should have_content 'Certification Type'
@@ -616,7 +616,7 @@ describe 'Certifications', slow: true do
       click_on 'Create'
 
       page.should have_content 'Show Certification Type'
-      page.should have_content 'Certification: Level III Truck Inspection created for Brown, Joe.'
+      page.should have_content "Certification 'Level III Truck Inspection' was successfully created for Brown, Joe."
     end
   end
 
@@ -687,7 +687,7 @@ describe 'Certifications', slow: true do
       click_on 'Create'
 
       page.should have_content 'Show Certification Type'
-      page.should have_content 'Certification: CPR created for Brown, Joe.'
+      page.should have_content "Certification 'CPR' was successfully created for Brown, Joe."
     end
 
     it 'should certify employee and be ready to create another' do
@@ -707,7 +707,7 @@ describe 'Certifications', slow: true do
       click_on 'Save and Create Another'
 
       page.should have_content 'Create Certification'
-      page.should have_content 'Certification: CPR created for Brown, Joe.'
+      page.should have_content "Certification 'CPR' was successfully created for Brown, Joe."
 
       page.should have_content 'Employee'
       page.should have_link 'Joe Brown'
@@ -728,7 +728,7 @@ describe 'Certifications', slow: true do
       click_on 'Create'
 
       page.should have_content 'Show Certification Type'
-      page.should have_content 'Certification: AAA Truck Inspection created for Brown, Joe.'
+      page.should have_content "Certification 'AAA Truck Inspection' was successfully created for Brown, Joe."
     end
   end
 
@@ -824,7 +824,7 @@ describe 'Certifications', slow: true do
       click_on 'Update'
 
       page.should have_content 'Show Certification Type'
-      page.should have_content 'Certification was successfully updated.'
+      page.should have_content "Certification 'Level III Truck Inspection' was successfully updated for Brown, Joe."
       page.should have_content 'Level III Truck Inspection'
 
       within '[data-certified] table tbody tr:nth-of-type(1)' do
@@ -904,7 +904,7 @@ describe 'Certifications', slow: true do
       alert.accept
 
       page.should have_content 'Show Certification Type'
-      page.should have_content 'Certification for Brown, Joe deleted'
+      page.should have_content "Certification 'CPR' was successfully deleted for Brown, Joe."
     end
 
     it 'should delete existing certification from edit page', js: true do
@@ -927,7 +927,7 @@ describe 'Certifications', slow: true do
       alert.accept
 
       page.should have_content 'Show Certification Type'
-      page.should have_content 'Certification for Brown, Joe deleted'
+      page.should have_content "Certification 'CPR' was successfully deleted for Brown, Joe."
     end
   end
 
