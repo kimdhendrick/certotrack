@@ -1,0 +1,27 @@
+The following pieces of equipment are expired:
+
+<table>
+  <tr>
+    <th align="left">Equipment</th>
+    <th align="left">Serial Number</th>
+    <th align="left">Assignee</th>
+    <th align="left">Expiration Date</th>
+  </tr>
+
+  <% @equipment.each do |equipment| %>
+    <tr>
+      <td><%= equipment.name %></td></td>
+      <td><%= equipment.serial_number %></td>
+      <td><%= equipment.assignee %></td>
+      <td><%= equipment.expiration_date %></td>
+    </tr>
+  <% end %>
+</table>
+<br/>
+
+From the folks at CertoTrack
+
+<br/>
+
+Visit us at: <a href="www.certotrack.com">www.certotrack.com</a>
+

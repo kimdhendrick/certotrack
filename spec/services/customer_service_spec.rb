@@ -209,4 +209,13 @@ describe CustomerService do
       my_user.roles.should == ['vehicle']
     end
   end
+
+  describe 'get_customers' do
+    let!(:one_customer) { create(:customer, name: 'A Customer') }
+    let!(:another_customer) { create(:customer, name: 'Another Customer') }
+
+    it 'should return all customers' do
+      CustomerService.new.get_customers.should =~ [one_customer, another_customer]
+    end
+  end
 end

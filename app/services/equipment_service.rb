@@ -15,6 +15,10 @@ class EquipmentService
     _get_equipment_for_user(current_user).select { |e| e.expired? }
   end
 
+  def get_expired_equipment_for_customer(customer)
+    customer.equipments.select { |e| e.expired? }
+  end
+
   def get_expiring_equipment(current_user)
     _get_equipment_for_user(current_user).select { |e| e.expiring? }
   end

@@ -14,4 +14,8 @@ class CustomerService
     customer.users.each { |user| user.roles = customer.roles }
     customer.save
   end
+
+  def get_customers
+    Customer.all
+  end
 end
