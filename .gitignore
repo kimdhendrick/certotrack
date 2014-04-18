@@ -22,3 +22,5 @@
 
 # Ignore secret key in devise
 config/initializers/devise_secret.rb
+
+config/initializers/setup_mail.rb
