@@ -1,0 +1,27 @@
+The following certifications are <%=@message%>:
+
+<table>
+  <tr>
+    <th align="left">Certification Type</th>
+    <th align="left">Employee</th>
+    <th align="left">Location</th>
+    <th align="left">Expiration Date</th>
+  </tr>
+
+  <% @certifications.each do |certification| %>
+    <tr>
+      <td><%= certification.name %></td></td>
+      <td><%= certification.employee_name %></td>
+      <td><%= certification.location %></td>
+      <td><%= certification.expiration_date %></td>
+    </tr>
+  <% end %>
+</table>
+<br/>
+
+From the folks at CertoTrack
+
+<br/>
+
+Visit us at: <a href="www.certotrack.com">www.certotrack.com</a>
+

@@ -51,6 +51,14 @@ class CertificationService
     get_all_certifications(current_user).select { |e| e.expiring? }
   end
 
+  def get_expired_certifications_for_customer(customer)
+    customer.certifications.select { |e| e.expired? }
+  end
+
+  def get_expiring_certifications_for_customer(customer)
+    customer.certifications.select { |e| e.expiring? }
+  end
+
   def get_units_based_certifications(current_user)
     get_all_certifications(current_user).select { |e| e.units_based? }
   end

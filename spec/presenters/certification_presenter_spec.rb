@@ -9,7 +9,7 @@ describe CertificationPresenter do
   end
 
   it 'should respond true to units_based?' do
-    certification = create(:units_based_certification, customer: create(:customer))
+    certification = create(:units_based_certification)
     CertificationPresenter.new(certification).units_based?.should be_true
   end
 
@@ -19,47 +19,27 @@ describe CertificationPresenter do
   end
 
   it 'should respond to interval' do
-    certification_type = create(
-      :certification_type,
-      customer: create(:customer),
-      interval: Interval::THREE_MONTHS.text
-    )
-    certification = create(
-      :certification,
-      certification_type: certification_type,
-      customer: certification_type.customer
-    )
+    certification_type = create(:certification_type, interval: Interval::THREE_MONTHS.text)
+    certification = create(:certification, certification_type: certification_type)
 
     CertificationPresenter.new(certification).interval.should == '3 months'
   end
 
   it 'should respond to trainer' do
-    certification = create(
-      :certification,
-      customer: create(:customer),
-      trainer: 'Trainer'
-    )
+    certification = create(:certification, trainer: 'Trainer')
 
     CertificationPresenter.new(certification).trainer.should == 'Trainer'
   end
 
   it 'should respond to status' do
-    certification = create(
-      :certification,
-      customer: create(:customer),
-      expiration_date: Date.new(2012, 4, 2)
-    )
+    certification = create(:certification, expiration_date: Date.new(2012, 4, 2))
 
     CertificationPresenter.new(certification).status.should == certification.status
     CertificationPresenter.new(certification).status.text.should == 'Expired'
   end
 
   it 'should respond to comments' do
-    certification = create(
-      :certification,
-      customer: create(:customer),
-      comments: 'Hello!'
-    )
+    certification = create(:certification, comments: 'Hello!')
 
     CertificationPresenter.new(certification).comments.should == 'Hello!'
   end
@@ -67,9 +47,7 @@ describe CertificationPresenter do
   it 'should respond to sort_key' do
     certification = create(
       :certification,
-      customer: create(:customer),
-      certification_type: create(:certification_type, name: 'Cert type 123'),
-      comments: 'Hello!'
+      certification_type: create(:certification_type, name: 'Cert type 123')
     )
 
     CertificationPresenter.new(certification).sort_key.should == 'Cert type 123'
@@ -78,7 +56,6 @@ describe CertificationPresenter do
   it 'should respond to last_certification_date' do
     certification = create(
       :certification,
-      customer: create(:customer),
       last_certification_date: Date.new(2013, 5, 12)
     )
 
@@ -88,7 +65,6 @@ describe CertificationPresenter do
   it 'should respond to expiration_date' do
     certification = create(
       :certification,
-      customer: create(:customer),
       expiration_date: Date.new(2012, 6, 20)
     )
 
@@ -98,7 +74,6 @@ describe CertificationPresenter do
   it 'should respond to last_certification_date_sort_key' do
     certification = create(
       :certification,
-      customer: create(:customer),
       last_certification_date: Date.new(2013, 5, 12)
     )
 
@@ -108,7 +83,6 @@ describe CertificationPresenter do
   it 'should respond to expiration_date_sort_key' do
     certification = create(
       :certification,
-      customer: create(:customer),
       expiration_date: Date.new(2012, 6, 20)
     )
 
@@ -118,33 +92,29 @@ describe CertificationPresenter do
   it 'should respond to location' do
     location = create(:location)
     employee = create(:employee, location: location)
-    certification = create(
-      :certification,
-      customer: create(:customer),
-      employee: employee
-    )
+    certification = create(:certification, employee: employee)
 
     CertificationPresenter.new(certification).location.should == location
   end
 
+  it 'should respond to location_name' do
+    location = create(:location, name: 'Golden')
+    employee = create(:employee, location: location)
+    certification = create(:certification, employee: employee)
+
+    CertificationPresenter.new(certification).location_name.should == 'Golden'
+  end
+
   it 'should respond to employee_name' do
     employee = create(:employee, first_name: 'First', last_name: 'Last')
-    certification = create(
-      :certification,
-      customer: create(:customer),
-      employee: employee
-    )
+    certification = create(:certification, employee: employee)
 
     CertificationPresenter.new(certification).employee_name.should == 'Last, First'
   end
 
   it 'should respond to certification_type' do
     certification_type = create(:certification_type, name: 'CertType')
-    certification = create(
-      :certification,
-      customer: create(:customer),
-      certification_type: certification_type
-    )
+    certification = create(:certification, certification_type: certification_type)
 
     CertificationPresenter.new(certification).certification_type.should == 'CertType'
   end
@@ -165,7 +135,6 @@ describe CertificationPresenter do
     employee = create(:employee)
     certification = create(
       :certification,
-      customer: create(:customer),
       employee: employee,
       expiration_date: Date.new(2012, 6, 20)
     )

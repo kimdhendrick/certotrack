@@ -164,16 +164,16 @@ describe CertificationService do
     let!(:certification_two_valid) { create(:certification, expiration_date: Date.tomorrow) }
 
     context 'an admin user' do
-      it 'should return count that includes all expired certifications' do
+      it 'should return all expired certifications' do
         admin_user = create(:user, admin: true)
 
         CertificationService.new.get_expired_certifications(admin_user).should =~
-            [certification_one_expired, certification_two_expired]
+          [certification_one_expired, certification_two_expired]
       end
     end
 
     context 'a regular user' do
-      it "should return count that includes only that user's expired certifications" do
+      it "should return only that user's expired certifications" do
         user = create(:user, customer: my_customer)
 
         CertificationService.new.get_expired_certifications(user).should == [certification_one_expired]
@@ -189,20 +189,44 @@ describe CertificationService do
     let!(:certification_two_expired) { create(:certification, expiration_date: Date.today) }
 
     context 'an admin user' do
-      it 'should return count that includes all expiring certifications' do
+      it 'should return all expiring certifications' do
         admin_user = create(:user, admin: true)
 
         CertificationService.new.get_expiring_certifications(admin_user).should =~
-            [certification_one_expiring, certification_two_expiring]
+          [certification_one_expiring, certification_two_expiring]
       end
     end
 
     context 'a regular user' do
-      it "should return count that includes only that user's expiring certifications" do
+      it "should return only that user's expiring certifications" do
         user = create(:user, customer: my_customer)
 
         CertificationService.new.get_expiring_certifications(user).should == [certification_one_expiring]
       end
+    end
+  end
+
+  describe '#get_expired_certifications_for_customer' do
+    let(:my_customer) { create(:customer) }
+    let!(:certification_one_expired) { create(:certification, customer: my_customer, expiration_date: Date.yesterday) }
+    let!(:certification_one_valid) { create(:certification, customer: my_customer, expiration_date: Date.tomorrow) }
+    let!(:certification_two_expired) { create(:certification, expiration_date: Date.yesterday) }
+    let!(:certification_two_valid) { create(:certification, expiration_date: Date.tomorrow) }
+
+    it "should return only that customer's expired certifications" do
+      CertificationService.new.get_expired_certifications_for_customer(my_customer).should == [certification_one_expired]
+    end
+  end
+
+  describe '#get_expiring_certifications_for_customer' do
+    let(:my_customer) { create(:customer) }
+    let!(:certification_one_expiring) { create(:certification, customer: my_customer, expiration_date: Date.tomorrow) }
+    let!(:certification_one_expired) { create(:certification, customer: my_customer, expiration_date: Date.today) }
+    let!(:certification_two_expiring) { create(:certification, expiration_date: Date.tomorrow) }
+    let!(:certification_two_expired) { create(:certification, expiration_date: Date.today) }
+
+    it "should return only that customer's expiring certifications" do
+      CertificationService.new.get_expiring_certifications_for_customer(my_customer).should == [certification_one_expiring]
     end
   end
 
@@ -220,7 +244,7 @@ describe CertificationService do
         admin_user = create(:user, admin: true)
 
         CertificationService.new.get_units_based_certifications(admin_user).should =~
-            [@units_based_certification_for_my_customer, @units_based_certification_for_other_customer]
+          [@units_based_certification_for_my_customer, @units_based_certification_for_other_customer]
       end
     end
 
@@ -248,7 +272,7 @@ describe CertificationService do
         admin_user = create(:user, admin: true)
 
         CertificationService.new.get_recertification_required_certifications(admin_user).should =~
-            [@recertify_certification_for_my_customer, @recertify_certification_for_other_customer]
+          [@recertify_certification_for_my_customer, @recertify_certification_for_other_customer]
       end
     end
 
@@ -289,13 +313,13 @@ describe CertificationService do
       certification_service = CertificationService.new(certification_factory: fake_certification_factory)
 
       certification = certification_service.certify(
-          create(:user),
-          employee.id,
-          certification_type.id,
-          '12/31/2000',
-          'Joe Bob',
-          'Great class!',
-          '15'
+        create(:user),
+        employee.id,
+        certification_type.id,
+        '12/31/2000',
+        'Joe Bob',
+        'Great class!',
+        '15'
       )
 
       fake_certification_factory.received_message.should == :new_instance
@@ -316,13 +340,13 @@ describe CertificationService do
       certification_service = CertificationService.new(certification_factory: fake_certification_factory)
 
       certification = certification_service.certify(
-          create(:user),
-          employee.id,
-          certification_type.id,
-          '999',
-          'Joe Bob',
-          'Great class!',
-          nil
+        create(:user),
+        employee.id,
+        certification_type.id,
+        '999',
+        'Joe Bob',
+        'Great class!',
+        nil
       )
 
       certification.should_not be_valid
@@ -344,12 +368,12 @@ describe CertificationService do
 
       certification = create(:certification)
       attributes = {
-          'employee_id' => employee.id,
-          'certification_type_id' => certification_type.id,
-          'last_certification_date' => '03/05/2013',
-          'trainer' => 'Trainer',
-          'comments' => 'Comments',
-          'units_achieved' => '12'
+        'employee_id' => employee.id,
+        'certification_type_id' => certification_type.id,
+        'last_certification_date' => '03/05/2013',
+        'trainer' => 'Trainer',
+        'comments' => 'Comments',
+        'units_achieved' => '12'
       }
 
       success = CertificationService.new.update_certification(certification, attributes)
