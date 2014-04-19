@@ -85,31 +85,6 @@ Answer 'yes' when prompted. Copy & paste command to ignore rvm warnings.
 
     rake db:reset
 
-## Heroku cheatsheet
-
-### Rails Console
-    heroku run rails console
-
-### Recreate database
-    heroku pg:reset DATABASE
-
-### Migrate database
-    heroku run rake db:migrate
-
-### Reseed database
-    heroku run rake db:seed
-
-### Restart heroku
-    heroku restart
-
-### Setting config values on heroku
-
-    https://devcenter.heroku.com/articles/config-vars
-    heroku config:set GITHUB_USERNAME=joesmith
-    heroku config
-    heroku config:get GITHUB_USERNAME
-    heroku config:unset GITHUB_USERNAME
-
 # Development
 
 ## Builds
