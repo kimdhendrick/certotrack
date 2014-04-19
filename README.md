@@ -1,7 +1,7 @@
 Certotrack
 ==========
 
-Welcome to CT on Rails! 
+Welcome to CT on Rails!
 
 # Getting Started
 
@@ -17,7 +17,7 @@ Welcome to CT on Rails!
     rvm gemset create certotrack
 
 ### Use certotrack Gemset
-    
+
     rvm gemset use certotrack
 
 ### Create .rvmrc file in /certotrack
@@ -36,7 +36,7 @@ Answer 'yes' when prompted. Copy & paste command to ignore rvm warnings.
 
 ## Setup Devise
 
-### CERTOTRACK_SECRET_KEY 
+### CERTOTRACK_SECRET_KEY
 
     export CERTOTRACK_SECRET_KEY=blahblahblah
 
@@ -85,22 +85,30 @@ Answer 'yes' when prompted. Copy & paste command to ignore rvm warnings.
 
     rake db:reset
 
-# Heroku cheatsheet
+## Heroku cheatsheet
 
-## Rails Console
+### Rails Console
     heroku run rails console
 
-## Recreate database
+### Recreate database
     heroku pg:reset DATABASE
 
-## Migrate database
+### Migrate database
     heroku run rake db:migrate
 
-## Reseed database
+### Reseed database
     heroku run rake db:seed
 
-## Restart heroku
+### Restart heroku
     heroku restart
+
+### Setting config values on heroku
+
+    https://devcenter.heroku.com/articles/config-vars
+    heroku config:set GITHUB_USERNAME=joesmith
+    heroku config
+    heroku config:get GITHUB_USERNAME
+    heroku config:unset GITHUB_USERNAME
 
 # Development
 
