@@ -1,9 +1,9 @@
 module Notification
   class NotificationMailer < ActionMailer::Base
-    def expired_equipment(equipment, recipients)
+    def expired_equipment(frequency, equipment, recipients)
       _with_emails(recipients).each do |recipient|
         @equipment = EquipmentListPresenter.new(equipment).sort
-        mail(to: recipient.email, subject: _subject('Daily'), from: _sender)
+        mail(to: recipient.email, subject: _subject(frequency), from: _sender)
       end
     end
 
@@ -14,7 +14,7 @@ module Notification
     end
 
     def _subject(type)
-      "#{type} Expired Equipment Alert"
+      "#{type.to_s.capitalize} Expired Equipment Alert"
     end
 
     def _sender

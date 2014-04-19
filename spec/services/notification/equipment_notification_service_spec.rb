@@ -25,11 +25,18 @@ module Notification
       equipment_notification_service.send_expired_notifications(:daily)
     end
 
-    it 'should get recipients' do
+    it 'should get daily recipients' do
       recipient_service.should_receive(:get_recipients_for_customer_and_frequency).with(customer, :daily)
 
       equipment_notification_service = EquipmentNotificationService.new(params.merge(customer_service: customer_service_with_customer))
       equipment_notification_service.send_expired_notifications(:daily)
+    end
+
+    it 'should get weekly recipients' do
+      recipient_service.should_receive(:get_recipients_for_customer_and_frequency).with(customer, :weekly)
+
+      equipment_notification_service = EquipmentNotificationService.new(params.merge(customer_service: customer_service_with_customer))
+      equipment_notification_service.send_expired_notifications(:weekly)
     end
 
     it 'should get expired equipment' do
@@ -58,7 +65,7 @@ module Notification
       recipient_service = double(get_recipients_for_customer_and_frequency: recipients)
 
       mailable.should_receive(:deliver)
-      NotificationMailer.should_receive(:expired_equipment).with(expired_equipment, recipients).and_return(mailable)
+      NotificationMailer.should_receive(:expired_equipment).with(:daily, expired_equipment, recipients).and_return(mailable)
 
       equipment_notification_service = EquipmentNotificationService.new(
         customer_service: customer_service_with_customer,

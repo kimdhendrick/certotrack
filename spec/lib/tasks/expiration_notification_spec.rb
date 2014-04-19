@@ -10,13 +10,25 @@ describe 'notifications' do
     task.reenable
   end
 
-  describe 'notification:equipment:expired' do
-    let(:task) { Rake::Task['notification:equipment:expired'] }
+  describe 'notification:equipment:daily:expired' do
+    let(:task) { Rake::Task['notification:equipment:daily:expired'] }
 
-    it 'should send expired equipment notifications' do
+    it 'should send daily expired equipment notifications' do
       equipment_notification_service = double('EquipmentNotificationService')
       Notification::EquipmentNotificationService.stub(:new).and_return(equipment_notification_service)
       equipment_notification_service.should_receive(:send_expired_notifications).with(:daily)
+
+      task.invoke
+    end
+  end
+
+  describe 'notification:equipment:weekly:expired' do
+    let(:task) { Rake::Task['notification:equipment:weekly:expired'] }
+
+    it 'should send weekly expired equipment notifications' do
+      equipment_notification_service = double('EquipmentNotificationService')
+      Notification::EquipmentNotificationService.stub(:new).and_return(equipment_notification_service)
+      equipment_notification_service.should_receive(:send_expired_notifications).with(:weekly)
 
       task.invoke
     end

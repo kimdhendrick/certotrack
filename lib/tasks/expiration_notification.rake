@@ -1,25 +1,27 @@
 namespace :notification do
   namespace :equipment do
-    desc 'Sends notifications for expired equipment'
-    task :expired => :environment do
-      Notification::EquipmentNotificationService.new.send_expired_notifications(:daily)
+    namespace :daily do
+      desc 'Sends daily notifications for expired equipment'
+      task :expired => :environment do
+        Notification::EquipmentNotificationService.new.send_expired_notifications(:daily)
+      end
+
+      desc 'Sends daily notifications for expiring equipment'
+      task :expiring => :environment do
+        puts 'to do'
+      end
     end
 
-    desc 'Sends notifications for expiring equipment'
-    task :expiring => :environment do
-      puts 'to do'
-    end
-  end
+    namespace :weekly do
+      desc 'Sends weekly notifications for expired equipment'
+      task :expired => :environment do
+        Notification::EquipmentNotificationService.new.send_expired_notifications(:weekly)
+      end
 
-  namespace :certifications do
-    desc 'Sends notifications for expired certifications'
-    task :expired => :environment do
-      puts 'to do'
-    end
-
-    desc 'Sends notifications for expiring certifications'
-    task :expiring => :environment do
-      puts 'to do'
+      desc 'Sends weekly notifications for expiring equipment'
+      task :expiring => :environment do
+        puts 'to do'
+      end
     end
   end
 end

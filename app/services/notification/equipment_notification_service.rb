@@ -13,7 +13,7 @@ module Notification
         equipment = equipment_service.get_expired_equipment_for_customer(customer)
 
         if equipment.present?
-          notification_mailer.expired_equipment(equipment, recipients).deliver
+          notification_mailer.expired_equipment(frequency, equipment, recipients).deliver
         end
       end
     end
