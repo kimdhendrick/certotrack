@@ -94,6 +94,21 @@ describe EquipmentService do
     end
   end
 
+  describe 'get_expiring_equipment_for_customer' do
+    let!(:my_expiring_equipment) { create(:expiring_equipment, customer: my_customer) }
+    let!(:other_expiring_equipment) { create(:expiring_equipment) }
+    let!(:my_valid_equipment) { create(:valid_equipment, customer: my_customer) }
+    let!(:other_valid_equipment) { create(:valid_equipment) }
+    let!(:my_expiring_equipment) { create(:expiring_equipment, customer: my_customer) }
+    let!(:other_expiring_equipment) { create(:expiring_equipment) }
+
+    context 'a regular user' do
+      it "should return only that user's expiring equipment" do
+        EquipmentService.new.get_expiring_equipment_for_customer(my_customer).should == [my_expiring_equipment]
+      end
+    end
+  end
+
   describe 'get_expiring_equipment' do
     let!(:my_expiring_equipment) { create(:expiring_equipment, customer: my_customer) }
     let!(:other_expiring_equipment) { create(:expiring_equipment) }

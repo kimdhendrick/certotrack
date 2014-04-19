@@ -8,7 +8,7 @@ namespace :notification do
 
       desc 'Sends daily notifications for expiring equipment'
       task :expiring => :environment do
-        puts 'to do'
+        Notification::EquipmentNotificationService.new.send_expiring_notifications(:daily)
       end
     end
 
@@ -20,7 +20,7 @@ namespace :notification do
 
       desc 'Sends weekly notifications for expiring equipment'
       task :expiring => :environment do
-        puts 'to do'
+        Notification::EquipmentNotificationService.new.send_expiring_notifications(:weekly)
       end
     end
   end
