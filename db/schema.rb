@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140419230447) do
+ActiveRecord::Schema.define(version: 20140420200348) do
 
   create_table "certification_periods", force: true do |t|
     t.string   "trainer"
@@ -159,6 +159,8 @@ ActiveRecord::Schema.define(version: 20140419230447) do
     t.integer  "customer_id"
     t.boolean  "admin",                            default: false
     t.string   "expiration_notification_interval", default: "Never"
+    t.datetime "password_last_changed"
+    t.boolean  "password_expired",                 default: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

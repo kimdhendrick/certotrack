@@ -28,6 +28,8 @@ class User < ActiveRecord::Base
                 allow_nil: false
               }
 
+  before_create :_set_password_last_changed
+
   scope :with_role, ->(role) { where(UserRoleHelper::role_where_clause(role)) }
 
   def role?(role)
@@ -91,6 +93,10 @@ class User < ActiveRecord::Base
   end
 
   private
+
+  def _set_password_last_changed
+    self.password_last_changed = DateTime.now
+  end
 
   def _valid_password
     return if username.nil? || password.nil?
