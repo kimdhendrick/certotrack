@@ -1,21 +1,16 @@
 class User < ActiveRecord::Base
   include EmailFormatHelper
-  VALID_PASSWORD_REGEX = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,99}/
 
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable
 
   belongs_to :customer
+  has_many :password_histories, dependent: :destroy
 
   validates_presence_of :first_name,
                         :last_name,
                         :customer
 
-  validates :password,
-            format: {
-              with: VALID_PASSWORD_REGEX,
-              message: 'must be at least 8 characters long and must contain at least one digit and combination of upper and lower case'
-            },
-            on: :create
+  validate :_valid_password
   validates_confirmation_of :password, on: :create
 
   validates :email,
@@ -93,5 +88,32 @@ class User < ActiveRecord::Base
 
   def sort_key
     last_name + first_name
+  end
+
+  private
+
+  def _valid_password
+    return if username.nil? || password.nil?
+
+    if _invalid_password_format?(password)
+      errors.add(:password, 'must be at least 8 characters long and must contain at least one digit and combination of upper and lower case')
+    elsif password.downcase == username.downcase
+      errors.add(:password, 'must not be same as username')
+    elsif _password_used_recently?
+      errors.add(:password, 'must not have been used recently')
+    end
+  end
+
+  def _password_used_recently?
+    password_histories.any? do |historical_password|
+      bcrypt = ::BCrypt::Password.new(historical_password.encrypted_password)
+      current_encrypted_password = ::BCrypt::Engine.hash_secret("#{password}#{self.class.pepper}", bcrypt.salt)
+      current_encrypted_password == historical_password.encrypted_password
+    end
+  end
+
+  def _invalid_password_format?(password)
+    valid_password_format = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,99}/
+    valid_password_format.match(password).nil?
   end
 end
