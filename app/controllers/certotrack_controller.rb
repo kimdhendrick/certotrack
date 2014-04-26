@@ -32,5 +32,6 @@ class CertotrackController < ApplicationController
     end
 
     @first_name = current_user.first_name
+    @customer_name = current_user.customer.name
   end
 end

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe CertotrackController do
 
-  let(:customer) { create(:customer) }
+  let(:customer) { create(:customer, name: 'My Customer') }
 
   describe 'GET home' do
     context 'a user' do
@@ -12,6 +12,14 @@ describe CertotrackController do
         get :home
 
         assigns(:first_name).should == 'First'
+      end
+
+      it 'assigns customer_name' do
+        sign_in stub_equipment_user(customer)
+
+        get :home
+
+        assigns(:customer_name).should == 'My Customer'
       end
     end
 
