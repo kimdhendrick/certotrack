@@ -67,3 +67,17 @@ https://devcenter.heroku.com/articles/config-vars
     heroku config
     heroku config:get GITHUB_USERNAME
     heroku config:unset GITHUB_USERNAME
+
+### PG Backup
+
+#### List backups
+    heroku pgbackups
+
+#### Create backup
+    heroku pgbackups:capture
+
+#### Download backup
+    heroku pgbackups:url
+
+#### View documentation
+    heroku addons:docs pgbackups
