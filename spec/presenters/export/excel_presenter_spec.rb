@@ -102,12 +102,12 @@ module Export
         end
 
         it 'should call to_xls with the right headers' do
-          headers = 'Username,First Name,Last Name,Email Address,Notification Interval,Customer,Created Date'.split(',')
+          headers = 'Username,First Name,Last Name,Email Address,Password Last Changed,Notification Interval,Customer,Created Date'.split(',')
           collection.received_params[0][:headers].should == headers
         end
 
         it 'should call to_xls with the right columns' do
-          columns = [:username, :first_name, :last_name, :email, :expiration_notification_interval, :customer_name, :created_at]
+          columns = [:username, :first_name, :last_name, :email, :password_last_changed, :expiration_notification_interval, :customer_name, :created_at]
           collection.received_params[0][:columns].should == columns
         end
 

@@ -305,7 +305,7 @@ module Export
           header_row = table_header_and_data[0]
 
           header_row.should ==
-            ['Username', 'First Name', 'Last Name', 'Email Address', 'Notification Interval', 'Customer', 'Created Date']
+            ['Username', 'First Name', 'Last Name', 'Email Address', 'Password Last Changed', 'Notification Interval', 'Customer', 'Created Date']
         end
 
         it 'should render the proper data' do
@@ -319,6 +319,7 @@ module Export
               last_name: 'Smith',
               email: 'jsmith@example.com',
               customer: create(:customer, name: 'My Customer'),
+              password_changed_at: Date.new(2010, 1, 1),
               expiration_notification_interval: 'Never'
             )
           ]
@@ -330,7 +331,7 @@ module Export
           table_header_and_data = table_params[0]
           table_data = table_header_and_data[1]
           table_data.should ==
-            ['username123', 'Joe', 'Smith', 'jsmith@example.com', 'Never', 'My Customer', "#{Date.current.strftime('%m/%d/%Y')}"]
+            ['username123', 'Joe', 'Smith', 'jsmith@example.com', '01/01/2010', 'Never', 'My Customer', "#{Date.current.strftime('%m/%d/%Y')}"]
         end
       end
     end

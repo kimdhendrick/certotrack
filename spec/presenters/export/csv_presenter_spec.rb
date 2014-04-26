@@ -164,6 +164,7 @@ module Export
             last_name: 'Smith',
             email: 'jsmith@example.com',
             customer: create(:customer, name: 'My Customer'),
+            password_changed_at: Date.new(2010, 1, 1),
             expiration_notification_interval: 'Never'
           )
         end
@@ -171,7 +172,7 @@ module Export
         it 'should have the right headers' do
           results = CsvPresenter.new(User.all).present
 
-          results.split("\n")[0].should == 'Username,First Name,Last Name,Email Address,Notification Interval,Customer,Created Date'
+          results.split("\n")[0].should == 'Username,First Name,Last Name,Email Address,Password Last Changed,Notification Interval,Customer,Created Date'
         end
 
         it 'should have the right data' do
@@ -182,7 +183,7 @@ module Export
           data_results = results.split("\n")[1].split(',')
 
           data_results.should ==
-            ['username123', 'Joe', 'Smith', 'jsmith@example.com', 'Never', 'My Customer', "#{Date.current.strftime('%m/%d/%Y')}"]
+            ['username123', 'Joe', 'Smith', 'jsmith@example.com', '01/01/2010', 'Never', 'My Customer', "#{Date.current.strftime('%m/%d/%Y')}"]
         end
       end
     end

@@ -21,6 +21,7 @@ describe UserPresenter do
       email: 'bob@smith.com',
       expiration_notification_interval: 'Daily',
       customer: customer,
+      password_changed_at: Date.new(2010, 1, 1),
       roles: customer.roles
     )
   end
@@ -84,7 +85,7 @@ describe UserPresenter do
   end
 
   it 'should respond to created_at' do
-    user = UserPresenter.new(create(:customer, created_at: Date.new(2010, 1, 1)))
+    user = UserPresenter.new(create(:user, created_at: Date.new(2010, 1, 1)))
     user.created_at.should == '01/01/2010'
   end
 
@@ -102,5 +103,9 @@ describe UserPresenter do
       subject = UserPresenter.new(user, view)
       subject.delete_link.should =~ /<a.*>Delete<\/a>/
     end
+  end
+
+  it 'should respond to password_changed_at' do
+    UserPresenter.new(user).password_changed_at.should == '01/01/2010'
   end
 end

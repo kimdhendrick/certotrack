@@ -101,9 +101,9 @@ describe 'Users', slow: true do
         click_on 'Export to CSV'
 
         page.response_headers['Content-Type'].should include 'text/csv'
-        header_row = 'Username,First Name,Last Name,Email Address,Notification Interval,Customer,Created Date'
+        header_row = 'Username,First Name,Last Name,Email Address,Password Last Changed,Notification Interval,Customer,Created Date'
         page.text.should ==
-          "#{header_row} admin,Adam,Admin,adam@admin.com,Never,My Customer,#{Date.current.strftime("%m/%d/%Y")} judyjones,Judith,Jones,judy@jones.com,Never,Jefferson County,#{Date.current.strftime("%m/%d/%Y")} charliesmith,Charles,Smith,charlie@smith.com,Never,Denver,#{Date.current.strftime("%m/%d/%Y")}"
+          "#{header_row} admin,Adam,Admin,adam@admin.com,#{Date.current.strftime("%m/%d/%Y")},Never,My Customer,#{Date.current.strftime("%m/%d/%Y")} judyjones,Judith,Jones,judy@jones.com,#{Date.current.strftime("%m/%d/%Y")},Never,Jefferson County,#{Date.current.strftime("%m/%d/%Y")} charliesmith,Charles,Smith,charlie@smith.com,#{Date.current.strftime("%m/%d/%Y")},Never,Denver,#{Date.current.strftime("%m/%d/%Y")}"
       end
 
       it 'should export all users list to PDF' do

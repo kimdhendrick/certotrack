@@ -49,6 +49,10 @@ class UserPresenter
     DateHelpers::date_to_string(model.created_at)
   end
 
+  def password_changed_at
+    DateHelpers::date_to_string(model.password_changed_at)
+  end
+
   def edit_link
     @template.link_to 'Edit', @template.edit_customer_user_path(model)
   end
