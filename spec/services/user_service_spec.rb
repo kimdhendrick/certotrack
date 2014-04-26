@@ -129,101 +129,16 @@ describe UserService do
         user.certification_access?.should be_true
         user.vehicle_access?.should be_false
       end
-
-      context 'updating password' do
-        it 'should update password' do
-          user = create(
-            :user,
-            password: 'MyOldPassword123',
-            password_confirmation: 'MyOldPassword123'
-          )
-
-          attributes =
-            {
-              'id' => user.id,
-              'password' => 'MyNewPassword123'
-            }
-
-          UserService.new.update_user(user, attributes)
-
-          user.reload
-          user.password.should == 'MyNewPassword123'
-        end
-
-        it 'should add to the password histories' do
-          user = create(
-           :user,
-            password: 'MyOldPassword123',
-            password_confirmation: 'MyOldPassword123'
-          )
-
-          attributes =
-            {
-              'id' => user.id,
-              'password' => 'MyNewPassword123'
-            }
-
-          user.password_histories.count.should == 0
-
-          UserService.new.update_user(user, attributes)
-
-          user.reload
-          user.password_histories.count.should == 1
-        end
-
-        it 'should purge password histories > 5' do
-          too_many_password_histories = []
-          10.times do |i|
-            too_many_password_histories <<
-              PasswordHistory.new(
-                created_at: Time.now + i.seconds,
-                encrypted_password: User.new(password: 'blah').encrypted_password
-              )
-          end
-          oldest = too_many_password_histories[0]
-          newest = too_many_password_histories[9]
-
-          oldest.created_at.should < newest.created_at
-
-          user = create(
-            :user,
-            password: 'MyOldPassword123',
-            password_confirmation: 'MyOldPassword123',
-            password_histories: too_many_password_histories
-          )
-
-          attributes =
-            {
-              'id' => user.id,
-              'password' => 'MyNewPassword123'
-            }
-
-          user.password_histories.count.should == 10
-          PasswordHistory.count.should == 10
-
-          UserService.new.update_user(user, attributes)
-
-          user.reload
-          user.password_histories.count.should == 5
-          user.password_histories.should include(newest)
-          PasswordHistory.count.should == 5
-        end
-      end
     end
   end
 
   describe '#delete_user' do
     it 'destroys the requested user' do
       user = create(:user)
-      user.password_histories << PasswordHistory.create
-
-      PasswordHistory.count.should == 1
 
       expect {
         UserService.new.delete_user(user)
       }.to change(User, :count).by(-1)
-
-      PasswordHistory.count.should == 0
     end
   end
 end

@@ -11,7 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140419230447) do
+ActiveRecord::Schema.define(version: 20140322144548) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "certification_periods", force: true do |t|
     t.string   "trainer"
@@ -98,13 +101,6 @@ ActiveRecord::Schema.define(version: 20140419230447) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "created_by"
-  end
-
-  create_table "password_histories", force: true do |t|
-    t.integer  "user_id"
-    t.string   "encrypted_password"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "service_periods", force: true do |t|

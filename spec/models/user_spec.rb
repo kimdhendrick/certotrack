@@ -14,7 +14,6 @@ describe User do
   it { should respond_to(:password) }
   it { should respond_to(:password_confirmation) }
   it { should belong_to(:customer) }
-  it { should have_many(:password_histories) }
 
   describe 'associations' do
     it 'should respond to certification_types' do
@@ -151,27 +150,7 @@ describe User do
     it { should_not be_valid }
   end
 
-  describe 'when password matches username' do
-    before do
-      user.username = 'Password123'
-      user.password = 'Password123'
-      user.password_confirmation = 'Password123'
-    end
-    it { should_not be_valid }
-  end
-
-  describe 'when password was used recently' do
-    before do
-      user.password = 'Password123'
-      user.password_confirmation = 'Password123'
-      user.password_histories =
-        [PasswordHistory.new(encrypted_password: user.encrypted_password)]
-    end
-    it { should_not be_valid }
-
-  end
-
-  describe 'when password is perfect' do
+  describe 'when password is complex enough' do
     before do
       user.password = 'Passwor1'
       user.password_confirmation = 'Passwor1'
