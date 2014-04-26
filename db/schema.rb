@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140322144548) do
+ActiveRecord::Schema.define(version: 20140426152218) do
 
   create_table "certification_periods", force: true do |t|
     t.string   "trainer"
@@ -100,6 +100,16 @@ ActiveRecord::Schema.define(version: 20140322144548) do
     t.string   "created_by"
   end
 
+  create_table "old_passwords", force: true do |t|
+    t.string   "encrypted_password",       null: false
+    t.string   "password_salt"
+    t.string   "password_archivable_type", null: false
+    t.integer  "password_archivable_id",   null: false
+    t.datetime "created_at"
+  end
+
+  add_index "old_passwords", ["password_archivable_type", "password_archivable_id"], name: "index_password_archivable", using: :btree
+
   create_table "service_periods", force: true do |t|
     t.datetime "start_date"
     t.datetime "end_date"
@@ -152,9 +162,11 @@ ActiveRecord::Schema.define(version: 20140322144548) do
     t.integer  "customer_id"
     t.boolean  "admin",                            default: false
     t.string   "expiration_notification_interval", default: "Never"
+    t.datetime "password_changed_at"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["password_changed_at"], name: "index_users_on_password_changed_at", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 

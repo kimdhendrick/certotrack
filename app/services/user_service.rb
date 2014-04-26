@@ -11,6 +11,7 @@ class UserService
   end
 
   def update_user(user, attributes)
+    attributes.delete('password') unless attributes['password'].present?
     user.update(attributes)
     user.roles = user.customer.roles
     user.save

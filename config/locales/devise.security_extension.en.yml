@@ -1,0 +1,10 @@
+en:
+  errors:
+    messages:
+      taken_in_past: 'may not be one used recently.'
+      equal_to_current_password: 'may not be the same as current password.'
+      password_format: 'must be at least 8 characters long and must contain at least one digit and combination of upper and lower case.'
+  devise:
+    password_expired:
+      updated: 'Password has been updated.'
+      change_required: "Your password is expired. Please change your password now."

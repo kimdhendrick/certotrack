@@ -19,6 +19,7 @@ gem 'will_paginate', '~> 3.0'
 gem 'validates_timeliness', '~> 3.0'
 gem 'to_xls'
 gem 'prawn'
+gem 'devise_security_extension'
 
 group :test do
   gem "shoulda-matchers"

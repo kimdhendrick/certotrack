@@ -101,6 +101,20 @@ describe UserService do
         user.first_name.should == 'Albert'
       end
 
+      it 'should not update password if not present' do
+        my_customer = create(:customer)
+        user = create(:user, customer: my_customer)
+        attributes =
+          {
+            'id' => user.id,
+            'first_name' => 'Albert',
+            'password' => ''
+          }
+
+        success = UserService.new.update_user(user, attributes)
+        success.should be_true
+      end
+
       it 'should return false if errors' do
         user = create(:user, first_name: 'Joe')
         user.stub(:save).and_return(false)

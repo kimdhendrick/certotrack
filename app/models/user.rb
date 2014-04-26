@@ -1,22 +1,14 @@
 class User < ActiveRecord::Base
   include EmailFormatHelper
-  VALID_PASSWORD_REGEX = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,99}/
 
-  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable
+  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable,
+         :password_expirable, :password_archivable, :secure_validatable
 
   belongs_to :customer
 
   validates_presence_of :first_name,
                         :last_name,
                         :customer
-
-  validates :password,
-            format: {
-              with: VALID_PASSWORD_REGEX,
-              message: 'must be at least 8 characters long and must contain at least one digit and combination of upper and lower case'
-            },
-            on: :create
-  validates_confirmation_of :password, on: :create
 
   validates :email,
             presence: true,
