@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140426152218) do
+ActiveRecord::Schema.define(version: 20140426165339) do
 
   create_table "certification_periods", force: true do |t|
     t.string   "trainer"
@@ -150,9 +150,6 @@ ActiveRecord::Schema.define(version: 20140426152218) do
     t.datetime "updated_at"
     t.string   "username"
     t.string   "encrypted_password",               default: "",      null: false
-    t.string   "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
     t.integer  "sign_in_count",                    default: 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
@@ -167,7 +164,6 @@ ActiveRecord::Schema.define(version: 20140426152218) do
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["password_changed_at"], name: "index_users_on_password_changed_at", using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
   create_table "vehicles", force: true do |t|
