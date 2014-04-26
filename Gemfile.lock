@@ -71,6 +71,9 @@ GEM
     diff-lcs (1.2.5)
     docile (1.1.2)
     erubis (2.7.0)
+    exception_notification (4.0.1)
+      actionmailer (>= 3.0.4)
+      activesupport (>= 3.0.4)
     execjs (2.0.2)
     factory_girl (4.3.0)
       activesupport (>= 3.0.0)
@@ -229,6 +232,7 @@ DEPENDENCIES
   database_cleaner
   devise
   devise_security_extension
+  exception_notification
   factory_girl_rails
   fuubar
   jbuilder (~> 1.2)

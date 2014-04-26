@@ -7,6 +7,8 @@ class CertotrackController < ApplicationController
                 :load_customer_service
 
   def home
+    raise 'Test exception!'
+
     if can? :read, :equipment
       @total_equipment_count = @equipment_service.count_all_equipment(current_user)
       @expired_equipment_count = @equipment_service.count_expired_equipment(current_user)

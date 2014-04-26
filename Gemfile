@@ -20,6 +20,7 @@ gem 'validates_timeliness', '~> 3.0'
 gem 'to_xls'
 gem 'prawn'
 gem 'devise_security_extension'
+gem 'exception_notification'
 
 group :test do
   gem "shoulda-matchers"
