@@ -1,14 +1,49 @@
 require 'spec_helper'
 
 describe 'Password Security', slow: true do
-  context 'when user with an expired password' do
-    let(:user) { create(:user, password: 'Password123', password_confirmation: 'Password123') }
+  let(:user) { create(:user, password: 'Password123', password_confirmation: 'Password123') }
 
+  context 'authenticated user' do
+    it 'should allow user to change their password', js: true do
+      login_as(user)
+
+      click_on 'Change Password'
+
+      page.should have_content 'Change Password'
+      fill_in 'Current Password', with: 'PasswordBAD'
+      fill_in 'New Password', with: 'password123'
+      fill_in 'Confirm New Password', with: 'password123'
+      click_on 'Change Password'
+      page.should have_content 'Current password is invalid'
+
+      fill_in 'Current Password', with: 'Password123'
+      fill_in 'New Password', with: 'password123'
+      fill_in 'Confirm New Password', with: 'password123'
+      click_on 'Change Password'
+      page.should have_content 'Password must be at least 8 characters long and must contain at least one digit and combination of upper and lower case.'
+
+      fill_in 'Current Password', with: 'Password123'
+      fill_in 'New Password', with: 'Password555'
+      fill_in 'Confirm New Password', with: 'Password666'
+      click_on 'Change Password'
+      page.should have_content "Password confirmation doesn't match Password"
+
+      fill_in 'Current Password', with: 'Password123'
+      fill_in 'New Password', with: 'Password321'
+      fill_in 'Confirm New Password', with: 'Password321'
+      click_on 'Change Password'
+
+      page.should have_content 'Password updated successfully.'
+      page.should have_content 'Welcome'
+    end
+  end
+
+  context 'when user with an expired password' do
     before do
       user.update_attribute(:password_changed_at, 91.days.ago)
     end
 
-    it 'should force the user to change his password to a valid one' do
+    it 'should force the user to change their password to a valid one' do
       login_as(user)
 
       page.should have_field 'password'

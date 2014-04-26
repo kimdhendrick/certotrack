@@ -9,6 +9,12 @@ Certotrack::Application.routes.draw do
     get "logout", :to => "devise/sessions#destroy"
   end
 
+  resource :change_password, only: [:edit] do
+    collection do
+      patch 'update_password'
+    end
+  end
+
   resources :equipment
   get 'expired_equipment', action: 'expired', controller: 'equipment'
   get 'expiring_equipment', action: 'expiring', controller: 'equipment'
