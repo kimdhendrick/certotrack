@@ -47,7 +47,7 @@ Daily jobs @ 15:00 UTC for each of these:
 ### Rails Console
     heroku run rails console
 
-### Recreate database
+### Recreate database (does not migrate or seed)
     heroku pg:reset DATABASE
 
 ### Migrate database
