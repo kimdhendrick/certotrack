@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
   include EmailFormatHelper
 
-  devise :database_authenticatable, :trackable,
+  devise :database_authenticatable, :trackable, :timeoutable,
          :password_expirable, :password_archivable, :secure_validatable
 
   belongs_to :customer
