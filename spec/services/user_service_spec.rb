@@ -103,8 +103,7 @@ describe UserService do
 
       it 'should return false if errors' do
         user = create(:user, first_name: 'Joe')
-        user.update_attribute(:username, nil)
-        user.should_not be_valid
+        user.stub(:save).and_return(false)
 
         success = UserService.new.update_user(user, {first_name: 'Bob'})
         success.should be_false
@@ -151,86 +150,25 @@ describe UserService do
           user.password.should == 'MyNewPassword123'
         end
 
-        context 'password change' do
-          it 'should add to the password histories' do
-            user = create(
-              :user,
-              password: 'MyOldPassword123',
-              password_confirmation: 'MyOldPassword123'
-            )
+        it 'should add to the password histories' do
+          user = create(
+           :user,
+            password: 'MyOldPassword123',
+            password_confirmation: 'MyOldPassword123'
+          )
 
-            attributes =
-              {
-                'id' => user.id,
-                'password' => 'MyNewPassword123'
-              }
+          attributes =
+            {
+              'id' => user.id,
+              'password' => 'MyNewPassword123'
+            }
 
-            user.password_histories.count.should == 0
+          user.password_histories.count.should == 0
 
-            UserService.new.update_user(user, attributes)
+          UserService.new.update_user(user, attributes)
 
-            user.reload
-            user.password_histories.count.should == 1
-          end
-
-          it 'should be valid' do
-            user = create(
-              :user,
-              password: 'MyOldPassword123',
-              password_confirmation: 'MyOldPassword123'
-            )
-
-            attributes =
-              {
-                'id' => user.id,
-                'password' => 'MyNewPassword123'
-              }
-
-            success = UserService.new.update_user(user, attributes)
-
-            success.should be_true
-            user.reload
-
-            user.valid?
-            puts user.errors.full_messages
-
-            user.should be_valid
-          end
-
-          it 'should not update password data if errors' do
-            user = create(:user, password_histories: [])
-            user.update_attribute(:username, nil)
-            user.update_attribute(:password_last_changed, nil)
-            user.should_not be_valid
-            old_password = user.encrypted_password
-
-            success = UserService.new.update_user(user, {password: 'NewPassword123'})
-            success.should be_false
-
-            user.reload
-            user.encrypted_password.should == old_password
-            user.password_histories.should == []
-            user.password_last_changed.should be_nil
-          end
-        end
-
-        context 'not a password change' do
-          it 'should not add to the password histories' do
-            user = create(:user)
-
-            attributes =
-              {
-                'id' => user.id,
-                'username' => 'new_username'
-              }
-
-            user.password_histories.count.should == 0
-
-            UserService.new.update_user(user, attributes)
-
-            user.reload
-            user.password_histories.count.should == 0
-          end
+          user.reload
+          user.password_histories.count.should == 1
         end
 
         it 'should purge password histories > 5' do
@@ -269,45 +207,6 @@ describe UserService do
           user.password_histories.count.should == 5
           user.password_histories.should include(newest)
           PasswordHistory.count.should == 5
-        end
-
-        it 'should update password_last_changed date' do
-          old_date_of_password_change = Date.new(2001, 1, 1)
-          user = create(
-            :user,
-            password: 'MyOldPassword123',
-            password_confirmation: 'MyOldPassword123',
-            password_last_changed: old_date_of_password_change
-          )
-
-          attributes =
-            {
-              'id' => user.id,
-              'password' => 'MyNewPassword123'
-            }
-
-          UserService.new.update_user(user, attributes)
-
-          user.reload
-          user.password_last_changed.should > old_date_of_password_change
-        end
-
-        context 'not a password change' do
-          it 'should not update password_last_changed date' do
-            user = create(:user)
-            old_date_of_password_change = user.password_last_changed
-
-            attributes =
-              {
-                'id' => user.id,
-                'username' => 'new_username'
-              }
-
-            UserService.new.update_user(user, attributes)
-
-            user.reload
-            (user.password_last_changed - old_date_of_password_change).should == 0
-          end
         end
       end
     end

@@ -16,19 +16,6 @@ describe User do
   it { should belong_to(:customer) }
   it { should have_many(:password_histories) }
 
-  it 'should default password_last_changed' do
-    user = User.create!(username: 'username',
-                        first_name: 'First',
-                        last_name: 'Last',
-                        email: 'email@example.com',
-                        password: 'Password123',
-                        password_confirmation: 'Password123',
-                        customer: create(:customer)
-    )
-
-    user.password_last_changed.should_not be_nil
-  end
-
   describe 'associations' do
     it 'should respond to certification_types' do
       user = create(:user, username: 'ABC')
@@ -64,21 +51,21 @@ describe User do
 
       user.locations.should == [location]
     end
-
+    
     it 'should respond to vehicles' do
       user = create(:user, username: 'ABC')
       vehicle = create(:vehicle, customer: user.customer)
 
       user.vehicles.should == [vehicle]
     end
-
+    
     it 'should respond to service_types' do
       user = create(:user, username: 'ABC')
       service_type = create(:service_type, customer: user.customer)
 
       user.service_types.should == [service_type]
     end
-
+    
     it 'should respond to services' do
       user = create(:user, username: 'ABC')
       service = create(:service, customer: user.customer)
