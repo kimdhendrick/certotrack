@@ -78,7 +78,9 @@ class EquipmentService
   private
 
   def _get_equipment_for_user(current_user)
-    current_user.admin? ? Equipment.all : current_user.equipments
+    current_user.admin? ?
+      Equipment.all.includes(:employee) :
+      current_user.equipments.includes(:employee)
   end
 
   def _expires_on(equipment)

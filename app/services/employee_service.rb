@@ -6,7 +6,9 @@ class EmployeeService
   end
 
   def get_all_employees(current_user)
-    current_user.admin? ? Employee.all : current_user.employees
+    current_user.admin? ?
+      Employee.all.includes(:location) :
+      current_user.employees.includes(:location)
   end
 
   def find(employee_ids, user)

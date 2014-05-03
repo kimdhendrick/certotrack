@@ -8,23 +8,26 @@ class CertotrackController < ApplicationController
 
   def home
     if can? :read, :equipment
-      @total_equipment_count = @equipment_service.count_all_equipment(current_user)
-      @expired_equipment_count = @equipment_service.count_expired_equipment(current_user)
-      @expiring_equipment_count = @equipment_service.count_expiring_equipment(current_user)
+      equipment = @equipment_service.get_all_equipment(current_user)
+      @total_equipment_count = equipment.count
+      @expired_equipment_count = _count(equipment, :expired?)
+      @expiring_equipment_count = _count(equipment, :expiring?)
     end
 
     if can? :read, :certification
-      @total_certification_count = @certification_service.count_all_certifications(current_user)
-      @total_expired_certification_count = @certification_service.count_expired_certifications(current_user)
-      @total_expiring_certification_count = @certification_service.count_expiring_certifications(current_user)
-      @total_units_based_certification_count = @certification_service.count_units_based_certifications(current_user)
-      @total_recertification_required_certification_count = @certification_service.count_recertification_required_certifications(current_user)
+      certifications = @certification_service.get_all_certifications(current_user)
+      @total_certification_count = certifications.count
+      @total_expired_certification_count = _count(certifications, :expired?)
+      @total_expiring_certification_count = _count(certifications, :expiring?)
+      @total_units_based_certification_count = _count(certifications, :units_based?)
+      @total_recertification_required_certification_count = _count(certifications, :recertification_required?)
     end
 
     if can? :read, :vehicle
-      @total_service_count = @vehicle_servicing_service.count_all_services(current_user)
-      @total_expired_service_count = @vehicle_servicing_service.count_expired_services(current_user)
-      @total_expiring_service_count = @vehicle_servicing_service.count_expiring_services(current_user)
+      services = @vehicle_servicing_service.get_all_services(current_user)
+      @total_service_count = services.count
+      @total_expired_service_count = _count(services, :expired?)
+      @total_expiring_service_count = _count(services, :expiring?)
     end
 
     if can? :read, :customer
@@ -33,5 +36,11 @@ class CertotrackController < ApplicationController
 
     @first_name = current_user.first_name
     @customer_name = current_user.customer.name
+  end
+
+  private
+
+  def _count(collection, question)
+    collection.select { |certification| certification.public_send(question) }.count
   end
 end

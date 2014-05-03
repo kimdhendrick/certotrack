@@ -8,7 +8,7 @@ class EmployeeDeactivationService
   end
 
   def get_deactivated_employees(current_user)
-    all_employees = Employee.unscoped.where(active: false)
+    all_employees = Employee.unscoped.where(active: false).includes(:location)
 
     current_user.admin? ?
       all_employees :

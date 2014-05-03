@@ -7,40 +7,19 @@ class CertificationService
 
   def get_all_certifications(current_user)
     current_user.admin? ?
-      Certification.all :
-      current_user.certifications
-  end
-
-  def count_all_certifications(current_user)
-    current_user.admin? ?
-      Certification.count :
-      current_user.certifications.count
+      Certification.all.includes(:certification_type, :active_certification_period) :
+      current_user.certifications.includes(:certification_type, :active_certification_period)
   end
 
   def search_certifications(current_user, params)
-    all_certifications =
-      current_user.admin? ?
-        Certification.all :
-        current_user.certifications
+    all_certifications = current_user.admin? ?
+      Certification.all :
+      current_user.certifications
 
     certifications = all_certifications.joins(:certification_type).joins(:employee)
-    @search_service.search(certifications, params)
-  end
 
-  def count_expired_certifications(current_user)
-    get_expired_certifications(current_user).count
-  end
-
-  def count_expiring_certifications(current_user)
-    get_expiring_certifications(current_user).count
-  end
-
-  def count_units_based_certifications(current_user)
-    get_units_based_certifications(current_user).count
-  end
-
-  def count_recertification_required_certifications(current_user)
-    get_recertification_required_certifications(current_user).count
+    @search_service.search(certifications, params).
+      includes(:certification_type, :active_certification_period, :employee)
   end
 
   def get_expired_certifications(current_user)
@@ -100,11 +79,12 @@ class CertificationService
   end
 
   def get_all_certifications_for_employee(employee)
-    employee.certifications
+    employee.certifications.includes(:certification_type, :active_certification_period)
   end
 
+  #TODO can't get employee to include!
   def get_all_certifications_for_certification_type(certification_type)
-    certification_type.certifications
+    certification_type.certifications.includes(:active_certification_period)
   end
 
   def recertify(certification, attributes)
