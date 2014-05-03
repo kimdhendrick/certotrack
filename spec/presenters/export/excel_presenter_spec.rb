@@ -107,7 +107,7 @@ module Export
         end
 
         it 'should call to_xls with the right columns' do
-          columns = [:username, :first_name, :last_name, :email, :password_last_changed, :expiration_notification_interval, :customer_name, :created_at]
+          columns = [:username, :first_name, :last_name, :email, :password_changed_at, :expiration_notification_interval, :customer_name, :created_at]
           collection.received_params[0][:columns].should == columns
         end
 
