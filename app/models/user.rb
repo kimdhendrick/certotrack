@@ -12,8 +12,7 @@ class User < ActiveRecord::Base
 
   validates :email,
             presence: true,
-            format: {with: VALID_EMAIL_REGEX},
-            uniqueness: {case_sensitive: false}
+            format: {with: VALID_EMAIL_REGEX}
 
   validates :username, presence: true, uniqueness: {case_sensitive: false}
 

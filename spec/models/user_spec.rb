@@ -113,11 +113,12 @@ describe User do
   describe 'when email address is already taken' do
     before do
       user_with_same_email = user.dup
+      user_with_same_email.username = 'something_different'
       user_with_same_email.email = user.email.upcase
       user_with_same_email.save
     end
 
-    it { should_not be_valid }
+    it { should be_valid }
   end
 
   describe 'when username is already taken' do

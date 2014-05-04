@@ -1,4 +1,6 @@
-# Original devise_security_extension SecureValidatable
+# Modified devise_security_extension SecureValidatable
+# - remove requirement that emails be unique
+
 module Devise
   module Models
     # SecureValidatable creates better validations with more validation for security
@@ -31,7 +33,7 @@ module Devise
 
           unless devise_validation_enabled?
             validates :email, :presence => true, :if => :email_required?
-            validates :email, :uniqueness => true, :allow_blank => true, :if => :email_changed? # check uniq for email ever
+            validates :email, :uniqueness => false, :allow_blank => true, :if => :email_changed? # check uniq for email ever
 
             validates :password, :presence => true, :length => password_length, :confirmation => true, :if => :password_required?
           end
