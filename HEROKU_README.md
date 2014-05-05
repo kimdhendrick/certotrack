@@ -48,6 +48,9 @@ Daily jobs @ 15:00 UTC for each of these:
     heroku run rails console
     heroku pg:psql
 
+### Get database stats
+    heroku pg
+
 ### Recreate database (does not migrate or seed)
     heroku pg:reset DATABASE
 
