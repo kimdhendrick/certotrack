@@ -11,27 +11,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140426165339) do
+ActiveRecord::Schema.define(version: 20140505133323) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "certification_periods", force: true do |t|
-    t.string   "trainer"
+    t.text     "trainer"
     t.datetime "start_date"
     t.datetime "end_date"
     t.integer  "units_achieved",   default: 0
-    t.string   "comments"
+    t.text     "comments"
     t.integer  "certification_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "certification_types", force: true do |t|
-    t.string   "name"
-    t.string   "interval"
+    t.text     "name"
+    t.text     "interval"
     t.integer  "units_required"
     t.integer  "customer_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "created_by"
+    t.text     "created_by"
   end
 
   create_table "certifications", force: true do |t|
@@ -42,20 +45,20 @@ ActiveRecord::Schema.define(version: 20140426165339) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "active_certification_period_id",                null: false
-    t.string   "created_by"
+    t.text     "created_by"
   end
 
   create_table "customers", force: true do |t|
-    t.string   "name"
-    t.string   "contact_person_name"
-    t.string   "contact_phone_number"
-    t.string   "contact_email"
-    t.string   "account_number"
-    t.string   "address1"
-    t.string   "address2"
-    t.string   "city"
-    t.string   "state"
-    t.string   "zip"
+    t.text     "name"
+    t.text     "contact_person_name"
+    t.text     "contact_phone_number"
+    t.text     "contact_email"
+    t.text     "account_number"
+    t.text     "address1"
+    t.text     "address2"
+    t.text     "city"
+    t.text     "state"
+    t.text     "zip"
     t.boolean  "active"
     t.boolean  "equipment_access"
     t.boolean  "certification_access"
@@ -65,45 +68,45 @@ ActiveRecord::Schema.define(version: 20140426165339) do
   end
 
   create_table "employees", force: true do |t|
-    t.string   "first_name"
-    t.string   "last_name"
+    t.text     "first_name"
+    t.text     "last_name"
     t.integer  "location_id"
-    t.string   "employee_number"
+    t.text     "employee_number"
     t.integer  "customer_id"
     t.boolean  "active",            default: true
     t.date     "deactivation_date"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "created_by"
+    t.text     "created_by"
   end
 
   create_table "equipment", force: true do |t|
-    t.string   "serial_number"
+    t.text     "serial_number"
     t.date     "last_inspection_date"
-    t.string   "inspection_interval"
-    t.string   "name"
+    t.text     "inspection_interval"
+    t.text     "name"
     t.date     "expiration_date"
-    t.string   "comments"
+    t.text     "comments"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "customer_id"
     t.integer  "location_id"
     t.integer  "employee_id"
-    t.string   "created_by"
+    t.text     "created_by"
   end
 
   create_table "locations", force: true do |t|
-    t.string   "name"
+    t.text     "name"
     t.integer  "customer_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "created_by"
+    t.text     "created_by"
   end
 
   create_table "old_passwords", force: true do |t|
-    t.string   "encrypted_password",       null: false
-    t.string   "password_salt"
-    t.string   "password_archivable_type", null: false
+    t.text     "encrypted_password",       null: false
+    t.text     "password_salt"
+    t.text     "password_archivable_type", null: false
     t.integer  "password_archivable_id",   null: false
     t.datetime "created_at"
   end
@@ -115,21 +118,21 @@ ActiveRecord::Schema.define(version: 20140426165339) do
     t.datetime "end_date"
     t.integer  "start_mileage"
     t.integer  "end_mileage"
-    t.string   "comments"
+    t.text     "comments"
     t.integer  "service_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "service_types", force: true do |t|
-    t.string   "name"
-    t.string   "expiration_type"
-    t.string   "interval_date"
+    t.text     "name"
+    t.text     "expiration_type"
+    t.text     "interval_date"
     t.integer  "interval_mileage"
     t.integer  "customer_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "created_by"
+    t.text     "created_by"
   end
 
   create_table "services", force: true do |t|
@@ -139,46 +142,45 @@ ActiveRecord::Schema.define(version: 20140426165339) do
     t.integer  "active_service_period_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "created_by"
+    t.text     "created_by"
   end
 
   create_table "users", force: true do |t|
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "email"
+    t.text     "first_name"
+    t.text     "last_name"
+    t.text     "email"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "username"
-    t.string   "encrypted_password",               default: "",      null: false
+    t.text     "username"
+    t.text     "encrypted_password",               default: "",      null: false
     t.integer  "sign_in_count",                    default: 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
+    t.text     "current_sign_in_ip"
+    t.text     "last_sign_in_ip"
     t.integer  "roles_mask"
     t.integer  "customer_id"
     t.boolean  "admin",                            default: false
-    t.string   "expiration_notification_interval", default: "Never"
+    t.text     "expiration_notification_interval", default: "Never"
     t.datetime "password_changed_at"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["password_changed_at"], name: "index_users_on_password_changed_at", using: :btree
   add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
   create_table "vehicles", force: true do |t|
-    t.string   "vehicle_number"
-    t.string   "vin"
-    t.string   "make"
-    t.string   "vehicle_model"
-    t.string   "license_plate"
+    t.text     "vehicle_number"
+    t.text     "vin"
+    t.text     "make"
+    t.text     "vehicle_model"
+    t.text     "license_plate"
     t.integer  "year"
     t.integer  "mileage"
     t.integer  "location_id"
     t.integer  "customer_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "created_by"
+    t.text     "created_by"
   end
 
 end
