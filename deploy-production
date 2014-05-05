@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if test $# -lt 1
+then
+   echo "Usage: ${0} tag-name"
+   exit 1
+fi
+
+git push certotrack ${1}:master && heroku run --app certotrack rake db:migrate

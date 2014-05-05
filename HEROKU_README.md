@@ -63,6 +63,12 @@ Daily jobs @ 15:00 UTC for each of these:
 ### Restart heroku
     heroku restart
 
+### Push tag to heroku
+    git push certotrack-staging <tag-name>:master
+    git push certotrack <tag-name>:master
+    (go back to master)
+    git push -f certotrack-staging master
+
 ### Setting config values on heroku
 
 https://devcenter.heroku.com/articles/config-vars
@@ -85,3 +91,4 @@ https://devcenter.heroku.com/articles/config-vars
 
 #### View documentation
     heroku addons:docs pgbackups
+
