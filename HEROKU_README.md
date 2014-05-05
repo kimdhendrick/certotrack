@@ -39,6 +39,12 @@ Daily jobs @ 15:00 UTC for each of these:
 
     if [ "$(date +%u)" = 1 ]; then rake notification:certification:weekly:expiring; fi
 
+### Heroku remote settings
+    certotrack              git@heroku.com:certotrack.git (fetch)
+    certotrack              git@heroku.com:certotrack.git (push)
+    certotrack-staging      git@heroku.com:certotrack-staging.git (fetch)
+    certotrack-staging      git@heroku.com:certotrack-staging.git (push)
+
 ## Heroku cheatsheet
 
 ### Rake tasks
