@@ -1,8 +1,9 @@
-* http://en.wikibooks.org/wiki/Converting_MySQL_to_PostgreSQL
+* Reference: http://en.wikibooks.org/wiki/Converting_MySQL_to_PostgreSQL
 1. mysqldump -u certouser -p --compatible=postgresql certotrack > certotrack_pg_dump.sql
 2. Clean dump file as below.
 3. Run dump commands: psql -h localhost -d certotrack_development -U certouser -f migration/certotrack_pg_dump_cleaned_final.sql
 4. Migrate data as below: (rails db or) psql -h localhost -d certotrack_development -U certouser
+5. Cleanup old CT tables as below.
 
 --------------------
 Clean dump file:
@@ -196,3 +197,33 @@ delete from services;
  alter sequence service_types_id_seq restart with 100;
  --alter sequence service_periods_id_seq
  --alter sequence services_id_seq
+
+
+--------------------
+Cleanup old tables
+--------------------
+
+DROP TABLE "DATABASECHANGELOG";
+DROP TABLE "DATABASECHANGELOG--LOCK";
+DROP TABLE "acl_class";
+DROP TABLE "certification";
+DROP TABLE "certification_certification_period";
+DROP TABLE "certification_period";
+DROP TABLE "certification_type";
+DROP TABLE "contact";
+DROP TABLE "county";
+DROP TABLE "customer";
+DROP TABLE "myequipment";
+DROP TABLE "location";
+DROP TABLE "password_history";
+DROP TABLE "position";
+DROP TABLE "road";
+DROP TABLE "role";
+DROP TABLE "service";
+DROP TABLE "service_type";
+DROP TABLE "system_time";
+DROP TABLE "test_report";
+DROP TABLE "trooper";
+DROP TABLE "myuser";
+DROP TABLE "user_role";
+DROP TABLE "vehicle";
