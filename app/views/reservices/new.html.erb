@@ -38,7 +38,7 @@
     </div>
     <div class="field">
       <%= label_tag :comments, 'Comments' %>
-      <%= text_field_tag :comments, @service.comments %>
+      <%= text_area_tag :comments, @service.comments %>
     </div>
     <%= submit_tag('Reservice') %>
 <% end %>
