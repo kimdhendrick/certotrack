@@ -1,10 +1,10 @@
 class BatchCertificationsController < ModelController
   include AuthorizationHelper
 
+  before_action :load_batch_certification
+
   def create
     authorize! :read, :certification
-
-    batch_certification = load_batch_certification
 
     _authorize_certifications(batch_certification.certifications)
 
@@ -27,6 +27,8 @@ class BatchCertificationsController < ModelController
   end
 
   private
+
+  attr_reader :batch_certification
 
   def _handle_error(batch_certification)
     @certifications = batch_certification.certifications
