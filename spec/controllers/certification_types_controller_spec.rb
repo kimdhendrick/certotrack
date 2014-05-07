@@ -177,7 +177,7 @@ describe CertificationTypesController do
         fake_employee_service.received_message.should == :get_employees_not_certified_for
         fake_employee_service.received_params[0].should == certification_type
 
-        fake_employee_list_presenter.received_message.should == :present
+        fake_employee_list_presenter.received_message.should == :sort
         fake_employee_list_presenter.received_params[0].should == {}
       end
 
@@ -217,7 +217,7 @@ describe CertificationTypesController do
         fake_employee_service.received_message.should == :get_employees_not_certified_for
         fake_employee_service.received_params[0].should == certification_type
 
-        fake_employee_list_presenter.received_message.should == :present
+        fake_employee_list_presenter.received_message.should == :sort
         fake_employee_list_presenter.received_params[0].should == {sort: 'sort_key', direction: 'desc'}
       end
 
@@ -243,7 +243,7 @@ describe CertificationTypesController do
 
         fake_certification_service.received_message.should == :get_all_certifications_for_certification_type
 
-        fake_certification_list_presenter.received_message.should == :present
+        fake_certification_list_presenter.received_message.should == :sort
         fake_certification_list_presenter.received_params[0].should == {sort: 'sort_key', direction: 'desc'}
       end
 
@@ -269,7 +269,7 @@ describe CertificationTypesController do
 
         fake_certification_service.received_message.should == :get_all_certifications_for_certification_type
 
-        fake_certification_list_presenter.received_message.should == :present
+        fake_certification_list_presenter.received_message.should == :sort
         fake_certification_list_presenter.received_params[0].should == {sort: 'status_code', direction: 'desc'}
       end
     end
