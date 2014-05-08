@@ -31,7 +31,7 @@ describe LocationPresenter do
 
   describe 'edit_link' do
     it 'should create a link to the edit page' do
-      location = build(:location)
+      location = create(:location)
       subject = LocationPresenter.new(location, view)
       subject.edit_link.should =~ /<a.*>Edit<\/a>/
     end

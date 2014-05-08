@@ -133,7 +133,7 @@ describe VehiclePresenter do
 
   describe 'edit_link' do
     it 'should create a link to the edit page' do
-      vehicle = build(:vehicle)
+      vehicle = create(:vehicle)
       subject = VehiclePresenter.new(vehicle, view)
       subject.edit_link.should =~ /<a.*>Edit<\/a>/
     end

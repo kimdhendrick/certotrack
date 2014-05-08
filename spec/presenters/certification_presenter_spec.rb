@@ -197,7 +197,7 @@ describe CertificationPresenter do
 
   describe 'recertify_link' do
     it 'should create a link to the recertify page' do
-      certification = build(:certification)
+      certification = create(:certification)
       subject = CertificationPresenter.new(certification, view)
       subject.recertify_link.should =~ /<a.*>Recertify<\/a>/
     end
@@ -205,7 +205,7 @@ describe CertificationPresenter do
 
   describe 'show_link' do
     it 'should create a link to the show page' do
-      certification = build(:certification)
+      certification = create(:certification)
       subject = CertificationPresenter.new(certification, view)
       subject.show_link.should =~ /<a.*>Back to certification<\/a>/
     end
@@ -213,7 +213,7 @@ describe CertificationPresenter do
 
   describe 'show_history_link' do
     it 'should create a link to the show history page' do
-      certification = build(:certification)
+      certification = create(:certification)
       subject = CertificationPresenter.new(certification, view)
       subject.show_history_link.should =~ /<a.*>Certification History<\/a>/
     end
@@ -239,7 +239,7 @@ describe CertificationPresenter do
 
   describe 'edit_link' do
     it 'should create a link to the edit page' do
-      certification = build(:certification)
+      certification = create(:certification)
       subject = CertificationPresenter.new(certification, view)
       subject.edit_link.should =~ /<a.*>Edit<\/a>/
     end
@@ -247,7 +247,7 @@ describe CertificationPresenter do
 
   describe 'delete_link' do
     it 'should create a link to the delete page' do
-      certification = build(:certification)
+      certification = create(:certification)
       subject = CertificationPresenter.new(certification, view)
       subject.delete_link.should =~ /<a.*>Delete<\/a>/
     end

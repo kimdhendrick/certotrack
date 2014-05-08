@@ -78,7 +78,7 @@ describe EquipmentPresenter do
 
   describe 'edit_link' do
     it 'should create a link to the edit page' do
-      equipment = build(:equipment)
+      equipment = create(:equipment)
       subject = EquipmentPresenter.new(equipment, view)
       subject.edit_link.should =~ /<a.*>Edit<\/a>/
     end

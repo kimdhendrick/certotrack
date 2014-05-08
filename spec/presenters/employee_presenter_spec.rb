@@ -72,7 +72,7 @@ describe EmployeePresenter do
 
   describe 'edit_link' do
     it 'should create a link to the edit page' do
-      employee = build(:employee)
+      employee = create(:employee)
       subject = EmployeePresenter.new(employee, view)
       subject.edit_link.should =~ /<a.*>Edit<\/a>/
     end
@@ -88,7 +88,7 @@ describe EmployeePresenter do
 
   describe 'deactivate_link' do
     it 'should create a link to the deactivate page' do
-      employee = build(:employee)
+      employee = create(:employee)
       subject = EmployeePresenter.new(employee, view)
       subject.deactivate_link.should =~ /<a.*>Deactivate<\/a>/
     end

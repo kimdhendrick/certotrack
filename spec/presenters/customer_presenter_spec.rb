@@ -119,7 +119,7 @@ describe CustomerPresenter do
 
   describe 'edit_link' do
     it 'should create a link to the edit page' do
-      customer = build(:customer)
+      customer = create(:customer)
       subject = CustomerPresenter.new(customer, view)
       subject.edit_link.should =~ /<a.*>Edit<\/a>/
     end

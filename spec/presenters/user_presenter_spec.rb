@@ -91,7 +91,7 @@ describe UserPresenter do
 
   describe 'edit_link' do
     it 'should create a link to the edit page' do
-      user = build(:user)
+      user = create(:user)
       subject = UserPresenter.new(user, view)
       subject.edit_link.should =~ /<a.*>Edit<\/a>/
     end
@@ -99,7 +99,7 @@ describe UserPresenter do
 
   describe 'delete_link' do
     it 'should create a link to the delete page' do
-      user = build(:user)
+      user = create(:user)
       subject = UserPresenter.new(user, view)
       subject.delete_link.should =~ /<a.*>Delete<\/a>/
     end

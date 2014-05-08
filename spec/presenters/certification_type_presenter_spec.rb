@@ -82,10 +82,14 @@ describe CertificationTypePresenter do
       end
 
       context 'when has valid certification' do
-        before { certification_type.stub(:has_valid_certification?).and_return(true) }
-
         it 'should return the link to Auto Recertify' do
-          subject.auto_recertify_link.should == "| <a href=\"/certification_types/1/auto_recertifications/new\">Auto Recertify</a>"
+          certification_type = create(:certification_type)
+          certification_type.stub(:has_valid_certification?).and_return(true)
+          certification_type.stub(:units_based?).and_return(true)
+
+          presenter = CertificationTypePresenter.new(certification_type, view)
+
+          presenter.auto_recertify_link.should == "| <a href=\"/certification_types/1/auto_recertifications/new\">Auto Recertify</a>"
         end
       end
     end
@@ -140,7 +144,7 @@ describe CertificationTypePresenter do
 
   describe 'edit_link' do
     it 'should create a link to the edit page' do
-      certification_type = build(:certification_type)
+      certification_type = create(:certification_type)
       subject = CertificationTypePresenter.new(certification_type, view)
       subject.edit_link.should =~ /<a.*>Edit<\/a>/
     end

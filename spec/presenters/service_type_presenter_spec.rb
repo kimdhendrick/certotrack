@@ -71,7 +71,7 @@ describe ServiceTypePresenter do
 
   describe 'edit_link' do
     it 'should create a link to the edit page' do
-      service_type = build(:service_type)
+      service_type = create(:service_type)
       subject = ServiceTypePresenter.new(service_type, view)
       subject.edit_link.should =~ /<a.*>Edit<\/a>/
     end
