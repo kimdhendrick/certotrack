@@ -16,4 +16,5 @@
 //= require jquery.chained.remote.js
 //= require jquery.chained.js
 //= require jquery-ui-1.10.3.custom.js
+//= require bootstrap
 //= require certotrack.js
