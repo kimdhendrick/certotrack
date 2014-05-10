@@ -104,6 +104,7 @@ GEM
     minitest (4.7.5)
     multi_json (1.10.0)
     multi_test (0.1.1)
+    newrelic_rpm (3.8.0.218)
     nokogiri (1.6.1)
       mini_portile (~> 0.5.0)
     orm_adapter (0.5.0)
@@ -236,6 +237,7 @@ DEPENDENCIES
   fuubar
   jbuilder (~> 1.2)
   jquery-rails
+  newrelic_rpm
   pg
   prawn
   rails (= 4.0.5)
