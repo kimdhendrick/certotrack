@@ -167,7 +167,7 @@ delete from services;
 --------------------
 
 DROP TABLE "DATABASECHANGELOG";
-DROP TABLE "DATABASECHANGELOG--LOCK";
+DROP TABLE "DATABASECHANGELOGLOCK";
 DROP TABLE "acl_class";
 DROP TABLE "certification";
 DROP TABLE "certification_certification_period";

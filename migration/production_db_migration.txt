@@ -1,5 +1,5 @@
 * Reference: http://en.wikibooks.org/wiki/Converting_MySQL_to_PostgreSQL
-1. mysqldump -u certouser -p --compatible=postgresql certotrack > certotrack_pg_dump.sql
+1. mysqldump -u certouser -h certotrack.com -p --compatible=postgresql certotrack > certotrack_pg_dump.sql
 2. Clean dump file as below.
 3. Run dump commands: psql -h localhost -d certotrack_development -U certouser -f migration/certotrack_pg_dump_cleaned_final.sql
 4. Run import commands: psql -h localhost -d certotrack_development -U certouser -f migration/production_db_migration.sql
@@ -8,32 +8,39 @@
 --------------------
 Clean dump file:
 --------------------
+add at line 17:
 SET standard_conforming_strings = 'off';
 SET backslash_quote = 'on';
 
-null out customer logo column
-datetime->timestamp
---UNLOCK TABLES
---LOCK TABLES "DATABASECHANGELOG" WRITE;
-int(11) -> int
-tinyint(1) -> int
-bigint(20)
+??null out customer logo column
+:1,$s/datetime/timestamp/g
+:1,$s/UNLOCK TABLES/--UNLOCK TABLES/g
+:1,$s/^LOCK TABLES/--LOCK TABLES/g
+:1,$s/int(11)/int/g
+:1,$s/tinyint(1)/int/g
+:1,$s/bigint(20)/int/g
+:1,$s/^  KEY ".*$//
+:1,$s/^  UNIQUE KEY.*$//
+:1,$s/  PRIMARY KEY ("id"),/  PRIMARY KEY ("id")/
+:1,$s/  "certification_period_id" int DEFAULT NULL,/  "certification_period_id" int DEFAULT NULL/
+:1,$s/  PRIMARY KEY ("role_id","user_id"),/  PRIMARY KEY ("role_id","user_id")/
+:1,$s/'\\0'/cast(0 as bit)/g
+:1,$s/\\'t/''t/g
+:1,$s/\\'/''/g
+:1,$s/mediumblob/bytea/g
+:1,$s/\\"/"/g
+:1,$s/longtext/text/g
+:1,$s/DROP TABLE IF EXISTS "user";/DROP TABLE IF EXISTS "myuser";/
+:1,$s/CREATE TABLE "user"/CREATE TABLE "myuser"/
+:1,$s/INSERT INTO "user"/INSERT INTO "myuser"/
+:1,$s/DROP TABLE IF EXISTS "equipment";/DROP TABLE IF EXISTS "myequipment";/
+:1,$s/CREATE TABLE "equipment"/CREATE TABLE "myequipment"/
+:1,$s/INSERT INTO "equipment"/INSERT INTO "myequipment"/
 
-delete KEY "FK..." lines
-remove UNIQUE KEYs
+(control A, control A)=> :1,$s/'^A'/cast(1 as bit)/g
+(control v, control M)=> :1,$s/\\r\\n/^V^M/g
+
 get rid of acl_entry, acl_object_identity, acl_sid
-'\\0' -> cast(0 as bit)
-'^A' -> cast(1 as bit)
-  \'t -> ''t
-\\r\\n -> ^V^M (control v, control M)
-\' -> ''
-mediumblob -> bytea
-\\" -> "
-longtext -> text
-
-change user table to myuser
-change equipment table to myequipment
-
 
 -------------------------------------------------------------------------------------------
 Invalid data:
