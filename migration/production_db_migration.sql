@@ -20,8 +20,6 @@ update customers set name = 'CertoTrack' where id = 5;
 
 delete from users;
 
-drop index index_users_on_email;
-
 insert into users
 (id, first_name, last_name, email, username,
  customer_id, expiration_notification_interval)
@@ -35,9 +33,10 @@ update users set admin=true where username='admin';
 delete from locations;
 
 insert into locations
-(id, name, customer_id)
-select id, name, customer_id from location
-where customer_id not in (2, 3, 4, 6);
+(id, name, customer_id, created_by)
+select l.id, l.name, l.customer_id, 'admin'
+from location l
+where l.customer_id not in (2, 3, 4, 6);
 
 delete from equipment;
 
@@ -58,14 +57,15 @@ delete from employees;
 
 insert into employees
 (id, first_name, last_name, location_id, employee_number,
- customer_id, active, deactivation_date, created_at, updated_at)
+ customer_id, active, deactivation_date, created_at, updated_at, created_by)
 select
-id, first_name, last_name, location_id, employee_number,
-customer_id,
-case when active=B'1' then true else false end,
-deactivation_date, created_date, edited_date
-from trooper
-where customer_id not in (2, 3, 4, 6);
+t.id, t.first_name, t.last_name, t.location_id, employee_number,
+t.customer_id,
+case when t.active=B'1' then true else false end,
+deactivation_date, t.created_date, t.edited_date, u.username
+from trooper t, myuser u
+where t.customer_id not in (2, 3, 4, 6)
+and t.created_by_user_id = u.id;
 
 update certification_type set customer_id = 5 where id = 20;
 
@@ -74,22 +74,24 @@ delete from certification_types;
 insert into certification_types
 (id, name, interval, units_required, customer_id,
 created_at,updated_at, created_by)
-select id, name, certification_interval, units_required, customer_id,
-created_date, edited_date, created_by_user_id
-from certification_type
-where customer_id not in (2, 3, 4, 6);
+select ct.id, ct.name, ct.certification_interval, units_required, ct.customer_id,
+ct.created_date, ct.edited_date, u.username
+from certification_type ct, myuser u
+where ct.customer_id not in (2, 3, 4, 6)
+and ct.created_by_user_id = u.id;
 
 delete from certifications;
 
 insert into certifications
 (id, certification_type_id, employee_id, customer_id,
  active, created_at, updated_at, active_certification_period_id, created_by)
-select id, certification_type_id, trooper_id,
-customer_id,
-case when active=B'1' then true else false end,
-created_date, edited_date, active_certification_period_id, created_by_user_id
-from certification
-where customer_id not in (2, 3, 4, 6);
+select c.id, certification_type_id, trooper_id,
+c.customer_id,
+case when c.active=B'1' then true else false end,
+c.created_date, c.edited_date, active_certification_period_id, u.username
+from certification c, myuser u
+where c.customer_id not in (2, 3, 4, 6)
+and c.created_by_user_id = u.id;
 
 delete from certification_periods;
 
@@ -112,11 +114,12 @@ insert into service_types
 (id, name, expiration_type, interval_date, interval_mileage,
  customer_id, created_at, updated_at, created_by)
 select
- id, name, expiration_type, interval_date, interval_mileage,
- customer_id, created_date, edited_date, created_by_user_id
+ st.id, st.name, expiration_type, interval_date, interval_mileage,
+ st.customer_id, st.created_date, st.edited_date, u.username
  expiration_type
-from service_type
-where customer_id not in (2, 3, 4, 6);
+from service_type st, myuser u
+where st.customer_id not in (2, 3, 4, 6)
+and st.created_by_user_id = u.id;
 
 delete from vehicles;
 
@@ -124,11 +127,12 @@ insert into vehicles
 (id, vehicle_number, vin, make, vehicle_model, license_plate, year,
  mileage, location_id, customer_id, created_at, updated_at, created_by)
 select
-id, car_number, vin, make, model, license_plate,
-year, mileage, location_id, customer_id, created_date,
-edited_date, created_by_user_id
-from vehicle
-where customer_id not in (2, 3, 4, 6);
+v.id, car_number, vin, make, model, license_plate,
+year, mileage, v.location_id, v.customer_id, v.created_date,
+v.edited_date, u.username
+from vehicle v, myuser u
+where v.customer_id not in (2, 3, 4, 6)
+and v.created_by_user_id = u.id;
 
 delete from services;
 
