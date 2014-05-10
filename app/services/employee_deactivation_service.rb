@@ -4,7 +4,7 @@ class EmployeeDeactivationService
     employee.certifications.each { |certification| certification.active = false }
     employee.deactivation_date = Date.current
     employee.active = false
-    employee.save
+    employee.save(validate: false)
   end
 
   def get_deactivated_employees(current_user)
