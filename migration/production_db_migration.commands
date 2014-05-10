@@ -1,3 +1,4 @@
+ActiveRecord::Base.logger.level = 1
 
 -- rails console:
 User.all.each do |user|
@@ -6,5 +7,10 @@ User.all.each do |user|
   user.save(validate: false)
 end
 
-User.where(username: 'admin').first.update_attribute(:password, 'Password123')
+User.all.each do |user|
+  password = (('a'..'z').to_a.shuffle[0, 6] + ('A'..'Z').to_a.shuffle[0, 2] + (0..9).to_a.shuffle[0, 1]).shuffle.join
+  user.update_attribute(:password, password)
+  puts "#{user.username} => #{password}"
+end
+
 -- rails console
