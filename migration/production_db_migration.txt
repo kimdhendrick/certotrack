@@ -33,3 +33,13 @@ longtext -> text
 
 change user table to myuser
 change equipment table to myequipment
+
+
+-------------------------------------------------------------------------------------------
+Invalid data:
+-------------------------------------------------------------------------------------------
+Equipment with duplicate serial numbers
+Certification Periods with duplicate start dates for the same certification
+Certifications for the same certification type for the same employee
+Vehicles with duplicate license plates, blank license plates, vin of wrong length
+-------------------------------------------------------------------------------------------
