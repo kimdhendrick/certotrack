@@ -1,6 +1,12 @@
 --------------------
 --Migrate data:
 --------------------
+update certification_type set created_by_user_id = 1 where created_by_user_id not in (select id from myuser);
+update certification set created_by_user_id = 1 where created_by_user_id not in (select id from myuser);
+update trooper set created_by_user_id = 1 where created_by_user_id not in (select id from myuser);
+update myequipment set created_by_user_id = 1 where created_by_user_id not in (select id from myuser);
+update service_type set created_by_user_id = 1 where created_by_user_id not in (select id from myuser);
+update vehicle set created_by_user_id = 1 where created_by_user_id not in (select id from myuser);
 
 delete from customers;
 

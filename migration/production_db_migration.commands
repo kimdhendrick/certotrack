@@ -1,16 +1,23 @@
+### rails console:
+
 ActiveRecord::Base.logger.level = 1
 
--- rails console:
 User.all.each do |user|
   user.roles = user.customer.roles
   user.username = user.username.downcase
   user.save(validate: false)
 end
 
+password_file = File.open('passwords.out', 'w')
+
 User.all.each do |user|
   password = (('a'..'z').to_a.shuffle[0, 6] + ('A'..'Z').to_a.shuffle[0, 2] + (0..9).to_a.shuffle[0, 1]).shuffle.join
   user.update_attribute(:password, password)
   puts "#{user.username} => #{password}"
+  password_file.write "#{user.username} => #{password}\n"
 end
 
--- rails console
+password_file.close
+
+User.where(username: 'kbarnesmcs').first.update_attribute(:password, 'ThanksForTestingMe!')
+
