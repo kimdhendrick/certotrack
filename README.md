@@ -91,9 +91,15 @@ Answer 'yes' when prompted. Copy & paste command to ignore rvm warnings.
     build_unit => Build all but features
     build_all => Build all including features
 
-## Seed data
-    equipment_user
-    certification_user
-    vehicle_user
-    full_rights_user
-    admin
+# Deployment
+
+### Tag sha to release
+    git tag release-0.1 b4af07e
+    git push
+    git push --tags
+
+### Deploy release to staging
+    ./deploy-staging release-0.1
+
+### Deploy release to production
+    ./deploy-production release-0.1
