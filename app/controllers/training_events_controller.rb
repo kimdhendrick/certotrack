@@ -9,7 +9,7 @@ class TrainingEventsController < ModelController
   def list_employees
     @employees = EmployeeListPresenter.new(
       @employee_service.get_all_employees(current_user)
-    ).present(params)
+    ).sort(params)
   end
 
   def list_certification_types
@@ -83,6 +83,6 @@ class TrainingEventsController < ModelController
   end
 
   def _get_certification_type_list
-    CertificationTypeListPresenter.new(@certification_type_service.get_all_certification_types(current_user)).present(params)
+    CertificationTypeListPresenter.new(@certification_type_service.get_all_certification_types(current_user)).sort(params)
   end
 end
