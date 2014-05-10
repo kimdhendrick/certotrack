@@ -80,6 +80,9 @@ GEM
       factory_girl (~> 4.4.0)
       railties (>= 3.0.0)
     ffi (1.9.3)
+    foundation-rails (5.2.2.0)
+      railties (>= 3.1.0)
+      sass (>= 3.2.0)
     fuubar (1.3.2)
       rspec (>= 2.14.0, < 3.1.0)
       ruby-progressbar (~> 1.3)
@@ -217,6 +220,8 @@ GEM
       rack (>= 1.0)
     websocket (1.0.7)
     will_paginate (3.0.5)
+    will_paginate-foundation (5.3.3)
+      will_paginate (>= 3.0.3)
     xpath (2.0.0)
       nokogiri (~> 1.3)
 
@@ -234,6 +239,7 @@ DEPENDENCIES
   devise_security_extension
   exception_notification
   factory_girl_rails
+  foundation-rails
   fuubar
   jbuilder (~> 1.2)
   jquery-rails
@@ -255,3 +261,4 @@ DEPENDENCIES
   unicorn
   validates_timeliness (~> 3.0)
   will_paginate (~> 3.0)
+  will_paginate-foundation

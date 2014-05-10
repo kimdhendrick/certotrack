@@ -1,21 +1,40 @@
-<p><%= link_to "All Equipment (#{@total_equipment_count})", equipment_index_path %></p>
-<p><%= link_to "Expired Equipment (#{@expired_equipment_count})", expired_equipment_path %></p>
-<p><%= link_to "Equipment Expiring Soon (#{@expiring_equipment_count})", expiring_equipment_path %></p>
-<p><%= link_to "Non-Inspectable Equipment", noninspectable_equipment_path %></p>
-<p><%= link_to 'Create Equipment', new_equipment_path %></p>
-<%= form_tag({:controller => "equipment", :action => "search"}, :method => "get", 'data-equipment-search-form' => 'data-equipment-search-form') do %>
-  <table>
-    <tr>
-      <td>
-        <%= text_field_tag :name, params[:name] %>
-      </td>
-      <td>
-        <%= submit_tag "Search", :name => nil %>
-      </td>
-    </tr>
-  </table>
-<% end %>
+<div class="contain-to-grid">
+  <nav class="top-bar" data-topbar>
+    <ul class="title-area">
+      <li class="name">
+        <h1>
+          <a href="#">Equipment</a>
+        </h1>
+      </li>
+    </ul>
+    <section class="top-bar-section">
+      <ul class="right">
+        <li class="has-form">
+          <%= form_tag({:controller => "equipment", :action => "search"}, :method => "get", 'data-equipment-search-form' => 'data-equipment-search-form') do %>
+            <div class="row collapse">
+              <div class="small-8 columns">
+                <%= text_field_tag :name, params[:name], {placeholder: "Search Equipment"} %>
+              </div>
+              <div class="small-4 columns">
+                <%= submit_tag "Search", {class: "button expand radius"} %>
+              </div>
+            </div>
+            <script type="text/javascript">
+              autocomplete_input_field('input#name', '<%= ajax_equipment_name_path %>');
+            </script>
+          <% end %>
+        </li>
+      </ul>
+    </section>
+  </nav>
+</div>
 
-<script type="text/javascript">
-  autocomplete_input_field('input#name', '<%= ajax_equipment_name_path %>');
-</script>
+<div class="panel">
+  <ul class="no-bullet">
+    <li><%= link_to "All Equipment (#{@total_equipment_count})", equipment_index_path %></li>
+    <li><%= link_to "Expired Equipment (#{@expired_equipment_count})", expired_equipment_path %></li>
+    <li><%= link_to "Equipment Expiring Soon (#{@expiring_equipment_count})", expiring_equipment_path %></li>
+    <li><%= link_to "Non-Inspectable Equipment", noninspectable_equipment_path %></li>
+    <li><%= link_to 'Create Equipment', new_equipment_path %></li>
+  </ul>
+</div>

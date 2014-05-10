@@ -1,17 +1,15 @@
 <h1><%= @report_title %></h1>
 
-<div>Total: <%= @equipment_count %></div>
-
-<ul id="primary-nav">
-  <li><%= link_to 'Home', root_path %></li>
+<ul class="inline-list">
   <li><%= link_to "Create Equipment", new_equipment_path %></li>
   <li><%= link_to 'Search Equipment', search_equipment_path %></li>
 </ul>
 
-<ul id="export-nav">
+<ul class="inline-list">
   <%= render @export_template %>
+  <li class="right">Total: <%= @equipment_count %></li>
 </ul>
 
 <%= render 'equipment_list' %>
 
-<%= will_paginate @equipments %>
+<%= will_paginate @equipments, renderer: FoundationPagination::Rails %>

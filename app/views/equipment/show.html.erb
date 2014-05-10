@@ -1,53 +1,93 @@
 <% presenter_for(@equipment) do |equipment| %>
   <h1>Show Equipment</h1>
 
-  <ul id="primary-nav">
-    <li><%= link_to 'Home', root_path %></li>
+  <ul class="inline-list">
     <li><%= link_to "All Equipment", equipment_index_path %></li>
     <li><%= link_to 'Search Equipment', search_equipment_path %></li>
     <li><%= link_to 'Create Equipment', new_equipment_path %></li>
   </ul>
 
-  <p>
-    <b>Name</b>
-    <%= equipment.name %>
-  </p>
+  <fieldset>
+    <div class="row field field">
+      <div class="small-3 columns">
+        <span class="field-name">Name</span>
+      </div>
+      <div class="small-9 columns">
+        <%= equipment.name %>
+      </div>
+    </div>
 
-  <p>
-    <b>Serial Number</b>
-    <%= equipment.serial_number %>
-  </p>
+    <div class="row field field">
+      <div class="small-3 columns">
+        <span class="field-name">Serial Number</span>
+      </div>
+      <div class="small-9 columns">
+        <%= equipment.serial_number %>
+      </div>
+    </div>
 
-  <p>
-    <%= equipment.assigned_to_label %>
-    <%= equipment.assignee %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name"><%= equipment.assigned_to_label %></span>
+      </div>
+      <div class="small-9 columns">
+        <%= equipment.assignee %>
+      </div>
+    </div>
 
-  <p>
-    <b>Status</b>
-    <%= equipment.status %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Status</span>
+      </div>
+      <div class="small-9 columns">
+        <%= equipment.status %>
+      </div>
+    </div>
 
-  <p>
-    <b>Inspection Interval</b>
-    <%= equipment.inspection_interval %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Inspection Interval</span>
+      </div>
+      <div class="small-9 columns">
+        <%= equipment.inspection_interval %>
+      </div>
+    </div>
 
-  <p>
-    <b>Last Inspection Date</b>
-    <%= equipment.last_inspection_date %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Last Inspection Date</span>
+      </div>
+      <div class="small-9 columns">
+        <%= equipment.last_inspection_date %>
+      </div>
+    </div>
 
-  <p>
-    <b>Expiration Date</b>
-    <%= equipment.expiration_date %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Expiration Date</span>
+      </div>
+      <div class="small-9 columns">
+        <%= equipment.expiration_date %>
+      </div>
+    </div>
 
-  <p>
-    <b>Comments</b>
-    <%= equipment.comments %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Comments</span>
+      </div>
+      <div class="small-9 columns">
+        <%= equipment.comments %>
+      </div>
+    </div>
 
-  <%= equipment.edit_link %> |
-  <%= equipment.delete_link %>
+    <div class="row actions">
+      <div class="small-6 columns">
+        <span class="right">
+          <%= equipment.edit_link %>
+          <%= equipment.delete_link %>
+        </span>
+      </div>
+    </div>
+
+  </fieldset>
 <% end %>

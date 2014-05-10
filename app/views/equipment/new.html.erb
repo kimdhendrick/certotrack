@@ -1,8 +1,7 @@
 <h1>Create Equipment</h1>
 
-<ul id="primary-nav">
-  <li><%= link_to 'Home', root_path %></li>
+<ul class="inline-list">
   <li><%= link_to 'Search Equipment', search_equipment_path %></li>
 </ul>
 
-<%= render 'form', user_action: 'Create' %>
+<%= render 'form', user_action: 'Create', delete_link: nil %>

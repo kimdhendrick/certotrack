@@ -1,43 +1,23 @@
-CertoTrack - Home
-
 <h2>Welcome to CertoTrack</h2>
-<h3>Welcome, <%=@first_name%>!</h3>
-<span>Customer: <%=@customer_name%></span>
-
-<p><%= link_to 'Change Password', edit_change_password_path %></p>
 
 <% if can? :read, :equipment %>
-  <hr/>
-  Equipment Links:
   <%= render 'equipment_links' %>
 <% end %>
 
 <% if can? :read, :certification %>
-  <hr/>
-  Certification Links:
   <%= render 'certification_links' %>
 <% end %>
 
 <% if can? :read, :vehicle %>
-  <hr/>
-  Vehicle Links:
   <%= render 'vehicle_links' %>
 <% end %>
 
 <% if (can? :manage, :administration) %>
-  <hr/>
-  Administration Links:
   <%= render 'administration_links' %>
 <% elsif (can? :read, :equipment) || (can? :read, :certification) || (can? :read, :vehicle) %>
-  <hr/>
-  User Administration Links:
   <%= render 'user_administration_links' %>
 <% end %>
 
 <% if (cannot? :read, :equipment) && (cannot? :read, :certification) && (cannot? :read, :vehicle) %>
   <p>You are not authorized for any services. Please contact support@certotrack.com.</p>
 <% end %>
-
-<form action="/logout">
-  <input type="submit" value="Log out"/>
-</form>

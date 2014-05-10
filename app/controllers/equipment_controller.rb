@@ -43,7 +43,8 @@ class EquipmentController < ModelController
     @equipment = @equipment_service.create_equipment(current_user.customer, _equipment_params_for_create)
 
     if @equipment.persisted?
-      redirect_to @equipment, notice: _success_message(@equipment.name, 'created')
+      flash[:success] = _success_message(@equipment.name, 'created')
+      redirect_to @equipment
     else
       assign_intervals
       render action: 'new'
@@ -54,7 +55,8 @@ class EquipmentController < ModelController
     success = @equipment_service.update_equipment(@equipment, _equipment_params)
 
     if success
-      redirect_to @equipment, notice: _success_message(@equipment.name, 'updated')
+      flash[:success] = _success_message(@equipment.name, 'updated')
+      redirect_to @equipment
     else
       assign_intervals
       render action: 'edit'
@@ -64,7 +66,8 @@ class EquipmentController < ModelController
   def destroy
     equipment_name = @equipment.name
     @equipment_service.delete_equipment(@equipment)
-    redirect_to equipment_index_url, notice: _success_message(equipment_name, 'deleted')
+    flash[:success] = _success_message(equipment_name, 'deleted')
+    redirect_to equipment_index_url
   end
 
   def search

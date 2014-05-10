@@ -1,2 +1,18 @@
-<p><%= link_to 'All Locations', locations_path %></p>
-<p><%= link_to 'Deactivated Employees', deactivated_employees_path %></p>
+<div class="contain-to-grid">
+  <nav class="top-bar" data-topbar>
+    <ul class="title-area">
+      <li class="name">
+        <h1>
+          <a href="#">User Administration</a>
+        </h1>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<div class="panel">
+  <ul class="no-bullet">
+    <li><%= link_to 'All Locations', locations_path %></li>
+    <li><%= link_to 'Deactivated Employees', deactivated_employees_path %></li>
+  </ul>
+</div>

@@ -1,34 +1,59 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
   <title>Certotrack</title>
+
   <%= favicon_link_tag 'favicon.ico' %>
-  <%= stylesheet_link_tag "application", :media => "all" %>
+  <%= stylesheet_link_tag "application" %>
   <%= javascript_include_tag "application" %>
+  <%= javascript_include_tag "vendor/modernizr" %>
   <%= csrf_meta_tags %>
 </head>
+
 <body>
 
-<% flash.each do |key, value| %>
-  <%= content_tag(:div, value, class: "alert alert-#{key}") %>
-<% end %>
+<div class="fixed">
+  <nav class="top-bar" data-topbar>
+    <ul class="title-area">
+      <li class="name">
+        <h1><%= link_to 'CertoTrack', root_path %></h1>
+      </li>
+    </ul>
+    <section class="top-bar-section">
+      <ul class="right">
+        <li class="has-dropdown">
+          <a href="#">Welcome <%= @first_name %>! (<%= @customer_name %>)</a>
+          <ul class="dropdown">
+            <li>
+              <%= link_to 'Change Password', edit_change_password_path %>
+            </li>
+            <li>
+              <%= link_to "Log out", "/logout" %>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+  </nav>
+</div>
 
-<%= yield %>
+<br/>
+<div class="row">
+  <div class="small-6 small-centered columns">
+    <% flash.each do |key, value| %>
+      <%= content_tag(:div, value, class: "label #{key} alert-#{key}") %>
+    <% end %>
+  </div>
+</div>
+
+<div class="row">
+  <%= yield %>
+</div>
 
 <%= debug(params) if Rails.env.development? %>
-
-<script type="text/javascript">
-  $(function() {
-    $('.datepicker').datepicker(
-      {
-        showOn: "button",
-        buttonImage: "/assets/calendar.png",
-        buttonImageOnly: true,
-        dateFormat: 'mm/dd/yy',
-        changeYear: true
-      });
-  });
-</script>
 
 </body>
 </html>

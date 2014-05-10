@@ -21,6 +21,8 @@ gem 'to_xls'
 gem 'prawn'
 gem 'devise_security_extension'
 gem 'exception_notification'
+gem 'foundation-rails'
+gem 'will_paginate-foundation'
 
 group :test do
   gem "shoulda-matchers"

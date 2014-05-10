@@ -9,15 +9,25 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
+ //= require foundation_and_overrides
+
  *= require_tree .
  */
 
-.alert-notice {
-  color: green;
-}
-
 .alert-timedout {
   display: none;
+}
+
+.field-name {
+  font-weight: bold;
+}
+
+.field {
+  padding-top: 10px;
+}
+
+.actions {
+  padding-top: 10px;
 }
 
 .sortable th .current {
@@ -34,40 +44,13 @@
   background-image: image-url('sorted_desc.gif');
 }
 
-#primary-nav {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-
-  li {
-    display: inline;
-    margin: 0;
-    padding: 0 10px 0 5px;
-    border-right: 1px solid black;
-  }
-  li:last-child {
-    border: none;
-  }
-}
-
-#export-nav {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-
-  li {
-    display: inline;
-    margin: 0;
-    padding: 0 10px 0 5px;
-    border-right: 1px solid black;
-  }
-  li:last-child {
-    border: none;
-  }
+.panel.errors {
+  background-color: #fff3f3 !important;
+  border: 1px solid red;
+  color: #cc0000;
 }
 
 /* miscellaneous */
-
 .debug_dump {
   clear: both;
   float: left;
@@ -76,4 +59,10 @@
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
+  background-color: #eee;
+  padding: 10px;
+  font-size: 11px;
+  color: #333;
+  font-family: verdana, arial, helvetica, sans-serif;
+  line-height: 18px;
 }

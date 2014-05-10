@@ -1,92 +1,119 @@
 <% presenter_for(@customer) do |customer| %>
   <h1>Show Customer</h1>
 
-  <ul id="primary-nav">
-    <li><%= link_to 'Home', root_path %></li>
+  <ul class="inline-list">
     <li><%= link_to 'All Customers', customers_path %></li>
     <li><%= link_to 'Create Customer', new_customer_path %></li>
   </ul>
 
-  <p>
-    <b>Name</b>
-    <%= customer.name %>
-  </p>
+  <div class="row">
+    <div class="small-9 columns">
+      <div class="row">
+        <div class="small-3 columns">
+          <span class="label">Name</span>
+        </div>
+        <div class="end">
+          <%= customer.name %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="small-3 columns">
+          <span class="label">Account Number</span>
+        </div>
+        <div class="end">
+          <%= customer.account_number %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="small-3 columns">
+          Contact Person Name
+        </div>
+        <div class="end">
+          <%= customer.contact_person_name %>
+          (<%= mail_to customer.contact_email, customer.contact_email %>)
+        </div>
+      </div>
+      <div class="row">
+        <div class="small-3 columns">
+          Contact Phone Number
+        </div>
+        <div class="end">
+          <%= customer.contact_phone_number %>    </div>
+      </div>
+      <div class="row">
+        <div class="small-3 columns">
+          Address
+        </div>
+        <div class="end">
+          <%= customer.address1 %>
+          <%= customer.address2 %>,
+          <%= customer.city %>, <%= customer.state %>
+          <%= customer.zip %>
+        </div>
+      </div>
 
-  <p>
-    <b>Account Number</b>
-    <%= customer.account_number %>
-  </p>
+      <div class="row">
+        <div class="small-3 columns">
+          Equipment Access
+        </div>
+        <div class="end">
+          <%= customer.equipment_access %>
+        </div>
+      </div>
 
-  <p>
-    <b>Contact Person Name</b>
-    <%= customer.contact_person_name %>
-    (<%= mail_to customer.contact_email, customer.contact_email %>)
-  </p>
+      <div class="row">
+        <div class="small-3 columns">
+          Certification Access
+        </div>
+        <div class="end">
+          <%= customer.certification_access %>
+        </div>
+      </div>
 
-  <p>
-    <b>Contact Phone Number</b>
-    <%= customer.contact_phone_number %>
-  </p>
+      <div class="row">
+        <div class="small-3 columns">
+          Vehicle Access
+        </div>
+        <div class="end">
+          <%= customer.vehicle_access %>
+        </div>
+      </div>
 
-  <p>
-    <b>Address</b>
-    <%= customer.address1 %>
-    <%= customer.address2 %>,
-    <%= customer.city %>, <%= customer.state %>
-    <%= customer.zip %>
-  </p>
+      <h2>Customer's Users</h2>
+      <table class="sortable" border="1">
+        <thead>
+        <tr>
+          <th>Username</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% customer.users.each do |user| %>
+          <tr>
+            <td><%= link_to user.username, customer_user_path(user.model) %></td>
+            <td><%= user.first_name %></td>
+            <td><%= user.last_name %></td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
 
-  <p>
-    <b>Equipment Access</b>
-    <%= customer.equipment_access %>
-  </p>
+      <br/>
+      <%= link_to 'Create New User', new_customer_user_path(customer_id: customer.id) %>
+      <br/>
 
-  <p>
-    <b>Certification Access</b>
-    <%= customer.certification_access %>
-  </p>
-
-  <p>
-    <b>Vehicle Access</b>
-    <%= customer.vehicle_access %>
-  </p>
-
-  <p>
-    <b>Locations</b>
-  <ul>
-    <% customer.locations.each do |location| %>
-      <li><%= location.name %></li>
-    <% end %>
-  </ul>
-  </p>
-
-  <%= link_to 'Create New Location', new_location_path(customer_id: customer.id) %>
-
-  <h2>Customer's Users</h2>
-  <table class="sortable" border="1">
-    <thead>
-    <tr>
-      <th>Username</th>
-      <th>First Name</th>
-      <th>Last Name</th>
-    </tr>
-    </thead>
-    <tbody>
-    <% customer.users.each do |user| %>
-      <tr>
-        <td><%= link_to user.username, customer_user_path(user.model) %></td>
-        <td><%= user.first_name %></td>
-        <td><%= user.last_name %></td>
-      </tr>
-    <% end %>
-    </tbody>
-  </table>
-
-  <br/>
-  <%= link_to 'Create New User', new_customer_user_path(customer_id: customer.id) %>
-  <br/>
-
-  <br/>
-  <%= customer.edit_link %>
-
+      <br/>
+      <%= customer.edit_link %>
+    </div>
+    <div class="small-3 columns">
+      <span class="label">Locations</span><br/>
+      <%= link_to 'Create New Location', new_location_path(customer_id: customer.id) %>
+      <ul>
+        <% customer.locations.each do |location| %>
+          <li><%= location.name %></li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
 <% end %>

@@ -70,7 +70,7 @@ class EquipmentPresenter
   end
 
   def edit_link
-    @template.link_to 'Edit', @template.edit_equipment_path(model)
+    @template.link_to 'Edit', @template.edit_equipment_path(model), {class: 'button tiny radius'}
   end
 
   def delete_link

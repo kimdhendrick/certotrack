@@ -1,7 +1,24 @@
-<p><%= link_to 'All Users', customer_users_path %></p>
-<p><%= link_to 'All Customers', customers_path %></p>
-<p><%= link_to 'Create Customer', new_customer_path %></p>
-<p><%= link_to 'All Locations', locations_path %></p>
-<p><%= link_to 'Deactivated Employees', deactivated_employees_path %></p>
+<div class="contain-to-grid">
+  <nav class="top-bar" data-topbar>
+    <ul class="title-area">
+      <li class="name">
+        <h1>
+          <a href="#">Administration</a>
+        </h1>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<div class="panel">
+  <ul class="no-bullet">
+    <li><%= link_to 'All Users', customer_users_path %></li>
+    <li><%= link_to 'All Customers', customers_path %></li>
+    <li><%= link_to 'Create Customer', new_customer_path %></li>
+    <li><%= link_to 'All Locations', locations_path %></li>
+    <li><%= link_to 'Deactivated Employees', deactivated_employees_path %></li>
+  </ul>
+</div>
 
 <%= render 'customer_list' %>
+

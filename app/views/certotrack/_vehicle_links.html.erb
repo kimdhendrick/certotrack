@@ -1,19 +1,39 @@
-<p><%= link_to "All Vehicle Services (#{@total_service_count})", services_path %></p>
-<p><%= link_to "Expired Vehicle Services (#{@total_expired_service_count})", expired_services_path %></p>
-<p><%= link_to "Expiring Vehicle Services (#{@total_expiring_service_count})", expiring_services_path %></p>
-<%= form_tag({:controller => "vehicles", :action => "search"}, :method => "get", 'data-vehicle-search-form' => 'data-vehicle-search-form') do %>
-  <table>
-    <tr>
-      <td>
-        <%= text_field_tag :make, params[:make] %>
-      </td>
-      <td>
-        <%= submit_tag "Search", :name => nil %>
-      </td>
-    </tr>
-  </table>
-<% end %>
-<p><%= link_to "All Vehicles", vehicles_path %></p>
-<p><%= link_to "Create Vehicle", new_vehicle_path %></p>
-<p><%= link_to "All Service Types", service_types_path %></p>
-<p><%= link_to "Create Service Type", new_service_type_path %></p>
+<div class="contain-to-grid">
+  <nav class="top-bar" data-topbar>
+    <ul class="title-area">
+      <li class="name">
+        <h1>
+          <a href="#">Vehicle</a>
+        </h1>
+      </li>
+    </ul>
+    <section class="top-bar-section">
+      <ul class="right">
+        <li class="has-form">
+          <%= form_tag({:controller => "vehicles", :action => "search"}, :method => "get", 'data-vehicle-search-form' => 'data-vehicle-search-form') do %>
+            <div class="row collapse">
+              <div class="small-8 columns">
+                <%= text_field_tag :make, params[:make], {placeholder: "Search Services"} %>
+              </div>
+              <div class="small-4 columns">
+                <%= submit_tag "Search", {class: "button expand radius"} %>
+              </div>
+            </div>
+          <% end %>
+        </li>
+      </ul>
+    </section>
+  </nav>
+</div>
+
+<div class="panel">
+  <ul class="no-bullet">
+    <li><%= link_to "All Vehicle Services (#{@total_service_count})", services_path %></li>
+    <li><%= link_to "Expired Vehicle Services (#{@total_expired_service_count})", expired_services_path %></li>
+    <li><%= link_to "Expiring Vehicle Services (#{@total_expiring_service_count})", expiring_services_path %></li>
+    <li><%= link_to "All Vehicles", vehicles_path %></li>
+    <li><%= link_to "Create Vehicle", new_vehicle_path %></li>
+    <li><%= link_to "All Service Types", service_types_path %></li>
+    <li><%= link_to "Create Service Type", new_service_type_path %></li>
+  </ul>
+</div>

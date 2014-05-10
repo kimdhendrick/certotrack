@@ -1,25 +1,52 @@
-<p><%= link_to "All Employee Certifications (#{@total_certification_count})", certifications_path %></p>
-<p><%= link_to "Expired Certifications (#{@total_expired_certification_count})", expired_certifications_path %></p>
-<p><%= link_to "Certifications Expiring Soon (#{@total_expiring_certification_count})", expiring_certifications_path %></p>
-<p><%= link_to "Units Based Certifications (#{@total_units_based_certification_count})", units_based_certifications_path %></p>
-<p><%= link_to "Recertification Required Certifications (#{@total_recertification_required_certification_count})", recertification_required_certifications_path %></p>
-<%= form_tag({:controller => "certifications", :action => "search"}, :method => "get", 'data-certification-search-form' => 'data-certification-search-form') do %>
-  <table>
-    <tr>
-      <td>
-        <%= text_field_tag :certification_type_or_employee_name, params[:certification_type_or_employee_name] %>
-      </td>
-      <td>
-        <%= submit_tag "Search", :name => nil %>
-      </td>
-    </tr>
-  </table>
-<% end %>
+<div class="contain-to-grid">
+  <nav class="top-bar" data-topbar>
+    <ul class="title-area">
+      <li class="name">
+        <h1>
+          <a href="#">Certification</a>
+        </h1>
+      </li>
+    </ul>
+    <section class="top-bar-section">
+      <ul class="right">
+        <li class="has-form">
+          <%= form_tag({:controller => "certifications", :action => "search"}, :method => "get", 'data-certification-search-form' => 'data-certification-search-form') do %>
+            <div class="row collapse">
+              <div class="small-8 columns">
+                <%= text_field_tag :certification_type_or_employee_name, params[:certification_type_or_employee_name], {placeholder: "Search Certifications"} %>
+              </div>
+              <div class="small-4 columns">
+                <%= submit_tag "Search", {class: "button expand radius"} %>
+              </div>
+            </div>
+          <% end %>
+        </li>
+      </ul>
+    </section>
+  </nav>
+</div>
 
+<div class="panel">
+  <div class="row">
+    <div class="small-6 columns">
+      <ul class="no-bullet">
+        <li><%= link_to "All Employee Certifications (#{@total_certification_count})", certifications_path %></li>
+        <li><%= link_to "Expired Certifications (#{@total_expired_certification_count})", expired_certifications_path %></li>
+        <li><%= link_to "Certifications Expiring Soon (#{@total_expiring_certification_count})", expiring_certifications_path %></li>
+        <li><%= link_to "Units Based Certifications (#{@total_units_based_certification_count})", units_based_certifications_path %></li>
+        <li><%= link_to "Recertification Required Certifications (#{@total_recertification_required_certification_count})", recertification_required_certifications_path %></li>
+      </ul>
+    </div>
 
-<p><%= link_to 'All Certification Types', certification_types_path %></p>
-<p><%= link_to 'Search Certification Types', search_certification_types_path %></p>
-<p><%= link_to 'Create Certification Type', new_certification_type_path %></p>
-<p><%= link_to 'All Employees', employees_path %></p>
-<p><%= link_to 'Create Employee', new_employee_path %></p>
-<p><%= link_to 'Create Training Event', employee_list_training_event_path %></p>
+    <div class="small-6 columns">
+      <ul class="no-bullet">
+        <li><%= link_to 'All Certification Types', certification_types_path %></li>
+        <li><%= link_to 'Search Certification Types', search_certification_types_path %></li>
+        <li><%= link_to 'Create Certification Type', new_certification_type_path %></li>
+        <li><%= link_to 'All Employees', employees_path %></li>
+        <li><%= link_to 'Create Employee', new_employee_path %></li>
+        <li><%= link_to 'Create Training Event', employee_list_training_event_path %></li>
+      </ul>
+    </div>
+  </div>
+</div>

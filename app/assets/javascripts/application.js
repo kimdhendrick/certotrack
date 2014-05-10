@@ -12,8 +12,23 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require foundation
 //= require tilt-jade/runtime
 //= require jquery.chained.remote.js
 //= require jquery.chained.js
 //= require jquery-ui-1.10.3.custom.js
 //= require certotrack.js
+
+$(function(){ $(document).foundation(); });
+
+$(function() {
+  $('.datepicker').datepicker(
+    {
+      dateFormat: 'mm/dd/yy',
+      changeYear: true
+    });
+
+  $('.ui-datepicker-trigger').on('click', function(e) {
+    $(e.target).parent().prev().find('input').datepicker('show');
+  });
+});

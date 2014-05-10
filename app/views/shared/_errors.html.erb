@@ -1,8 +1,8 @@
 <% if model.errors.any? %>
-  <div id="error_explanation">
-    <h2><%= pluralize(model.errors.count, "error") %> prevented this <%= model.class.name.underscore.humanize %> from being saved:</h2>
+  <div class="panel errors radius">
+    <h4><%= pluralize(model.errors.count, "error") %> prevented this <%= model.class.name.underscore.humanize %> from being saved:</h4>
 
-    <ul>
+    <ul class="no-bullet">
       <% model.errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
       <% end %>

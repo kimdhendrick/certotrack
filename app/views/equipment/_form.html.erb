@@ -1,58 +1,91 @@
-<%= form_for(@equipment, data: { equipment_form: "data-equipment-form" }) do |f| %>
+<%= form_for(@equipment, data: {equipment_form: "data-equipment-form"}) do |f| %>
 
   <%= render 'shared/errors', model: @equipment %>
 
-  <div class="field">
-    <%= f.label :name %>
-    <br/>
-    <%= f.text_field :name %>
-  </div>
-
-  <div class="field">
-    <%= f.label :serial_number, 'Serial Number' %>
-    <br/>
-    <%= f.text_field :serial_number %>
-  </div>
-
-  <div class="field">
-    <label for="assignee">Assignee</label>
-    <select id="assignee" name="assignee">
-      <%= options_for_select(['Unassigned', 'Employee', 'Location']) %>
-    </select>
-
-    <div id="assigneeListContainer">
-      <select id="assignedTo" name="assignedTo"></select>
+  <fieldset>
+    <div class="row">
+      <div class="small-6 columns">
+        <%= f.label :name %>
+        <%= f.text_field :name %>
+      </div>
     </div>
-  </div>
+
+    <div class="row">
+      <div class="small-6 columns">
+        <%= f.label :serial_number, 'Serial Number' %>
+        <%= f.text_field :serial_number %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="small-6 columns">
+        <label for="assignee">Assignee</label>
+
+        <div class="row">
+          <div class="small-6 columns">
+            <select id="assignee" name="assignee">
+              <%= options_for_select(['Unassigned', 'Employee', 'Location']) %>
+            </select>
+          </div>
+          <div class="small-6 columns">
+            <div id="assigneeListContainer">
+              <select id="assignedTo" name="assignedTo"></select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
-  <div class="field">
-    <%= f.label :inspection_interval, 'Inspection Interval' %>
-    <br/>
-    <%= select(:equipment, :inspection_interval,
-               options_from_collection_for_select(@intervals, 'text', 'text',
-                                                  @equipment.inspection_interval)) %>
-  </div>
+    <div class="row">
+      <div class="small-6 columns">
+        <%= f.label :inspection_interval, 'Inspection Interval' %>
+        <%= select(:equipment, :inspection_interval,
+                   options_from_collection_for_select(@intervals, 'text', 'text',
+                                                      @equipment.inspection_interval)) %>
+      </div>
+    </div>
 
-  <div class="field">
-    <%= f.label :last_inspection_date, 'Last Inspection Date' %>
-    <br/>
-    <input class="datepicker"
-           id="equipment_last_inspection_date"
-           name="equipment[last_inspection_date]"
-           type="text"
-           value="<%= DateHelpers.date_to_string(@equipment.last_inspection_date) %>">
-  </div>
+    <div class="row">
+      <div class="small-6 columns">
+        <div class="row">
+          <div class="small-12 columns">
+            <%= f.label :last_inspection_date, 'Last Inspection Date' %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="small-6 columns">
+            <input class="datepicker"
+                   id="equipment_last_inspection_date"
+                   name="equipment[last_inspection_date]"
+                   type="text"
+                   value="<%= DateHelpers.date_to_string(@equipment.last_inspection_date) %>"
+                   style="display: inline;">
+          </div>
+          <div class="small-6 columns">
+            <img class="ui-datepicker-trigger" src="/assets/calendar.png" alt="..." title="..." style="display: inline;"/>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <div class="field">
-    <%= f.label :comments, 'Comments' %>
-    <br/>
-    <%= f.text_area :comments %>
-  </div>
+    <div class="row">
+      <div class="small-6 columns">
+        <%= f.label :comments, 'Comments' %>
+        <%= f.text_area :comments %>
+      </div>
+    </div>
 
-  <div class="actions">
-    <%= submit_tag(user_action) %>
-  </div>
+    <div class="row">
+      <div class="small-6 columns">
+        <span class="right">
+            <%= submit_tag(user_action, class: "button tiny radius") %>
+            <%= delete_link if delete_link.present? %>
+        </span>
+      </div>
+    </div>
+
+  </fieldset>
 
 <% end %>
 
@@ -72,7 +105,7 @@
     $('#assignee').change(function() {
       if ($(this).val() == 'Unassigned') {
         if ($('#assigneeListContainer').is(':visible')) {
-          $('#assigneeListContainer').hide('explode', function() {
+          $('#assigneeListContainer').hide('slide', function() {
             remove_input();
             add_input('location', '');
             add_input('employee', '');

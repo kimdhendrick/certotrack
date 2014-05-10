@@ -1,6 +1,19 @@
-<h3>Manage Customers</h3>
-<ul>
-  <% @customers.each do |customer| %>
-    <li><%= link_to customer.name, customer.model %></li>
-  <% end %>
-</ul>
+<div class="contain-to-grid">
+  <nav class="top-bar" data-topbar>
+    <ul class="title-area">
+      <li class="name">
+        <h1>
+          <a href="#">Customers</a>
+        </h1>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<div class="panel">
+  <ul class="no-bullet">
+    <% @customers.each do |customer| %>
+      <li><%= link_to customer.name, customer.model %></li>
+    <% end %>
+  </ul>
+</div>
