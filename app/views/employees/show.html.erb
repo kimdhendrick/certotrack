@@ -9,8 +9,7 @@
 <% presenter_for(@employee) do |employee| %>
   <h1>Show Employee</h1>
 
-  <ul id="primary-nav">
-    <li><%= link_to 'Home', root_path %></li>
+  <ul class="inline-list">
     <li><%= link_to 'All Employees', employees_path %></li>
     <li><%= link_to 'Create Employee', new_employee_path %></li>
   </ul>

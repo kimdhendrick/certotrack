@@ -1,11 +1,5 @@
 <h2>Change Password</h2>
 
-<ul id="primary-nav">
-  <li><%= link_to 'Home', root_path %></li>
-</ul>
-
-<br/>
-
 <%= form_for(@user, :url => { :action => 'update_password' } ) do |f| %>
   <%= render 'shared/errors', model: @user %>
 

@@ -2,10 +2,6 @@
 
 <div>Total: <%=@user_count%></div>
 
-<ul id="primary-nav">
-  <li><%= link_to 'Home', root_path %></li>
-</ul>
-
 <ul id="export-nav">
   <li><%= link_to 'Export to CSV', customer_users_path(format: 'csv') %></li>
   <li><%= link_to 'Export to Excel', customer_users_path(format: 'xls') %></li>

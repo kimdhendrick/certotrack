@@ -1,8 +1,7 @@
 <% presenter_for(@vehicle) do |vehicle| %>
   <h1>Show Vehicle</h1>
 
-  <ul id="primary-nav">
-    <li><%= link_to 'Home', root_path %></li>
+  <ul class="inline-list">
     <li><%= link_to 'Search Vehicles', search_vehicles_path %></li>
     <li><%= link_to 'Create Vehicle', new_vehicle_path %></li>
   </ul>

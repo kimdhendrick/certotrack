@@ -1,8 +1,7 @@
 <% presenter_for(@certification) do |certification| %>
   <h1>Show Certification</h1>
 
-  <ul id="primary-nav">
-    <li><%= link_to 'Home', root_path %></li>
+  <ul class="inline-list">
     <li><%= link_to 'Search Certifications', search_certifications_path %></li>
     <li><%= link_to 'Create Certification', new_certification_path(source: :certification) %></li>
     <li><%= link_to 'Create Employee', new_employee_path %></li>

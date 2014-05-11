@@ -1,8 +1,7 @@
 <% presenter_for(@location) do |location| %>
   <h1>Show Location</h1>
 
-  <ul id="primary-nav">
-    <li><%= link_to 'Home', root_path %></li>
+  <ul class="inline-list">
     <li><%= link_to "All Locations", locations_path %></li>
     <li><%= link_to 'Create Location', new_location_path %></li>
   </ul>
