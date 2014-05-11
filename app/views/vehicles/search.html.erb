@@ -1,7 +1,5 @@
 <h1><%= @report_title %></h1>
 
-<div>Total: <%= @vehicle_count %></div>
-
 <ul class="inline-list">
   <li><%= link_to "Create Vehicle", new_vehicle_path %></li>
 </ul>
@@ -11,38 +9,44 @@
 <%= form_tag search_vehicles_path, :method => 'get' do %>
   <%= hidden_field_tag :direction, params[:direction] %>
   <%= hidden_field_tag :sort, params[:sort] %>
-  <table>
-    <tr>
-      <td><label for="make">Make contains:</label></td>
-      <td>
+  <fieldset>
+    <div class="row field">
+      <div class="small-6 columns">
+        <label for="make">Make contains:</label>
         <%= text_field_tag :make, params[:make] %>
-      </td>
-    </tr>
-    <tr>
-      <td><label for="vehicle_model">Model contains:</label></td>
-      <td>
+      </div>
+    </div>
+
+    <div class="row field">
+      <div class="small-6 columns">
+        <label for="make">Model contains:</label>
         <%= text_field_tag :vehicle_model, params[:vehicle_model] %>
-      </td>
-    </tr>
-    <tr>
-      <td><label for="location_id">Vehicle assigned to Location:</label></td>
-      <td>
+      </div>
+    </div>
+
+    <div class="row field">
+      <div class="small-6 columns">
+        <label for="location_id">Vehicle assigned to Location:</label>
         <select name="location_id">
           <option value='' selected='selected'>Any Location</option>
-          <%=
-              options_from_collection_for_select(@locations, 'id', 'name', params[:location_id])
-          %>
+          <%= options_from_collection_for_select(@locations, 'id', 'name', params[:location_id]) %>
         </select>
-      </td>
-    </tr>
-    <tr>
-      <td></td>
-      <td>
-        <%= submit_tag "Search", :name => nil %>
-      </td>
-    </tr>
-  </table>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="small-6 columns">
+        <span class="right">
+          <%= submit_tag "Search", class: "button tiny radius right" %>
+        </span>
+      </div>
+    </div>
+  </fieldset>
 <% end %>
+
+<ul class="inline-list">
+  <li class="right">Total: <%= @vehicle_count %></li>
+</ul>
 
 <%= render 'vehicle_list' %>
 

@@ -9,7 +9,6 @@
   <%= render 'shared/errors', model: @certification %>
 
   <fieldset>
-
     <div class="row field">
       <div class="small-2 columns">
         <label>Employee</label>
@@ -26,7 +25,7 @@
         </span>
       </div>
       <div class="small-10 columns">
-        <%= link_to "#{@certification.certification_type.name}", certification_type_path(@certification.certification_type) %>
+        <%= link_to @certification.certification_type.name, certification_type_path(@certification.certification_type) %>
       </div>
     </div>
 
@@ -66,14 +65,12 @@
       </div>
     </div>
 
-
     <div class="row field">
       <div class="small-6 columns">
         <%= label_tag :comments %>
         <%= text_area_tag :comments, @certification.comments, class: "comments" %>
       </div>
     </div>
-
 
     <div class="row">
       <div class="small-6 columns">

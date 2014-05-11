@@ -1,4 +1,7 @@
-<div class="field">
-  Service Type <%= @service.service_type.name %>
+<div class="small-2 columns">
+  <label>Service Type</label>
+</div>
+<div class="small-10 columns">
+  <%= @service.service_type.name %>
   <%= hidden_field(:service, :service_type_id, value: @service.service_type_id) %>
 </div>

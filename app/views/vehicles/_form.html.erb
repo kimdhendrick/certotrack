@@ -1,59 +1,73 @@
-<%= form_for(@vehicle, data: { vehicle_form: "data-vehicle-form" }) do |f| %>
+<%= form_for(@vehicle, data: {vehicle_form: "data-vehicle-form"}) do |f| %>
 
   <%= render 'shared/errors', model: @vehicle %>
 
-  <div class="field">
-    <%= f.label :vehicle_number, 'Vehicle Number' %>
-    <br/>
-    <%= f.text_field :vehicle_number %>
-  </div>
+  <fieldset>
+    <div class="row field">
+      <div class="small-6 columns">
+        <%= f.label :vehicle_number, 'Vehicle Number' %>
+        <%= f.text_field :vehicle_number %>
+      </div>
+    </div>
 
-  <div class="field">
-    <%= f.label :vin, 'VIN' %>
-    <br/>
-    <%= f.text_field :vin %>
-  </div>
+    <div class="row field">
+      <div class="small-6 columns">
+        <%= f.label :vin, 'VIN' %>
+        <%= f.text_field :vin %>
+      </div>
+    </div>
 
-  <div class="field">
-    <%= f.label :license_plate, 'License Plate' %>
-    <br/>
-    <%= f.text_field :license_plate %>
-  </div>
+    <div class="row field">
+      <div class="small-6 columns">
+        <%= f.label :license_plate, 'License Plate' %>
+        <%= f.text_field :license_plate %>
+      </div>
+    </div>
 
-  <div class="field">
-    <%= f.label :year %>
-    <br/>
-    <%= f.text_field :year %>
-  </div>
+    <div class="row field">
+      <div class="small-6 columns">
+        <%= f.label :year %>
+        <%= f.text_field :year %>
+      </div>
+    </div>
 
-  <div class="field">
-    <%= f.label :make %>
-    <br/>
-    <%= f.text_field :make %>
-  </div>
+    <div class="row field">
+      <div class="small-6 columns">
+        <%= f.label :make %>
+        <%= f.text_field :make %>
+      </div>
+    </div>
 
-  <div class="field">
-    <%= f.label :vehicle_model, 'Model' %>
-    <br/>
-    <%= f.text_field :vehicle_model %>
-  </div>
+    <div class="row field">
+      <div class="small-6 columns">
+        <%= f.label :vehicle_model, 'Model' %>
+        <%= f.text_field :vehicle_model %>
+      </div>
+    </div>
 
-  <div class="field">
-    <%= f.label :mileage %>
-    <br/>
-    <%= f.text_field :mileage %>
-  </div>
+    <div class="row field">
+      <div class="small-6 columns">
+        <%= f.label :mileage %>
+        <%= f.text_field :mileage %>
+      </div>
+    </div>
 
-  <div class="field">
-    <%= f.label :location_id, 'Location' %>
-    <br/>
-    <%= select(:vehicle, :location_id,
-               options_from_collection_for_select(@locations, 'id', 'name',
-                                                  @vehicle.location_id)) %>
-  </div>
+    <div class="row field">
+      <div class="small-6 columns">
+        <%= f.label :location_id, 'Location' %>
+        <%= select(:vehicle, :location_id,
+                   options_from_collection_for_select(@locations, 'id', 'name',
+                                                      @vehicle.location_id)) %>
+      </div>
+    </div>
 
-  <div class="actions">
-    <%= submit_tag(user_action) %>
-  </div>
-
+    <div class="row actions">
+      <div class="small-6 columns">
+        <span class="right">
+          <%= submit_tag(user_action, class: "button tiny radius") %>
+          <%= delete_link if delete_link.present? %>
+        </span>
+      </div>
+    </div>
+  </fieldset>
 <% end %>

@@ -119,7 +119,10 @@ class ServicePresenter
   def edit_link
     @template.link_to 'Edit',
                       @template.edit_service_path(model),
-                      data: {confirm: 'Are you sure you want to edit instead of reservice?'}
+                      {
+                        data: {confirm: 'Are you sure you want to edit instead of reservice?'},
+                        class: "button tiny radius"
+                      }
   end
 
   def delete_link
@@ -136,8 +139,9 @@ class ServicePresenter
 
   def reservice_link
     @template.link_to(
-        'Reservice',
-        @template.new_service_reservice_path(model)
+      'Reservice',
+      @template.new_service_reservice_path(model),
+      class: "button tiny radius"
     )
   end
 end

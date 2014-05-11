@@ -8,36 +8,58 @@
 
   <%= render 'shared/errors', model: @service_type %>
 
-  <p>
-    <b>Name</b>
-    <%= service_type.name %>
-  </p>
+  <fieldset>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Name</span>
+      </div>
+      <div class="small-9 columns">
+        <%= service_type.name %>
+      </div>
+    </div>
 
-  <p>
-    <b>Expiration Type</b>
-    <%= service_type.expiration_type %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Expiration Type</span>
+      </div>
+      <div class="small-9 columns">
+        <%= service_type.expiration_type %>
+      </div>
+    </div>
 
-  <% if service_type.date_expiration_type? %>
-    <p>
-      <b>Interval Date</b>
-      <%= service_type.interval_date %>
-    </p>
-  <% end %>
+    <% if service_type.date_expiration_type? %>
+      <div class="row field">
+        <div class="small-3 columns">
+          <span class="field-name">Interval Date</span>
+        </div>
+        <div class="small-9 columns">
+          <%= service_type.interval_date %>
+        </div>
+      </div>
+    <% end %>
 
-  <% if service_type.mileage_expiration_type? %>
-    <p>
-      <b>Interval Mileage</b>
-      <%= service_type.interval_mileage %>
-    </p>
-  <% end %>
+    <% if service_type.mileage_expiration_type? %>
+      <div class="row field">
+        <div class="small-3 columns">
+          <span class="field-name">Interval Mileage</span>
+        </div>
+        <div class="small-9 columns">
+          <%= service_type.interval_mileage %>
+        </div>
+      </div>
+    <% end %>
 
-  <span data-action-links=data-action-links>
-    <%= service_type.edit_link %> |
-    <%= service_type.delete_link %>
-  </span>
+    <div class="row actions">
+      <div class="small-6 columns">
+        <span class="right" data-action-links=data-action-links>
+          <%= service_type.edit_link %>
+          <%= service_type.delete_link %>
+        </span>
+      </div>
+    </div>
+  </fieldset>
 
-  <h2>Serviced Vehicles</h2>
+  <h3>Serviced Vehicles</h3>
   <span data-serviced-vehicles="data-serviced-vehicles">
     <table>
       <thead>
@@ -82,7 +104,7 @@
     </table>
   </span>
 
-  <h2>Non-Serviced Vehicles</h2>
+  <h3>Non-Serviced Vehicles</h3>
   <span data-unserviced-vehicles="data-unserviced-vehicles">
     <table>
       <thead>
@@ -123,7 +145,4 @@
       </tbody>
     </table>
   </span>
-
-
 <% end %>
-

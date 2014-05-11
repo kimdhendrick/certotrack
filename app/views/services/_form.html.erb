@@ -2,47 +2,74 @@
 
   <%= render 'shared/errors', model: @service %>
 
-  <% if @service.vehicle.present? && @source != 'service' %>
-    <%= render partial: 'show_vehicle', locals: {f: f} %>
-  <% else %>
-    <%= render partial: 'choose_vehicle', locals: {f: f} %>
-  <% end %>
+  <fieldset>
+    <div class="row field">
+      <% if @service.vehicle.present? && @source != 'service' %>
+        <%= render partial: 'show_vehicle', locals: {f: f} %>
+      <% else %>
+        <%= render partial: 'choose_vehicle', locals: {f: f} %>
+      <% end %>
+    </div>
 
-  <% if (user_action == 'Reservice') %>
-    <%= render partial: 'show_service_type', locals: {f: f} %>
-  <% else %>
-    <%= render partial: 'choose_service_type', locals: {f: f} %>
-  <% end %>
+    <div class="row field">
+      <% if (user_action == 'Reservice') %>
+        <%= render partial: 'show_service_type', locals: {f: f} %>
+      <% else %>
+        <%= render partial: 'choose_service_type', locals: {f: f} %>
+      <% end %>
+    </div>
 
-  <div class="field">
-    <%= f.label :last_service_date, 'Last Service Date' %>
-    <br/>
-    <input class="datepicker"
-           id="service_last_service_date"
-           name="service[last_service_date]"
-           type="text"
-           value="<%= DateHelpers.date_to_string(@service.last_service_date || Date.today) %>">
-  </div>
+    <div class="row">
+      <div class="small-6 columns">
+        <div class="row">
+          <div class="small-12 columns">
+            <%= f.label :last_service_date, 'Last Service Date' %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="small-6 columns">
+            <input class="datepicker"
+                   id="service_last_service_date"
+                   name="service[last_service_date]"
+                   type="text"
+                   value="<%= DateHelpers.date_to_string(@service.last_service_date || Date.today) %>">
+          </div>
+          <div class="small-6 columns">
+            <img class="ui-datepicker-trigger" src="/assets/calendar.png" alt="..." title="..." style="display: inline;"/>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <div class="field">
-    <%= f.label :last_service_mileage, 'Last Service Mileage' %>
-    <br/>
-    <%= f.text_field :last_service_mileage %>
-  </div>
+    <div class="row field">
+      <div class="small-6 columns">
+        <%= f.label :last_service_mileage, 'Last Service Mileage' %>
+        <%= f.text_field :last_service_mileage %>
+      </div>
+    </div>
 
-  <div class="field">
-    <%= f.label :comments %>
-    <br/>
-    <%= f.text_area :comments, class: "comments" %>
-  </div>
+    <div class="row field">
+      <div class="small-6 columns">
+        <%= f.label :comments %>
+        <%= f.text_area :comments, class: "comments" %>
+      </div>
+    </div>
 
-  <input type="hidden" name="source" value="<%= @source %>">
+    <input type="hidden" name="source" value="<%= @source %>">
 
-  <%= submit_tag(user_action) %>
-  <% if user_action == 'Create' %>
-    <%= submit_tag "Save and Create Another" %>
-  <% end %>
+    <div class="row actions">
+      <div class="small-6 columns">
+        <span class="right">
+          <%= submit_tag(user_action, class: "button tiny radius") %>
+          <% if user_action == 'Create' %>
+            <%= submit_tag "Save and Create Another", class: "button tiny radius" %>
+          <% end %>
+          <%= delete_link if delete_link.present? %>
+        </span>
+      </div>
+    </div>
 <% end %>
+</fieldset>
 
 <script type="text/javascript">
   $('[name=commit]').click(function() {

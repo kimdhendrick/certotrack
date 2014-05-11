@@ -8,56 +8,81 @@
 
   <%= render 'shared/errors', model: @vehicle %>
 
-  <p>
-    <b>Vehicle Number</b>
-    <%= vehicle.vehicle_number %>
-  </p>
+  <fieldset>
+    <div class="row field">
+      <div class="small-6 columns">
+        <span class="field-name">Vehicle Number</span>
+        <%= vehicle.vehicle_number %>
+      </div>
+    </div>
 
-  <p>
-    <b>VIN</b>
-    <%= vehicle.vin %>
-  </p>
+    <div class="row field">
+      <div class="small-6 columns">
+        <span class="field-name">VIN</span>
+        <%= vehicle.vin %>
+      </div>
+    </div>
 
-  <p>
-    <b>License Plate</b>
-    <%= vehicle.license_plate %>
-  </p>
+    <div class="row field">
+      <div class="small-6 columns">
+        <span class="field-name">License Plate</span>
+        <%= vehicle.license_plate %>
+      </div>
+    </div>
 
-  <p>
-    <b>Year</b>
-    <%= vehicle.year %>
-  </p>
+    <div class="row field">
+      <div class="small-6 columns">
+        <span class="field-name">Year</span>
+        <%= vehicle.year %>
+      </div>
+    </div>
 
-  <p>
-    <b>Make</b>
-    <%= vehicle.make %>
-  </p>
+    <div class="row field">
+      <div class="small-6 columns">
+        <span class="field-name">Make</span>
+        <%= vehicle.make %>
+      </div>
+    </div>
 
-  <p>
-    <b>Model</b>
-    <%= vehicle.vehicle_model %>
-  </p>
+    <div class="row field">
+      <div class="small-6 columns">
+        <span class="field-name">Model</span>
+        <%= vehicle.vehicle_model %>
+      </div>
+    </div>
 
-  <p>
-    <b>Mileage</b>
-    <%= vehicle.mileage %>
-  </p>
+    <div class="row field">
+      <div class="small-6 columns">
+        <span class="field-name">Mileage</span>
+        <%= vehicle.mileage %>
+      </div>
+    </div>
 
-  <p>
-    <b>Location</b>
-    <%= vehicle.location %>
-  </p>
+    <div class="row field">
+      <div class="small-6 columns">
+        <span class="field-name">Location</span>
+        <%= vehicle.location %>
+      </div>
+    </div>
 
-  <p>
-    <b>Status</b>
-    <%= vehicle.status %>
-  </p>
+    <div class="row field">
+      <div class="small-6 columns">
+        <span class="field-name">Status</span>
+        <%= vehicle.status %>
+      </div>
+    </div>
 
-  <%= vehicle.edit_link %> |
-  <%= vehicle.delete_link %>
+    <div class="row actions">
+      <div class="small-6 columns">
+        <span class="right">
+          <%= vehicle.edit_link %>
+          <%= vehicle.delete_link %>
+        </span>
+      </div>
+    </div>
+  </fieldset>
 
-
-  <h2>Vehicle's Services</h2>
+  <h3>Vehicle's Services</h3>
 
   <span data-vehicle-services="data-vehicle-services">
     <table>
@@ -86,6 +111,10 @@
     </table>
   </span>
 
-  <br/>
-  <%= vehicle.new_service_link %>
+  <div class="row actions">
+    <div class="small-6 columns">
+      <%= vehicle.new_service_link %>
+    </div>
+  </div>
+
 <% end %>

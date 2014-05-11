@@ -1,9 +1,11 @@
 <h1><%=@report_title%></h1>
 
-<div>Total: <%=@service_count%></div>
-
 <ul class="inline-list">
   <li><%= link_to 'Create Service', new_service_path %></li>
+</ul>
+
+<ul class="inline-list">
+  <li class="right">Total: <%= @service_count %></li>
 </ul>
 
 <%= render 'service_list'%>

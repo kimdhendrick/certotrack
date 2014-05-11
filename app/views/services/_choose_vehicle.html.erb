@@ -1,10 +1,12 @@
-<div class="field">
+<div class="small-2 columns">
   <%= f.label :vehicle_id, 'Vehicle' %>
-  <br/>
+</div>
+<div class="small-4 columns">
   <%= select(:service, :vehicle_id,
              options_from_collection_for_select(@vehicles, 'id', 'name',
                                                 @service.vehicle_id),
              {prompt: 'Select Vehicle...'}) %>
 </div>
-
-<%= link_to 'Create Vehicle', new_vehicle_path %>
+<div class="small-6 columns">
+  <%= link_to 'Create Vehicle', new_vehicle_path %>
+</div>

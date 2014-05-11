@@ -8,38 +8,67 @@
 
 <%= form_tag(service_reservices_path(@service)) do |f| %>
 
-    <%= render 'shared/errors', model: @service %>
+  <%= render 'shared/errors', model: @service %>
 
-    <div class="field">
-        <span class="label">
-        Vehicle
-        </span>
-        <span class="value">
-        <%= vehicle.name %>
-        </span>
-    </div>
-    <div class="field">
-      <span class="label">
-        Service Type
-      </span>
-      <span class="value">
-          <%= @service.name %>
-      </span>
+  <fieldset>
+    <div class="row field">
+      <div class="small-2 columns">
+        <label>Vehicle</label>
+      </div>
+      <div class="small-10 columns">
+        <%= link_to vehicle.name, @service.vehicle %>
+      </div>
     </div>
 
-    <div class="field">
-      <%= label_tag :start_mileage, 'Last Service Mileage' %>
-      <%= text_field_tag :start_mileage, @service.last_service_mileage %>
+    <div class="row field">
+      <div class="small-2 columns">
+        <label>Service Type</label>
+      </div>
+      <div class="small-10 columns">
+        <%= link_to @service.name, service_type_path(@service.service_type) %>
+      </div>
     </div>
-    <div class="field">
-      <%= label_tag :start_date, 'Last Service Date' %>
-      <%= text_field_tag :start_date, DateHelpers.date_to_string(@service.last_service_date), class: 'datepicker' %>
+
+    <div class="row field">
+      <div class="small-6 columns">
+        <%= label_tag :start_mileage, 'Last Service Mileage' %>
+        <%= text_field_tag :start_mileage, @service.last_service_mileage %>
+      </div>
     </div>
-    <div class="field">
-      <%= label_tag :comments, 'Comments' %>
-      <%= text_area_tag :comments, @service.comments %>
+
+    <div class="row">
+      <div class="small-6 columns">
+        <div class="row">
+          <div class="small-12 columns">
+            <%= label_tag :start_date, 'Last Service Date' %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="small-6 columns">
+            <%= text_field_tag :start_date, DateHelpers.date_to_string(@service.last_service_date), class: 'datepicker' %>
+          </div>
+          <div class="small-6 columns">
+            <img class="ui-datepicker-trigger" src="/assets/calendar.png" alt="..." title="..." style="display: inline;"/>
+          </div>
+        </div>
+      </div>
     </div>
-    <%= submit_tag('Reservice') %>
+
+    <div class="row field">
+      <div class="small-6 columns">
+        <%= label_tag :comments, 'Comments' %>
+        <%= text_area_tag :comments, @service.comments, class: "comments" %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="small-6 columns">
+        <span class="right">
+          <%= submit_tag('Reservice', class: "button tiny radius") %>
+        </span>
+      </div>
+    </div>
+  </fieldset>
 <% end %>
 
 <script type="text/javascript">

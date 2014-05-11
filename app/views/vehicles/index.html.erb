@@ -1,9 +1,11 @@
 <h1><%=@report_title%></h1>
 
-<div>Total: <%=@vehicle_count%></div>
-
 <ul class="inline-list">
   <li><%= link_to 'Create Vehicle', new_vehicle_path %></li>
+</ul>
+
+<ul class="inline-list">
+  <li class="right">Total: <%= @vehicle_count %></li>
 </ul>
 
 <%= render 'vehicle_list'%>

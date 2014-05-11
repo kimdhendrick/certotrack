@@ -5,6 +5,4 @@
   <li><%= link_to "Create Vehicle", new_vehicle_path %></li>
 </ul>
 
-<%= render 'form', user_action: 'Update' %>
-
-<%= VehiclePresenter.new(@vehicle, self).delete_link %>
+<%= render 'form', user_action: 'Update', delete_link: VehiclePresenter.new(@vehicle, self).delete_link %>

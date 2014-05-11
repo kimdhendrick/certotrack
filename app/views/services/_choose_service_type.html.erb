@@ -1,10 +1,13 @@
-<div class="field">
+<div class="small-2 columns">
   <%= f.label :service_type_id, 'Service Type' %>
-  <br/>
+</div>
+<div class="small-4 columns">
   <%= select(:service, :service_type_id,
              options_from_collection_for_select(@service_types, 'id', 'name',
                                                 @service.service_type_id),
              {prompt: 'Select Service Type...'}) %>
 </div>
+<div class="small-6 columns">
+  <%= link_to 'Create Service Type', new_service_type_path %>
+</div>
 
-<%= link_to 'Create Service Type', new_service_type_path %>

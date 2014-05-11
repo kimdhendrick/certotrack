@@ -34,7 +34,7 @@ class ServiceTypePresenter
   end
 
   def edit_link
-    @template.link_to 'Edit', @template.edit_service_type_path(model)
+    @template.link_to 'Edit', @template.edit_service_type_path(model), class: "button tiny radius"
   end
 
   def delete_link

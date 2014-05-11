@@ -1,36 +1,62 @@
 <h1>Show Service History</h1>
 
+<ul class="inline-list">
+  <li><%= link_to 'All Services', services_path %></li>
+</ul>
+
 <% presenter_for(@service) do |service| %>
-  <p>
-    <b>Vehicle</b>
-    <%= service.vehicle_show_link_by_name %>
-  </p>
+  <fieldset>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Vehicle</span>
+      </div>
+      <div class="small-9 columns">
+        <%= service.vehicle_show_link_by_name %>
+      </div>
+    </div>
 
-  <p>
-    <b>Service Type</b>
-    <%= service.service_type_show_link %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Service Type</span>
+      </div>
+      <div class="small-9 columns">
+        <%= service.service_type_show_link %>
+      </div>
+    </div>
 
-  <p>
-    <b>Expiration Type</b>
-    <%= service.expiration_type %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Expiration Type</span>
+      </div>
+      <div class="small-9 columns">
+        <%= service.expiration_type %>
+      </div>
+    </div>
 
-  <% if service.date_expiration_type? %>
-    <p>
-      <b>Interval Date</b>
-      <%= service.interval_date %>
-    </p>
-  <% end %>
+    <% if service.date_expiration_type? %>
+      <div class="row field">
+        <div class="small-3 columns">
+          <span class="field-name">Interval Date</span>
+        </div>
+        <div class="small-9 columns">
+          <%= service.interval_date %>
+        </div>
+      </div>
+    <% end %>
 
-  <% if service.mileage_expiration_type? %>
-    <p>
-      <b>Interval Mileage</b>
-      <%= service.interval_mileage %>
-    </p>
-  <% end %>
+    <% if service.mileage_expiration_type? %>
+      <div class="row field">
+        <div class="small-3 columns">
+          <span class="field-name">Interval Mileage</span>
+        </div>
+        <div class="small-9 columns">
+          <%= service.interval_mileage %>
+        </div>
+      </div>
+    <% end %>
 
-  <h2>Service History (<%= service.service_type_name %>)</h2>
+  </fieldset>
+  <h3>Service History (<%= service.service_type_name %>)</h3>
 
   <span data-historical="data-historical">
         <table>
@@ -57,6 +83,5 @@
         </table>
       </span>
 
-  <br/>
   <%= service.show_link %>
 <% end %>

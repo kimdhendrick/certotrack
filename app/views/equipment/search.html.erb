@@ -9,52 +9,56 @@
 <%= form_tag search_equipment_path, :method => 'get' do %>
   <%= hidden_field_tag :direction, params[:direction] %>
   <%= hidden_field_tag :sort, params[:sort] %>
-  <table>
-    <tr>
-      <td><label for="name">Name contains:</label></td>
-      <td>
+
+  <fieldset>
+    <div class="row field">
+      <div class="small-6 columns">
+        <label for="name">Name contains:</label>
         <%= text_field_tag :name, params[:name] %>
-      </td>
-    </tr>
-    <tr>
-      <td><label for="serial_number">Serial Number contains:</label></td>
-      <td>
+      </div>
+    </div>
+
+    <div class="row field">
+      <div class="small-6 columns">
+        <label for="serial_number">Serial Number contains:</label>
         <%= text_field_tag :serial_number, params[:serial_number] %>
-      </td>
-    </tr>
-    <tr>
-      <td>Assigned To</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td><label for="location_id">Location:</label></td>
-      <td>
+      </div>
+    </div>
+
+    <div class="row field">
+      <div class="small-6 columns">
+        <label>Assigned To</label>
+      </div>
+    </div>
+
+    <div class="row field">
+      <div class="small-6 columns">
+        <label for="location_id">Location:</label>
         <select name="location_id">
           <option value='' selected='selected'>Any Location</option>
-          <%=
-              options_from_collection_for_select(@locations, 'id', 'name', params[:location_id])
-          %>
+          <%=options_from_collection_for_select(@locations, 'id', 'name', params[:location_id])%>
         </select>
-      </td>
-    </tr>
-    <tr>
-      <td><label for="employee_id">Employee:</label></td>
-      <td>
+      </div>
+    </div>
+
+    <div class="row field">
+      <div class="small-6 columns">
+        <label for="employee_id">Employee:</label>
         <select name="employee_id">
           <option value='' selected='selected'>Any Employee</option>
-          <%=
-              options_from_collection_for_select(@employees, 'id', 'name', params[:employee_id])
-          %>
+          <%=options_from_collection_for_select(@employees, 'id', 'name', params[:employee_id])%>
         </select>
-      </td>
-    </tr>
-    <tr>
-      <td></td>
-      <td>
-        <%= submit_tag "Search", class: "button small radius right" %>
-      </td>
-    </tr>
-  </table>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="small-6 columns">
+        <span class="right">
+          <%= submit_tag "Search", class: "button tiny radius right" %>
+        </span>
+      </div>
+    </div>
+  </fieldset>
 <% end %>
 
 <ul class="inline-list">

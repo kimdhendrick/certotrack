@@ -5,6 +5,4 @@
   <li><%= link_to "Create Service", new_service_path %></li>
 </ul>
 
-<%= render 'form', user_action: 'Update' %>
-
-<%= ServicePresenter.new(@service, self).delete_link %>
+<%= render 'form', user_action: 'Update', delete_link: ServicePresenter.new(@service, self).delete_link %>

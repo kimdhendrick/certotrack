@@ -7,57 +7,96 @@
     <li><%= link_to 'Create Vehicle', new_employee_path %></li>
   </ul>
 
-  <p>
-    <b>Service Type</b>
-    <%= service.service_type_show_link %>
-  </p>
+  <fieldset>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Service Type</span>
+      </div>
+      <div class="small-3 columns">
+        <%= service.service_type_show_link %>
+      </div>
+      <div class="small-6 columns">
+        <%= service.show_history_link %>
+      </div>
+    </div>
 
-  <p>
-    * <%= service.show_history_link %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Vehicle</span>
+      </div>
+      <div class="small-9 columns">
+        <%= service.vehicle_show_link_by_name %>
+      </div>
+    </div>
 
-  <p>
-    <b>Vehicle</b>
-    <%= service.vehicle_show_link_by_name %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Status</span>
+      </div>
+      <div class="small-9 columns">
+        <%= service.status %>
+      </div>
+    </div>
 
-  <p>
-    <b>Status</b>
-    <%= service.status %>
-  </p>
+    <% if service.date_expiration_type? %>
+      <div class="row field">
+        <div class="small-3 columns">
+          <span class="field-name">Service Due Date</span>
+        </div>
+        <div class="small-9 columns">
+          <%= service.service_due_date %>
+        </div>
+      </div>
+    <% end %>
 
-  <% if service.date_expiration_type? %>
-    <p>
-      <b>Service Due Date</b>
-      <%= service.service_due_date %>
-    </p>
-  <% end %>
 
-  <% if service.mileage_expiration_type? %>
-    <p>
-      <b>Service Due Mileage</b>
-      <%= service.service_due_mileage %>
-    </p>
-  <% end %>
+    <% if service.mileage_expiration_type? %>
+      <div class="row field">
+        <div class="small-3 columns">
+          <span class="field-name">Service Due Mileage</span>
+        </div>
+        <div class="small-9 columns">
+          <%= service.service_due_mileage %>
+        </div>
+      </div>
+    <% end %>
 
-  <p>
-    <b>Last Service Date</b>
-    <%= service.last_service_date %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Last Service Date</span>
+      </div>
+      <div class="small-9 columns">
+        <%= service.last_service_date %>
+      </div>
+    </div>
 
-  <p>
-    <b>Last Service Mileage</b>
-    <%= service.last_service_mileage %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Last Service Mileage</span>
+      </div>
+      <div class="small-9 columns">
+        <%= service.last_service_mileage %>
+      </div>
+    </div>
 
-  <p>
-    <b>Comments</b>
-    <%= service.comments %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Comments</span>
+      </div>
+      <div class="small-9 columns">
+        <%= service.comments %>
+      </div>
+    </div>
 
-  <%= service.reservice_link %> |
-  <%= service.edit_link %> |
-  <%= service.delete_link %>
-
+    <div class="row actions">
+      <div class="small-6 columns">
+        <span class="right">
+          <%= service.reservice_link %>
+          <%= service.edit_link %>
+          <%= service.delete_link %>
+        </span>
+      </div>
+    </div>
+  </fieldset>
 <% end %>
 

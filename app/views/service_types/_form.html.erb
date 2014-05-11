@@ -2,47 +2,56 @@
 
   <%= render 'shared/errors', model: @service_type %>
 
-  <div class="field">
-    <%= f.label :name %>
-    <br/>
-    <%= f.text_field :name %>
-  </div>
+  <fieldset>
+    <div class="row">
+      <div class="small-6 columns">
+        <%= f.label :name %>
+        <%= f.text_field :name %>
+      </div>
+    </div>
 
-  <div class="field">
-    <%= f.label :expiration_type, 'Expiration Type' %>
-    <br/>
-    <%= select(:service_type, :expiration_type,
-               options_for_select(@expiration_types, @service_type.expiration_type),
-               {prompt: 'Please choose one...'}) %>
-  </div>
+    <div class="row">
+      <div class="small-6 columns">
+        <%= f.label :expiration_type, 'Expiration Type' %>
+        <%= select(:service_type, :expiration_type,
+                   options_for_select(@expiration_types, @service_type.expiration_type),
+                   {prompt: 'Please choose one...'}) %>
+      </div>
+    </div>
 
-  <div class="field">
-    <%= f.label :interval_date, 'Interval Date' %>
-    <br/>
-    <%= select(:service_type, :interval_date,
-               options_from_collection_for_select(@interval_dates, 'text', 'text',
-                                                  @service_type.interval_date)) %>
-  </div>
+    <div class="row">
+      <div class="small-6 columns">
+        <%= f.label :interval_date, 'Interval Date' %>
+        <%= select(:service_type, :interval_date,
+                   options_from_collection_for_select(@interval_dates, 'text', 'text',
+                                                      @service_type.interval_date)) %>
+      </div>
+    </div>
 
-  <div class="field">
-    <%= f.label :interval_mileage, 'Interval Mileage' %>
-    <br/>
-    <%= select(:service_type, :interval_mileage,
-               options_for_select(@interval_mileages, @service_type.interval_mileage)) %>
-  </div>
+    <div class="row">
+      <div class="small-6 columns">
+        <%= f.label :interval_mileage, 'Interval Mileage' %>
+        <%= select(:service_type, :interval_mileage,
+                   options_for_select(@interval_mileages, @service_type.interval_mileage)) %>
+      </div>
+    </div>
 
-
-  <div class="actions">
-    <%= submit_tag(user_action) %>
-  </div>
-
+    <div class="row">
+      <div class="small-6 columns">
+        <span class="right">
+          <%= submit_tag(user_action, class: "button tiny radius") %>
+          <%= delete_link if delete_link.present? %>
+        </span>
+      </div>
+    </div>
+  </fieldset>
 <% end %>
 
 <script type="text/javascript">
   $(function() {
     selectExpirationIntervals();
 
-    $("#service_type_expiration_type").change(function () {
+    $("#service_type_expiration_type").change(function() {
       selectExpirationIntervals();
     });
   });

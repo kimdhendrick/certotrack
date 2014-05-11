@@ -48,7 +48,7 @@ class VehiclePresenter
   end
 
   def edit_link
-    @template.link_to 'Edit', @template.edit_vehicle_path(model)
+    @template.link_to 'Edit', @template.edit_vehicle_path(model), class: "button tiny radius"
   end
 
   def delete_link
@@ -57,6 +57,7 @@ class VehiclePresenter
 
   def new_service_link
     @template.link_to 'New Vehicle Service',
-                      @template.new_service_path(vehicle_id: model.id, source: :vehicle)
+                      @template.new_service_path(vehicle_id: model.id, source: :vehicle),
+                      {class: "button tiny radius"}
   end
 end
