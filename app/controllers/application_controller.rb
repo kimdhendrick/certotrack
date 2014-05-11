@@ -12,8 +12,8 @@ class ApplicationController < ActionController::Base
     @logged_in = current_user.present?
 
     if @logged_in
-      @first_name = current_user.first_name
-      @customer_name = current_user.customer.name
+      @first_name = current_user.first_name.strip
+      @customer_name = current_user.customer.name.strip
     end
   end
 end
