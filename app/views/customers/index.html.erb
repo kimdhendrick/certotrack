@@ -1,16 +1,20 @@
-<h1><%=@report_title%></h1>
+<h1><%= @report_title %></h1>
 
 <ul class="inline-list">
   <li><%= link_to 'Create Customer', new_customer_path %></li>
 </ul>
 
 <ul class="inline-list">
-  <li><%= link_to 'Export to CSV', customers_path(format: 'csv') %></li>
-  <li><%= link_to 'Export to Excel', customers_path(format: 'xls') %></li>
-  <li><%= link_to 'Export to PDF', customers_path(format: 'pdf', params: params) %></li>
-  <li class="right">Total: <%= @customer_count %></li>
+  <li>
+    <a href="#" data-dropdown="drop1" class="button tiny secondary radius dropdown">Export</a>
+    <ul id="drop1" data-dropdown-content class="f-dropdown">
+      <li><%= link_to 'Export to CSV', customers_path(format: 'csv') %></li>
+      <li><%= link_to 'Export to Excel', customers_path(format: 'xls') %></li>
+      <li><%= link_to 'Export to PDF', customers_path(format: 'pdf', params: params) %></li>
+    </ul>
+  <li>Total: <%= @customer_count %></li>
 </ul>
 
-<%= render 'customers_list'%>
+<%= render 'customers_list' %>
 
 <%= will_paginate @customers, renderer: FoundationPagination::Rails %>

@@ -67,10 +67,15 @@
   <h3>Employee's Certifications</h3>
 
   <ul class="inline-list">
-    <li><%= employee.export_to_csv_link %></li>
-    <li><%= employee.export_to_xls_link %></li>
-    <li><%= employee.export_to_pdf_link(params) %></li>
-    <li class="right">Total: <%= @total_certifications %></li>
+    <li>
+      <a href="#" data-dropdown="drop1" class="button tiny secondary radius dropdown">Export</a>
+      <ul id="drop1" data-dropdown-content class="f-dropdown">
+        <li><%= employee.export_to_csv_link %></li>
+        <li><%= employee.export_to_xls_link %></li>
+        <li><%= employee.export_to_pdf_link(params) %></li>
+      </ul>
+    </li>
+    <li>Total: <%= @total_certifications %></li>
   </ul>
 
   <% if employee.show_batch_edit_button?(@certifications) %>

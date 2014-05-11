@@ -49,10 +49,15 @@
 <% end %>
 
 <ul class="inline-list">
-  <li><%= link_to 'Export to CSV', search_certifications_path(format: 'csv', params: params) %></li>
-  <li><%= link_to 'Export to Excel', search_certifications_path(format: 'xls', params: params) %></li>
-  <li><%= link_to 'Export to PDF', search_certifications_path(format: 'pdf', params: params) %></li>
-  <li class="right">Total: <%= @certification_count %></li>
+  <li>
+    <a href="#" data-dropdown="drop1" class="button tiny secondary radius dropdown">Export</a>
+    <ul id="drop1" data-dropdown-content class="f-dropdown">
+      <li><%= link_to 'Export to CSV', search_certifications_path(format: 'csv', params: params) %></li>
+      <li><%= link_to 'Export to Excel', search_certifications_path(format: 'xls', params: params) %></li>
+      <li><%= link_to 'Export to PDF', search_certifications_path(format: 'pdf', params: params) %></li>
+    </ul>
+  </li>
+  <li>Total: <%= @certification_count %></li>
 </ul>
 
 <%= render 'certification_list' %>

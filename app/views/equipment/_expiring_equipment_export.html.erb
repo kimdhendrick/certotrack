@@ -1,9 +1,14 @@
 <li>
-  <%= link_to 'Export to CSV', expiring_equipment_path(format: 'csv', params: params) %>
-</li>
-<li>
-  <%= link_to 'Export to Excel', expiring_equipment_path(format: 'xls', params: params) %>
-</li>
-<li>
-  <%= link_to 'Export to PDF', expiring_equipment_path(format: 'pdf', params: params) %>
+  <a href="#" data-dropdown="drop1" class="button tiny secondary radius dropdown">Export</a>
+  <ul id="drop1" data-dropdown-content class="f-dropdown">
+    <li>
+      <%= link_to 'Export to CSV', expiring_equipment_path(format: 'csv', params: params) %>
+    </li>
+    <li>
+      <%= link_to 'Export to Excel', expiring_equipment_path(format: 'xls', params: params) %>
+    </li>
+    <li>
+      <%= link_to 'Export to PDF', expiring_equipment_path(format: 'pdf', params: params) %>
+    </li>
+  </ul>
 </li>

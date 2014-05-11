@@ -2,12 +2,17 @@
 
 
 <ul class="inline-list">
-  <li><%= link_to 'Export to CSV', deactivated_employees_path(format: 'csv') %></li>
-  <li><%= link_to 'Export to Excel', deactivated_employees_path(format: 'xls') %></li>
-  <li><%= link_to 'Export to PDF', deactivated_employees_path(format: 'pdf') %></li>
-  <li class="right">Total: <%= @employee_count %></li>
+  <li>
+    <a href="#" data-dropdown="drop1" class="button tiny secondary radius dropdown">Export</a>
+    <ul id="drop1" data-dropdown-content class="f-dropdown">
+      <li><%= link_to 'Export to CSV', deactivated_employees_path(format: 'csv') %></li>
+      <li><%= link_to 'Export to Excel', deactivated_employees_path(format: 'xls') %></li>
+      <li><%= link_to 'Export to PDF', deactivated_employees_path(format: 'pdf') %></li>
+    </ul>
+  </li>
+  <li>Total: <%= @employee_count %></li>
 </ul>
 
-<%= render 'deactivated_employee_list'%>
+<%= render 'deactivated_employee_list' %>
 
 <%= will_paginate @employees, renderer: FoundationPagination::Rails %>

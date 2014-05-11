@@ -12,9 +12,9 @@
       <td><%= link_to certification_type.name, certification_type.model %></td>
       <td><%= certification_type.interval %></td>
       <td>
-      <% if certification_type.units_based? %>
-        <%= certification_type.units_required %>
-      <% end %>
+        <% if certification_type.units_based? %>
+          <%= certification_type.units_required %>
+        <% end %>
       </td>
     </tr>
   <% end %>

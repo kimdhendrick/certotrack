@@ -1,10 +1,15 @@
 <h1><%= @report_title %></h1>
 
 <ul class="inline-list">
-  <li><%= link_to 'Export to CSV', customer_users_path(format: 'csv') %></li>
-  <li><%= link_to 'Export to Excel', customer_users_path(format: 'xls') %></li>
-  <li><%= link_to 'Export to PDF', customer_users_path(format: 'pdf', params: params) %></li>
-  <li class="right">Total: <%= @user_count %></li>
+  <li>
+    <a href="#" data-dropdown="drop1" class="button tiny secondary radius dropdown">Export</a>
+    <ul id="drop1" data-dropdown-content class="f-dropdown">
+      <li><%= link_to 'Export to CSV', customer_users_path(format: 'csv') %></li>
+      <li><%= link_to 'Export to Excel', customer_users_path(format: 'xls') %></li>
+      <li><%= link_to 'Export to PDF', customer_users_path(format: 'pdf', params: params) %></li>
+    </ul>
+  </li>
+  <li>Total: <%= @user_count %></li>
 </ul>
 
 <%= render 'users_list' %>
