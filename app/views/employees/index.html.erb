@@ -1,9 +1,11 @@
 <h1>All Employees</h1>
 
-<div>Total: <%=@employee_count%></div>
-
 <ul class="inline-list">
   <li><%= link_to "Create Employee", new_employee_path %></li>
+</ul>
+
+<ul class="inline-list">
+  <li class="right">Total: <%= @employee_count %></li>
 </ul>
 
 <%= render 'employee_list'%>

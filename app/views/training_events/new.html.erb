@@ -1,8 +1,9 @@
 <h2>Create Training Event</h2>
 
-<h3>Please confirm that these employees:</h3>
+<fieldset>
+  <h3>Please confirm that these employees:</h3>
 
-<%= form_tag training_events_path do %>
+  <%= form_tag training_events_path do %>
   <span data-employee-list="data-employee-list">
     <table>
       <thead>
@@ -14,20 +15,20 @@
       </tr>
       </thead>
       <tbody>
-        <% @employees.each do |employee| %>
-          <%= hidden_field_tag "employee_ids[]", employee.id %>
-          <tr>
-            <td><%= employee.employee_number %></td>
-            <td><%= employee.first_name %></td>
-            <td><%= employee.last_name %></td>
-            <td><%= employee.location %></td>
-          </tr>
-        <% end %>
+      <% @employees.each do |employee| %>
+        <%= hidden_field_tag "employee_ids[]", employee.id %>
+        <tr>
+          <td><%= employee.employee_number %></td>
+          <td><%= employee.first_name %></td>
+          <td><%= employee.last_name %></td>
+          <td><%= employee.location %></td>
+        </tr>
+      <% end %>
       </tbody>
     </table>
    </span>
 
-  <h3>Will be registered for these certification types:</h3>
+    <h3>Will be registered for these certification types:</h3>
 
   <span data-certification-type-list="data-certification-type-list">
     <table>
@@ -49,21 +50,41 @@
     </table>
    </span>
 
-  <div class="field">
-    <%= label_tag "trainer", "Trainer" %>
-    <br/>
-    <%= text_field_tag "trainer" %>
-  </div>
+    <div class="row">
+      <div class="small-6 columns">
+        <%= label_tag "trainer", "Trainer" %>
+        <%= text_field_tag "trainer" %>
+      </div>
+    </div>
 
-  <div class="field">
-    <%= label_tag "certification_date", "Certification Date" %>
-    <br/>
-    <input class="datepicker"
-           id="certification_date"
-           name="certification_date"
-           type="text"
-           value="<%= DateHelpers.date_to_string(Date.today) %>">
-  </div>
+    <div class="row">
+      <div class="small-6 columns">
+        <div class="row">
+          <div class="small-12 columns">
+            <%= label_tag "certification_date", "Certification Date" %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="small-6 columns">
+            <input class="datepicker"
+                   id="certification_date"
+                   name="certification_date"
+                   type="text"
+                   value="<%= DateHelpers.date_to_string(Date.today) %>">
+          </div>
+          <div class="small-6 columns">
+            <img class="ui-datepicker-trigger" src="/assets/calendar.png" alt="..." title="..." style="display: inline;"/>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <%= submit_tag "Save" %>
-<% end %>
+    <div class="row actions">
+      <div class="small-4 columns">
+        <%= submit_tag "Save", class: "button tiny radius" %>
+      </div>
+    </div>
+
+    </fieldset>
+
+  <% end %>

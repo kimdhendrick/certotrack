@@ -1,7 +1,7 @@
 <h2>Create Training Event - Select Employees</h2>
 
 <%= form_tag certification_type_list_training_event_path, method: 'get' do %>
-  <table border='1'>
+  <table>
     <thead>
     <tr>
       <td>Select</td>
@@ -24,6 +24,9 @@
     </tbody>
   </table>
 
-  <%= submit_tag "Next" %>
-
+  <div class="row actions">
+    <div class="small-4 columns">
+       <%= submit_tag "Next", class: "button tiny radius" %>
+    </div>
+  </div>
 <% end %>

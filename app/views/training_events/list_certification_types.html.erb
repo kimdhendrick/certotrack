@@ -2,7 +2,7 @@
 
 <%= form_tag new_training_event_path, method: 'get' do %>
   <%= hidden_field_tag :employee_ids, @employee_ids %>
-  <table border='1'>
+  <table>
     <thead>
     <tr>
       <td>Select</td>
@@ -21,5 +21,9 @@
     </tbody>
   </table>
 
-  <%= submit_tag 'Next' %>
+  <div class="row actions">
+    <div class="small-4 columns">
+      <%= submit_tag "Next", class: "button tiny radius" %>
+    </div>
+  </div>
 <% end %>

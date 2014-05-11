@@ -1,14 +1,15 @@
+<h2>Create Training Event - Confirmation</h2>
+
 <ul class="inline-list">
   <li><%= link_to 'Search Certifications', search_certifications_path %></li>
 </ul>
 
-<h2>Create Training Event - Confirmation</h2>
-
 <h3>Training event has been created, please print out this page for your records.</h3>
 
 <% if @employees_with_errors.any? %>
-  <div class="errors"> The following employee/certification combinations had errors and were not certified:
-    <ul>
+  <div class="panel errors radius">
+    <h4>The following employee/certification combinations had errors and were not certified:</h4>
+    <ul class="no-bullet">
       <% @employees_with_errors.each_with_index do |error_employee, i| %>
         <li><%= "#{error_employee.last_name}, #{error_employee.first_name} : #{@certification_types_with_errors[i].name}" %></li>
       <% end %>
@@ -17,7 +18,7 @@
 <% end %>
 
 <span data-employee-list="data-employee-list">
-  <table border='1'>
+  <table>
     <thead>
     <tr>
       <td>Employee Number</td>
@@ -39,10 +40,8 @@
   </table>
 </span>
 
-<br/>
-
 <span data-certification-type-list="data-certification-type-list">
-  <table border='1'>
+  <table>
     <thead>
     <tr>
       <td>Name</td>
@@ -60,10 +59,8 @@
   </table>
 </span>
 
-<br/>
-
 <span data-details="data-details">
-  <table border='1'>
+  <table>
     <thead>
     <tr>
       <td>Trainer</td>

@@ -1,13 +1,32 @@
-<h1>Confirm Deactivation</h1>
+<h2>Confirm Deactivation</h2>
 
-<h2>Click Deactivate button at bottom to deactivate employee</h2>
-<h2>*The following equipment is assigned to this employee and will be unassigned if you continue:</h2>
+<h3>Click Deactivate button at bottom to deactivate employee</h3>
 
-<%= render 'deactivate_confirm_equipment_list'%>
+<div class="panel callout radius">
+  <ul class="no-bullet">
+    <li>
+      The following equipment will be removed if you continue:
+    </li>
+  </ul>
+</div>
 
-<h2>*The following certifications will be removed if you continue:</h2>
+<%= render 'deactivate_confirm_equipment_list' %>
 
-<%= render 'deactivate_confirm_certification_list'%>
+<div class="panel callout radius">
+  <ul class="no-bullet">
+    <li>
+      The following certifications will be removed if you continue:
+    </li>
+  </ul>
+</div>
 
-<%= link_to 'Cancel', employee_path(@employee) %> |
-<%= link_to 'Deactivate', deactivate_path(@employee), data: {confirm: 'Deactivate Employee will unassign all equipment and remove certifications and employee. Are you sure?'} %>
+<%= render 'deactivate_confirm_certification_list' %>
+
+<div class="row actions">
+  <div class="small-6 columns">
+    <span class="right">
+      <%= link_to 'Cancel', employee_path(@employee), class: "button tiny radius" %>
+      <%= link_to 'Deactivate', deactivate_path(@employee), data: {confirm: 'Deactivate Employee will unassign all equipment and remove certifications and employee. Are you sure?'}, class: "button tiny radius" %>
+    </span>
+  </div>
+</div>
