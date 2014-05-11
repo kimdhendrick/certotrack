@@ -8,18 +8,34 @@
 
   <%= render 'shared/errors', model: @location %>
 
-  <p>
-    <b>Name</b>
-    <%= location.name %>
-  </p>
+  <fieldset>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Name</span>
+      </div>
+      <div class="small-9 columns">
+        <%= location.name %>
+      </div>
+    </div>
 
-  <% if can? :manage, :customer %>
-    <p>
-      <b>Customer</b>
-      <%= link_to location.customer_name, location.customer %>
-    </p>
-  <% end %>
+    <% if can? :manage, :customer %>
+      <div class="row field">
+        <div class="small-3 columns">
+          <span class="field-name">Customer</span>
+        </div>
+        <div class="small-9 columns">
+          <%= link_to location.customer_name, location.customer %>
+        </div>
+      </div>
+    <% end %>
 
-  <%= location.edit_link %> |
-  <%= location.delete_link %>
+    <div class="row actions">
+      <div class="small-6 columns">
+        <span class="right">
+          <%= location.edit_link %>
+          <%= location.delete_link %>
+        </span>
+      </div>
+    </div>
+  </fieldset>
 <% end %>

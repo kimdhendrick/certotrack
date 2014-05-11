@@ -1,25 +1,32 @@
-<%= form_for(@location, data: { location_form: "data-location-form" }) do |f| %>
+<%= form_for(@location, data: {location_form: "data-location-form"}) do |f| %>
 
   <%= render 'shared/errors', model: @location %>
-
-  <div class="field">
-    <%= f.label :name, 'Location' %>
-    <br/>
-    <%= f.text_field :name %>
-  </div>
-
-  <% if can? :manage, :customer %>
-      <div class="field">
-      <%= f.label :customer_id, 'Customer' %>
-      <br/>
-      <%= select(:location, :customer_id,
-                 options_from_collection_for_select(@customers, 'id', 'name',
-                                                    @location.customer_id)) %>
+  <fieldset>
+    <div class="row field">
+      <div class="small-6 columns">
+        <%= f.label :name, 'Location' %>
+        <%= f.text_field :name %>
+      </div>
     </div>
-  <% end %>
 
-  <div class="actions">
-    <%= submit_tag(user_action) %>
-  </div>
+    <% if can? :manage, :customer %>
+      <div class="row field">
+        <div class="small-6 columns">
+          <%= f.label :customer_id, 'Customer' %>
+          <%= select(:location, :customer_id,
+                     options_from_collection_for_select(@customers, 'id', 'name',
+                                                        @location.customer_id)) %>
+        </div>
+      </div>
+    <% end %>
 
+    <div class="row actions">
+      <div class="small-6 columns">
+        <span class="right">
+          <%= submit_tag(user_action, class: "button tiny radius") %>
+          <%= delete_link if delete_link.present? %>
+        </span>
+      </div>
+    </div>
+  </fieldset>
 <% end %>

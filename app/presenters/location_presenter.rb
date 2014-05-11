@@ -25,7 +25,7 @@ class LocationPresenter
   end
 
   def edit_link
-    @template.link_to 'Edit', @template.edit_location_path(model)
+    @template.link_to 'Edit', @template.edit_location_path(model), class: 'button tiny radius'
   end
 
   def delete_link
