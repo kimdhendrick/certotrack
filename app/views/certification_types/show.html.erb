@@ -82,7 +82,7 @@
   <%= form_tag(controller: 'batch_certifications', action: 'create') do %>
     <%= certification_type.hidden_id_field %>
     <span data-certified="data-certified">
-        <table class="sortable" border="1">
+        <table class="sortable">
           <thead>
           <tr>
             <th><%= sortable 'sort_key', title = 'Employee Name', options = 'certified_employee_name' %></th>
@@ -143,7 +143,7 @@
 
   <h3>Non Certified Employees</h3>
   <span data-uncertified="data-uncertified">
-  <table class="sortable" border="1">
+  <table class="sortable">
     <thead>
     <tr>
       <th><%= sortable 'sort_key', title = 'Employee Name', options = 'non_certified_employee_name' %></th>

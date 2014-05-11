@@ -1,35 +1,46 @@
-<%= form_for(@employee, data: { employee_form: "data-employee-form" }) do |f| %>
+<%= form_for(@employee, data: {employee_form: "data-employee-form"}) do |f| %>
 
   <%= render 'shared/errors', model: @employee %>
 
-  <div class="field">
-    <%= f.label :first_name, 'First Name' %>
-    <br/>
-    <%= f.text_field :first_name %>
-  </div>
+  <fieldset>
+    <div class="row">
+      <div class="small-6 columns">
+        <%= f.label :first_name, 'First Name' %>
+        <%= f.text_field :first_name %>
+      </div>
+    </div>
 
-  <div class="field">
-    <%= f.label :last_name, 'Last Name' %>
-    <br/>
-    <%= f.text_field :last_name %>
-  </div>
+    <div class="row">
+      <div class="small-6 columns">
+        <%= f.label :last_name, 'Last Name' %>
+        <%= f.text_field :last_name %>
+      </div>
+    </div>
 
-  <div class="field">
-    <%= f.label :employee_number, 'Employee Number' %>
-    <br/>
-    <%= f.text_field :employee_number %>
-  </div>
+    <div class="row">
+      <div class="small-6 columns">
+        <%= f.label :employee_number, 'Employee Number' %>
+        <%= f.text_field :employee_number %>
+      </div>
+    </div>
 
-  <div class="field">
-    <%= f.label :location_id, 'Location' %>
-    <br/>
-    <%= select(:employee, :location_id,
-               options_from_collection_for_select(@locations, 'id', 'name',
-                                                  @employee.location_id)) %>
-  </div>
+    <div class="row">
+      <div class="small-6 columns">
+        <%= f.label :location_id, 'Location' %>
+        <%= select(:employee, :location_id,
+                   options_from_collection_for_select(@locations, 'id', 'name',
+                                                      @employee.location_id)) %>
+      </div>
+    </div>
 
-  <div class="actions">
-    <%= submit_tag(user_action) %>
-  </div>
+    <div class="row">
+      <div class="small-6 columns">
+        <span class="right">
+      <%= submit_tag(user_action, class: "button tiny radius") %>
+          <%= delete_link if delete_link.present? %>
+          </span>
+      </div>
+    </div>
+  </fieldset>
 
 <% end %>

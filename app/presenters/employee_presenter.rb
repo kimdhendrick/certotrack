@@ -40,7 +40,7 @@ class EmployeePresenter
   end
 
   def edit_link
-    @template.link_to 'Edit', @template.edit_employee_path(model)
+    @template.link_to 'Edit', @template.edit_employee_path(model), class: "button tiny radius"
   end
 
   def delete_link
@@ -50,7 +50,10 @@ class EmployeePresenter
   def deactivate_link
     @template.link_to 'Deactivate',
                       @template.deactivate_confirm_path(model),
-                      data: {confirm: 'Deactivate Employee will unassign all equipment and remove certifications and employee. Are you sure?'}
+                      {
+                        data: {confirm: 'Deactivate Employee will unassign all equipment and remove certifications and employee. Are you sure?'},
+                        class: "button tiny radius"
+                      }
   end
 
   def new_certification_link

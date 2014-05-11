@@ -16,39 +16,62 @@
 
   <%= render 'shared/errors', model: @employee %>
 
-  <ul id="export-nav">
+  <fieldset>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Employee Number</span>
+      </div>
+      <div class="small-9 columns">
+        <%= employee.employee_number %>
+      </div>
+    </div>
+
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">First Name</span>
+      </div>
+      <div class="small-9 columns">
+        <%= employee.first_name %>
+      </div>
+    </div>
+
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Last Name</span>
+      </div>
+      <div class="small-9 columns">
+        <%= employee.last_name %>
+      </div>
+    </div>
+
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Location</span>
+      </div>
+      <div class="small-9 columns">
+        <%= employee.location_name %>
+      </div>
+    </div>
+
+    <div class="row actions">
+      <div class="small-7 columns">
+        <span class="right">
+          <%= employee.edit_link %>
+          <%= employee.delete_link %>
+          <%= employee.deactivate_link %>
+        </span>
+      </div>
+    </div>
+  </fieldset>
+
+  <h3>Employee's Certifications</h3>
+
+  <ul class="inline-list">
     <li><%= employee.export_to_csv_link %></li>
     <li><%= employee.export_to_xls_link %></li>
     <li><%= employee.export_to_pdf_link(params) %></li>
+    <li class="right">Total: <%= @total_certifications %></li>
   </ul>
-
-  <p>
-    <b>Employee Number</b>
-    <%= employee.employee_number %>
-  </p>
-
-  <p>
-    <b>First Name</b>
-    <%= employee.first_name %>
-  </p>
-
-  <p>
-    <b>Last Name</b>
-    <%= employee.last_name %>
-  </p>
-
-  <p>
-    <b>Location</b>
-    <%= employee.location_name %>
-  </p>
-
-  <%= employee.edit_link %> |
-  <%= employee.delete_link %> |
-  <%= employee.deactivate_link %>
-
-  <hr/>
-
-  <h2>Employee's Certifications</h2>
 
   <% if employee.show_batch_edit_button?(@certifications) %>
     <input type="checkbox" id="editModeButton"/>
@@ -57,7 +80,7 @@
 
   <%= form_tag(controller: 'batch_certifications', action: 'create') do %>
     <%= employee.hidden_id_field %>
-    <table class="sortable" border="1">
+    <table class="sortable">
       <thead>
       <tr>
         <th><%= sortable 'name', title = 'Certification Type' %></th>
@@ -78,7 +101,8 @@
           <td>
             <% if certification.units_based? %>
               <span data-units-achieved-editable='data-units-achieved-editable'>
-                <%= employee.units_input_field(certification, @batch_certification) %> of <%= certification.units_required %>
+                <%= employee.units_input_field(certification, @batch_certification) %>
+                of <%= certification.units_required %>
               </span>
               <span data-units-achieved-read-only='data-units-achieved-read-only'>
                 <%= certification.units_achieved_of_required %>

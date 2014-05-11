@@ -20,7 +20,10 @@ class EmployeesController < ModelController
     certifications_for_employee = @certification_service.get_all_certifications_for_employee(@employee)
 
     respond_to do |format|
-      format.html { @certifications = CertificationListPresenter.new(certifications_for_employee).present(params) }
+      format.html do
+        @certifications = CertificationListPresenter.new(certifications_for_employee).present(params)
+        @total_certifications = certifications_for_employee.count
+      end
       format.csv { _render_collection_as_csv('employee_certifications', certifications_for_employee) }
       format.xls { _render_collection_as_xls('Employee Certifications', :employee_certifications, certifications_for_employee) }
       format.pdf { _render_collection_as_pdf('Employee Certifications', :employee_certifications, certifications_for_employee) }
