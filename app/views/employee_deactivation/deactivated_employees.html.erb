@@ -1,11 +1,11 @@
 <h1>Deactivated Employee List</h1>
 
-<div>Total: <%=@employee_count%></div>
 
-<ul id="export-nav">
+<ul class="inline-list">
   <li><%= link_to 'Export to CSV', deactivated_employees_path(format: 'csv') %></li>
   <li><%= link_to 'Export to Excel', deactivated_employees_path(format: 'xls') %></li>
   <li><%= link_to 'Export to PDF', deactivated_employees_path(format: 'pdf') %></li>
+  <li class="right">Total: <%= @employee_count %></li>
 </ul>
 
 <%= render 'deactivated_employee_list'%>
