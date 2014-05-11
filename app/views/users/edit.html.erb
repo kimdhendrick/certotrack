@@ -4,6 +4,4 @@
   <li><%= link_to 'All Users', customer_users_path %></li>
 </ul>
 
-<%= render 'form', user_action: 'Update', form_path: customer_user_path(@user) %>
-
-<%= UserPresenter.new(@user, self).delete_link %>
+<%= render 'form', user_action: 'Update', form_path: customer_user_path(@user), delete_link: UserPresenter.new(@user, self).delete_link %>

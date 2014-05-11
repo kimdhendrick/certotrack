@@ -1,15 +1,14 @@
 <h1><%=@report_title%></h1>
 
-<div>Total: <%=@customer_count%></div>
-
 <ul class="inline-list">
   <li><%= link_to 'Create Customer', new_customer_path %></li>
 </ul>
 
-<ul id="export-nav">
+<ul class="inline-list">
   <li><%= link_to 'Export to CSV', customers_path(format: 'csv') %></li>
   <li><%= link_to 'Export to Excel', customers_path(format: 'xls') %></li>
   <li><%= link_to 'Export to PDF', customers_path(format: 'pdf', params: params) %></li>
+  <li class="right">Total: <%= @customer_count %></li>
 </ul>
 
 <%= render 'customers_list'%>

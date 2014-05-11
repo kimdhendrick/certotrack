@@ -5,47 +5,86 @@
     <li><%= link_to 'All Users', customer_users_path %></li>
   </ul>
 
-  <p>
-    <b>Name</b>
-    <%= user.name %>
-  </p>
+  <fieldset>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Name</span>
+      </div>
+      <div class="small-9 columns">
+        <%= user.name %>
+      </div>
+    </div>
 
-  <p>
-    <b>Username</b>
-    <%= user.username %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Username</span>
+      </div>
+      <div class="small-9 columns">
+        <%= user.username %>
+      </div>
+    </div>
 
-  <p>
-    <b>Customer</b>
-    <%= link_to user.customer_name, user.customer %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Customer</span>
+      </div>
+      <div class="small-9 columns">
+        <%= link_to user.customer_name, user.customer %>
+      </div>
+    </div>
 
-  <p>
-    <b>Email Address</b>
-    <%= user.email %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Email Address</span>
+      </div>
+      <div class="small-9 columns">
+        <%= user.email %>
+      </div>
+    </div>
 
-  <p>
-    <b>Expiration Notification Interval</b>
-    <%= user.expiration_notification_interval %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Expiration Notification Interval</span>
+      </div>
+      <div class="small-9 columns">
+        <%= user.expiration_notification_interval %>
+      </div>
+    </div>
 
-  <p>
-    <b>Equipment Access</b>
-    <%= user.equipment_access %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Equipment Access</span>
+      </div>
+      <div class="small-9 columns">
+        <%= user.equipment_access %>
+      </div>
+    </div>
 
-  <p>
-    <b>Certification Access</b>
-    <%= user.certification_access %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Certification Access</span>
+      </div>
+      <div class="small-9 columns">
+        <%= user.certification_access %>
+      </div>
+    </div>
 
-  <p>
-    <b>Vehicle Access</b>
-    <%= user.vehicle_access %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Vehicle Access</span>
+      </div>
+      <div class="small-9 columns">
+        <%= user.vehicle_access %>
+      </div>
+    </div>
 
-  <%= user.edit_link %> |
-  <%= user.delete_link %>
-
+    <div class="row actions">
+      <div class="small-6 columns">
+        <span class="right">
+          <%= user.edit_link %>
+          <%= user.delete_link %>
+        </span>
+      </div>
+    </div>
+  </fieldset>
 <% end %>

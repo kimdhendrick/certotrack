@@ -54,10 +54,15 @@ class UserPresenter
   end
 
   def edit_link
-    @template.link_to 'Edit', @template.edit_customer_user_path(model)
+    @template.link_to 'Edit', @template.edit_customer_user_path(model), class: 'button tiny radius'
   end
 
   def delete_link
-    @template.link_to 'Delete', @template.customer_user_path(model), method: :delete, data: {confirm: 'Are you sure you want to delete this user?'}
+    @template.link_to 'Delete', @template.customer_user_path(model),
+                      {
+                        method: :delete,
+                        data: {confirm: 'Are you sure you want to delete this user?'},
+                        class: 'button tiny radius'
+                      }
   end
 end
