@@ -133,8 +133,11 @@
 
   <%= will_paginate @certifications, renderer: FoundationPagination::Rails %>
 
-  <br/>
-  <%= employee.new_certification_link %>
+  <div class="row actions">
+    <div class="small-6 columns">
+      <%= employee.new_certification_link %>
+    </div>
+  </div>
 <% end %>
 
 <script type="text/javascript">

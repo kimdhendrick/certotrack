@@ -58,7 +58,8 @@ class EmployeePresenter
 
   def new_certification_link
     @template.link_to 'New Employee Certification',
-                      @template.new_certification_path(employee_id: model.id, source: :employee)
+                      @template.new_certification_path(employee_id: model.id, source: :employee),
+                      {class: "button tiny radius"}
   end
 
   def hidden_id_field
