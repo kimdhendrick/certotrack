@@ -5,6 +5,4 @@
   <li><%= link_to "Create Certification Type", new_certification_type_path %></li>
 </ul>
 
-<%= render 'form', user_action: 'Update' %>
-
-<%= CertificationTypePresenter.new(@certification_type, self).delete_link %>
+<%= render 'form', user_action: 'Update', delete_link: CertificationTypePresenter.new(@certification_type, self).delete_link %>

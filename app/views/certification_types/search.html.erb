@@ -1,7 +1,5 @@
 <h1>Search Certification Types</h1>
 
-<div>Total: <%=@certification_types_count%></div>
-
 <ul class="inline-list">
   <li><%= link_to "Create Certification Type", new_certification_type_path %></li>
 </ul>
@@ -19,12 +17,16 @@
     <tr>
       <td></td>
       <td>
-        <%= submit_tag "Search", :name => nil %>
+        <%= submit_tag "Search", class: "button small radius right" %>
       </td>
     </tr>
   </table>
 <% end %>
 
-<%= render 'certification_type_list'%>
+<ul class="inline-list">
+  <li clas="right">Total: <%= @certification_types_count %></li>
+</ul>
+
+<%= render 'certification_type_list' %>
 
 <%= will_paginate @certification_types, renderer: FoundationPagination::Rails %>

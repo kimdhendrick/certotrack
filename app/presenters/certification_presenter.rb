@@ -106,7 +106,10 @@ class CertificationPresenter
   def edit_link
     @template.link_to 'Edit',
                       @template.edit_certification_path(model),
-                      data: {confirm: 'Are you sure you want to edit instead of recertify?'}
+                      {
+                        data: {confirm: 'Are you sure you want to edit instead of recertify?'},
+                        class: 'button tiny radius'
+                      }
   end
 
   def delete_link
@@ -114,7 +117,7 @@ class CertificationPresenter
   end
 
   def recertify_link
-    @template.link_to 'Recertify', @template.new_certification_recertification_path(model)
+    @template.link_to 'Recertify', @template.new_certification_recertification_path(model), {class: 'button tiny radius'}
   end
 
   def show_history_link

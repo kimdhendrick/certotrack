@@ -7,56 +7,102 @@
     <li><%= link_to 'Create Employee', new_employee_path %></li>
   </ul>
 
-  <p>
-    <b>Certification Type</b>
-    <%= certification.certification_type_show_link %>
-  </p>
+  <fieldset>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Certification Type</span>
+      </div>
+      <div class="small-3 columns">
+        <%= certification.certification_type_show_link %>
+      </div>
+      <div class="small-6 columns">
+        <%= certification.show_history_link %>
+      </div>
+    </div>
 
-  <p>
-    * <%= certification.show_history_link %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Certification Interval</span>
+      </div>
+      <div class="small-9 columns">
+        <%= certification.interval %>
+      </div>
+    </div>
 
-  <p>
-    <b>Certification Interval</b>
-    <%= certification.interval %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Employee</span>
+      </div>
+      <div class="small-9 columns">
+        <%= certification.employee_show_link %>
+      </div>
+    </div>
 
-  <p>
-    <b>Employee</b>
-    <%= certification.employee_show_link %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Trainer</span>
+      </div>
+      <div class="small-9 columns">
+        <%= certification.trainer %>
+      </div>
+    </div>
 
-  <p>
-    <b>Trainer</b>
-    <%= certification.trainer %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Status</span>
+      </div>
+      <div class="small-9 columns">
+        <%= certification.status %>
+      </div>
+    </div>
 
-  <p>
-    <b>Status</b>
-    <%= certification.status %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Last Certification Date</span>
+      </div>
+      <div class="small-9 columns">
+        <%= certification.last_certification_date %>
+      </div>
+    </div>
 
-  <p>
-    <b>Last Certification Date</b>
-    <%= certification.last_certification_date %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Expiration Date</span>
+      </div>
+      <div class="small-9 columns">
+        <%= certification.expiration_date %>
+      </div>
+    </div>
 
-  <p>
-    <b>Expiration Date</b>
-    <%= certification.expiration_date %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name"><%= certification.units_achieved_label %></span>
+      </div>
+      <div class="small-9 columns">
+        <%= certification.units_achieved_of_required %>
+      </div>
+    </div>
 
-  <p>
-    <b><%= certification.units_achieved_label %></b>
-    <%= certification.units_achieved_of_required %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Comments</span>
+      </div>
+      <div class="small-9 columns">
+        <%= certification.comments %>
+      </div>
+    </div>
 
-  <p>
-    <b>Comments</b>
-    <%= certification.comments %>
-  </p>
+    <div class="row actions">
+      <div class="small-6 columns">
+        <span class="right">
+          <%= certification.recertify_link %>
+          <%= certification.edit_link %>
+          <%= certification.delete_link %>
+        </span>
+      </div>
+    </div>
 
-  <%= certification.recertify_link %> |
-  <%= certification.edit_link %> |
-  <%= certification.delete_link %>
+  </fieldset>
+
+
 <% end %>

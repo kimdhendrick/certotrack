@@ -5,22 +5,36 @@
 </ul>
 
 <% presenter_for(@certification) do |certification| %>
-  <p>
-    <b>Employee</b>
-    <%= certification.employee_show_link %>
-  </p>
+  <fieldset>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Employee</span>
+      </div>
+      <div class="small-9 columns">
+        <%= certification.employee_show_link %>
+      </div>
+    </div>
 
-  <p>
-    <b>Certification Type</b>
-    <%= certification.certification_type_show_link %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Certification Type</span>
+      </div>
+      <div class="small-9 columns">
+        <%= certification.certification_type_show_link %>
+      </div>
+    </div>
 
-  <p>
-    <b>Certification Interval</b>
-    <%= certification.interval %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Certification Interval</span>
+      </div>
+      <div class="small-9 columns">
+        <%= certification.interval %>
+      </div>
+    </div>
+  </fieldset>
 
-  <h2>Certification History (<%= certification.certification_type %>)</h2>
+  <h3>Certification History (<%= certification.certification_type %>)</h3>
 
   <span data-historical="data-historical">
         <table border="1">
@@ -53,6 +67,5 @@
         </table>
       </span>
 
-  <br/>
   <%= certification.show_link %>
 <% end %>

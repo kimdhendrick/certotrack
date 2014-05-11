@@ -1,8 +1,9 @@
+<h1>Valid Certifications</h1>
+
 <ul class="inline-list">
   <li><%= link_to 'Search Certifications', search_certifications_path %></li>
 </ul>
 
-<h1>Valid Certifications</h1>
 <h2><%= @certification_type.name %></h2>
 
 <%= form_tag(certification_type_auto_recertifications_path(@certification_type)) do %>
@@ -68,5 +69,5 @@
       <% end %>
       </tbody>
     </table>
-    <%= button_tag 'Recertify' %>
+    <%= button_tag 'Recertify', {class: 'button tiny radius'} %>
 <% end %>

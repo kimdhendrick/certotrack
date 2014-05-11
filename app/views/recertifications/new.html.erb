@@ -6,48 +6,84 @@
 </ul>
 
 <%= form_tag(certification_recertifications_path(@certification)) do |f| %>
-
   <%= render 'shared/errors', model: @certification %>
 
-  <div class="field">
-    Employee <%= link_to "#{@certification.employee.first_name} #{@certification.employee.last_name}", @certification.employee %>
-  </div>
+  <fieldset>
 
-  <div class="field">
-    <span id="certification_type" data-id="<%= @certification.certification_type.id %>">Certification Type</span>
-    <%= link_to "#{@certification.certification_type.name}", certification_type_path(@certification.certification_type) %>
-  </div>
+    <div class="row field">
+      <div class="small-2 columns">
+        <label>Employee</label>
+      </div>
+      <div class="small-10 columns">
+        <%= link_to "#{@certification.employee.first_name} #{@certification.employee.last_name}", @certification.employee %>
+      </div>
+    </div>
 
-  <div class="field">
-    <%= label_tag :trainer %>
-    <br/>
-    <%= text_field_tag :trainer, @certification.trainer %>
-  </div>
+    <div class="row field">
+      <div class="small-2 columns">
+        <span id="certification_type" data-id="<%= @certification.certification_type.id %>">
+          <label>Certification Type</label>
+        </span>
+      </div>
+      <div class="small-10 columns">
+        <%= link_to "#{@certification.certification_type.name}", certification_type_path(@certification.certification_type) %>
+      </div>
+    </div>
 
-  <div data-units_achieved="data-units_achieved" class="field">
-    <%= label_tag :units_achieved, 'Units Achieved' %>
-    <br/>
-    <%= text_field_tag :units_achieved, 0 %>
-  </div>
+    <div class="row field">
+      <div class="small-6 columns">
+        <%= label_tag :trainer %>
+        <%= text_field_tag :trainer, @certification.trainer %>
+      </div>
+    </div>
 
-  <div class="field">
-    <%= label_tag :last_certification_date, 'Last Certification Date' %>
-    <br/>
-    <input class="datepicker"
-           id="last_certification_date"
-           name="last_certification_date"
-           type="text"
-           value="<%= DateHelpers.date_to_string(@certification.last_certification_date) %>">
-  </div>
+    <div class="row field">
+      <div class="small-6 columns" data-units_achieved="data-units_achieved">
+        <%= label_tag :units_achieved, 'Units Achieved' %>
+        <%= text_field_tag :units_achieved, 0 %>
+      </div>
+    </div>
 
-  <div class="field">
-    <%= label_tag :comments %>
-    <br/>
-    <%= text_area_tag :comments, @certification.comments %>
-  </div>
+    <div class="row">
+      <div class="small-6 columns">
+        <div class="row">
+          <div class="small-12 columns">
+            <%= label_tag :last_certification_date, 'Last Certification Date' %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="small-6 columns">
+            <input class="datepicker"
+                   id="last_certification_date"
+                   name="last_certification_date"
+                   type="text"
+                   value="<%= DateHelpers.date_to_string(@certification.last_certification_date) %>">
+          </div>
+          <div class="small-6 columns">
+            <img class="ui-datepicker-trigger" src="/assets/calendar.png" alt="..." title="..." style="display: inline;"/>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <%= submit_tag('Recertify') %>
 
+    <div class="row field">
+      <div class="small-6 columns">
+        <%= label_tag :comments %>
+        <%= text_area_tag :comments, @certification.comments, class: "comments" %>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="small-6 columns">
+        <span class="right">
+          <%= submit_tag('Recertify', class: "button tiny radius") %>
+        </span>
+      </div>
+    </div>
+
+  </fieldset>
 <% end %>
 
 <script type="text/javascript">
@@ -92,5 +128,6 @@
         }
       }
     );
-  };
+  }
+  ;
 </script>

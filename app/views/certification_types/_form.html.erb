@@ -2,28 +2,39 @@
 
   <%= render 'shared/errors', model: @certification_type %>
 
-  <div class="field">
-    <%= f.label :name %>
-    <br/>
-    <%= f.text_field :name %>
-  </div>
+  <fieldset>
+    <div class="row">
+      <div class="small-6 columns">
+        <%= f.label :name %>
+        <%= f.text_field :name %>
+      </div>
+    </div>
 
-  <div class="field">
-    <%= f.label :units_required, 'Required Units' %>
-    <br/>
-    <%= f.text_field :units_required %>
-  </div>
+    <div class="row">
+      <div class="small-6 columns">
+        <%= f.label :units_required, 'Required Units' %>
+        <%= f.text_field :units_required %>
+      </div>
+    </div>
 
-  <div class="field">
-    <%= f.label :interval, 'Interval' %>
-    <br/>
-    <%= select(:certification_type, :interval,
-               options_from_collection_for_select(@intervals, 'text', 'text',
-                                                  @certification_type.interval)) %>
-  </div>
+    <div class="row">
+      <div class="small-6 columns">
 
-  <div class="actions">
-    <%= submit_tag(user_action) %>
-  </div>
+        <%= f.label :interval, 'Interval' %>
+        <%= select(:certification_type, :interval,
+                   options_from_collection_for_select(@intervals, 'text', 'text',
+                                                      @certification_type.interval)) %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="small-6 columns">
+        <span class="right">
+          <%= submit_tag(user_action, class: "button tiny radius") %>
+          <%= delete_link if delete_link.present? %>
+        </span>
+      </div>
+    </div>
+  </fieldset>
 
 <% end %>

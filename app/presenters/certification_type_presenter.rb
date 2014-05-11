@@ -41,7 +41,7 @@ class CertificationTypePresenter
   end
 
   def edit_link
-    @template.link_to 'Edit', @template.edit_certification_type_path(model)
+    @template.link_to 'Edit', @template.edit_certification_type_path(model), {class: 'button tiny radius'}
   end
 
   def delete_link
@@ -50,7 +50,7 @@ class CertificationTypePresenter
 
   def auto_recertify_link
     return '' unless model.units_based? && model.has_valid_certification?
-    "| #{@template.link_to('Auto Recertify', @template.new_certification_type_auto_recertification_path(model))}"
+    @template.link_to('Auto Recertify', @template.new_certification_type_auto_recertification_path(model), {class: 'button tiny radius'})
   end
 
   def hidden_id_field

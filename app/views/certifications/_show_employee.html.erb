@@ -1,4 +1,7 @@
-<div class="field">
-  Employee <%= link_to "#{@certification.employee.first_name} #{@certification.employee.last_name}", @certification.employee %>
+<div class="small-2 columns">
+  <label>Employee</label>
+</div>
+<div class="small-10 columns">
+  <%= link_to "#{@certification.employee.first_name} #{@certification.employee.last_name}", @certification.employee %>
   <%= hidden_field(:certification, :employee_id, value: @certification.employee_id) %>
 </div>

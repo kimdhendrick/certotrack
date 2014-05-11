@@ -1,7 +1,5 @@
 <h1><%= @report_title %></h1>
 
-<div>Total: <%= @certification_count %></div>
-
 <ul class="inline-list">
   <li><%= link_to "Create Certification", new_certification_path %></li>
 </ul>
@@ -43,16 +41,17 @@
     <tr>
       <td></td>
       <td>
-        <%= submit_tag "Search", :name => nil %>
+        <%= submit_tag "Search", class: "button small radius right" %>
       </td>
     </tr>
   </table>
 <% end %>
 
-<ul id="export-nav">
+<ul class="inline-list">
   <li><%= link_to 'Export to CSV', search_certifications_path(format: 'csv', params: params) %></li>
   <li><%= link_to 'Export to Excel', search_certifications_path(format: 'xls', params: params) %></li>
   <li><%= link_to 'Export to PDF', search_certifications_path(format: 'pdf', params: params) %></li>
+  <li class="right">Total: <%= @certification_count %></li>
 </ul>
 
 <%= render 'certification_list' %>

@@ -1,8 +1,6 @@
 <% if @batch_certification.present? %>
-  <div class="errors">
-    <ul>
-      <li>Errors occurred during the batch update. See below for details.</li>
-    </ul>
+  <div class="panel errors radius">
+    <h4>Errors occurred during the batch update. See below for details.</h4>
   </div>
 <% end %>
 
@@ -16,38 +14,65 @@
 
   <%= render 'shared/errors', model: @certification_type %>
 
-  <p>
-    <b>Name</b>
-    <%= certification_type.name %>
-  </p>
+  <fieldset>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Certified Employees</span>
+      </div>
+      <div class="small-9 columns">
+        <%= @certifications_count %>
+      </div>
+    </div>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Non-Certified Employees</span>
+      </div>
+      <div class="small-9 columns">
+        <%= @non_certified_employee_count %>
+      </div>
+    </div>
+  </fieldset>
 
-  <p>
-    <b>Interval</b>
-    <%= certification_type.interval %>
-  </p>
+  <fieldset>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Name</span>
+      </div>
+      <div class="small-9 columns">
+        <%= certification_type.name %>
+      </div>
+    </div>
 
-  <p>
-    <b><%= certification_type.units_required_label %></b>
-    <%= certification_type.units_required %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Interval</span>
+      </div>
+      <div class="small-9 columns">
+        <%= certification_type.interval %>
+      </div>
+    </div>
 
-  <p>
-    <b>Certified Employees</b>
-    <%= @certifications_count %>
-  </p>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name"><%= certification_type.units_required_label %></span>
+      </div>
+      <div class="small-9 columns">
+        <%= certification_type.units_required %>
+      </div>
+    </div>
 
-  <p>
-    <b>Non-Certified Employees</b>
-    <%= @non_certified_employee_count %>
-  </p>
+    <div class="row actions">
+      <div class="small-7 columns">
+        <span class="right">
+          <%= certification_type.edit_link %>
+          <%= certification_type.delete_link %>
+          <%= certification_type.auto_recertify_link.html_safe %>
+        </span>
+      </div>
+    </div>
+  </fieldset>
 
-  <%= certification_type.edit_link %> |
-  <%= certification_type.delete_link %>
-  <%= certification_type.auto_recertify_link.html_safe %>
-
-  <br/>
-
-  <h2>Certified Employees</h2>
+  <h3>Certified Employees</h3>
 
   <% if certification_type.show_batch_edit_button?(@certifications) %>
     <input type="checkbox" id="editModeButton"/>
@@ -56,7 +81,7 @@
 
   <%= form_tag(controller: 'batch_certifications', action: 'create') do %>
     <%= certification_type.hidden_id_field %>
-        <span data-certified="data-certified">
+    <span data-certified="data-certified">
         <table class="sortable" border="1">
           <thead>
           <tr>
@@ -83,13 +108,14 @@
               <td>
                 <% if certification.units_based? %>
                   <span data-units-achieved-editable='data-units-achieved-editable'>
-                    <%= certification_type.units_input_field(certification, @batch_certification) %> of <%= certification.units_required %>
+                    <%= certification_type.units_input_field(certification, @batch_certification) %>
+                    of <%= certification.units_required %>
                   </span>
                   <span data-units-achieved-read-only='data-units-achieved-read-only'>
                     <%= certification.units_achieved_of_required %>
                   </span>
                   <% if @batch_certification.present? %>
-                    <div class="errors">
+                    <div class="panel errors">
                       <%= @batch_certification.error(certification.id) %>
                     </div>
                   <% end %>
@@ -104,18 +130,18 @@
 
       </span>
 
-      <div id="batchUpdateButtons">
-        <button type="submit" id="batchUpdateButton">
-          Update
-        </button>
-        <button type="reset" id="resetButton">
-          Reset
-        </button>
-      </div>
+    <div id="batchUpdateButtons">
+      <button type="submit" id="batchUpdateButton">
+        Update
+      </button>
+      <button type="reset" id="resetButton">
+        Reset
+      </button>
+    </div>
 
   <% end %>
 
-  <h2>Non Certified Employees</h2>
+  <h3>Non Certified Employees</h3>
   <span data-uncertified="data-uncertified">
   <table class="sortable" border="1">
     <thead>

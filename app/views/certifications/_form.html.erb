@@ -2,52 +2,81 @@
 
   <%= render 'shared/errors', model: @certification %>
 
-  <% if @certification.employee.present? && @source != 'certification' %>
-    <%= render partial: 'show_employee', locals: {f: f} %>
-  <% else %>
-    <%= render partial: 'choose_employee', locals: {f: f} %>
-  <% end %>
+  <fieldset>
+    <div class="row field">
+      <% if @certification.employee.present? && @source != 'certification' %>
+        <%= render partial: 'show_employee', locals: {f: f} %>
+      <% else %>
+        <%= render partial: 'choose_employee', locals: {f: f} %>
+      <% end %>
+    </div>
 
-  <% if (user_action == 'Recertify') %>
-    <%= render partial: 'show_certification_type', locals: {f: f} %>
-  <% else %>
-    <%= render partial: 'choose_certification_type', locals: {f: f} %>
-  <% end %>
+    <div class="row field">
+      <% if (user_action == 'Recertify') %>
+        <%= render partial: 'show_certification_type', locals: {f: f} %>
+      <% else %>
+        <%= render partial: 'choose_certification_type', locals: {f: f} %>
+      <% end %>
+    </div>
 
-  <div class="field">
-    <%= f.label :trainer %>
-    <br/>
-    <%= f.text_field :trainer %>
+    <div class="row">
+      <div class="small-6 columns">
+        <%= f.label :trainer %>
+        <%= f.text_field :trainer %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="small-6 columns" data-units_achieved="data-units_achieved">
+        <%= f.label :units_achieved, 'Units Achieved' %>
+        <%= f.text_field :units_achieved %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="small-6 columns">
+        <div class="row">
+          <div class="small-12 columns">
+            <%= f.label :last_certification_date, 'Last Certification Date' %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="small-6 columns">
+            <input class="datepicker"
+                   id="certification_last_certification_date"
+                   name="certification[last_certification_date]"
+                   type="text"
+                   value="<%= DateHelpers.date_to_string(@certification.last_certification_date || Date.today) %>">
+          </div>
+          <div class="small-6 columns">
+            <img class="ui-datepicker-trigger" src="/assets/calendar.png" alt="..." title="..." style="display: inline;"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="small-6 columns">
+        <%= f.label :comments %>
+        <%= f.text_area :comments, class: "comments" %>
+      </div>
+    </div>
+
+    <input type="hidden" name="source" value="<%= @source %>">
+  </fieldset>
+
+  <div class="row">
+    <div class="small-6 columns">
+        <span class="right">
+          <%= submit_tag(user_action, class: "button tiny radius") %>
+          <% if user_action == 'Create' %>
+            <%= submit_tag "Save and Create Another", class: "button tiny radius" %>
+          <% end %>
+          <%= delete_link if delete_link.present? %>
+        </span>
+    </div>
   </div>
-
-  <div data-units_achieved="data-units_achieved" class="field">
-    <%= f.label :units_achieved, 'Units Achieved' %>
-    <br/>
-    <%= f.text_field :units_achieved %>
-  </div>
-
-  <div class="field">
-    <%= f.label :last_certification_date, 'Last Certification Date' %>
-    <br/>
-    <input class="datepicker"
-           id="certification_last_certification_date"
-           name="certification[last_certification_date]"
-           type="text"
-           value="<%= DateHelpers.date_to_string(@certification.last_certification_date || Date.today) %>">
-  </div>
-
-  <div class="field">
-    <%= f.label :comments %>
-    <br/>
-    <%= f.text_area :comments %>
-  </div>
-
-  <input type="hidden" name="source" value="<%= @source %>">
-
-  <%= submit_tag(user_action) %>
-  <% if user_action == 'Create' %>
-    <%= submit_tag "Save and Create Another" %>
-  <% end %>
 
 <% end %>
 

@@ -1,14 +1,14 @@
 <h1><%=@report_title%></h1>
 
-<div>Total: <%=@certification_count%></div>
 
 <ul class="inline-list">
   <li><%= link_to 'Create Certification', new_certification_path %></li>
   <li><%= link_to 'Search Certifications', search_certifications_path %></li>
 </ul>
 
-<ul id="export-nav">
+<ul class="inline-list">
   <%= render @export_template %>
+  <li class="right">Total: <%=@certification_count%></li>
 </ul>
 
 <%= render 'certification_list'%>
