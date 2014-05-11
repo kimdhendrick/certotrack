@@ -23,24 +23,27 @@
       </li>
     </ul>
     <section class="top-bar-section">
-      <ul class="right">
-        <li class="has-dropdown">
-          <a href="#">Welcome <%= @first_name %>! (<%= @customer_name %>)</a>
-          <ul class="dropdown">
-            <li>
-              <%= link_to 'Change Password', edit_change_password_path %>
-            </li>
-            <li>
-              <%= link_to "Log out", "/logout" %>
-            </li>
-          </ul>
-        </li>
-      </ul>
+      <% if @logged_in %>
+        <ul class="right">
+          <li class="has-dropdown">
+            <a href="#">Welcome <%= @first_name %>! (<%= @customer_name %>)</a>
+            <ul class="dropdown">
+              <li>
+                <%= link_to 'Change Password', edit_change_password_path %>
+              </li>
+              <li>
+                <%= link_to "Log out", "/logout" %>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      <% end %>
     </section>
   </nav>
 </div>
 
 <br/>
+
 <div class="row">
   <div class="small-6 small-centered columns">
     <% flash.each do |key, value| %>

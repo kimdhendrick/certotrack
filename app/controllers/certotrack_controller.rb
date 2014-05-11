@@ -33,9 +33,6 @@ class CertotrackController < ApplicationController
     if can? :read, :customer
       @customers = CustomerListPresenter.new(@customer_service.get_all_customers(current_user)).sort
     end
-
-    @first_name = current_user.first_name
-    @customer_name = current_user.customer.name
   end
 
   private
