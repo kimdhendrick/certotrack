@@ -14,4 +14,4 @@
 
 <%= render 'customers_list'%>
 
-<%= will_paginate @customers %>
+<%= will_paginate @customers, renderer: FoundationPagination::Rails %>

@@ -8,4 +8,4 @@
 
 <%= render 'service_list'%>
 
-<%= will_paginate @services %>
+<%= will_paginate @services, renderer: FoundationPagination::Rails %>

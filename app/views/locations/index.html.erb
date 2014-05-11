@@ -8,4 +8,4 @@
 
 <%= render 'locations_list'%>
 
-<%= will_paginate @locations %>
+<%= will_paginate @locations, renderer: FoundationPagination::Rails %>

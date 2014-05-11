@@ -107,7 +107,7 @@
 
   <% end %>
 
-  <%= will_paginate @certifications %>
+  <%= will_paginate @certifications, renderer: FoundationPagination::Rails %>
 
   <br/>
   <%= employee.new_certification_link %>

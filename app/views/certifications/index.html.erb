@@ -13,4 +13,4 @@
 
 <%= render 'certification_list'%>
 
-<%= will_paginate @certifications %>
+<%= will_paginate @certifications, renderer: FoundationPagination::Rails %>

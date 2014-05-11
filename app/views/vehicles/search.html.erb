@@ -46,7 +46,7 @@
 
 <%= render 'vehicle_list' %>
 
-<%= will_paginate @vehicles %>
+<%= will_paginate @vehicles, renderer: FoundationPagination::Rails %>
 
 <script type="text/javascript">
   autocomplete_input_field('input#make', '<%=ajax_vehicle_make_path%>');

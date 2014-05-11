@@ -10,4 +10,4 @@
 
 <%= render 'deactivated_employee_list'%>
 
-<%= will_paginate @employees %>
+<%= will_paginate @employees, renderer: FoundationPagination::Rails %>

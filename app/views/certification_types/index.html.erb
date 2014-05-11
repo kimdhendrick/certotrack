@@ -9,4 +9,4 @@
 
 <%= render 'certification_type_list'%>
 
-<%= will_paginate @certification_types %>
+<%= will_paginate @certification_types, renderer: FoundationPagination::Rails %>

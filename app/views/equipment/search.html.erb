@@ -67,7 +67,7 @@
 
 <%= render 'equipment_list' %>
 
-<%= will_paginate @equipments %>
+<%= will_paginate @equipments, renderer: FoundationPagination::Rails %>
 
 <script type="text/javascript">
   autocomplete_input_field('input#name', '<%=ajax_equipment_name_path%>');
