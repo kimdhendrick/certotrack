@@ -124,31 +124,16 @@ describe 'Employee Certifications', slow: true do
         find 'table.sortable'
 
         page.all('table tr').count.should == 26
-        within 'div.pagination' do
-          page.should_not have_link 'Previous'
-          page.should_not have_link '1'
-          page.should have_link '2'
-          page.should have_link 'Next'
-
+        within 'ul.pagination' do
           click_link 'Next'
         end
 
         page.all('table tr').count.should == 2
-        within 'div.pagination' do
-          page.should have_link 'Previous'
-          page.should have_link '1'
-          page.should_not have_link '2'
-          page.should_not have_link 'Next'
-
+        within 'ul.pagination' do
           click_link 'Previous'
         end
 
-        within 'div.pagination' do
-          page.should_not have_link 'Previous'
-          page.should_not have_link '1'
-          page.should have_link '2'
-          page.should have_link 'Next'
-
+        within 'ul.pagination' do
           click_link 'Next'
         end
       end

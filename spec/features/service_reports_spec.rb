@@ -269,47 +269,19 @@ describe 'Service Reports', slow: true do
         find 'table.sortable'
 
         page.all('table tr').count.should == 25 + 1
-        within 'div.pagination' do
-          page.should_not have_link 'Previous'
-          page.should_not have_link '1'
-          page.should have_link '2'
-          page.should have_link '3'
-          page.should have_link 'Next'
-
+        within 'ul.pagination' do
           click_link 'Next'
         end
-
 
         page.all('table tr').count.should == 25 + 1
-        within 'div.pagination' do
-          page.should have_link 'Previous'
-          page.should have_link '1'
-          page.should_not have_link '2'
-          page.should have_link '3'
-          page.should have_link 'Next'
-
+        within 'ul.pagination' do
           click_link 'Next'
         end
 
-
         page.all('table tr').count.should == 5 + 1
-        within 'div.pagination' do
-          page.should have_link 'Previous'
-          page.should have_link '1'
-          page.should have_link '2'
-          page.should_not have_link '3'
-          page.should_not have_link 'Next'
-        end
-
-        click_link 'Previous'
-        click_link 'Previous'
-
-        within 'div.pagination' do
-          page.should_not have_link 'Previous'
-          page.should_not have_link '1'
-          page.should have_link '2'
-          page.should have_link '3'
-          page.should have_link 'Next'
+        within 'ul.pagination' do
+          click_link 'Previous'
+          click_link 'Previous'
         end
       end
     end
@@ -703,46 +675,19 @@ describe 'Service Reports', slow: true do
         find 'table.sortable'
 
         page.all('table tr').count.should == 25 + 1
-        within 'div.pagination' do
-          page.should_not have_link 'Previous'
-          page.should_not have_link '1'
-          page.should have_link '2'
-          page.should have_link '3'
-          page.should have_link 'Next'
-
+        within 'ul.pagination' do
           click_link 'Next'
         end
 
-
         page.all('table tr').count.should == 25 + 1
-        within 'div.pagination' do
-          page.should have_link 'Previous'
-          page.should have_link '1'
-          page.should_not have_link '2'
-          page.should have_link '3'
-          page.should have_link 'Next'
-
+        within 'ul.pagination' do
           click_link 'Next'
         end
 
         page.all('table tr').count.should == 5 + 1
-        within 'div.pagination' do
-          page.should have_link 'Previous'
-          page.should have_link '1'
-          page.should have_link '2'
-          page.should_not have_link '3'
-          page.should_not have_link 'Next'
-        end
-
-        click_link 'Previous'
-        click_link 'Previous'
-
-        within 'div.pagination' do
-          page.should_not have_link 'Previous'
-          page.should_not have_link '1'
-          page.should have_link '2'
-          page.should have_link '3'
-          page.should have_link 'Next'
+        within 'ul.pagination' do
+          click_link 'Previous'
+          click_link 'Previous'
         end
       end
     end
@@ -1136,46 +1081,19 @@ describe 'Service Reports', slow: true do
         find 'table.sortable'
 
         page.all('table tr').count.should == 25 + 1
-        within 'div.pagination' do
-          page.should_not have_link 'Previous'
-          page.should_not have_link '1'
-          page.should have_link '2'
-          page.should have_link '3'
-          page.should have_link 'Next'
-
+        within 'ul.pagination' do
           click_link 'Next'
         end
 
-
         page.all('table tr').count.should == 25 + 1
-        within 'div.pagination' do
-          page.should have_link 'Previous'
-          page.should have_link '1'
-          page.should_not have_link '2'
-          page.should have_link '3'
-          page.should have_link 'Next'
-
+        within 'ul.pagination' do
           click_link 'Next'
         end
 
         page.all('table tr').count.should == 5 + 1
-        within 'div.pagination' do
-          page.should have_link 'Previous'
-          page.should have_link '1'
-          page.should have_link '2'
-          page.should_not have_link '3'
-          page.should_not have_link 'Next'
-        end
-
-        click_link 'Previous'
-        click_link 'Previous'
-
-        within 'div.pagination' do
-          page.should_not have_link 'Previous'
-          page.should_not have_link '1'
-          page.should have_link '2'
-          page.should have_link '3'
-          page.should have_link 'Next'
+        within 'ul.pagination' do
+          click_link 'Previous'
+          click_link 'Previous'
         end
       end
     end

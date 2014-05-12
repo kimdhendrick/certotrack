@@ -69,7 +69,7 @@ describe 'Employee Deactivation', slow: true do
 
       page.should have_link 'Home'
       page.should have_content 'Click Deactivate button at bottom to deactivate employee'
-      page.should have_content 'The following equipment is assigned to this employee and will be unassigned if you continue:'
+      page.should have_content 'The following equipment will be removed if you continue:'
       page.should have_content 'Name'
       page.should have_content 'Serial Number'
       page.should have_content 'Status'
@@ -302,48 +302,22 @@ describe 'Employee Deactivation', slow: true do
         find 'table'
 
         page.all('table tr').count.should == 25 + 1
-        within 'div.pagination' do
-          page.should_not have_link 'Previous'
-          page.should_not have_link '1'
-          page.should have_link '2'
-          page.should have_link '3'
-          page.should have_link 'Next'
-
+        within 'ul.pagination' do
           click_link 'Next'
         end
 
         page.all('table tr').count.should == 25 + 1
-        within 'div.pagination' do
-          page.should have_link 'Previous'
-          page.should have_link '1'
-          page.should_not have_link '2'
-          page.should have_link '3'
-          page.should have_link 'Next'
-
+        within 'ul.pagination' do
           click_link 'Next'
         end
 
         page.all('table tr').count.should == 5 + 1
-        within 'div.pagination' do
-          page.should have_link 'Previous'
-          page.should have_link '1'
-          page.should have_link '2'
-          page.should_not have_link '3'
-          page.should_not have_link 'Next'
-
+        within 'ul.pagination' do
           click_link 'Previous'
         end
 
-        within 'div.pagination' do
+        within 'ul.pagination' do
           click_link 'Previous'
-        end
-
-        within 'div.pagination' do
-          page.should_not have_link 'Previous'
-          page.should_not have_link '1'
-          page.should have_link '2'
-          page.should have_link '3'
-          page.should have_link 'Next'
         end
       end
     end

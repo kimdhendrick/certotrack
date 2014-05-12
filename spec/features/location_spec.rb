@@ -49,14 +49,12 @@ describe 'Locations', slow: true do
       page.should have_link 'Create Location'
 
       fill_in 'Location', with: 'China'
-      page.should_not have_content 'Customer'
 
       click_on 'Update'
 
       page.should have_content 'Show Location'
       page.should have_content "Location 'China' was successfully updated."
       page.should have_content 'China'
-      page.should_not have_content 'Customer'
     end
 
     it 'should be able to create a new location' do
@@ -74,14 +72,12 @@ describe 'Locations', slow: true do
       page.should have_link 'All Locations'
 
       fill_in 'Location', with: 'Siberia'
-      page.should_not have_content 'Customer'
 
       click_on 'Create'
 
       page.should have_content 'Show Location'
       page.should have_content "Location 'Siberia' was successfully created"
       page.should have_content 'Siberia'
-      page.should_not have_content 'Customer'
     end
 
     it 'should be able to delete a location', js: true do
@@ -289,11 +285,11 @@ describe 'Locations', slow: true do
       click_link 'All Locations'
 
       # Ascending sort
-      click_link 'Customer'
+      click_link 'Customer Name'
       column_data_should_be_in_order('alpha', 'beta', 'zeta')
 
       # Descending sort
-      click_link 'Customer'
+      click_link 'Customer Name'
       column_data_should_be_in_order('zeta', 'beta', 'alpha')
     end
   end
@@ -314,47 +310,19 @@ describe 'Locations', slow: true do
       find 'table.sortable'
 
       page.all('table tr').count.should == 25 + 1
-      within 'div.pagination' do
-        page.should_not have_link 'Previous'
-        page.should_not have_link '1'
-        page.should have_link '2'
-        page.should have_link '3'
-        page.should have_link 'Next'
-
+      within 'ul.pagination' do
         click_link 'Next'
       end
-
 
       page.all('table tr').count.should == 25 + 1
-      within 'div.pagination' do
-        page.should have_link 'Previous'
-        page.should have_link '1'
-        page.should_not have_link '2'
-        page.should have_link '3'
-        page.should have_link 'Next'
-
+      within 'ul.pagination' do
         click_link 'Next'
       end
 
-
       page.all('table tr').count.should == 5 + 1
-      within 'div.pagination' do
-        page.should have_link 'Previous'
-        page.should have_link '1'
-        page.should have_link '2'
-        page.should_not have_link '3'
-        page.should_not have_link 'Next'
-      end
-
-      click_link 'Previous'
-      click_link 'Previous'
-
-      within 'div.pagination' do
-        page.should_not have_link 'Previous'
-        page.should_not have_link '1'
-        page.should have_link '2'
-        page.should have_link '3'
-        page.should have_link 'Next'
+      within 'ul.pagination' do
+        click_link 'Previous'
+        click_link 'Previous'
       end
     end
   end
