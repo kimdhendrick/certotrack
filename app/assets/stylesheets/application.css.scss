@@ -58,13 +58,64 @@
 
 .readable-label {
   @include label(
-    $text-size:15px
+    $padding:7px 16px 9px,
+    $text-size:15px,
+    $bg:#2ba6cb,
+    $radius:4px
   );
 }
 
 .warning {
   @include label(
-    $bg:yellow
+    $padding:7px 16px 7px,
+    $text-size:13px,
+    $bg:#FFFF66,
+    $radius:10px
+  );
+}
+
+.expired {
+  @include label(
+    $padding:7px 16px 7px,
+    $text-size:13px,
+    $bg:red,
+    $radius:10px
+  );
+}
+
+.valid {
+  @include label(
+    $padding:7px 16px 7px,
+    $text-size:13px,
+    $bg:blue,
+    $radius:10px
+  );
+}
+
+.na {
+  @include label(
+    $padding:7px 16px 7px,
+    $text-size:13px,
+    $bg:#e7e7e7,
+    $radius:10px
+  );
+}
+
+.pending {
+  @include label(
+    $padding:7px 16px 7px,
+    $text-size:13px,
+    $bg:#FFFF66,
+    $radius:10px
+  );
+}
+
+.recertify {
+  @include label(
+    $padding:7px 16px 7px,
+    $text-size:13px,
+    $bg:black,
+    $radius:10px
   );
 }
 

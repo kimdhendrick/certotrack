@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe SortableByStatus do
+describe StatusHelper do
 
   class TestSortableByStatus
-    include SortableByStatus
+    include StatusHelper
   end
 
   subject { TestSortableByStatus.new }

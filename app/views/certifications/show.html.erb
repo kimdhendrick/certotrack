@@ -52,7 +52,9 @@
         <span class="field-name">Status</span>
       </div>
       <div class="small-9 columns">
-        <%= certification.status %>
+        <div class="<%=certification.status_style%>">
+          <%= certification.status %>
+        </div>
       </div>
     </div>
 

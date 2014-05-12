@@ -1,5 +1,5 @@
 class CertificationPresenter
-  include SortableByStatus
+  include StatusHelper
   include EmployeesHelper
   include LinkHelper
 

@@ -122,7 +122,11 @@
                   <% end %>
                 <% end %>
               </td>
-              <td><%= certification.status %></td>
+              <td>
+                <div class="<%= certification.status_style %>">
+                  <%= certification.status %>
+                </div>
+              </td>
               <td><%= link_to 'Edit', certification.model %></td>
             </tr>
           <% end %>

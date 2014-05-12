@@ -1,5 +1,5 @@
 class EquipmentPresenter
-  include SortableByStatus
+  include StatusHelper
   include LinkHelper
 
   attr_reader :model
@@ -67,19 +67,6 @@ class EquipmentPresenter
 
   def created_at
     DateHelpers::date_to_string(model.created_at)
-  end
-
-  def status_style
-    case model.status
-      when Status::VALID
-        'label round'
-      when Status::EXPIRED
-        'alert label round'
-      when Status::EXPIRING
-        ''
-      when Status::NA
-        'secondary label round'
-    end
   end
 
   def edit_link

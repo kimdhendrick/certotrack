@@ -40,7 +40,9 @@
         <span class="field-name">Status</span>
       </div>
       <div class="small-9 columns">
-        <%= equipment.status %>
+        <div class="<%=equipment.status_style%>">
+          <%= equipment.status %>
+        </div>
       </div>
     </div>
 

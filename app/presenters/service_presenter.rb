@@ -1,7 +1,7 @@
 class ServicePresenter
   include ActionView::Helpers::NumberHelper
   include PresentableModelHelper
-  include SortableByStatus
+  include StatusHelper
   include LinkHelper
 
   attr_reader :model

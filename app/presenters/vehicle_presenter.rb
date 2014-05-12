@@ -1,6 +1,6 @@
 class VehiclePresenter
   include ActionView::Helpers::NumberHelper
-  include SortableByStatus
+  include StatusHelper
   include LinkHelper
 
   attr_reader :model

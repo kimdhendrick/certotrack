@@ -1,5 +1,5 @@
 class Service < ActiveRecord::Base
-  include SortableByStatus
+  include StatusHelper
 
   belongs_to :service_type
   belongs_to :vehicle

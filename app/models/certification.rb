@@ -1,5 +1,5 @@
 class Certification < ActiveRecord::Base
-  include SortableByStatus
+  include StatusHelper
 
   default_scope { where('certifications.active = true') }
 

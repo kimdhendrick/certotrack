@@ -119,7 +119,11 @@
               <% end %>
             <% end %>
           </td>
-          <td><%= certification.status %></td>
+          <td>
+            <div class="<%=certification.status_style%>">
+              <%= certification.status %>
+            </div>
+          </td>
         </tr>
       <% end %>
       </tbody>

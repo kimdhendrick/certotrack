@@ -17,7 +17,11 @@
       <td><%= link_to certification.name, certification.model.certification_type %></td>
       <td><%= certification.interval %></td>
       <td><%= certification.units_achieved_of_required %></td>
-      <td><%= certification.status %></td>
+      <td>
+        <div class="<%=certification.status_style%>">
+          <%= certification.status %>
+        </div>
+      </td>
       <td><%= link_to certification.employee_name, certification.employee_model %></td>
       <td><%= certification.trainer %></td>
       <td><%= certification.last_certification_date %></td>
