@@ -47,7 +47,7 @@
 <div class="row">
   <div class="small-6 small-centered columns">
     <% flash.each do |key, value| %>
-      <%= content_tag(:div, value, class: "readable-label #{key} alert-#{key}") %>
+      <%= content_tag(:div, value, class: "label #{key} alert-#{key}") %>
     <% end %>
   </div>
 </div>

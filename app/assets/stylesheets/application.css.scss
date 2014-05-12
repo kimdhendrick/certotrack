@@ -56,15 +56,6 @@
   color: #cc0000;
 }
 
-.readable-label {
-  @include label(
-    $padding:7px 16px 9px,
-    $text-size:15px,
-    $bg:#2ba6cb,
-    $radius:4px
-  );
-}
-
 .warning {
   @include label(
     $padding:7px 16px 7px,
