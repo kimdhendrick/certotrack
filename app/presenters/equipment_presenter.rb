@@ -69,6 +69,19 @@ class EquipmentPresenter
     DateHelpers::date_to_string(model.created_at)
   end
 
+  def status_style
+    case model.status
+      when Status::VALID
+        'label round'
+      when Status::EXPIRED
+        'alert label round'
+      when Status::EXPIRING
+        ''
+      when Status::NA
+        'secondary label round'
+    end
+  end
+
   def edit_link
     @template.link_to 'Edit', @template.edit_equipment_path(model), {class: 'button tiny radius'}
   end

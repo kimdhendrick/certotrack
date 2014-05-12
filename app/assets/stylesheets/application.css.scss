@@ -62,6 +62,12 @@
   );
 }
 
+.warning {
+  @include label(
+    $bg:yellow
+  );
+}
+
 /* miscellaneous */
 .debug_dump {
   clear: both;

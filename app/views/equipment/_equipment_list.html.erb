@@ -17,7 +17,11 @@
       <td><%= link_to equipment.name, equipment.model %></td>
       </td>
       <td><%= equipment.serial_number %></td>
-      <td><%= equipment.status %></td>
+      <td>
+        <div class="<%=equipment.status_style%>">
+          <%= equipment.status %>
+        </div>
+      </td>
       <td><%= equipment.inspection_interval %></td>
       <td><%= equipment.last_inspection_date %></td>
       <td><%= equipment.inspection_type %></td>
