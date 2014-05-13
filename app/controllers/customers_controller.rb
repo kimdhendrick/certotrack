@@ -17,7 +17,8 @@ class CustomersController < ModelController
     @customer = @customer_service.create_customer(_customer_params)
 
     if @customer.persisted?
-      redirect_to @customer, notice: _success_message('created')
+      flash[:success] = _success_message('created')
+      redirect_to @customer
     else
       _set_states
       render action: 'new'
@@ -55,7 +56,8 @@ class CustomersController < ModelController
     success = @customer_service.update_customer(@customer, _customer_params)
 
     if success
-      redirect_to @customer, notice: _success_message('updated')
+      flash[:success] = _success_message('updated')
+      redirect_to @customer
     else
       _set_states
       render action: 'edit'

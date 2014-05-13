@@ -13,7 +13,7 @@ class BatchCertificationsController < ModelController
       return
     end
 
-    flash[:notice] = 'Certifications updated successfully.'
+    flash[:success] = 'Certifications updated successfully.'
 
     if batch_certification.employee_update?
       redirect_to employee_path(params[:employee_id]) and return

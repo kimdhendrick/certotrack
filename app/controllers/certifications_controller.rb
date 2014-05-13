@@ -58,9 +58,11 @@ class CertificationsController < ModelController
     success_message = _success_message(@certification.certification_type, @certification.employee, 'created')
 
     if _redirect_to_employee?
-      redirect_to @certification.employee, notice: success_message
+      flash[:success] = success_message
+      redirect_to @certification.employee
     elsif _redirect_to_certification_type?
-      redirect_to @certification.certification_type, notice: success_message
+      flash[:success] = success_message
+      redirect_to @certification.certification_type
     else
       _render_new_with_message success_message
     end
@@ -78,8 +80,8 @@ class CertificationsController < ModelController
     success = @certification_service.update_certification(@certification, _certification_params)
 
     if success
-      redirect_to @certification.certification_type,
-                  notice: _success_message(@certification.certification_type, @certification.employee, 'updated')
+      flash[:success] = _success_message(@certification.certification_type, @certification.employee, 'updated')
+      redirect_to @certification.certification_type
     else
       _set_certification_types(current_user)
       render action: 'edit'
@@ -92,7 +94,8 @@ class CertificationsController < ModelController
 
     @certification_service.delete_certification(@certification)
 
-    redirect_to certification_type, notice: _success_message(certification_type, employee, 'deleted')
+    flash[:success] = _success_message(certification_type, employee, 'deleted')
+    redirect_to certification_type
   end
 
   def certification_history
@@ -178,7 +181,7 @@ class CertificationsController < ModelController
   end
 
   def _render_new_with_message(message = nil)
-    flash[:notice] = message
+    flash[:success] = message
     _set_new_certification(current_user, params[:certification][:employee_id], nil)
     _render_new
   end

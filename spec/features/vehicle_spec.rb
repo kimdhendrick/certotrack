@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Vehicles', slow: true, js:true do
+describe 'Vehicles', slow: true do
 
   let(:customer) { create(:customer) }
 

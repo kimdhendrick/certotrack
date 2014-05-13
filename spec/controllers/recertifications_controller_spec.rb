@@ -64,7 +64,7 @@ describe RecertificationsController do
 
       it 'should provide success message' do
         post :create, params, {}
-        flash[:notice].should =~ /\ASmith, John was successfully recertified for Certification 'Scrum Master-\d+'\.\Z/
+        flash[:success].should =~ /\ASmith, John was successfully recertified for Certification 'Scrum Master-\d+'\.\Z/
       end
     end
 

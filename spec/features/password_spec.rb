@@ -50,8 +50,6 @@ describe 'Password Security', slow: true do
       page.should have_content 'Renew your password'
       page.should have_button 'Change my password'
 
-      page.should_not have_content 'Welcome'
-
       page.fill_in 'Current password', with: 'Password123'
       page.fill_in 'New password', with: 'p'
       page.fill_in 'Confirm new password', with: 'p'

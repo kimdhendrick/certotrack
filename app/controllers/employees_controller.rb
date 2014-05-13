@@ -42,7 +42,8 @@ class EmployeesController < ModelController
     @employee = @employee_service.create_employee(current_user.customer, _employees_params_for_create)
 
     if @employee.persisted?
-      redirect_to @employee, notice: "Employee #{EmployeePresenter.new(@employee).name} was successfully created."
+      flash[:success] = "Employee #{EmployeePresenter.new(@employee).name} was successfully created."
+      redirect_to @employee
     else
       _set_locations
       render action: 'new'
@@ -57,7 +58,8 @@ class EmployeesController < ModelController
     success = @employee_service.update_employee(@employee, _employees_params)
 
     if success
-      redirect_to @employee, notice: "Employee #{EmployeePresenter.new(@employee).name} was successfully updated."
+      flash[:success] = "Employee #{EmployeePresenter.new(@employee).name} was successfully updated."
+      redirect_to @employee
     else
       _set_locations
       render action: 'edit'
@@ -66,7 +68,8 @@ class EmployeesController < ModelController
 
   def destroy
     if @employee_service.delete_employee(@employee)
-      redirect_to employees_url, notice: "Employee #{EmployeePresenter.new(@employee).name} was successfully deleted."
+      flash[:success] = "Employee #{EmployeePresenter.new(@employee).name} was successfully deleted."
+      redirect_to employees_url
     else
       assign_certifications_by_employee(params)
       render :show

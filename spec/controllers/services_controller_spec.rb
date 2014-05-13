@@ -340,7 +340,7 @@ describe ServicesController do
 
           post :create, params, {}
 
-          flash[:notice].should == "Service 'certType24' was successfully created for Vehicle 'PLATE/DD123 2011 Dart'."
+          flash[:success].should == "Service 'certType24' was successfully created for Vehicle 'PLATE/DD123 2011 Dart'."
         end
       end
 
@@ -423,7 +423,7 @@ describe ServicesController do
 
           post :create, params, {}
 
-          flash[:notice].should == "Service 'Oil Change' was successfully created for Vehicle 'PLATE/DD123 2011 Dart'."
+          flash[:success].should == "Service 'Oil Change' was successfully created for Vehicle 'PLATE/DD123 2011 Dart'."
         end
       end
     end
@@ -592,7 +592,7 @@ describe ServicesController do
           put :update, {:id => service.to_param, :service => {'comments' => 'Test'}}, {}
 
           response.should redirect_to(service.service_type)
-          flash[:notice].should == "Service 'AAA Truck Inspection' was successfully updated for Vehicle 'PLATE/DD123 2011 Dart'."
+          flash[:success].should == "Service 'AAA Truck Inspection' was successfully updated for Vehicle 'PLATE/DD123 2011 Dart'."
         end
       end
 
@@ -711,7 +711,7 @@ describe ServicesController do
 
         delete :destroy, {:id => service.to_param}, {}
 
-        flash[:notice].should == "Service 'AAA Truck Inspection' was successfully deleted for Vehicle 'ABC-123/JB3 2010 Wrangler'."
+        flash[:success].should == "Service 'AAA Truck Inspection' was successfully deleted for Vehicle 'ABC-123/JB3 2010 Wrangler'."
       end
     end
 

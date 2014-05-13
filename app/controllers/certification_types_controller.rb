@@ -29,7 +29,8 @@ class CertificationTypesController < ModelController
     success = @certification_type_service.update_certification_type(@certification_type, _certification_type_params)
 
     if success
-      redirect_to @certification_type, notice: _success_message(@certification_type.name, 'updated')
+      flash[:success] = _success_message(@certification_type.name, 'updated')
+      redirect_to @certification_type
     else
       assign_intervals
       render action: 'edit'
@@ -48,7 +49,8 @@ class CertificationTypesController < ModelController
     @certification_type = @certification_type_service.create_certification_type(current_user.customer, _certification_type_params_for_create)
 
     if @certification_type.persisted?
-      redirect_to @certification_type, notice: _success_message(@certification_type.name, 'created')
+      flash[:success] = _success_message(@certification_type.name, 'created')
+        redirect_to @certification_type
     else
       assign_intervals
       render action: 'new'
@@ -58,7 +60,8 @@ class CertificationTypesController < ModelController
   def destroy
     certification_type_name = @certification_type.name
     if @certification_type_service.delete_certification_type(@certification_type)
-      redirect_to certification_types_path, notice: _success_message(certification_type_name, 'deleted')
+      flash[:success] = _success_message(certification_type_name, 'deleted')
+        redirect_to certification_types_path
     else
       assign_certifications_by_certification_type(_certified_params(params))
       assign_non_certified_employees_by_certification_type(_noncertified_params(params))

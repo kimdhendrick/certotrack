@@ -341,7 +341,7 @@ describe ServiceTypesController do
           post :create, {:service_type => service_type_attributes}, {}
 
           response.should redirect_to(ServiceType.last)
-          flash[:notice].should == "Service Type 'Routine Inspection' was successfully created."
+          flash[:success].should == "Service Type 'Routine Inspection' was successfully created."
         end
 
         it 'sets the current_user as the creator' do
@@ -540,7 +540,7 @@ describe ServiceTypesController do
           put :update, {:id => service_type.to_param, :service_type => service_type_attributes}, {}
 
           response.should redirect_to(service_type)
-          flash[:notice].should == "Service Type 'Routine Inspection' was successfully updated."
+          flash[:success].should == "Service Type 'Routine Inspection' was successfully updated."
         end
       end
 
@@ -654,7 +654,7 @@ describe ServiceTypesController do
         delete :destroy, {:id => service_type.to_param}, {}
 
         response.should redirect_to(service_types_path)
-        flash[:notice].should == "Service Type 'Routine Inspection' was successfully deleted."
+        flash[:success].should == "Service Type 'Routine Inspection' was successfully deleted."
       end
 
       context 'when destroy call fails' do

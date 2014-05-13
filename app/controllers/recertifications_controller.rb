@@ -17,7 +17,8 @@ class RecertificationsController < ModelController
     success = @certification_service.recertify(@certification, certification_period_params)                                  
 
     if success
-      redirect_to @certification, notice: _success_message
+      flash[:success] = _success_message
+      redirect_to @certification
     else
       render action: :new
     end

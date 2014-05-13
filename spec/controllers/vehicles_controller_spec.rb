@@ -191,7 +191,7 @@ describe VehiclesController do
           post :create, {:vehicle => {vin: '98765432109876543'}}, {}
 
           response.should redirect_to(Vehicle.last)
-          flash[:notice].should == "Vehicle number 'vehicle_number' was successfully created."
+          flash[:success].should == "Vehicle number 'vehicle_number' was successfully created."
         end
 
         it 'sets the current_user as the creator' do
@@ -449,7 +449,7 @@ describe VehiclesController do
           put :update, {:id => vehicle.to_param, :vehicle => {'vehicle_number' => '123'}}, {}
 
           response.should redirect_to(vehicle)
-          flash[:notice].should == "Vehicle number 'vehicle_number' was successfully updated."
+          flash[:success].should == "Vehicle number 'vehicle_number' was successfully updated."
         end
       end
 
@@ -566,7 +566,7 @@ describe VehiclesController do
           delete :destroy, {:id => vehicle.to_param}, {}
 
           response.should redirect_to(vehicles_path)
-          flash[:notice].should == "Vehicle number 'blah123' was successfully deleted."
+          flash[:success].should == "Vehicle number 'blah123' was successfully deleted."
         end
       end
 

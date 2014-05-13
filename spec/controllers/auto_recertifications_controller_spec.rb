@@ -129,7 +129,7 @@ describe AutoRecertificationsController do
         it 'should provide a success notification' do
           post :create, {certification_type_id: certification_type.id, certification_ids: [certification.id]}
 
-          flash[:notice].should == 'Auto Recertify successful.'
+          flash[:success].should == 'Auto Recertify successful.'
         end
 
         it 'should call CertificationService#auto_recertify' do
@@ -210,7 +210,7 @@ describe AutoRecertificationsController do
         it 'should provide a success notification' do
           post :create, {certification_type_id: certification_type.id, certification_ids: [certification.id]}
 
-          flash[:notice].should == 'Auto Recertify successful.'
+          flash[:success].should == 'Auto Recertify successful.'
         end
 
         it 'should call CertificationService#auto_recertify' do

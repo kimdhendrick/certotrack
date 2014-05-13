@@ -184,7 +184,7 @@ describe LocationsController do
           post :create, {:location => {name: 'Hawaii'}}, {}
 
           response.should redirect_to(Location.last)
-          flash[:notice].should == "Location 'Hawaii' was successfully created."
+          flash[:success].should == "Location 'Hawaii' was successfully created."
         end
 
         it 'sets the current_user as the creator' do
@@ -426,7 +426,7 @@ describe LocationsController do
           put :update, {:id => location.to_param, :location => {'name' => 'Georgia'}}, {}
 
           response.should redirect_to(location)
-          flash[:notice].should == "Location 'Georgia' was successfully updated."
+          flash[:success].should == "Location 'Georgia' was successfully updated."
         end
       end
 
@@ -547,7 +547,7 @@ describe LocationsController do
           delete :destroy, {:id => location.to_param}, {}
 
           response.should redirect_to(locations_path)
-          flash[:notice].should == "Location 'Outside' was successfully deleted."
+          flash[:success].should == "Location 'Outside' was successfully deleted."
         end
       end
 

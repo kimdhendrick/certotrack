@@ -58,9 +58,11 @@ class ServicesController < ModelController
     success_message = _success_message(@service.name, @service.vehicle, 'created')
 
     if _redirect_to_vehicle?
-      redirect_to @service.vehicle, notice: success_message
+      flash[:success] = success_message
+      redirect_to @service.vehicle
     elsif _redirect_to_service_type?
-      redirect_to @service.service_type, notice: success_message
+      flash[:success] = success_message
+      redirect_to @service.service_type
     else
       _render_new_with_message success_message
     end
@@ -78,7 +80,8 @@ class ServicesController < ModelController
     success = @vehicle_servicing_service.update_service(@service, _service_params)
 
     if success
-      redirect_to @service.service_type, notice: _success_message(@service.name, @service.vehicle, 'updated')
+      flash[:success] = _success_message(@service.name, @service.vehicle, 'updated')
+      redirect_to @service.service_type
     else
       _set_service_types(current_user)
       render action: 'edit'
@@ -90,7 +93,8 @@ class ServicesController < ModelController
     vehicle = @service.vehicle
 
     @vehicle_servicing_service.delete_service(@service)
-    redirect_to service_type, notice: _success_message(service_type.name, vehicle, 'deleted')
+    flash[:success] = _success_message(service_type.name, vehicle, 'deleted')
+    redirect_to service_type
   end
 
   def service_history
@@ -141,7 +145,7 @@ class ServicesController < ModelController
   end
 
   def _render_new_with_message(message = nil)
-    flash[:notice] = message
+    flash[:success] = message
     _set_new_service(current_user, params[:service][:vehicle_id], nil)
     _render_new
   end

@@ -14,7 +14,7 @@ class TrainingEventsController < ModelController
 
   def list_certification_types
     if params[:employee_ids].nil?
-      flash[:notice] = 'Please select at least one Employee.'
+      flash[:success] = 'Please select at least one Employee.'
       redirect_to employee_list_training_event_path and return
     end
 
@@ -24,7 +24,7 @@ class TrainingEventsController < ModelController
 
   def new
     if params[:certification_type_ids].nil?
-      flash[:notice] = 'Please select at least one Certification Type.'
+      flash[:success] = 'Please select at least one Certification Type.'
       @certification_types = _get_certification_type_list
       @employee_ids = params[:employee_ids]
       render 'training_events/list_certification_types' and return

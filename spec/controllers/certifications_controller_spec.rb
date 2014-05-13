@@ -832,7 +832,7 @@ describe CertificationsController do
 
           post :create, params, {}
 
-          flash[:notice].should == "Certification 'certType24' was successfully created for Barnes, Dutch."
+          flash[:success].should == "Certification 'certType24' was successfully created for Barnes, Dutch."
         end
       end
 
@@ -908,7 +908,7 @@ describe CertificationsController do
 
           post :create, params, {}
 
-          flash[:notice].should == "Certification 'certType24' was successfully created for Barnes, Dutch."
+          flash[:success].should == "Certification 'certType24' was successfully created for Barnes, Dutch."
         end
       end
     end
@@ -1026,8 +1026,8 @@ describe CertificationsController do
 
           put :update, {:id => certification.to_param, :certification => {'comments' => 'Test'}}, {}
 
+          flash[:success].should == "Certification 'CPR' was successfully updated for Smith, John."
           response.should redirect_to(certification.certification_type)
-          flash[:notice].should == "Certification 'CPR' was successfully updated for Smith, John."
         end
       end
 
@@ -1189,7 +1189,7 @@ describe CertificationsController do
 
         delete :destroy, {:id => certification.to_param}, {}
 
-        flash[:notice].should == "Certification 'CPR' was successfully deleted for last, first."
+        flash[:success].should == "Certification 'CPR' was successfully deleted for last, first."
       end
     end
 

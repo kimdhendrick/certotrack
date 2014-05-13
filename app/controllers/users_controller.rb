@@ -38,7 +38,8 @@ class UsersController < ModelController
     @user = @user_service.create_user(_user_params)
 
     if @user.persisted?
-      redirect_to customer_user_path(@user), notice: _success_message(@user, 'created')
+      flash[:success] = _success_message(@user, 'created')
+      redirect_to customer_user_path(@user)
     else
       render action: 'new'
     end
@@ -52,7 +53,8 @@ class UsersController < ModelController
     success = @user_service.update_user(@user, _user_params)
 
     if success
-      redirect_to customer_user_path(@user), notice: _success_message(@user, 'updated')
+      flash[:success] = _success_message(@user, 'updated')
+      redirect_to customer_user_path(@user)
     else
       _set_customers
       render action: 'edit'
@@ -63,7 +65,8 @@ class UsersController < ModelController
     authorize! :manage, :user
     user_name = "#{@user.last_name}, #{@user.first_name}"
     if @user_service.delete_user(@user)
-      redirect_to customer_users_path, notice: "User '#{user_name}' was successfully deleted."
+      flash[:success] = "User '#{user_name}' was successfully deleted."
+      redirect_to customer_users_path
     else
       render :show
     end

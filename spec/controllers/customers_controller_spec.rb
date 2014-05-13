@@ -77,7 +77,7 @@ describe CustomersController do
           post :create, {:customer => customer_attributes}, {}
 
           response.should redirect_to(customer)
-          flash[:notice].should == "Customer 'Government' was successfully created."
+          flash[:success].should == "Customer 'Government' was successfully created."
         end
       end
 
@@ -313,7 +313,7 @@ describe CustomersController do
           put :update, {:id => customer.to_param, :customer => customer_attributes}, {}
 
           response.should redirect_to(customer)
-          flash[:notice].should == "Customer 'Mine' was successfully updated."
+          flash[:success].should == "Customer 'Mine' was successfully updated."
         end
       end
 

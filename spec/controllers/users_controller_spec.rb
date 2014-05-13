@@ -180,7 +180,7 @@ describe UsersController do
           post :create, {:user => {username: 'new_username'}}, {}
 
           response.should redirect_to(customer_user_path(User.last))
-          flash[:notice].should == "User 'Jones, Heather' was successfully created."
+          flash[:success].should == "User 'Jones, Heather' was successfully created."
         end
       end
 
@@ -300,7 +300,7 @@ describe UsersController do
           put :update, {:id => user.to_param, :user => user_attributes}, {}
 
           response.should redirect_to(customer_user_path(user))
-          flash[:notice].should == "User 'Jones, Heather' was successfully updated."
+          flash[:success].should == "User 'Jones, Heather' was successfully updated."
         end
       end
 
@@ -380,7 +380,7 @@ describe UsersController do
         delete :destroy, {:id => user.to_param}, {}
 
         response.should redirect_to(customer_users_path)
-        flash[:notice].should == "User 'Doe, Julie' was successfully deleted."
+        flash[:success].should == "User 'Doe, Julie' was successfully deleted."
       end
     end
   end

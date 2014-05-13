@@ -29,7 +29,8 @@ class VehiclesController < ModelController
     @vehicle = @vehicle_service.create_vehicle(current_user, _vehicle_params_for_create)
 
     if @vehicle.persisted?
-      redirect_to @vehicle, notice: _success_message(@vehicle.vehicle_number, 'created')
+      flash[:success] = _success_message(@vehicle.vehicle_number, 'created')
+      redirect_to @vehicle
     else
       _set_locations
       render action: 'new'
@@ -53,7 +54,8 @@ class VehiclesController < ModelController
     success = @vehicle_service.update_vehicle(@vehicle, _vehicle_params)
 
     if success
-      redirect_to @vehicle, notice: _success_message(@vehicle.vehicle_number, 'updated')
+      flash[:success] = _success_message(@vehicle.vehicle_number, 'updated')
+      redirect_to @vehicle
     else
       _set_locations
       render action: 'edit'
@@ -64,7 +66,8 @@ class VehiclesController < ModelController
     vehicle_number = @vehicle.vehicle_number
 
     if @vehicle_service.delete_vehicle(@vehicle)
-      redirect_to vehicles_path, notice: _success_message(vehicle_number, 'deleted')
+      flash[:success] = _success_message(vehicle_number, 'deleted')
+      redirect_to vehicles_path
     else
       _set_services
       render :show

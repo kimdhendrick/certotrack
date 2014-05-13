@@ -574,7 +574,7 @@ describe EquipmentController do
           post :create, {:equipment => equipment_attributes}, {}
 
           response.should redirect_to(Equipment.last)
-          flash[:notice].should == "Equipment 'Box' was successfully created."
+          flash[:success].should == "Equipment 'Box' was successfully created."
         end
 
         it 'sets the current_user as the creator' do
@@ -695,7 +695,7 @@ describe EquipmentController do
           put :update, {:id => equipment.to_param, :equipment => equipment_attributes}, {}
 
           response.should redirect_to(equipment)
-          flash[:notice].should == "Equipment 'Box' was successfully updated."
+          flash[:success].should == "Equipment 'Box' was successfully updated."
         end
       end
 
@@ -803,7 +803,7 @@ describe EquipmentController do
         delete :destroy, {:id => equipment.to_param}, {}
 
         response.should redirect_to(equipment_index_url)
-        flash[:notice].should == "Equipment 'Box' was successfully deleted."
+        flash[:success].should == "Equipment 'Box' was successfully deleted."
       end
     end
 

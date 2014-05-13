@@ -47,7 +47,7 @@ describe ChangePasswordsController do
         patch :update_password, {:user => password_attributes}, {}
 
         response.should redirect_to root_path
-        flash[:notice].should == 'Password updated successfully.'
+        flash[:success].should == 'Password updated successfully.'
       end
     end
 

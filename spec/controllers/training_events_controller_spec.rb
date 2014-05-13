@@ -54,7 +54,7 @@ describe TrainingEventsController do
       get :list_certification_types, {employee_ids: nil}, {}
 
       response.should redirect_to employee_list_training_event_path
-      flash[:notice].should == 'Please select at least one Employee.'
+      flash[:success].should == 'Please select at least one Employee.'
     end
   end
 
@@ -105,7 +105,7 @@ describe TrainingEventsController do
       get :new, {certification_type_ids: nil, employee_ids: '1'}, {}
 
       response.should render_template('training_events/list_certification_types')
-      flash[:notice].should == 'Please select at least one Certification Type.'
+      flash[:success].should == 'Please select at least one Certification Type.'
     end
   end
 

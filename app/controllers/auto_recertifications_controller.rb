@@ -30,7 +30,7 @@ class AutoRecertificationsController < ModelController
     result = @certification_service.auto_recertify(certifications)
 
     if result == :success
-      flash[:notice] = 'Auto Recertify successful.'
+      flash[:success] = 'Auto Recertify successful.'
       redirect_to certification_type_url(@certification_type)
     else
       flash[:error] = 'A system error has occurred. Please contact support@certotrack.com.'

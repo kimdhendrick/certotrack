@@ -71,7 +71,7 @@ describe CertificationTypesController do
           post :create, {:certification_type => certification_type_attributes}, {}
 
           response.should redirect_to(CertificationType.last)
-          flash[:notice].should == "Certification Type 'CPR' was successfully created."
+          flash[:success].should == "Certification Type 'CPR' was successfully created."
         end
 
         it 'sets the current user as the creator' do
@@ -385,7 +385,7 @@ describe CertificationTypesController do
           put :update, {:id => certification_type.to_param, :certification_type => certification_type_attributes}, {}
 
           response.should redirect_to(certification_type)
-          flash[:notice].should == "Certification Type 'CPR' was successfully updated."
+          flash[:success].should == "Certification Type 'CPR' was successfully updated."
         end
       end
 
@@ -488,7 +488,7 @@ describe CertificationTypesController do
           delete :destroy, {:id => certification_type.to_param}, {}
 
           response.should redirect_to(certification_types_path)
-          flash[:notice].should == "Certification Type 'CPR' was successfully deleted."
+          flash[:success].should == "Certification Type 'CPR' was successfully deleted."
         end
       end
 

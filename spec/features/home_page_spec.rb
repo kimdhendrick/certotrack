@@ -8,7 +8,7 @@ describe 'Home Page', slow: true do
     end
 
     it 'should welcome the user' do
-      page.should have_content 'Welcome, First!'
+      page.should have_content 'Welcome First!'
     end
   end
 

@@ -26,7 +26,7 @@ describe EmployeeDeactivationController do
         delete :deactivate, {:id => employee.to_param}, {}
 
         response.should redirect_to(employees_url)
-        flash[:notice].should == 'Employee last, first deactivated'
+        flash[:success].should == 'Employee last, first deactivated'
       end
     end
 

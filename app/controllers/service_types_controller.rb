@@ -36,7 +36,8 @@ class ServiceTypesController < ModelController
     @service_type = @service_type_service.create_service_type(current_user.customer, _service_type_params_for_create)
 
     if @service_type.persisted?
-      redirect_to @service_type, notice: _success_message(@service_type.name, 'created')
+      flash[:success] = _success_message(@service_type.name, 'created')
+      redirect_to @service_type
     else
       _assign_interval_dates
       _assign_interval_mileages
@@ -55,7 +56,8 @@ class ServiceTypesController < ModelController
     success = @service_type_service.update_service_type(@service_type, _service_type_params)
 
     if success
-      redirect_to @service_type, notice: _success_message(@service_type.name, 'updated')
+      flash[:success] = _success_message(@service_type.name, 'updated')
+      redirect_to @service_type
     else
       _assign_interval_dates
       _assign_interval_mileages
@@ -68,7 +70,8 @@ class ServiceTypesController < ModelController
     service_type_name = @service_type.name
 
     if @service_type_service.delete_service_type(@service_type)
-      redirect_to service_types_path, notice: _success_message(service_type_name, 'deleted')
+      flash[:success] = _success_message(service_type_name, 'deleted')
+      redirect_to service_types_path
     else
       _set_non_serviced_vehicles
       _set_serviced_vehicles

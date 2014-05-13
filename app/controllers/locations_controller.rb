@@ -28,7 +28,8 @@ class LocationsController < ModelController
     @location = @location_service.create_location(current_user, _location_params_for_create)
 
     if @location.persisted?
-      redirect_to @location, notice: _success_message(@location.name, 'created')
+      flash[:success] = _success_message(@location.name, 'created')
+      redirect_to @location
     else
       _set_customers
       render action: 'new'
@@ -43,7 +44,8 @@ class LocationsController < ModelController
     success = @location_service.update_location(current_user, @location, _location_params)
 
     if success
-      redirect_to @location, notice: _success_message(@location.name, 'updated')
+      flash[:success] = _success_message(@location.name, 'updated')
+      redirect_to @location
     else
       _set_customers
       render action: 'edit'
@@ -57,7 +59,8 @@ class LocationsController < ModelController
     location_name = @location.name
 
     if @location_service.delete_location(@location)
-      redirect_to locations_path, notice: _success_message(location_name, 'deleted')
+      flash[:success] = _success_message(location_name, 'deleted')
+      redirect_to locations_path
     else
       render :show
     end

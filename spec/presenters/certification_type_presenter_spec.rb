@@ -89,7 +89,8 @@ describe CertificationTypePresenter do
 
           presenter = CertificationTypePresenter.new(certification_type, view)
 
-          presenter.auto_recertify_link.should == "| <a href=\"/certification_types/1/auto_recertifications/new\">Auto Recertify</a>"
+          presenter.auto_recertify_link.should =~ /\/certification_types\/1\/auto_recertifications\/new/
+          presenter.auto_recertify_link.should =~ /Auto Recertify/
         end
       end
     end

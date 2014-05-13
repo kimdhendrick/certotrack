@@ -19,7 +19,7 @@ describe BatchCertificationsController do
 
       post :create, params, {}
 
-      flash[:notice].should == 'Certifications updated successfully.'
+      flash[:success].should == 'Certifications updated successfully.'
     end
 
     it 'should redirect to employee on success' do
