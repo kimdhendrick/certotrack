@@ -1,6 +1,6 @@
 1. mysqldump -u certouser -h certotrack.com -p --compatible=postgresql certotrack > certotrack_pg_dump.sql
 2. Clean dump file as below.
-3. Run dump commands: psql -h localhost -d certotrack_development -U certouser -f migration/certotrack_pg_dump_cleaned_final.sql
+3. Run dump commands: psql -h localhost -d certotrack_development -U certouser -f migration/certotrack_pg_dump.sql
 4. Run import commands: psql -h localhost -d certotrack_development -U certouser -f migration/production_db_migration.sql
 5. Run rails commands in production_db_migration.commands
 6. Push to heroku:
