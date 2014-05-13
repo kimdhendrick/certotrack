@@ -7,7 +7,7 @@ describe 'Customers', slow: true do
     end
 
     it 'should create new customer' do
-      visit '/'
+      visit dashboard_path
       click_link 'Create Customer'
 
       page.should have_content 'Create Customer'
@@ -207,7 +207,7 @@ describe 'Customers', slow: true do
       end
 
       it 'should show All Customers report' do
-        visit '/'
+        visit dashboard_path
         page.should have_content 'All Customers'
         click_link 'All Customers'
 
@@ -253,7 +253,7 @@ describe 'Customers', slow: true do
       end
 
       it 'should export Deactivated employees list to CSV' do
-        visit '/'
+        visit dashboard_path
         click_link 'All Customers'
 
         click_on 'Export to CSV'
@@ -265,7 +265,7 @@ describe 'Customers', slow: true do
       end
 
       it 'should export Deactivated employees list to PDF' do
-        visit '/'
+        visit dashboard_path
         click_link 'All Customers'
 
         click_on 'Export to PDF'
@@ -274,7 +274,7 @@ describe 'Customers', slow: true do
       end
 
       it 'should export Deactivated employees list to Excel' do
-        visit '/'
+        visit dashboard_path
         click_link 'All Customers'
 
         click_on 'Export to Excel'
@@ -289,7 +289,7 @@ describe 'Customers', slow: true do
         create(:customer, name: 'beta')
         create(:customer, name: 'alpha')
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Customers'
 
         click_link 'Name'
@@ -304,7 +304,7 @@ describe 'Customers', slow: true do
         create(:customer, account_number: '333')
         create(:customer, account_number: '111')
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Customers'
 
         click_link 'Account Number'
@@ -319,7 +319,7 @@ describe 'Customers', slow: true do
         create(:customer, contact_person_name: 'beta')
         create(:customer, contact_person_name: 'alpha')
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Customers'
 
         click_link 'Contact Person Name'
@@ -334,7 +334,7 @@ describe 'Customers', slow: true do
         create(:customer, contact_email: 'beta@example.com')
         create(:customer, contact_email: 'alpha@example.com')
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Customers'
 
         click_link 'Contact Email'
@@ -351,7 +351,7 @@ describe 'Customers', slow: true do
           create(:customer)
         end
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Customers'
 
         find 'table.sortable'
@@ -376,7 +376,7 @@ describe 'Customers', slow: true do
     end
 
     it 'should list customers on home page' do
-      visit '/'
+      visit dashboard_path
 
       page.should have_link 'Jefferson County'
       click_on 'Jefferson County'
@@ -409,7 +409,7 @@ describe 'Customers', slow: true do
     end
 
     it 'should allow user to update customer attributes' do
-      visit '/'
+      visit dashboard_path
 
       click_on 'My Customer Name'
 

@@ -46,7 +46,7 @@ describe ChangePasswordsController do
       it 'redirects to the home page' do
         patch :update_password, {:user => password_attributes}, {}
 
-        response.should redirect_to root_path
+        response.should redirect_to dashboard_path
         flash[:success].should == 'Password updated successfully.'
       end
     end

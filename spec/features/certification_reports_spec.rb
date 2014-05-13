@@ -60,7 +60,7 @@ describe 'Certification Reports', slow: true do
       end
 
       it 'should list all employee certifications' do
-        visit '/'
+        visit dashboard_path
         page.should have_content 'All Employee Certifications (2)'
         click_link 'All Employee Certifications (2)'
 
@@ -101,7 +101,7 @@ describe 'Certification Reports', slow: true do
       end
 
       it 'should export to CSV' do
-        visit '/'
+        visit dashboard_path
         click_link 'All Employee Certifications'
 
         click_on 'Export to CSV'
@@ -112,7 +112,7 @@ describe 'Certification Reports', slow: true do
       end
 
       it 'should export to Excel' do
-        visit '/'
+        visit dashboard_path
         click_link 'All Employee Certifications'
 
         click_on 'Export to Excel'
@@ -121,7 +121,7 @@ describe 'Certification Reports', slow: true do
       end
 
       it 'should export to PDF' do
-        visit '/'
+        visit dashboard_path
         click_link 'All Employee Certifications'
 
         click_on 'Export to PDF'
@@ -201,7 +201,7 @@ describe 'Certification Reports', slow: true do
         create(:certification, certification_type: beta, customer: customer)
         create(:certification, certification_type: alpha, customer: customer)
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Employee Certifications'
 
         # Ascending sort
@@ -223,7 +223,7 @@ describe 'Certification Reports', slow: true do
         create(:certification, certification_type: create(:certification_type, interval: Interval::ONE_MONTH.text, customer: customer))
         create(:certification, certification_type: create(:certification_type, interval: Interval::THREE_MONTHS.text, customer: customer))
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Employee Certifications'
 
         # Ascending sort
@@ -258,7 +258,7 @@ describe 'Certification Reports', slow: true do
         warning = create(:certification, expiration_date: Date.tomorrow, customer: customer)
         valid = create(:certification, expiration_date: (Date.current)+120, customer: customer)
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Employee Certifications'
 
         # Ascending sort
@@ -275,7 +275,7 @@ describe 'Certification Reports', slow: true do
         beta = create(:certification, employee: create(:employee, last_name: 'beta', first_name: 'a'), customer: customer)
         alpha = create(:certification, employee: create(:employee, last_name: 'alpha', first_name: 'a'), customer: customer)
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Employee Certifications'
 
         # Ascending sort
@@ -292,7 +292,7 @@ describe 'Certification Reports', slow: true do
         beta = create(:certification, trainer: 'beta', customer: customer)
         alpha = create(:certification, trainer: 'alpha', customer: customer)
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Employee Certifications'
 
         # Ascending sort
@@ -312,7 +312,7 @@ describe 'Certification Reports', slow: true do
         tomorrow = create(:certification, last_certification_date: Date.parse('2014-01-02'), customer: customer).
           last_certification_date.strftime("%m/%d/%Y")
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Employee Certifications'
 
         # Ascending sort
@@ -332,7 +332,7 @@ describe 'Certification Reports', slow: true do
         tomorrow = create(:certification, expiration_date: Date.parse('2014-01-02'), customer: customer).
           expiration_date.strftime("%m/%d/%Y")
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Employee Certifications'
 
         # Ascending sort
@@ -355,7 +355,7 @@ describe 'Certification Reports', slow: true do
           create(:certification, customer: customer)
         end
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Employee Certifications (55)'
 
         find 'table.sortable'
@@ -432,7 +432,7 @@ describe 'Certification Reports', slow: true do
       end
 
       it 'should list expired employee certifications' do
-        visit '/'
+        visit dashboard_path
         page.should have_content 'Expired Certifications (1)'
         click_link 'Expired Certifications (1)'
 
@@ -535,7 +535,7 @@ describe 'Certification Reports', slow: true do
         create(:certification, certification_type: beta, customer: customer, expiration_date: Date.parse('2013-12-31'))
         create(:certification, certification_type: alpha, customer: customer, expiration_date: Date.parse('2013-12-31'))
 
-        visit '/'
+        visit dashboard_path
         click_link 'Expired Certifications'
 
         # Ascending sort
@@ -565,7 +565,7 @@ describe 'Certification Reports', slow: true do
         create(:certification, expiration_date: Date.parse('2013-12-31'),
                certification_type: create(:certification_type, interval: Interval::THREE_MONTHS.text, customer: customer))
 
-        visit '/'
+        visit dashboard_path
         click_link 'Expired Certifications'
 
         # Ascending sort
@@ -603,7 +603,7 @@ describe 'Certification Reports', slow: true do
         alpha = create(:certification, expiration_date: Date.parse('2013-12-31'),
                        employee: create(:employee, last_name: 'alpha', first_name: 'a'), customer: customer)
 
-        visit '/'
+        visit dashboard_path
         click_link 'Expired Certifications'
 
         # Ascending sort
@@ -620,7 +620,7 @@ describe 'Certification Reports', slow: true do
         beta = create(:certification, trainer: 'beta', customer: customer, expiration_date: Date.parse('2013-12-31'),)
         alpha = create(:certification, trainer: 'alpha', customer: customer, expiration_date: Date.parse('2013-12-31'),)
 
-        visit '/'
+        visit dashboard_path
         click_link 'Expired Certifications'
 
         # Ascending sort
@@ -640,7 +640,7 @@ describe 'Certification Reports', slow: true do
         tomorrow = create(:certification, last_certification_date: Date.parse('2014-01-02'), customer: customer, expiration_date: Date.parse('2013-12-31')).
           last_certification_date.strftime("%m/%d/%Y")
 
-        visit '/'
+        visit dashboard_path
         click_link 'Expired Certifications'
 
         # Ascending sort
@@ -660,7 +660,7 @@ describe 'Certification Reports', slow: true do
         last_month = create(:certification, expiration_date: Date.parse('2012-12-30')-30, customer: customer).
           expiration_date.strftime("%m/%d/%Y")
 
-        visit '/'
+        visit dashboard_path
         click_link 'Expired Certifications'
 
         # Ascending sort
@@ -683,7 +683,7 @@ describe 'Certification Reports', slow: true do
           create(:certification, customer: customer, expiration_date: Date.yesterday)
         end
 
-        visit '/'
+        visit dashboard_path
         click_link 'Expired Certifications (55)'
 
         find 'table.sortable'
@@ -699,8 +699,24 @@ describe 'Certification Reports', slow: true do
         end
 
         page.all('table tr').count.should == 5 + 1
+        within 'div.pagination' do
+          page.should have_link 'Previous'
+          page.should have_link '1'
+          page.should have_link '2'
+          page.should_not have_link '3'
+          page.should_not have_link 'Next'
+        end
+
         click_link 'Previous'
         click_link 'Previous'
+
+        within 'div.pagination' do
+          page.should_not have_link 'Previous'
+          page.should_not have_link '1'
+          page.should have_link '2'
+          page.should have_link '3'
+          page.should have_link 'Next'
+        end
       end
     end
   end
@@ -760,7 +776,7 @@ describe 'Certification Reports', slow: true do
       end
 
       it 'should list expiring employee certifications' do
-        visit '/'
+        visit dashboard_path
         page.should have_content 'Certifications Expiring Soon (1)'
         click_link 'Certifications Expiring Soon (1)'
 
@@ -863,7 +879,7 @@ describe 'Certification Reports', slow: true do
         create(:certification, certification_type: beta, customer: customer, expiration_date: Date.tomorrow)
         create(:certification, certification_type: alpha, customer: customer, expiration_date: Date.tomorrow)
 
-        visit '/'
+        visit dashboard_path
         click_link 'Certifications Expiring Soon '
 
         # Ascending sort
@@ -893,7 +909,7 @@ describe 'Certification Reports', slow: true do
         create(:certification, expiration_date: Date.tomorrow,
                certification_type: create(:certification_type, interval: Interval::THREE_MONTHS.text, customer: customer))
 
-        visit '/'
+        visit dashboard_path
         click_link 'Certifications Expiring Soon'
 
         # Ascending sort
@@ -931,7 +947,7 @@ describe 'Certification Reports', slow: true do
         alpha = create(:certification, expiration_date: Date.tomorrow,
                        employee: create(:employee, last_name: 'alpha', first_name: 'a'), customer: customer)
 
-        visit '/'
+        visit dashboard_path
         click_link 'Certifications Expiring Soon '
 
         # Ascending sort
@@ -948,7 +964,7 @@ describe 'Certification Reports', slow: true do
         beta = create(:certification, trainer: 'beta', customer: customer, expiration_date: Date.tomorrow,)
         alpha = create(:certification, trainer: 'alpha', customer: customer, expiration_date: Date.tomorrow,)
 
-        visit '/'
+        visit dashboard_path
         click_link 'Certifications Expiring Soon '
 
         # Ascending sort
@@ -968,7 +984,7 @@ describe 'Certification Reports', slow: true do
         yesterday = create(:certification, last_certification_date: Date.current, customer: customer, expiration_date: Date.tomorrow).
           last_certification_date.strftime("%m/%d/%Y")
 
-        visit '/'
+        visit dashboard_path
         click_link 'Certifications Expiring Soon'
 
         # Ascending sort
@@ -988,7 +1004,7 @@ describe 'Certification Reports', slow: true do
         in_three_days = create(:certification, expiration_date: Date.current+3, customer: customer).
           expiration_date.strftime("%m/%d/%Y")
 
-        visit '/'
+        visit dashboard_path
         click_link 'Certifications Expiring Soon '
 
         # Ascending sort
@@ -1011,7 +1027,7 @@ describe 'Certification Reports', slow: true do
           create(:certification, customer: customer, expiration_date: Date.tomorrow)
         end
 
-        visit '/'
+        visit dashboard_path
         click_link 'Certifications Expiring Soon (55)'
 
         find 'table.sortable'
@@ -1082,7 +1098,7 @@ describe 'Certification Reports', slow: true do
       end
 
       it 'should list units based employee certifications' do
-        visit '/'
+        visit dashboard_path
         page.should have_content 'Units Based Certifications (1)'
         click_link 'Units Based Certifications (1)'
 
@@ -1168,7 +1184,7 @@ describe 'Certification Reports', slow: true do
       end
 
       it 'should list recertification required employee certifications' do
-        visit '/'
+        visit dashboard_path
         page.should have_content 'Recertification Required Certifications (1)'
         click_link 'Recertification Required Certifications (1)'
 

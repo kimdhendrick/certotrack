@@ -23,7 +23,7 @@ describe 'Vehicles', slow: true do
     end
 
     it 'should list all vehicles' do
-      visit root_path
+      visit dashboard_path
 
       page.should have_link 'All Vehicles'
       click_on 'All Vehicles'
@@ -80,7 +80,7 @@ describe 'Vehicles', slow: true do
     end
 
     it 'should be able to create a new vehicle' do
-      visit root_path
+      visit dashboard_path
 
       page.should have_link 'All Vehicles'
       click_on 'All Vehicles'
@@ -117,7 +117,7 @@ describe 'Vehicles', slow: true do
     end
 
     it 'should show and edit a vehicle' do
-      visit root_path
+      visit dashboard_path
       click_on 'All Vehicles'
       click_on '1M8GDM9AXKP042788'
 
@@ -136,7 +136,7 @@ describe 'Vehicles', slow: true do
       page.should have_content '10,000'
       page.should have_content 'Denver'
 
-      visit root_path
+      visit dashboard_path
       click_on 'All Vehicles'
       click_on '987345'
 
@@ -187,7 +187,7 @@ describe 'Vehicles', slow: true do
 
     describe 'deleting a vehicle' do
       it 'should be able to delete a vehicle', js: true do
-        visit root_path
+        visit dashboard_path
         click_on 'All Vehicles'
         click_on '1M8GDM9AXKP042788'
         click_on 'Delete'
@@ -208,7 +208,7 @@ describe 'Vehicles', slow: true do
         before do
           create(:service, vehicle: @vehicle1, customer: customer)
 
-          visit root_path
+          visit dashboard_path
           click_on 'All Vehicles'
           click_on '1M8GDM9AXKP042788'
           click_on 'Delete'
@@ -228,7 +228,7 @@ describe 'Vehicles', slow: true do
     end
 
     it 'should be able to search vehicles' do
-      visit root_path
+      visit dashboard_path
 
       within '[data-vehicle-search-form]' do
         click_on 'Search'
@@ -326,7 +326,7 @@ describe 'Vehicles', slow: true do
       create(:vehicle, customer: customer, make: 'Unique Name')
       create(:vehicle, customer: customer, make: 'Zippy')
 
-      visit '/'
+      visit dashboard_path
       within '[data-vehicle-search-form]' do
         click_on 'Search'
       end
@@ -349,7 +349,7 @@ describe 'Vehicles', slow: true do
     end
 
     it 'should search from home page' do
-      visit root_path
+      visit dashboard_path
 
       within '[data-vehicle-search-form]' do
         fill_in 'make', with: 'Chevro'
@@ -366,7 +366,7 @@ describe 'Vehicles', slow: true do
     it 'should auto complete on make', js: true do
       create(:vehicle, make: 'Toyota', customer: customer)
 
-      visit '/'
+      visit dashboard_path
       click_on 'Search'
 
       assert_autocomplete('make', 'toy', 'Toyota')
@@ -375,7 +375,7 @@ describe 'Vehicles', slow: true do
     it 'should auto complete on model', js: true do
       create(:vehicle, vehicle_model: 'Corolla', customer: customer)
 
-      visit '/'
+      visit dashboard_path
       click_on 'Search'
 
       assert_autocomplete('vehicle_model', 'cor', 'Corolla')
@@ -402,7 +402,7 @@ describe 'Vehicles', slow: true do
     end
 
     it 'should be able to create a new vehicle' do
-      visit root_path
+      visit dashboard_path
 
       page.should have_link 'Create Vehicle'
 
@@ -446,7 +446,7 @@ describe 'Vehicles', slow: true do
       beta = create(:vehicle, vehicle_number: 'beta', customer: customer)
       alpha = create(:vehicle, vehicle_number: 'alpha', customer: customer)
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Vehicles'
 
       # Ascending sort
@@ -463,7 +463,7 @@ describe 'Vehicles', slow: true do
       BETA = create(:vehicle, vin: 'BETA5678901234567', customer: customer)
       ALPHA = create(:vehicle, vin: 'ALPHA678901234567', customer: customer)
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Vehicles'
 
       # Ascending sort
@@ -480,7 +480,7 @@ describe 'Vehicles', slow: true do
       beta = create(:vehicle, license_plate: 'beta', customer: customer)
       alpha = create(:vehicle, license_plate: 'alpha', customer: customer)
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Vehicles'
 
       # Ascending sort
@@ -497,7 +497,7 @@ describe 'Vehicles', slow: true do
       beta = create(:vehicle, year: '1995', customer: customer)
       alpha = create(:vehicle, year: '1970', customer: customer)
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Vehicles'
 
       # Ascending sort
@@ -514,7 +514,7 @@ describe 'Vehicles', slow: true do
       beta = create(:vehicle, make: 'beta', customer: customer)
       alpha = create(:vehicle, make: 'alpha', customer: customer)
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Vehicles'
 
       # Ascending sort
@@ -531,7 +531,7 @@ describe 'Vehicles', slow: true do
       beta = create(:vehicle, vehicle_model: 'beta', customer: customer)
       alpha = create(:vehicle, vehicle_model: 'alpha', customer: customer)
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Vehicles'
 
       # Ascending sort
@@ -548,7 +548,7 @@ describe 'Vehicles', slow: true do
       beta = create(:vehicle, mileage: 20000, customer: customer)
       alpha = create(:vehicle, mileage: 1000, customer: customer)
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Vehicles'
 
       # Ascending sort
@@ -569,7 +569,7 @@ describe 'Vehicles', slow: true do
       create(:vehicle, location: last_location, customer: customer)
       create(:vehicle, location: middle_location, customer: customer)
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Vehicles'
 
       click_link 'Location'
@@ -590,7 +590,7 @@ describe 'Vehicles', slow: true do
       vehicle_with_na_service = create(:vehicle, customer: customer)
       create(:service, expiration_date: nil, vehicle: vehicle_with_na_service, service_type: service_type)
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Vehicles'
 
       click_link 'Status'
@@ -611,7 +611,7 @@ describe 'Vehicles', slow: true do
         create(:vehicle, customer: customer)
       end
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Vehicles'
 
       find 'table.sortable'

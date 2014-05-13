@@ -48,7 +48,7 @@ describe 'Employee Deactivation', slow: true do
         customer: customer
       )
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Employees'
       click_link 'Sandee'
 
@@ -129,7 +129,7 @@ describe 'Employee Deactivation', slow: true do
       page.all('table tr').count.should == 1
       page.should have_content 'Total: 0'
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Equipment'
       click_link 'Meter'
 
@@ -147,7 +147,7 @@ describe 'Employee Deactivation', slow: true do
                               customer: customer
       )
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Employees'
       click_link 'Sandee'
 
@@ -204,7 +204,7 @@ describe 'Employee Deactivation', slow: true do
       end
 
       it 'should show Deactivated Employees list' do
-        visit '/'
+        visit dashboard_path
         page.should have_content 'Deactivated Employees'
         click_link 'Deactivated Employees'
 
@@ -238,7 +238,7 @@ describe 'Employee Deactivation', slow: true do
       end
 
       it 'should export Deactivated employees list to CSV' do
-        visit '/'
+        visit dashboard_path
         click_link 'Deactivated Employees'
 
         click_on 'Export to CSV'
@@ -250,7 +250,7 @@ describe 'Employee Deactivation', slow: true do
       end
 
       it 'should export Deactivated employees list to PDF' do
-        visit '/'
+        visit dashboard_path
         click_link 'Deactivated Employees'
 
         click_on 'Export to PDF'
@@ -259,7 +259,7 @@ describe 'Employee Deactivation', slow: true do
       end
 
       it 'should export Deactivated employees list to Excel' do
-        visit '/'
+        visit dashboard_path
         click_link 'Deactivated Employees'
 
         click_on 'Export to Excel'
@@ -296,7 +296,7 @@ describe 'Employee Deactivation', slow: true do
           create(:employee, active: false, customer: customer)
         end
 
-        visit '/'
+        visit dashboard_path
         click_link 'Deactivated Employees'
 
         find 'table'

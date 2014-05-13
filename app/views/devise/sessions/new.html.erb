@@ -1,25 +1,19 @@
-<h2>Login</h2>
+<div class="row"></div>
+<div class="small-6 small-centered columns">
+  <h2>Login</h2>
 
-<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
-  <fieldset>
-    <div class="row">
-      <div class="small-6 columns">
-        <%= f.label :username %>
-        <%= f.text_field :username, autofocus: true %>
-      </div>
-    </div>
+  <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+    <fieldset>
 
-    <div class="row">
-      <div class="small-6 columns">
-        <%= f.label :password %>
-        <%= f.password_field :password %>
-      </div>
-    </div>
+      <%= f.label :username %>
+      <%= f.text_field :username, autofocus: true %>
 
-    <div class="row">
-      <div class="small-6 columns">
-        <%= f.submit 'Login', class: "button tiny radius right" %>
-      </div>
-    </div>
-  </fieldset>
-<% end %>
+      <%= f.label :password %>
+      <%= f.password_field :password %>
+
+      <%= f.submit 'Login', class: "button tiny radius right" %>
+
+    </fieldset>
+  <% end %>
+</div>
+</div>

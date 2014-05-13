@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'Employee', slow: true do
   let(:customer) { create(:customer) }
-  
+
   describe 'Create Employee' do
     before do
       login_as_certification_user(customer)
@@ -10,7 +10,7 @@ describe 'Employee', slow: true do
     end
 
     it 'should create new Employee' do
-      visit '/'
+      visit dashboard_path
       click_link 'Create Employee'
 
       page.should have_content 'Create Employee'
@@ -70,7 +70,7 @@ describe 'Employee', slow: true do
                last_name: 'Barnes',
         )
 
-        visit '/'
+        visit dashboard_path
         page.should have_content 'All Employees'
         click_link 'All Employees'
 
@@ -125,7 +125,7 @@ describe 'Employee', slow: true do
         create(:employee, first_name: 'beta', customer: customer)
         create(:employee, first_name: 'alpha', customer: customer)
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Employees'
 
         click_link 'First Name'
@@ -140,7 +140,7 @@ describe 'Employee', slow: true do
         create(:employee, last_name: 'beta', customer: customer)
         create(:employee, last_name: 'alpha', customer: customer)
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Employees'
 
         click_link 'Last Name'
@@ -155,7 +155,7 @@ describe 'Employee', slow: true do
         create(:employee, employee_number: '333', customer: customer)
         create(:employee, employee_number: '111', customer: customer)
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Employees'
 
         click_link 'Employee Number'
@@ -174,7 +174,7 @@ describe 'Employee', slow: true do
         create(:employee, location: last_location, customer: customer)
         create(:employee, location: middle_location, customer: customer)
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Employees'
 
         click_link 'Location'
@@ -195,7 +195,7 @@ describe 'Employee', slow: true do
           create(:employee, customer: customer)
         end
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Employees'
 
         find 'table.sortable'
@@ -238,7 +238,7 @@ describe 'Employee', slow: true do
                               customer: customer
       )
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Employees'
       click_link 'Sandee'
 
@@ -279,7 +279,7 @@ describe 'Employee', slow: true do
                               customer: customer
       )
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Employees'
       click_link 'Sandee'
 
@@ -332,7 +332,7 @@ describe 'Employee', slow: true do
                               customer: customer
       )
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Employees'
       click_link 'Sandee'
 
@@ -366,7 +366,7 @@ describe 'Employee', slow: true do
 
       create(:equipment, employee: valid_employee)
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Employees'
       click_link 'Sandee'
 
@@ -400,7 +400,7 @@ describe 'Employee', slow: true do
 
       create(:certification, employee: valid_employee, customer: valid_employee.customer)
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Employees'
       click_link 'Sandee'
 

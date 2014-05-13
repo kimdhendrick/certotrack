@@ -16,4 +16,8 @@ class ApplicationController < ActionController::Base
       @customer_name = current_user.customer.name.strip
     end
   end
+
+  def after_sign_out_path_for(resource)
+    login_path
+  end
 end

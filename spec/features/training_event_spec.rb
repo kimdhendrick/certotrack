@@ -21,7 +21,7 @@ describe 'Training Event', slow: true do
   end
 
   it 'should let user certify employees for training event', js: true do
-    visit '/'
+    visit dashboard_path
     click_on 'Create Training Event'
 
     page.should have_content 'Create Training Event - Select Employees'

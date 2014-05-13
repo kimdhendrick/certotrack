@@ -72,7 +72,7 @@ describe 'Auto Recertify', slow: true do
       page.should have_selector('h2', text: 'ScrumMaster')
 
       # Links
-      page.should have_link('Home', href: root_path)
+      page.should have_link('Home', href: dashboard_path)
       page.should have_link('Search Certifications', href: search_certifications_path)
 
       # Column Headers

@@ -60,7 +60,7 @@ describe 'Service Reports', slow: true do
           customer: vehicle.customer
         )
 
-        visit '/'
+        visit dashboard_path
         page.should have_content 'All Vehicle Services (2)'
 
         click_on 'All Vehicle Services (2)'
@@ -115,7 +115,7 @@ describe 'Service Reports', slow: true do
         create(:service, service_type: beta, customer: customer)
         create(:service, service_type: alpha, customer: customer)
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Vehicle Services'
 
         # Ascending sort
@@ -132,7 +132,7 @@ describe 'Service Reports', slow: true do
         warning = create(:service, expiration_date: Date.tomorrow, customer: customer)
         valid = create(:service, expiration_date: (Date.current)+120, customer: customer)
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Vehicle Services'
 
         # Ascending sort
@@ -149,7 +149,7 @@ describe 'Service Reports', slow: true do
         beta = create(:service, vehicle: create(:vehicle, license_plate: 'beta'), customer: customer)
         alpha = create(:service, vehicle: create(:vehicle, license_plate: 'alpha'), customer: customer)
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Vehicle Services'
 
         # Ascending sort
@@ -166,7 +166,7 @@ describe 'Service Reports', slow: true do
         high = create(:service, vehicle: create(:vehicle, mileage: 10000), customer: customer)
         middle = create(:service, vehicle: create(:vehicle, mileage: 100), customer: customer)
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Vehicle Services'
 
         # Ascending sort
@@ -186,7 +186,7 @@ describe 'Service Reports', slow: true do
         tomorrow = create(:service, last_service_date: Date.parse('2014-01-02'), customer: customer).
           last_service_date.strftime("%m/%d/%Y")
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Vehicle Services'
 
         # Ascending sort
@@ -203,7 +203,7 @@ describe 'Service Reports', slow: true do
         middle = create(:service, last_service_mileage: 100, customer: customer)
         high = create(:service, last_service_mileage: 1000, customer: customer)
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Vehicle Services'
 
         # Ascending sort
@@ -223,7 +223,7 @@ describe 'Service Reports', slow: true do
         tomorrow = create(:service, expiration_date: Date.parse('2014-01-02'), customer: customer).
           expiration_date.strftime("%m/%d/%Y")
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Vehicle Services'
 
         # Ascending sort
@@ -240,7 +240,7 @@ describe 'Service Reports', slow: true do
         middle = create(:service, expiration_mileage: 100, customer: customer)
         high = create(:service, expiration_mileage: 1000, customer: customer)
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Vehicle Services'
 
         # Ascending sort
@@ -263,7 +263,7 @@ describe 'Service Reports', slow: true do
           create(:service, customer: customer)
         end
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Vehicle Services (55)'
 
         find 'table.sortable'
@@ -379,7 +379,7 @@ describe 'Service Reports', slow: true do
           customer: vehicle.customer
         )
 
-        visit '/'
+        visit dashboard_path
         page.should have_content 'Expired Vehicle Services (2)'
 
         click_on 'Expired Vehicle Services (2)'
@@ -434,7 +434,7 @@ describe 'Service Reports', slow: true do
         create(:service, service_type: beta, customer: customer, expiration_date: Date.yesterday)
         create(:service, service_type: alpha, customer: customer, expiration_date: Date.yesterday)
 
-        visit '/'
+        visit dashboard_path
         click_link 'Expired Vehicle Services'
 
         # Ascending sort
@@ -463,7 +463,7 @@ describe 'Service Reports', slow: true do
                        customer: customer,
                        expiration_date: Date.yesterday)
 
-        visit '/'
+        visit dashboard_path
         click_link 'Expired Vehicle Services'
 
         # Ascending sort
@@ -498,7 +498,7 @@ describe 'Service Reports', slow: true do
           expiration_date: Date.yesterday
         )
 
-        visit '/'
+        visit dashboard_path
         click_link 'Expired Vehicle Services'
 
         # Ascending sort
@@ -534,7 +534,7 @@ describe 'Service Reports', slow: true do
           customer: customer, expiration_date: Date.yesterday
         ).last_service_date.strftime("%m/%d/%Y")
 
-        visit '/'
+        visit dashboard_path
         click_link 'Expired Vehicle Services'
 
         # Ascending sort
@@ -571,7 +571,7 @@ describe 'Service Reports', slow: true do
           expiration_date: Date.yesterday
         )
 
-        visit '/'
+        visit dashboard_path
         click_link 'Expired Vehicle Services'
 
         # Ascending sort
@@ -607,7 +607,7 @@ describe 'Service Reports', slow: true do
           customer: customer, expiration_date: Date.yesterday
         ).expiration_date.strftime("%m/%d/%Y")
 
-        visit '/'
+        visit dashboard_path
         click_link 'Expired Vehicle Services'
 
         # Ascending sort
@@ -644,7 +644,7 @@ describe 'Service Reports', slow: true do
           expiration_date: Date.yesterday
         )
 
-        visit '/'
+        visit dashboard_path
         click_link 'Expired Vehicle Services'
 
         # Ascending sort
@@ -669,7 +669,7 @@ describe 'Service Reports', slow: true do
                  expiration_date: Date.yesterday)
         end
 
-        visit '/'
+        visit dashboard_path
         click_link 'Expired Vehicle Services (55)'
 
         find 'table.sortable'
@@ -785,7 +785,7 @@ describe 'Service Reports', slow: true do
           customer: vehicle.customer
         )
 
-        visit '/'
+        visit dashboard_path
         page.should have_content 'Expiring Vehicle Services (2)'
 
         click_on 'Expiring Vehicle Services (2)'
@@ -840,7 +840,7 @@ describe 'Service Reports', slow: true do
         create(:service, service_type: beta, customer: customer, expiration_date: Date.tomorrow)
         create(:service, service_type: alpha, customer: customer, expiration_date: Date.tomorrow)
 
-        visit '/'
+        visit dashboard_path
         click_link 'Expiring Vehicle Services'
 
         # Ascending sort
@@ -869,7 +869,7 @@ describe 'Service Reports', slow: true do
                        customer: customer,
                        expiration_date: Date.tomorrow)
 
-        visit '/'
+        visit dashboard_path
         click_link 'Expiring Vehicle Services'
 
         # Ascending sort
@@ -904,7 +904,7 @@ describe 'Service Reports', slow: true do
           expiration_date: Date.tomorrow
         )
 
-        visit '/'
+        visit dashboard_path
         click_link 'Expiring Vehicle Services'
 
         # Ascending sort
@@ -940,7 +940,7 @@ describe 'Service Reports', slow: true do
           customer: customer, expiration_date: Date.tomorrow
         ).last_service_date.strftime("%m/%d/%Y")
 
-        visit '/'
+        visit dashboard_path
         click_link 'Expiring Vehicle Services'
 
         # Ascending sort
@@ -977,7 +977,7 @@ describe 'Service Reports', slow: true do
           expiration_date: Date.tomorrow
         )
 
-        visit '/'
+        visit dashboard_path
         click_link 'Expiring Vehicle Services'
 
         # Ascending sort
@@ -1013,7 +1013,7 @@ describe 'Service Reports', slow: true do
           customer: customer, expiration_date: Date.tomorrow
         ).expiration_date.strftime("%m/%d/%Y")
 
-        visit '/'
+        visit dashboard_path
         click_link 'Expiring Vehicle Services'
 
         # Ascending sort
@@ -1050,7 +1050,7 @@ describe 'Service Reports', slow: true do
           expiration_date: Date.tomorrow
         )
 
-        visit '/'
+        visit dashboard_path
         click_link 'Expiring Vehicle Services'
 
         # Ascending sort
@@ -1075,7 +1075,7 @@ describe 'Service Reports', slow: true do
                  expiration_date: Date.tomorrow)
         end
 
-        visit '/'
+        visit dashboard_path
         click_link 'Expiring Vehicle Services (55)'
 
         find 'table.sortable'

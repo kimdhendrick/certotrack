@@ -10,7 +10,7 @@ describe 'Certification Type', slow: true do
     end
 
     it 'should create new units based certification type' do
-      visit '/'
+      visit dashboard_path
       click_link 'Create Certification Type'
 
       page.should have_content 'Create Certification Type'
@@ -314,7 +314,7 @@ describe 'Certification Type', slow: true do
                units_required: 99
         )
 
-        visit '/'
+        visit dashboard_path
         page.should have_content 'All Certification Types'
         click_link 'All Certification Types'
 
@@ -365,7 +365,7 @@ describe 'Certification Type', slow: true do
         create(:certification_type, name: 'beta', customer: customer)
         create(:certification_type, name: 'alpha', customer: customer)
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Certification Types'
 
         # Ascending sort
@@ -387,7 +387,7 @@ describe 'Certification Type', slow: true do
         create(:certification_type, interval: Interval::ONE_MONTH.text, customer: customer)
         create(:certification_type, interval: Interval::THREE_MONTHS.text, customer: customer)
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Certification Types'
 
         # Ascending sort
@@ -428,7 +428,7 @@ describe 'Certification Type', slow: true do
           create(:certification_type, customer: customer)
         end
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Certification Types'
 
         find 'table.sortable'
@@ -468,7 +468,7 @@ describe 'Certification Type', slow: true do
                name: 'Routine Examination'
         )
 
-        visit '/'
+        visit dashboard_path
 
         click_on 'Search Certification Types'
 
@@ -499,7 +499,7 @@ describe 'Certification Type', slow: true do
                name: 'Routine Examination'
         )
 
-        visit '/'
+        visit dashboard_path
         click_on 'Search Certification Types'
 
         page.should have_content 'Search Certification Types'

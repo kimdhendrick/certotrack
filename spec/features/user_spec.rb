@@ -55,7 +55,7 @@ describe 'Users', slow: true do
       end
 
       it 'should show All Users report' do
-        visit '/'
+        visit dashboard_path
         page.should have_content 'All Users'
         click_link 'All Users'
 
@@ -95,7 +95,7 @@ describe 'Users', slow: true do
       end
 
       it 'should export all users list to CSV' do
-        visit '/'
+        visit dashboard_path
         click_link 'All Users'
 
         click_on 'Export to CSV'
@@ -107,7 +107,7 @@ describe 'Users', slow: true do
       end
 
       it 'should export all users list to PDF' do
-        visit '/'
+        visit dashboard_path
         click_link 'All Users'
 
         click_on 'Export to PDF'
@@ -116,7 +116,7 @@ describe 'Users', slow: true do
       end
 
       it 'should export all users list to Excel' do
-        visit '/'
+        visit dashboard_path
         click_link 'All Users'
 
         click_on 'Export to Excel'
@@ -131,7 +131,7 @@ describe 'Users', slow: true do
         create(:user, first_name: 'beta')
         create(:user, first_name: 'alpha')
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Users'
 
         click_link 'First Name'
@@ -146,7 +146,7 @@ describe 'Users', slow: true do
         create(:user, first_name: 'beta')
         create(:user, first_name: 'alpha')
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Users'
 
         click_link 'First Name'
@@ -161,7 +161,7 @@ describe 'Users', slow: true do
         create(:user, last_name: 'beta')
         create(:user, last_name: 'alpha')
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Users'
 
         click_link 'Last Name'
@@ -180,7 +180,7 @@ describe 'Users', slow: true do
         create(:user, customer: beta_customer)
         create(:user, customer: alpha_customer)
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Users'
 
         click_link 'Customer'
@@ -197,7 +197,7 @@ describe 'Users', slow: true do
           create(:user)
         end
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Users'
 
         find 'table.sortable'
@@ -237,7 +237,7 @@ describe 'Users', slow: true do
         roles: jeffco.roles
       )
 
-      visit '/'
+      visit dashboard_path
       page.should have_content 'All Users'
       click_link 'All Users'
 
@@ -277,7 +277,7 @@ describe 'Users', slow: true do
         vehicle_access: true
       )
 
-      visit '/'
+      visit dashboard_path
       click_on 'Jefferson County'
 
       page.should have_link 'Create New User'
@@ -346,7 +346,7 @@ describe 'Users', slow: true do
         roles: jeffco.roles
       )
 
-      visit '/'
+      visit dashboard_path
       page.should have_content 'All Users'
       click_link 'All Users'
 
@@ -415,7 +415,7 @@ describe 'Users', slow: true do
         roles: jeffco.roles
       )
 
-      visit '/'
+      visit dashboard_path
       page.should have_content 'All Users'
       click_link 'All Users'
 
@@ -462,7 +462,7 @@ describe 'Users', slow: true do
         roles: jeffco.roles
       )
 
-      visit '/'
+      visit dashboard_path
       page.should have_content 'All Users'
       click_link 'All Users'
 

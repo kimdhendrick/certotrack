@@ -22,7 +22,7 @@
         <li>
           <div class="row">
             <div class="small-3 columns">
-              <a href="/" class="button tiny radius">CertoTrack&nbsp;Home</a>
+              <a href="/dashboard" class="button tiny radius">CertoTrack&nbsp;Home</a>
             </div>
           </div>
         </li>
@@ -38,7 +38,7 @@
                 <%= link_to 'Change Password', edit_change_password_path %>
               </li>
               <li>
-                <%= link_to "Log out", "/logout" %>
+                <%= link_to "Log out", logout_path %>
               </li>
             </ul>
           </li>
@@ -53,7 +53,7 @@
 <div class="row">
   <div class="small-6 small-centered columns">
     <% flash.each do |key, value| %>
-      <%= content_tag(:div, value, class: "label radius #{key} alert-#{key}") %>
+      <%= content_tag(:div, value, class: "label #{key} alert-#{key}") %>
     <% end %>
   </div>
 </div>

@@ -9,7 +9,7 @@ describe 'Navigation', slow: true do
     end
 
     it 'navigates Home page' do
-      visit root_path
+      visit dashboard_path
       page.should have_content 'Welcome to CertoTrack'
 
       page.should have_link 'All Equipment (0)'
@@ -20,7 +20,7 @@ describe 'Navigation', slow: true do
 
       click_and_test_link_with_title 'All Equipment'
 
-      visit root_path
+      visit dashboard_path
       click_and_test_link_with_title 'Create Equipment'
     end
 
@@ -168,7 +168,7 @@ describe 'Navigation', slow: true do
     end
 
     it 'navigates Search Equipment' do
-      visit root_path
+      visit dashboard_path
 
       within '[data-equipment-search-form]' do
         click_on 'Search'
@@ -194,7 +194,7 @@ describe 'Navigation', slow: true do
     end
 
     it 'navigates Home page' do
-      visit root_path
+      visit dashboard_path
       page.should have_content 'Welcome to CertoTrack'
 
       page.should have_link 'Create Certification Type'
@@ -204,10 +204,10 @@ describe 'Navigation', slow: true do
 
       click_and_test_link_with_title 'Create Certification Type'
 
-      visit root_path
+      visit dashboard_path
       click_and_test_link_with_title 'All Certification Types'
 
-      visit root_path
+      visit dashboard_path
       click_and_test_link_with_title 'Create Employee'
     end
 
@@ -483,7 +483,7 @@ describe 'Navigation', slow: true do
   describe 'Administration Links' do
     it 'when certification user' do
       login_as_certification_user(customer)
-      visit '/'
+      visit dashboard_path
 
       page.should have_link 'Deactivated Employees'
 
@@ -523,14 +523,14 @@ describe 'Navigation', slow: true do
     end
 
     it 'should have all the right stuff' do
-      visit root_path
+      visit dashboard_path
       click_on 'All Locations'
       page.should have_content 'All Locations'
 
       click_and_test_home_link
       click_on 'All Locations'
       click_and_test_link_with_title 'Create Location'
-      visit root_path
+      visit dashboard_path
       click_on 'All Locations'
 
       click_on 'My Location'
@@ -540,12 +540,12 @@ describe 'Navigation', slow: true do
       click_on 'My Location'
 
       click_and_test_link_with_title 'All Locations'
-      visit root_path
+      visit dashboard_path
       click_on 'All Locations'
       click_on 'My Location'
 
       click_and_test_link_with_title 'Create Location'
-      visit root_path
+      visit dashboard_path
       click_on 'All Locations'
       click_on 'My Location'
 
@@ -564,14 +564,14 @@ describe 'Navigation', slow: true do
     end
 
     it 'should have all the right stuff' do
-      visit root_path
+      visit dashboard_path
       click_on 'All Vehicles'
       page.should have_content 'All Vehicles'
 
       click_and_test_home_link
       click_on 'All Vehicles'
       click_and_test_link_with_title 'Create Vehicle'
-      visit root_path
+      visit dashboard_path
       click_on 'All Vehicles'
 
       click_on 'My Vehicle'
@@ -581,12 +581,12 @@ describe 'Navigation', slow: true do
       click_on 'My Vehicle'
 
       click_and_test_link_with_title 'Search Vehicles'
-      visit root_path
+      visit dashboard_path
       click_on 'All Vehicles'
       click_on 'My Vehicle'
 
       click_and_test_link_with_title 'Create Vehicle'
-      visit root_path
+      visit dashboard_path
       click_on 'All Vehicles'
       click_on 'My Vehicle'
 
@@ -594,19 +594,19 @@ describe 'Navigation', slow: true do
       page.should have_content 'Edit Vehicle'
       click_and_test_home_link
 
-      visit root_path
+      visit dashboard_path
       click_on 'All Vehicles'
       click_on 'My Vehicle'
       click_on 'Edit'
       click_and_test_link_with_title 'Search Vehicles'
 
-      visit root_path
+      visit dashboard_path
       click_on 'All Vehicles'
       click_on 'My Vehicle'
       click_on 'Edit'
       click_and_test_link_with_title 'Create Vehicle'
 
-      visit root_path
+      visit dashboard_path
       within '[data-vehicle-search-form]' do
         click_on 'Search'
       end
@@ -632,14 +632,14 @@ describe 'Navigation', slow: true do
     end
 
     it 'should have all the right stuff' do
-      visit root_path
+      visit dashboard_path
       click_on 'All Service Types'
       page.should have_content 'All Service Types'
 
       click_and_test_home_link
       click_on 'All Service Types'
       click_and_test_link_with_title 'Create Service Type'
-      visit root_path
+      visit dashboard_path
       click_on 'All Service Types'
 
       click_on 'Oil Change'
@@ -649,25 +649,25 @@ describe 'Navigation', slow: true do
       click_on 'Oil Change'
 
       click_and_test_link_with_title 'Create Service Type'
-      visit root_path
+      visit dashboard_path
       click_on 'All Service Types'
       click_on 'Oil Change'
       click_and_test_link_with_title 'All Service Types'
 
-      visit root_path
+      visit dashboard_path
       click_on 'All Service Types'
       click_on 'Oil Change'
       click_on 'Edit'
       page.should have_content 'Edit Service Type'
       click_and_test_home_link
 
-      visit root_path
+      visit dashboard_path
       click_on 'All Service Types'
       click_on 'Oil Change'
       click_on 'Edit'
       click_and_test_link_with_title 'Create Service Type'
 
-      visit root_path
+      visit dashboard_path
       click_on 'All Service Types'
       click_on 'Oil Change'
       page.should have_content 'Show Service Type'
@@ -675,12 +675,12 @@ describe 'Navigation', slow: true do
       page.should have_content 'Edit Service Type'
       click_and_test_link_with_title 'All Vehicle Services'
 
-      visit root_path
+      visit dashboard_path
       click_on 'All Service Types'
       click_on 'Create Service'
       click_and_test_link_with_title 'Home'
 
-      visit root_path
+      visit dashboard_path
       click_on 'All Service Types'
       click_on 'Create Service'
       click_and_test_link_with_title 'All Service Types'
@@ -693,46 +693,46 @@ describe 'Navigation', slow: true do
     end
 
     it 'should have all the right links' do
-      visit root_path
+      visit dashboard_path
       click_on 'All Customers'
       click_and_test_home_link
 
-      visit root_path
+      visit dashboard_path
       click_on 'All Customers'
       click_and_test_link_with_title 'Create Customer'
 
-      visit root_path
+      visit dashboard_path
       click_on 'My Customer'
       click_and_test_home_link
 
-      visit root_path
+      visit dashboard_path
       click_on 'My Customer'
       click_and_test_link_with_title 'Create Customer'
 
-      visit root_path
+      visit dashboard_path
       click_on 'My Customer'
       click_and_test_link_with_title 'All Customers'
 
-      visit root_path
+      visit dashboard_path
       click_on 'My Customer'
       click_on 'Edit'
       click_and_test_home_link
 
-      visit root_path
+      visit dashboard_path
       click_on 'My Customer'
       click_on 'Edit'
       click_and_test_link_with_title 'All Customers'
 
-      visit root_path
+      visit dashboard_path
       click_on 'My Customer'
       click_on 'Edit'
       click_and_test_link_with_title 'Create'
 
-      visit root_path
+      visit dashboard_path
       click_on 'Create Customer'
       click_and_test_home_link
 
-      visit root_path
+      visit dashboard_path
       click_on 'Create Customer'
       click_and_test_link_with_title 'All Customers'
     end

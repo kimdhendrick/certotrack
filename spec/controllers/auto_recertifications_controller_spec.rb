@@ -185,7 +185,7 @@ describe AutoRecertificationsController do
 
           post :create, {certification_type_id: certification_type.id, certification_ids: [certification.id, another_certification.id]}
 
-          response.should redirect_to(root_path)
+          response.should redirect_to(dashboard_path)
         end
       end
     end

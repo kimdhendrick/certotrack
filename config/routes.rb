@@ -1,6 +1,10 @@
 Certotrack::Application.routes.draw do
 
-  root to: 'certotrack#home'
+  root to: 'static_pages#home'
+
+  get '/home', to: 'static_pages#home'
+  get '/about_us', to: 'static_pages#about_us'
+  get '/dashboard', to: 'certotrack#home'
 
   devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}
   devise_scope :user do

@@ -12,7 +12,7 @@ describe 'Locations', slow: true do
     end
 
     it 'should list all locations' do
-      visit root_path
+      visit dashboard_path
 
       page.should have_link 'All Locations'
       click_on 'All Locations'
@@ -33,7 +33,7 @@ describe 'Locations', slow: true do
     end
 
     it 'should show and edit a location' do
-      visit root_path
+      visit dashboard_path
       click_on 'All Locations'
       click_on 'Alaska'
       page.should have_content 'Show Location'
@@ -58,7 +58,7 @@ describe 'Locations', slow: true do
     end
 
     it 'should be able to create a new location' do
-      visit root_path
+      visit dashboard_path
 
       page.should have_link 'All Locations'
       click_on 'All Locations'
@@ -81,7 +81,7 @@ describe 'Locations', slow: true do
     end
 
     it 'should be able to delete a location', js: true do
-      visit root_path
+      visit dashboard_path
       click_on 'All Locations'
       click_on 'Alaska'
       click_on 'Delete'
@@ -103,7 +103,7 @@ describe 'Locations', slow: true do
 
       create(:equipment, location: location)
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Locations'
       click_link 'San Antonio'
 
@@ -121,7 +121,7 @@ describe 'Locations', slow: true do
 
       create(:employee, location: location)
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Locations'
       click_link 'San Antonio'
 
@@ -139,7 +139,7 @@ describe 'Locations', slow: true do
 
       create(:vehicle, location: location)
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Locations'
       click_link 'San Antonio'
 
@@ -174,7 +174,7 @@ describe 'Locations', slow: true do
     end
 
     it 'should show and edit a location', js: true do
-      visit root_path
+      visit dashboard_path
       click_on 'All Locations'
       click_on 'Texas'
       page.should have_content 'Show Location'
@@ -208,7 +208,7 @@ describe 'Locations', slow: true do
     end
 
     it 'should be able to create a new location for any customer' do
-      visit root_path
+      visit dashboard_path
 
       page.should have_link 'All Locations'
       click_on 'All Locations'
@@ -233,7 +233,7 @@ describe 'Locations', slow: true do
     end
 
     it 'should be able to delete a location', js: true do
-      visit root_path
+      visit dashboard_path
       click_on 'All Locations'
       click_on 'Florida'
       click_on 'Delete'
@@ -259,7 +259,7 @@ describe 'Locations', slow: true do
       beta = create(:location, name: 'beta', customer: customer)
       alpha = create(:location, name: 'alpha', customer: customer)
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Locations'
 
       # Ascending sort
@@ -281,7 +281,7 @@ describe 'Locations', slow: true do
       beta = create(:location, customer: customer2)
       alpha = create(:location, customer: customer3)
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Locations'
 
       # Ascending sort
@@ -304,7 +304,7 @@ describe 'Locations', slow: true do
         create(:location, customer: customer)
       end
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Locations'
 
       find 'table.sortable'

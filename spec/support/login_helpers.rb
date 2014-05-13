@@ -24,7 +24,7 @@ module LoginHelpers
   end
 
   def login_as(user)
-    visit "#"
+    visit dashboard_path
     fill_in 'Username', with: user.username.upcase
     fill_in 'Password', with: user.password
     click_button 'Login'

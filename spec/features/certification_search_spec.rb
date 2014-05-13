@@ -130,7 +130,7 @@ describe 'Certification Search', slow: true do
   end
 
   def _navigate_to_search
-    visit '/'
+    visit dashboard_path
     within '[data-certification-search-form]' do
       click_on 'Search'
     end

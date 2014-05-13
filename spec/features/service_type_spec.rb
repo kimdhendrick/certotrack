@@ -113,7 +113,7 @@ describe 'Service Types', slow: true do
     end
 
     it 'should list all service types' do
-      visit root_path
+      visit dashboard_path
 
       page.should have_link 'All Service Types'
       click_on 'All Service Types'
@@ -142,7 +142,7 @@ describe 'Service Types', slow: true do
     end
 
     it 'should show service type and serviced vehicles' do
-      visit root_path
+      visit dashboard_path
 
       click_on 'All Service Types'
 
@@ -232,7 +232,7 @@ describe 'Service Types', slow: true do
     end
 
     it 'should create new service types' do
-      visit '/'
+      visit dashboard_path
       click_link 'Create Service Type'
 
       page.should have_content 'Create Service Type'
@@ -261,7 +261,7 @@ describe 'Service Types', slow: true do
     end
 
     it 'should update service types' do
-      visit root_path
+      visit dashboard_path
 
       click_on 'All Service Types'
 
@@ -356,7 +356,7 @@ describe 'Service Types', slow: true do
     end
 
     it 'should show service type' do
-      visit root_path
+      visit dashboard_path
 
       click_on 'All Service Types'
 
@@ -393,7 +393,7 @@ describe 'Service Types', slow: true do
         page.should have_content 'Dodge'
       end
 
-      visit root_path
+      visit dashboard_path
 
       click_on 'All Service Types'
 
@@ -441,7 +441,7 @@ describe 'Service Types', slow: true do
       beta = create(:service_type, name: 'beta', customer: customer)
       alpha = create(:service_type, name: 'alpha', customer: customer)
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Service Types'
 
       # Ascending sort
@@ -458,7 +458,7 @@ describe 'Service Types', slow: true do
       beta = create(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_DATE_AND_MILEAGE, customer: customer)
       alpha = create(:service_type, expiration_type: ServiceType::EXPIRATION_TYPE_BY_MILEAGE, customer: customer)
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Service Types'
 
       # Ascending sort
@@ -476,7 +476,7 @@ describe 'Service Types', slow: true do
       beta = create(:service_type, interval_date: Interval::ONE_YEAR.text, customer: customer)
       alpha = create(:service_type, interval_date: Interval::ONE_MONTH.text, customer: customer)
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Service Types'
 
       # Ascending sort
@@ -493,7 +493,7 @@ describe 'Service Types', slow: true do
       beta = create(:service_type, interval_mileage: 5000, customer: customer)
       alpha = create(:service_type, interval_mileage: 3000, customer: customer)
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Service Types'
 
       # Ascending sort
@@ -516,7 +516,7 @@ describe 'Service Types', slow: true do
         create(:service_type, customer: customer)
       end
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Service Types'
 
       find 'table.sortable'

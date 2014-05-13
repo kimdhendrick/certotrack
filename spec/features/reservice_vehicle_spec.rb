@@ -41,7 +41,7 @@ describe 'Reservice Vehicle Pages', slow: true do
 
     describe 'page' do
       it { should have_selector('h1', text: 'Reservice Vehicle') }
-      it { should have_link('Home', root_path) }
+      it { should have_link('Home', dashboard_path) }
       it { should have_link('Create Service', href: new_service_path) }
       it { should have_selector('div label', text: 'Vehicle') }
       it { should have_selector('div', text: '123-ABC/34987 1999 Dart') }

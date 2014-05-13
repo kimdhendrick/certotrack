@@ -22,7 +22,7 @@ describe 'Authentication', slow: true do
       it { should have_selector('div.alert', text: 'Invalid') }
 
       describe 'after visiting another page' do
-        before { visit root_path }
+        before { visit dashboard_path }
         it { should have_selector('div.alert', text: 'You need to sign in before continuing.') }
       end
     end

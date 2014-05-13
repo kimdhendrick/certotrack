@@ -8,7 +8,7 @@ class ChangePasswordsController < ApplicationController
     if @user.update_with_password(user_params)
       sign_in @user, bypass: true
       flash[:success] = 'Password updated successfully.'
-      redirect_to root_path
+      redirect_to dashboard_path
     else
       render 'edit'
     end

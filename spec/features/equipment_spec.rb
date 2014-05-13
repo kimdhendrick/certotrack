@@ -20,7 +20,7 @@ describe 'Equipment', slow: true do
                                location_id: denver_location.id
       )
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Equipment'
       click_link 'Meter'
 
@@ -64,7 +64,7 @@ describe 'Equipment', slow: true do
     end
 
     it 'should create new equipment assigned to a location', js: true do
-      visit '/'
+      visit dashboard_path
       click_link 'Create Equipment'
 
       page.should have_content 'Create Equipment'
@@ -106,7 +106,7 @@ describe 'Equipment', slow: true do
     end
 
     it 'should create new equipment assigned to an employee', js: true do
-      visit '/'
+      visit dashboard_path
       click_link 'Create Equipment'
 
       page.should have_content 'Create Equipment'
@@ -150,7 +150,7 @@ describe 'Equipment', slow: true do
     end
 
     it 'should create new unassigned equipment' do
-      visit '/'
+      visit dashboard_path
       click_link 'Create Equipment'
 
       page.should have_content 'Create Equipment'
@@ -185,7 +185,7 @@ describe 'Equipment', slow: true do
     end
 
     it 'should alert on future dates', js: true do
-      visit '/'
+      visit dashboard_path
       click_link 'Create Equipment'
 
       fill_in 'Name', with: 'Level'
@@ -205,7 +205,7 @@ describe 'Equipment', slow: true do
       page.should have_content 'Show Equipment'
       page.should have_content '01/01/2000'
 
-      visit '/'
+      visit dashboard_path
       click_link 'Create Equipment'
 
       fill_in 'Name', with: 'Level'
@@ -226,7 +226,7 @@ describe 'Equipment', slow: true do
     it 'should auto complete on name', js: true do
       create(:equipment, name: 'Leveler', customer: customer)
 
-      visit '/'
+      visit dashboard_path
       click_link 'Create Equipment'
 
       assert_autocomplete('equipment_name', 'lev', 'Leveler')
@@ -262,7 +262,7 @@ describe 'Equipment', slow: true do
                                location_id: littleton_location.id
       )
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Equipment'
       click_link 'Meter'
 
@@ -321,7 +321,7 @@ describe 'Equipment', slow: true do
                                location_id: littleton_location.id
       )
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Equipment'
       click_link 'Meter'
       click_on 'Edit'
@@ -341,7 +341,7 @@ describe 'Equipment', slow: true do
       page.should have_content 'Show Equipment'
       page.should have_content '01/01/2000'
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Equipment'
       click_link 'Meter'
       click_link 'Edit'
@@ -373,7 +373,7 @@ describe 'Equipment', slow: true do
                                name: 'Meter'
       )
 
-      visit '/'
+      visit dashboard_path
       click_link 'All Equipment'
       click_link 'Meter'
 
@@ -429,7 +429,7 @@ describe 'Equipment', slow: true do
         end
 
         it 'should show All Equipment report' do
-          visit '/'
+          visit dashboard_path
           page.should have_content 'All Equipment'
           click_link 'All Equipment'
 
@@ -464,7 +464,7 @@ describe 'Equipment', slow: true do
         end
 
         it 'should export to CSV' do
-          visit '/'
+          visit dashboard_path
           click_link 'All Equipment'
 
           click_on 'Export to CSV'
@@ -475,7 +475,7 @@ describe 'Equipment', slow: true do
         end
 
         it 'should export to PDF' do
-          visit '/'
+          visit dashboard_path
           click_link 'All Equipment'
 
           click_on 'Export to PDF'
@@ -484,7 +484,7 @@ describe 'Equipment', slow: true do
         end
 
         it 'should export to Excel' do
-          visit '/'
+          visit dashboard_path
           click_link 'All Equipment'
 
           click_on 'Export to Excel'
@@ -507,7 +507,7 @@ describe 'Equipment', slow: true do
         end
 
         it 'should show Expired Equipment report' do
-          visit '/'
+          visit dashboard_path
           page.should have_content 'Expired Equipment'
           click_link 'Expired Equipment'
 
@@ -531,7 +531,7 @@ describe 'Equipment', slow: true do
         end
 
         it 'should export to CSV' do
-          visit '/'
+          visit dashboard_path
           click_link 'Expired Equipment'
 
           click_on 'Export to CSV'
@@ -542,7 +542,7 @@ describe 'Equipment', slow: true do
         end
 
         it 'should export to Excel' do
-          visit '/'
+          visit dashboard_path
           click_link 'Expired Equipment'
 
           click_on 'Export to Excel'
@@ -551,7 +551,7 @@ describe 'Equipment', slow: true do
         end
 
         it 'should export to PDF' do
-          visit '/'
+          visit dashboard_path
           click_link 'Expired Equipment'
 
           click_on 'Export to PDF'
@@ -574,7 +574,7 @@ describe 'Equipment', slow: true do
         end
 
         it 'should show Expiring Equipment report' do
-          visit '/'
+          visit dashboard_path
           page.should have_content 'Equipment Expiring Soon'
           click_link 'Equipment Expiring Soon'
 
@@ -596,7 +596,7 @@ describe 'Equipment', slow: true do
         end
 
         it 'should export to CSV' do
-          visit '/'
+          visit dashboard_path
           click_link 'Equipment Expiring Soon'
 
           click_on 'Export to CSV'
@@ -607,7 +607,7 @@ describe 'Equipment', slow: true do
         end
 
         it 'should export to Excel' do
-          visit '/'
+          visit dashboard_path
           click_link 'Equipment Expiring Soon'
 
           click_on 'Export to Excel'
@@ -616,7 +616,7 @@ describe 'Equipment', slow: true do
         end
 
         it 'should export to PDF' do
-          visit '/'
+          visit dashboard_path
           click_link 'Equipment Expiring Soon'
 
           click_on 'Export to PDF'
@@ -636,7 +636,7 @@ describe 'Equipment', slow: true do
           )
         end
         it 'should show Non-Inspectable Equipment report' do
-          visit '/'
+          visit dashboard_path
           page.should have_content 'Non-Inspectable Equipment'
           click_link 'Non-Inspectable Equipment'
 
@@ -657,7 +657,7 @@ describe 'Equipment', slow: true do
         end
 
         it 'should export to CSV' do
-          visit '/'
+          visit dashboard_path
           click_link 'Non-Inspectable Equipment'
 
           click_on 'Export to CSV'
@@ -668,7 +668,7 @@ describe 'Equipment', slow: true do
         end
 
         it 'should export to Excel' do
-          visit '/'
+          visit dashboard_path
           click_link 'Non-Inspectable Equipment'
 
           click_on 'Export to Excel'
@@ -677,7 +677,7 @@ describe 'Equipment', slow: true do
         end
 
         it 'should export to PDF' do
-          visit '/'
+          visit dashboard_path
           click_link 'Non-Inspectable Equipment'
 
           click_on 'Export to PDF'
@@ -715,7 +715,7 @@ describe 'Equipment', slow: true do
         create(:equipment, name: 'beta', customer: customer)
         create(:equipment, name: 'alpha', customer: customer)
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Equipment'
 
         # Ascending sort
@@ -732,7 +732,7 @@ describe 'Equipment', slow: true do
         create(:equipment, serial_number: '333', customer: customer)
         create(:equipment, serial_number: '111', customer: customer)
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Equipment'
 
         click_link 'Serial Number'
@@ -747,7 +747,7 @@ describe 'Equipment', slow: true do
         create(:expired_equipment, customer: customer)
         create(:valid_equipment, customer: customer)
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Equipment'
 
         click_link 'Status'
@@ -767,7 +767,7 @@ describe 'Equipment', slow: true do
         create(:equipment, inspection_interval: Interval::ONE_MONTH.text, customer: customer)
         create(:equipment, inspection_interval: Interval::THREE_MONTHS.text, customer: customer)
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Equipment'
 
         click_link 'Inspection Interval'
@@ -804,7 +804,7 @@ describe 'Equipment', slow: true do
         create(:equipment, last_inspection_date: latest_date, customer: customer)
         create(:equipment, last_inspection_date: earliest_date, customer: customer)
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Equipment'
 
         click_link 'Last Inspection Date'
@@ -819,7 +819,7 @@ describe 'Equipment', slow: true do
         not_inspectable = create(:equipment, inspection_interval: Interval::NOT_REQUIRED.text, customer: customer)
         inspectable2 = create(:equipment, inspection_interval: Interval::FIVE_YEARS.text, customer: customer)
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Equipment'
 
         click_link 'Inspection Type'
@@ -839,7 +839,7 @@ describe 'Equipment', slow: true do
         create(:equipment, expiration_date: earliest_date, customer: customer)
         create(:equipment, expiration_date: nil, customer: customer)
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Equipment'
 
         click_link 'Expiration Date'
@@ -865,7 +865,7 @@ describe 'Equipment', slow: true do
         create(:equipment, employee: first_employee, customer: customer)
         create(:equipment, location: middle_location, customer: customer)
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Equipment'
 
         click_link 'Assignee'
@@ -886,7 +886,7 @@ describe 'Equipment', slow: true do
           create(:equipment, customer: customer)
         end
 
-        visit '/'
+        visit dashboard_path
         click_link 'All Equipment'
 
         find 'table.sortable'
@@ -926,7 +926,7 @@ describe 'Equipment', slow: true do
         end
 
         it 'should show Search Equipment page' do
-          visit '/'
+          visit dashboard_path
 
           within '[data-equipment-search-form]' do
             click_on 'Search'
@@ -951,7 +951,7 @@ describe 'Equipment', slow: true do
         end
 
         it 'should export to CSV' do
-          visit '/'
+          visit dashboard_path
 
           within '[data-equipment-search-form]' do
             click_on 'Search'
@@ -968,7 +968,7 @@ describe 'Equipment', slow: true do
         end
 
         it 'should export to Excel' do
-          visit '/'
+          visit dashboard_path
 
           within '[data-equipment-search-form]' do
             click_on 'Search'
@@ -980,7 +980,7 @@ describe 'Equipment', slow: true do
         end
 
         it 'should export to PDF' do
-          visit '/'
+          visit dashboard_path
 
           within '[data-equipment-search-form]' do
             click_on 'Search'
@@ -1003,7 +1003,7 @@ describe 'Equipment', slow: true do
                name: 'Box'
         )
 
-        visit '/'
+        visit dashboard_path
 
         assert_autocomplete('name', 'bo', 'Box')
 
@@ -1034,7 +1034,7 @@ describe 'Equipment', slow: true do
                name: 'Box'
         )
 
-        visit '/'
+        visit dashboard_path
         within '[data-equipment-search-form]' do
           click_on 'Search'
         end
@@ -1065,7 +1065,7 @@ describe 'Equipment', slow: true do
       it 'should auto complete on name', js: true do
         create(:equipment, name: 'Leveler', customer: customer)
 
-        visit '/'
+        visit dashboard_path
         click_on 'Search'
 
         assert_autocomplete('name', 'lev', 'Leveler')
