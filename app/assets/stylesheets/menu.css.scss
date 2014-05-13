@@ -1,0 +1,132 @@
+.menu {
+
+}
+.menu-item {
+  margin: 5px 0;
+  white-space: nowrap;
+}
+
+a.menu-item-link {
+  display: block;
+  height: 24px;
+  padding-left: 29px;
+  padding-right: 5px;
+  line-height: 24px;
+  width: 350px;
+  text-decoration: none;
+}
+
+a.menu-item-link:hover {
+  background-color: #069;
+  color: white;
+}
+
+.icon {
+  background-repeat: no-repeat;
+  background-position: top left;
+  background-size: 24px 24px;
+}
+
+.all-employee-cert-link {
+  background-image: url('icons/clipboard.png');
+}
+
+.exp-cert-link {
+  background-image: url('icons/shield_red.png');
+}
+
+.exp-cert-soon-link {
+  background-image: url('icons/shield_yellow.png');
+}
+
+.units-based-cert-link {
+  background-image: url('icons/chart.png');
+}
+
+.recert-req-link {
+  background-image: url('icons/refresh.png');
+}
+
+.all-emp-link {
+  background-image: url('icons/user_group.png');
+}
+
+.all-cert-types-link {
+  background-image: url('icons/folder.png');
+}
+
+.all-service-types-link {
+  background-image: url('icons/service_type.png');
+}
+
+.all-services-link {
+  background-image: url('icons/checklist.png');
+}
+
+.exp-services-link {
+  background-image: url('icons/shield_red.png');
+}
+
+.exp-services-soon-link {
+  background-image: url('icons/shield_yellow.png');
+}
+
+.all-vehicles-link {
+  background-image: url('icons/vehicle_red.png');
+}
+
+.search-cert-types-link {
+  background-image: url('icons/magnify_plus.png');
+}
+
+.create-cert-type-link {
+  background-image: url('icons/document_edit.png');
+}
+
+.create-emp-link {
+  background-image: url('icons/user_add.png');
+}
+
+.create-training-event-link {
+  background-image: url('icons/checklist.png');
+}
+
+.all-equip-link {
+  background-image: url('icons/tools.png');
+}
+
+.exp-equip-link {
+  background-image: url('icons/shield_red.png');
+}
+
+.exp-equip-soon-link {
+  background-image: url('icons/shield_yellow.png');
+}
+
+.non-inspectable-equip-link {
+  background-image: url('icons/shield_blue.png');
+}
+
+.create-equip-link {
+  background-image: url('icons/light_off.png');
+}
+
+.create-service-link {
+  background-image: url('icons/tools.png');
+}
+
+.create-service-type-link {
+  background-image: url('icons/create_service_type.png');
+}
+
+.create-vehicle-link {
+  background-image: url('icons/vehicle.png');
+}
+
+.create-location-link {
+  background-image: url('icons/database_add.png');
+}
+
+.all-location-link {
+  background-image: url('icons/map.png');
+}

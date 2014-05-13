@@ -11,8 +11,12 @@
 </div>
 
 <div class="panel">
-  <ul class="no-bullet">
-    <li><%= link_to 'All Locations', locations_path %></li>
-    <li><%= link_to 'Deactivated Employees', deactivated_employees_path %></li>
+  <ul class="menu no-bullet">
+    <li class="menu-item">
+      <%= link_to 'All Locations', locations_path, class: "menu-item-link icon all-location-link" %>
+    </li>
+    <li class="menu-item">
+      <%= link_to 'Deactivated Employees', deactivated_employees_path, class: "menu-item-link icon all-emp-link" %>
+    </li>
   </ul>
 </div>

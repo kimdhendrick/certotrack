@@ -27,13 +27,37 @@
 </div>
 
 <div class="panel">
-  <ul class="no-bullet">
-    <li><%= link_to "All Vehicle Services (#{@total_service_count})", services_path %></li>
-    <li><%= link_to "Expired Vehicle Services (#{@total_expired_service_count})", expired_services_path %></li>
-    <li><%= link_to "Expiring Vehicle Services (#{@total_expiring_service_count})", expiring_services_path %></li>
-    <li><%= link_to "All Vehicles", vehicles_path %></li>
-    <li><%= link_to "Create Vehicle", new_vehicle_path %></li>
-    <li><%= link_to "All Service Types", service_types_path %></li>
-    <li><%= link_to "Create Service Type", new_service_type_path %></li>
-  </ul>
+  <div class="row">
+
+    <div class="small-6 columns">
+      <ul class="menu no-bullet">
+        <li class="menu-item">
+          <%= link_to "All Vehicle Services (#{@total_service_count})", services_path, class: "menu-item-link icon all-services-link" %>
+        </li>
+        <li class="menu-item">
+          <%= link_to "Expired Vehicle Services (#{@total_expired_service_count})", expired_services_path, class: "menu-item-link icon exp-services-link" %>
+        </li>
+        <li class="menu-item">
+          <%= link_to "Expiring Vehicle Services (#{@total_expiring_service_count})", expiring_services_path, class: "menu-item-link icon exp-services-soon-link" %>
+        </li>
+      </ul>
+    </div>
+
+    <div class="small-6 columns">
+      <ul class="menu no-bullet">
+        <li class="menu-item">
+          <%= link_to "All Vehicles", vehicles_path, class: "menu-item-link icon all-vehicles-link" %>
+        </li>
+        <li class="menu-item">
+          <%= link_to "Create Vehicle", new_vehicle_path, class: "menu-item-link icon create-vehicle-link" %>
+        </li>
+        <li class="menu-item">
+          <%= link_to "All Service Types", service_types_path, class: "menu-item-link icon all-service-types-link" %>
+        </li>
+        <li class="menu-item">
+          <%= link_to "Create Service Type", new_service_type_path, class: "menu-item-link icon create-service-type-link" %></li>
+      </ul>
+    </div>
+
+  </div>
 </div>

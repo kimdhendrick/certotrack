@@ -30,11 +30,21 @@
 </div>
 
 <div class="panel">
-  <ul class="no-bullet">
-    <li><%= link_to "All Equipment (#{@total_equipment_count})", equipment_index_path %></li>
-    <li><%= link_to "Expired Equipment (#{@expired_equipment_count})", expired_equipment_path %></li>
-    <li><%= link_to "Equipment Expiring Soon (#{@expiring_equipment_count})", expiring_equipment_path %></li>
-    <li><%= link_to "Non-Inspectable Equipment", noninspectable_equipment_path %></li>
-    <li><%= link_to 'Create Equipment', new_equipment_path %></li>
+  <ul class="menu no-bullet">
+    <li class="menu-item">
+      <%= link_to "All Equipment (#{@total_equipment_count})", equipment_index_path, class: "menu-item-link icon all-equip-link" %>
+    </li>
+    <li class="menu-item">
+      <%= link_to "Expired Equipment (#{@expired_equipment_count})", expired_equipment_path, class: "menu-item-link icon exp-equip-link" %>
+    </li>
+    <li class="menu-item">
+      <%= link_to "Equipment Expiring Soon (#{@expiring_equipment_count})", expiring_equipment_path, class: "menu-item-link icon exp-equip-soon-link" %>
+    </li>
+    <li class="menu-item">
+      <%= link_to "Non-Inspectable Equipment", noninspectable_equipment_path, class: "menu-item-link icon non-inspectable-equip-link" %>
+    </li>
+    <li class="menu-item">
+      <%= link_to 'Create Equipment', new_equipment_path, class: "menu-item-link icon create-equip-link" %>
+    </li>
   </ul>
 </div>
