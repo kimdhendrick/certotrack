@@ -6,7 +6,7 @@ describe 'Authentication', slow: true do
 
   describe 'signin' do
 
-    before { visit '#welcome' }
+    before { visit '/dashboard' }
 
     describe 'login page' do
 
