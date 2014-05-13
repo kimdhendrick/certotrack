@@ -43,11 +43,11 @@ describe 'Reservice Vehicle Pages', slow: true do
       it { should have_selector('h1', text: 'Reservice Vehicle') }
       it { should have_link('Home', root_path) }
       it { should have_link('Create Service', href: new_service_path) }
-      it { should have_selector('span.label', text: 'Vehicle') }
-      it { should have_selector('span.value', text: '123-ABC/34987 1999 Dart') }
-      it { should have_selector('span.label', text: 'Service Type') }
-      it { should have_selector('span.value', text: 'Oil change') }
-      it { should have_selector('span.value', text: 'Oil change') }
+      it { should have_selector('div label', text: 'Vehicle') }
+      it { should have_selector('div', text: '123-ABC/34987 1999 Dart') }
+      it { should have_selector('div label', text: 'Service Type') }
+      it { should have_selector('div', text: 'Oil change') }
+      it { should have_selector('div', text: 'Oil change') }
       specify { find_field('Last Service Mileage').value.should == '10001' }
       specify { find_field('Last Service Date').value.should == '05/16/2013' }
       specify { find_field('Comments').value.should == 'Best oil change evah!' }
@@ -58,7 +58,7 @@ describe 'Reservice Vehicle Pages', slow: true do
         click_button 'Reservice'
       end
 
-      it { should have_selector('#error_explanation') }
+      it { should have_selector('.errors') }
     end
 
     describe 'with valid information' do
