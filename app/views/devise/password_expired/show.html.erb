@@ -1,0 +1,36 @@
+<h2>Password Expired</h2>
+
+<%= form_for(resource, :as => resource_name, :url => [resource_name, :password_expired], :html => {:method => :put}) do |f| %>
+  <%= render 'shared/errors', model: @user %>
+
+  <fieldset>
+    <div class="row">
+      <div class="small-6 columns">
+        <%= f.label :current_password, "Current password" %>
+        <%= f.password_field :current_password %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="small-6 columns">
+        <%= f.label :password, "New password" %>
+        <%= f.password_field :password %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="small-6 columns">
+        <%= f.label :password_confirmation, "Confirm new password" %>
+        <%= f.password_field :password_confirmation %>
+      </div>
+    </div>
+
+    <div class="row actions">
+      <div class="small-6 columns">
+        <span class="right">
+          <%= f.submit "Update", class: "button tiny radius right" %>
+        </span>
+      </div>
+    </div>
+<% end %>
+</fieldset>

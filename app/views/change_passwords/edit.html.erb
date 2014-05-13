@@ -1,24 +1,37 @@
 <h2>Change Password</h2>
 
-<%= form_for(@user, :url => { :action => 'update_password' } ) do |f| %>
+<%= form_for(@user, :url => {:action => 'update_password'}) do |f| %>
   <%= render 'shared/errors', model: @user %>
 
-  <div class='field'>
-    <%= f.label :current_password, 'Current Password' %>
-    <br/>
-    <%= f.password_field :current_password, autofocus: true %>
-  </div>
-  <div class='field'>
-    <%= f.label :password, 'New Password' %>
-    <br/>
-    <%= f.password_field :password, :autocomplete => 'off'  %>
-  </div>
-  <div class='field'>
-    <%= f.label :password_confirmation, 'Confirm New Password' %>
-    <br/>
-    <%= f.password_field :password_confirmation %>
-  </div>
-  <div class='action_container'>
-    <%= f.submit 'Change Password' %>
-  </div>
+  <fieldset>
+    <div class="row">
+      <div class='small-6 columns'>
+        <%= f.label :current_password, 'Current Password' %>
+        <br/>
+        <%= f.password_field :current_password, autofocus: true %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class='small-6 columns'>
+        <%= f.label :password, 'New Password' %>
+        <%= f.password_field :password, :autocomplete => 'off' %>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class='small-6 columns'>
+        <%= f.label :password_confirmation, 'Confirm New Password' %>
+        <%= f.password_field :password_confirmation %>
+      </div>
+    </div>
+
+    <div class="row actions">
+      <div class="small-6 columns">
+        <span class="right">
+          <%= f.submit 'Update', class: "button tiny radius" %>
+        </span>
+      </div>
+    </div>
+  </fieldset>
 <% end %>
