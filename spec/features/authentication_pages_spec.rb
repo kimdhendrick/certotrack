@@ -10,8 +10,9 @@ describe 'Authentication', slow: true do
 
     describe 'login page' do
 
-      it { should have_content('Login') }
       it { should have_title('Certotrack') }
+      it { should have_content('Username') }
+      it { should have_content('Password') }
       it { should have_selector('input[type=submit]') }
     end
 
@@ -41,7 +42,9 @@ describe 'Authentication', slow: true do
 
       describe 'followed by signout' do
         before { click_on 'Log out' }
-        it { should have_content('Login') }
+        it { should have_title('Certotrack') }
+        it { should have_content('Username') }
+        it { should have_content('Password') }
         it { should have_selector('input[type=submit]') }
       end
     end
