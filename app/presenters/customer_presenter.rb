@@ -54,6 +54,6 @@ class CustomerPresenter
   end
 
   def edit_link
-    @template.link_to 'Edit', @template.edit_customer_path(model)
+    @template.link_to 'Edit Customer', @template.edit_customer_path(model), class: "button tiny radius"
   end
 end

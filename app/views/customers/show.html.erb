@@ -7,113 +7,150 @@
   </ul>
 
   <div class="row">
-    <div class="small-9 columns">
-      <div class="row">
-        <div class="small-3 columns">
-          <span class="label">Name</span>
+    <fieldset>
+      <div class="small-8 columns">
+        <div class="row field">
+          <div class="small-4 columns">
+            <span class="field-name">Name</span>
+          </div>
+          <div class="end">
+            <%= customer.name %>
+          </div>
         </div>
-        <div class="end">
-          <%= customer.name %>
+        <div class="row field">
+          <div class="small-4 columns">
+            <span class="field-name">Account Number</span>
+          </div>
+          <div class="end">
+            <%= customer.account_number %>
+          </div>
+        </div>
+        <div class="row field">
+          <div class="small-4 columns">
+            <span class="field-name">Contact Person Name</span>
+          </div>
+          <div class="end">
+            <%= customer.contact_person_name %>
+            (<%= mail_to customer.contact_email, customer.contact_email %>)
+          </div>
+        </div>
+        <div class="row field">
+          <div class="small-4 columns">
+            <span class="field-name">Contact Phone Number</span>
+          </div>
+          <div class="end">
+            <%= customer.contact_phone_number %>
+          </div>
+        </div>
+        <div class="row field">
+          <div class="small-4 columns">
+            <span class="field-name">Address</span>
+          </div>
+          <div class="small-8 columns">
+            <div class="row">
+              <div class="small-12 columns">
+                <%= customer.address1 %>
+              </div>
+            </div>
+            <div class="row">
+              <div class="small-12 columns">
+                <%= customer.address2 %>
+              </div>
+            </div>
+            <div class="row">
+              <div class="small-12 columns">
+                <%= customer.city %>, <%= customer.state %>
+              </div>
+            </div>
+            <div class="row">
+              <div class="small-12 columns">
+                <%= customer.zip %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row field">
+          <div class="small-4 columns">
+            <span class="field-name">Equipment Access</span>
+          </div>
+          <div class="end">
+            <%= customer.equipment_access %>
+          </div>
+        </div>
+        <div class="row field">
+          <div class="small-4 columns">
+            <span class="field-name">Certification Access</span>
+          </div>
+          <div class="end">
+            <%= customer.certification_access %>
+          </div>
+        </div>
+        <div class="row field">
+          <div class="small-4 columns">
+            <span class="field-name">Vehicle Access</span>
+          </div>
+          <div class="end">
+            <%= customer.vehicle_access %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="end columns">
+            <hr/>
+          </div>
+        </div>
+        <div class="row actions">
+          <div class="small-6 columns">
+            <%= customer.edit_link %>
+          </div>
+        </div>
+        <div class="row field">
+          <div class="small-8 columns">
+            <h3>Customer's Users</h3>
+            <table class="sortable">
+              <thead>
+              <tr>
+                <th>Username</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+              </tr>
+              </thead>
+              <tbody>
+              <% customer.users.each do |user| %>
+                <tr>
+                  <td><%= link_to user.username, customer_user_path(user.model) %></td>
+                  <td><%= user.first_name %></td>
+                  <td><%= user.last_name %></td>
+                </tr>
+              <% end %>
+              </tbody>
+            </table>
+            <%= link_to 'Create New User', new_customer_user_path(customer_id: customer.id), class: "button tiny radius" %>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <div class="small-3 columns">
-          <span class="label">Account Number</span>
+      <div class="small-4 columns">
+        <div class="row">
+          <div class="small-12 columns">
+            <h3>Locations</h3>
+          </div>
         </div>
-        <div class="end">
-          <%= customer.account_number %>
+        <div class="row">
+          <div class="small-12 columns" style="overflow-y: scroll; height:600px;">
+            <ul class="no-bullet">
+              <% customer.locations.each do |location| %>
+                <li>
+                  <td><%= location.name %></td>
+                </li>
+              <% end %>
+            </ul>
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="small-3 columns">
-          Contact Person Name
-        </div>
-        <div class="end">
-          <%= customer.contact_person_name %>
-          (<%= mail_to customer.contact_email, customer.contact_email %>)
-        </div>
-      </div>
-      <div class="row">
-        <div class="small-3 columns">
-          Contact Phone Number
-        </div>
-        <div class="end">
-          <%= customer.contact_phone_number %>    </div>
-      </div>
-      <div class="row">
-        <div class="small-3 columns">
-          Address
-        </div>
-        <div class="end">
-          <%= customer.address1 %>
-          <%= customer.address2 %>,
-          <%= customer.city %>, <%= customer.state %>
-          <%= customer.zip %>
+        <div class="row actions">
+          <div class="small-12 columns">
+            <%= link_to 'Create New Location', new_location_path(customer_id: customer.id), class: "button tiny radius" %>
+          </div>
         </div>
       </div>
-
-      <div class="row">
-        <div class="small-3 columns">
-          Equipment Access
-        </div>
-        <div class="end">
-          <%= customer.equipment_access %>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="small-3 columns">
-          Certification Access
-        </div>
-        <div class="end">
-          <%= customer.certification_access %>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="small-3 columns">
-          Vehicle Access
-        </div>
-        <div class="end">
-          <%= customer.vehicle_access %>
-        </div>
-      </div>
-
-      <h2>Customer's Users</h2>
-      <table class="sortable">
-        <thead>
-        <tr>
-          <th>Username</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-        </tr>
-        </thead>
-        <tbody>
-        <% customer.users.each do |user| %>
-          <tr>
-            <td><%= link_to user.username, customer_user_path(user.model) %></td>
-            <td><%= user.first_name %></td>
-            <td><%= user.last_name %></td>
-          </tr>
-        <% end %>
-        </tbody>
-      </table>
-
-      <br/>
-      <%= link_to 'Create New User', new_customer_user_path(customer_id: customer.id) %>
-      <br/>
-
-      <br/>
-      <%= customer.edit_link %>
-    </div>
-    <div class="small-3 columns">
-      <span class="label">Locations</span><br/>
-      <%= link_to 'Create New Location', new_location_path(customer_id: customer.id) %>
-      <ul>
-        <% customer.locations.each do |location| %>
-          <li><%= location.name %></li>
-        <% end %>
-      </ul>
-    </div>
+    </fieldset>
   </div>
 <% end %>
