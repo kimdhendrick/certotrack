@@ -9,15 +9,13 @@ class ApplicationController < ActionController::Base
   end
 
   def welcome_user
-    @logged_in = current_user.present?
-
-    if @logged_in
+    if user_signed_in?
       @first_name = current_user.first_name.strip
       @customer_name = current_user.customer.name.strip
     end
   end
 
-  def after_sign_out_path_for(resource)
-    login_path
+  def after_sign_in_path_for(resource)
+    dashboard_path
   end
 end

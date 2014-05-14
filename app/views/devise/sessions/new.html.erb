@@ -1,19 +1,45 @@
-<div class="row"></div>
-<div class="small-6 small-centered columns">
-  <h2>Login</h2>
+<div class="row">
+  <div class="small-12 small-centered columns">
 
-  <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
-    <fieldset>
-
-      <%= f.label :username %>
-      <%= f.text_field :username, autofocus: true %>
-
-      <%= f.label :password %>
-      <%= f.password_field :password %>
-
-      <%= f.submit 'Login', class: "button tiny radius right" %>
-
-    </fieldset>
-  <% end %>
+    <h1 class="text-center">
+      Welcome to CertoTrack
+    </h1>
+  </div>
 </div>
+
+<div class="row" data-equalizer>
+  <div class="small-8 columns">
+    <%= image_tag 'crystalLake.jpg', 'data-equalizer-watch' => '' %>
+  </div>
+  <div class="small-4 columns">
+    <div class="panel radius" data-equalizer-watch>
+      <p>
+        CertoTrack enables you to more easily track your equipment
+        certifications, personnel qualifications, and more.
+      </p>
+
+      <p>
+        <a href="mailto:sales@certotrack.com">Contact us at
+          sales@certotrack.com</a> to find out how we can simplify your job!
+      </p>
+
+      <div class="row">
+        <div class="small-12 small-centered columns">
+          <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+            <fieldset>
+
+              <%= f.label :username %>
+              <%= f.text_field :username, autofocus: true %>
+
+              <%= f.label :password %>
+              <%= f.password_field :password %>
+
+              <%= f.submit 'Login', class: "button tiny radius right" %>
+
+            </fieldset>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
