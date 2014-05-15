@@ -34,6 +34,9 @@
             <a href="#">Welcome <%= @first_name %>! (<%= @customer_name %>)</a>
             <ul class="dropdown">
               <li>
+                <%= link_to 'Refresh Counts', refresh_path %>
+              </li>
+              <li>
                 <%= link_to 'Change Password', edit_change_password_path %>
               </li>
               <li>
