@@ -1,12 +1,13 @@
 1. mysqldump -u certouser -h certotrack.com -p --compatible=postgresql certotrack > certotrack_pg_dump.sql
 2. Clean dump file as below.
-3. Run dump commands: psql -h localhost -d certotrack_development -U certouser -f migration/certotrack_pg_dump.sql
-4. Run import commands: psql -h localhost -d certotrack_development -U certouser -f migration/production_db_migration.sql
-5. Run rails commands in production_db_migration.commands
-6. Push to heroku:
-  heroku pg:reset DATABASE_URL --app certotrack
-  heroku pg:push certotrack_development DATABASE_URL --app certotrack
-  heroku restart --app certotrack
+3. rake db:drop db:create db:migrate
+4. psql -h localhost -d certotrack_development -U certouser -f migration/certotrack_pg_dump.sql
+5. psql -h localhost -d certotrack_development -U certouser -f migration/production_db_migration.sql
+6. Run rails commands in production_db_migration.commands
+7. Push to heroku:
+     heroku pg:reset DATABASE_URL --app certotrack
+     heroku pg:push certotrack_development DATABASE_URL --app certotrack
+     heroku restart --app certotrack
 
 * Reference:
   * http://en.wikibooks.org/wiki/Converting_MySQL_to_PostgreSQL
