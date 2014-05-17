@@ -13,7 +13,7 @@
           <div class="small-4 columns">
             <span class="field-name">Name</span>
           </div>
-          <div class="end">
+          <div class="small-8 columns">
             <%= customer.name %>
           </div>
         </div>
@@ -21,7 +21,7 @@
           <div class="small-4 columns">
             <span class="field-name">Account Number</span>
           </div>
-          <div class="end">
+          <div class="small-8 columns">
             <%= customer.account_number %>
           </div>
         </div>
@@ -29,7 +29,7 @@
           <div class="small-4 columns">
             <span class="field-name">Contact Person Name</span>
           </div>
-          <div class="end">
+          <div class="small-8 columns">
             <%= customer.contact_person_name %>
             (<%= mail_to customer.contact_email, customer.contact_email %>)
           </div>
@@ -38,7 +38,7 @@
           <div class="small-4 columns">
             <span class="field-name">Contact Phone Number</span>
           </div>
-          <div class="end">
+          <div class="small-8 columns">
             <%= customer.contact_phone_number %>
           </div>
         </div>
@@ -48,22 +48,22 @@
           </div>
           <div class="small-8 columns">
             <div class="row">
-              <div class="small-12 columns">
+              <div class="small-8 columns">
                 <%= customer.address1 %>
               </div>
             </div>
             <div class="row">
-              <div class="small-12 columns">
+              <div class="small-8 columns">
                 <%= customer.address2 %>
               </div>
             </div>
             <div class="row">
-              <div class="small-12 columns">
+              <div class="small-8 columns">
                 <%= customer.city %>, <%= customer.state %>
               </div>
             </div>
             <div class="row">
-              <div class="small-12 columns">
+              <div class="small-8 columns">
                 <%= customer.zip %>
               </div>
             </div>
@@ -73,7 +73,7 @@
           <div class="small-4 columns">
             <span class="field-name">Equipment Access</span>
           </div>
-          <div class="end">
+          <div class="small-8 columns">
             <%= customer.equipment_access %>
           </div>
         </div>
@@ -81,7 +81,7 @@
           <div class="small-4 columns">
             <span class="field-name">Certification Access</span>
           </div>
-          <div class="end">
+          <div class="small-8 columns">
             <%= customer.certification_access %>
           </div>
         </div>
@@ -89,7 +89,7 @@
           <div class="small-4 columns">
             <span class="field-name">Vehicle Access</span>
           </div>
-          <div class="end">
+          <div class="small-8 columns">
             <%= customer.vehicle_access %>
           </div>
         </div>
