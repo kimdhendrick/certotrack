@@ -23,7 +23,11 @@
       <td><%= vehicle.vehicle_model %></td>
       <td><%= vehicle.mileage %></td>
       <td><%= vehicle.location %></td>
-      <td><%= vehicle.status %></td>
+      <td>
+        <div class="<%=vehicle.status_style%>">
+          <%= vehicle.status %>
+        </div>
+      </td>
     </tr>
   <% end %>
   </tbody>

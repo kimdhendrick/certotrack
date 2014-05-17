@@ -96,7 +96,11 @@
           <td><%= service.service_due_mileage %></td>
           <td><%= service.last_service_date %></td>
           <td><%= service.last_service_mileage %></td>
-          <td><%= service.status %></td>
+          <td>
+            <div class="<%=service.status_style%>">
+              <%= service.status %>
+            </div>
+          </td>
           <td><%= link_to 'Edit', service.model %></td>
         </tr>
       <% end %>

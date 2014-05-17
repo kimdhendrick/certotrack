@@ -15,7 +15,11 @@
   <% @services.each do |service| %>
     <tr>
       <td><%= link_to service.service_type_name, service.model.service_type %></td>
-      <td><%= service.status %></td>
+      <td>
+        <div class="<%=service.status_style%>">
+          <%= service.status %>
+        </div>
+      </td>
       <td><%= link_to service.vehicle_name, service.model.vehicle %></td>
       <td><%= service.vehicle_mileage %></td>
       <td><%= service.service_due_date %></td>
