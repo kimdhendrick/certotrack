@@ -116,6 +116,13 @@ describe Service do
       service.should_not be_expired
     end
 
+    it 'should answer expired? when vehicle mileage not set' do
+      service.vehicle.mileage = nil
+      service.expiration_mileage = 20000
+
+      service.should be_expired
+    end
+
     it 'should answer expiring? when expiring' do
       service.expiration_mileage = 10499
 
@@ -123,6 +130,13 @@ describe Service do
     end
 
     it 'should answer expiring? when not expiring' do
+      service.expiration_mileage = 20000
+
+      service.should_not be_expiring
+    end
+
+    it 'should answer expiring? when vehicle mileage not set' do
+      service.vehicle.mileage = nil
       service.expiration_mileage = 20000
 
       service.should_not be_expiring

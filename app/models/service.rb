@@ -180,11 +180,15 @@ class Service < ActiveRecord::Base
     end
 
     def _expiring_soon
-      _expiration_value < (service.vehicle.mileage + 500)
+      mileage = service.vehicle.mileage || 0
+      _expiration_value < (mileage + 500)
     end
 
     def _expired?
-      _expiration_value.present? && _expiration_value <= service.vehicle.mileage
+      mileage = service.vehicle.mileage
+      return true unless mileage.present?
+
+      _expiration_value.present? && _expiration_value <= mileage
     end
   end
 
