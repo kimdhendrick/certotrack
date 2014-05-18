@@ -115,7 +115,7 @@
                   <span data-units-achieved-read-only='data-units-achieved-read-only'>
                     <%= certification.units_achieved_of_required %>
                   </span>
-                  <% if @batch_certification.present? %>
+                  <% if @batch_certification.present? && @batch_certification.error(certification.id).present? %>
                     <div class="panel errors">
                       <%= @batch_certification.error(certification.id) %>
                     </div>
