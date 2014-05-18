@@ -60,7 +60,11 @@
                 <td><%= certification_period.units %></td>
               <% end %>
               <td><%= certification_period.trainer %></td>
-              <td><%= certification_period.status %></td>
+              <td>
+                <div class="<%= certification_period.status_style %>">
+                  <%= certification_period.status %>
+                </div>
+              </td>
             </tr>
           <% end %>
           </tbody>

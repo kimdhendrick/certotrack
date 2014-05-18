@@ -76,7 +76,11 @@
               <td><%= service_period.last_service_date %></td>
               <td><%= service_period.expiration_date %></td>
               <td><%= service_period.expiration_mileage %></td>
-              <td><%= service_period.status %></td>
+              <td>
+                <div class="<%= service_period.status_style %>">
+                  <%= service_period.status %>
+                </div>
+              </td>
             </tr>
           <% end %>
           </tbody>

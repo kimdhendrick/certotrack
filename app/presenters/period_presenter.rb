@@ -15,4 +15,8 @@ module PeriodPresenter
   def model_start_date
     DateHelpers.date_to_string model.start_date
   end
+
+  def status_style
+    status.to_s.delete('/').downcase
+  end
 end
