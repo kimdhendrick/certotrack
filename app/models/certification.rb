@@ -124,19 +124,21 @@ class Certification < ActiveRecord::Base
   class UnitsBasedCertificationStrategy < CertificationStrategy
 
     def status
-      return Status::VALID if _achieved_units_required?
+      return Status::VALID if _achieved_units_required_in_time?
       return Status::PENDING if _pending?
       return Status::RECERTIFY
     end
 
     private
 
-    def _achieved_units_required?
+    def _achieved_units_required_in_time?
+      return false if _expired?
+
       (certification.units_achieved || 0) >= _units_required
     end
 
     def _pending?
-      _expiration_date.present? && !_expired? && !_achieved_units_required?
+      _expiration_date.present? && !_expired? && !_achieved_units_required_in_time?
     end
 
     def _units_required

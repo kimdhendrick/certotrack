@@ -95,27 +95,35 @@ describe Certification do
       let (:certification) { build(:certification, certification_type: certification_type) }
       let (:certification_period) { create(:certification_period, certification: certification) }
 
-      it 'should calculate VALID status when units achieved meets or exceeds units required' do
+      it 'should calculate VALID status when expiration date is in the future and units achieved meets or exceeds units required' do
         certification.units_achieved = 101
+        certification.expiration_date = Date.tomorrow
 
         certification.status.should == Status::VALID
       end
 
-      it 'should calculate recertify when expiration date is not set and units achieved less than required' do
+      it 'should calculate RECERTIFY status when expiration date is in the past and units achieved meets or exceeds units required' do
+        certification.units_achieved = 101
+        certification.expiration_date = Date.yesterday
+
+        certification.status.should == Status::RECERTIFY
+      end
+
+      it 'should calculate RECERTIFY when expiration date is not set and units achieved less than required' do
         certification.units_achieved = 99
         certification.expiration_date = nil
 
         certification.status.should == Status::RECERTIFY
       end
 
-      it 'should calculate recertify when expiration date is in the past and units achieved less than required' do
+      it 'should calculate RECERTIFY when expiration date is in the past and units achieved less than required' do
         certification.units_achieved = 99
         certification.expiration_date = Date.yesterday
 
         certification.status.should == Status::RECERTIFY
       end
 
-      it 'should calculate pending when expiration date is not past and units achieved less than required' do
+      it 'should calculate PENDING when expiration date is not past and units achieved less than required' do
         certification.units_achieved = 99
         certification.expiration_date = Date.tomorrow
 

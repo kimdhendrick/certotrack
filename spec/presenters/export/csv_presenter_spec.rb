@@ -81,7 +81,7 @@ module Export
           data_results = results.split("\n")[1].split(',')
 
           data_results.should ==
-            ["\"Brown", " Joe\"", 'CPR', 'Valid', '12', '01/02/2013', '01/02/2014', 'Trainer Tom', 'username', "#{Date.current.strftime('%m/%d/%Y')}", 'Well done']
+            ["\"Brown", " Joe\"", 'CPR', 'Recertify', '12', '01/02/2013', '01/02/2014', 'Trainer Tom', 'username', "#{Date.current.strftime('%m/%d/%Y')}", 'Well done']
         end
       end
 

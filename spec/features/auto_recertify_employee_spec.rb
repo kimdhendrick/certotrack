@@ -58,7 +58,7 @@ describe 'Auto Recertify', slow: true do
 
   describe 'Auto Recertify page' do
     before do
-      @certification1 = create(:units_based_certification, certification_type: certification_type, customer: customer, trainer: 'Doe, Jane', expiration_date: Time.local(2013, 12, 1))
+      @certification1 = create(:units_based_certification, certification_type: certification_type, customer: customer, trainer: 'Doe, Jane', expiration_date: Time.local(2043, 12, 1))
       @certification2 = create(:units_based_certification, certification_type: certification_type, customer: customer)
       login_as_certification_user(customer)
     end
@@ -94,7 +94,7 @@ describe 'Auto Recertify', slow: true do
         page.should have_selector('td.employee', text: 'Smith, John')
         page.should have_selector('td.trainer', text: 'Doe, Jane')
         page.should have_selector('td.last_certification_date', text: '05/15/2013')
-        page.should have_selector('td.expiration_date', text: '12/01/2013')
+        page.should have_selector('td.expiration_date', text: '12/01/2043')
       end
 
       within('tbody tr:nth-child(2)') do
