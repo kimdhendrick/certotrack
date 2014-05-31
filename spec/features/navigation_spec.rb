@@ -684,6 +684,10 @@ describe 'Navigation', slow: true do
       click_on 'All Service Types'
       click_on 'Create Service'
       click_and_test_link_with_title 'All Service Types'
+
+      visit dashboard_path
+      click_on 'All Vehicle Services'
+      click_and_test_link_with_title 'All Vehicles'
     end
   end
 
