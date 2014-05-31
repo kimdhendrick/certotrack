@@ -26,6 +26,22 @@ describe VehicleServiceFactory do
       service.errors.full_messages_for(:"service_periods.start_date").should be_empty
     end
 
+    it 'should handle punctuation in mileage' do
+      service_type = create(:service_type)
+      vehicle = create(:vehicle)
+
+      service = VehicleServiceFactory.new.new_instance(
+        current_user_id: create(:user).id,
+        vehicle_id: vehicle.id,
+        service_type_id: service_type.id,
+        service_mileage: '123,000.50'
+      )
+
+      service.should be_valid
+      service.active_service_period.should be_valid
+      service.last_service_mileage.should == 123000
+    end
+
     it 'creates a service when given an vehicle_id' do
       service_type = create(:service_type)
       customer = create(:customer)
@@ -136,7 +152,7 @@ describe VehicleServiceFactory do
         vehicle_id: vehicle.id,
         service_type_id: service_type.id,
         service_date: '12/15/2000',
-        service_mileage: 20000,
+        service_mileage: '20000',
         comments: nil
       )
 

@@ -441,9 +441,9 @@ describe Service do
       let(:service) { create(:service, service_type: service_type) }
       let(:original_active_service_period) { create(:service_period, service: service) }
       let(:start_date) { Date.current }
-      let(:start_mileage) { 10_000 }
+      let(:start_mileage) { '10,000.500' }
       let(:comments) { 'some comments' }
-      let(:attributes) { {start_date: start_date, start_mileage: start_mileage, comments: comments} }
+      let(:attributes) { {'start_date' => start_date.to_s, 'start_mileage' => start_mileage, 'comments' => comments} }
 
       subject { service }
 
@@ -455,7 +455,7 @@ describe Service do
 
       its(:active_service_period) { should_not == original_active_service_period }
       its(:last_service_date) { should == start_date }
-      its(:last_service_mileage) { should == start_mileage }
+      its(:last_service_mileage) { should == 10_000 }
       its(:comments) { should == comments }
       its(:expiration_date) { should == start_date + 1.month }
       its(:expiration_mileage) { should == 15_000 }

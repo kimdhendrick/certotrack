@@ -25,10 +25,8 @@ class VehicleService
   end
 
   def update_vehicle(vehicle, attributes)
+    attributes['mileage'] = attributes['mileage'].gsub(/,/, '') if attributes['mileage'].present?
     vehicle.update(attributes)
-    if attributes['mileage']
-      vehicle.mileage = attributes['mileage'].gsub(/[^\d\.]/, '')
-    end
     vehicle.save
   end
 

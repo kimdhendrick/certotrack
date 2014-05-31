@@ -26,6 +26,36 @@ describe Vehicle do
     end
   end
 
+  describe 'mileage' do
+    it 'should not allow negative mileage' do
+      subject.mileage = -1
+      subject.should_not be_valid
+      subject.errors[:mileage].should == ['must be greater than or equal to 0']
+    end
+
+    it 'should not allow non-numeric mileage' do
+      subject.mileage = 'abc'
+      subject.should_not be_valid
+      subject.errors[:mileage].should == ['is not a number']
+    end
+
+    it 'should allow positive mileage' do
+      subject.mileage = 1
+      subject.should be_valid
+    end
+
+    it 'should allow 0 mileage' do
+      subject.mileage = 0
+      subject.should be_valid
+    end
+
+    it 'should allow no mileage' do
+      subject.mileage = nil
+      subject.should be_valid
+    end
+  end
+
+
   describe '#status' do
     it 'should return NA when no services assigned to vehicle' do
       vehicle.status.should == Status::NA

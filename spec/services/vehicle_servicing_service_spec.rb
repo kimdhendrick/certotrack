@@ -156,10 +156,10 @@ describe VehicleServicingService do
   end
 
   describe '#reservice' do
-    let(:start_date) { Date.current }
-    let(:start_mileage) { 10_000 }
+    let(:start_date) { Date.current.to_s }
+    let(:start_mileage) { '10000' }
     let(:comments) { 'some_comments' }
-    let(:attributes) { {start_date: start_date, start_mileage: start_mileage, comments: comments} }
+    let(:attributes) { {'start_date' => start_date, 'start_mileage' => start_mileage, 'comments' => comments} }
     let(:service) { double('service') }
 
     subject { VehicleServicingService.new }

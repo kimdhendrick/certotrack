@@ -83,6 +83,7 @@ class Service < ActiveRecord::Base
   end
 
   def reservice(attributes)
+    attributes['start_mileage'] = attributes['start_mileage'].gsub(/,/, '') if attributes['start_mileage'].present?
     new_service_period = service_periods.build(attributes)
     self.active_service_period = new_service_period
     update_expiration_date_and_mileage

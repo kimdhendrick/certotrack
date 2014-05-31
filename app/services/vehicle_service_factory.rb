@@ -18,6 +18,8 @@ class VehicleServiceFactory
   private
 
   def _build_active_service_period(service, attributes)
+    attributes[:service_mileage] = attributes[:service_mileage].gsub(/,/, '') if attributes[:service_mileage].present?
+
     service_period_params =
       {
         service: service,

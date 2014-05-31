@@ -34,11 +34,8 @@ class VehicleServicingService
   end
 
   def update_service(service, attributes)
+    attributes['last_service_mileage'] = attributes['last_service_mileage'].gsub(/,/, '') if attributes['last_service_mileage'].present?
     service.assign_attributes(attributes)
-    if attributes['last_service_mileage']
-      service.last_service_mileage = attributes['last_service_mileage'].gsub(/[^\d\.]/, '')
-    end
-
     service.update_expiration_date_and_mileage
     service.save
   end

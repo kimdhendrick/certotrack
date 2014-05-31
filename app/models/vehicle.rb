@@ -15,6 +15,7 @@ class Vehicle < ActiveRecord::Base
   validates_uniqueness_of :license_plate, scope: :customer_id, case_sensitive: false
   validates_uniqueness_of :vin, scope: :customer_id, case_sensitive: false
   validates_length_of :vin, is: 17
+  validates :mileage, numericality: {greater_than_or_equal_to: 0}, allow_nil: true
 
   before_validation :_upcase_vin
 
@@ -22,7 +23,7 @@ class Vehicle < ActiveRecord::Base
 
   def status
     applicable_services = services.map(&:status).reject { |status| status == Status::NA }
-    return Status.find(applicable_services.map(&:id).max) || Status::NA
+    Status.find(applicable_services.map(&:id).max) || Status::NA
   end
 
   private
