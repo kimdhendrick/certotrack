@@ -40,7 +40,7 @@ describe 'Password Security', slow: true do
 
   context 'when user with an expired password' do
     before do
-      user.update_attribute(:password_changed_at, 91.days.ago)
+      user.update_attribute(:password_changed_at, 4.months.ago)
     end
 
     it 'should force the user to change their password to a valid one' do
