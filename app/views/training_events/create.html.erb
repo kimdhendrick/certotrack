@@ -51,7 +51,7 @@
     <tbody>
     <% @certification_types.each do |certification_type| %>
       <tr>
-        <td><%= certification_type.name %></td>
+        <td><%= link_to certification_type.name, certification_type %></td>
         <td><%= certification_type.interval %></td>
       </tr>
     <% end %>
