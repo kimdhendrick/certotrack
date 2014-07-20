@@ -25,10 +25,19 @@ describe CertificationPresenter do
     CertificationPresenter.new(certification).interval.should == '3 months'
   end
 
-  it 'should respond to trainer' do
-    certification = create(:certification, trainer: 'Trainer')
+  context '#trainer' do
+    it 'should respond to trainer' do
+      certification = create(:certification, trainer: 'Trainer')
 
-    CertificationPresenter.new(certification).trainer.should == 'Trainer'
+      CertificationPresenter.new(certification).trainer.should == 'Trainer'
+    end
+
+    it 'should return nothing when status is not certified' do
+      certification = build(:units_based_certification)
+      certification.active_certification_period = nil
+
+      CertificationPresenter.new(certification).trainer.should be_nil
+    end
   end
 
   it 'should respond to status' do
@@ -38,10 +47,19 @@ describe CertificationPresenter do
     CertificationPresenter.new(certification).status.text.should == 'Expired'
   end
 
-  it 'should respond to comments' do
-    certification = create(:certification, comments: 'Hello!')
+  context '#comments' do
+    it 'should respond to comments' do
+      certification = create(:certification, comments: 'Hello!')
 
-    CertificationPresenter.new(certification).comments.should == 'Hello!'
+      CertificationPresenter.new(certification).comments.should == 'Hello!'
+    end
+
+    it 'should return nothing when status is not certified' do
+      certification = build(:units_based_certification)
+      certification.active_certification_period = nil
+
+      CertificationPresenter.new(certification).comments.should be_nil
+    end
   end
 
   it 'should respond to sort_key' do
@@ -62,13 +80,22 @@ describe CertificationPresenter do
     CertificationPresenter.new(certification).last_certification_date.should == '05/12/2013'
   end
 
-  it 'should respond to expiration_date' do
-    certification = create(
-      :certification,
-      expiration_date: Date.new(2012, 6, 20)
-    )
+  context '#expiration_date' do
+    it 'should respond to expiration_date' do
+      certification = create(
+        :certification,
+        expiration_date: Date.new(2012, 6, 20)
+      )
 
-    CertificationPresenter.new(certification).expiration_date.should == '06/20/2012'
+      CertificationPresenter.new(certification).expiration_date.should == '06/20/2012'
+    end
+
+    it 'should return nothing when status is not certified' do
+      certification = build(:units_based_certification)
+      certification.active_certification_period = nil
+
+      CertificationPresenter.new(certification).expiration_date.should be_nil
+    end
   end
 
   it 'should respond to last_certification_date_sort_key' do
@@ -151,12 +178,20 @@ describe CertificationPresenter do
         CertificationPresenter.new(certification).units_achieved_of_required.should be_blank
       end
     end
+
     context 'when Certification is unit based' do
       it 'should be the value of #units_achieved of #units_required' do
         certification = build(:units_based_certification)
         certification.units_achieved = 2
         certification.certification_type.units_required = 3
         CertificationPresenter.new(certification).units_achieved_of_required.should == '2 of 3'
+      end
+
+      it 'should return nothing when status is not certified' do
+        certification = build(:units_based_certification)
+        certification.active_certification_period = nil
+
+        CertificationPresenter.new(certification).units_achieved_of_required.should be_nil
       end
     end
   end
@@ -174,6 +209,13 @@ describe CertificationPresenter do
         certification.units_achieved = 2
         certification.certification_type.units_required = 3
         CertificationPresenter.new(certification).units.should == '2'
+      end
+
+      it 'should return nothing when status is not certified' do
+        certification = build(:units_based_certification)
+        certification.active_certification_period = nil
+
+        CertificationPresenter.new(certification).units.should be_nil
       end
     end
   end

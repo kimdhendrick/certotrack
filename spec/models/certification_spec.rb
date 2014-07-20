@@ -19,247 +19,9 @@ describe Certification do
     it 'should validate the uniqueness of certification_type_id' do
       certification = create(:certification)
       certification.should validate_uniqueness_of(:certification_type_id).
-                               scoped_to(:employee_id).
-                               with_message(/already assigned to this Employee. Please update existing Certification/)
+                             scoped_to(:employee_id).
+                             with_message(/already assigned to this Employee. Please update existing Certification/)
 
-    end
-
-    context 'non-units based certification type' do
-      let (:certification_type) { create(:certification_type, units_required: 0) }
-      let (:certification) { build(:certification, certification_type: certification_type) }
-      let (:certification_period) { create(:certification_period, certification: certification) }
-
-      it 'should calculate NA status when no expiration date' do
-        certification.expiration_date = nil
-
-        certification.status.should == Status::NA
-      end
-
-      it 'should calculate VALID status when expiration date is in the future' do
-        certification.expiration_date = Date.today + 61.days
-
-        certification.status.should == Status::VALID
-      end
-
-      it 'should calculate EXPIRED status when expiration date is in the past' do
-        certification.expiration_date = Date.yesterday
-
-        certification.status.should == Status::EXPIRED
-      end
-
-      it 'should calculate WARNING status when expiration date is within 60 days in the future' do
-        certification.expiration_date = Date.tomorrow
-
-        certification.status.should == Status::EXPIRING
-      end
-
-      it 'should answer expired? when expired' do
-        certification.expiration_date = Date.yesterday
-
-        certification.should be_expired
-      end
-
-      it 'should answer expiring? when expiring' do
-        certification.expiration_date = Date.tomorrow
-
-        certification.should be_expiring
-      end
-
-      it 'should answer current? when valid' do
-        certification.expiration_date = Date.today + 61.days
-
-        certification.should be_current
-      end
-
-      it 'should answer current? when not current' do
-        certification.expiration_date = Date.yesterday
-
-        certification.should_not be_current
-      end
-
-      it 'should answer expired? when not expired' do
-        certification.expiration_date = Date.tomorrow
-
-        certification.should_not be_expired
-      end
-
-      it 'should answer expiring? when not expiring' do
-        certification.expiration_date = Date.today
-
-        certification.should_not be_expiring
-      end
-    end
-
-    context 'units based certification type' do
-      let (:certification_type) { create(:certification_type, units_required: 100) }
-      let (:certification) { build(:certification, certification_type: certification_type) }
-      let (:certification_period) { create(:certification_period, certification: certification) }
-
-      it 'should calculate VALID status when expiration date is in the future and units achieved meets or exceeds units required' do
-        certification.units_achieved = 101
-        certification.expiration_date = Date.tomorrow
-
-        certification.status.should == Status::VALID
-      end
-
-      it 'should calculate RECERTIFY status when expiration date is in the past and units achieved meets or exceeds units required' do
-        certification.units_achieved = 101
-        certification.expiration_date = Date.yesterday
-
-        certification.status.should == Status::RECERTIFY
-      end
-
-      it 'should calculate RECERTIFY when expiration date is not set and units achieved less than required' do
-        certification.units_achieved = 99
-        certification.expiration_date = nil
-
-        certification.status.should == Status::RECERTIFY
-      end
-
-      it 'should calculate RECERTIFY when expiration date is in the past and units achieved less than required' do
-        certification.units_achieved = 99
-        certification.expiration_date = Date.yesterday
-
-        certification.status.should == Status::RECERTIFY
-      end
-
-      it 'should calculate PENDING when expiration date is not past and units achieved less than required' do
-        certification.units_achieved = 99
-        certification.expiration_date = Date.tomorrow
-
-        certification.status.should == Status::PENDING
-      end
-
-      it 'should answer recertification_required? when recertification is required' do
-        certification.units_achieved = 99
-        certification.expiration_date = Date.yesterday
-
-        certification.should be_recertification_required
-      end
-
-      it 'should answer recertification_required? when valid' do
-        certification.units_achieved = 101
-
-        certification.should_not be_recertification_required
-      end
-    end
-
-    describe 'getters and setters' do
-      it 'should respond to status_code for sorting' do
-        certification_type = create(:certification_type, units_required: 100)
-        certification = build(:certification, certification_type: certification_type)
-
-        certification.status_code.should == certification.status.sort_order
-      end
-
-      it 'should respond to active_certification_period' do
-        certification = create(:certification)
-
-        certification.active_certification_period.should be_a(CertificationPeriod)
-      end
-
-      it 'should respond to last_certification_date' do
-        certification = create(:certification)
-        certification.active_certification_period.start_date = Date.new(2010, 5, 10)
-
-        certification.last_certification_date.should == Date.new(2010, 5, 10)
-      end
-
-      it 'should respond to last_certification_date=' do
-        certification = create(:certification)
-        certification.last_certification_date = Date.new(2010, 5, 10)
-
-        certification.last_certification_date.should == Date.new(2010, 5, 10)
-        certification.active_certification_period.start_date.should == Date.new(2010, 5, 10)
-      end
-
-      it 'should respond to expiration_date' do
-        certification = create(:certification)
-        certification.active_certification_period.end_date = Date.new(2012, 1, 2)
-
-        certification.expiration_date.should == Date.new(2012, 1, 2)
-      end
-
-      it 'should respond to expiration_date=' do
-        certification = create(:certification)
-        certification.expiration_date = Date.new(2010, 5, 10)
-
-        certification.expiration_date.should == Date.new(2010, 5, 10)
-        certification.active_certification_period.end_date.should == Date.new(2010, 5, 10)
-      end
-
-      it 'should respond to trainer' do
-        certification = create(:certification)
-        certification.active_certification_period.trainer = 'Trainer Joe'
-
-        certification.trainer.should == 'Trainer Joe'
-      end
-
-      it 'should respond to trainer=' do
-        certification = create(:certification)
-        certification.trainer = 'Hiya'
-
-        certification.trainer.should == 'Hiya'
-        certification.active_certification_period.trainer.should == 'Hiya'
-      end
-
-      it 'should respond to comments' do
-        certification = create(:certification)
-        certification.active_certification_period.comments= 'something special'
-
-        certification.comments.should == 'something special'
-      end
-
-      it 'should respond to comments=' do
-        certification = create(:certification)
-        certification.comments = 'Hiya'
-
-        certification.comments.should == 'Hiya'
-        certification.active_certification_period.comments.should == 'Hiya'
-      end
-
-      it 'should respond to units_achieved' do
-        certification = create(:certification)
-        certification.active_certification_period.units_achieved = 10
-
-        certification.units_achieved.should == 10
-      end
-
-      it 'should respond to units_achieved=' do
-        certification = create(:certification)
-        certification.units_achieved = 10
-
-        certification.units_achieved.should == 10
-        certification.active_certification_period.units_achieved.should == 10
-      end
-
-      it 'should respond to units_required' do
-        certification_type = create(:certification_type, units_required: 100)
-        certification = create(:certification, certification_type: certification_type, customer: create(:customer))
-        certification.units_required.should == 100
-      end
-
-      it 'should respond to name' do
-        certification_type = create(:certification_type, name: 'Scrum Master')
-        certification = create(:certification, certification_type: certification_type, customer: create(:customer))
-        certification.name.should == 'Scrum Master'
-      end
-
-      it 'should respond to interval' do
-        certification_type = create(:certification_type, interval: Interval::THREE_MONTHS.text)
-        certification = create(:certification, certification_type: certification_type, customer: create(:customer))
-        certification.interval.should == '3 months'
-      end
-
-      it 'should respond to units_based?' do
-        build(:certification).should_not be_units_based
-        build(:units_based_certification).should be_units_based
-      end
-
-      it 'should default active to true' do
-        certification = Certification.new
-        certification.active.should be_true
-      end
     end
 
     describe 'new date validations' do
@@ -312,80 +74,330 @@ describe Certification do
         end
       end
     end
+  end
 
-    describe '#recertify' do
-      subject { create(:certification, last_certification_date: 1.year.ago) }
-      let(:start_date) { 2.days.from_now }
-      let(:trainer) { 'New Trainer' }
-      let(:comments) { 'New Comments' }
-      let(:units_achieved) { 42 }
-      let(:attributes) { {start_date: start_date, trainer: trainer, comments: comments, units_achieved: units_achieved} }
+  context 'non-units based certification type' do
+    let (:certification_type) { create(:certification_type, units_required: 0) }
+    let (:certification) { build(:certification, certification_type: certification_type) }
+    let (:certification_period) { create(:certification_period, certification: certification) }
 
-      before do
-        @original_certification_period = subject.active_certification_period
-        Timecop.freeze(Time.local(2013, 10, 20, 18, 16, 00))
-      end
+    it 'should calculate NOT_CERTIFIED status when never certified' do
+      certification.active_certification_period = nil
 
-      after { Timecop.return }
+      certification.status.should == Status::NOT_CERTIFIED
+    end
 
-      it 'should keep the original certification period in its history' do
-        subject.reload
-        subject.recertify(attributes)
-        subject.certification_periods.should include(@original_certification_period)
-      end
+    it 'should calculate NA status when no expiration date' do
+      certification.expiration_date = nil
 
-      it 'should create a new active_certification_period' do
-        subject.reload
-        subject.recertify(attributes)
-        subject.active_certification_period.should_not == @original_certification_period
-        subject.active_certification_period.certification.should == subject
-      end
+      certification.status.should == Status::NA
+    end
 
-      it 'should set new trainer in active_certification_period' do
-        subject.recertify(trainer: trainer)
-        subject.active_certification_period.trainer.should == trainer
-      end
+    it 'should calculate VALID status when expiration date is in the future' do
+      certification.expiration_date = Date.today + 61.days
 
-      it 'should set new start_date in active_certification_period' do
-        subject.recertify(start_date: start_date)
-        subject.last_certification_date.should == start_date
-      end
+      certification.status.should == Status::VALID
+    end
 
-      it 'should set new comments in active_certification_period' do
-        subject.recertify(comments: comments)
-        subject.active_certification_period.comments.should == comments
-      end
+    it 'should calculate EXPIRED status when expiration date is in the past' do
+      certification.expiration_date = Date.yesterday
 
-      it 'should set new units_achieved in active_certification_period' do
-        subject.recertify(units_achieved: units_achieved)
-        subject.active_certification_period.units_achieved.should == units_achieved
-      end
+      certification.status.should == Status::EXPIRED
+    end
 
-      it 'should create a valid active_certification_period' do
-        subject.recertify(attributes)
-        subject.active_certification_period.should be_valid
-      end
+    it 'should calculate WARNING status when expiration date is within 60 days in the future' do
+      certification.expiration_date = Date.tomorrow
 
-      it 'should recalculate expiration_date' do
-        subject.recertify(attributes)
-        subject.expiration_date.should == Time.utc(2014, 10, 23, 0, 16, 0)
-      end
+      certification.status.should == Status::EXPIRING
+    end
+
+    it 'should answer expired? when expired' do
+      certification.expiration_date = Date.yesterday
+
+      certification.should be_expired
+    end
+
+    it 'should answer expiring? when expiring' do
+      certification.expiration_date = Date.tomorrow
+
+      certification.should be_expiring
+    end
+
+    it 'should answer current? when valid' do
+      certification.expiration_date = Date.today + 61.days
+
+      certification.should be_current
+    end
+
+    it 'should answer current? when not current' do
+      certification.expiration_date = Date.yesterday
+
+      certification.should_not be_current
+    end
+
+    it 'should answer expired? when not expired' do
+      certification.expiration_date = Date.tomorrow
+
+      certification.should_not be_expired
+    end
+
+    it 'should answer expiring? when not expiring' do
+      certification.expiration_date = Date.today
+
+      certification.should_not be_expiring
+    end
+  end
+
+  context 'units based certification type' do
+    let (:certification_type) { create(:certification_type, units_required: 100) }
+    let (:certification) { build(:certification, certification_type: certification_type) }
+    let (:certification_period) { create(:certification_period, certification: certification) }
+
+    it 'should calculate NOT_CERTIFIED status when never certified' do
+      certification.active_certification_period = nil
+
+      certification.status.should == Status::NOT_CERTIFIED
+    end
+
+    it 'should calculate VALID status when expiration date is in the future and units achieved meets or exceeds units required' do
+      certification.units_achieved = 101
+      certification.expiration_date = Date.tomorrow
+
+      certification.status.should == Status::VALID
+    end
+
+    it 'should calculate RECERTIFY status when expiration date is in the past and units achieved meets or exceeds units required' do
+      certification.units_achieved = 101
+      certification.expiration_date = Date.yesterday
+
+      certification.status.should == Status::RECERTIFY
+    end
+
+    it 'should calculate RECERTIFY when expiration date is not set and units achieved less than required' do
+      certification.units_achieved = 99
+      certification.expiration_date = nil
+
+      certification.status.should == Status::RECERTIFY
+    end
+
+    it 'should calculate RECERTIFY when expiration date is in the past and units achieved less than required' do
+      certification.units_achieved = 99
+      certification.expiration_date = Date.yesterday
+
+      certification.status.should == Status::RECERTIFY
+    end
+
+    it 'should calculate PENDING when expiration date is not past and units achieved less than required' do
+      certification.units_achieved = 99
+      certification.expiration_date = Date.tomorrow
+
+      certification.status.should == Status::PENDING
+    end
+
+    it 'should answer recertification_required? when recertification is required' do
+      certification.units_achieved = 99
+      certification.expiration_date = Date.yesterday
+
+      certification.should be_recertification_required
+    end
+
+    it 'should answer recertification_required? when valid' do
+      certification.units_achieved = 101
+
+      certification.should_not be_recertification_required
+    end
+  end
+
+  describe 'getters and setters' do
+    it 'should respond to status_code for sorting' do
+      certification_type = create(:certification_type, units_required: 100)
+      certification = build(:certification, certification_type: certification_type)
+
+      certification.status_code.should == certification.status.sort_order
+    end
+
+    it 'should respond to active_certification_period' do
+      certification = create(:certification)
+
+      certification.active_certification_period.should be_a(CertificationPeriod)
+    end
+
+    it 'should respond to last_certification_date' do
+      certification = create(:certification)
+      certification.active_certification_period.start_date = Date.new(2010, 5, 10)
+
+      certification.last_certification_date.should == Date.new(2010, 5, 10)
+    end
+
+    it 'should respond to last_certification_date=' do
+      certification = create(:certification)
+      certification.last_certification_date = Date.new(2010, 5, 10)
+
+      certification.last_certification_date.should == Date.new(2010, 5, 10)
+      certification.active_certification_period.start_date.should == Date.new(2010, 5, 10)
+    end
+
+    it 'should respond to expiration_date' do
+      certification = create(:certification)
+      certification.active_certification_period.end_date = Date.new(2012, 1, 2)
+
+      certification.expiration_date.should == Date.new(2012, 1, 2)
+    end
+
+    it 'should respond to expiration_date=' do
+      certification = create(:certification)
+      certification.expiration_date = Date.new(2010, 5, 10)
+
+      certification.expiration_date.should == Date.new(2010, 5, 10)
+      certification.active_certification_period.end_date.should == Date.new(2010, 5, 10)
+    end
+
+    it 'should respond to trainer' do
+      certification = create(:certification)
+      certification.active_certification_period.trainer = 'Trainer Joe'
+
+      certification.trainer.should == 'Trainer Joe'
+    end
+
+    it 'should respond to trainer=' do
+      certification = create(:certification)
+      certification.trainer = 'Hiya'
+
+      certification.trainer.should == 'Hiya'
+      certification.active_certification_period.trainer.should == 'Hiya'
+    end
+
+    it 'should respond to comments' do
+      certification = create(:certification)
+      certification.active_certification_period.comments= 'something special'
+
+      certification.comments.should == 'something special'
+    end
+
+    it 'should respond to comments=' do
+      certification = create(:certification)
+      certification.comments = 'Hiya'
+
+      certification.comments.should == 'Hiya'
+      certification.active_certification_period.comments.should == 'Hiya'
+    end
+
+    it 'should respond to units_achieved' do
+      certification = create(:certification)
+      certification.active_certification_period.units_achieved = 10
+
+      certification.units_achieved.should == 10
+    end
+
+    it 'should respond to units_achieved=' do
+      certification = create(:certification)
+      certification.units_achieved = 10
+
+      certification.units_achieved.should == 10
+      certification.active_certification_period.units_achieved.should == 10
+    end
+
+    it 'should respond to units_required' do
+      certification_type = create(:certification_type, units_required: 100)
+      certification = create(:certification, certification_type: certification_type, customer: create(:customer))
+      certification.units_required.should == 100
+    end
+
+    it 'should respond to name' do
+      certification_type = create(:certification_type, name: 'Scrum Master')
+      certification = create(:certification, certification_type: certification_type, customer: create(:customer))
+      certification.name.should == 'Scrum Master'
+    end
+
+    it 'should respond to interval' do
+      certification_type = create(:certification_type, interval: Interval::THREE_MONTHS.text)
+      certification = create(:certification, certification_type: certification_type, customer: create(:customer))
+      certification.interval.should == '3 months'
+    end
+
+    it 'should respond to units_based?' do
+      build(:certification).should_not be_units_based
+      build(:units_based_certification).should be_units_based
+    end
+
+    it 'should default active to true' do
+      certification = Certification.new
+      certification.active.should be_true
+    end
+  end
+
+  describe '#recertify' do
+    subject { create(:certification, last_certification_date: 1.year.ago) }
+    let(:start_date) { 2.days.from_now }
+    let(:trainer) { 'New Trainer' }
+    let(:comments) { 'New Comments' }
+    let(:units_achieved) { 42 }
+    let(:attributes) { {start_date: start_date, trainer: trainer, comments: comments, units_achieved: units_achieved} }
+
+    before do
+      @original_certification_period = subject.active_certification_period
+      Timecop.freeze(Time.local(2013, 10, 20, 18, 16, 00))
+    end
+
+    after { Timecop.return }
+
+    it 'should keep the original certification period in its history' do
+      subject.reload
+      subject.recertify(attributes)
+      subject.certification_periods.should include(@original_certification_period)
+    end
+
+    it 'should create a new active_certification_period' do
+      subject.reload
+      subject.recertify(attributes)
+      subject.active_certification_period.should_not == @original_certification_period
+      subject.active_certification_period.certification.should == subject
+    end
+
+    it 'should set new trainer in active_certification_period' do
+      subject.recertify(trainer: trainer)
+      subject.active_certification_period.trainer.should == trainer
+    end
+
+    it 'should set new start_date in active_certification_period' do
+      subject.recertify(start_date: start_date)
+      subject.last_certification_date.should == start_date
+    end
+
+    it 'should set new comments in active_certification_period' do
+      subject.recertify(comments: comments)
+      subject.active_certification_period.comments.should == comments
+    end
+
+    it 'should set new units_achieved in active_certification_period' do
+      subject.recertify(units_achieved: units_achieved)
+      subject.active_certification_period.units_achieved.should == units_achieved
+    end
+
+    it 'should create a valid active_certification_period' do
+      subject.recertify(attributes)
+      subject.active_certification_period.should be_valid
+    end
+
+    it 'should recalculate expiration_date' do
+      subject.recertify(attributes)
+      subject.expiration_date.should == Time.utc(2014, 10, 23, 0, 16, 0)
     end
   end
 
   describe '#update_expiration_date' do
-      it 'should update certification expiration date' do
-        certification_type = create(:certification_type, interval: Interval::FIVE_YEARS.text)
-        certification = create(
-            :certification,
-            certification_type: certification_type,
-            last_certification_date: '2012-03-29'.to_date,
-            expiration_date: '2000-01-01'.to_date
-        )
+    it 'should update certification expiration date' do
+      certification_type = create(:certification_type, interval: Interval::FIVE_YEARS.text)
+      certification = create(
+        :certification,
+        certification_type: certification_type,
+        last_certification_date: '2012-03-29'.to_date,
+        expiration_date: '2000-01-01'.to_date
+      )
 
-        certification.update_expiration_date
+      certification.update_expiration_date
 
-        certification.expiration_date.should == '2017-03-29'.to_date
+      certification.expiration_date.should == '2017-03-29'.to_date
     end
   end
 end

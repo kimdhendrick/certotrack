@@ -73,6 +73,17 @@
     </div>
   </fieldset>
 
+  <ul class="inline-list">
+    <li>
+      <a href="#" data-dropdown="drop1" class="button tiny secondary radius dropdown">Export</a>
+      <ul id="drop1" data-dropdown-content class="f-dropdown">
+        <li><%= certification_type.export_to_csv_link %></li>
+        <li><%= certification_type.export_to_xls_link %></li>
+        <li><%= certification_type.export_to_pdf_link(params) %></li>
+      </ul>
+    </li>
+  </ul>
+
   <h3>Certified Employees</h3>
 
   <% if certification_type.show_batch_edit_button?(@certifications) %>

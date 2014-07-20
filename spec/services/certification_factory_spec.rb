@@ -1,8 +1,7 @@
 require 'spec_helper'
 
 describe CertificationFactory do
-  describe 'new_instance' do
-
+  describe '#new_instance' do
     it 'creates a certification when given no certification data' do
       customer = create(:customer)
       certification = CertificationFactory.new.new_instance(
@@ -120,6 +119,47 @@ describe CertificationFactory do
       )
 
       certification.created_by.should == 'creator_username'
+    end
+  end
+
+  describe '#build_uncertified_certifications_for' do
+    let(:certification_type) { build(:certification_type, name: 'Something Certifiable')}
+    let(:employee) { build(:employee)}
+
+    it 'builds certifications' do
+      certifications = CertificationFactory.new.build_uncertified_certifications_for(certification_type, [employee])
+
+      certifications.count == 1
+      certifications.first.should be_a(Certification)
+    end
+
+    it 'builds empty certifications with the right certification_type' do
+      certifications = CertificationFactory.new.build_uncertified_certifications_for(certification_type, [employee])
+
+      certifications.first.certification_type.should == certification_type
+    end
+
+    it 'builds empty certifications with the right employee' do
+      certifications = CertificationFactory.new.build_uncertified_certifications_for(certification_type, [employee])
+
+      certifications.first.employee.should == employee
+    end
+
+    it 'builds certifications for all the employees' do
+      employee1 = build(:employee)
+      employee2 = build(:employee)
+      employee3 = build(:employee)
+
+      certifications = CertificationFactory.new.build_uncertified_certifications_for(certification_type, [employee1, employee2, employee3])
+
+      certifications.count == 3
+      certifications.map(&:employee).should =~ [employee1, employee2, employee3]
+    end
+
+    it 'builds certifications with not certified status' do
+      certifications = CertificationFactory.new.build_uncertified_certifications_for(certification_type, [employee])
+
+      certifications.first.status.should == Status::NOT_CERTIFIED
     end
   end
 end

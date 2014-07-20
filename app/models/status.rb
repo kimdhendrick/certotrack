@@ -6,7 +6,8 @@ class Status < ActiveHash::Base
     {id: 3, text: 'Expired'},
     {id: 4, text: 'Recertify'},
     {id: 5, text: 'Pending'},
-    {id: 6, text: 'N/A'}
+    {id: 6, text: 'N/A'},
+    {id: 7, text: 'Not Certified'}
   ]
 
   alias_method :to_s, :text
@@ -18,4 +19,5 @@ class Status < ActiveHash::Base
   RECERTIFY = Status.find(4)
   PENDING = Status.find(5)
   NA = Status.find(6)
+  NOT_CERTIFIED = Status.find(7)
 end

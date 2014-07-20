@@ -15,6 +15,12 @@ class CertificationFactory
     certification
   end
 
+  def build_uncertified_certifications_for(certification_type, employee_collection)
+    employee_collection.collect do |employee|
+      Certification.new(certification_type: certification_type, employee: employee)
+    end
+  end
+
   private
 
   def _build_certification_period(certification, attributes)

@@ -17,8 +17,21 @@ class CertificationTypesController < ModelController
   end
 
   def show
-    assign_certifications_by_certification_type(_certified_params(params))
-    assign_non_certified_employees_by_certification_type(_noncertified_params(params))
+    certifications_collection = @certification_service.get_all_certifications_for_certification_type(@certification_type)
+    employees_collection = @employee_service.get_employees_not_certified_for(@certification_type)
+
+    respond_to do |format|
+      format.html do
+        @certifications = CertificationListPresenter.new(certifications_collection).sort(_certified_params(params))
+        @certifications_count = certifications_collection.count
+
+        @non_certified_employees = EmployeeListPresenter.new(employees_collection).sort(_noncertified_params(params))
+        @non_certified_employee_count = employees_collection.count
+      end
+      format.csv { _render_collection_as_csv('certification_type_certifications', _build_certifications_for_export(certifications_collection, employees_collection)) }
+      format.xls { _render_collection_as_xls('Certification Type Certifications', :certification_type_certifications, _build_certifications_for_export(certifications_collection, employees_collection)) }
+      format.pdf { _render_collection_as_pdf('Certification Type Certifications', :certification_type_certifications, _build_certifications_for_export(certifications_collection, employees_collection)) }
+    end
   end
 
   def edit
@@ -50,7 +63,7 @@ class CertificationTypesController < ModelController
 
     if @certification_type.persisted?
       flash[:success] = _success_message(@certification_type.name, 'created')
-        redirect_to @certification_type
+      redirect_to @certification_type
     else
       assign_intervals
       render action: 'new'
@@ -61,7 +74,7 @@ class CertificationTypesController < ModelController
     certification_type_name = @certification_type.name
     if @certification_type_service.delete_certification_type(@certification_type)
       flash[:success] = _success_message(certification_type_name, 'deleted')
-        redirect_to certification_types_path
+      redirect_to certification_types_path
     else
       assign_certifications_by_certification_type(_certified_params(params))
       assign_non_certified_employees_by_certification_type(_noncertified_params(params))
@@ -83,6 +96,11 @@ class CertificationTypesController < ModelController
   end
 
   private
+
+  def _build_certifications_for_export(certifications_collection, employees_collection)
+    certifications_collection +
+      CertificationFactory.new.build_uncertified_certifications_for(@certification_type, employees_collection)
+  end
 
   def _success_message(certification_type_name, verb)
     "Certification Type '#{certification_type_name}' was successfully #{verb}."

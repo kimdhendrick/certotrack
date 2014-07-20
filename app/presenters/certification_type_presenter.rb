@@ -53,6 +53,22 @@ class CertificationTypePresenter
     @template.link_to('Auto Recertify', @template.new_certification_type_auto_recertification_path(model), {class: 'button tiny radius'})
   end
 
+  def export_to_csv_link
+    @template.link_to 'Export to CSV',
+                      @template.certification_type_path(format: 'csv', id: model.id)
+  end
+
+  def export_to_xls_link
+    @template.link_to 'Export to Excel',
+                      @template.certification_type_path(format: 'xls', id: model.id)
+  end
+
+  def export_to_pdf_link(params)
+    @template.link_to 'Export to PDF',
+                      @template.certification_type_path(model, format: 'pdf', sort: params[:sort], direction: params[:direction])
+  end
+
+
   def hidden_id_field
     @template.hidden_field_tag :certification_type_id, model.id
   end

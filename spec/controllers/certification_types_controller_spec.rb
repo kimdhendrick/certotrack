@@ -153,124 +153,240 @@ describe CertificationTypesController do
         sign_in stub_certification_user(customer)
       end
 
-      it 'assigns certification_type as @certification_type' do
-        certification_type = create(:certification_type, customer: customer)
-        #noinspection RubyArgCount
-        EmployeeListPresenter.stub(:new).and_return(Faker.new([]))
+      context 'HTML format' do
+        it 'assigns certification_type as @certification_type' do
+          certification_type = create(:certification_type, customer: customer)
+          #noinspection RubyArgCount
+          EmployeeListPresenter.stub(:new).and_return(Faker.new([]))
 
-        get :show, {:id => certification_type.to_param}, {}
-        assigns(:certification_type).should eq(certification_type)
+          get :show, {:id => certification_type.to_param}, {}
+          assigns(:certification_type).should eq(certification_type)
+        end
+
+        it 'assigns non_certified_employees as @non_certified_employees' do
+          employee = create(:employee, customer: customer)
+          fake_employee_service = controller.load_employee_service(Faker.new([employee]))
+          certification_type = create(:certification_type, customer: customer)
+          fake_employee_list_presenter = Faker.new([EmployeePresenter.new(employee)])
+          #noinspection RubyArgCount
+          EmployeeListPresenter.stub(:new).and_return(fake_employee_list_presenter)
+
+          get :show, {id: certification_type.id}, {}
+
+          assigns(:non_certified_employees).map(&:model).should eq([employee])
+          assigns(:non_certified_employee_count).should == 1
+          fake_employee_service.received_message.should == :get_employees_not_certified_for
+          fake_employee_service.received_params[0].should == certification_type
+
+          fake_employee_list_presenter.received_message.should == :sort
+          fake_employee_list_presenter.received_params[0].should == {}
+        end
+
+        it 'assigns certifications as @certifications' do
+          certification = create(:certification)
+          fake_certification_service = controller.load_certification_service(Faker.new([certification]))
+          certification_type = create(:certification_type, customer: customer)
+          #noinspection RubyArgCount
+          EmployeeListPresenter.stub(:new).and_return(Faker.new([]))
+
+          get :show, {id: certification_type.id}, {}
+
+          assigns(:certifications).map(&:model).should eq([certification])
+          assigns(:certifications_count).should == 1
+          fake_certification_service.received_message.should == :get_all_certifications_for_certification_type
+          fake_certification_service.received_params[0].should == certification_type
+        end
+
+        it 'sorts non_certified_employees by employee name' do
+          employee = create(:employee, customer: customer)
+          fake_employee_service = controller.load_employee_service(Faker.new([employee]))
+          certification_type = create(:certification_type, customer: customer)
+
+          fake_employee_list_presenter = Faker.new([employee])
+          #noinspection RubyArgCount
+          EmployeeListPresenter.stub(:new).and_return(fake_employee_list_presenter)
+
+          params = {
+            id: certification_type.id,
+            sort: 'sort_key',
+            direction: 'desc',
+            options: 'non_certified_employee_name'
+          }
+
+          get :show, params, {}
+
+          fake_employee_service.received_message.should == :get_employees_not_certified_for
+          fake_employee_service.received_params[0].should == certification_type
+
+          fake_employee_list_presenter.received_message.should == :sort
+          fake_employee_list_presenter.received_params[0].should == {sort: 'sort_key', direction: 'desc'}
+        end
+
+        it 'sorts certifications by employee name' do
+          certification = create(:certification)
+          fake_certification_service = controller.load_certification_service(Faker.new([certification]))
+          certification_type = create(:certification_type, customer: customer)
+          #noinspection RubyArgCount
+          EmployeeListPresenter.stub(:new).and_return(Faker.new([]))
+
+          fake_certification_list_presenter = Faker.new([certification])
+          #noinspection RubyArgCount
+          CertificationListPresenter.stub(:new).and_return(fake_certification_list_presenter)
+
+          params = {
+            id: certification_type.id,
+            sort: 'sort_key',
+            direction: 'desc',
+            options: 'certified_employee_name'
+          }
+
+          get :show, params, {}
+
+          fake_certification_service.received_message.should == :get_all_certifications_for_certification_type
+
+          fake_certification_list_presenter.received_message.should == :sort
+          fake_certification_list_presenter.received_params[0].should == {sort: 'sort_key', direction: 'desc'}
+        end
+
+        it 'sorts certifications by status' do
+          certification = create(:certification)
+          fake_certification_service = controller.load_certification_service(Faker.new([certification]))
+          certification_type = create(:certification_type, customer: customer)
+          #noinspection RubyArgCount
+          EmployeeListPresenter.stub(:new).and_return(Faker.new([]))
+
+          fake_certification_list_presenter = Faker.new([certification])
+          #noinspection RubyArgCount
+          CertificationListPresenter.stub(:new).and_return(fake_certification_list_presenter)
+
+          params = {
+            id: certification_type.id,
+            sort: 'sort_key',
+            direction: 'desc',
+            options: 'certified_status'
+          }
+
+          get :show, params, {}
+
+          fake_certification_service.received_message.should == :get_all_certifications_for_certification_type
+
+          fake_certification_list_presenter.received_message.should == :sort
+          fake_certification_list_presenter.received_params[0].should == {sort: 'status_code', direction: 'desc'}
+        end
       end
 
-      it 'assigns non_certified_employees as @non_certified_employees' do
-        employee = create(:employee, customer: customer)
-        fake_employee_service = controller.load_employee_service(Faker.new([employee]))
-        certification_type = create(:certification_type, customer: customer)
-        fake_employee_list_presenter = Faker.new([EmployeePresenter.new(employee)])
-        #noinspection RubyArgCount
-        EmployeeListPresenter.stub(:new).and_return(fake_employee_list_presenter)
+      context 'export' do
+        let(:uncertified_employee) { create(:employee, customer: customer) }
 
-        get :show, {id: certification_type.id}, {}
+        let(:certification) { create(:certification, customer: customer) }
+        let(:certification_type) { create(:certification_type, customer: customer) }
+        let(:certifications) { [certification] }
 
-        assigns(:non_certified_employees).map(&:model).should eq([employee])
-        assigns(:non_certified_employee_count).should == 1
-        fake_employee_service.received_message.should == :get_employees_not_certified_for
-        fake_employee_service.received_params[0].should == certification_type
+        let(:uncertified_certification) { [build(:certification, customer: customer)] }
+        let(:uncertified_certifications) { [uncertified_certification] }
+        let(:certification_type_certifications) { [certification, uncertified_certification]}
 
-        fake_employee_list_presenter.received_message.should == :sort
-        fake_employee_list_presenter.received_params[0].should == {}
-      end
+        before do
+          controller.load_certification_service(Faker.new(certifications))
+          controller.load_employee_service(Faker.new([uncertified_employee]))
 
-      it 'assigns certifications as @certifications' do
-        certification = create(:certification)
-        fake_certification_service = controller.load_certification_service(Faker.new([certification]))
-        certification_type = create(:certification_type, customer: customer)
-        #noinspection RubyArgCount
-        EmployeeListPresenter.stub(:new).and_return(Faker.new([]))
+          CertificationFactory.
+            any_instance.
+            stub(:build_uncertified_certifications_for).
+            and_return(uncertified_certifications)
+        end
 
-        get :show, {id: certification_type.id}, {}
+        context 'CSV export' do
+          before do
+            Export::CsvPresenter.stub(:new).with(certification_type_certifications).and_return(Faker.new)
+          end
 
-        assigns(:certifications).map(&:model).should eq([certification])
-        assigns(:certifications_count).should == 1
-        fake_certification_service.received_message.should == :get_all_certifications_for_certification_type
-        fake_certification_service.received_params[0].should == certification_type
-      end
+          it 'responds to csv format' do
+            get :show, {format: 'csv', :id => certification_type.to_param}, {}
 
-      it 'sorts non_certified_employees by employee name' do
-        employee = create(:employee, customer: customer)
-        fake_employee_service = controller.load_employee_service(Faker.new([employee]))
-        certification_type = create(:certification_type, customer: customer)
+            response.headers['Content-Type'].should == 'text/csv; charset=utf-8'
+          end
 
-        fake_employee_list_presenter = Faker.new([employee])
-        #noinspection RubyArgCount
-        EmployeeListPresenter.stub(:new).and_return(fake_employee_list_presenter)
+          it 'calls CsvPresenter#present with certifications' do
+            fake_csv_presenter = Faker.new
+            Export::CsvPresenter.should_receive(:new).with(certification_type_certifications).and_return(fake_csv_presenter)
 
-        params = {
-          id: certification_type.id,
-          sort: 'sort_key',
-          direction: 'desc',
-          options: 'non_certified_employee_name'
-        }
+            get :show, {format: 'csv', :id => certification_type.to_param}, {}
 
-        get :show, params, {}
+            fake_csv_presenter.received_message.should == :present
+          end
 
-        fake_employee_service.received_message.should == :get_employees_not_certified_for
-        fake_employee_service.received_params[0].should == certification_type
+          it 'exports to file' do
+            get :show, {format: 'csv', :id => certification_type.to_param}, {}
 
-        fake_employee_list_presenter.received_message.should == :sort
-        fake_employee_list_presenter.received_params[0].should == {sort: 'sort_key', direction: 'desc'}
-      end
+            response.headers['Content-Disposition'].should == 'attachment; filename="certification_type_certifications.csv"'
+          end
 
-      it 'sorts certifications by employee name' do
-        certification = create(:certification)
-        fake_certification_service = controller.load_certification_service(Faker.new([certification]))
-        certification_type = create(:certification_type, customer: customer)
-        #noinspection RubyArgCount
-        EmployeeListPresenter.stub(:new).and_return(Faker.new([]))
+          it 'builds noncertified certifications' do
+            CertificationFactory.
+              any_instance.
+              should_receive(:build_uncertified_certifications_for).
+              with(certification_type, [uncertified_employee]).
+              and_return(uncertified_certifications)
 
-        fake_certification_list_presenter = Faker.new([certification])
-        #noinspection RubyArgCount
-        CertificationListPresenter.stub(:new).and_return(fake_certification_list_presenter)
+            get :show, {format: 'csv', :id => certification_type.to_param}, {}
+          end
+        end
 
-        params = {
-          id: certification_type.id,
-          sort: 'sort_key',
-          direction: 'desc',
-          options: 'certified_employee_name'
-        }
+        context 'XLS export' do
+          before do
+            Export::ExcelPresenter.stub(:new).with(certification_type_certifications, 'Certification Type Certifications').and_return(Faker.new)
+          end
 
-        get :show, params, {}
+          it 'responds to xls format' do
+            get :show, {format: 'xls', :id => certification_type.to_param}, {}
 
-        fake_certification_service.received_message.should == :get_all_certifications_for_certification_type
+            response.headers['Content-Type'].should == 'application/vnd.ms-excel'
+          end
 
-        fake_certification_list_presenter.received_message.should == :sort
-        fake_certification_list_presenter.received_params[0].should == {sort: 'sort_key', direction: 'desc'}
-      end
+          it 'calls ExcelPresenter#present with certifications' do
+            fake_xls_presenter = Faker.new
+            Export::ExcelPresenter.should_receive(:new).with(certification_type_certifications, 'Certification Type Certifications').and_return(fake_xls_presenter)
 
-      it 'sorts certifications by status' do
-        certification = create(:certification)
-        fake_certification_service = controller.load_certification_service(Faker.new([certification]))
-        certification_type = create(:certification_type, customer: customer)
-        #noinspection RubyArgCount
-        EmployeeListPresenter.stub(:new).and_return(Faker.new([]))
+            get :show, {format: 'xls', :id => certification_type.to_param}, {}
 
-        fake_certification_list_presenter = Faker.new([certification])
-        #noinspection RubyArgCount
-        CertificationListPresenter.stub(:new).and_return(fake_certification_list_presenter)
+            fake_xls_presenter.received_message.should == :present
+          end
 
-        params = {
-          id: certification_type.id,
-          sort: 'sort_key',
-          direction: 'desc',
-          options: 'certified_status'
-        }
+          it 'exports to file' do
+            get :show, {format: 'xls', :id => certification_type.to_param}, {}
 
-        get :show, params, {}
+            response.headers['Content-Disposition'].should == 'attachment; filename="certification_type_certifications.xls"'
+          end
+        end
 
-        fake_certification_service.received_message.should == :get_all_certifications_for_certification_type
+        context 'PDF export' do
+          before do
+            Export::PdfPresenter.stub(:new).with(certification_type_certifications, 'Certification Type Certifications', {}).and_return(Faker.new)
+          end
 
-        fake_certification_list_presenter.received_message.should == :sort
-        fake_certification_list_presenter.received_params[0].should == {sort: 'status_code', direction: 'desc'}
+          it 'responds to pdf format' do
+            get :show, {format: 'pdf', :id => certification_type.to_param}, {}
+
+            response.headers['Content-Type'].should == 'application/pdf'
+          end
+
+          it 'calls PdfPresenter#present with certifications' do
+            fake_pdf_presenter = Faker.new
+            sort_params = {'sort' => 'name', 'direction' => 'asc'}
+            Export::PdfPresenter.should_receive(:new).with(certification_type_certifications, 'Certification Type Certifications', sort_params).and_return(fake_pdf_presenter)
+
+            get :show, {format: 'pdf', :id => certification_type.to_param}.merge(sort_params), {}
+
+            fake_pdf_presenter.received_message.should == :present
+          end
+
+          it 'exports to file' do
+            get :show, {format: 'pdf', :id => certification_type.to_param}, {}
+
+            response.headers['Content-Disposition'].should == 'attachment; filename="certification_type_certifications.pdf"'
+          end
+        end
       end
     end
 

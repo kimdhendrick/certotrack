@@ -8,6 +8,7 @@ describe Status do
     Status::RECERTIFY.to_s.should == 'Recertify'
     Status::PENDING.to_s.should == 'Pending'
     Status::NA.to_s.should == 'N/A'
+    Status::NOT_CERTIFIED.to_s.should == 'Not Certified'
   end
 
   it 'should have sort_order' do
@@ -17,5 +18,6 @@ describe Status do
     Status::RECERTIFY.sort_order.should == 4
     Status::PENDING.sort_order.should == 5
     Status::NA.sort_order.should == 6
+    Status::NOT_CERTIFIED.sort_order.should == 7
   end
 end

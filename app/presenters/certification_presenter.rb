@@ -9,9 +9,7 @@ class CertificationPresenter
            :units_required,
            :units_based?,
            :interval,
-           :trainer,
            :status,
-           :comments,
            :name,
            :created_by,
            to: :model
@@ -19,6 +17,18 @@ class CertificationPresenter
   def initialize(model, template = nil)
     @model = model
     @template = template
+  end
+
+  def trainer
+    return if _never_certified?
+
+    model.trainer
+  end
+
+  def comments
+    return if _never_certified?
+
+    model.comments
   end
 
   def sort_key
@@ -30,6 +40,8 @@ class CertificationPresenter
   end
 
   def expiration_date
+    return if _never_certified?
+
     DateHelpers.date_to_string model.expiration_date
   end
 
@@ -82,17 +94,21 @@ class CertificationPresenter
   end
 
   def units_achieved_label
-    return '' unless model.units_based?
+    return if _date_based?
+
     'Units Achieved'
   end
 
   def units_achieved_of_required
-    return '' unless model.units_based?
+    return if _date_based? || _never_certified?
+
     "#{model.units_achieved} of #{model.units_required}"
   end
 
   def units
-    model.units_achieved.to_s if model.units_based?
+    return if _date_based? || _never_certified?
+
+    model.units_achieved.to_s
   end
 
   def status_text
@@ -126,5 +142,15 @@ class CertificationPresenter
 
   def show_link
     @template.link_to 'Back to certification', @template.certification_path(model)
+  end
+
+  private
+
+  def _date_based?
+    !model.units_based?
+  end
+
+  def _never_certified?
+    !model.active_certification_period.present?
   end
 end

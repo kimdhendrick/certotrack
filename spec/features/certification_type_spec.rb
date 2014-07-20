@@ -42,96 +42,129 @@ describe 'Certification Type', slow: true do
       login_as_certification_user(customer)
     end
 
-    it 'should render show certification type page' do
-      certification_type = create(:certification_type,
-                                  name: 'CPR',
-                                  interval: Interval::SIX_MONTHS.text,
-                                  customer: customer
-      )
-
-      create(:certification_type,
-             name: 'Inspections',
-             interval: Interval::SIX_MONTHS.text,
-             units_required: 30,
-             customer: customer
-      )
-
-      create(:employee,
-             employee_number: 'SG1',
-             first_name: 'Sarah',
-             last_name: 'Green',
-             customer: customer
-      )
-
-      certified_employee = create(:employee,
-                                  employee_number: 'JB3',
-                                  first_name: 'Joe',
-                                  last_name: 'Brown',
-                                  location: create(:location, name: 'Denver', customer_id: customer.id),
-                                  customer: customer
-      )
-
-      create(:certification,
-             employee: certified_employee,
-             certification_type: certification_type,
-             trainer: 'Trainer Timmy',
-             last_certification_date: Date.new(2010, 1, 1),
-             expiration_date: Date.new(2010, 6, 1),
-             customer: certified_employee.customer)
-
-      visit certification_type_path certification_type.id
-
-      page.should have_link 'Home'
-      page.should have_link 'Search Certification Types'
-      page.should have_link 'Create Certification Type'
-
-      page.should have_content 'Name CPR'
-      page.should have_content 'Interval 6 months'
-      page.should_not have_content 'Required Units'
-
-      page.should have_content 'Non-Certified Employees 1'
-      page.should have_content 'Certified Employees 1'
-
-      page.all('[data-uncertified] table tr').count.should == 1 + 1
-
-      within '[data-uncertified] table thead tr' do
-        page.should have_content 'Employee Name'
-        page.should have_content 'Employee Number'
+    context 'date based certification types' do
+      let(:certification_type) do
+        create(
+          :certification_type,
+          name: 'CPR',
+          interval: Interval::SIX_MONTHS.text,
+          customer: customer
+        )
       end
 
-      within '[data-uncertified] table tbody tr:nth-of-type(1)' do
-        page.should have_link 'Green, Sarah'
-        page.should have_content 'SG1'
-        page.should have_link 'Certify'
+      before do
+        create(
+          :certification_type,
+          name: 'Inspections',
+          interval: Interval::SIX_MONTHS.text,
+          units_required: 30,
+          customer: customer
+        )
+
+        create(
+          :employee,
+          employee_number: 'SG1',
+          first_name: 'Sarah',
+          last_name: 'Green',
+          customer: customer
+        )
+
+        certified_employee = create(
+          :employee,
+          employee_number: 'JB3',
+          first_name: 'Joe',
+          last_name: 'Brown',
+          location: create(:location, name: 'Denver', customer_id: customer.id),
+          customer: customer
+        )
+
+        create(
+          :certification,
+          employee: certified_employee,
+          certification_type: certification_type,
+          trainer: 'Trainer Timmy',
+          last_certification_date: Date.new(2010, 1, 1),
+          expiration_date: Date.new(2010, 6, 1),
+          customer: certified_employee.customer
+        )
       end
 
-      page.all('[data-certified] table tr').count.should == 1 + 1
+      it 'should render show certification type page' do
+        visit certification_type_path certification_type.id
 
-      within '[data-certified] table thead tr' do
-        page.should have_content 'Employee Name'
-        page.should have_content 'Employee Number'
-        page.should have_content 'Location'
-        page.should have_content 'Trainer'
-        page.should have_content 'Expiration Date'
-        page.should have_content 'Last Certification Date'
-        page.should have_content 'Units'
-        page.should have_content 'Status'
-        page.should have_content 'Certification'
-      end
+        page.should have_link 'Home'
+        page.should have_link 'Search Certification Types'
+        page.should have_link 'Create Certification Type'
 
-      within '[data-certified] table tbody tr:nth-of-type(1)' do
-        page.should have_link 'Brown, Joe'
-        page.should have_content 'JB3'
-        page.should have_content 'Denver'
-        page.should have_content 'Trainer Timmy'
-        page.should have_content '06/01/2010'
-        page.should have_content '01/01/2010'
-        page.should have_content 'Expired'
+        page.should have_content 'Name CPR'
+        page.should have_content 'Interval 6 months'
+        page.should_not have_content 'Required Units'
+
+        page.should have_content 'Non-Certified Employees 1'
+        page.should have_content 'Certified Employees 1'
+
+        page.all('[data-uncertified] table tr').count.should == 1 + 1
+
+        within '[data-uncertified] table thead tr' do
+          page.should have_content 'Employee Name'
+          page.should have_content 'Employee Number'
+        end
+
+        within '[data-uncertified] table tbody tr:nth-of-type(1)' do
+          page.should have_link 'Green, Sarah'
+          page.should have_content 'SG1'
+          page.should have_link 'Certify'
+        end
+
+        page.all('[data-certified] table tr').count.should == 1 + 1
+
+        within '[data-certified] table thead tr' do
+          page.should have_content 'Employee Name'
+          page.should have_content 'Employee Number'
+          page.should have_content 'Location'
+          page.should have_content 'Trainer'
+          page.should have_content 'Expiration Date'
+          page.should have_content 'Last Certification Date'
+          page.should have_content 'Units'
+          page.should have_content 'Status'
+          page.should have_content 'Certification'
+        end
+
+        within '[data-certified] table tbody tr:nth-of-type(1)' do
+          page.should have_link 'Brown, Joe'
+          page.should have_content 'JB3'
+          page.should have_content 'Denver'
+          page.should have_content 'Trainer Timmy'
+          page.should have_content '06/01/2010'
+          page.should have_content '01/01/2010'
+          page.should have_content 'Expired'
+          page.should have_link 'Edit'
+        end
+
         page.should have_link 'Edit'
+        page.should have_link 'Delete'
       end
 
-      page.should have_link 'Edit'
-      page.should have_link 'Delete'
+      it 'should have link to export to CSV' do
+        visit certification_type_path certification_type.id
+
+        click_on 'Export'
+        page.should have_link 'Export to CSV'
+      end
+
+      it 'should have link to export to Excel' do
+        visit certification_type_path certification_type.id
+
+        click_on 'Export'
+        page.should have_link 'Export to Excel'
+      end
+
+      it 'should have link to export to PDF' do
+        visit certification_type_path certification_type.id
+
+        click_on 'Export'
+        page.should have_link 'Export to PDF'
+      end
     end
 
     it 'should render show certification type page for units based' do

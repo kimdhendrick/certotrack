@@ -112,6 +112,10 @@ class Certification < ActiveRecord::Base
 
     private
 
+    def _not_certified?
+      certification.active_certification_period.nil?
+    end
+
     def _expired?
       _expiration_date.present? && _expiration_date <= Date.today
     end
@@ -124,6 +128,7 @@ class Certification < ActiveRecord::Base
   class UnitsBasedCertificationStrategy < CertificationStrategy
 
     def status
+      return Status::NOT_CERTIFIED if _not_certified?
       return Status::VALID if _achieved_units_required_in_time?
       return Status::PENDING if _pending?
       return Status::RECERTIFY
@@ -149,6 +154,7 @@ class Certification < ActiveRecord::Base
   class DateBasedCertificationStrategy < CertificationStrategy
 
     def status
+      return Status::NOT_CERTIFIED if _not_certified?
       return Status::NA if _na?
       return Status::EXPIRED if _expired?
       return Status::EXPIRING if _expiring?
