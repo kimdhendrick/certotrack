@@ -13,7 +13,7 @@
           <%= form_tag({:controller => "vehicles", :action => "search"}, :method => "get", 'data-vehicle-search-form' => 'data-vehicle-search-form') do %>
             <div class="row collapse">
               <div class="small-8 columns">
-                <%= text_field_tag :make, params[:make], {placeholder: "Search Services"} %>
+                <%= text_field_tag :make, params[:make], {placeholder: "Search Vehicles"} %>
               </div>
               <div class="small-4 columns">
                 <%= submit_tag "Search", class: "button tiny radius" %>
