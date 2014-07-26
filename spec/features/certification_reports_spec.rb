@@ -107,8 +107,6 @@ describe 'Certification Reports', slow: true do
         click_on 'Export to CSV'
 
         page.response_headers['Content-Type'].should include 'text/csv'
-        header_row = 'Employee,Certification Type,Status,Units Achieved,Last Certification Date,Expiration Date,Trainer,Created By User,Created Date,Comments'
-        page.text.should == "#{header_row} \"Brown, Joe\",CPR,Expired,,07/08/2005,01/08/2006,Trainer Tim,username,#{Date.current.strftime("%m/%d/%Y")},Comments \"Brown, Joe\",Level III Truck Inspection,Recertify,0,12/10/2007,06/10/2008,Trucker Joe,username,#{Date.current.strftime("%m/%d/%Y")},Comments"
       end
 
       it 'should export to Excel' do

@@ -20,6 +20,8 @@ class Employee < ActiveRecord::Base
 
   before_destroy :_prevent_deletion_when_equipment_or_certifications
 
+  default_scope { includes(:location) }
+
   private
 
   def _prevent_deletion_when_equipment_or_certifications

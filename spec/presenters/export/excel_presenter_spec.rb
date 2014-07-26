@@ -42,12 +42,12 @@ module Export
         end
 
         it 'should call to_xls with the right headers' do
-          headers = 'Employee,Certification Type,Status,Units Achieved,Last Certification Date,Expiration Date,Trainer,Created By User,Created Date,Comments'.split(',')
+          headers = 'Employee,Employee Number,Employee Location,Certification Type,Status,Units Achieved,Last Certification Date,Expiration Date,Trainer,Created By User,Created Date,Comments'.split(',')
           collection.received_params[0][:headers].should == headers
         end
 
         it 'should call to_xls with the right columns' do
-          columns = [:employee_name, :certification_type, :status_text, :units, :last_certification_date, :expiration_date, :trainer, :created_by, :created_at, :comments]
+          columns = [:employee_name, :employee_number, :location_name, :certification_type, :status_text, :units, :last_certification_date, :expiration_date, :trainer, :created_by, :created_at, :comments]
           collection.received_params[0][:columns].should == columns
         end
 

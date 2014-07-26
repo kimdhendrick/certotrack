@@ -65,6 +65,10 @@ class CertificationPresenter
     model.employee
   end
 
+  def employee_number
+    model.employee.employee_number
+  end
+
   def location
     model.employee.location
   end

@@ -145,7 +145,7 @@ module Export
           header_row = table_header_and_data[0]
 
           header_row.should ==
-            ['Employee', 'Certification Type', 'Status', 'Units Achieved', 'Last Certification Date', 'Expiration Date', 'Trainer', 'Created By User', 'Created Date', 'Comments']
+            ['Employee', 'Employee Number', 'Employee Location', 'Certification Type', 'Status', 'Units Achieved', 'Last Certification Date', 'Expiration Date', 'Trainer', 'Created By User', 'Created Date', 'Comments']
         end
 
         it 'should render the proper data' do
@@ -154,7 +154,9 @@ module Export
           employee = create(
             :employee,
             first_name: 'Joe',
-            last_name: 'Brown'
+            last_name: 'Brown',
+            employee_number: '876ABC',
+            location: create(:location, name: 'Golden')
           )
           certification_type = create(:certification_type, units_required: 10, name: 'CPR')
           certification_collection = [
@@ -178,7 +180,7 @@ module Export
           table_header_and_data = table_params[0]
           table_data = table_header_and_data[1]
           table_data.should ==
-            ['Brown, Joe', 'CPR', 'Recertify', '12', '01/02/2013', '01/02/2014', 'Trainer Tom', 'username', "#{Date.current.strftime('%m/%d/%Y')}", 'Well done']
+            ['Brown, Joe', '876ABC', 'Golden', 'CPR', 'Recertify', '12', '01/02/2013', '01/02/2014', 'Trainer Tom', 'username', "#{Date.current.strftime('%m/%d/%Y')}", 'Well done']
         end
 
         it 'should sort the collection of certifications' do

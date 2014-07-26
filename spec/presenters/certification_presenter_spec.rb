@@ -139,6 +139,13 @@ describe CertificationPresenter do
     CertificationPresenter.new(certification).employee_name.should == 'Last, First'
   end
 
+  it 'should respond to employee_number' do
+    employee = create(:employee, first_name: 'First', last_name: 'Last', employee_number: 'ABC123')
+    certification = create(:certification, employee: employee)
+
+    CertificationPresenter.new(certification).employee_number.should == 'ABC123'
+  end
+
   it 'should respond to certification_type' do
     certification_type = create(:certification_type, name: 'CertType')
     certification = create(:certification, certification_type: certification_type)

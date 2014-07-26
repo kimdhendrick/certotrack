@@ -51,7 +51,9 @@ module Export
           employee = create(
             :employee,
             first_name: 'Joe',
-            last_name: 'Brown'
+            last_name: 'Brown',
+            employee_number: '876ABC',
+            location: create(:location, name: 'Golden')
           )
           certification_type = create(:certification_type, units_required: 10, name: 'CPR')
           create(
@@ -70,7 +72,7 @@ module Export
         it 'should have the right headers' do
           results = CsvPresenter.new(Certification.all).present
 
-          results.split("\n")[0].should == 'Employee,Certification Type,Status,Units Achieved,Last Certification Date,Expiration Date,Trainer,Created By User,Created Date,Comments'
+          results.split("\n")[0].should == 'Employee,Employee Number,Employee Location,Certification Type,Status,Units Achieved,Last Certification Date,Expiration Date,Trainer,Created By User,Created Date,Comments'
         end
 
         it 'should have the right data' do
@@ -81,7 +83,7 @@ module Export
           data_results = results.split("\n")[1].split(',')
 
           data_results.should ==
-            ["\"Brown", " Joe\"", 'CPR', 'Recertify', '12', '01/02/2013', '01/02/2014', 'Trainer Tom', 'username', "#{Date.current.strftime('%m/%d/%Y')}", 'Well done']
+            ["\"Brown", " Joe\"", '876ABC', 'Golden', 'CPR', 'Recertify', '12', '01/02/2013', '01/02/2014', 'Trainer Tom', 'username', "#{Date.current.strftime('%m/%d/%Y')}", 'Well done']
         end
       end
 

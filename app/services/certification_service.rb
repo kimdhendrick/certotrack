@@ -8,7 +8,7 @@ class CertificationService
   def get_all_certifications(current_user)
     current_user.admin? ?
       Certification.all.includes(:certification_type, :active_certification_period) :
-      current_user.certifications.includes(:certification_type, :active_certification_period)
+      current_user.certifications.includes(:certification_type, :active_certification_period, :employee)
   end
 
   def search_certifications(current_user, params)
