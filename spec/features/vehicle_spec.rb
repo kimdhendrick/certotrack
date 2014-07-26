@@ -317,9 +317,9 @@ describe 'Vehicles', slow: true do
       select 'Golden', from: 'location_id'
       click_on 'Search'
 
-      page.should have_content 'Dodge'
-      page.should have_content 'Chevrolet'
-      page.should have_content 'Buick'
+      page.should_not have_content 'Dodge'
+      page.should_not have_content 'Chevrolet'
+      page.should_not have_content 'Buick'
     end
 
     it 'should search and sort simultaneously', js: true do

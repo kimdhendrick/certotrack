@@ -62,13 +62,37 @@ describe SearchService do
       SearchService.new.search(certifications, {certification_type: 'date_based'}).should == [date_based]
     end
 
-    it 'should search by certification type name OR location' do
+    it 'should search by certification type name AND location' do
+      denver = create(:location, name: 'Denver')
       golden = create(:location, name: 'Golden')
-      match = create(:certification,
-                     employee: create(:employee, location: golden),
-                     certification_type: create(:certification_type, name: 'Inspector'))
+      inspector_certification_type = create(:certification_type, name: 'Inspector')
+      another_certification_type = create(:certification_type, name: 'Something else')
 
-      SearchService.new.search(certifications, {name: 'Inspector', location_id: golden.id}).should == [match]
+      matches_name_but_not_location = create(:certification,
+                     employee: create(:employee, location: denver),
+                     certification_type: inspector_certification_type)
+      matches_location_but_not_name = create(:certification,
+                     employee: create(:employee, location: golden),
+                     certification_type: another_certification_type)
+      matches_name_and_location = create(:certification,
+                     employee: create(:employee, location: golden),
+                     certification_type: inspector_certification_type)
+
+      SearchService.new.search(certifications, {name: 'Inspector', location_id: golden.id}).should == [matches_name_and_location]
+    end
+
+    it 'should search by certification type AND name' do
+      units_based_certification_type = create(:certification_type, name: 'CPR', units_required: 10)
+      a_different_units_based_certification_type = create(:certification_type, name: 'Something different', units_required: 10)
+      date_based_certification_type_with_same_name = create(:certification_type, name: 'CPR', units_required: 0)
+      matches_certification_type_but_not_name = create(:certification,
+                     certification_type: a_different_units_based_certification_type)
+      matches_name_but_not_certification_type = create(:certification,
+                     certification_type: date_based_certification_type_with_same_name)
+      matches_name_and_certification_type = create(:certification,
+                     certification_type: units_based_certification_type)
+
+      SearchService.new.search(certifications, {name: 'CPR', certification_type: 'units_based'}).should == [matches_name_and_certification_type]
     end
   end
 
@@ -111,7 +135,7 @@ describe SearchService do
       SearchService.new.search(Equipment.all, {location_id: 1}).should == [match]
     end
 
-    it 'should search by all fields' do
+    it 'should search by ANDing all fields' do
       employee_match = create(:equipment, employee_id: 7)
       location_match = create(:equipment, location_id: 3)
       name_match = create(:equipment, name: 'Meter123')
@@ -126,19 +150,36 @@ describe SearchService do
           location_id: 3
         }
 
-      SearchService.new.search(Equipment.all, search_params).should =~
-        [
-          employee_match,
-          location_match,
-          name_match,
-          serial_number_match
-        ]
+      SearchService.new.search(Equipment.all, search_params).should == []
     end
 
-    it 'should search by name OR serial_number' do
+    it 'should search by name AND serial_number' do
+      matches_name_but_not_serial_number = create(:equipment, name: 'Meter', serial_number: 'XYZ')
+      matches_serial_number_but_not_name = create(:equipment, name: 'Another name', serial_number: 'ABC123')
       match = create(:equipment, name: 'Meter', serial_number: 'ABC123')
       SearchService.new.search(Equipment.all, {name: 'Meter', serial_number: 'ABC123'}).should == [match]
     end
+    
+    it 'should search by name AND employee_id' do
+      matches_name_but_not_employee = create(:equipment, name: 'Meter', employee_id: 99)
+      matches_employee_but_not_name = create(:equipment, name: 'Another name', employee_id: 5)
+      match = create(:equipment, name: 'Meter', employee_id: 5)
+      SearchService.new.search(Equipment.all, {name: 'Meter', employee_id: 5}).should == [match]
+    end
+    
+    it 'should search by name AND location_id' do
+      matches_name_but_not_location_id = create(:equipment, name: 'Meter', location_id: 99)
+      matches_location_id_but_not_name = create(:equipment, name: 'Another name', location_id: 5)
+      match = create(:equipment, name: 'Meter', location_id: 5)
+      SearchService.new.search(Equipment.all, {name: 'Meter', location_id: 5}).should == [match]
+    end
+
+    it 'should search by employee_id AND location_id' do
+      matches_employee_but_not_location = create(:equipment, employee_id: 5, location_id: 99)
+      matches_location_but_not_employee = create(:equipment, employee_id: 99, location_id: 5)
+      SearchService.new.search(Equipment.all, {employee_id: 5, location_id: 5}).should =~ []
+    end
+
   end
 
   describe 'search by Certification Type' do
@@ -178,6 +219,14 @@ describe SearchService do
       SearchService.new.search(Vehicle.all, {vehicle_model: 'Cor'}).should == [match]
       SearchService.new.search(Vehicle.all, {vehicle_model: 'lla'}).should == [match]
       SearchService.new.search(Vehicle.all, {vehicle_model: 'roll'}).should == [match]
+    end
+
+    it 'should search by make AND model' do
+      matches_make_but_not_model = create(:vehicle, make: 'Ford', vehicle_model: 'something')
+      matches_model_but_not_make = create(:vehicle, vehicle_model: 'Tempo', make: 'something')
+      match = create(:vehicle, make: 'Ford', vehicle_model: 'Tempo')
+
+      SearchService.new.search(Vehicle.all, {vehicle_model: 'Tempo', make: 'Ford'}).should == [match]
     end
   end
 end
