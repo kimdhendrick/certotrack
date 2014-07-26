@@ -82,7 +82,6 @@ class CertificationService
     employee.certifications.includes(:certification_type, :active_certification_period)
   end
 
-  #TODO can't get employee to include!
   def get_all_certifications_for_certification_type(certification_type)
     certification_type.certifications.includes(:active_certification_period)
   end

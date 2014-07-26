@@ -91,8 +91,7 @@ describe 'Services', slow: true do
       page.should have_content 'Show Service'
 
       page.should have_link 'Home'
-      #TODO all service list
-      #page.should have_link 'All Services'
+      page.should have_link 'All Vehicle Services'
       page.should have_link 'Create Service'
       page.should have_link 'Create Vehicle'
 
@@ -202,9 +201,8 @@ describe 'Services', slow: true do
       page.should have_content 'Edit Service'
 
       page.should have_link 'Home'
-      #page.should have_link 'All Services'
-      #page.should have_link 'Search Services'
-      page.should have_link 'Create Service'
+      page.should have_link 'All Vehicle Services'
+      page.should have_link 'Create Service Type'
 
       page.should have_content 'Service Type'
       page.should have_content 'Vehicle'
@@ -214,8 +212,8 @@ describe 'Services', slow: true do
 
       page.should have_field 'Service Type', with: service.service_type.id.to_s
       page.should have_link 'ABC-123/JB3 2010 Wrangler'
-      page.should have_field 'Last Service Date' #, with: '01/01/2013'
-      page.should have_field 'Comments' #, with: 'Got messier'
+      page.should have_field 'Last Service Date'
+      page.should have_field 'Comments'
 
       page.should have_link 'Delete'
 
