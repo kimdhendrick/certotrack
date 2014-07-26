@@ -136,7 +136,7 @@ class EquipmentController < ModelController
     @locations = LocationListPresenter.new(@location_service.get_all_locations(current_user)).sort
 
     employees_collection = @employee_service.get_all_employees(current_user)
-    @employees = EmployeeListPresenter.new(employees_collection).present({sort: :sort_key})
+    @employees = EmployeeListPresenter.new(employees_collection).sort({sort: :sort_key})
   end
 
   def _set_equipment

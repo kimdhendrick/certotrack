@@ -43,7 +43,7 @@ class VehiclesController < ModelController
 
   def _set_services
     vehicle_services = @vehicle_servicing_service.get_all_services_for_vehicle(@vehicle)
-    @services = ServiceListPresenter.new(vehicle_services).present(params)
+    @services = ServiceListPresenter.new(vehicle_services).sort(params)
   end
 
   def edit

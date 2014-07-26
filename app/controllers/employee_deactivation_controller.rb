@@ -8,8 +8,8 @@ class EmployeeDeactivationController < ModelController
   before_action :_set_employee, only: [:deactivate_confirm, :deactivate]
 
   def deactivate_confirm
-    @equipments = EquipmentListPresenter.new(@equipment_service.get_all_equipment_for_employee(@employee)).present
-    @certifications = CertificationListPresenter.new(@certification_service.get_all_certifications_for_employee(@employee)).present
+    @equipments = EquipmentListPresenter.new(@equipment_service.get_all_equipment_for_employee(@employee)).sort
+    @certifications = CertificationListPresenter.new(@certification_service.get_all_certifications_for_employee(@employee)).sort
   end
 
   def deactivate

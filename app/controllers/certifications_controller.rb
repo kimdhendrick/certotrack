@@ -145,8 +145,6 @@ class CertificationsController < ModelController
     @certification_count = certification_collection.count
     @locations = LocationListPresenter.new(@location_service.get_all_locations(current_user)).sort
     @certification_types = get_certification_type_types
-    employees_collection = @employee_service.get_all_employees(current_user)
-    @employees = EmployeeListPresenter.new(employees_collection).present({sort: :sort_key})
   end
 
   def _set_certification

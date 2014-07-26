@@ -901,7 +901,7 @@ describe EquipmentController do
           get :search
 
           assigns(:employees).map(&:model).should == [employee]
-          fake_equipment_list_presenter.received_message.should == :present
+          fake_equipment_list_presenter.received_message.should == :sort
           fake_equipment_list_presenter.received_params[0].should == {sort: :sort_key}
         end
       end
