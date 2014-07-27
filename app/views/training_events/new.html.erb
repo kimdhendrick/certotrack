@@ -79,6 +79,13 @@
       </div>
     </div>
 
+    <div class="row">
+      <div class="small-6 columns">
+        <%= label_tag "comments", "Comments" %>
+        <%= text_area_tag "comments", nil, class: 'comments' %>
+      </div>
+    </div>
+
     <div class="row actions">
       <div class="small-4 columns">
         <%= submit_tag "Save", class: "button tiny radius" %>

@@ -27,6 +27,7 @@ class TrainingEventsController < ModelController
       flash[:success] = 'Please select at least one Certification Type.'
       @certification_types = _get_certification_type_list
       @employee_ids = params[:employee_ids]
+      @comments = params[:comments]
       render 'training_events/list_certification_types' and return
     end
 
@@ -35,6 +36,7 @@ class TrainingEventsController < ModelController
 
     @employees = @employee_service.find(employee_ids, current_user)
     @certification_types = @certification_type_service.find(current_user, certification_type_ids)
+    @comments = params[:comments]
   end
 
   def create
@@ -51,13 +53,15 @@ class TrainingEventsController < ModelController
     @certification_types = certification_types_pending_authorization
     @trainer = params[:trainer]
     @certification_date = params[:certification_date]
+    @comments = params[:comments]
 
     result = @training_event_service.create_training_event(
       current_user,
       @employees.map(&:id),
       @certification_types.map(&:id),
       @certification_date,
-      @trainer
+      @trainer,
+      @comments
     )
 
     @employees_with_errors = result[:employees_with_errors]

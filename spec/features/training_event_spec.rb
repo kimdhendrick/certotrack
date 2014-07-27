@@ -129,6 +129,7 @@ describe 'Training Event', slow: true do
 
     fill_in 'Trainer', with: 'Trainer Joe'
     fill_in 'Certification Date', with: '11/08/2013'
+    fill_in 'Comments', with: 'Just for fun'
 
     click_on 'Save'
 
@@ -169,11 +170,13 @@ describe 'Training Event', slow: true do
     within '[data-details] table thead tr' do
       page.should have_content 'Trainer'
       page.should have_content 'Certification Date'
+      page.should have_content 'Comments'
     end
 
     within '[data-details] table tbody tr:nth-of-type(1)' do
       page.should have_content 'Trainer Joe'
       page.should have_content '11/08/2013'
+      page.should have_content 'Just for fun'
     end
 
     page.should have_link 'Home'

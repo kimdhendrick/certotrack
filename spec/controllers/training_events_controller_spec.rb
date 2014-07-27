@@ -101,6 +101,21 @@ describe TrainingEventsController do
       fake_certification_type_service.received_params[1].should == [my_certification_type.id]
     end
 
+    it 'assigns @comments' do
+      controller.load_employee_service(Faker.new([]))
+      controller.load_certification_type_service(Faker.new([]))
+
+      params = {
+        :employee_ids => '1',
+        :certification_type_ids => [],
+        :comments => 'Just for fun'
+      }
+
+      get :new, params, {}
+
+      assigns(:comments).should == 'Just for fun'
+    end
+
     it 'redirects if no certification types selected' do
       get :new, {certification_type_ids: nil, employee_ids: '1'}, {}
 
@@ -126,6 +141,14 @@ describe TrainingEventsController do
         fake_employee_service.received_message.should == :find
         fake_employee_service.received_params[0].should == [my_employee.id]
         fake_employee_service.received_params[1].should == current_user
+      end
+
+      it 'assigns @comments' do
+        controller.load_employee_service(Faker.new([]))
+
+        get :create, {comments: 'Just for fun', employee_ids: [], certification_type_ids: []}, {}
+
+        assigns(:comments).should == 'Just for fun'
       end
 
       it 'does not assign unauthorized employees' do
@@ -188,7 +211,8 @@ describe TrainingEventsController do
           employee_ids: ["#{my_employee.id}"],
           certification_type_ids: ["#{my_certification_type.id}"],
           certification_date: '11/10/2013',
-          trainer: 'trainer'
+          trainer: 'trainer',
+          comments: 'just for fun'
         }, {}
 
         fake_training_event_service.received_message.should == :create_training_event
@@ -197,6 +221,7 @@ describe TrainingEventsController do
         fake_training_event_service.received_params[2].should == [my_certification_type.id]
         fake_training_event_service.received_params[3].should == '11/10/2013'
         fake_training_event_service.received_params[4].should == 'trainer'
+        fake_training_event_service.received_params[5].should == 'just for fun'
 
         response.should render_template('training_events/create')
         assigns(:employees_with_errors).should == []
@@ -217,12 +242,14 @@ describe TrainingEventsController do
 
         get :create, {
           employee_ids: ["#{my_employee.id}"],
-          certification_type_ids: ["#{my_certification_type.id}"]
+          certification_type_ids: ["#{my_certification_type.id}"],
+          comments: 'oops'
         }, {}
 
         response.should render_template('training_events/create')
         assigns(:employees_with_errors).should == [my_employee]
         assigns(:certification_types_with_errors).should == [my_certification_type]
+        assigns(:comments).should == 'oops'
       end
     end
 

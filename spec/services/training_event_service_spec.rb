@@ -11,7 +11,7 @@ describe TrainingEventService do
       employee = create(:employee)
       certification_type = create(:certification_type)
 
-      result = subject.create_training_event(current_user, [employee.id], [certification_type.id], '11/09/2013', 'Myself')
+      result = subject.create_training_event(current_user, [employee.id], [certification_type.id], '11/09/2013', 'Myself', 'comments')
 
       result.should ==
         {
@@ -26,6 +26,7 @@ describe TrainingEventService do
       new_certification.trainer.should == 'Myself'
       new_certification.last_certification_date.should == Date.new(2013, 11, 9)
       new_certification.customer.should == current_user.customer
+      new_certification.comments.should == 'comments'
     end
 
     it 'should return errors when invalid certifications' do
@@ -37,7 +38,7 @@ describe TrainingEventService do
       fake_certification_service = Faker.new(invalid_certification)
 
       subject = TrainingEventService.new({certification_service: fake_certification_service})
-      result = subject.create_training_event(current_user, [bad_employee.id], [bad_certification_type.id], '11/09/2013', 'Myself')
+      result = subject.create_training_event(current_user, [bad_employee.id], [bad_certification_type.id], '11/09/2013', 'Myself', 'comments')
       result.should ==
         {
           success: false,
@@ -59,7 +60,7 @@ describe TrainingEventService do
         customer: current_user.customer
       )
 
-      result = subject.create_training_event(current_user, [employee.id], [certification_type.id], '11/09/2013', 'Myself')
+      result = subject.create_training_event(current_user, [employee.id], [certification_type.id], '11/09/2013', 'Myself', 'comments')
 
       result[:success].should == true
 
@@ -70,6 +71,7 @@ describe TrainingEventService do
       existing_certification.certification_type.should == certification_type
       existing_certification.trainer.should == 'Myself'
       existing_certification.customer.should == current_user.customer
+      existing_certification.comments.should == 'comments'
     end
 
     it 'should handle errors on invalid recertification' do
@@ -85,7 +87,7 @@ describe TrainingEventService do
 
       subject = TrainingEventService.new({certification_service: Faker.new(false)})
 
-      result = subject.create_training_event(current_user, [bad_employee.id], [bad_certification_type.id], '11/09/2013', 'Myself')
+      result = subject.create_training_event(current_user, [bad_employee.id], [bad_certification_type.id], '11/09/2013', 'Myself', 'comments')
 
       result.should ==
         {
