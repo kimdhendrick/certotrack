@@ -143,7 +143,8 @@ describe 'Certification Search', slow: true do
       page.should have_link 'Units'
       page.should have_link 'Status'
       page.should have_link 'Employee'
-      page.should have_link 'Trainer'
+      page.should have_link 'Employee Number'
+      page.should have_link 'Employee Location'
       page.should have_link 'Last Certification Date'
       page.should have_link 'Expiration Date'
     end

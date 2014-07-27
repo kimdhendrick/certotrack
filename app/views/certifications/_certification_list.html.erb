@@ -6,7 +6,8 @@
     <th><%= sortable 'units_required_sort_key', title="Units" %></th>
     <th><%= sortable 'status_code', title='Status' %></th>
     <th><%= sortable 'employee_name', title = 'Employee' %></th>
-    <th><%= sortable 'trainer' %></th>
+    <th><%= sortable 'employee_number' %></th>
+    <th><%= sortable 'location_name', title = 'Employee Location' %></th>
     <th><%= sortable 'last_certification_date_sort_key', title='Last Certification Date' %></th>
     <th><%= sortable 'expiration_date_sort_key', title='Expiration Date' %></th>
   </tr>
@@ -23,7 +24,8 @@
         </div>
       </td>
       <td><%= link_to certification.employee_name, certification.employee_model %></td>
-      <td><%= certification.trainer %></td>
+      <td><%= certification.employee_number %></td>
+      <td><%= certification.location_name %></td>
       <td><%= certification.last_certification_date %></td>
       <td><%= certification.expiration_date %></td>
     </tr>

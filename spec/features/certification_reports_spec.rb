@@ -73,7 +73,8 @@ describe 'Certification Reports', slow: true do
           page.should have_link 'Units'
           page.should have_link 'Status'
           page.should have_link 'Employee'
-          page.should have_link 'Trainer'
+          page.should have_link 'Employee Number'
+          page.should have_link 'Employee Location'
           page.should have_link 'Last Certification Date'
           page.should have_link 'Expiration Date'
         end
@@ -83,7 +84,8 @@ describe 'Certification Reports', slow: true do
           page.should have_content 'Annually'
           page.should have_content 'Expired'
           page.should have_content 'Brown, Joe'
-          page.should have_content 'Trainer Tim'
+          page.should have_content 'JB3'
+          page.should have_content 'Denver'
           page.should have_content '07/08/2005'
           page.should have_content '01/08/2006'
         end
@@ -94,7 +96,8 @@ describe 'Certification Reports', slow: true do
           page.should have_content '0 of 30'
           page.should have_content 'Recertify'
           page.should have_content 'Brown, Joe'
-          page.should have_content 'Trucker Joe'
+          page.should have_content 'JB3'
+          page.should have_content 'Denver'
           page.should have_content '12/10/2007'
           page.should have_content '06/10/2008'
         end
@@ -285,21 +288,44 @@ describe 'Certification Reports', slow: true do
         column_data_should_be_in_order(zeta.employee.last_name, beta.employee.last_name, alpha.employee.last_name)
       end
 
-      it 'should sort by trainer' do
-        zeta = create(:certification, trainer: 'zeta', customer: customer)
-        beta = create(:certification, trainer: 'beta', customer: customer)
-        alpha = create(:certification, trainer: 'alpha', customer: customer)
+      it 'should sort by employee number' do
+        zeta_employee = create(:employee, employee_number: 'zeta')
+        beta_employee = create(:employee, employee_number: 'beta')
+        alpha_employee = create(:employee, employee_number: 'alpha')
+        zeta = create(:certification,  employee: zeta_employee, customer: customer)
+        beta = create(:certification,  employee: beta_employee, customer: customer)
+        alpha = create(:certification, employee: alpha_employee, customer: customer)
 
         visit refresh_path
         click_link 'All Employee Certifications'
 
         # Ascending sort
-        click_link 'Trainer'
-        column_data_should_be_in_order(alpha.trainer, beta.trainer, zeta.trainer)
+        click_link 'Employee Number'
+        column_data_should_be_in_order('alpha', 'beta', 'zeta')
 
         # Descending sort
-        click_link 'Trainer'
-        column_data_should_be_in_order(zeta.trainer, beta.trainer, alpha.trainer)
+        click_link 'Employee Number'
+        column_data_should_be_in_order('zeta', 'beta', 'alpha')
+      end
+
+      it 'should sort by employee location' do
+        zeta_employee = create(:employee, location: create(:location, name: 'zeta'))
+        beta_employee = create(:employee, location: create(:location, name: 'beta'))
+        alpha_employee = create(:employee, location: create(:location, name: 'alpha'))
+        zeta = create(:certification,  employee: zeta_employee, customer: customer)
+        beta = create(:certification,  employee: beta_employee, customer: customer)
+        alpha = create(:certification, employee: alpha_employee, customer: customer)
+
+        visit refresh_path
+        click_link 'All Employee Certifications'
+
+        # Ascending sort
+        click_link 'Employee Location'
+        column_data_should_be_in_order('alpha', 'beta', 'zeta')
+
+        # Descending sort
+        click_link 'Employee Location'
+        column_data_should_be_in_order('zeta', 'beta', 'alpha')
       end
 
       it 'should sort by last certification date' do
@@ -443,7 +469,8 @@ describe 'Certification Reports', slow: true do
           page.should have_link 'Units'
           page.should have_link 'Status'
           page.should have_link 'Employee'
-          page.should have_link 'Trainer'
+          page.should have_link 'Employee Number'
+          page.should have_link 'Employee Location'
           page.should have_link 'Last Certification Date'
           page.should have_link 'Expiration Date'
         end
@@ -453,7 +480,8 @@ describe 'Certification Reports', slow: true do
           page.should have_content '6 months'
           page.should have_content 'Expired'
           page.should have_content 'Brown, Joe'
-          page.should have_content 'Trucker Joe'
+          page.should have_content 'JB3'
+          page.should have_content 'Denver'
           page.should have_content '12/10/2007'
           page.should have_content '06/10/2008'
         end
@@ -613,21 +641,44 @@ describe 'Certification Reports', slow: true do
         column_data_should_be_in_order(zeta.employee.last_name, beta.employee.last_name, alpha.employee.last_name)
       end
 
-      it 'should sort by trainer' do
-        zeta = create(:certification, trainer: 'zeta', customer: customer, expiration_date: Date.parse('2013-12-31'),)
-        beta = create(:certification, trainer: 'beta', customer: customer, expiration_date: Date.parse('2013-12-31'),)
-        alpha = create(:certification, trainer: 'alpha', customer: customer, expiration_date: Date.parse('2013-12-31'),)
+      it 'should sort by employee number' do
+        zeta_employee = create(:employee, employee_number: 'zeta')
+        beta_employee = create(:employee, employee_number: 'beta')
+        alpha_employee = create(:employee, employee_number: 'alpha')
+        zeta = create(:certification,  employee: zeta_employee, customer: customer)
+        beta = create(:certification,  employee: beta_employee, customer: customer)
+        alpha = create(:certification, employee: alpha_employee, customer: customer)
 
         visit refresh_path
-        click_link 'Expired Certifications'
+        click_link 'All Employee Certifications'
 
         # Ascending sort
-        click_link 'Trainer'
-        column_data_should_be_in_order(alpha.trainer, beta.trainer, zeta.trainer)
+        click_link 'Employee Number'
+        column_data_should_be_in_order('alpha', 'beta', 'zeta')
 
         # Descending sort
-        click_link 'Trainer'
-        column_data_should_be_in_order(zeta.trainer, beta.trainer, alpha.trainer)
+        click_link 'Employee Number'
+        column_data_should_be_in_order('zeta', 'beta', 'alpha')
+      end
+
+      it 'should sort by employee location' do
+        zeta_employee = create(:employee, location: create(:location, name: 'zeta'))
+        beta_employee = create(:employee, location: create(:location, name: 'beta'))
+        alpha_employee = create(:employee, location: create(:location, name: 'alpha'))
+        zeta = create(:certification,  employee: zeta_employee, customer: customer)
+        beta = create(:certification,  employee: beta_employee, customer: customer)
+        alpha = create(:certification, employee: alpha_employee, customer: customer)
+
+        visit refresh_path
+        click_link 'All Employee Certifications'
+
+        # Ascending sort
+        click_link 'Employee Location'
+        column_data_should_be_in_order('alpha', 'beta', 'zeta')
+
+        # Descending sort
+        click_link 'Employee Location'
+        column_data_should_be_in_order('zeta', 'beta', 'alpha')
       end
 
       it 'should sort by last certification date' do
@@ -773,7 +824,8 @@ describe 'Certification Reports', slow: true do
           page.should have_link 'Units'
           page.should have_link 'Status'
           page.should have_link 'Employee'
-          page.should have_link 'Trainer'
+          page.should have_link 'Employee Number'
+          page.should have_link 'Employee Location'
           page.should have_link 'Last Certification Date'
           page.should have_link 'Expiration Date'
         end
@@ -783,7 +835,8 @@ describe 'Certification Reports', slow: true do
           page.should have_content '6 months'
           page.should have_content 'Warning'
           page.should have_content 'Brown, Joe'
-          page.should have_content 'Trucker Joe'
+          page.should have_content 'JB3'
+          page.should have_content 'Denver'
           page.should have_content '12/10/2007'
           page.should have_content Date.tomorrow.strftime("%m/%d/%Y")
         end
@@ -943,21 +996,44 @@ describe 'Certification Reports', slow: true do
         column_data_should_be_in_order(zeta.employee.last_name, beta.employee.last_name, alpha.employee.last_name)
       end
 
-      it 'should sort by trainer' do
-        zeta = create(:certification, trainer: 'zeta', customer: customer, expiration_date: Date.tomorrow,)
-        beta = create(:certification, trainer: 'beta', customer: customer, expiration_date: Date.tomorrow,)
-        alpha = create(:certification, trainer: 'alpha', customer: customer, expiration_date: Date.tomorrow,)
+      it 'should sort by employee number' do
+        zeta_employee = create(:employee, employee_number: 'zeta')
+        beta_employee = create(:employee, employee_number: 'beta')
+        alpha_employee = create(:employee, employee_number: 'alpha')
+        zeta = create(:certification,  employee: zeta_employee, customer: customer)
+        beta = create(:certification,  employee: beta_employee, customer: customer)
+        alpha = create(:certification, employee: alpha_employee, customer: customer)
 
         visit refresh_path
-        click_link 'Certifications Expiring Soon '
+        click_link 'All Employee Certifications'
 
         # Ascending sort
-        click_link 'Trainer'
-        column_data_should_be_in_order(alpha.trainer, beta.trainer, zeta.trainer)
+        click_link 'Employee Number'
+        column_data_should_be_in_order('alpha', 'beta', 'zeta')
 
         # Descending sort
-        click_link 'Trainer'
-        column_data_should_be_in_order(zeta.trainer, beta.trainer, alpha.trainer)
+        click_link 'Employee Number'
+        column_data_should_be_in_order('zeta', 'beta', 'alpha')
+      end
+
+      it 'should sort by employee location' do
+        zeta_employee = create(:employee, location: create(:location, name: 'zeta'))
+        beta_employee = create(:employee, location: create(:location, name: 'beta'))
+        alpha_employee = create(:employee, location: create(:location, name: 'alpha'))
+        zeta = create(:certification,  employee: zeta_employee, customer: customer)
+        beta = create(:certification,  employee: beta_employee, customer: customer)
+        alpha = create(:certification, employee: alpha_employee, customer: customer)
+
+        visit refresh_path
+        click_link 'All Employee Certifications'
+
+        # Ascending sort
+        click_link 'Employee Location'
+        column_data_should_be_in_order('alpha', 'beta', 'zeta')
+
+        # Descending sort
+        click_link 'Employee Location'
+        column_data_should_be_in_order('zeta', 'beta', 'alpha')
       end
 
       it 'should sort by last certification date' do
@@ -1095,7 +1171,8 @@ describe 'Certification Reports', slow: true do
           page.should have_link 'Units'
           page.should have_link 'Status'
           page.should have_link 'Employee'
-          page.should have_link 'Trainer'
+          page.should have_link 'Employee Number'
+          page.should have_link 'Employee Location'
           page.should have_link 'Last Certification Date'
           page.should have_link 'Expiration Date'
         end
@@ -1106,7 +1183,8 @@ describe 'Certification Reports', slow: true do
           page.should have_content '13 of 100'
           page.should have_content 'Pending'
           page.should have_content 'Brown, Joe'
-          page.should have_content 'Trucker Joe'
+          page.should have_content 'JB3'
+          page.should have_content 'Denver'
           page.should have_content Date.yesterday.strftime("%m/%d/%Y")
           page.should have_content Date.tomorrow.strftime("%m/%d/%Y")
         end
@@ -1181,7 +1259,8 @@ describe 'Certification Reports', slow: true do
           page.should have_link 'Units'
           page.should have_link 'Status'
           page.should have_link 'Employee'
-          page.should have_link 'Trainer'
+          page.should have_link 'Employee Number'
+          page.should have_link 'Employee Location'
           page.should have_link 'Last Certification Date'
           page.should have_link 'Expiration Date'
         end
@@ -1192,7 +1271,8 @@ describe 'Certification Reports', slow: true do
           page.should have_content '13 of 100'
           page.should have_content 'Recertify'
           page.should have_content 'Brown, Joe'
-          page.should have_content 'Trucker Joe'
+          page.should have_content 'JB3'
+          page.should have_content 'Denver'
           page.should have_content '01/01/2009'
           page.should have_content '01/01/2010'
         end
