@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe EmployeeService do
   let(:my_customer) { create(:customer) }
-  let(:my_user) { create(:user, customer: my_customer)}
-  let(:admin_user) { create(:user, admin: true)}
+  let(:my_user) { create(:user, customer: my_customer) }
+  let(:admin_user) { create(:user, admin: true) }
 
   describe 'get_all_employees' do
     context 'when admin user' do
@@ -53,13 +53,15 @@ describe EmployeeService do
   end
 
   describe '#create_employee' do
+    let(:location) { create(:location) }
+
     it 'should create employee' do
       attributes =
         {
           'first_name' => 'Kim',
           'last_name' => 'Ba',
           'employee_number' => 'KIMBA123',
-          'location_id' => 99,
+          'location_id' => location.id,
           'created_by' => 'kimba'
         }
       customer = build(:customer)
@@ -70,12 +72,14 @@ describe EmployeeService do
       employee.first_name.should == 'Kim'
       employee.last_name.should == 'Ba'
       employee.employee_number.should == 'KIMBA123'
-      employee.location_id.should == 99
+      employee.location_id.should == location.id
       employee.customer.should == customer
     end
   end
 
   describe '#update_employee' do
+    let(:location) { create(:location) }
+
     it 'should update employees attributes' do
       employee = create(:employee, customer: my_customer)
       attributes =
@@ -84,7 +88,7 @@ describe EmployeeService do
           'first_name' => 'Susie',
           'last_name' => 'Sampson',
           'employee_number' => 'newEmpNum',
-          'location_id' => 99
+          'location_id' => location.id
         }
 
       success = EmployeeService.new.update_employee(employee, attributes)
@@ -94,7 +98,7 @@ describe EmployeeService do
       employee.first_name.should == 'Susie'
       employee.last_name.should == 'Sampson'
       employee.employee_number.should == 'newEmpNum'
-      employee.location_id.should == 99
+      employee.location_id.should == location.id
     end
 
     it 'should return false if errors' do

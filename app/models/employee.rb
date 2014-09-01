@@ -14,7 +14,8 @@ class Employee < ActiveRecord::Base
                         :first_name,
                         :last_name,
                         :customer,
-                        :created_by
+                        :created_by,
+                        :location
 
   validates_uniqueness_of :employee_number, scope: :customer_id, case_sensitive: false
 

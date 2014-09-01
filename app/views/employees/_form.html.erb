@@ -29,7 +29,9 @@
         <%= f.label :location_id, 'Location' %>
         <%= select(:employee, :location_id,
                    options_from_collection_for_select(@locations, 'id', 'name',
-                                                      @employee.location_id)) %>
+                                                      @employee.location_id),
+                   {include_blank: ''})
+        %>
       </div>
     </div>
 

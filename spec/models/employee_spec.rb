@@ -10,6 +10,7 @@ describe Employee do
   it { should validate_presence_of :employee_number }
   it { should validate_presence_of :customer }
   it { should validate_presence_of :created_by }
+  it { should validate_presence_of :location }
   it { should validate_uniqueness_of(:employee_number).scoped_to(:customer_id) }
   it { should belong_to(:customer) }
   it { should belong_to(:location) }
