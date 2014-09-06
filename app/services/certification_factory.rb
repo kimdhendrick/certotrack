@@ -11,7 +11,6 @@ class CertificationFactory
                                       customer: customer,
                                       created_by: current_user.username)
     certification = _build_certification_period(certification, attributes)
-    certification.expiration_date = _expires_on(certification_type_id, certification.last_certification_date)
     certification
   end
 
@@ -33,10 +32,17 @@ class CertificationFactory
         units_achieved: attributes[:units_achieved]
       }
 
-    active_certification_period = certification.create_active_certification_period(certification_period_params)
+    begin
+      active_certification_period = certification.create_active_certification_period(certification_period_params)
+    rescue => exception
+      error_message = "Exception: #{exception} occurred for params: #{certification_period_params}"
+      Rails.logger.error(error_message)
+      active_certification_period = CertificationPeriod.new(certification: certification)
+    end
 
     if active_certification_period.valid?
       certification.certification_periods << active_certification_period
+      certification.expiration_date = _expires_on(certification.certification_type_id, certification.last_certification_date)
     end
 
     certification

@@ -120,6 +120,24 @@ describe CertificationFactory do
 
       certification.created_by.should == 'creator_username'
     end
+
+    describe 'debugging ArgumentError in production' do
+      it 'rescues exception and logs them' do
+        Certification.any_instance.stub(:create_active_certification_period).and_raise(ArgumentError.new('blah'))
+
+        certification_type = create(:certification_type)
+        customer = create(:customer)
+        employee = create(:employee)
+
+        Rails.logger.should_receive(:error)
+
+        CertificationFactory.new.new_instance(
+          current_user_id: create(:user, username: 'creator_username', customer: customer).id,
+          employee_id: employee.id,
+          certification_type_id: certification_type.id
+        )
+      end
+    end
   end
 
   describe '#build_uncertified_certifications_for' do
