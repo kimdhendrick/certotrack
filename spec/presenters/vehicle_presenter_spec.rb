@@ -10,6 +10,7 @@ describe VehiclePresenter do
           vin: '12345678901234567',
           license_plate: 'HAPPYONE',
           mileage: 200000,
+          tire_size: 'P225/50R16 91S',
           year: 2009,
           customer: create(:customer, name: 'myCustomer'))
   end
@@ -52,6 +53,10 @@ describe VehiclePresenter do
 
   it 'should respond to mileage' do
     subject.mileage.should == '200,000'
+  end
+
+  it 'should respond to tire_size' do
+    subject.tire_size.should == 'P225/50R16 91S'
   end
 
   it 'should respond to sortable_mileage' do

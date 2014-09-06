@@ -55,7 +55,6 @@ describe Vehicle do
     end
   end
 
-
   describe '#status' do
     it 'should return NA when no services assigned to vehicle' do
       vehicle.status.should == Status::NA

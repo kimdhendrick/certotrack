@@ -12,6 +12,7 @@ class VehiclePresenter
            :make,
            :year,
            :vehicle_model,
+           :tire_size,
            to: :model
 
   def initialize(model, template = nil)

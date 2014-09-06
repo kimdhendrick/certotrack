@@ -54,6 +54,13 @@
 
     <div class="row field">
       <div class="small-6 columns">
+        <%= f.label :tire_size, 'Tire Size' %>
+        <%= f.text_field :tire_size %>
+      </div>
+    </div>
+
+    <div class="row field">
+      <div class="small-6 columns">
         <%= f.label :location_id, 'Location' %>
         <%= select(:vehicle, :location_id,
                    options_from_collection_for_select(@locations, 'id', 'name',

@@ -11,7 +11,8 @@ describe 'Vehicles', slow: true do
       boulder = create(:location, name: 'Boulder', customer: customer)
 
       @vehicle1 = create(:vehicle, vehicle_number: '987345', vin: '1M8GDM9AXKP042788', license_plate: 'ABC-123',
-                         year: 2013, make: 'Chevrolet', vehicle_model: 'Chevette', mileage: 10000, location: denver, customer: customer)
+                         year: 2013, make: 'Chevrolet', vehicle_model: 'Chevette', mileage: 10000, tire_size: 'P225/50R16 91S',
+                         location: denver, customer: customer)
 
       create(:vehicle, vehicle_number: '34987', vin: '2B8GDM9AXKP042790', license_plate: '123-ABC',
              year: 1999, make: 'Dodge', vehicle_model: 'Dart', mileage: 20000, location: golden, customer: customer)
@@ -38,6 +39,7 @@ describe 'Vehicles', slow: true do
         page.should have_link 'Make'
         page.should have_link 'Model'
         page.should have_link 'Mileage'
+        page.should have_link 'Tire Size'
         page.should have_link 'Location'
         page.should have_link 'Status'
       end
@@ -74,6 +76,7 @@ describe 'Vehicles', slow: true do
         page.should have_content 'Chevrolet'
         page.should have_content 'Chevette'
         page.should have_content '10,000'
+        page.should have_content 'P225/50R16 91S'
         page.should have_content 'Denver'
         page.should have_content 'N/A'
       end
@@ -100,6 +103,7 @@ describe 'Vehicles', slow: true do
       fill_in 'Make', with: 'Audi'
       fill_in 'Model', with: 'A3'
       fill_in 'Mileage', with: '15'
+      fill_in 'Tire Size', with: 'P225/50R16 100S'
       select 'Golden', from: 'vehicle_location_id'
 
       click_on 'Create'
@@ -113,6 +117,7 @@ describe 'Vehicles', slow: true do
       page.should have_content 'Audi'
       page.should have_content 'A3'
       page.should have_content '15'
+      page.should have_content 'P225/50R16 100S'
       page.should have_content 'Golden'
     end
 
@@ -134,6 +139,7 @@ describe 'Vehicles', slow: true do
       page.should have_content 'Chevrolet'
       page.should have_content 'Chevette'
       page.should have_content '10,000'
+      page.should have_content 'P225/50R16 91S'
       page.should have_content 'Denver'
 
       visit dashboard_path
@@ -148,6 +154,7 @@ describe 'Vehicles', slow: true do
       page.should have_content 'Chevrolet'
       page.should have_content 'Chevette'
       page.should have_content '10,000'
+      page.should have_content 'P225/50R16 91S'
       page.should have_content 'Denver'
 
       page.should have_link 'Edit'
@@ -167,6 +174,7 @@ describe 'Vehicles', slow: true do
       fill_in 'Make', with: 'Audi'
       fill_in 'Model', with: 'A3'
       fill_in 'Mileage', with: '15'
+      fill_in 'Tire Size', with: 'P999'
       select 'Golden', from: 'vehicle_location_id'
 
       click_on 'Update'
@@ -182,6 +190,7 @@ describe 'Vehicles', slow: true do
       page.should have_content 'Audi'
       page.should have_content 'A3'
       page.should have_content '15'
+      page.should have_content 'P999'
       page.should have_content 'Golden'
     end
 
@@ -248,6 +257,7 @@ describe 'Vehicles', slow: true do
         page.should have_link 'Make'
         page.should have_link 'Model'
         page.should have_link 'Mileage'
+        page.should have_link 'Tire Size'
         page.should have_link 'Location'
         page.should have_link 'Status'
       end
@@ -274,6 +284,7 @@ describe 'Vehicles', slow: true do
         page.should have_link '987345'
         page.should have_link '1M8GDM9AXKP042788'
         page.should have_content 'Chevrolet'
+        page.should have_content 'P225/50R16 91S'
       end
 
       fill_in 'Make', with: 'Chevro'
@@ -558,6 +569,23 @@ describe 'Vehicles', slow: true do
       # Descending sort
       click_link 'Mileage'
       column_data_should_be_in_order('20,000', '1,000', '300')
+    end
+
+    it 'should sort by tire_size' do
+      zeta = create(:vehicle, tire_size: 'A', customer: customer)
+      beta = create(:vehicle, tire_size: 'C', customer: customer)
+      alpha = create(:vehicle, tire_size: 'B', customer: customer)
+
+      visit dashboard_path
+      click_link 'All Vehicles'
+
+      # Ascending sort
+      click_link 'Tire Size'
+      column_data_should_be_in_order('A', 'B', 'C')
+
+      # Descending sort
+      click_link 'Tire Size'
+      column_data_should_be_in_order('C', 'B', 'A')
     end
 
     it 'should sort by location' do

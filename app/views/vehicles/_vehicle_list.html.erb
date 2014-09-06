@@ -8,6 +8,7 @@
     <th><%= sortable 'make' %></th>
     <th><%= sortable 'vehicle_model', title="Model" %></th>
     <th><%= sortable 'sortable_mileage', title="Mileage" %></th>
+    <th><%= sortable 'tire_size', title="Tire Size" %></th>
     <th><%= sortable 'location' %></th>
     <th><%= sortable 'status_code', title='Status' %></th>
   </tr>
@@ -22,6 +23,7 @@
       <td><%= vehicle.make %></td>
       <td><%= vehicle.vehicle_model %></td>
       <td><%= vehicle.mileage %></td>
+      <td><%= vehicle.tire_size %></td>
       <td><%= vehicle.location %></td>
       <td>
         <div class="<%=vehicle.status_style%>">

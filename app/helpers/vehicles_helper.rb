@@ -10,6 +10,7 @@ module VehiclesHelper
       :vehicle_model,
       :year,
       :mileage,
+      :tire_size,
       :location_id
     ]
   end
