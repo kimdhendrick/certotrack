@@ -115,17 +115,23 @@
       $('#assigneeLabel, #assigneeList').show('slide');
     });
 
+    $('#assignedTo').one("change", function() {
+      if ($('#assignee').val() == 'Location') {
+        $('#assignedTo').val(<%=@equipment.location_id%>);
+      } else if ($('#assignee').val() == 'Employee') {
+        $('#assignedTo').val(<%=@equipment.employee_id%>);
+      }
+    });
+
     $('#assignedTo').change(function() {
       remove_input();
 
       if ($('#assignee').val() == 'Location') {
         add_input('location', $(this).val());
         add_input('employee', '');
-        $('#assignedTo').val(<%=@equipment.location_id%>);
       } else if ($('#assignee').val() == 'Employee') {
         add_input('employee', $(this).val());
         add_input('location', '');
-        $('#assignedTo').val(<%=@equipment.employee_id%>);
       } else {
         add_input('location', '');
         add_input('employee', '');
