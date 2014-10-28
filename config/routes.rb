@@ -12,10 +12,6 @@ Certotrack::Application.routes.draw do
     get "logout", :to => "devise/sessions#destroy"
   end
 
-  namespace :api do
-    resources :sessions, only: [:create]
-  end
-
   resource :change_password, only: [:edit] do
     collection do
       patch 'update_password'
@@ -76,4 +72,9 @@ Certotrack::Application.routes.draw do
   resources :customers, only: [:new, :create, :show, :edit, :update, :index]
 
   resources :customer_users, controller: 'users', only: [:index, :show, :new, :create, :edit, :update, :destroy]
+
+  namespace :api do
+    resources :sessions, only: [:create]
+    resources :equipment, only: [:index]
+  end
 end
