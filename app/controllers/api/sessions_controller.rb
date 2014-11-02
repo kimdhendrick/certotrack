@@ -21,11 +21,17 @@ module Api
     end
 
     def render_success_message_for(user)
-      render json: {message: 'success', first_name: user.first_name, last_name: user.last_name, email: user.email}, status: 200
+      render json: {
+        message: 'success',
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        authenticity_token: form_authenticity_token
+      }, status: 200
     end
 
     def render_invalid_login
-      render json: {message: 'invalid username/password combination'}, status: 401
+      render json: {message: 'Invalid username/password combination'}, status: 401
     end
 
     def set_csrf_header
