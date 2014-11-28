@@ -15,7 +15,7 @@ module Api
 
       equipment_collection = @equipment_service.public_send("get_#{equipment_type}_equipment", current_user)
 
-      render json: EquipmentListPresenter.new(equipment_collection).present(params).map(&:model)
+      render json: EquipmentListPresenter.new(equipment_collection).sort(params).map(&:model)
     end
   end
 end
