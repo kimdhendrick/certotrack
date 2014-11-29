@@ -69,8 +69,9 @@ Daily jobs @ 15:00 UTC for each of these:
 ### Restart heroku
     heroku restart
 
-### Push tag to heroku
+### Push tag/branch to heroku
     git push certotrack-staging <tag-name>:master
+    git push certotrack-staging <branch-name>:master
     git push certotrack <tag-name>:master
     (go back to master)
     git push -f certotrack-staging master
