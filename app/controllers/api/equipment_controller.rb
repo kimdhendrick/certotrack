@@ -8,6 +8,12 @@ module Api
       _render_equipment_list(:all)
     end
 
+    def names
+      authorize! :read, :equipment
+
+      render json: @equipment_service.get_equipment_names(current_user, '')
+    end
+
     private
 
     def _render_equipment_list(equipment_type)

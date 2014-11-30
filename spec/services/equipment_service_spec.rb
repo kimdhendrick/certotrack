@@ -363,6 +363,17 @@ describe EquipmentService do
       EquipmentService.new.get_equipment_names(me, 'equipment').should == ['my_equipment']
     end
 
+    it 'should sort the names' do
+      my_customer = create(:customer)
+      me = create(:user, customer: my_customer)
+      create(:equipment, name: 'BBB', customer: my_customer)
+      create(:equipment, name: 'AAA', customer: my_customer)
+      create(:equipment, name: 'ZZZ', customer: my_customer)
+      create(:equipment, name: 'GGG', customer: my_customer)
+
+      EquipmentService.new.get_equipment_names(me, '').should == ['AAA', 'BBB', 'GGG', 'ZZZ']
+    end
+
     it 'should match term anywhere in name' do
       my_customer = create(:customer)
       me = create(:user, customer: my_customer)

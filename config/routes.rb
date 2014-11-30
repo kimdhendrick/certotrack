@@ -76,5 +76,6 @@ Certotrack::Application.routes.draw do
   namespace :api do
     resources :sessions, only: [:create]
     resources :equipment, only: [:index]
+    get '/equipment/names', action: 'names', controller: 'equipment'
   end
 end
