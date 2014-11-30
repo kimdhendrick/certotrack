@@ -8,7 +8,9 @@ module Api
                username: 'iphone_user',
                password: 'Password123',
                first_name: 'Joe',
-               last_name: 'Smith'
+               last_name: 'Smith',
+               email: 'joe.smith@example.com',
+               customer: create(:customer, name: 'HazMat ')
         )
       end
 
@@ -32,11 +34,14 @@ module Api
           JSON.parse(response.body)['message'].should == 'success'
         end
 
-        it 'returns first_name and last_name' do
+        it 'returns user information' do
           post :create, valid_params, {}
 
-          JSON.parse(response.body)['first_name'].should == 'Joe'
-          JSON.parse(response.body)['last_name'].should == 'Smith'
+          results = JSON.parse(response.body)
+          results['first_name'].should == 'Joe'
+          results['last_name'].should == 'Smith'
+          results['email'].should == 'joe.smith@example.com'
+          results['customer_name'].should == 'HazMat'
         end
 
         it 'sets the X-CSRF-Token token' do

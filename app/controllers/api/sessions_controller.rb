@@ -26,6 +26,7 @@ module Api
         first_name: user.first_name,
         last_name: user.last_name,
         email: user.email,
+        customer_name: user.customer.name.strip,
         authenticity_token: form_authenticity_token
       }, status: 200
     end
