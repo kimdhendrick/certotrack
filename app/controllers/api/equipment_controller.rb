@@ -14,6 +14,12 @@ module Api
       render json: @equipment_service.get_equipment_names(current_user, '')
     end
 
+    def find_all_by_name
+      authorize! :read, :equipment
+
+      render json: @equipment_service.search_equipment(current_user, {name: params[:name]})
+    end
+
     private
 
     def _render_equipment_list(equipment_type)

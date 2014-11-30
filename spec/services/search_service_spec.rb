@@ -1,6 +1,6 @@
 require 'spec_helper'
-describe SearchService do
 
+describe SearchService do
   describe 'search by Certifications' do
     let (:certifications) { Certification.all.joins(:certification_type).joins(:employee) }
 
