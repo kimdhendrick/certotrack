@@ -4,10 +4,6 @@ module Api
 
     before_filter :load_equipment_service
 
-    def index
-      _render_equipment_list(:all)
-    end
-
     def names
       authorize! :read, :equipment
 
@@ -17,17 +13,12 @@ module Api
     def find_all_by_name
       authorize! :read, :equipment
 
-      render json: @equipment_service.search_equipment(current_user, {name: params[:name]})
-    end
+      equipment_collection = @equipment_service.search_equipment(current_user, {name: params[:name]})
+      results = EquipmentListPresenter.new(equipment_collection).sort.map do |equipment|
+        Api::EquipmentPresenter.new(equipment).present
+      end
 
-    private
-
-    def _render_equipment_list(equipment_type)
-      authorize! :read, :equipment
-
-      equipment_collection = @equipment_service.public_send("get_#{equipment_type}_equipment", current_user)
-
-      render json: EquipmentListPresenter.new(equipment_collection).sort(params).map(&:model)
+      render json: results
     end
   end
 end
