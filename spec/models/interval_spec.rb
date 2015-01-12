@@ -6,6 +6,7 @@ describe Interval do
     Interval::THREE_MONTHS.to_s.should == '3 months'
     Interval::SIX_MONTHS.to_s.should == '6 months'
     Interval::ONE_YEAR.to_s.should == 'Annually'
+    Interval::QUARTERLY_ONE_YEAR.to_s.should == 'Quarterly/Annually'
     Interval::TWO_YEARS.to_s.should == '2 years'
     Interval::THREE_YEARS.to_s.should == '3 years'
     Interval::FIVE_YEARS.to_s.should == '5 years'
@@ -33,6 +34,34 @@ describe Interval do
       Interval::THREE_YEARS.from(start_date).should == Date.new(2013, 1, 1)
       Interval::FIVE_YEARS.from(start_date).should == Date.new(2015, 1, 1)
       Interval::NOT_REQUIRED.from(start_date).should be_nil
+    end
+
+    context 'Quarterly Annual' do
+      context 'when in the first quarter' do
+        it 'should find the next quarter of the following year' do
+          Interval::QUARTERLY_ONE_YEAR.from(Date.new(2010, 1, 1)).should == Date.new(2011, 4, 1)
+          Interval::QUARTERLY_ONE_YEAR.from(Date.new(2010, 2, 15)).should == Date.new(2011, 4, 1)
+          Interval::QUARTERLY_ONE_YEAR.from(Date.new(2010, 3, 31)).should == Date.new(2011, 4, 1)
+        end
+      end
+
+      context 'when in the second quarter' do
+        it 'should find the next quarter of the following year' do
+          Interval::QUARTERLY_ONE_YEAR.from(Date.new(2010, 4, 15)).should == Date.new(2011, 7, 1)
+        end
+      end
+
+      context 'when in the third quarter' do
+        it 'should find the next quarter of the following year' do
+          Interval::QUARTERLY_ONE_YEAR.from(Date.new(2010, 8, 15)).should == Date.new(2011, 10, 1)
+        end
+      end
+
+      context 'when in the fourth quarter' do
+        it 'should find the next quarter of the following year' do
+          Interval::QUARTERLY_ONE_YEAR.from(Date.new(2010, 10, 15)).should == Date.new(2012, 1, 1)
+        end
+      end
     end
 
     it 'should be nil when nil start date' do

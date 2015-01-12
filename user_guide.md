@@ -63,6 +63,7 @@
 * Assignee - Unassigned, Employee or Location
 * Inspection Interval
     * 1 month - 5 years
+    * Quarterly/Annually - calculates the first day of the next quarter of the following year
     * Not Required
 * Last Inspection Date (mm/dd/yyyy)
     * Required if inspection interval selected
@@ -126,6 +127,7 @@
    * If entered, becomes 'units based' certification type
 * Interval
     * 1 month - 5 years
+    * Quarterly/Annually - calculates the first day of the next quarter of the following year
     * Not Required
 
 ### Search Certification Type
