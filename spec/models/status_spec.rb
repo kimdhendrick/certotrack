@@ -20,4 +20,16 @@ describe Status do
     Status::NA.sort_order.should == 6
     Status::NOT_CERTIFIED.sort_order.should == 7
   end
+
+  it 'should be comparable' do
+    Status::VALID.should be < Status::EXPIRING
+    Status::EXPIRING.should be < Status::EXPIRED
+    Status::EXPIRED.should be < Status::RECERTIFY
+    Status::RECERTIFY.should be < Status::PENDING
+    Status::PENDING.should be < Status::NA
+    Status::NA.should be < Status::NOT_CERTIFIED
+
+    Status::VALID.should == Status::VALID
+    Status::EXPIRING.should be > Status::VALID
+  end
 end

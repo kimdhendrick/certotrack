@@ -114,4 +114,19 @@ describe Sorter do
       results.should == []
     end
   end
+
+  context 'certification' do
+    it 'should sort status asc' do
+      certifications =
+        [
+          expiring = build(:certification, expiration_date: Date.tomorrow),
+          expired = build(:certification, expiration_date: Date.yesterday),
+          na = build(:certification, expiration_date: nil),
+          valid = build(:certification, expiration_date: Date.current + 6.months)
+        ]
+
+      results = Sorter.new.sort(certifications, 'status', 'asc')
+      results.should == [valid, expiring, expired, na]
+    end
+  end
 end

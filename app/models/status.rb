@@ -1,4 +1,5 @@
 class Status < ActiveHash::Base
+  include Comparable
 
   self.data = [
     {id: 1, text: 'Valid'},
@@ -20,4 +21,8 @@ class Status < ActiveHash::Base
   PENDING = Status.find(5)
   NA = Status.find(6)
   NOT_CERTIFIED = Status.find(7)
+
+  def <=>(other)
+    sort_order <=> other.sort_order
+  end
 end
