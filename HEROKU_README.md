@@ -88,14 +88,20 @@ https://devcenter.heroku.com/articles/config-vars
 ### PG Backup
 
 #### List backups
-    heroku pgbackups
+    heroku pg:backups --app certotrack
 
 #### Create backup
-    heroku pgbackups:capture
+    heroku pg:backups capture DATABASE_URL --app certotrack
+
+#### Created scheduled backups
+    heroku pg:backups schedule DATABASE_URL  --app certotrack
+
+#### Show backup schedule
+    heroku pg:backups schedules --app certotrack
 
 #### Download backup
-    heroku pgbackups:url
+    heroku pg:backups public-url <backup_id> --app certotrack
 
-#### View documentation
-    heroku addons:docs pgbackups
-
+#### Restore backup
+    heroku pg:backups restore <backup_id> DATABASE_URL --app certotrack
+    The database being restored to must be empty. You can wipe out an existing database with heroku pg:reset.
