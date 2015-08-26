@@ -103,3 +103,11 @@ Answer 'yes' when prompted. Copy & paste command to ignore rvm warnings.
 
 ### Deploy release to production
     ./deploy-production release-0.1
+
+# Reactivate Employee
+    There is no UI at this point for reactivating employees, but there is a service.
+    From the (production) rails console, run:
+
+    EmployeeReactivationService.reactivate_employee(employee)
+
+    after you've located the employee and stuffed them into a variable of the same name.
