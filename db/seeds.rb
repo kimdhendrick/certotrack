@@ -37,9 +37,9 @@ User.create!(username: 'guest', password: 'Password123', email: 'guest@example.c
 # Equipment customer data
 golden = Location.create!(name: 'Golden', customer: equipment_customer, created_by: 'seed_user')
 john = Employee.create!(first_name: 'John', last_name: 'Doe', customer: equipment_customer, employee_number: 'JD123',
-                        location_id: golden, created_by: 'seed_user')
+                        location: golden, created_by: 'seed_user')
 sue = Employee.create!(first_name: 'Sue', last_name: 'Smith', customer: equipment_customer, employee_number: 'SS123',
-                       location_id: golden, created_by: 'seed_user')
+                       location: golden, created_by: 'seed_user')
 
 Equipment.create!(name: 'Meter', serial_number: 'ABC123', customer: equipment_customer,
                   last_inspection_date: '01-01-2013', inspection_interval: Interval::ONE_YEAR.text,
@@ -73,9 +73,9 @@ Equipment.create!(name: 'Mobile Data Computer', serial_number: 'MDC999', custome
 boulder = Location.create!(name: 'Boulder', customer: full_rights_customer, created_by: 'seed_user')
 denver = Location.create!(name: 'Denver', customer: full_rights_customer, created_by: 'seed_user')
 tom = Employee.create!(first_name: 'Tom', last_name: 'Doe', customer: full_rights_customer,
-                       employee_number: 'TD123', location_id: boulder, created_by: 'seed_user')
+                       employee_number: 'TD123', location: boulder, created_by: 'seed_user')
 mary = Employee.create!(first_name: 'Mary', last_name: 'Smith', customer: full_rights_customer,
-                        employee_number: 'MS123', location_id: denver, created_by: 'seed_user')
+                        employee_number: 'MS123', location: denver, created_by: 'seed_user')
 
 
 Vehicle.create!(vehicle_number: '987345', vin: '1M8GDM9AXKP042788', license_plate: 'ABC-123',
