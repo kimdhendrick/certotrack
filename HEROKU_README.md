@@ -105,3 +105,7 @@ https://devcenter.heroku.com/articles/config-vars
 #### Restore backup
     heroku pg:backups restore <backup_id> DATABASE_URL --app certotrack
     The database being restored to must be empty. You can wipe out an existing database with heroku pg:reset.
+
+#### Transfer database from one app to another
+    Copy from certotrack to certotrack-staging e.g.: 
+    heroku pg:copy certotrack::HEROKU_POSTGRESQL_COPPER DATABASE_URL -a certotrack-staging
