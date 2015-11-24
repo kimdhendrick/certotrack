@@ -25,6 +25,7 @@ gem 'devise_security_extension'
 gem 'exception_notification'
 gem 'foundation-rails'
 gem 'will_paginate-foundation'
+gem 'stripe'
 
 group :test do
   gem "shoulda-matchers"

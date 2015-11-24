@@ -3,9 +3,10 @@ Heroku README
 
 ## Setup
 
+Use 'heroku config' to see/set/get environment variables.
+
 ### Email settings
 
-Use 'heroku config' to see/set/get environment variables.
 These values are loaded by config/initializers/setup_mail.rb.
 
     CERTOTRACK_EMAIL_ADDRESS:    smtp.sendgrid.net
@@ -16,6 +17,15 @@ These values are loaded by config/initializers/setup_mail.rb.
     CERTOTRACK_SECRET_KEY:       see 1password or heroku
 
 SendGrid: https://sendgrid.com/account/overview
+
+### Stripe settings
+
+These values are loaded by config/initializers/stripe.rb.
+
+    CERTOTRACK_STRIPE_PUBLISHABLE_KEY: see 1password or stripe accounts settings
+    CERTOTRACK_STRIPE_SECRET_KEY: see 1password or stripe accounts settings
+    
+https://dashboard.stripe.com/account/apikeys    
 
 ### Scheduler settings
 
