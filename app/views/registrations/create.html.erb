@@ -1,0 +1,34 @@
+<div class="row">
+  <div class="small-12 columns">
+    <h1 class="text-center">Account Confirmation</h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="small-10 columns">
+    <p>
+      Account created successfully!
+    </p>
+
+    <p>
+      Username: <b><%= @registration.email %></b>
+    </p>
+
+    <p>
+      Customer name: <b><%= @registration.customer_name %></b>
+    </p>
+
+    <p>
+      Please login in now using the above username and the password you chose.
+    </p>
+
+    <p>
+      Once logged in, we recommend these initial steps:
+    <ol>
+      <li>Create locations</li>
+      <li>Create employees</li>
+      <li>Create equipment</li>
+    </ol>
+    </p>
+  </div>
+</div>

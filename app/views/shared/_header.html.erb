@@ -45,6 +45,13 @@
             </ul>
           </li>
         </ul>
+      <% else %>
+          <ul class="right">
+            <li class="divider"></li>
+            <li>
+              <%= link_to 'Sign Up', new_registration_path %>
+            </li>
+          </ul>
       <% end %>
     </section>
   </nav>

@@ -1,0 +1,114 @@
+<div class="row">
+  <div class="small-8 columns end">
+    <h1 class="text-center">Sign Up</h1>
+  </div>
+
+  <div class="small-8 columns end">
+    <p>
+      Choose the recurring subscription plan that best suits your needs.
+      Plans will automatically renew, cancel anytime by contacting us at
+      <a href="mailto:sales@certotrack.com">sales@certotrack.com</a>.
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="small-8 columns end">
+    <%= form_for(@registration) do |f| %>
+        <%= render 'errors', model: @registration %>
+        <fieldset>
+          <div class="row">
+            <div class="small-6 columns">
+              <%= f.label :first_name %>
+              <%= f.text_field :first_name %>
+            </div>
+            <div class="small-6 columns end">
+              <%= f.label :last_name %>
+              <%= f.text_field :last_name %>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="small-6 columns">
+              <%= f.label :password %>
+              <%= f.password_field :password %>
+            </div>
+            <div class="small-6 columns">
+              <%= f.label :customer_name %>
+              <%= f.text_field :customer_name %>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="small-12 columns">
+              <%= f.label 'Subscription' %>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="small-6 columns">
+              <%= f.radio_button :subscription, 'annual' %>
+              <%= f.label :subscription, 'Annual - $270/year' %>
+            </div>
+            <div class="small-6 columns">
+              <%= f.radio_button :subscription, 'monthly' %>
+              <%= f.label :subscription, 'Monthly - $25/month' %>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="small-12 columns">
+              <span id="monthly_subscription">
+                <script name='checkoutScript'
+                        src='https://checkout.stripe.com/checkout.js' class='stripe-button'
+                        data-key='pk_test_XWkdckSXPZ46Kk835EWRJXdb'
+                        data-amount='2500'
+                        data-name='CertoTrack'
+                        data-description='monthly'
+                        data-image='/assets/crystalLake_scaled.jpg'
+                        data-locale='auto'
+                        data-allow-remember-me="false"
+                        data-label='Register'>
+                </script>
+                </span>
+                <span id="annual_subscription">
+                    <script name='checkoutScript'
+                            src='https://checkout.stripe.com/checkout.js' class='stripe-button'
+                            data-key='pk_test_XWkdckSXPZ46Kk835EWRJXdb'
+                            data-amount='27000'
+                            data-name='CertoTrack'
+                            data-description='annual'
+                            data-image='/assets/crystalLake_scaled.jpg'
+                            data-locale='auto'
+                            data-allow-remember-me="false"
+                            data-label='Register'>
+                    </script>
+                </span>
+            </div>
+          </div>
+
+        </fieldset>
+
+    <% end %>
+  </div>
+</div>
+
+<script type='text/javascript'>
+    $(function () {
+        $('#annual_subscription').show();
+        $('#monthly_subscription').hide();
+    });
+
+    var subscriptionChanged = function (e) {
+        if (e.target.value == '<%= Subscription::MONTHLY.text %>') {
+            $('#monthly_subscription').show();
+            $('#annual_subscription').hide();
+        } else {
+            $('#annual_subscription').show();
+            $('#monthly_subscription').hide();
+        }
+    };
+
+    $('#registration_subscription_annual').change(subscriptionChanged);
+    $('#registration_subscription_monthly').change(subscriptionChanged);
+</script>

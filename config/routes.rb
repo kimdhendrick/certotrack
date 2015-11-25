@@ -4,6 +4,8 @@ Certotrack::Application.routes.draw do
   get '/dashboard', to: 'certotrack#home'
   get '/refresh', to: 'certotrack#refresh'
 
+  resources :registrations, only: [:new, :create]
+
   devise_for :users, path_names: {sign_in: "login", sign_out: "logout"}
   devise_scope :user do
     root 'devise/sessions#new'
