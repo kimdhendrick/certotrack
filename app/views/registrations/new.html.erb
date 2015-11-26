@@ -6,7 +6,7 @@
   <div class="small-8 columns end">
     <p>
       Choose the recurring subscription plan that best suits your needs.
-      Plans will automatically renew, cancel anytime by contacting us at
+      Plans will automatically renew. Cancel anytime by contacting us at
       <a href="mailto:sales@certotrack.com">sales@certotrack.com</a>.
     </p>
   </div>
@@ -29,49 +29,41 @@
           </div>
 
           <div class="row">
-            <div class="small-6 columns">
-              <%= f.label :password %>
-              <%= f.password_field :password %>
-            </div>
-            <div class="small-6 columns">
+            <div class="small-12 columns">
               <%= f.label :customer_name %>
               <%= f.text_field :customer_name %>
             </div>
           </div>
 
           <div class="row">
+            <div class="small-6 columns">
+              <%= f.label :password, 'Enter Password' %>
+              <%= f.password_field :password %>
+            </div>
+            <div class="small-6 columns">
+              <%= f.label :password_confirm, 'Re-enter Password' %>
+              <%= f.password_field :password_confirm %>
+            </div>
+          </div>
+
+          <div class="row">
             <div class="small-12 columns">
-              <%= f.label 'Subscription' %>
+              &nbsp;
             </div>
           </div>
 
           <div class="row">
             <div class="small-6 columns">
-              <%= f.radio_button :subscription, 'annual' %>
               <%= f.label :subscription, 'Annual - $270/year' %>
             </div>
             <div class="small-6 columns">
-              <%= f.radio_button :subscription, 'monthly' %>
               <%= f.label :subscription, 'Monthly - $25/month' %>
             </div>
           </div>
 
           <div class="row">
-            <div class="small-12 columns">
-              <span id="monthly_subscription">
-                <script name='checkoutScript'
-                        src='https://checkout.stripe.com/checkout.js' class='stripe-button'
-                        data-key='pk_test_XWkdckSXPZ46Kk835EWRJXdb'
-                        data-amount='2500'
-                        data-name='CertoTrack'
-                        data-description='monthly'
-                        data-image='/assets/crystalLake_scaled.jpg'
-                        data-locale='auto'
-                        data-allow-remember-me="false"
-                        data-label='Register'>
-                </script>
-                </span>
-                <span id="annual_subscription">
+            <div class="small-6 columns">
+                <span onclick="annualSubscriptionSelected()">
                     <script name='checkoutScript'
                             src='https://checkout.stripe.com/checkout.js' class='stripe-button'
                             data-key='pk_test_XWkdckSXPZ46Kk835EWRJXdb'
@@ -81,12 +73,28 @@
                             data-image='/assets/crystalLake_scaled.jpg'
                             data-locale='auto'
                             data-allow-remember-me="false"
-                            data-label='Register'>
+                            data-label='Purchase Annual Subscription'>
+                    </script>
+                </span>
+            </div>
+            <div class="small-6 columns">
+               <span onclick="monthlySubscriptionSelected()">
+                    <script name='checkoutScript'
+                            src='https://checkout.stripe.com/checkout.js' class='stripe-button'
+                            data-key='pk_test_XWkdckSXPZ46Kk835EWRJXdb'
+                            data-amount='2500'
+                            data-name='CertoTrack'
+                            data-description='monthly'
+                            data-image='/assets/crystalLake_scaled.jpg'
+                            data-locale='auto'
+                            data-allow-remember-me="false"
+                            data-label='Purchase Monthly Subscription'>
                     </script>
                 </span>
             </div>
           </div>
 
+          <%= f.hidden_field :subscription %>
         </fieldset>
 
     <% end %>
@@ -94,21 +102,11 @@
 </div>
 
 <script type='text/javascript'>
-    $(function () {
-        $('#annual_subscription').show();
-        $('#monthly_subscription').hide();
-    });
-
-    var subscriptionChanged = function (e) {
-        if (e.target.value == '<%= Subscription::MONTHLY.text %>') {
-            $('#monthly_subscription').show();
-            $('#annual_subscription').hide();
-        } else {
-            $('#annual_subscription').show();
-            $('#monthly_subscription').hide();
-        }
+    var annualSubscriptionSelected = function () {
+        $('#registration_subscription').val('annual');
+    };
+    var monthlySubscriptionSelected = function () {
+        $('#registration_subscription').val('monthly');
     };
 
-    $('#registration_subscription_annual').change(subscriptionChanged);
-    $('#registration_subscription_monthly').change(subscriptionChanged);
 </script>

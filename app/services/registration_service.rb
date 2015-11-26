@@ -84,6 +84,8 @@ class RegistrationService
         last_name: params['last_name'],
         email: params['payment_email'],
         customer_name: params['customer_name'],
+        password: params['password'],
+        password_confirm: params['password_confirm'],
     }
   end
 

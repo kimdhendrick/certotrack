@@ -29,6 +29,7 @@ class RegistrationsController < ApplicationController
             :last_name,
             :customer_name,
             :password,
+            :password_confirm,
             :subscription,
         ]
     ).merge(

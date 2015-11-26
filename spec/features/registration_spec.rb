@@ -17,10 +17,10 @@ describe 'Registration', js: true, slow: true do
 
     fill_in 'First name', with: 'Susie'
     fill_in 'Last name', with: 'Newbie'
-    fill_in 'Password', with: 'Password123!'
+    fill_in 'Enter Password', with: 'Password123!'
+    fill_in 'Re-enter Password', with: 'Password123!'
     fill_in 'Customer name', with: 'New Customer'
-    choose 'registration_subscription_annual'
 
-    click_on 'Register'
+    click_on 'Purchase Monthly Subscription'
   end
 end

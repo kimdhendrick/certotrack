@@ -9,6 +9,7 @@ describe RegistrationService do
           'last_name' => 'Smith',
           'customer_name' => 'New Customer',
           'password' => 'Password123!',
+          'password_confirm' => 'Password123!',
           'subscription' => 'monthly',
           'payment_token' => 'tok_123',
           'payment_email' => 'sally@gmail.com',

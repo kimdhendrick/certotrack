@@ -13,5 +13,15 @@ describe Registration do
       registration.should_not be_valid
       registration.errors[:subscription].should == ['invalid value']
     end
+
+    it 'should validate the passwords match' do
+      registration = Registration.new(password: 'Password123!', password_confirm: 'something else!')
+
+      registration.should_not be_valid
+      registration.errors[:password].should == ['does not match Confirm Password']
+
+      registration = Registration.new(password: 'Password123!', password_confirm: 'Password123!')
+      registration.errors[:password].should == []
+    end
   end
 end
