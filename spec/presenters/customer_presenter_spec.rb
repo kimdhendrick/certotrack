@@ -17,7 +17,9 @@ describe CustomerPresenter do
       zip: '80222',
       equipment_access: true,
       certification_access: true,
-      vehicle_access: true
+      vehicle_access: true,
+      subscription: 'annual',
+      payment_processor_customer_id: 'cus_123_abc'
     )
   end
 
@@ -83,6 +85,14 @@ describe CustomerPresenter do
 
   it 'should respond to vehicle_access' do
     CustomerPresenter.new(customer).vehicle_access.should == 'Yes'
+  end
+
+  it 'should respond to subscription' do
+    CustomerPresenter.new(customer).subscription.should == 'annual'
+  end
+
+  it 'should respond to payment_processor_customer_id' do
+    CustomerPresenter.new(customer).payment_processor_customer_id.should == 'cus_123_abc'
   end
 
   it 'should respond to created_at' do

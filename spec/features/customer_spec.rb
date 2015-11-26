@@ -87,7 +87,9 @@ describe 'Customers', slow: true do
           zip: '80222',
           equipment_access: true,
           certification_access: true,
-          vehicle_access: true
+          vehicle_access: true,
+          subscription: 'annual',
+          payment_processor_customer_id: 'cus_123_abc'
         )
       end
 
@@ -117,6 +119,9 @@ describe 'Customers', slow: true do
         page.should have_content 'Denver'
         page.should have_content 'Golden'
         page.should have_content 'Highlands Ranch'
+
+        page.should have_content 'annual'
+        page.should have_content 'cus_123_abc'
 
         page.should have_content "Customer's Users"
         within 'table thead tr' do

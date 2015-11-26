@@ -14,6 +14,8 @@ class CustomerPresenter
            :city,
            :state,
            :zip,
+           :subscription,
+           :payment_processor_customer_id,
            to: :model
 
   def initialize(model, template = nil)
