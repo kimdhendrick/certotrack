@@ -66,7 +66,7 @@
                 <span onclick="annualSubscriptionSelected()">
                     <script name='checkoutScript'
                             src='https://checkout.stripe.com/checkout.js' class='stripe-button'
-                            data-key='pk_test_XWkdckSXPZ46Kk835EWRJXdb'
+                            data-key='<%=Rails.configuration.stripe[:publishable_key]%>'
                             data-amount='27000'
                             data-name='CertoTrack'
                             data-description='annual'
@@ -81,7 +81,7 @@
                <span onclick="monthlySubscriptionSelected()">
                     <script name='checkoutScript'
                             src='https://checkout.stripe.com/checkout.js' class='stripe-button'
-                            data-key='pk_test_XWkdckSXPZ46Kk835EWRJXdb'
+                            data-key='<%=Rails.configuration.stripe[:publishable_key]%>'
                             data-amount='2500'
                             data-name='CertoTrack'
                             data-description='monthly'
