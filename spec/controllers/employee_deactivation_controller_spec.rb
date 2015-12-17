@@ -11,19 +11,19 @@ describe EmployeeDeactivationController do
 
       it 'calls EmployeesService' do
         employee = create(:employee, customer: customer)
-        fake_employee_service = controller.load_employee_deactivation_service(Faker.new(true))
+        fake_employee_deactivation_service = controller.load_employee_deactivation_service(Faker.new(true))
 
-        delete :deactivate, {:id => employee.to_param}, {}
+        get :deactivate, {:id => employee.to_param}, {}
 
-        fake_employee_service.received_message.should == :deactivate_employee
-        fake_employee_service.received_params[0].should == employee
+        fake_employee_deactivation_service.received_message.should == :deactivate_employee
+        fake_employee_deactivation_service.received_params[0].should == employee
       end
 
       it 'redirects to the employee list' do
         employee = create(:employee, customer: customer, last_name: 'last', first_name: 'first')
         controller.load_employee_deactivation_service(Faker.new(true))
 
-        delete :deactivate, {:id => employee.to_param}, {}
+        get :deactivate, {:id => employee.to_param}, {}
 
         response.should redirect_to(employees_url)
         flash[:success].should == 'Employee last, first deactivated'
@@ -37,9 +37,13 @@ describe EmployeeDeactivationController do
 
       it 'calls EmployeesService' do
         employee = create(:employee, customer: customer)
-        controller.load_employee_deactivation_service(Faker.new(true))
+        fake_employee_deactivation_service = Faker.new(true)
+        controller.load_employee_deactivation_service(fake_employee_deactivation_service)
 
-        delete :deactivate, {:id => employee.to_param}, {}
+        get :deactivate, {:id => employee.to_param}, {}
+
+        fake_employee_deactivation_service.received_message.should == :deactivate_employee
+        fake_employee_deactivation_service.received_params[0].should == employee
       end
     end
 
@@ -49,12 +53,12 @@ describe EmployeeDeactivationController do
       end
 
       it 'does not deactivate' do
-        employee = build(:employee)
-        fake_employee_service = controller.load_employee_deactivation_service(Faker.new([employee]))
+        employee = create(:employee, customer: customer)
+        fake_employee_deactivation_service = controller.load_employee_deactivation_service(Faker.new([employee]))
 
-        get :deactivated_employees
+        get :deactivate, {:id => employee.to_param}, {}
 
-        fake_employee_service.received_message.should be_nil
+        fake_employee_deactivation_service.received_message.should be_nil
       end
     end
   end
@@ -123,13 +127,13 @@ describe EmployeeDeactivationController do
     it 'calls get_deactivated_employees with current_user and params' do
       my_user = stub_certification_user(customer)
       sign_in my_user
-      fake_employee_service = controller.load_employee_deactivation_service(Faker.new([]))
+      fake_employee_deactivation_service = controller.load_employee_deactivation_service(Faker.new([]))
       params = {}
 
       get :deactivated_employees, params
 
-      fake_employee_service.received_messages.should == [:get_deactivated_employees]
-      fake_employee_service.received_params[0].should == my_user
+      fake_employee_deactivation_service.received_messages.should == [:get_deactivated_employees]
+      fake_employee_deactivation_service.received_params[0].should == my_user
     end
 
     context 'when certification user' do
