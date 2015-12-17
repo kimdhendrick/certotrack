@@ -191,4 +191,64 @@ describe EmployeeDeactivationController do
       end
     end
   end
+
+  describe 'GET reactivate' do
+    context 'when certification user' do
+      before do
+        sign_in stub_certification_user(customer)
+      end
+
+      it 'calls EmployeeReactivationService' do
+        employee = create(:employee, customer: customer)
+        fake_employee_reactivation_service = controller.load_employee_reactivation_service(Faker.new(true))
+
+        post :reactivate, {:id => employee.to_param}, {}
+
+        fake_employee_reactivation_service.received_message.should == :reactivate_employee
+        fake_employee_reactivation_service.received_params[0].should == employee
+      end
+
+      it 'redirects to the employee show page' do
+        employee = create(:employee, customer: customer, last_name: 'last', first_name: 'first')
+        controller.load_employee_reactivation_service(Faker.new(true))
+
+        post :reactivate, {:id => employee.to_param}, {}
+
+        response.should redirect_to(employee)
+        flash[:success].should == 'Employee last, first reactivated'
+      end
+    end
+
+    context 'when admin user' do
+      before do
+        sign_in stub_admin(customer)
+      end
+
+      it 'calls EmployeeReactivationService' do
+        employee = create(:employee, customer: customer)
+        fake_employee_reactivation_service = Faker.new(true)
+        controller.load_employee_reactivation_service(fake_employee_reactivation_service)
+
+        post :reactivate, {:id => employee.to_param}, {}
+
+        fake_employee_reactivation_service.received_message.should == :reactivate_employee
+        fake_employee_reactivation_service.received_params[0].should == employee
+      end
+    end
+
+    context 'when guest user' do
+      before do
+        sign_in stub_guest_user
+      end
+
+      it 'does not reactivate' do
+        employee = create(:employee, customer: customer)
+        fake_employee_reactivation_service = controller.load_employee_reactivation_service(Faker.new([employee]))
+
+        post :reactivate, {:id => employee.to_param}, {}
+
+        fake_employee_reactivation_service.received_message.should be_nil
+      end
+    end
+  end
 end

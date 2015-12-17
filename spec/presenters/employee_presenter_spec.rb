@@ -101,4 +101,12 @@ describe EmployeePresenter do
       subject.new_certification_link.should =~ /<a.*>New Employee Certification<\/a>/
     end
   end
+
+  describe 'reactivate_link' do
+    it 'should create a link to the reactivate page' do
+      employee = create(:employee)
+      subject = EmployeePresenter.new(employee, view)
+      subject.reactivate_link.should =~ /<a.*>Reactivate<\/a>/
+    end
+  end
 end

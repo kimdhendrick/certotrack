@@ -39,6 +39,7 @@ Certotrack::Application.routes.draw do
   get '/deactivate_confirm/:id', to: 'employee_deactivation#deactivate_confirm', as: 'deactivate_confirm'
   get '/deactivate/:id', to: 'employee_deactivation#deactivate', as: 'deactivate'
   get 'deactivated_employees', action: 'deactivated_employees', controller: 'employee_deactivation'
+  get '/reactivate/:id', to: 'employee_deactivation#reactivate', as: 'reactivate'
 
   resources :batch_certifications, only: [:create]
   resources :certifications do

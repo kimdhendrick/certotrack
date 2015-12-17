@@ -3,6 +3,7 @@ class EmployeeDeactivationController < ModelController
 
   before_filter :load_equipment_service,
                 :load_employee_deactivation_service,
+                :load_employee_reactivation_service,
                 :load_certification_service
 
   before_action :_set_employee, only: [:deactivate_confirm, :deactivate]
@@ -18,6 +19,13 @@ class EmployeeDeactivationController < ModelController
     @employee_deactivation_service.deactivate_employee(@employee)
     flash[:success] = "Employee #{EmployeePresenter.new(@employee).name} deactivated"
     redirect_to employees_url
+  end
+
+  def reactivate
+    @employee = _get_model(Employee, unscoped: true)
+    @employee_reactivation_service.reactivate_employee(@employee)
+    flash[:success] = "Employee #{EmployeePresenter.new(@employee).name} reactivated"
+    redirect_to @employee
   end
 
   def deactivated_employees
@@ -37,6 +45,10 @@ class EmployeeDeactivationController < ModelController
 
   def load_employee_deactivation_service(service = EmployeeDeactivationService.new)
     @employee_deactivation_service ||= service
+  end
+
+  def load_employee_reactivation_service(service = EmployeeReactivationService.new)
+    @employee_reactivation_service ||= service
   end
 
   def load_equipment_service(service = EquipmentService.new)

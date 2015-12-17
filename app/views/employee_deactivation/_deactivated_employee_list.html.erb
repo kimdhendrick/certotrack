@@ -6,6 +6,7 @@
     <th>Last Name</th>
     <th>Location</th>
     <th>Deactivation Date</th>
+    <th>Reactivate</th>
   </tr>
   </thead>
   <tbody>
@@ -16,6 +17,7 @@
       <td><%= employee.last_name %></td></td>
       <td><%= employee.location_name %></td></td>
       <td><%= employee.deactivation_date %></td></td>
+      <td><%= presenter_for(employee.model).reactivate_link %></td></td>
     </tr>
   <% end %>
   </tbody>

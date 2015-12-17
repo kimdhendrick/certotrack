@@ -56,6 +56,15 @@ class EmployeePresenter
                       }
   end
 
+  def reactivate_link
+    @template.link_to 'Reactivate',
+                      @template.reactivate_path(model),
+                      {
+                        data: {confirm: 'Reactivate Employee will restore the employee. All previous certifications will be reactivated. Previously assigned equipment will not be modified. Are you sure?'},
+                        class: "button tiny radius"
+                      }
+  end
+
   def new_certification_link
     @template.link_to 'New Employee Certification',
                       @template.new_certification_path(employee_id: model.id, source: :employee),

@@ -53,8 +53,8 @@ module ControllerHelper
     params.slice('sort', 'direction')
   end
 
-  def _get_model(model_class, param_name = :id)
-    model_pending_authorization = model_class.find(params[param_name])
+  def _get_model(model_class, param_name = :id, unscoped: false)
+    model_pending_authorization = unscoped ? model_class.unscoped.find(params[param_name]) : model_class.find(params[param_name])
     resource = model_class.name.underscore.to_sym
 
     if can? :manage, resource
