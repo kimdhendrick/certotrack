@@ -1,0 +1,11 @@
+<h1><%= @report_title %></h1>
+
+<ul class="inline-list">
+  <li>Total: <%= @user_count %></li>
+</ul>
+
+<%= link_to 'Create New User', new_customer_user_path, class: "button tiny radius" %>
+
+<%= render 'users_for_customer_list' %>
+
+<%= will_paginate @users, renderer: FoundationPagination::Rails %>

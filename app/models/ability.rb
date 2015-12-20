@@ -11,6 +11,7 @@ class Ability
     _setup_abilities_for([Vehicle, ServiceType, Service]) if _vehicle_user?
     _setup_abilities_for([Location]) if _location_user?
     _setup_abilities_for([Employee]) if _employee_user?
+    _setup_abilities_for([User]) if _location_user?
   end
 
   private

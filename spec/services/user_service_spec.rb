@@ -2,16 +2,26 @@ require 'spec_helper'
 
 describe UserService do
   describe '#get_all_users' do
-    let(:user1) { create(:user) }
-    let!(:user2) { create(:user) }
+    let(:my_customer) { create(:customer) }
+    let(:other_customer) { create(:customer) }
+    let(:my_user) { create(:user, customer: my_customer) }
+    let!(:other_user) { create(:user, customer: other_customer) }
 
     context 'when admin user' do
       it 'should return all users' do
         admin_user = create(:user, admin: true)
 
-        users = subject.get_all_users
+        users = subject.get_all_users(admin_user)
 
-        users.should =~ [user1, user2, admin_user]
+        users.should =~ [my_user, other_user, admin_user]
+      end
+    end
+
+    context 'when regular user' do
+      it 'should return all users for current customer' do
+        users = subject.get_all_users(my_user)
+
+        users.should == [my_user]
       end
     end
   end
@@ -22,14 +32,14 @@ describe UserService do
         customer = create(:customer)
         admin_user = create(:user, admin: true)
         attributes =
-          {
-            'first_name' => 'Adam',
-            'last_name' => 'Ant',
-            'email' => 'adam@example.com',
-            'username' => 'adam',
-            'password' => 'Password123',
-            'customer_id' => customer.id
-          }
+            {
+                'first_name' => 'Adam',
+                'last_name' => 'Ant',
+                'email' => 'adam@example.com',
+                'username' => 'adam',
+                'password' => 'Password123',
+                'customer_id' => customer.id
+            }
 
         user = UserService.new.create_user(attributes)
 
@@ -40,21 +50,21 @@ describe UserService do
 
       it 'should create user with correct roles' do
         customer = create(
-          :customer,
-          equipment_access: true,
-          certification_access: true,
-          vehicle_access: false
+            :customer,
+            equipment_access: true,
+            certification_access: true,
+            vehicle_access: false
         )
         admin_user = create(:user, admin: true)
         attributes =
-          {
-            'first_name' => 'Adam',
-            'last_name' => 'Ant',
-            'email' => 'adam@example.com',
-            'username' => 'adam',
-            'password' => 'Password123',
-            'customer_id' => customer.id
-          }
+            {
+                'first_name' => 'Adam',
+                'last_name' => 'Ant',
+                'email' => 'adam@example.com',
+                'username' => 'adam',
+                'password' => 'Password123',
+                'customer_id' => customer.id
+            }
 
         user = UserService.new.create_user(attributes)
 
@@ -67,10 +77,10 @@ describe UserService do
         customer = create(:customer)
         admin_user = create(:user, admin: true)
         attributes =
-          {
-            'first_name' => 'Adam',
-            'customer_id' => customer.id
-          }
+            {
+                'first_name' => 'Adam',
+                'customer_id' => customer.id
+            }
 
         user = UserService.new.create_user(attributes)
 
@@ -89,10 +99,10 @@ describe UserService do
         my_customer = create(:customer)
         user = create(:user, customer: my_customer)
         attributes =
-          {
-            'id' => user.id,
-            'first_name' => 'Albert'
-          }
+            {
+                'id' => user.id,
+                'first_name' => 'Albert'
+            }
 
         success = UserService.new.update_user(user, attributes)
         success.should be_true
@@ -105,11 +115,11 @@ describe UserService do
         my_customer = create(:customer)
         user = create(:user, customer: my_customer)
         attributes =
-          {
-            'id' => user.id,
-            'first_name' => 'Albert',
-            'password' => ''
-          }
+            {
+                'id' => user.id,
+                'first_name' => 'Albert',
+                'password' => ''
+            }
 
         success = UserService.new.update_user(user, attributes)
         success.should be_true
@@ -130,10 +140,10 @@ describe UserService do
         user = create(:user)
 
         another_customer = create(
-          :customer,
-          equipment_access: true,
-          certification_access: true,
-          vehicle_access: false
+            :customer,
+            equipment_access: true,
+            certification_access: true,
+            vehicle_access: false
         )
 
         UserService.new.update_user(user, {customer_id: another_customer.id})
@@ -147,12 +157,18 @@ describe UserService do
   end
 
   describe '#delete_user' do
+    let!(:current_user) { create(:user) }
+
     it 'destroys the requested user' do
       user = create(:user)
 
       expect {
-        UserService.new.delete_user(user)
+        UserService.new.delete_user(current_user, user)
       }.to change(User, :count).by(-1)
+    end
+
+    it 'does not allow user to destroy himself or herself' do
+      UserService.new.delete_user(current_user, current_user).should == false
     end
   end
 end

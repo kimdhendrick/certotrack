@@ -1,0 +1,7 @@
+<h1>Edit User</h1>
+
+<ul class="inline-list">
+  <li><%= link_to 'All Users', customer_users_path %></li>
+</ul>
+
+<%= render 'form_for_customer', user_action: 'Update', form_path: customer_user_path(@user), delete_link: UserPresenter.new(@user, self).delete_link %>

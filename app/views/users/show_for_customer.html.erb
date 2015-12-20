@@ -1,0 +1,54 @@
+<% presenter_for(@user) do |user| %>
+  <h1>Show User</h1>
+
+  <ul class="inline-list">
+    <li><%= link_to 'All Users', customer_users_path %></li>
+  </ul>
+
+  <fieldset>
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Name</span>
+      </div>
+      <div class="small-9 columns">
+        <%= user.name %>
+      </div>
+    </div>
+
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Username</span>
+      </div>
+      <div class="small-9 columns">
+        <%= user.username %>
+      </div>
+    </div>
+
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Email Address</span>
+      </div>
+      <div class="small-9 columns">
+        <%= user.email %>
+      </div>
+    </div>
+
+    <div class="row field">
+      <div class="small-3 columns">
+        <span class="field-name">Expiration Notification Interval</span>
+      </div>
+      <div class="small-9 columns">
+        <%= user.expiration_notification_interval %>
+      </div>
+    </div>
+
+    <div class="row actions">
+      <div class="small-6 columns">
+        <span class="right">
+          <%= user.edit_link %>
+          <%= user.delete_link %>
+        </span>
+      </div>
+    </div>
+  </fieldset>
+<% end %>

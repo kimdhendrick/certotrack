@@ -1,0 +1,18 @@
+<table class="sortable">
+  <thead>
+  <tr>
+    <th><%= sortable 'username' %></th>
+    <th><%= sortable 'first_name' %></th>
+    <th><%= sortable 'last_name' %></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @users.each do |user| %>
+    <tr>
+      <td><%= link_to user.username, customer_user_path(user.model) %></td>
+      <td><%= user.first_name %></td>
+      <td><%= user.last_name %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

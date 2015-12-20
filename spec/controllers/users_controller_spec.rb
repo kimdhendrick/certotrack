@@ -2,6 +2,20 @@ require 'spec_helper'
 
 describe UsersController do
   describe 'GET #index' do
+    context 'when regular user' do
+      let(:user) { stub_equipment_user }
+
+      before do
+        sign_in user
+      end
+
+      it 'renders users_for_customer page' do
+        get :index, {}
+
+        response.should render_template 'users/users_for_customer'
+      end
+    end
+
     context 'when admin user' do
       let(:user) { build(:user) }
       let(:fake_user_service_that_returns_list) { Faker.new([user]) }
@@ -12,10 +26,16 @@ describe UsersController do
         end
         big_list_of_users
       end
-      let(:admin_user) { stub_admin }
+      let(:admin_user) { stub_admin(create(:customer)) }
 
       before do
         sign_in admin_user
+      end
+
+      it 'renders users/index page' do
+        get :index, {}
+
+        response.should render_template 'users/index'
       end
 
       it 'calls get_all_users with current_user and params' do
@@ -86,14 +106,34 @@ describe UsersController do
   end
 
   describe 'GET #show' do
+    context 'when regular user' do
+      let(:user) { stub_equipment_user }
+
+      before do
+        sign_in user
+      end
+
+      it 'renders show_for_customer page' do
+        get :show, {:id => user.to_param}, {}
+
+        response.should render_template 'users/show_for_customer'
+      end
+    end
+
     context 'when admin user' do
+      let(:user) { create(:user) }
+
       before do
         sign_in stub_admin
       end
 
-      it 'assigns user' do
-        user = create(:user)
+      it 'renders show' do
+        get :show, {:id => user.to_param}, {}
 
+        response.should render_template 'users/show'
+      end
+
+      it 'assigns user' do
         get :show, {:id => user.to_param}, {}
 
         assigns(:user).should eq(user)
@@ -116,9 +156,36 @@ describe UsersController do
   end
 
   describe 'GET #new' do
+    context 'when regular user' do
+      let(:user) { stub_equipment_user }
+
+      before do
+        sign_in user
+      end
+
+      it 'assigns a new user' do
+        get :new
+
+        assigns(:user).should be_a_new(User)
+        assigns(:user).customer.should == user.customer
+      end
+
+      it 'renders new_for_customer' do
+        get :new
+
+        response.should render_template 'new_for_customer'
+      end
+    end
+
     context 'when admin user' do
       before do
         sign_in stub_admin
+      end
+
+      it 'renders new' do
+        get :new, {customer_id: 1}, {}
+
+        response.should render_template 'new'
       end
 
       it 'assigns a new user' do
@@ -220,14 +287,34 @@ describe UsersController do
   end
 
   describe 'GET #edit' do
+    context 'when regular user' do
+      let(:user) { stub_equipment_user }
+
+      before do
+        sign_in user
+      end
+
+      it 'renders show_for_customer page' do
+        get :edit, {:id => user.to_param}, {}
+
+        response.should render_template 'users/edit_for_customer'
+      end
+    end
+
     context 'when an admin user' do
+      let(:user) { create(:user) }
+
       before do
         sign_in stub_admin
       end
 
-      it 'assigns the user' do
-        user = create(:user)
+      it 'renders edit' do
+        get :edit, {:id => user.to_param}, {}
 
+        response.should render_template 'users/edit'
+      end
+
+      it 'assigns the user' do
         get :edit, {:id => user.to_param}, {}
 
         assigns(:user).should eq(user)
@@ -268,8 +355,8 @@ describe UsersController do
       describe 'with valid params' do
         let(:user_attributes) do
           {
-            first_name: 'Gary',
-            last_name: 'Snail'
+              first_name: 'Gary',
+              last_name: 'Snail'
           }
         end
 
@@ -342,6 +429,29 @@ describe UsersController do
   end
 
   describe 'DELETE #destroy' do
+    context 'when regular user' do
+      let(:user) { stub_equipment_user }
+
+      before do
+        sign_in user
+      end
+
+      context 'when destroy call fails' do
+        before do
+          user_service = double('user_service')
+          user_service.stub(:delete_user).and_return(false)
+          controller.load_user_service(user_service)
+
+          delete :destroy, {id: user.to_param}, {}
+          response.should render_template 'show_for_customer'
+        end
+
+        it 'should display message' do
+          flash[:error].should == "Unable to delete User 'Last, First'."
+        end
+      end
+    end
+
     context 'when admin user' do
       before do
         sign_in stub_admin
@@ -355,7 +465,7 @@ describe UsersController do
         delete :destroy, {:id => user.to_param}, {}
 
         fake_user_service.received_message.should == :delete_user
-        fake_user_service.received_params[0].should == user
+        fake_user_service.received_params[1].should == user
       end
 
       context 'when destroy call fails' do
@@ -370,6 +480,10 @@ describe UsersController do
 
         it 'should render show page' do
           response.should render_template('show')
+        end
+
+        it 'should display message' do
+          flash[:error].should == "Unable to delete User 'Last, First'."
         end
       end
 

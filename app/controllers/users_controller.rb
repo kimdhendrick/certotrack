@@ -11,25 +11,35 @@ class UsersController < ModelController
     authorize! :read, :user
 
     @report_title = 'All Users'
-    user_collection = @user_service.get_all_users
+    user_collection = @user_service.get_all_users(current_user)
     report_type = 'users'
 
     respond_to do |format|
-      format.html { _render_collection_as_html(user_collection) }
+      format.html do
+        _render_collection_as_html(user_collection)
+        render (current_user.admin? ? :index : :users_for_customer)
+      end
       format.csv { _render_collection_as_csv(report_type, user_collection) }
       format.xls { _render_collection_as_xls(@report_title, report_type, user_collection) }
       format.pdf { _render_collection_as_pdf(@report_title, report_type, user_collection) }
     end
+
   end
 
   def show
     authorize! :read, :user
+    render (current_user.admin? ? :show : :show_for_customer)
   end
 
   def new
     authorize! :create, :user
 
-    @user = User.new(customer: Customer.find(params[:customer_id]))
+    customer = current_user.admin? ?
+        Customer.find(params[:customer_id]) :
+        current_user.customer
+    @user = User.new(customer: customer)
+
+    render (current_user.admin? ? :new : :new_for_customer)
   end
 
   def create
@@ -47,6 +57,7 @@ class UsersController < ModelController
 
   def edit
     _set_customers
+    render (current_user.admin? ? :edit : :edit_for_customer)
   end
 
   def update
@@ -62,13 +73,14 @@ class UsersController < ModelController
   end
 
   def destroy
-    authorize! :manage, :user
+    authorize! :manage, @user
     user_name = "#{@user.last_name}, #{@user.first_name}"
-    if @user_service.delete_user(@user)
+    if @user_service.delete_user(current_user, @user)
       flash[:success] = "User '#{user_name}' was successfully deleted."
       redirect_to customer_users_path
     else
-      render :show
+      flash[:error] = "Unable to delete User '#{user_name}'."
+      render (current_user.admin? ? :show : :show_for_customer)
     end
   end
 
