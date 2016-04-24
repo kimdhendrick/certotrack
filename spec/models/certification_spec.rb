@@ -19,7 +19,7 @@ describe Certification do
     it 'should validate the uniqueness of certification_type_id' do
       certification = create(:certification)
       certification.should validate_uniqueness_of(:certification_type_id).
-                             scoped_to(:employee_id).
+                             scoped_to(:employee_id, :active).
                              with_message(/already assigned to this Employee. Please update existing Certification/)
 
     end
