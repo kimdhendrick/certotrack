@@ -7,18 +7,106 @@ module Export
     let(:collection_wrapper) { double(:collection_wrapper, collection: []) }
 
     describe '#headers' do
-      it 'should return the right headers' do
-        result = described_class.new(equipment_collection, collection_wrapper).headers
+      context 'when equipment' do
+        let(:collection) { [equipment] }
 
-        expect(result).to eq Export::EquipmentHeaderColumnMapping::HEADERS
+        it 'should return the right headers' do
+          result = described_class.new(collection, collection_wrapper).headers
+
+          expect(result).to eq Export::EquipmentHeaderColumnMapping::HEADERS
+        end
+      end
+
+      context 'when user' do
+        let(:collection) { [User.new] }
+
+        it 'should return the right headers' do
+          result = described_class.new(collection, collection_wrapper).headers
+
+          expect(result).to eq Export::UserHeaderColumnMapping::HEADERS
+        end
+      end
+
+      context 'when certification' do
+        let(:collection) { [Certification.new] }
+
+        it 'should return the right headers' do
+          result = described_class.new(collection, collection_wrapper).headers
+
+          expect(result).to eq Export::CertificationHeaderColumnMapping::HEADERS
+        end
+      end
+
+      context 'when customer' do
+        let(:collection) { [Customer.new] }
+
+        it 'should return the right headers' do
+          result = described_class.new(collection, collection_wrapper).headers
+
+          expect(result).to eq Export::CustomerHeaderColumnMapping::HEADERS
+        end
+      end
+
+      context 'when employee' do
+        let(:collection) { [Employee.new] }
+
+        it 'should return the right headers' do
+          result = described_class.new(collection, collection_wrapper).headers
+
+          expect(result).to eq Export::EmployeeHeaderColumnMapping::HEADERS
+        end
       end
     end
 
     describe '#column_names' do
-      it 'should return the right column_names' do
-        result = described_class.new(equipment_collection, collection_wrapper).column_names
+      context 'when equipment' do
+        let(:collection) { [equipment] }
 
-        expect(result).to eq Export::EquipmentHeaderColumnMapping::COLUMNS
+        it 'should return the right column_names' do
+          result = described_class.new(collection, collection_wrapper).column_names
+
+          expect(result).to eq Export::EquipmentHeaderColumnMapping::COLUMNS
+        end
+      end
+
+      context 'when user' do
+        let(:collection) { [User.new] }
+
+        it 'should return the right column_names' do
+          result = described_class.new(collection, collection_wrapper).column_names
+
+          expect(result).to eq Export::UserHeaderColumnMapping::COLUMNS
+        end
+      end
+
+      context 'when certification' do
+        let(:collection) { [Certification.new] }
+
+        it 'should return the right column_names' do
+          result = described_class.new(collection, collection_wrapper).column_names
+
+          expect(result).to eq Export::CertificationHeaderColumnMapping::COLUMNS
+        end
+      end
+
+      context 'when customer' do
+        let(:collection) { [Customer.new] }
+
+        it 'should return the right column_names' do
+          result = described_class.new(collection, collection_wrapper).column_names
+
+          expect(result).to eq Export::CustomerHeaderColumnMapping::COLUMNS
+        end
+      end
+
+      context 'when employee' do
+        let(:collection) { [Employee.new] }
+
+        it 'should return the right column_names' do
+          result = described_class.new(collection, collection_wrapper).column_names
+
+          expect(result).to eq Export::EmployeeHeaderColumnMapping::COLUMNS
+        end
       end
     end
 
