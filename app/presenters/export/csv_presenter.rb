@@ -1,26 +1,25 @@
 module Export
   class CsvPresenter
-    include ListPresenterHelper
-    include PresenterHelper
-
-    attr_reader :collection
 
     def initialize(collection)
-      _set_model_class(collection)
-      @collection = collection_wrapped_in_presenters(collection)
+      @collection_exporter = CollectionPresenterFactory.new.instance(collection)
     end
 
     def present
       CSV.generate do |csv|
-        csv << _headers
+        csv << collection_exporter.headers
 
-        collection.each do |equipment|
-          values = _column_names.map do |column_name|
-            equipment.public_send(column_name)
+        collection_exporter.each do |model|
+          values = collection_exporter.column_names.map do |column_name|
+            model.public_send(column_name)
           end
           csv << values
         end
       end
     end
+
+    private
+
+    attr_reader :collection_exporter
   end
 end

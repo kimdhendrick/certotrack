@@ -1,0 +1,14 @@
+module Export
+  class EmptyCollectionExporter
+    def headers
+      ['No results found']
+    end
+
+    def column_names
+      []
+    end
+
+    def each(&block)
+    end
+  end
+end
