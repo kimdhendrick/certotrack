@@ -10,10 +10,9 @@ module Export
         csv << collection_exporter.headers
 
         collection_exporter.each do |model|
-          values = collection_exporter.column_names.map do |column_name|
+          csv << collection_exporter.column_names.map do |column_name|
             model.public_send(column_name)
           end
-          csv << values
         end
       end
     end

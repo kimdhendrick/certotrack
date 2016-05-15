@@ -1,5 +1,6 @@
 module Export
   class EmptyCollectionExporter
+
     def headers
       ['No results found']
     end
@@ -8,7 +9,7 @@ module Export
       []
     end
 
-    def each(&block)
+    def each(&_)
     end
   end
 end
