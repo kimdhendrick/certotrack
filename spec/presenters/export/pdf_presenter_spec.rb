@@ -56,7 +56,7 @@ module Export
           fake_list_presenter = Faker.new([])
           ListPresenter.stub(:new).and_return(fake_list_presenter)
 
-          PdfPresenter.new([], '', {sort: 'name', direction: 'asc'}).present
+          PdfPresenter.new([Equipment.new], '', {sort: 'name', direction: 'asc'}).present
 
           fake_list_presenter.received_message.should == :sort
           fake_list_presenter.received_params[0][:sort].should == 'name'

@@ -1,8 +1,9 @@
 module Export
   class CollectionExporter
-    def initialize(collection)
+
+    def initialize(collection, collection_wrapper)
       model_class = collection.first.class
-      @collection = collection.map { |model| "#{model_class}Presenter".constantize.new(model) }
+      @collection = collection_wrapper.collection
       @mapping = "Export::#{model_class}HeaderColumnMapping".constantize
     end
 
