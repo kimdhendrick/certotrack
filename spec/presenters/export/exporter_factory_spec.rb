@@ -21,7 +21,7 @@ module Export
 
           it 'should use CsvCollectionPresenter' do
             csv_collection_presenter = double(:csv_collection_presenter, collection: [])
-            allow(CsvCollectionPresenter).to receive(:new)
+            allow(CollectionPresenter).to receive(:new)
                                                .with(collection, {})
                                                .and_return(csv_collection_presenter)
 

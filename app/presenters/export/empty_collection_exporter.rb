@@ -11,5 +11,9 @@ module Export
 
     def each(&_)
     end
+
+    def collection
+      []
+    end
   end
 end

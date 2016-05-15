@@ -1,6 +1,8 @@
 module Export
   class CollectionExporter
 
+    attr_reader :collection
+
     def initialize(collection, collection_wrapper)
       model_class = collection.first.class
       @collection = collection_wrapper.collection
@@ -21,6 +23,6 @@ module Export
 
     private
 
-    attr_reader :mapping, :collection
+    attr_reader :mapping
   end
 end

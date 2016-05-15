@@ -1,18 +1,16 @@
 module Export
   class ExcelPresenter
-    include ListPresenterHelper
-    include PresenterHelper
-
-    attr_reader :collection, :title
-
     def initialize(collection, title)
-      _set_model_class(collection)
-      @collection = collection_wrapped_in_presenters(collection)
+      @exporter = ExporterFactory.new.instance(collection, :xls)
       @title = title
     end
 
     def present
-      collection.to_xls(headers: _headers, columns: _column_names, name: title)
+      exporter.collection.to_xls(headers: exporter.headers, columns: exporter.column_names, name: title)
     end
+
+    private
+
+    attr_reader :exporter, :title
   end
 end

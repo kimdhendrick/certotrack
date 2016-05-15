@@ -9,7 +9,8 @@ module Export
 
     def export_mapping(collection, options)
       {
-          :csv => -> { CsvCollectionPresenter.new(collection, options) },
+          :csv => -> { CollectionPresenter.new(collection, options) },
+          :xls => -> { CollectionPresenter.new(collection, options) },
           :pdf => -> { PdfCollectionPresenter.new(collection, options) },
       }
     end

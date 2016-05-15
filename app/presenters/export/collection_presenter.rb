@@ -1,5 +1,5 @@
 module Export
-  class CsvCollectionPresenter
+  class CollectionPresenter
     def initialize(model_collection, _)
       @model_collection = model_collection
     end
