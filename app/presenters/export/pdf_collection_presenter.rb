@@ -6,8 +6,7 @@ module Export
     end
 
     def collection
-      model_class = model_collection.first.class
-      "#{model_class}ListPresenter".constantize.new(model_collection).sort(params)
+      ExportModelMap.new(model_collection.first.class).list_presenter.new(model_collection).sort(params)
     end
 
     private

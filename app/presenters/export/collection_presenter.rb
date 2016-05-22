@@ -5,8 +5,9 @@ module Export
     end
 
     def collection
-      model_class = model_collection.first.class
-      model_collection.map { |model| "#{model_class}Presenter".constantize.new(model) }
+      model_collection.map do |model|
+        ExportModelMap.new(model_collection.first.class).presenter.new(model)
+      end
     end
 
     private
