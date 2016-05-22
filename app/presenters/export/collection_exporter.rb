@@ -1,28 +1,18 @@
 module Export
   class CollectionExporter
 
-    attr_reader :collection
+    attr_reader :collection, :headers, :column_names
 
     def initialize(collection, collection_wrapper)
-      model_class = collection.first.class
       @collection = collection_wrapper.collection
-      @mapping = "Export::#{model_class}HeaderColumnMapping".constantize
+
+      map = ExportModelMap.new(collection.first.class)
+      @headers = map.headers
+      @column_names = map.columns
     end
 
     def each(&block)
       collection.each { |model| block.call(model) }
     end
-
-    def headers
-      mapping::HEADERS
-    end
-
-    def column_names
-      mapping::COLUMNS
-    end
-
-    private
-
-    attr_reader :mapping
   end
 end
