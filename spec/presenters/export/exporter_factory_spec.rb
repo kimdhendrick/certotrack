@@ -34,6 +34,26 @@ module Export
           end
         end
 
+        context 'when xls' do
+          it 'should return a CollectionExporter' do
+            expect(described_class.new.instance(collection, :csv)).to be_a CollectionExporter
+          end
+
+          it 'should use CsvCollectionPresenter' do
+            xls_collection_presenter = double(:xls_collection_presenter, collection: [])
+            allow(CollectionPresenter).to receive(:new)
+                                               .with(collection, {})
+                                               .and_return(xls_collection_presenter)
+
+            collection_exporter = double(:collection_exporter)
+            allow(CollectionExporter).to receive(:new)
+                                           .with(collection, xls_collection_presenter)
+                                           .and_return(eq collection_exporter)
+
+            expect(described_class.new.instance(collection, :xls)).to eq collection_exporter
+          end
+        end
+
         context 'when pdf' do
           it 'should return a CollectionExporter' do
             expect(described_class.new.instance(collection, :pdf)).to be_a CollectionExporter
