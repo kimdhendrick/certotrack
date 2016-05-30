@@ -4,20 +4,20 @@ module Export
   describe PdfPresenter do
     describe '#present' do
       context 'any model' do
-        let(:certification_collection) { [create(:certification)] }
+        let(:collection) { [create(:equipment)] }
 
         it 'should instantiate Prawn Document' do
           fake_prawn_document = Faker.new
           Prawn::Document.should_receive(:new).with(page_layout: :landscape).and_return(fake_prawn_document)
 
-          PdfPresenter.new(certification_collection, '').present
+          PdfPresenter.new(collection, '').present
         end
 
         it 'should create a prawn table' do
           fake_prawn_document = Faker.new
           Prawn::Document.stub(:new).and_return(fake_prawn_document)
 
-          PdfPresenter.new(certification_collection, 'title').present
+          PdfPresenter.new(collection, 'title').present
 
           fake_prawn_document.received_messages[0].should == :text
           fake_prawn_document.received_messages[1].should == :table
@@ -28,7 +28,7 @@ module Export
           fake_prawn_document = Faker.new
           Prawn::Document.stub(:new).and_return(fake_prawn_document)
 
-          PdfPresenter.new(certification_collection, 'title').present
+          PdfPresenter.new(collection, 'title').present
 
           fake_prawn_document.received_messages[0].should == :text
           fake_prawn_document.all_received_params[0].should ==
@@ -42,7 +42,7 @@ module Export
           fake_prawn_document = Faker.new
           Prawn::Document.stub(:new).and_return(fake_prawn_document)
 
-          PdfPresenter.new(certification_collection, 'title').present
+          PdfPresenter.new(collection, 'title').present
 
           fake_prawn_document.received_messages[1].should == :table
           table_params = fake_prawn_document.all_received_params[1]
@@ -115,18 +115,6 @@ module Export
           table_data = table_header_and_data[1]
           table_data.should ==
             ['Meter', 'MySerialNum', 'N/A', 'Annually', '01/01/2000', 'Inspectable', '', 'Unassigned', 'username', "#{Date.current.strftime('%m/%d/%Y')}"]
-        end
-
-        it 'should sort the collection' do
-          equipment = create(:equipment)
-          fake_list_presenter = Faker.new(EquipmentListPresenter.new([equipment]).present)
-          EquipmentListPresenter.stub(:new).and_return(fake_list_presenter)
-
-          PdfPresenter.new([equipment], '', {sort: 'name', direction: 'asc'}).present
-
-          fake_list_presenter.received_message.should == :sort
-          fake_list_presenter.received_params[0][:sort].should == 'name'
-          fake_list_presenter.received_params[0][:direction].should == 'asc'
         end
       end
     end
