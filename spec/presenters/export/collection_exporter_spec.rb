@@ -3,13 +3,11 @@ require 'spec_helper'
 module Export
   describe CollectionExporter do
     let(:equipment) { Equipment.new }
-    let(:equipment_collection) { [equipment] }
+    let(:collection) { [equipment] }
     let(:collection_wrapper) { double(:collection_wrapper, collection: []) }
 
     describe '#headers' do
       context 'when equipment' do
-        let(:collection) { [equipment] }
-
         it 'should return the right headers' do
           result = described_class.new(collection, collection_wrapper).headers
 
@@ -60,8 +58,6 @@ module Export
 
     describe '#column_names' do
       context 'when equipment' do
-        let(:collection) { [equipment] }
-
         it 'should return the right column_names' do
           result = described_class.new(collection, collection_wrapper).column_names
 
@@ -117,11 +113,21 @@ module Export
 
         expect(collection_wrapper).to receive(:collection).and_return(wrapped_collection)
 
-        sut = described_class.new(equipment_collection, collection_wrapper)
+        sut = described_class.new([equipment], collection_wrapper)
 
         sut.each { success = true }
 
         expect(success).to eq true
+      end
+    end
+
+    describe '#collection' do
+      it 'should return the collection' do
+        allow(collection_wrapper).to receive(:collection).and_return(collection)
+
+        result = described_class.new(collection, collection_wrapper).collection
+
+        expect(result).to eq(collection)
       end
     end
   end

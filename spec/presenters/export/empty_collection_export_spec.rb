@@ -25,5 +25,11 @@ module Export
         end
       end
     end
+
+    describe '#collection' do
+      it 'should return empty collection' do
+        expect(described_class.new.collection).to eq([])
+      end
+    end
   end
 end

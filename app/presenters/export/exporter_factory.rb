@@ -7,6 +7,8 @@ module Export
       CollectionExporter.new(collection, export_mapping(collection, options)[format].call)
     end
 
+    private
+
     def export_mapping(collection, options)
       {
           :csv => -> { CollectionPresenter.new(collection, options) },
