@@ -257,19 +257,16 @@ describe 'Customers', slow: true do
         end
       end
 
-      it 'should export Deactivated employees list to CSV' do
+      it 'should export customers list to CSV' do
         visit dashboard_path
         click_link 'All Customers'
 
         click_on 'Export to CSV'
 
         page.response_headers['Content-Type'].should include 'text/csv'
-        header_row = 'Name,Account Number,Contact Person Name,Contact Email,Contact Phone Number,Address 1,Address 2,City,State,Zip,Active,Equipment Access,Certification Access,Vehicle Access,Created Date'
-        page.text.should ==
-          "#{header_row} Jefferson County,ABC123,Joe,joe@example.com,,,,,,,Yes,Yes,Yes,Yes,#{Date.current.strftime("%m/%d/%Y")} Adams County,AACC,Jane,jane@example.com,,,,,,,Yes,No,No,No,#{Date.current.strftime("%m/%d/%Y")} Douglas County,DDD,Donna,donna@example.com,,,,,,,Yes,Yes,Yes,No,#{Date.current.strftime("%m/%d/%Y")}"
       end
 
-      it 'should export Deactivated employees list to PDF' do
+      it 'should export customers list to PDF' do
         visit dashboard_path
         click_link 'All Customers'
 
@@ -278,7 +275,7 @@ describe 'Customers', slow: true do
         page.response_headers['Content-Type'].should include 'pdf'
       end
 
-      it 'should export Deactivated employees list to Excel' do
+      it 'should export customers list to Excel' do
         visit dashboard_path
         click_link 'All Customers'
 

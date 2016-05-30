@@ -486,6 +486,33 @@ describe 'Certification Reports', slow: true do
           page.should have_content '06/10/2008'
         end
       end
+
+      it 'should export to CSV' do
+        visit refresh_path
+        click_link 'Expired Certifications (1)'
+
+        click_on 'Export to CSV'
+
+        page.response_headers['Content-Type'].should include 'text/csv'
+      end
+
+      it 'should export to Excel' do
+        visit refresh_path
+        click_link 'Expired Certifications (1)'
+
+        click_on 'Export to Excel'
+
+        page.response_headers['Content-Type'].should include 'excel'
+      end
+
+      it 'should export to PDF' do
+        visit refresh_path
+        click_link 'Expired Certifications (1)'
+
+        click_on 'Export to PDF'
+
+        page.response_headers['Content-Type'].should include 'pdf'
+      end
     end
 
     context 'when an admin user' do
@@ -841,6 +868,33 @@ describe 'Certification Reports', slow: true do
           page.should have_content Date.tomorrow.strftime("%m/%d/%Y")
         end
       end
+
+      it 'should export to CSV' do
+        visit refresh_path
+        click_link 'Certifications Expiring Soon (1)'
+
+        click_on 'Export to CSV'
+
+        page.response_headers['Content-Type'].should include 'text/csv'
+      end
+
+      it 'should export to Excel' do
+        visit refresh_path
+        click_link 'Certifications Expiring Soon (1)'
+
+        click_on 'Export to Excel'
+
+        page.response_headers['Content-Type'].should include 'excel'
+      end
+
+      it 'should export to PDF' do
+        visit refresh_path
+        click_link 'Certifications Expiring Soon (1)'
+
+        click_on 'Export to PDF'
+
+        page.response_headers['Content-Type'].should include 'pdf'
+      end
     end
 
     context 'when an admin user' do
@@ -1189,6 +1243,33 @@ describe 'Certification Reports', slow: true do
           page.should have_content Date.tomorrow.strftime("%m/%d/%Y")
         end
       end
+
+      it 'should export to CSV' do
+        visit refresh_path
+        click_link 'Units Based Certifications (1)'
+
+        click_on 'Export to CSV'
+
+        page.response_headers['Content-Type'].should include 'text/csv'
+      end
+
+      it 'should export to Excel' do
+        visit refresh_path
+        click_link 'Units Based Certifications (1)'
+
+        click_on 'Export to Excel'
+
+        page.response_headers['Content-Type'].should include 'excel'
+      end
+
+      it 'should export to PDF' do
+        visit refresh_path
+        click_link 'Units Based Certifications (1)'
+
+        click_on 'Export to PDF'
+
+        page.response_headers['Content-Type'].should include 'pdf'
+      end
     end
   end
 
@@ -1276,6 +1357,33 @@ describe 'Certification Reports', slow: true do
           page.should have_content '01/01/2009'
           page.should have_content '01/01/2010'
         end
+      end
+
+      it 'should export to CSV' do
+        visit refresh_path
+        click_link 'Recertification Required Certifications (1)'
+
+        click_on 'Export to CSV'
+
+        page.response_headers['Content-Type'].should include 'text/csv'
+      end
+
+      it 'should export to Excel' do
+        visit refresh_path
+        click_link 'Recertification Required Certifications (1)'
+
+        click_on 'Export to Excel'
+
+        page.response_headers['Content-Type'].should include 'excel'
+      end
+
+      it 'should export to PDF' do
+        visit refresh_path
+        click_link 'Recertification Required Certifications (1)'
+
+        click_on 'Export to PDF'
+
+        page.response_headers['Content-Type'].should include 'pdf'
       end
     end
   end

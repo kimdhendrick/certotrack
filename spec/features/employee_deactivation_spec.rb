@@ -244,9 +244,6 @@ describe 'Employee Deactivation', slow: true do
         click_on 'Export to CSV'
 
         page.response_headers['Content-Type'].should include 'text/csv'
-        header_row = 'Employee Number,First Name,Last Name,Location,Created By User,Created Date'
-        page.text.should ==
-          "#{header_row} JB3,Joe,Brown,Denver,username,#{Date.current.strftime("%m/%d/%Y")} SG99,Sue,Green,Littleton,username,#{Date.current.strftime("%m/%d/%Y")}"
       end
 
       it 'should export Deactivated employees list to PDF' do

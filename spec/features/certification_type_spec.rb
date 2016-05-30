@@ -149,21 +149,27 @@ describe 'Certification Type', slow: true do
         visit certification_type_path certification_type.id
 
         click_on 'Export'
-        page.should have_link 'Export to CSV'
+        click_on 'Export to CSV'
+
+        page.response_headers['Content-Type'].should include 'text/csv'
       end
 
       it 'should have link to export to Excel' do
         visit certification_type_path certification_type.id
 
         click_on 'Export'
-        page.should have_link 'Export to Excel'
+        click_on 'Export to Excel'
+
+        page.response_headers['Content-Type'].should include 'excel'
       end
 
       it 'should have link to export to PDF' do
         visit certification_type_path certification_type.id
 
         click_on 'Export'
-        page.should have_link 'Export to PDF'
+        click_on 'Export to PDF'
+
+        page.response_headers['Content-Type'].should include 'pdf'
       end
     end
 
