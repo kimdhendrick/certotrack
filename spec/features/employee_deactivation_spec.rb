@@ -170,98 +170,173 @@ describe 'Employee Deactivation', slow: true do
     context 'when a certification user' do
       let(:littleton_location) { create(:location, name: 'Littleton', customer_id: customer.id) }
       let(:denver_location) { create(:location, name: 'Denver', customer_id: customer.id) }
+      let(:deactivation_date) { Date.new(2000, 1, 1) }
 
-      before do
-        create(:employee,
-               active: false,
-               deactivation_date: Date.new(2000, 1, 1),
-               employee_number: 'JB3',
-               first_name: 'Joe',
-               last_name: 'Brown',
-               location_id: denver_location.id,
-               customer_id: customer.id
-        )
+      context 'deactivated employees' do
+        before do
+          create(:employee,
+                 active: false,
+                 deactivation_date: deactivation_date,
+                 employee_number: 'JB3',
+                 first_name: 'Joe',
+                 last_name: 'Brown',
+                 location_id: denver_location.id,
+                 customer_id: customer.id
+          )
 
-        create(:employee,
-               active: false,
-               deactivation_date: Date.new(2001, 12, 31),
-               employee_number: 'SG99',
-               first_name: 'Sue',
-               last_name: 'Green',
-               location_id: littleton_location.id,
-               customer_id: customer.id
-        )
+          create(:employee,
+                 active: false,
+                 deactivation_date: Date.new(2001, 12, 31),
+                 employee_number: 'SG99',
+                 first_name: 'Sue',
+                 last_name: 'Green',
+                 location_id: littleton_location.id,
+                 customer_id: customer.id
+          )
 
-        create(:employee,
-               deactivation_date: Date.new(2013, 4, 4),
-               active: false,
-               employee_number: 'KB123',
-               first_name: 'Kim',
-               last_name: 'Barnes',
-        )
+          create(:employee,
+                 deactivation_date: Date.new(2013, 4, 4),
+                 active: false,
+                 employee_number: 'KB123',
+                 first_name: 'Kim',
+                 last_name: 'Barnes',
+          )
 
-        login_as_certification_user(customer)
-      end
-
-      it 'should show Deactivated Employees list' do
-        visit dashboard_path
-        page.should have_content 'Deactivated Employees'
-        click_link 'Deactivated Employees'
-
-        page.should have_content 'Deactivated Employee List'
-        page.should have_content 'Total: 2'
-        page.should have_link 'Home'
-
-        within 'table thead tr' do
-          page.should have_content 'Employee Number'
-          page.should have_content 'First Name'
-          page.should have_content 'Last Name'
-          page.should have_content 'Location'
-          page.should have_content 'Deactivation Date'
+          login_as_certification_user(customer)
         end
 
-        within 'table tbody tr:nth-of-type(1)' do
-          page.should have_content 'JB3'
-          page.should have_content 'Joe'
-          page.should have_content 'Brown'
-          page.should have_content 'Denver'
-          page.should have_content '01/01/2000'
+        it 'should show Deactivated Employees list' do
+          visit dashboard_path
+          page.should have_content 'Deactivated Employees'
+          click_link 'Deactivated Employees'
+
+          page.should have_content 'Deactivated Employee List'
+          page.should have_content 'Total: 2'
+          page.should have_link 'Home'
+
+          within 'table thead tr' do
+            page.should have_content 'Employee Number'
+            page.should have_content 'First Name'
+            page.should have_content 'Last Name'
+            page.should have_content 'Location'
+            page.should have_content 'Deactivation Date'
+          end
+
+          within 'table tbody tr:nth-of-type(1)' do
+            page.should have_content 'JB3'
+            page.should have_content 'Joe'
+            page.should have_content 'Brown'
+            page.should have_content 'Denver'
+            page.should have_content '01/01/2000'
+          end
+
+          within 'table tbody tr:nth-of-type(2)' do
+            page.should have_content 'SG99'
+            page.should have_content 'Sue'
+            page.should have_content 'Green'
+            page.should have_content 'Littleton'
+            page.should have_content '12/31/2001'
+          end
         end
 
-        within 'table tbody tr:nth-of-type(2)' do
-          page.should have_content 'SG99'
-          page.should have_content 'Sue'
-          page.should have_content 'Green'
-          page.should have_content 'Littleton'
-          page.should have_content '12/31/2001'
+        it 'should export Deactivated employees list to CSV' do
+          visit dashboard_path
+          click_link 'Deactivated Employees'
+
+          click_on 'Export to CSV'
+
+          page.response_headers['Content-Type'].should include 'text/csv'
+        end
+
+        it 'should export Deactivated employees list to PDF' do
+          visit dashboard_path
+          click_link 'Deactivated Employees'
+
+          click_on 'Export to PDF'
+
+          page.response_headers['Content-Type'].should include 'pdf'
+        end
+
+        it 'should export Deactivated employees list to Excel' do
+          visit dashboard_path
+          click_link 'Deactivated Employees'
+
+          click_on 'Export to Excel'
+
+          page.response_headers['Content-Type'].should include 'excel'
         end
       end
 
-      it 'should export Deactivated employees list to CSV' do
-        visit dashboard_path
-        click_link 'Deactivated Employees'
+      context 'sorting' do
+        before do
+          login_as_certification_user(customer)
+          visit dashboard_path
+          click_link 'Deactivated Employees'
+        end
 
-        click_on 'Export to CSV'
+        it 'should sort by employee number' do
+          create(:employee, employee_number: '222', customer: customer, active: false, deactivation_date: deactivation_date)
+          create(:employee, employee_number: '333', customer: customer, active: false, deactivation_date: deactivation_date)
+          create(:employee, employee_number: '111', customer: customer, active: false, deactivation_date: deactivation_date)
 
-        page.response_headers['Content-Type'].should include 'text/csv'
-      end
+          visit dashboard_path
+          click_link 'Deactivated Employees'
 
-      it 'should export Deactivated employees list to PDF' do
-        visit dashboard_path
-        click_link 'Deactivated Employees'
+          click_link 'Employee Number'
+          column_data_should_be_in_order('111', '222', '333')
 
-        click_on 'Export to PDF'
+          click_link 'Employee Number'
+          column_data_should_be_in_order('333', '222', '111')
+        end
 
-        page.response_headers['Content-Type'].should include 'pdf'
-      end
+        it 'should sort by first name' do
+          create(:employee, first_name: 'zeta', customer: customer, active: false, deactivation_date: deactivation_date)
+          create(:employee, first_name: 'beta', customer: customer, active: false, deactivation_date: deactivation_date)
+          create(:employee, first_name: 'alpha', customer: customer, active: false, deactivation_date: deactivation_date)
 
-      it 'should export Deactivated employees list to Excel' do
-        visit dashboard_path
-        click_link 'Deactivated Employees'
+          visit dashboard_path
+          click_link 'Deactivated Employees'
 
-        click_on 'Export to Excel'
+          click_link 'First Name'
+          column_data_should_be_in_order('alpha', 'beta', 'zeta')
 
-        page.response_headers['Content-Type'].should include 'excel'
+          click_link 'First Name'
+          column_data_should_be_in_order('zeta', 'beta', 'alpha')
+        end
+
+        it 'should sort by last name' do
+          create(:employee, last_name: 'zeta', customer: customer, active: false, deactivation_date: deactivation_date)
+          create(:employee, last_name: 'beta', customer: customer, active: false, deactivation_date: deactivation_date)
+          create(:employee, last_name: 'alpha', customer: customer, active: false, deactivation_date: deactivation_date)
+
+          visit dashboard_path
+          click_link 'Deactivated Employees'
+
+          click_link 'Last Name'
+          column_data_should_be_in_order('alpha', 'beta', 'zeta')
+
+          click_link 'Last Name'
+          column_data_should_be_in_order('zeta', 'beta', 'alpha')
+        end
+
+        it 'should sort by location' do
+          first_location = create(:location, name: 'Alcatraz')
+          last_location = create(:location, name: 'Zurich')
+          middle_location = create(:location, name: 'Burbank')
+
+          create(:employee, location: first_location, customer: customer, active: false, deactivation_date: deactivation_date)
+          create(:employee, location: last_location, customer: customer, active: false, deactivation_date: deactivation_date)
+          create(:employee, location: middle_location, customer: customer, active: false, deactivation_date: deactivation_date)
+
+          visit dashboard_path
+          click_link 'Deactivated Employees'
+
+          click_link 'Location'
+          column_data_should_be_in_order('Alcatraz', 'Burbank', 'Zurich')
+
+          click_link 'Location'
+          column_data_should_be_in_order('Zurich', 'Burbank', 'Alcatraz')
+        end
       end
     end
 
